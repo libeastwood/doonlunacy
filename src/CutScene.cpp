@@ -754,6 +754,7 @@ void DuneCutScene::loadPalette(char *filename)
 	//fclose(f);
 
 
+        free(line);
 
 	hasPalette = true;
 
@@ -798,81 +799,41 @@ void DuneCutScene::loadScenes()
 	this->nScenes = 2;
 
 
-
-
-
-
-
 	this->loadPalette("data/intro/intro.pal");
-
-
 
 	scenes = (Dune_Scene **)malloc(sizeof(Dune_Scene *) * nScenes);
 
-
-
 	scenes[0] = (Dune_Scene *)malloc(sizeof(Dune_Scene));
-
 	scenes[0]->basePath = "data/intro/intro1";
-
 	scenes[0]->nFrames = 50;
-
 	scenes[0]->curFrame = 0;
-
 	scenes[0]->endWaitTime = 2000;
 
-
-
 	scenes[0]->nVOSounds = 3;
-
 	scenes[0]->voSounds = (Dune_Scene_VO **)malloc(sizeof(Dune_Scene_VO *) * scenes[0]->nVOSounds);
-
 	scenes[0]->voSounds[0] = (Dune_Scene_VO *)malloc(sizeof(Dune_Scene_VO));
 
-
-
 	scenes[0]->voSounds[0]->sound = Mix_LoadWAV("data/intro/introvoc/resampled/dune.ogg");
-
 	scenes[0]->voSounds[0]->played = false;
-
 	scenes[0]->voSounds[0]->playAtFrame = 50;
 
-	
-
 	scenes[0]->voSounds[1] = (Dune_Scene_VO *)malloc(sizeof(Dune_Scene_VO));
-
 	scenes[0]->voSounds[1]->sound = Mix_LoadWAV("data/intro/introvoc/resampled/blding.ogg");
-
 	scenes[0]->voSounds[1]->played = false;
-
 	scenes[0]->voSounds[1]->playAtFrame = 50;
-
-
-
 	scenes[0]->voSounds[2] = (Dune_Scene_VO *)malloc(sizeof(Dune_Scene_VO));
-
 	scenes[0]->voSounds[2]->sound = Mix_LoadWAV("data/intro/introvoc/resampled/dynasty.ogg");
-
 	scenes[0]->voSounds[2]->played = false;
-
 	scenes[0]->voSounds[2]->playAtFrame = 50;
-
-
 
 	loadSceneImages(scenes[0]);
 
-
-
 	scenes[1] = (Dune_Scene *)malloc(sizeof(Dune_Scene));
-
 	scenes[1]->basePath = "data/intro/intro2";
-
 	scenes[1]->nFrames = 50;
-
 	scenes[1]->curFrame = 0;
 
 	loadSceneImages(scenes[1]);
-
 }
 
 
@@ -885,7 +846,7 @@ void DuneCutScene::parseScenesFile(char *filename)
 
 	int rChannels = Mix_ReserveChannels(2);
 
-	char *line = (char *)malloc(1024);
+	char *line = (char*)malloc(1024);
 
 
 
@@ -933,7 +894,7 @@ void DuneCutScene::parseScenesFile(char *filename)
 
 	int vosNum;
 
-	char path[1024];
+	char *path = (char*) malloc(1024);
 
 
 
@@ -1413,9 +1374,8 @@ void DuneCutScene::parseScenesFile(char *filename)
 
 	showText( 0, 0, "", 52);
 
-	free(line);
-
-
+        free(line);
+        free(path);
 
 }
 
@@ -1471,7 +1431,7 @@ void DuneCutScene::loadSceneImages(Dune_Scene* scene)
 
 {
 
-	char *path = (char *)malloc(1024);
+	char *path = (char*)malloc(1024);;
 
 	SDL_RWops *rw;
 
@@ -1751,6 +1711,8 @@ void DuneCutScene::loadSceneImages(Dune_Scene* scene)
 
 		zzip_dir_close(zzipdir);
 
+        free(path);
+
 }
 
 
@@ -1790,7 +1752,8 @@ char *DuneCutScene::getFramePath(char *basePath, int frame)
 	framePath = strcat(framePath, end);
 
 
-
+        free(end);
+        
 	return framePath;
 
 
@@ -1866,6 +1829,7 @@ char *DuneCutScene::getFramePathAlpha(char *basePath, int frame, int set)
 	framePath = strcat(framePath, end);
 
 
+        free(end);
 
 	return framePath;
 

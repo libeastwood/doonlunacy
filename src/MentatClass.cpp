@@ -1026,6 +1026,7 @@ char *MentatClass::getFramePath(char *basePath, int frame)
 
 	framePath = strcat(framePath, end);
 
+        free(end);
 
 
 	return framePath;
@@ -1048,7 +1049,7 @@ void MentatClass::setMentatView(int entry)
 
 	{
 
-		char *path = (char *)malloc(1024);
+		char path[1024];
 
 		
 
@@ -1083,8 +1084,6 @@ void MentatClass::setMentatView(int entry)
 
 
 		mentatEntries[entry].loaded = true;
-
-		free(path);
 
 	}
 
@@ -2031,7 +2030,7 @@ void MentatClass::doBriefing(int level)
 
 
 
-	char *path = (char *)malloc(1024);
+	char path[1024];
 
 
 
@@ -2065,9 +2064,6 @@ void MentatClass::doBriefing(int level)
 
 
 	levelEntry.loaded = true;
-
-	free(path);
-
 
 
 	inBriefing = true;
@@ -2484,7 +2480,7 @@ bool MentatClass::doHouseInfo(int h)
 
 	
 
-	char *path = (char *)malloc(1024);
+	char path[1024];
 
 
 
@@ -2536,7 +2532,7 @@ bool MentatClass::doHouseInfo(int h)
 
 	levelEntry.loaded = true;
 
-	free(path);
+	//free(path);
 
 
 
