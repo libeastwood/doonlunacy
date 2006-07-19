@@ -1,0 +1,18 @@
+#ifndef DUNE_HOUSES_H
+#define DUNE_HOUSES_H
+
+typedef enum
+{
+	HOUSE_ATREIDES,		//house definitions
+	HOUSE_ORDOS,
+	HOUSE_HARKONNEN,
+	HOUSE_SARDAUKAR,
+	HOUSE_FREMEN,
+	HOUSE_MERCENARY,
+	NUM_HOUSES
+} HOUSETYPE;
+
+
+extern int houseColour[NUM_HOUSES];
+
+#endif // DUNE_HOUSES_H

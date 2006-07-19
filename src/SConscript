@@ -1,0 +1,16 @@
+Import('env')
+
+from glob import glob
+
+gui_sources = glob("gui/*.cpp")
+structure_sources = glob("structures/*.cpp")
+unit_sources = glob("units/*.cpp")
+base_sources = glob("*.cpp")
+
+all_sources = gui_sources + structure_sources + unit_sources + base_sources
+
+SDL_rwops_zzip = env.Object('SDL_rwops_zzip.c')
+
+env.Program("dunelegacy", all_sources + [SDL_rwops_zzip])
+
+
