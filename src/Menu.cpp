@@ -36,7 +36,7 @@
 
 
 #define SCREEN_BPP 8
-#define VERSION "0.94"
+#define VERSION "0.94.1"
 
 
 SDL_Surface	*screen;
