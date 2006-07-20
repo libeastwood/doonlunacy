@@ -6301,14 +6301,14 @@ int main(int argc, char *argv[])
 
 	{
 
-		SDL_Quit();
+//		SDL_Quit();
 		fprintf(stderr,"Warning: Couldn't set 11025 Hz 16-bit audio\n- Reason: %s\n",SDL_GetError());
 
-		exit(1);
+//		exit(1);
 
 	}
 
-	else
+//	else
 
 		fprintf(stdout, "allocated %d channels.\n", Mix_AllocateChannels(16)); fflush(stdout);
 
