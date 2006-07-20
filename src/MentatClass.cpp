@@ -230,6 +230,7 @@ void MentatClass::draw()
 {
 
 	//Draw pic first
+	SDL_FillRect(screen, NULL, COLOUR_BLACK);
 
 	if(inHouseChoice && !inInfoScreen)
 
@@ -2058,6 +2059,10 @@ void MentatClass::doBriefing(int level)
 	}
 
 
+	mentatProceedSurf = loadImageFromZip(zzipdir, "mentat/mentat_proceed.bmp");
+
+	mentatProceedSurfPressed = loadImageFromZip(zzipdir, "mentat/mentat_proceed_pressed.bmp");
+
 
 	zzip_dir_close(zzipdir);
 
@@ -2073,6 +2078,17 @@ void MentatClass::doBriefing(int level)
 	currentViewID = 1;
 
 
+	buttonExit.setSurface(mentatProceedSurf, NULL);
+
+	buttonExit.setPressedSurface(mentatProceedSurfPressed, NULL);
+
+	buttonExit.setHeight(mentatProceedSurf->h);
+
+	buttonExit.setWidth(mentatProceedSurf->w);
+
+	buttonExit.setX(mentatPos.x + 305);
+
+	buttonExit.setY(mentatPos.y + 350);
 
 	buttonExit.setCallBack(briefingButtonCallback, this);
 

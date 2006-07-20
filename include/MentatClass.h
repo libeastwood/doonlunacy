@@ -224,6 +224,9 @@ private:
 	SDL_Surface *mentatSurface;
 	SDL_Surface *mentatExitSurf;
 	SDL_Surface *mentatExitSurfPressed;
+	SDL_Surface *mentatProceedSurf;
+	SDL_Surface *mentatProceedSurfPressed;
+
 	//SDL_Surface *textSurface;
 	SDL_Surface *shoulderSurface;
 
