@@ -1652,6 +1652,9 @@ void do_game()
 	fps = 0;
 	debug = false;
 
+	//When shade is set to true map is not revealed at the beginning of the game
+	shade = true;
+
 	builderSelectMode = fullscreenMode = 
 
 	groupCreateMode = menuMode = messageMode = moveDownMode = 
