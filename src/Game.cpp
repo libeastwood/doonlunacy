@@ -29,6 +29,7 @@
 #define TOPBAR_MASKED_AREA_HEIGHT	5
 #define END_WAIT_TIMER	                300
 
+bool key_alt = false;
 float fps = 0;
 
 char typingMessage[MAX_LINE];
@@ -4147,6 +4148,9 @@ void doInput()
 							break;
 						}
 					}
+					case SDLK_LALT:
+						key_alt = true;
+						break;
 					case SDLK_a:	//set object on attack move
 						if (!selectedList->isEmpty())
 						{
@@ -4325,8 +4329,15 @@ void doInput()
 						}
 						break;
 					case SDLK_RETURN:
-						typingMessage[0] = '\0';
-						messageMode = true;
+						if (key_alt)
+						{
+							SDL_WM_ToggleFullScreen(screen);
+						}
+						else
+						{
+							typingMessage[0] = '\0';
+							messageMode = true;
+						}
 						break;
 					case SDLK_RIGHT:
 						moveRightMode = true;
@@ -4397,6 +4408,9 @@ void doInput()
 					break;
 				case SDLK_UP:
 					moveUpMode = false;
+					break;
+				case SDLK_LALT:
+					key_alt = false;
 					break;
 				default:
 					 break;
