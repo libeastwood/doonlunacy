@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "Math.h"
+#include "dMath.h"
 #include "DuneConstants.h"
 
 class PlayerClass

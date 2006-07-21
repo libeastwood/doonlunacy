@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "MapClass.h"
 #include <iostream>
+#include <math.h>
 
 
 bool checkCell(int cellX, int cellY)

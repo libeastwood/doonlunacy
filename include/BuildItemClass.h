@@ -2,7 +2,7 @@
 #define DUNE_BUILDITEMCLASS_H
 
 #include "SDL.h"
-#include "Math.h"
+#include "dMath.h"
 #include "DuneConstants.h"
 
 typedef struct

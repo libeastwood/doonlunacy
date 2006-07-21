@@ -34,6 +34,8 @@
 
 #include "DataFile.h"
 
+#include <time.h>
+
 
 #define SCREEN_BPP 8
 #define VERSION "0.94.1"

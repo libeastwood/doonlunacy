@@ -28,7 +28,6 @@
 #include "DataFile.h"
 
 #include "SDL_rwops_zzip.h"
-#include "SDL_rotozoom.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 
@@ -1359,12 +1358,12 @@ void fixDisplayFormat()
 
 void scaleData(int count, double zoom)
 {
-    SDL_Surface *prescaled = IMG_Load_RW(SDL_RWFromFile(fileNames[count], "rb"), 0);
-    SDL_Surface *scaled = zoomSurface(prescaled, zoom, zoom, SMOOTHING_ON);
+    //SDL_Surface *prescaled = IMG_Load_RW(SDL_RWFromFile(fileNames[count], "rb"), 0);
+    //SDL_Surface *scaled = zoomSurface(prescaled, zoom, zoom, SMOOTHING_ON);
 
-    SDL_FreeSurface((SDL_Surface*)dataFile[count].dat);
+    //SDL_FreeSurface((SDL_Surface*)dataFile[count].dat);
 
-    dataFile[count].dat = (char*)scaled;
+    //dataFile[count].dat = (char*)scaled;
 };
 
 void scaleUnits()

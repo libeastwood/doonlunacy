@@ -3,7 +3,7 @@
 
 class TerrainClass;
 
-#include "Math.h"
+#include "dMath.h"
 
 class PriorityQ
 {

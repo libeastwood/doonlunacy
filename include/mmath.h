@@ -2,7 +2,7 @@
 #define DUNE_MMATH_H
 
 #include "DuneConstants.h"
-#include "Math.h"
+#include "dMath.h"
 
 bool checkCell(int cellX, int cellY);
 bool fix_cell(int& cellX, int& cellY);

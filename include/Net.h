@@ -6,7 +6,7 @@
 #include "SDL_net.h"
 
 #include "DuneConstants.h"
-#include "Math.h"
+#include "dMath.h"
 #include "Settings.h"
 #include "gui/Graphics.h"
 

@@ -13,6 +13,8 @@
 #include "structures/StructureClass.h"
 #include "structures/RepairYardClass.h"
 
+#include <math.h>
+
 
 InfantryClass::InfantryClass(PlayerClass* newOwner) : GroundUnit(newOwner)
 
@@ -613,7 +615,7 @@ void InfantryClass::move()
 
 
 
-		if ((fabs((double)wantedReal.x - realX) <= 0.2) && (fabs((double)wantedReal.y - realY) <= 0.2))
+		if ((abs((double)wantedReal.x - realX) <= 0.2) && (abs((double)wantedReal.y - realY) <= 0.2))
 
 		{
 
@@ -804,8 +806,8 @@ void InfantryClass::setSpeeds()
 		dy -= sy;
 
 
-
-		double scale = speed/sqrt((double)(dx*dx + dy*dy));
+		double s = sqrt(double(dx*dx + dy*dy));
+		double scale = speed/s;
 
 		xSpeed = dx*scale;
 

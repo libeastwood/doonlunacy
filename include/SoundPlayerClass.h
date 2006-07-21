@@ -1,7 +1,7 @@
 #ifndef DUNE_SOUNDPLAYERCLASS_H
 #define DUNE_SOUNDPLAYERCLASS_H
 
-#include "Math.h"
+#include "dMath.h"
 #include "SDL_mixer.h"
 
 typedef enum { MUSIC_ATTACK, MUSIC_INTRO, MUSIC_LOSE, MUSIC_PEACE, MUSIC_WIN, MUSIC_RANDOM } MUSICTYPE;

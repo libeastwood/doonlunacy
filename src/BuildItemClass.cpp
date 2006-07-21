@@ -5,6 +5,9 @@
 #include "ui.h"
 #include "gui/Graphics.h"
 #include "Colours.h"
+
+#include "mmath.h"
+
 #include <math.h>
 
 BuildItemClass::BuildItemClass()

@@ -1,7 +1,7 @@
 #ifndef DUNE_LINK_H
 #define DUNE_LINK_H
 
-#include "Math.h"
+#include "dMath.h"
 
 class Link
 {

@@ -11,6 +11,8 @@
 #include "BulletClass.h"
 #include "SoundPlayerClass.h"
 
+#include <math.h>
+
 GunTurretClass::GunTurretClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
 	itemID = Structure_GunTurret;
@@ -107,7 +109,7 @@ void GunTurretClass::turn()
 	if (angle > wantedAngle)
 	{
 		angleRight = angle - wantedAngle;
-		angleLeft = fabs(8-angle)+wantedAngle;
+		angleLeft = abs(8-angle)+wantedAngle;
 	}
 	else if (angle < wantedAngle)
 	{
