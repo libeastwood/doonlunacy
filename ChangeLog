@@ -1,0 +1,11 @@
+0.94.1
+* Code has been cleaned up, no more warnings, should compile on all archs
+* New files and directory structure
+* Switched from GNU Make to SCons
+* In-game fullscreen switching with ALT+ENTER enabled
+* Works with data set
+* Random map generation in map editor
+* Game works without sound being initialized
+* Several memory leaks has been fixed
+* Other misc bug fixes..
+
