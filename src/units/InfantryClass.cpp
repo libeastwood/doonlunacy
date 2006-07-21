@@ -614,8 +614,11 @@ void InfantryClass::move()
 		}
 
 
-
+#if defined(_MSC_VER)
 		if ((abs((double)wantedReal.x - realX) <= 0.2) && (abs((double)wantedReal.y - realY) <= 0.2))
+#else
+		if ((fabs((double)wantedReal.x - realX) <= 0.2) && (fabs((double)wantedReal.y - realY) <= 0.2))
+#endif
 
 		{
 
