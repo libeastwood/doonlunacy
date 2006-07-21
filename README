@@ -1,0 +1,51 @@
+Dune Legacy
+
+With new blood this project is finally alive again and seems to be
+in a more healthy state than ever!
+
+Some background history:
+The Dune Legacy project was originally started by Anthony Cole, then helped out by Raal
+Goff and Martin Reichl before it was abandoned by them. It cointains small segments of
+code greatfully borrowed from Olaf van der Spek's Mixer (dune2 data extraction), and
+Stefen Hendriks' Ultra Dune2(random map generator).
+
+Current situation:
+This project was picked up again by Per Øyvind Karlsen (Dvalin) in 2005 after being
+left dead for over a year. With some minor fixes and modifications 0.94 was released
+08.10.2005. Since then not much was done until July of 2006 where new people joined
+the project and it got a lot of new code. A lot of the code has been cleaned up and
+fixed, and much of it has been rewritten. Also this stable release works with the
+(arhm.. non-free, se wiki for details) data distributed for it.
+
+Some in-game info:
+Left mouse to drag and select, right mouse to give order (move, attack etc.)
+Structures can be given waypoints with right click
+Use mouse wheel or buttons below/above bar to move build selection bar up/down
+Use 'f1' to toggle cheat/debug mode
+Try 'tab' for toggle toolbar
+Try 'm' for change music
+With any of your selected units try command modes shortcut keys:
+        'a' - attack move
+Delete will delete one selected owned object, hold shift to delete all.
+Use 'd' to deploy a mcv.
+Use '-' and '+' keys to adjust game speed.
+Use 'f' to toggle fog of war.
+Other controls and commands and things should be similar to other games.
+
+Multiplayer:
+Type in an IP address or alias in the input box in multiplayer menu.
+It uses the custom map map.dlm and all players must have an EXACT copy of
+it under main directory, or it will be completely out of sync, and error
+messages will be reported in game.
+The networking code is probably not secure yet so don't play against people
+you can't trust.  Also it is not completely finished yet - things like stand
+ground will not work in multiplayer.
+
+In the singleplayer menu you can choose your house and the level you want to play,
+1-22 - the original maps for each house, although most of ordos maps will not work
+correctly atm.
+
+Other resources:
+IRC: #dunelegacy @ irc.freenode.net
+Web: http://sourceforge.net/projects/dunelegacy
+
