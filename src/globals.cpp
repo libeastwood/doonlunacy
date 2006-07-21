@@ -21,7 +21,7 @@ int	structuresCreated,
                 unitsCreated;
 
 
-bool     shade,
+bool     shade = true,
                 fog_wanted;
 
 bool     attackMoveMode,
