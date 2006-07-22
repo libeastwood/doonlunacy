@@ -1282,9 +1282,9 @@ void loadDataFile()
 
 	{
 
-		fprintf(stderr, "ERROR: unable to load all data."
-                                "Missing %d\n"
-                                "Continuing anyway...", unloadedItems);
+		fprintf(stderr, "ERROR: unable to load all data.\n"
+                                "Missing %d files\n"
+                                "Continuing anyway...\n", unloadedItems);
 
 	}
 

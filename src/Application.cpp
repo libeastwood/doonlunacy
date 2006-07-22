@@ -214,85 +214,6 @@ void Application::InitVideo()
 
     m_rootWidget->setSize(set->m_width, set->m_height);
     m_rootWidget->setPos(0, 0);
-
-    /*
-    menu = (SDL_Surface*)(dataFile[UI_Menu].dat);
-    backgroundOffsetX = (screen->w - menu->w)/2;
-    backgroundOffsetY = (screen->h - menu->h)/2;
-
-    //resize all buttons
-    main_vbox.setX(screen->w/3);
-    main_vbox.setWidth(screen->w/3);
-    main_vbox.setY(screen->h/2 + 32);
-    main_vbox.setHeight(screen->h - main_vbox.getY() - 10);
-    main_vbox.resizeChildren();
-
-    single_hbox.setX(10);
-
-    single_hbox.setWidth(screen->w - 20);
-
-    single_hbox.setY(10);
-
-    single_hbox.setHeight(screen->h - 20);
-    single_hbox.resizeChildren();
-
-    custom_hbox.setX(10);
-
-    custom_hbox.setWidth(screen->w - 20);
-
-    custom_hbox.setY(10);
-
-    custom_hbox.setHeight(screen->h - 20);
-    custom_hbox.resizeChildren();
-
-    multi_hbox.setX(10);
-
-    multi_hbox.setWidth(screen->w - 20);
-
-    multi_hbox.setY(10);
-
-    multi_hbox.setHeight(screen->h - 20);
-    multi_hbox.resizeChildren();
-
-    multiServer_hbox.setX(10);
-
-    multiServer_hbox.setWidth(screen->w - 20);
-
-    multiServer_hbox.setY(10);
-
-    multiServer_hbox.setHeight(screen->h - 20);
-    multiServer_hbox.resizeChildren();
-
-    multiClient_hbox.setX(10);
-
-    multiClient_hbox.setWidth(screen->w - 20);
-
-    multiClient_hbox.setY(10);
-
-    multiClient_hbox.setHeight(screen->h - 20);
-    multiClient_hbox.resizeChildren();
-
-    options_vbox.setX(10);
-
-    options_vbox.setWidth(screen->w - 20);
-
-    options_vbox.setY(10);
-
-    options_vbox.setHeight(screen->h - 20);
-    options_vbox.resizeChildren();
-
-    about_window.setX(10);
-
-    about_window.setWidth(screen->w - 20);
-
-    about_window.setY(10);
-
-    about_window.setHeight(screen->h - 20);
-
-    //fixDisplayFormat();
-    //oscaleBackgroundScreens();
-    //scaleUnits();
-    */
 };
 
 void Application::LoadData()
@@ -335,11 +256,14 @@ void Application::Run()
 {
     Uint32 now = SDL_GetTicks();
     Uint32 then;
+    // keep the frame rate down to around 30 fps
+    const Uint32 min_frame_duration = 30; 
 
     Uint32 fps_start = now;
     int fps_frames = 0;
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
+
     
     m_running = true;
 
@@ -353,7 +277,16 @@ void Application::Run()
 
         then = now;
         now = SDL_GetTicks();
-        float dt = float(then - now) / 1000.0f;
+
+        // dont steal all the processing time 
+        if (now - then < min_frame_duration)
+        {
+            SDL_Delay(min_frame_duration -(now - then));
+
+            now = SDL_GetTicks();
+        };
+        
+        float dt = float(now - then) / 1000.0f;
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
 

@@ -1,5 +1,7 @@
 #include "State.h"
 
+#include <assert.h>
+
 #define STATE_DEBUG
 
 State::State()
