@@ -6,6 +6,8 @@
 #include "BuildItemClass.h"
 #include "gui.h"
 
+#include "singleton.h"
+
 typedef enum
 {
 	Mentat_Atreides,
@@ -146,7 +148,7 @@ typedef struct Mentat_Entry
 	SDL_Surface *staticpic;
 	SDL_Surface	**pic;
 	char *text;
-	char *fullText[512];//needed?
+	//char *fullText[512];//needed?
 	char *basePath;
 
 	int frames;
@@ -158,60 +160,64 @@ typedef struct Mentat_Entry
 
 
 
-class MentatClass
+class MentatClass : public Singleton<MentatClass>
 {
+    friend class Singleton<MentatClass>;
 
-public:
+    protected:
         MentatClass();
-		~MentatClass();
-		void showMentat();
-		bool doExit();
-		void draw();
-		void handlePress(int x, int y);
-		void handleCancelPress(int x, int y);
-		void handleRelease(int x, int y);
-		void handleCancelRelease(int x, int y);
-		void LoadData();
-		void LoadMentatEntry(int entry, int frames, char *basePath, char *text);
-		void UnLoadMentatEntry(int entry);
-		void setMentatView(int entry);
-		char *getFramePath(char *basePath, int frame);
-		void createList();
-		void checkMinMaxSelection();
+        ~MentatClass();
 
-		void doBriefing(int level);
-		int doHouseChoice();
-		bool doHouseInfo(int h);
+    public:
+        void showMentat();
+        bool doExit();
+        void draw();
+        void handlePress(int x, int y);
+        void handleCancelPress(int x, int y);
+        void handleRelease(int x, int y);
+        void handleCancelRelease(int x, int y);
+        void LoadData();
+        void LoadMentatEntry(int entry, int frames, char *basePath, char *text);
+        void UnLoadMentatEntry(int entry);
+        void setMentatView(int entry);
+        char *getFramePath(char *basePath, int frame);
+        void createList();
+        void checkMinMaxSelection();
 
-		void makeTextSurface(int num);
+        void doBriefing(int level);
+        int doHouseChoice();
+        bool doHouseInfo(int h);
 
-		static void handleUp(void *val);
-		static void handleDown(void *val);
-		static void listButtonCallBack(void *val);
+        void makeTextSurface(int num);
 
-		static void yesCallback(void *val);
-		static void noCallback(void *val);
-		static void houseChoiceCallbackA(void *val);
-		static void houseChoiceCallbackO(void *val);
-		static void houseChoiceCallbackH(void *val);
-		inline void setHouseChoiceExitValue(int b) { houseChoiceExitValue = b; }
-		inline void setHouseChoiceValue(int b) { houseChoiceValue = b; }
+        static void handleUp(void *val);
+        static void handleDown(void *val);
+        static void listButtonCallBack(void *val);
 
-		void handleInput();
-		static void briefingButtonCallback(void *val);
-		inline void setBriefingRunning(bool b) { briefingRunning = b; }
-		
+        static void yesCallback(void *val);
+        static void noCallback(void *val);
+        static void houseChoiceCallbackA(void *val);
+        static void houseChoiceCallbackO(void *val);
+        static void houseChoiceCallbackH(void *val);
+        inline void setHouseChoiceExitValue(int b) { houseChoiceExitValue = b; }
+        inline void setHouseChoiceValue(int b) { houseChoiceValue = b; }
 
-		void doUp();
-		void doDown();
+        void handleInput();
+        static void briefingButtonCallback(void *val);
+        inline void setBriefingRunning(bool b) { briefingRunning = b; }
+        
 
-		void updateTimers();
-		void setHouse(int h);
+        void doUp();
+        void doDown();
 
-		void UnloadTemporaryData();
+        void updateTimers();
+        void setHouse(int h);
 
-		SDL_Surface *loadImageFromZip(ZZIP_DIR* zzipdir, char *path);
+        void UnloadTemporaryData();
 
+<<<<<<< .mine
+        SDL_Surface *loadImageFromZip(ZZIP_DIR* zzipdir, char *path);
+=======
 private:
 	Window *mentatWindow;
 	int house;
@@ -229,41 +235,57 @@ private:
 
 	//SDL_Surface *textSurface;
 	SDL_Surface *shoulderSurface;
+>>>>>>> .r19
 
-	SDL_Surface *eyesFrames[5];
-	SDL_Surface *mouthFrames[5];
-	SDL_Rect mentatPos, graphicPos, textPos, mouthPos, eyesPos, shoulderPos;
-	HBox mentatButtons;
-	VBox listBox;
-	Button buttonExit, buttonOK, listBt1, listBt2, listBt3, listBt4, listBt5, listBt6, listUp, listDown;
+    private:
+        Window *mentatWindow;
+        int house;
+        int currentViewID;
+        int frameTimer, mouthTimer, eyesTimer;
+        int eyesFrame, mouthFrame;
+        int talkLength;
+        int minSelection;
+        int maxSelection;
+        SDL_Surface *mentatSurface;
+        SDL_Surface *mentatExitSurf;
+        SDL_Surface *mentatExitSurfPressed;
+        //SDL_Surface *textSurface;
+        SDL_Surface *shoulderSurface;
 
-	BUILD_ITEM_DATA	data1, data2, data3, data4, data5, data6;//holds a void * and a number, perfect for what we need
+        SDL_Surface *eyesFrames[5];
+        SDL_Surface *mouthFrames[5];
+        SDL_Rect mentatPos, graphicPos, textPos, mouthPos, eyesPos, shoulderPos;
+        HBox mentatButtons;
+        VBox listBox;
+        Button buttonExit, buttonOK, listBt1, listBt2, listBt3, listBt4, listBt5, listBt6, listUp, listDown;
 
-	ListIterator	*selectionList;
+        BUILD_ITEM_DATA	data1, data2, data3, data4, data5, data6;//holds a void * and a number, perfect for what we need
 
-	int loadedBefore;
+        ListIterator	*selectionList;
 
-	Mentat_Entry levelEntry;
-	bool inBriefing;
-	bool briefingRunning;
+        int loadedBefore;
 
-	bool	inHouseChoice;
-	bool	inInfoScreen;
+        Mentat_Entry levelEntry;
+        bool inBriefing;
+        bool briefingRunning;
 
-	int houseChoiceExitValue;
-	int houseChoiceValue;
+        bool	inHouseChoice;
+        bool	inInfoScreen;
 
-	Button houseAtre, houseOrdos, houseHark;
-	HBox houseButtons;
-	Window *houseChoiceWindow;
-	SDL_Surface *heraldSurf;
+        int houseChoiceExitValue;
+        int houseChoiceValue;
 
-	Button yesButton, noButton;//buttons for yes and no
-	HBox yesNoButtons;
-	Window *houseInfoWindow;
-	Label	textLabel;
+        Button houseAtre, houseOrdos, houseHark;
+        HBox houseButtons;
+        Window *houseChoiceWindow;
+        SDL_Surface *heraldSurf;
 
-	char *zipPath;
+        Button yesButton, noButton;//buttons for yes and no
+        HBox yesNoButtons;
+        Window *houseInfoWindow;
+        Label	textLabel;
+
+        char *zipPath;
 };
 
 #endif // DUNE_MENTATCLASS_H

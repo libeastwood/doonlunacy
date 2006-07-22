@@ -49,4 +49,6 @@ private:
 	ObjectClass* lastSinglySelectedObject;
 };
 
+extern MapClass        *map;
+
 #endif // DUNE_MAPCLASS_H

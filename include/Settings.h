@@ -4,6 +4,7 @@
 #include "DuneConstants.h"
 #include "SDL.h"
 #include "SDL_net.h"
+#include <string>
 
 typedef struct
 {
@@ -50,5 +51,59 @@ typedef struct
 } SETTINGSTYPE;
 
 extern SETTINGSTYPE settings;
+
+
+#include "singleton.h"
+
+class Settings: public Singleton<Settings>
+{
+    friend class Singleton<Settings>;
+    friend class Application;
+
+    protected:
+        Settings();
+
+        // protected so Application can change them 
+        int m_width, m_height;
+        bool m_fullscreen;
+        bool m_debug;
+        bool m_doubleBuffered;
+
+        std::string m_dataDir;
+
+    public:
+        void ParseFile(char* fn);
+        void ParseOptions(int argc, char* argv[]);
+
+        inline int GetWidth() 
+                { return m_width; }
+        inline int GetHeight()
+                { return m_height; }
+
+        // put in application
+        /*
+        void SetScreenSize(int width, int height);
+                { m_screenWidth = width;
+                  m_screenHeight = height; }
+        */
+
+        inline bool GetFullScreen()
+                { return m_fullscreen; }
+
+        // put in application
+        /*
+        void SetFullScreen(bool x)
+                { m_fullscreen = x; }
+        */
+
+        inline bool GetDebug()
+                { return m_debug; }
+        void SetDebug(bool x) 
+                { m_debug = x; } 
+
+        inline bool GetDoubleBuffered() 
+                { return m_doubleBuffered; }
+
+};
 
 #endif // DUNE_SETTINGS_H

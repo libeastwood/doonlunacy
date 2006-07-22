@@ -9,11 +9,9 @@ class MapClass;
 class SoundPlayerClass;
 class MentatClass;
 
-extern MapClass        *map;
-
 extern SoundPlayerClass* soundPlayer;
 
-extern MentatClass *mentat;
+//extern MentatClass *mentat;
 
 extern ListIterator        *selectedLists;
 extern ListIterator        *unitList;

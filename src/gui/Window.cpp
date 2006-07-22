@@ -8,6 +8,7 @@ Window::Window() : Container()
 {
 	surface = NULL;
 }
+
 Window::~Window()
 {
 	if(surface)

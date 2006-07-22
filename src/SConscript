@@ -9,8 +9,28 @@ base_sources = glob("*.cpp")
 
 all_sources = gui_sources + structure_sources + unit_sources + base_sources
 
-SDL_rwops_zzip = env.Object('SDL_rwops_zzip.c')
+#all_sources.remove('Menu.cpp')
 
-env.Program("../dunelegacy", all_sources + [SDL_rwops_zzip])
+all_sources = [ "Application.cpp",
+                "Settings.cpp",
+                "Font.cpp",
+                "State.cpp",            
+                "DataFile.cpp",
+
+                "TopLevelState.cpp",
+                "MainMenu.cpp", 
+                "SingleMenu.cpp", 
+
+                "gui2/Widget.cpp",
+                "gui2/Container.cpp",
+                "gui2/Button.cpp",
+                "gui2/VBox.cpp",
+    
+                "main.cpp",
+              ]
+
+#all_sources += [env.Object('SDL_rwops_zzip.c')]
+
+env.Program("../dunelegacy", all_sources)
 
 

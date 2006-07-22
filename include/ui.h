@@ -7,6 +7,7 @@
 #include "gui/VBox.h"
 #include "gui/Button.h"
 
+#define MIN_FONT_SIZE 6
 #define MAX_FONT_SIZE 50
 
 extern SDL_Surface* screen;

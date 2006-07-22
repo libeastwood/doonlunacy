@@ -3266,46 +3266,26 @@ void init_save_load_windows()
 void drawCursor()
 {
 	SDL_Rect dest, src;
-
 	SDL_Surface* surface = (SDL_Surface*)dataFile[UI_Cursor].dat;
 
-	
-
 	dest.x = drawnMouseX;
-
 	dest.y = drawnMouseY;
-
 	dest.w = src.w = surface->w/NUM_CURSORS;
-
 	dest.h = src.h = surface->h;
-
 	src.x = src.w * cursorFrame;
-
 	src.y = 0;
-
-
 
 	//reposition image so pointing on right spot
 
 	if (cursorFrame == CURSOR_RIGHT)
-
 		dest.x -= dest.w/2;
-
 	else if (cursorFrame == CURSOR_DOWN)
-
 		dest.y -= dest.h/2;
-
 	if ((cursorFrame == CURSOR_TARGET) || (cursorFrame == CURSOR_SELECTION))
-
 	{
-
 		dest.x -= dest.w/2;
-
 		dest.y -= dest.h/2;
-
 	}
-
-
 
 	SDL_BlitSurface(surface, &src, screen, &dest);
 }

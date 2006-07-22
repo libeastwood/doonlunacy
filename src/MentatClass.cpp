@@ -10,113 +10,68 @@
 #include "data.h"
 
 #define FRAME_TIME 10
-
 #define MOUTH_TIME 10
-
 #define EYES_TIME 200
-
 #define WAIT_TIME 5
 
-
-
 char *mentatFileNames[Mentat_Unknown];//for the mentat character
-
-
-
 int *mentatFrames[Mentat_Entry_Unknown];//frames for each entry
-
 char *mentatEntryFileNames[Mentat_Entry_Unknown];//files for mentat entries
 
-
-
 char *mentatDescriptionsAtreides[Mentat_Entry_Unknown];//for the mentat texts
-
 //char *mentatDescriptionsOrdos[Mentat_Entry_Unknown];//for the mentat texts
-
 //char *mentatDescriptionsHarkonnen[Mentat_Entry_Unknown];//for the mentat texts
-
 Mentat_Entry mentatEntries[Mentat_Entry_Unknown];//for the mentat entries
 
-
-
 int levelpics[22];
-
 char *levelBriefingText[22];
 
-
-
-
-
 MentatClass::MentatClass()
-
 {
+    printf("1\n");
+    house = -1;
+    currentViewID = -1;
+    loadedBefore = 0;
+    frameTimer = FRAME_TIME;
+    eyesTimer = EYES_TIME;
+    mouthTimer = MOUTH_TIME;
+    talkLength = 0;
 
-	house = -1;
+    printf("2\n");
+    eyesFrame = 0;
+    mouthFrame = 0;
 
-	currentViewID = -1;
+    printf("a\n");
+    mentatWindow = new Window();
+    printf("b\n");
+    houseInfoWindow = new Window();
+    printf("c\n");
+    houseChoiceWindow = new Window();
 
-	loadedBefore = 0;
+    printf("3\n");
+    LoadData();
+    printf("d\n");
+    createList();
+    printf("e\n");
+    makeTextSurface(1);//Make a temp surface
 
-	frameTimer = FRAME_TIME;
+    printf("4\n");
+    inBriefing = false;
+    briefingRunning = false;
 
-	eyesTimer = EYES_TIME;
+    printf("5\n");
+    inInfoScreen = false;
+    inHouseChoice = false;
 
-	mouthTimer = MOUTH_TIME;
+    printf("6\n");
+    textLabel.setVisible(true);
+    textLabel.setTransparent(true);
+    textLabel.setTextColour(COLOUR_WHITE);
+    textLabel.setJustification(1);
 
-	talkLength = 0;
-
-
-
-	eyesFrame = 0;
-
-	mouthFrame = 0;
-
-
-
-	mentatWindow = new Window();
-
-	houseInfoWindow = new Window();
-
-	houseChoiceWindow = new Window();
-
-
-
-	LoadData();
-
-	createList();
-
-	makeTextSurface(1);//Make a temp surface
-
-
-
-	inBriefing = false;
-
-	briefingRunning = false;
-
-
-
-	inInfoScreen = false;
-
-	inHouseChoice = false;
-
-
-
-	textLabel.setVisible(true);
-
-	textLabel.setTransparent(true);
-
-	textLabel.setTextColour(COLOUR_WHITE);
-
-	textLabel.setJustification(1);
-
-
-
-	zipPath = "data/mentat.zip";
-
+    printf("7\n");
+    zipPath = "data/mentat.zip";
 }
-
-
-
 
 
 MentatClass::~MentatClass()

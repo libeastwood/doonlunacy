@@ -30,6 +30,8 @@ env.Append(LIBS = [ 	"SDL",
                     	"SDL_image",
                     	"SDL_net",
                     	"SDL_ttf",
+                        
+                        "boost_signals",
                   ])
 
 env.Append(CPPPATH = [	"${SDL_INCLUDE_PATH}",

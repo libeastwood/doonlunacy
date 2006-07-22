@@ -18,6 +18,14 @@ Widget::~Widget()
 		focusedWidget = NULL;
 }
 
+bool Widget::handleMotion(Uint16 x, Uint16 y)
+{
+    if (x > m_x && x < m_x + width &&
+        y > m_y && y < m_y + height)
+        return true;
+    return false;
+};
+
 void Widget::handleCancelPress(Uint32 x, Uint32 y)
 {
 	if (focusedWidget != NULL)

@@ -24,6 +24,8 @@
 
 #endif
 
+#define MAX_MUSICFILES 1000
+#define MAX_LINE 256
 
 #include "DataFile.h"
 
@@ -31,9 +33,9 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 
-#include "data.h"
-#include "DuneConstants.h"
-#include "Music.h"
+//#include "data.h"
+//#include "DuneConstants.h"
+//#include "Music.h"
 
 DATAFILE* dataFile;
 
@@ -43,10 +45,19 @@ char musicFiles[MAX_MUSICFILES][MAX_LINE];
 
 int musicCount = 0;
 
-
+int	        Music_Last,
+                Music_AttackFirst,
+                Music_AttackLast,
+                Music_IntroFirst,
+                Music_IntroLast,
+                Music_LoseFirst,
+                Music_LoseLast,
+                Music_PeaceFirst,
+                Music_PeaceLast,
+                Music_WinFirst,
+                Music_WinLast;
 
 int getMusicFileNames(char* dir)
-
 {
 
 #ifdef _MSC_VER
@@ -1123,7 +1134,7 @@ void loadDataFile()
 
 	size = Unknown + musicCount + 1;
 
-
+        
 
 	//load in all data
 

@@ -109,7 +109,7 @@ void GunTurretClass::turn()
 	if (angle > wantedAngle)
 	{
 		angleRight = angle - wantedAngle;
-		angleLeft = abs(int(8-angle))+wantedAngle;
+		angleLeft = abs(8-angle)+wantedAngle;
 	}
 	else if (angle < wantedAngle)
 	{

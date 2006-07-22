@@ -83,196 +83,105 @@ Label	*headingLabel;
 
 
 Button	main_buttonSinglePlayer,
-
 		main_buttonMultiPlayer,
-
 		main_buttonMapEditor,
-
 		main_buttonOptions,
-
 		main_buttonAbout,
-
 		main_buttonQuit,
-
 		
-
 		single_buttonDifficulty,
-
 		single_buttonHouse,
 
-
-
-//		single_buttonCampaign,
-
+                //single_buttonCampaign,
 		single_buttonRandomMap,
-
 		single_buttonSingleMap,
-
-//		single_buttonCancel,
-
-
+                //single_buttonCancel,
 
 		custom_buttonName[MAX_PLAYERS],
-
 		custom_buttonColour[MAX_PLAYERS],
-
 		custom_buttonHouse[MAX_PLAYERS],
-
 		custom_buttonTeam[MAX_PLAYERS],
-
 		custom_buttonStart,
-
 		custom_buttonCancel,
 
-		
-
 		multi_buttonCreate,
-
 		multi_buttonJoin,
-
 		multi_buttonCancel,
 
-		
-
 		multiServer_buttonName[MAX_PLAYERS],
-
 		multiServer_buttonColour[MAX_PLAYERS],
-
 		multiServer_buttonHouse[MAX_PLAYERS],
-
 		multiServer_buttonTeam[MAX_PLAYERS],
-
 		multiServer_buttonStart,
-
 		multiServer_buttonKick,
-
 		multiServer_buttonCancel,
 
-		
-
 		multiClient_buttonName[MAX_PLAYERS],
-
 		multiClient_buttonColour[MAX_PLAYERS],
-
 		multiClient_buttonHouse[MAX_PLAYERS],
-
 		multiClient_buttonTeam[MAX_PLAYERS],
-
 		multiClient_buttonCancel,
-
 		multiClient_buttonMessage,
 
-
-
 		options_buttonConcrete,
-
 		options_buttonRes,
-
 		options_buttonFullScreen,
-
 		options_buttonDoubleBuffered,
-
 		options_buttonOk,
-
 		options_buttonCancel;
 
-
-
 Entry		multi_address,
-
-			options_name;
-
-
+                options_name;
 
 HBox		multi_hbox,
-
-			custom_hbox,
-
-			custom_clientHbox[MAX_PLAYERS],
-
-			multiClient_hbox,
-
-			multiClient_clientHbox[MAX_PLAYERS],
-
-			multiServer_hbox,
-
-			multiServer_clientHbox[MAX_PLAYERS],
-
-			single_hbox,
-
-			options_hbox;
+                custom_hbox,
+                custom_clientHbox[MAX_PLAYERS],
+                multiClient_hbox,
+                multiClient_clientHbox[MAX_PLAYERS],
+                multiServer_hbox,
+                multiServer_clientHbox[MAX_PLAYERS],
+                single_hbox,
+                options_hbox;
 
 VBox		main_vbox,
-
-			custom_vbox,
-
-			custom_vbox2,
-
-			custom_vbox3,
-
-			single_vbox,
-
-			single_vbox2,
-
-			multi_vbox,
-
-			multi_vbox2,
-
-			multiClient_vbox,
-
-			multiClient_vbox2,
-
-			multiClient_vbox3,
-
-			multiServer_vbox,
-
-			multiServer_vbox2,
-
-			multiServer_vbox3,
-
-			options_vbox;
+                custom_vbox,
+                custom_vbox2,
+                custom_vbox3,
+                single_vbox,
+                single_vbox2,
+                multi_vbox,
+                multi_vbox2,
+                multiClient_vbox,
+                multiClient_vbox2,
+                multiClient_vbox3,
+                multiServer_vbox,
+                multiServer_vbox2,
+                multiServer_vbox3,
+                options_vbox;
 
 Widget		*currentWidget,
                 *focusedWidget = NULL;
 
 Window		about_window;
 
-
-
-
-
 bool	gameCreated,
-
-		createThreadValid,
-
-		quiting,
-
-		joinThreadValid,
-
-		multi_buttonHit,
-
-		multiGameStarting;
+        createThreadValid,
+        quiting,
+        joinThreadValid,
+        multi_buttonHit,
+        multiGameStarting;
 
 bool	inMainMenu;
 
-
-
 int		backgroundOffsetX,
-
 		backgroundOffsetY,
-
-
-
 		multi_buttonRow,
-
 		playersJoined;
 
 
 
 TCPsocket sockets[MAX_PLAYERS];
-
 TCPsocket server;
-
 SDLNet_SocketSet socketSet;
 
 
@@ -280,22 +189,20 @@ SDLNet_SocketSet socketSet;
 SDL_Thread	*multiGame_thread = NULL;
 
 SDL_mutex	*mutex_button = NULL,
-
 			*mutex_currentWidget = NULL,
-
 			*mutex_playersJoined = NULL;
 
 
 
 SDL_Surface		*menu,
-
-				*menuText;
+                        *menuText;
 
 
 
 void setVideoMode();
 
 void realign_buttons();
+#include "data.h"
 
 
 
@@ -965,8 +872,8 @@ void single_campaign_start()
 
 			settings.techLevel = (settings.campaignLevel + 1)/3 + 1;
 
-			mentat->setHouse(settings.playerHouse[settings.playerNum]);
-			mentat->doBriefing(settings.campaignLevel - 1);
+                        MentatClass::Instance()->setHouse(settings.playerHouse[settings.playerNum]);
+                        MentatClass::Instance()->doBriefing(settings.campaignLevel - 1);
 			start_game();
 
 			levelSuccessful = settings.won;
@@ -1077,7 +984,7 @@ void single_campaign()
 
 		*/
 
-	settings.playerNum = mentat->doHouseChoice();
+	settings.playerNum = MentatClass::Instance()->doHouseChoice();
 
 	settings.campaignLevel = 0;
 
@@ -5740,7 +5647,6 @@ int mainLoop()
 		if (currentWidget == mainWindow)
 
 		{
-
 			//dest.x = backgroundOffsetX;
 			//dest.y = backgroundOffsetX;
 			dest.y = screen->h - menuText->h - 17;
@@ -6129,7 +6035,7 @@ void init_loadWindow()
 }
 
 
-int main(int argc, char *argv[])
+int main2(int argc, char *argv[])
 {
     int     i,
 
@@ -6399,15 +6305,10 @@ int main(int argc, char *argv[])
 
 	//get the house palettes
 	houseColour[HOUSE_ATREIDES] = COLOUR_ATREIDES;
-
 	houseColour[HOUSE_ORDOS] = COLOUR_ORDOS;
-
 	houseColour[HOUSE_HARKONNEN] = COLOUR_HARKONNEN;
-
 	houseColour[HOUSE_SARDAUKAR] = COLOUR_SARDAUKAR;
-
 	houseColour[HOUSE_FREMEN] = COLOUR_FREMEN;
-
 	houseColour[HOUSE_MERCENARY] = COLOUR_MERCENARY;
 
 
@@ -6415,8 +6316,8 @@ int main(int argc, char *argv[])
 	//load mentat
 
 	fprintf(stdout, "loading mentat.....\n");fflush(stdout);
-	MentatClass *mentat = new MentatClass();
-	setMentat(mentat);
+        MentatClass::Instance(); // *mentat = new MentatClass();
+	//setMentat(mentat);
 
 
 
@@ -6454,9 +6355,7 @@ int main(int argc, char *argv[])
 	//i suspect the palette on one of the images is corrupt...so we have to redefine white
 
 	palette->colors[COLOUR_WHITE].r = 255;
-
 	palette->colors[COLOUR_WHITE].g = 255;
-
 	palette->colors[COLOUR_WHITE].b = 255;
 
 

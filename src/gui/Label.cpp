@@ -10,7 +10,9 @@ Label::Label() : Widget()
 //		text[i] = ' ';
 
 	nLines = 0;
-	text = (char **)malloc(sizeof(char *) * nLines);
+        long bytes = sizeof(char *) * nLines;
+        printf("bytes %ld\n", bytes);
+	text = (char **)malloc(bytes);
 
 	textSurface = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * nLines);
 
