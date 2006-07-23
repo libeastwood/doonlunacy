@@ -160,7 +160,7 @@ Font* FontManager::loadFont(const char* fn)
     {
         byte offset = hchar[i] & 0xFF;
         byte height = hchar[i] >> 8;
-        byte width = wchar[i] / 2;
+        byte width =( wchar[i] + 1) / 2;
         printf("%d width = %hd offset = %hd height = %hd\n", i, width, offset, height);
         
         characters[i].width = width;
