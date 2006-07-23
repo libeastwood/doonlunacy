@@ -1,1 +1,1 @@
-Program('font.cpp')
+Program('font.cpp', CCFLAGS=["-g"])

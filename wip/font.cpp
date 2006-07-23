@@ -21,6 +21,14 @@ struct FNTHeader
     byte maxw;     /* Max. character width          */
 };
 
+struct FNTCharacter
+{
+    byte width;
+    byte height;
+    byte y_offset;
+    byte *bitmap;
+};
+
 int main(int argc, char* argv[])
 {
     FILE* file = fopen("new10p.fnt", "rb");
@@ -42,21 +50,112 @@ int main(int argc, char* argv[])
 
     printf("nchars %u\n", header.nchars);
 
-    word cdata[header.nchars+1];
+    word* dchar = new word[header.nchars+1];
 
-    fread(cdata, sizeof(word), header.nchars+1, file);
-    
-    byte wchar[header.nchars+1];
+    fread(dchar, sizeof(word), header.nchars+1, file);
+
+    byte* wchar = new byte[header.nchars+1];
 
     printf("wpos %d\n", header.wpos);
     fseek(file, header.wpos, SEEK_SET);
-    long br = fread(cdata, sizeof(byte), header.nchars+1, file);
-    printf("br %ld\n", br);
+    long br = fread(wchar, sizeof(byte), header.nchars+1, file);
+    printf("br %ld %d\n", br, 1);
 
     if (wchar[0] != 8) printf("bad!!\n");
 
-    //for (int i=0; i!=header.nchars+1; i++)
-    //    printf("%d %hd\n", i, wchar[i]);
+    word* hchar = new word[header.nchars+1];
 
+    fseek(file, header.hpos, SEEK_SET);
+    fread(hchar, sizeof(word), header.nchars+1, file);
+
+    fseek(file, header.cdata, SEEK_SET);
+
+    FNTCharacter* characters = new FNTCharacter[header.nchars+1];    
+    
+    for (int i=0; i!=header.nchars+1; i++)
+    {
+        byte offset = hchar[i] & 0xFF;
+        byte height = hchar[i] >> 8;
+        byte width = wchar[i] / 2;
+        printf("%d width = %hd offset = %hd height = %hd\n", i, width, offset, height);
+        
+        characters[i].width = width;
+        characters[i].height = height;
+        characters[i].y_offset = offset;
+        printf("size %hd\n", width * height);
+        printf("dchar %hd\n", dchar[i]);
+
+        fseek(file, dchar[i], SEEK_SET); 
+        byte* bitmap = new byte[width * height];
+        fread(bitmap, sizeof(byte), width * height, file);
+        characters[i].bitmap = bitmap;       
+
+        // 65 = A apparently
+        if (i==65) printf("************************************************\n");
+
+        for (byte y=0; y!=offset; y++)
+        {
+            for (byte x=0; x!=width; x++)
+            {
+                printf("  .  .");
+            };
+            printf("\n");
+        };
+        
+        for (byte y=0; y!=height; y++)
+        {
+            for (byte x=0; x!=width; x++)
+            {
+                byte lobyte =  bitmap[x + (y*width)] >> 4;
+                byte hibyte =  bitmap[x + (y*width)] & 0x0F;     
+
+                if (hibyte==0) 
+                {
+                    printf("  ");    
+                }
+                else
+                {
+                    printf("%2hd", hibyte);
+                }
+
+                printf(".");
+
+                if (lobyte==0)
+                {
+                    printf("  ");
+                }
+                else
+                {
+                    printf("%2hd", lobyte);
+                };  
+
+                printf(".");
+            };
+            printf("\n");
+        };
+
+        for (byte y=height; y!=header.height; y++)
+        {
+            for (byte x=0; x!=width; x++)
+            {
+                printf("  .  .");
+            };
+            printf("\n");
+        };
+        
+    };
+ 
     fclose(file);
+
+    for (int i=0; i!=header.nchars+1; i++)
+    {
+        delete [] characters[i].bitmap;
+    };
+
+    delete [] characters;
+
+    delete [] dchar;
+    delete [] wchar;
+    delete [] hchar;
+    //delete [] cdata;
 };
