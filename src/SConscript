@@ -18,6 +18,7 @@ all_sources = [ "Application.cpp",
                 "DataFile.cpp",
 
                 "TopLevelState.cpp",
+                "MenuBase.cpp", 
                 "MainMenu.cpp", 
                 "SingleMenu.cpp", 
 

@@ -31,7 +31,7 @@ struct FNTCharacter
 
 int main(int argc, char* argv[])
 {
-    FILE* file = fopen("new10p.fnt", "rb");
+    FILE* file = fopen("intro.fnt", "rb");
 
     FNTHeader header;
 
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         byte offset = hchar[i] & 0xFF;
         byte height = hchar[i] >> 8;
         byte width = wchar[i] / 2;
-        printf("%d width = %hd offset = %hd height = %hd\n", i, width, offset, height);
+        printf("%d %c width = %hd offset = %hd height = %hd\n", i, i, width, offset, height);
         
         characters[i].width = width;
         characters[i].height = height;
@@ -109,24 +109,14 @@ int main(int argc, char* argv[])
                 byte lobyte =  bitmap[x + (y*width)] >> 4;
                 byte hibyte =  bitmap[x + (y*width)] & 0x0F;     
 
-                if (hibyte==0) 
                 {
-                    printf("  ");    
-                }
-                else
-                {
-                    printf("%2hd", hibyte);
+                    printf("%02hd", hibyte);
                 }
 
                 printf(".");
 
-                if (lobyte==0)
                 {
-                    printf("  ");
-                }
-                else
-                {
-                    printf("%2hd", lobyte);
+                    printf("%02hd", lobyte);
                 };  
 
                 printf(".");
@@ -138,7 +128,7 @@ int main(int argc, char* argv[])
         {
             for (byte x=0; x!=width; x++)
             {
-                printf("  .  .");
+                printf("00.00.");
             };
             printf("\n");
         };

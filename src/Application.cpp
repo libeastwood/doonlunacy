@@ -193,7 +193,7 @@ void Application::InitVideo()
         videoFlags |= SDL_FULLSCREEN;
 
     m_screen = SDL_SetVideoMode(set->m_width, set->m_height, 
-                              SCREEN_BPP, videoFlags);
+                              8, videoFlags);
     if(!m_screen)
     {
         fprintf(stderr, "ERROR: Couldn't set video mode: %s\n", SDL_GetError());
@@ -264,6 +264,7 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
+    Font* fnt = FontManager::Instance()->getFont("intro.fnt");
     
     m_running = true;
 
@@ -291,6 +292,8 @@ void Application::Run()
         if (m_rootState->Execute(dt) == -1) m_running = false;
 
         m_rootWidget->draw(m_screen);
+
+        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10);
 
         BlitCursor();
             
@@ -323,6 +326,7 @@ void Application::HandleEvents()
         switch (event.type)
         {
             case SDL_QUIT:
+                printf("QUIT!\n");
                 m_running = false;
                 break;
             case SDL_MOUSEMOTION:

@@ -66,7 +66,7 @@ MainMenuState::MainMenuState()
     m_vbox->setPos(x - 5, 312);
     m_vbox->reshape();
     
-    Application::Instance()->RootWidget()->addChild(m_vbox);
+    m_container->addChild(m_vbox);
 };
 
 MainMenuState::~MainMenuState()
@@ -96,6 +96,7 @@ void MainMenuState::doQuit()
     PopState();
 };
 
+/*
 void MainMenuState::JustMadeActive()
 {
     Application::Instance()->RootWidget()->addChild(m_vbox);
@@ -108,9 +109,11 @@ void MainMenuState::JustMadeInactive()
     State::JustMadeInactive();
 };
 
+
 int MainMenuState::Execute(float dt)
 {
     Application::Instance()->BlitCentered(m_menuBackground);
 
     return 0;
 };
+*/

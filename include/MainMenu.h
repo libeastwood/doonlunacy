@@ -1,23 +1,20 @@
 #ifndef DUNE_MAINMENU_H
 #define DUNE_MAINMENU_H
 
-#include "State.h"
+#include "MenuBase.h"
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 
-#include "SDL.h"
-
-
-class MainMenuState : public State 
+class MainMenuState : public MenuBaseState 
 {
     public:
         MainMenuState();
         ~MainMenuState();
 
-        void JustMadeActive();
-        void JustMadeInactive();
+        //void JustMadeActive();
+        //void JustMadeInactive();
 
-        int Execute(float dt);
+        //int Execute(float dt);
 
         void doSkirmish();
         void doSingle();
@@ -26,9 +23,6 @@ class MainMenuState : public State
         virtual const char* GetName() { return "MainMenuState"; }
 
     private:
-        SDL_Surface* m_menuBackground;
-        //Window* m_menu;
-
         VBox* m_vbox;
         
         GraphicButton* m_butSingle;
