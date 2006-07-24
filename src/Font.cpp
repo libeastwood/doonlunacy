@@ -28,9 +28,9 @@ void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 of
         ch = &m_characters[text[c]];
         bitmap = ch->bitmap;
 
-        byte ox;
+/*        byte ox;
         
-	/*
+
         for (byte y=0; y!=ch->y_offset; y++)
         {
             ox = offx;
