@@ -45,7 +45,7 @@ class Font
         Font(FNTCharacter* characters, FNTHeader* header);
         ~Font();
 
-        void render(const char* text, SDL_Surface* surface, Uint16 x, Uint16 y);
+        void render(const char* text, SDL_Surface* surface, Uint16 x, Uint16 y, Uint8 paloff);
 
     private:
         FNTHeader* m_header;

@@ -17,20 +17,20 @@ Font::~Font()
     delete m_header;
 };
 
-void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 offy)
+void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 offy, Uint8 paloff)
 {
     FNTCharacter* ch;
     byte* bitmap;
     Uint8* pixels = (Uint8*)surface->pixels;
-    
+
     for (unsigned int c=0; c!=strlen(text); c++)
     {
-        printf("char %c\n", text[c]);
         ch = &m_characters[text[c]];
         bitmap = ch->bitmap;
 
         byte ox;
         
+	/*
         for (byte y=0; y!=ch->y_offset; y++)
         {
             ox = offx;
@@ -42,6 +42,7 @@ void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 of
                 ++ox;
             };
         };
+	*/
         
         for (byte y=0; y!=ch->height; y++)
         {
@@ -72,22 +73,21 @@ void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 of
                 printf(".");
                 */
 
-                //if (hibyte!=0)
+                if (hibyte!=0)
                 {
-                    pixels[(offx + x) + ((ch->y_offset + y + offy) * surface->w)] = Uint8(hibyte);
+                    pixels[(offx + x) + ((ch->y_offset + y + offy) * surface->w)] = paloff + Uint8(hibyte);
                 };
 
-                //if (2 < ch->width) lobyte!=0)
+                if (lobyte!=0) //(2 < ch->width) lobyte!=0)
                 {
-                    pixels[(offx + x + 1) + ((ch->y_offset + y + offy) * surface->w)] = Uint8(lobyte);
+                    pixels[(offx + x + 1) + ((ch->y_offset + y + offy) * surface->w)] = paloff + Uint8(lobyte);
                 };
             };
 
-            printf("\n");
         };
         offx += (2*ch->width) + 1;
     };
-    
+
 };
 
 FontManager::FontManager()

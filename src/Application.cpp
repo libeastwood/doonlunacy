@@ -28,6 +28,8 @@
 #define SCREEN_BPP 8
 #define VERSION "0.94.1"
 
+Uint8 gpaloff;
+
 Application::Application()
 {
     m_running = false;
@@ -264,11 +266,13 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
-    Font* fnt = FontManager::Instance()->getFont("intro.fnt");
+    Font* fnt = FontManager::Instance()->getFont("new8p.fnt");
     
     m_running = true;
 
     assert(m_rootWidget != NULL);
+
+    gpaloff = 0 ;
     
     while (m_running)
     {
@@ -293,7 +297,8 @@ void Application::Run()
 
         m_rootWidget->draw(m_screen);
 
-        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10);
+        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
+        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 
         BlitCursor();
             
@@ -344,6 +349,11 @@ void Application::HandleEvents()
                 m_rootWidget->handleButtonUp(   event.button.button,
                                                 event.button.x,
                                                 event.button.y);
+		if (event.button.button == 1)
+			gpaloff ++;
+		else
+			gpaloff --;
+		printf("gpla %u\n", gpaloff);
                 break;
             case SDL_KEYDOWN:
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
