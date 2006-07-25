@@ -25,6 +25,8 @@
 #include "MainMenu.h"
 #include "DataFile.h"
 
+#include "pakfile/Pakfile.h"
+
 #define SCREEN_BPP 8
 #define VERSION "0.94.1"
 
@@ -100,8 +102,7 @@ void Application::Init()
     //mutex_currentWidget = SDL_CreateMutex();
     //mutex_playersJoined = SDL_CreateMutex();
 
-    //LoadData();
-    loadDataFile();
+    LoadData();
 
     m_rootWidget = new Container();
 
@@ -220,6 +221,18 @@ void Application::InitVideo()
 
 void Application::LoadData()
 {
+    Pakfile intropak ("intro.pak");
+    int nfiles = intropak.getNumFiles();
+
+    for (int i=0; i!=nfiles; i++)
+    {
+        printf("found file %s\n", intropak.getFilename(i));
+    };
+
+    
+    
+    //loadDataFile();
+    
     /*
     fprintf(stdout, "loading data.....\n");
     loadDataFile();
@@ -293,9 +306,9 @@ void Application::Run()
         
         float dt = float(now - then) / 1000.0f;
 
-        if (m_rootState->Execute(dt) == -1) m_running = false;
+        //if (m_rootState->Execute(dt) == -1) m_running = false;
 
-        m_rootWidget->draw(m_screen);
+        //m_rootWidget->draw(m_screen);
 
         fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
         fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
