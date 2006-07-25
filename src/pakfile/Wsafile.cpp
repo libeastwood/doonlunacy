@@ -8,14 +8,18 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 	Filedata = bufFiledata;
 	WsaFilesize = bufsize;
 	
+        printf("loading wsa with size %d...\n", bufsize);
+        
 	if(WsaFilesize < 10) {
 		fprintf(stderr, "Error: No valid WSA-File: File too small!\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	NumFrames = SDL_SwapLE16(*((Uint16*) Filedata) );
+        printf("numframes = %d\n", NumFrames);
 	SizeX = SDL_SwapLE16(*((Uint16*) (Filedata + 2)) );
 	SizeY = SDL_SwapLE16(*((Uint16*) (Filedata + 4)) );
+        printf("size %d x %d\n", SizeX, SizeY);
 	
 	if( ((unsigned short *) Filedata)[4] == 0) {
 		Index = (Uint32 *) (Filedata + 10);
@@ -24,6 +28,8 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 		Index = (Uint32 *) (Filedata + 8);
 		FramesPer1024ms = SDL_SwapLE16( *((Uint16*) (Filedata+6)) );		
 	}
+
+        printf("FramesPer1024ms = %d", FramesPer1024ms);
 	
 	if(Index[0] == 0) {
 		Index++;
@@ -31,7 +37,7 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 	}
 	
 	if(Filedata + WsaFilesize < (((unsigned char *) Index) + 4 * NumFrames)) {
-		fprintf(stderr, "Error: No valid WSA-File: File too small!\n");
+		fprintf(stderr, "Error: No valid WSA-File: File too small -2-!\n");
 		exit(EXIT_FAILURE);		
 	}
 	

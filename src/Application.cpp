@@ -23,9 +23,12 @@
 #include "Font.h"
 #include "TopLevelState.h"
 #include "MainMenu.h"
+#include "IntroState.h"
 #include "DataFile.h"
 
 #include "pakfile/Pakfile.h"
+
+#include "ResMan.h"
 
 #define SCREEN_BPP 8
 #define VERSION "0.94.1"
@@ -84,7 +87,7 @@ void Application::Init()
     if (SDL_Init(flags) < 0)
     {
         fprintf(stderr, "ERROR: Couldn't initialise SDL: %s\n", SDL_GetError());
-        Die();
+        //Die();
     }
 
     SDL_EnableUNICODE(1);
@@ -132,7 +135,8 @@ void Application::Init()
     //realign_buttons();
 
     m_rootState = new TopLevelState();
-    m_rootState->PushState( new MainMenuState() );
+    m_rootState->PushState( new IntroState() );
+    //m_rootState->PushState( new MainMenuState() );
 }
 
 void Application::InitSettings()
@@ -185,6 +189,12 @@ void Application::InitNet()
     */
 };
 
+
+void Application::SetPalette(SDL_Palette* pal)
+{
+    SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors);
+};
+
 void Application::InitVideo()
 {
     Settings* set = Settings::Instance();
@@ -205,13 +215,14 @@ void Application::InitVideo()
     
     // set the video palette 
     // grab the palette from any image, we use menu
-    SDL_Surface* menu = (SDL_Surface*)(dataFile[UI_Menu].dat);
-    SDL_Palette* palette = new SDL_Palette;
-    palette->ncolors = menu->format->palette->ncolors;
-    palette->colors = new SDL_Color[palette->ncolors];
-    memcpy(palette->colors, menu->format->palette->colors, 
-            sizeof(SDL_Color) * palette->ncolors);
-    SDL_SetColors(m_screen, palette->colors, 0, palette->ncolors);
+
+    //SDL_Surface* menu = (SDL_Surface*)(dataFile[UI_Menu].dat);
+    //SDL_Palette* palette = new SDL_Palette;
+    //palette->ncolors = menu->format->palette->ncolors;
+    //palette->colors = new SDL_Color[palette->ncolors];
+    //memcpy(palette->colors, menu->format->palette->colors, 
+    //        sizeof(SDL_Color) * palette->ncolors);
+    //SDL_SetColors(m_screen, palette->colors, 0, palette->ncolors);
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -221,13 +232,31 @@ void Application::InitVideo()
 
 void Application::LoadData()
 {
-    Pakfile intropak ("intro.pak");
-    int nfiles = intropak.getNumFiles();
+    printf("loading resources\n");
+    ResMan::Instance()->addRes("ATRE");
+    ResMan::Instance()->addRes("DUNE");
+    ResMan::Instance()->addRes("ENGLISH");
+    ResMan::Instance()->addRes("FINALE");
+    ResMan::Instance()->addRes("HARK");
+    ResMan::Instance()->addRes("HERC");
+    ResMan::Instance()->addRes("INTRO");
+    ResMan::Instance()->addRes("INTROVOC");
+    ResMan::Instance()->addRes("MENTAT");
+    ResMan::Instance()->addRes("MERC");
+    ResMan::Instance()->addRes("ORDOS");
+    ResMan::Instance()->addRes("SCENARIO");
+    ResMan::Instance()->addRes("SOUND");
+    ResMan::Instance()->addRes("VOC");
+    ResMan::Instance()->addRes("XTRE");
+    printf("done loading resources\n");
 
-    for (int i=0; i!=nfiles; i++)
-    {
-        printf("found file %s\n", intropak.getFilename(i));
-    };
+    //Pakfile intropak ("intro.pak");
+    //int nfiles = intropak.getNumFiles();
+
+    //for (int i=0; i!=nfiles; i++)
+    //{
+    //    printf("found file %s\n", intropak.getFilename(i));
+    //};
 
     
     

@@ -25,7 +25,7 @@ private:
 
 	unsigned char* Filedata;
 	Uint32* Index;
-	Uint32 WsaFilesize;
+	int WsaFilesize;
 
 	Uint16 NumFrames;
 	Uint16 SizeX;

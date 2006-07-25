@@ -94,6 +94,7 @@ void Pakfile::readIndex()
 		}
 		
 		strcpy(FileEntry[NumFileEntry].Filename,name);
+                printf("pak: found file %s\n", name);
 		
 		if(NumFileEntry > 0) {
 			FileEntry[NumFileEntry - 1].EndOffset = startoffset - 1;

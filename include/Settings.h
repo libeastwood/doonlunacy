@@ -104,6 +104,8 @@ class Settings: public Singleton<Settings>
         inline bool GetDoubleBuffered() 
                 { return m_doubleBuffered; }
 
+        std::string GetDataDir() { return m_dataDir; }
+
 };
 
 #endif // DUNE_SETTINGS_H

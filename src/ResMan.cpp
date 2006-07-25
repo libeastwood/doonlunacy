@@ -1,7 +1,11 @@
 #include "ResMan.h"
+#include "Settings.h"
 
 #include "boost/filesystem/operations.hpp" // includes boost/filesystem/path.hpp
 #include "boost/filesystem/fstream.hpp"    // ditto
+
+#include <assert.h>
+
 namespace bfs = boost::filesystem;
 
 Resource::~Resource()
@@ -18,6 +22,7 @@ DIRResource::DIRResource(bfs::path path)
 
 int DIRResource::readFile(bfs::path path, unsigned char* buf)
 {
+    assert(0); // this doesnt work
     bfs::path fullpath (m_path.string() + path.string());
 
     FILE *file = fopen (fullpath.string().c_str(), "rb");
@@ -51,7 +56,9 @@ PAKResource::~PAKResource()
 int PAKResource::readFile(bfs::path path, unsigned char* buf)
 {
     int filesize;
-    buf = m_pakfile->getFile(path.string().c_str(), &filesize);
+    unsigned char *b =  m_pakfile->getFile(path.string().c_str(), &filesize);
+    buf = b;
+    printf("read pak %s size %d\n", path.string().c_str(), filesize);
     return filesize;
 };
 
@@ -75,30 +82,60 @@ ResMan::~ResMan()
     m_resources.clear();
 };
 
-bool ResMan::addRes(const char* name)
+bool ResMan::addRes(std::string name)
 {
-    bfs::path file (name);
+    std::string fullpath = Settings::Instance()->GetDataDir();
+    fullpath.append(name);
+    printf("adding resource %s from %s...\n", name.c_str(), fullpath.c_str());
+    bfs::path file (fullpath);
     Resource *res = NULL;
 
-    if (bfs::is_directory(file))
+    if (bfs::exists(file))
     {
+        printf("Using DIRResource for %s\n", name.c_str());
         res = new DIRResource(file);
     }
-    else
+    else 
     {
-        res = new PAKResource(file);
+        std::string pakname = file.string();
+        pakname.append(".PAK");
+        bfs::path pakpath (pakname);
+
+        if (!bfs::exists(pakpath))
+        {
+            printf("Neither DIR or PAK found for %s\n", name.c_str());
+            return false;
+        }
+        
+        res = new PAKResource(pakpath);
     };
 
-    // this isnt going to work..
-    if (res == NULL)
-    {
-        return false;
-    };
-
-    m_resources[name] = res;
+    m_resources[name.c_str()] = res;
 
     return true;
 };
 
 
+int ResMan::readFile(std::string name, unsigned char* buf)
+{
+    unsigned int p = name.find(':');
+    assert(p != std::string::npos);
+
+    std::string fsname = std::string(name, 0, p);
+    std::string filename = std::string(name, p+1, 
+                                       name.length() - fsname.length() - 1);
+
+    printf("opening file from %s named %s...\n", fsname.c_str(), filename.c_str());
+
+    Resource* res = m_resources[fsname];
+
+    if (res == NULL)
+    {
+        printf("ERROR: cannot find file!\n");
+        buf = 0;
+        return 0;
+    };
+    
+    return res->readFile(filename.c_str(), buf);
+};
 

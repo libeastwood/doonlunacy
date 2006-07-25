@@ -7,6 +7,7 @@
 #include "boost/filesystem/path.hpp"
 
 #include <map>
+#include <string>
 
 class Resource
 {
@@ -45,16 +46,16 @@ class ResMan : public Singleton<ResMan>
 {
     friend class Singleton<ResMan>;
 
-    typedef std::map<const char*, Resource*> ResList;
+    typedef std::map<std::string, Resource*> ResList;
 
     protected:
         ResMan();
         ~ResMan();
 
     public:
-        bool addRes(const char* name);
+        bool addRes(std::string name);
 
-        int readFile(const char* path, char* buf);
+        int readFile(std::string path, unsigned char* buf);
 
     private:
         ResList m_resources;
