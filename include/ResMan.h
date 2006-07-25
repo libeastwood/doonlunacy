@@ -12,7 +12,8 @@ class Resource
 {
     public:
         Resource() {};
-        virtual long readFile(boost::filesystem::path path, char* buf) { return 0; }
+        virtual ~Resource();
+        virtual int readFile(boost::filesystem::path path, unsigned char* buf) { return 0; }
 
     protected:
         boost::filesystem::path m_path;
@@ -22,8 +23,8 @@ class Resource
 class DIRResource : public Resource
 {
     public:
-        DIRResource(boost::filesystem::path path) {};
-        virtual long readFile(boost::filesystem::path path, char* buf) {return 0;}
+        DIRResource(boost::filesystem::path path) ;
+        virtual int readFile(boost::filesystem::path path, unsigned char* buf) ;
     
 };
 
@@ -31,9 +32,9 @@ class DIRResource : public Resource
 class PAKResource : public Resource
 {
     public:
-        PAKResource(boost::filesystem::path path) {};
+        PAKResource(boost::filesystem::path path) ;
         ~PAKResource();
-        virtual long readFile(boost::filesystem::path path, char* buf) {return 0;}
+        virtual int readFile(boost::filesystem::path path, unsigned char* buf) ;
     
     private:
         Pakfile *m_pakfile;
@@ -53,7 +54,7 @@ class ResMan : public Singleton<ResMan>
     public:
         bool addRes(const char* name);
 
-        long readFile(const char* path, char* buf);
+        int readFile(const char* path, char* buf);
 
     private:
         ResList m_resources;

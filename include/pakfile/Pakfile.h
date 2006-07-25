@@ -12,12 +12,12 @@ struct PakFileEntry {
 class Pakfile
 {
 public:
-	Pakfile(char * Pakfilename);
+	Pakfile(const char * Pakfilename);
 	~Pakfile();
 
 	char * getFilename(int index);
 
-	unsigned char *getFile(char *fname, int *size);
+	unsigned char *getFile(const char *fname, int *size);
 
 	inline int getNumFiles() {return NumFileEntry;};
 

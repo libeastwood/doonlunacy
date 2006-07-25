@@ -3,7 +3,7 @@
 #include <string.h>
 #include <SDL_endian.h>
 
-Pakfile::Pakfile(char *Pakfilename)
+Pakfile::Pakfile(const char *Pakfilename)
 {
 	FileEntry = NULL;
 	NumFileEntry = 0;
@@ -120,7 +120,7 @@ char * Pakfile::getFilename(int index) {
 	return FileEntry[index].Filename;
 };
 
-unsigned char *Pakfile::getFile(char *fname, int *size)
+unsigned char *Pakfile::getFile(const char *fname, int *size)
 {
 	int Index = -1;
 	

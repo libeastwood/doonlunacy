@@ -9,17 +9,17 @@ DIRResource::DIRResource(bfs::path path)
    m_path = path; 
 };
 
-long DIRResource::readFile(bfs::path path, char* buf)
+int DIRResource::readFile(bfs::path path, unsigned char* buf)
 {
-    bfs::path fullpath = m_path + path;
+    bfs::path fullpath (m_path.string() + path.string());
 
-    FILE file (fullpath.c_str(), "rb");
+    FILE *file = fopen (fullpath.string().c_str(), "rb");
     fseek(file, 0, SEEK_END);
-    long filesize = ftell;
+    int filesize = ftell(file);
 
     fseek(file, 0, SEEK_SET);
 
-    buf = new char[filesize];
+    buf = new unsigned char[filesize];
 
     fread(buf, filesize, 1, file);
 
@@ -33,7 +33,7 @@ long DIRResource::readFile(bfs::path path, char* buf)
 PAKResource::PAKResource(bfs::path path)
 {
     m_path = path;
-    m_pakfile = Pakfile(path.c_str());
+    m_pakfile = new Pakfile(path.string().c_str());
 };
 
 PAKResource::~PAKResource()
@@ -41,10 +41,10 @@ PAKResource::~PAKResource()
     delete m_pakfile;
 };
 
-long PAKResource::readFile(bfs::path path, char* buf)
+int PAKResource::readFile(bfs::path path, unsigned char* buf)
 {
-    long filesize;
-    buf = m_pakfile->getFile(path.c_str(), &filesize);
+    int filesize;
+    buf = m_pakfile->getFile(path.string().c_str(), &filesize);
     return filesize;
 };
 
@@ -62,7 +62,7 @@ ResMan::~ResMan()
          it != m_resources.end();
          ++it)
     {
-        delete *it;
+        delete (it->second);
     };
 
     m_resources.clear();
@@ -75,11 +75,11 @@ bool ResMan::addRes(const char* name)
 
     if (bfs::is_directory(file))
     {
-        res = DIRResource(file);
+        res = new DIRResource(file);
     }
     else
     {
-        res = PAKResource(file);
+        res = new PAKResource(file);
     };
 
     // this isnt going to work..
@@ -88,7 +88,7 @@ bool ResMan::addRes(const char* name)
         return false;
     };
 
-    m_resources[fn] = res;
+    m_resources[name] = res;
 
     return true;
 };
