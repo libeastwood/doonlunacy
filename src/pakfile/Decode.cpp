@@ -15,7 +15,7 @@ Decode::~Decode()
 	;
 };
 
-int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned checksum)
+int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned int checksum)
 {
 	//
 	// should decode all the format80 stuff ;-) 

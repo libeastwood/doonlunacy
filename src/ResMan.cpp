@@ -4,6 +4,13 @@
 #include "boost/filesystem/fstream.hpp"    // ditto
 namespace bfs = boost::filesystem;
 
+Resource::~Resource()
+{
+
+};
+
+// ------------------------------------------------------------------
+
 DIRResource::DIRResource(bfs::path path)
 {
    m_path = path; 

@@ -44,7 +44,9 @@ env.Append(LIBS = [ 	"SDL",
                   ])
 
 if sys.platform != 'win32':
-    env.Append(LIBS=["boost_signals"])
+    env.Append(LIBS=[   "boost_signals",
+                        "boost_filesystem",
+                    ])
 
 env.Append(CPPPATH = [	"${SDL_INCLUDE_PATH}",
 			"${ZLIB_INCLUDE_PATH}",
