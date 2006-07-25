@@ -22,6 +22,8 @@ all_sources = [ "Application.cpp",
                 "MainMenu.cpp", 
                 "SingleMenu.cpp", 
 
+                "ResMan.cpp",
+
                 "gui2/Widget.cpp",
                 "gui2/Container.cpp",
                 "gui2/Button.cpp",

@@ -24,17 +24,17 @@ int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned 
 	unsigned char *readp = image_in;
 	unsigned char *writep = image_out;
 
-	uint a = 0;
-	uint b = 0;
-	uint c = 0;
-	uint d = 0;
-	uint e = 0;
-//	uint relposcount = 0;
-	uint megacounta = 0;
-	uint megacountb = 0;
-	uint megacountc = 0;
-	uint megacountd = 0;
-	uint megacounte = 0;
+	Uint16 a = 0;
+	Uint16 b = 0;
+	Uint16 c = 0;
+	Uint16 d = 0;
+	Uint16 e = 0;
+//	Uint16 relposcount = 0;
+	Uint16 megacounta = 0;
+	Uint16 megacountb = 0;
+	Uint16 megacountc = 0;
+	Uint16 megacountd = 0;
+	Uint16 megacounte = 0;
 	/*
 	   1 10cccccc
 	   2 0cccpppp p
@@ -165,7 +165,7 @@ void Decode::shp_correct_lf(unsigned char *in, unsigned char *out, int size)
 
 void Decode::apply_pal_offsets(unsigned char *offsets, unsigned char *data,unsigned int length)
 {
-	uint i;
+	Uint16 i;
 	for (i = 0; i < length; i ++)
 		data[i] = offsets[data[i]];
 };
