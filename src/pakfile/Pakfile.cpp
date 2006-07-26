@@ -1,6 +1,7 @@
 #include "pakfile/Pakfile.h"
 #include <stdlib.h>
-#include <SDL_endian.h>
+#include <string>
+#include "SDL_endian.h"
 
 Pakfile::Pakfile(const char *Pakfilename)
 {

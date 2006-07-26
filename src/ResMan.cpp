@@ -22,7 +22,7 @@ DIRResource::DIRResource(bfs::path path)
    m_path = path; 
 };
 
-int DIRResource::readFile(bfs::path path, unsigned char* buf)
+unsigned char* DIRResource::readFile(bfs::path path, int *size)
 {
     assert(0); // this doesnt work
     bfs::path fullpath (m_path.string() + path.string());
@@ -33,13 +33,15 @@ int DIRResource::readFile(bfs::path path, unsigned char* buf)
 
     fseek(file, 0, SEEK_SET);
 
-    buf = new unsigned char[filesize];
+    unsigned char* buf = new unsigned char[filesize];
 
     fread(buf, filesize, 1, file);
 
     fclose(file);
 
-    return filesize;
+    if (size != NULL) *size = filesize;
+
+    return buf;
 };
 
 // ------------------------------------------------------------------
@@ -55,13 +57,19 @@ PAKResource::~PAKResource()
     delete m_pakfile;
 };
 
-int PAKResource::readFile(bfs::path path, unsigned char* buf)
+unsigned char* PAKResource::readFile(bfs::path path, int *size)
 {
     int filesize;
-    unsigned char *b =  m_pakfile->getFile(path.string().c_str(), &filesize);
-    buf = b;
+    unsigned char *buf =  m_pakfile->getFile(path.string().c_str(), &filesize);
+    
     printf("read pak %s size %d\n", path.string().c_str(), filesize);
-    return filesize;
+
+    assert(buf != NULL);
+    assert(filesize != 0);
+
+    if (size != NULL) *size = filesize;
+
+    return buf;
 };
 
 // ------------------------------------------------------------------
@@ -118,7 +126,7 @@ bool ResMan::addRes(std::string name)
 };
 
 
-int ResMan::readFile(std::string name, unsigned char* buf)
+unsigned char*  ResMan::readFile(std::string name, int *size)
 {
     unsigned int p = name.find(':');
     assert(p != std::string::npos);
@@ -134,9 +142,13 @@ int ResMan::readFile(std::string name, unsigned char* buf)
     if (res == NULL)
     {
         printf("ERROR: cannot find file!\n");
-        buf = 0;
-        return 0;
+        if (size != NULL) size = 0;
+        return NULL;
     };
     
-    return res->readFile(filename.c_str(), buf);
+    unsigned char *buf = res->readFile(filename.c_str(), size);
+
+    assert(buf != NULL);
+    
+    return buf;
 };

@@ -54,7 +54,7 @@ Wsafile::~Wsafile()
 	free(decodedFrames);
 };
 
-SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber)
+SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *pal)
 {
 	if(FrameNumber >= NumFrames) {
 		return NULL;
@@ -70,7 +70,7 @@ SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber)
 	
 	printf("File Nr.: %d (Size: %dx%d)\n",FrameNumber,SizeX,SizeY);
 			
-	//SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
 	SDL_LockSurface(pic);
 
 	//Now we can copy line by line

@@ -192,6 +192,8 @@ void Application::InitNet()
 
 void Application::SetPalette(SDL_Palette* pal)
 {
+    assert(pal != NULL);
+    printf("setting palette %d colors\n", pal->ncolors);
     SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors);
 };
 
@@ -307,7 +309,7 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
-    Font* fnt = FontManager::Instance()->getFont("new8p.fnt");
+    //Font* fnt = FontManager::Instance()->getFont("new8p.fnt");
     
     m_running = true;
 
@@ -334,14 +336,14 @@ void Application::Run()
         
         float dt = float(now - then) / 1000.0f;
 
-        //if (m_rootState->Execute(dt) == -1) m_running = false;
+        if (m_rootState->Execute(dt) == -1) m_running = false;
 
         //m_rootWidget->draw(m_screen);
 
-        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
-        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
+        //fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
+        //fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 
-        BlitCursor();
+        //BlitCursor();
             
         SDL_Flip(m_screen);
 
@@ -440,7 +442,7 @@ void Application::BlitCursor()
 
 void Application::Blit(SDL_Surface* surface, SDL_Rect* src, SDL_Rect* dest)
 {
-    SDL_BlitSurface(surface, src, m_screen, dest);
+    assert( SDL_BlitSurface(surface, src, m_screen, dest) == 0 );
 };
 
 void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
@@ -457,6 +459,7 @@ void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
         dest.y = (Settings::Instance()->m_height / 2) - (src->h / 2);
     };
     
+    printf("blitting %d %d %d %d\n", dest.x, dest.y, surface->w, surface->h);
     Blit(surface, src, &dest);
 };
 
