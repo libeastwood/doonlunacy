@@ -1,6 +1,5 @@
 #include "pakfile/Pakfile.h"
 #include <stdlib.h>
-#include <string.h>
 #include <SDL_endian.h>
 
 Pakfile::Pakfile(const char *Pakfilename)
@@ -46,7 +45,6 @@ void Pakfile::readIndex()
 	int i;
 	int startoffset;
 	char name[256];
-	
 	
 	while(1) {
 		if(fread((void*) &startoffset, 4, 1,fPakFile) != 1) {

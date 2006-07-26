@@ -41,6 +41,8 @@ all_sources = [ "Application.cpp",
                 "main.cpp",
               ]
 
+#all_sources = ["ResMan.cpp"]
+
 #all_sources += [env.Object('SDL_rwops_zzip.c')]
 
 env.Program("../dunelegacy", all_sources)

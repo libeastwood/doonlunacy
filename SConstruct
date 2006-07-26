@@ -26,7 +26,7 @@ if sys.platform != "win32":
 	env.ParseConfig('sdl-config --cflags --libs')
 	env.ParseConfig('pkg-config --cflags --libs zziplib')
 	env.Append(CCFLAGS=["-Wall"]) #, "-Werror"])
-	#env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])
+	env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])
 	#env.Append(LINKFLAGS = ["-ffast-math"])
 
 	if 1:
@@ -34,10 +34,10 @@ if sys.platform != "win32":
 else:
 	env.Append(LIBS = ["zzipdll", "zdll", "SDLmain"])
 	env.Append(LINKFLAGS = ["/SUBSYSTEM:CONSOLE"])
-	env.Append(CCFLAGS = ["/MD", "/O2"])
+	env.Append(CCFLAGS = ["/O2", "/EHsc", "/MD", "/Op"])
 
 env.Append(LIBS = [ 	"SDL",
-			"SDL_mixer", 
+                        "SDL_mixer", 
                     	"SDL_image",
                     	"SDL_net",
                     	"SDL_ttf",

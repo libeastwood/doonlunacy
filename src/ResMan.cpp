@@ -1,8 +1,10 @@
+#include "boost/filesystem/path.hpp"
+#include "boost/filesystem/operations.hpp" 
+
 #include "ResMan.h"
 #include "Settings.h"
 
-#include "boost/filesystem/operations.hpp" // includes boost/filesystem/path.hpp
-#include "boost/filesystem/fstream.hpp"    // ditto
+//#include "boost/filesystem/fstream.hpp"    // ditto
 
 #include <assert.h>
 
@@ -138,4 +140,3 @@ int ResMan::readFile(std::string name, unsigned char* buf)
     
     return res->readFile(filename.c_str(), buf);
 };
-

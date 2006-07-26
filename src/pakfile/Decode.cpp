@@ -1,18 +1,18 @@
 #include "pakfile/Decode.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 
 #include <SDL.h>
 
 Decode::Decode()
 {
-	;
-}
+
+};
 
 Decode::~Decode()
 {
-	;
+
 };
 
 int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned int checksum)
@@ -115,12 +115,12 @@ int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned 
 			fprintf(stderr,"file contains unknown format80 command: %x\n",*readp);
 			exit(EXIT_FAILURE);
 		}
-	}
+	};
 	if (megacounta + megacountb + megacountc + megacountd + megacounte
 			!= checksum)
 		return -1;
 	return 0;
-}
+};
 
 void Decode::my_memcpy(unsigned char *dst, unsigned char *src, unsigned cnt)
 {
@@ -135,8 +135,8 @@ void Decode::my_memcpy(unsigned char *dst, unsigned char *src, unsigned cnt)
 		*dst = *src;
 		dst++;
 		src++;
-	}
-}
+	};
+};
 
 void Decode::shp_correct_lf(unsigned char *in, unsigned char *out, int size)
 {

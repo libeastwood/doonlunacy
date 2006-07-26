@@ -26,7 +26,7 @@
 #include "IntroState.h"
 #include "DataFile.h"
 
-#include "pakfile/Pakfile.h"
+//#include "pakfile/Pakfile.h"
 
 #include "ResMan.h"
 
@@ -252,7 +252,6 @@ void Application::LoadData()
 
     //Pakfile intropak ("intro.pak");
     //int nfiles = intropak.getNumFiles();
-
     //for (int i=0; i!=nfiles; i++)
     //{
     //    printf("found file %s\n", intropak.getFilename(i));
