@@ -2,6 +2,8 @@
 
 Palettefile::Palettefile(unsigned char* buf, int bufsize)
 {
+    printf("loading palette...\n");
+    
     m_palette = new SDL_Palette;
     m_palette->ncolors = bufsize / 3;
 
@@ -11,9 +13,11 @@ Palettefile::Palettefile(unsigned char* buf, int bufsize)
     
     for (int i=0; i!=m_palette->ncolors; i++, c++, dunepal+=3)
     {
-        c->r = dunepal[0];
-        c->g = dunepal[1];
-        c->b = dunepal[2];
+        c->r = (dunepal[0] << 2) + 3;
+        c->g = (dunepal[1] << 2) + 3;
+        c->b = (dunepal[2] << 2) + 3;
+
+        printf("%d %03d %03d %03d\n", i, c->r, c->g, c->b);
     };
 
     delete [] buf;

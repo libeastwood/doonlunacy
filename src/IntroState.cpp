@@ -17,8 +17,7 @@ IntroState::IntroState()
     m_currentFrame = 0;
     m_frametime = 0.0f;
 
-    int len;
-    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
+    data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
     
     Palettefile pal (data, len);
     Application::Instance()->SetPalette(pal.getPalette());
@@ -44,7 +43,7 @@ int IntroState::Execute(float dt)
 {
     m_frametime += dt;
 
-    if (m_frametime > 1.0f)
+    if (m_frametime > 1.1f)
     {
         m_frametime = 0.0f;
         m_currentFrame ++;
@@ -54,7 +53,7 @@ int IntroState::Execute(float dt)
         };
     };
 
-    m_animSurface = m_wsa->getPicture(m_currentFrame);
+    m_animSurface = m_wsa->getPicture(m_currentFrame, Application::Instance()->GetCurrentPalette());
 
     assert(m_animSurface != NULL);
     

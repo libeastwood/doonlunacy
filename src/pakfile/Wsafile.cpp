@@ -54,7 +54,7 @@ Wsafile::~Wsafile()
 	free(decodedFrames);
 };
 
-SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *pal)
+SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
 	if(FrameNumber >= NumFrames) {
 		return NULL;

@@ -47,6 +47,7 @@ class Application : public Singleton<Application>
         void BlitCentered(SDL_Surface* surface, SDL_Rect* src=NULL);
 
         void SetPalette(SDL_Palette* pal);
+        SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
 
     private:
         void InitSettings();
@@ -60,6 +61,7 @@ class Application : public Singleton<Application>
         void BlitCursor();
 
         SDL_Surface* m_screen;
+        SDL_Palette* m_currentPalette;
         
         StateMachine* m_rootState;
 

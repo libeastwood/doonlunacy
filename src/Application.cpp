@@ -195,6 +195,7 @@ void Application::SetPalette(SDL_Palette* pal)
     assert(pal != NULL);
     printf("setting palette %d colors\n", pal->ncolors);
     SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors);
+    m_currentPalette = pal;
 };
 
 void Application::InitVideo()
@@ -344,6 +345,7 @@ void Application::Run()
         //fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 
         //BlitCursor();
+        
             
         SDL_Flip(m_screen);
 
