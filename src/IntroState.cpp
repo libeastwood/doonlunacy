@@ -20,6 +20,7 @@ IntroState::IntroState()
     data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
     
     Palettefile pal (data, len);
+
     Application::Instance()->SetPalette(pal.getPalette());
 };
 
@@ -53,7 +54,15 @@ int IntroState::Execute(float dt)
         };
     };
 
-    m_animSurface = m_wsa->getPicture(m_currentFrame, Application::Instance()->GetCurrentPalette());
+    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
+    
+    /*
+    printf("ISE %u %u %u\n", palette->colors[12].r,
+                         palette->colors[12].g,
+                         palette->colors[12].b);
+    */
+    
+    m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
 
     assert(m_animSurface != NULL);
     

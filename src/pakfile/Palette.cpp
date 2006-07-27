@@ -20,6 +20,10 @@ Palettefile::Palettefile(unsigned char* buf, int bufsize)
         printf("%d %03d %03d %03d\n", i, c->r, c->g, c->b);
     };
 
+    printf("%u %u %u\n", m_palette->colors[12].r,
+                         m_palette->colors[12].g,
+                         m_palette->colors[12].b);
+
     delete [] buf;
 };
 

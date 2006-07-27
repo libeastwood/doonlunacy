@@ -5,10 +5,12 @@
 #include "pakfile/Wsafile.h"
 
 #include "SDL.h"
-
+#include <list>
 
 class IntroState : public State 
 {
+    typedef std::list<std::string> IntroList;
+    
     public:
         IntroState();
         ~IntroState();
@@ -21,6 +23,8 @@ class IntroState : public State
     public:
         SDL_Surface* m_animSurface;
 
+        IntroList m_wsaNames;
+        
         Wsafile *m_wsa; 
 
         int m_currentFrame;

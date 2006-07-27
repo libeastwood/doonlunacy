@@ -196,6 +196,19 @@ void Application::SetPalette(SDL_Palette* pal)
     printf("setting palette %d colors\n", pal->ncolors);
     SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors);
     m_currentPalette = pal;
+
+    SDL_Palette* palette = m_screen->format->palette;
+    
+    printf("1-- %u %u %u\n", palette->colors[12].r,
+                         palette->colors[12].g,
+                         palette->colors[12].b);
+
+    palette = m_currentPalette;
+    
+    printf("2-- %u %u %u\n", palette->colors[12].r,
+                         palette->colors[12].g,
+                         palette->colors[12].b);
+
 };
 
 void Application::InitVideo()
