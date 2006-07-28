@@ -6,6 +6,7 @@
 
 #include "SDL.h"
 #include <list>
+#include <string>
 
 class IntroState : public State 
 {
@@ -19,6 +20,8 @@ class IntroState : public State
         void JustMadeInactive();
 
         int Execute(float dt);
+
+        void enque(std::string file) { m_wsaNames.push_back(file); }
 
     public:
         SDL_Surface* m_animSurface;

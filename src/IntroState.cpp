@@ -6,7 +6,12 @@
 IntroState::IntroState()
 {
     int len;
-    unsigned char* data = ResMan::Instance()->readFile(std::string("INTRO:INTRO2.WSA"), &len);
+
+    enque("INTRO:INTRO1.WSA");
+    enque("INTRO:INTRO2.WSA");
+    enque("INTRO:INTRO3.WSA");
+    
+    unsigned char* data = ResMan::Instance()->readFile(std::string("INTRO:INTRO1.WSA"), &len);
 
     assert(data != NULL);
 
@@ -44,7 +49,7 @@ int IntroState::Execute(float dt)
 {
     m_frametime += dt;
 
-    if (m_frametime > 1.1f)
+    if (m_frametime > 0.1f)
     {
         m_frametime = 0.0f;
         m_currentFrame ++;
