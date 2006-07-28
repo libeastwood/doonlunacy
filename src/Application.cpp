@@ -324,7 +324,7 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
-    //Font* fnt = FontManager::Instance()->getFont("new8p.fnt");
+    Font* fnt = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     
     m_running = true;
 
@@ -355,8 +355,8 @@ void Application::Run()
 
         //m_rootWidget->draw(m_screen);
 
-        //fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
-        //fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
+        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
+        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 
         //BlitCursor();
         

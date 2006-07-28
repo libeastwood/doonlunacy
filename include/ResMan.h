@@ -9,6 +9,21 @@
 #include <map>
 #include <string>
 
+class FileLike
+{
+    public:
+        FileLike(unsigned char* buf, int size);
+        ~FileLike();
+        
+        void read(void* buf, int size);
+        void seek(int offset);    
+
+    private:
+        unsigned char* m_buf;
+        int m_size;
+        int m_pos;
+};
+
 class Resource
 {
     public:
@@ -54,6 +69,7 @@ class ResMan : public Singleton<ResMan>
         bool addRes(std::string name);
 
         unsigned char* readFile(std::string name, int *size);
+        FileLike* readFile(std::string name);
 
     private:
         ResList m_resources;

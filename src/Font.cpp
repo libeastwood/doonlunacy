@@ -1,5 +1,6 @@
 #include "Font.h"
 #include "Application.h"
+#include "ResMan.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -115,15 +116,14 @@ Font* FontManager::getFont(const char* fn)
 Font* FontManager::loadFont(const char* fn)
 {
     printf("loadFont  %s\n", fn);
-    FILE* file = fopen(fn, "rb");
+    //FILE* file = fopen(fn, "rb");
+    FileLike* file = ResMan::Instance()->readFile(fn);
 
     printf("sizeof word %u, sizeof byte %u\n", sizeof(word), sizeof(byte));
 
     FNTHeader* header = new FNTHeader();
     
-    printf("fsize %d\n", header->fsize);
-
-    fread(header, sizeof(FNTHeader), 1, file);
+    file->read(header, sizeof(FNTHeader));
 
     printf("fsize %d\n", header->fsize);
 
@@ -136,23 +136,22 @@ Font* FontManager::loadFont(const char* fn)
 
     word* dchar = new word[header->nchars+1];
 
-    fread(dchar, sizeof(word), header->nchars+1, file);
+    file->read(dchar, sizeof(word) * (header->nchars+1));
 
     byte* wchar = new byte[header->nchars+1];
 
     printf("wpos %d\n", header->wpos);
-    fseek(file, header->wpos, SEEK_SET);
-    long br = fread(wchar, sizeof(byte), header->nchars+1, file);
-    printf("br %ld %d\n", br, 1);
+    file->seek(header->wpos);
+    file->read(wchar, sizeof(byte) * (header->nchars+1));
 
     if (wchar[0] != 8) printf("bad!!\n");
 
     word* hchar = new word[header->nchars+1];
 
-    fseek(file, header->hpos, SEEK_SET);
-    fread(hchar, sizeof(word), header->nchars+1, file);
+    file->seek(header->hpos);
+    file->read(hchar, sizeof(word) * (header->nchars+1));
 
-    fseek(file, header->cdata, SEEK_SET);
+    file->seek(header->cdata);
 
     FNTCharacter* characters = new FNTCharacter[header->nchars+1];    
     
@@ -169,12 +168,14 @@ Font* FontManager::loadFont(const char* fn)
         printf("size %hd\n", width * height);
         printf("dchar %hd\n", dchar[i]);
 
-        fseek(file, dchar[i], SEEK_SET); 
+        file->seek(dchar[i]); 
         byte* bitmap = new byte[width * height];
-        fread(bitmap, sizeof(byte), width * height, file);
+        file->read(bitmap, sizeof(byte) * (width * height));
         characters[i].bitmap = bitmap;       
     };
 
+    delete file;
+    
     Font* font = new Font(characters, header);
 
     return font;

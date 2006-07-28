@@ -10,6 +10,31 @@
 
 namespace bfs = boost::filesystem;
 
+FileLike::FileLike(unsigned char* buf, int size)
+{
+    m_buf = buf;
+    m_size = size;
+    m_pos = 0;
+};
+
+FileLike::~FileLike()
+{
+    delete m_buf;
+};
+
+void FileLike::read(void* buf, int size)
+{
+    memcpy(buf, &m_buf[m_pos], size);
+    m_pos += size; 
+};
+
+void FileLike::seek(int offset)
+{
+    m_pos = offset;
+};
+
+// ------------------------------------------------------------------
+
 Resource::~Resource()
 {
 
@@ -151,4 +176,11 @@ unsigned char*  ResMan::readFile(std::string name, int *size)
     assert(buf != NULL);
     
     return buf;
+};
+
+FileLike* ResMan::readFile(std::string name)
+{
+    int size;
+    unsigned char* buf = readFile(name, &size);
+    return new FileLike(buf, size);
 };
