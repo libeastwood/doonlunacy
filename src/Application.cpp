@@ -194,7 +194,7 @@ void Application::SetPalette(SDL_Palette* pal)
 {
     assert(pal != NULL);
     printf("setting palette %d colors\n", pal->ncolors);
-    SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors);
+    assert( SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors) == 1 );
     m_currentPalette = pal;
 
     SDL_Palette* palette = m_screen->format->palette;
@@ -215,7 +215,7 @@ void Application::InitVideo()
 {
     Settings* set = Settings::Instance();
     
-    int videoFlags = 0;
+    int videoFlags = SDL_HWPALETTE;
     if (set->m_doubleBuffered)
         videoFlags |= SDL_HWSURFACE | SDL_DOUBLEBUF;
     if (set->m_fullscreen)
@@ -333,7 +333,7 @@ void Application::Run()
     
     while (m_running)
     {
-        SDL_FillRect(m_screen, NULL, COLOUR_BLACK);
+        SDL_FillRect(m_screen, NULL, 0);
 
         HandleEvents();
 
@@ -359,8 +359,16 @@ void Application::Run()
 
         //BlitCursor();
         
+        SDL_Rect pdest = {10, 10, 5, 10};
+
+        for (Uint32 i=0; i!=256; i++)
+        {
+            pdest.x = 7 * i;
+            SDL_FillRect(m_screen, &pdest, i);
+        }    
+
             
-        SDL_Flip(m_screen);
+        assert( SDL_Flip(m_screen) == 0);
 
         fps_frames ++;
 
@@ -369,8 +377,6 @@ void Application::Run()
             fps = fps_frames / (float(now - fps_start) / 1000.0);
 
             printf("fps: %f\n", fps);
-
-            SDL_Delay(100);
 
             fps_frames = 0;
             fps_start = now;
@@ -407,11 +413,11 @@ void Application::HandleEvents()
                 m_rootWidget->handleButtonUp(   event.button.button,
                                                 event.button.x,
                                                 event.button.y);
-		if (event.button.button == 1)
-			gpaloff ++;
-		else
-			gpaloff --;
-		printf("gpla %u\n", gpaloff);
+                if (event.button.button == 1)
+                    gpaloff ++;
+                else
+                    gpaloff --;
+                printf("gpla %u\n", gpaloff);
                 break;
             case SDL_KEYDOWN:
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
@@ -474,7 +480,7 @@ void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
         dest.y = (Settings::Instance()->m_height / 2) - (src->h / 2);
     };
     
-    printf("blitting %d %d %d %d\n", dest.x, dest.y, surface->w, surface->h);
+    //printf("blitting %d %d %d %d\n", dest.x, dest.y, surface->w, surface->h);
     Blit(surface, src, &dest);
 };
 

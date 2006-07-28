@@ -5,33 +5,39 @@
 
 IntroState::IntroState()
 {
-    int len;
-
     enque("INTRO:INTRO1.WSA");
     enque("INTRO:INTRO2.WSA");
     enque("INTRO:INTRO3.WSA");
-    
-    unsigned char* data = ResMan::Instance()->readFile(std::string("INTRO:INTRO1.WSA"), &len);
-
-    assert(data != NULL);
-
-    printf("intro1 len %d\n", len);
-
-    m_wsa = new Wsafile(data, len);
+    enque("INTRO:INTRO5.WSA");
+    enque("INTRO:INTRO6.WSA");
+    enque("INTRO:INTRO7A.WSA");
+    enque("INTRO:INTRO7B.WSA");
+    enque("INTRO:INTRO8A.WSA");
+    enque("INTRO:INTRO8B.WSA");
+    enque("INTRO:INTRO8C.WSA");
+    enque("INTRO:INTRO9.WSA");
+    enque("INTRO:INTRO10.WSA");
+    enque("INTRO:INTRO11.WSA");
+    enque("INTRO:INTRO12.WSA");
 
     m_currentFrame = 0;
     m_frametime = 0.0f;
 
-    data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
+    int len;
+    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
     
     Palettefile pal (data, len);
 
     Application::Instance()->SetPalette(pal.getPalette());
+
+    m_wsa = NULL;
+
+    next();
 };
 
 IntroState::~IntroState()
 {
-    delete m_wsa;
+    if (m_wsa != NULL) delete m_wsa;
 };
 
 void IntroState::JustMadeActive()
@@ -45,6 +51,29 @@ void IntroState::JustMadeInactive()
     State::JustMadeInactive();
 };
 
+void IntroState::load(std::string name)
+{
+    printf("intro loading %s\n", name.c_str());
+    if (m_wsa != NULL) delete m_wsa;
+    
+    int len;
+    unsigned char* data = ResMan::Instance()->readFile(name, &len);
+
+    assert(data != NULL);
+
+    m_wsa = new Wsafile(data, len);
+};
+
+void IntroState::next()
+{
+    printf("loading next..\n");
+    IntroList::iterator it = m_wsaNames.begin();
+    assert( it != m_wsaNames.end() );
+    load(*it);
+    m_wsaNames.pop_front();
+    m_currentFrame = 0 ;
+};
+
 int IntroState::Execute(float dt)
 {
     m_frametime += dt;
@@ -55,7 +84,7 @@ int IntroState::Execute(float dt)
         m_currentFrame ++;
         if (m_currentFrame >= m_wsa->getNumFrames())
         {
-            return -1;
+            next();
         };
     };
 

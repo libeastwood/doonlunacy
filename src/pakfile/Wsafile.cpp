@@ -68,16 +68,18 @@ SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 		return NULL;
 	}
 	
-	printf("Frame Nr.: %d (Size: %dx%d)\n",FrameNumber,SizeX,SizeY);
+	//printf("Frame Nr.: %d (Size: %dx%d)\n",FrameNumber,SizeX,SizeY);
 			
+    /*
         printf("%u %u %u\n", palette->colors[12].r,
                              palette->colors[12].g,
                              palette->colors[12].b);
+    */
         
 	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
 	SDL_LockSurface(pic);
 
-        printf("%u\n", Image[0]);
+        //printf("%u\n", Image[0]);
 
 	//Now we can copy line by line
 	for(int y = 0; y < SizeY;y++) {

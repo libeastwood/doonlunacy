@@ -22,6 +22,8 @@ class IntroState : public State
         int Execute(float dt);
 
         void enque(std::string file) { m_wsaNames.push_back(file); }
+        void next();
+        void load(std::string file);
 
     public:
         SDL_Surface* m_animSurface;
