@@ -6,6 +6,7 @@
 IntroState::IntroState()
 {
     enque("INTRO:INTRO1.WSA");
+    /*
     enque("INTRO:INTRO2.WSA");
     enque("INTRO:INTRO3.WSA");
     enque("INTRO:INTRO5.WSA");
@@ -18,7 +19,7 @@ IntroState::IntroState()
     enque("INTRO:INTRO9.WSA");
     enque("INTRO:INTRO10.WSA");
     enque("INTRO:INTRO11.WSA");
-    enque("INTRO:INTRO12.WSA");
+    */
 
     m_currentFrame = 0;
     m_frametime = 0.0f;
@@ -64,14 +65,20 @@ void IntroState::load(std::string name)
     m_wsa = new Wsafile(data, len);
 };
 
-void IntroState::next()
+bool IntroState::next()
 {
     printf("loading next..\n");
     IntroList::iterator it = m_wsaNames.begin();
-    assert( it != m_wsaNames.end() );
+    if (it == m_wsaNames.end() )
+    {
+        return false;
+    }
+
     load(*it);
     m_wsaNames.pop_front();
     m_currentFrame = 0 ;
+
+    return true;
 };
 
 int IntroState::Execute(float dt)
@@ -84,7 +91,7 @@ int IntroState::Execute(float dt)
         m_currentFrame ++;
         if (m_currentFrame >= m_wsa->getNumFrames())
         {
-            next();
+            if (!next()) return -1;
         };
     };
 

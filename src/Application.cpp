@@ -135,6 +135,7 @@ void Application::Init()
     //realign_buttons();
 
     m_rootState = new TopLevelState();
+    m_rootState->PushState( new MainMenuState() );
     m_rootState->PushState( new IntroState() );
     //m_rootState->PushState( new MainMenuState() );
 }
@@ -359,6 +360,7 @@ void Application::Run()
 
         //BlitCursor();
         
+#if 0
         SDL_Rect pdest = {10, 10, 5, 10};
 
         for (Uint32 i=0; i!=256; i++)
@@ -366,6 +368,7 @@ void Application::Run()
             pdest.x = 7 * i;
             SDL_FillRect(m_screen, &pdest, i);
         }    
+#endif 
 
             
         assert( SDL_Flip(m_screen) == 0);

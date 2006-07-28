@@ -11,11 +11,12 @@
 
 MainMenuState::MainMenuState()
 {
-    m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
+    //m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
     //m_menu = new Window();
     //m_menu->setHeight(m_menuBackground->h);
     //m_menu->setWidth(m_menuBackground->w);
 
+    /*
     m_vbox = new VBox();
     
     m_butSingle = new GraphicButton((SDL_Surface*)(dataFile[UI_Single].dat),
@@ -67,10 +68,12 @@ MainMenuState::MainMenuState()
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
+    */
 };
 
 MainMenuState::~MainMenuState()
 {
+    /*
     delete m_butSingle;
     delete m_butMulti;
     delete m_butMapEd;
@@ -79,6 +82,7 @@ MainMenuState::~MainMenuState()
     delete m_butQuit;
 
     delete m_vbox;
+    */
 };
 
 void MainMenuState::doSkirmish()
