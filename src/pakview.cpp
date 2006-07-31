@@ -1,5 +1,8 @@
 #include "Application.h"
 #include "Settings.h"
+#include "State.h"
+
+#include "gui2/Button.h"
 
 namespace boost {
 
@@ -10,6 +13,35 @@ namespace boost {
 
 }
 
+class PakViewState : public State
+{
+    public:
+       PakViewState()
+       {
+            m_button = new BoringButton("test");
+            m_button->setSize(100, 50);
+            m_button->setPos(10, 10);
+            m_button->setVisible(true);
+
+            Application::Instance()->RootWidget()->addChild(m_button);
+       };
+
+       ~PakViewState()
+       {
+            delete m_button;
+       };
+       
+       int Execute(float dt)
+       {
+           return 0;
+       };
+
+      virtual const char* GetName() { return "PakViewState"; }
+
+    private:
+       BoringButton* m_button;
+};
+
 int main(int argc, char *argv[])
 {
     Settings::Instance()->ParseFile("dunelegacy.cfg");
@@ -18,9 +50,9 @@ int main(int argc, char *argv[])
     Application::Instance()->Init();
     //Application::Instance()->PushState( new MainMenuState() );
     //Application::Instance()->PushState( new IntroState() );
-
-
     
+    Application::Instance()->RootState()->PushState( new PakViewState() );
+
     Application::Instance()->Run();
     
     Application::Destroy();

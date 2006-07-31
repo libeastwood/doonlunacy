@@ -198,16 +198,7 @@ void Application::SetPalette(SDL_Palette* pal)
 
     SDL_Palette* palette = m_screen->format->palette;
     
-    printf("1-- %u %u %u\n", palette->colors[12].r,
-                         palette->colors[12].g,
-                         palette->colors[12].b);
-
     palette = m_currentPalette;
-    
-    printf("2-- %u %u %u\n", palette->colors[12].r,
-                         palette->colors[12].g,
-                         palette->colors[12].b);
-
 };
 
 void Application::InitVideo()
@@ -351,14 +342,14 @@ void Application::Run()
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
 
-        //m_rootWidget->draw(m_screen);
-
-        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
-        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
+        m_rootWidget->draw(m_screen);
 
         //BlitCursor();
         
 #if 0
+        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
+        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
+
         SDL_Rect pdest = {10, 10, 5, 10};
 
         for (Uint32 i=0; i!=256; i++)
@@ -367,9 +358,8 @@ void Application::Run()
             SDL_FillRect(m_screen, &pdest, i);
         }    
 #endif 
-
             
-        assert( SDL_Flip(m_screen) == 0);
+        SDL_Flip(m_screen);
 
         fps_frames ++;
 

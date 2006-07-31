@@ -3,6 +3,7 @@
 
 #include "gui2/Widget.h"
 #include "boost/signal.hpp"
+#include <string>
 
 class Button : public Widget
 {
@@ -32,6 +33,21 @@ class GraphicButton : public Button
         SDL_Surface* m_surfPressed;
 
         bool m_pressed;
+};
+
+
+class BoringButton : public GraphicButton
+{
+    public:
+        BoringButton(std::string caption);
+        ~BoringButton();
+
+        virtual void setSize(Uint16 w, Uint16 h);
+
+    protected:
+        std::string m_caption;
+
+        virtual void redraw();
 };
 
 #endif // DUNE_GUI2_BUTTON

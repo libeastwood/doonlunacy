@@ -18,6 +18,20 @@ Font::~Font()
     delete m_header;
 };
 
+void Font::extents(const char* text, Uint16& w, Uint16& h)
+{
+    FNTCharacter* ch;
+
+    w = 0;
+    h = m_header->height;
+
+    for (unsigned int c=0; c!=strlen(text); c++)
+    {
+        ch = &m_characters[text[c]];
+        w += (2 * ch->width) + 1;
+    };
+};
+
 void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 offy, Uint8 paloff)
 {
     FNTCharacter* ch;
@@ -29,22 +43,6 @@ void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 of
         ch = &m_characters[text[c]];
         bitmap = ch->bitmap;
 
-/*        byte ox;
-        
-
-        for (byte y=0; y!=ch->y_offset; y++)
-        {
-            ox = offx;
-            for (byte x=0; x!=ch->width; x++)
-            {
-                pixels[(ox) + ((y + offy) * surface->w)] = 0;
-                ++ox;
-                pixels[(ox) + ((y + offy) * surface->w)] = 0;
-                ++ox;
-            };
-        };
-	*/
-        
         for (byte y=0; y!=ch->height; y++)
         {
             for (byte x=0; x!=ch->width*2; x+=2)
@@ -52,28 +50,6 @@ void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 of
                 byte lobyte = bitmap[(x/2) + (y*ch->width)] >> 4;
                 byte hibyte = bitmap[(x/2) + (y*ch->width)] & 0x0F;
                 
-                /*
-                if (hibyte==0) 
-                {
-                    printf("  ");    
-                }
-                else
-                {
-                    printf("%2hd", hibyte);
-                }
-                printf(".");
-
-                if (lobyte==0)
-                {
-                    printf("  ");
-                }
-                else
-                {
-                    printf("%2hd", lobyte);
-                };  
-                printf(".");
-                */
-
                 if (hibyte!=0)
                 {
                     pixels[(offx + x) + ((ch->y_offset + y + offy) * surface->w)] = paloff + Uint8(hibyte);

@@ -1,5 +1,8 @@
 #include "gui2/Button.h"
 #include <stdio.h>
+#include "Colours.h"
+#include "Font.h"
+#include "Application.h"
 
 bool Button::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
@@ -43,13 +46,15 @@ void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
     SDL_Rect destrect;
     destrect.x = offx + m_x;
     destrect.y = offy + m_y;
-    
+
     if (m_pressed)
     {
+        assert(m_pressed != NULL);
         SDL_BlitSurface(m_surfPressed, NULL, dest, &destrect);
     }
     else
     {
+        assert(m_surfNormal != NULL);
         SDL_BlitSurface(m_surfNormal, NULL, dest, &destrect);
     };
 };
@@ -75,6 +80,61 @@ bool GraphicButton::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
     m_pressed = false;
     printf("%p up\n", this);
     return Button::handleButtonUp(button, x, y);
+};
+
+// ------------------------------------------------------------------
+
+BoringButton::BoringButton(std::string caption)
+{
+    m_caption = caption;
+};
+
+BoringButton::~BoringButton()
+{
+    SDL_FreeSurface(m_surfNormal);
+    SDL_FreeSurface(m_surfPressed);
+};
+
+void BoringButton::setSize(Uint16 w, Uint16 h)
+{
+    GraphicButton::setSize(w, h);
+    redraw();
+};
+
+void BoringButton::redraw()
+{
+    if (m_surfNormal != NULL) SDL_FreeSurface(m_surfNormal);
+    if (m_surfPressed != NULL) SDL_FreeSurface(m_surfPressed);
+
+    m_surfNormal  = SDL_CreateRGBSurface(SDL_SWSURFACE, m_width, m_height, 8,
+                                        0, 0, 0, 0); 
+    assert(m_surfNormal != NULL);
+
+    m_surfPressed = SDL_CreateRGBSurface(SDL_SWSURFACE, m_width, m_height, 8,
+                                        0, 0, 0, 0); 
+    assert(m_surfPressed != NULL);
+
+    SDL_Palette* pal = Application::Instance()->Screen()->format->palette;
+
+    SDL_SetColors(m_surfNormal, pal->colors, 0, pal->ncolors);
+    SDL_SetColors(m_surfPressed, pal->colors, 0, pal->ncolors);
+
+    SDL_FillRect(m_surfNormal, NULL, COLOUR_DARKGREY);
+    SDL_FillRect(m_surfPressed, NULL, COLOUR_LIGHTGREY);
+
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+
+    Uint16 textw, texth;
+    font->extents(m_caption.c_str(), textw, texth);
+
+    printf("text wh %u %u\n", textw, texth);
+
+    font->render(m_caption.c_str(), m_surfNormal,
+                    (m_width / 2) - (textw / 2), 
+                    (m_height / 2) - (texth / 2), 0);
+    font->render(m_caption.c_str(), m_surfPressed,
+                    (m_width / 2) - (textw / 2), 
+                    (m_height / 2) - (texth / 2), 0);
 };
 
 
