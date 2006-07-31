@@ -32,7 +32,7 @@ void Font::extents(const char* text, Uint16& w, Uint16& h)
     };
 };
 
-void Font::render(const char* text, SDL_Surface* surface, Uint16 offx, Uint16 offy, Uint8 paloff)
+void Font::render(const char* text, SDL_Surface* surface, int offx, int offy, Uint8 paloff)
 {
     FNTCharacter* ch;
     byte* bitmap;

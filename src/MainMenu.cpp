@@ -18,7 +18,7 @@ MainMenuState::MainMenuState()
 
     m_vbox = new VBox();
 
-    const int bw = 100;
+    const int bw = 200;
     const int bh = 20;
     
     m_butSingle = new BoringButton("Single Player");
