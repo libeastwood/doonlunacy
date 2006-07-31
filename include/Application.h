@@ -71,6 +71,7 @@ class Application : public Singleton<Application>
 
         Uint16 m_cursorX, m_cursorY;
         Cursor m_cursorFrame;
+        SDL_Surface* m_cursor;
 };
 
 

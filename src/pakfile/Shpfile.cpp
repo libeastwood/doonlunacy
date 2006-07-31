@@ -124,6 +124,8 @@ SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette)
 	}
 		
 	SDL_UnlockSurface(pic);
+
+        SDL_SetColorKey(pic, SDL_SRCCOLORKEY, 0);
 	
 	if(ImageOut != NULL) {
 		free(ImageOut);

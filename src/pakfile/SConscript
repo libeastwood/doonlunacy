@@ -1,44 +1,16 @@
 Import('env')
 
-from glob import glob
-
-gui_sources = glob("gui/*.cpp")
-structure_sources = glob("structures/*.cpp")
-unit_sources = glob("units/*.cpp")
-base_sources = glob("*.cpp")
-
-all_sources = gui_sources + structure_sources + unit_sources + base_sources
-
-#all_sources.remove('Menu.cpp')
-
-all_sources = [ "Application.cpp",
-                "Settings.cpp",
-                "Font.cpp",
-                "State.cpp",            
-                "DataFile.cpp",
-
-                "TopLevelState.cpp",
-                "MenuBase.cpp", 
-                "MainMenu.cpp", 
-                "SingleMenu.cpp", 
-
-                "gui2/Widget.cpp",
-                "gui2/Container.cpp",
-                "gui2/Button.cpp",
-                "gui2/VBox.cpp",
-
-                "pakfile/CpsFile.cpp",
-                "pakfile/Decode.cpp",
-                "pakfile/IcnFile.cpp",
-                "pakfile/Pakfile.cpp",
-                "pakfile/Shpfile.cpp",
-                "pakfile/Wsafile.cpp",
-
-                "main.cpp",
+all_sources = [ 
+                "Cpsfile.cpp",
+                "Decode.cpp",
+                "Icnfile.cpp",
+                "Pakfile.cpp",
+                "Shpfile.cpp",
+                "Wsafile.cpp",
+                "Palette.cpp",
               ]
 
-#all_sources += [env.Object('SDL_rwops_zzip.c')]
 
-env.Program("../dunelegacy", all_sources)
+env.StaticLibrary("pakfile", all_sources)
 
 

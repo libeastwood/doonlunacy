@@ -122,7 +122,7 @@ void BoringButton::redraw()
     SDL_FillRect(m_surfNormal, NULL, 23);
     SDL_FillRect(m_surfPressed, NULL, 18);
 
-    Font* font = FontManager::Instance()->getFont("DUNE:NEW8P.FNT");
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
     Uint16 textw, texth;
     font->extents(m_caption.c_str(), textw, texth);
@@ -131,10 +131,10 @@ void BoringButton::redraw()
 
     font->render(m_caption.c_str(), m_surfNormal,
                     (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 15);
+                    (m_height / 2) - (texth / 2), 2);
     font->render(m_caption.c_str(), m_surfPressed,
                     (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 25);
+                    (m_height / 2) - (texth / 2), 2);
 };
 
 

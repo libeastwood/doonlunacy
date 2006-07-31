@@ -25,12 +25,19 @@ class MainMenuState : public MenuBaseState
     private:
         VBox* m_vbox;
         
-        GraphicButton* m_butSingle;
-        GraphicButton* m_butMulti;
-        GraphicButton* m_butMapEd;
-        GraphicButton* m_butOptions;
-        GraphicButton* m_butAbout;
-        GraphicButton* m_butQuit;
+        //GraphicButton* m_butSingle;
+        //GraphicButton* m_butMulti;
+        //GraphicButton* m_butMapEd;
+        //GraphicButton* m_butOptions;
+        //GraphicButton* m_butAbout;
+        //GraphicButton* m_butQuit;
+
+        BoringButton* m_butSingle;
+        BoringButton* m_butMulti;
+        BoringButton* m_butMapEd;
+        BoringButton* m_butOptions;
+        BoringButton* m_butAbout;
+        BoringButton* m_butQuit;
         
 };
 

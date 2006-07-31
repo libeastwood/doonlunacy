@@ -24,11 +24,11 @@
 #include "TopLevelState.h"
 #include "DataFile.h"
 
-//#include "pakfile/Pakfile.h"
+#include "pakfile/Palette.h"
+#include "pakfile/Shpfile.h"
 
 #include "ResMan.h"
 
-#define SCREEN_BPP 8
 #define VERSION "0.94.1"
 
 Uint8 gpaloff;
@@ -41,14 +41,16 @@ Application::Application()
 
     m_cursorX = 0;
     m_cursorY = 0;
+    m_cursorFrame = CURSOR_NORMAL;
 };
 
 Application::~Application()
 {
     delete m_rootState;
+    delete m_rootWidget;
     
     FontManager::Destroy();
-    destroyDataFile();
+    //destroyDataFile();
     //MentatClass::Destroy();
 
     //Mix_CloseAudio();
@@ -103,7 +105,6 @@ void Application::Init()
     //mutex_currentWidget = SDL_CreateMutex();
     //mutex_playersJoined = SDL_CreateMutex();
 
-    LoadData();
 
     m_rootWidget = new Container();
 
@@ -123,6 +124,8 @@ void Application::Init()
     //MentatClass::Instance();
 
     InitVideo();
+
+    LoadData();
 
     //char versionString[100];
     //sprintf(versionString, "%s", VERSION);
@@ -256,6 +259,19 @@ void Application::LoadData()
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
 
+    int len;
+    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
+    
+    Palettefile pal (data, len);
+
+    SetPalette(pal.getPalette());
+
+    data = ResMan::Instance()->readFile("DUNE:MOUSE.SHP", &len);
+
+    Shpfile mouse (data, len);
+
+    m_cursor = mouse.getPicture(0, m_screen->format->palette);
+
     //Pakfile intropak ("intro.pak");
     //int nfiles = intropak.getNumFiles();
     //for (int i=0; i!=nfiles; i++)
@@ -344,7 +360,7 @@ void Application::Run()
 
         m_rootWidget->draw(m_screen);
 
-        //BlitCursor();
+        BlitCursor();
         
 #if 0
         fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
@@ -426,14 +442,14 @@ void Application::HandleEvents()
 void Application::BlitCursor()
 {
     SDL_Rect dest, src;
-    SDL_Surface* surface = (SDL_Surface*)dataFile[UI_Cursor].dat;
+    SDL_Surface* surface = m_cursor; // being lazy, rename me 
 
     dest.x = m_cursorX;
     dest.y = m_cursorY;
-    src.w = surface->w / NUM_CURSORS;
-    src.h = surface->h;
-    src.x = src.w * m_cursorFrame;
-    src.y = 0;
+    //src.w = surface->w / NUM_CURSORS;
+    //src.h = surface->h;
+    //src.x = src.w * m_cursorFrame;
+    //src.y = 0;
 
     //reposition image so pointing on right spot
 
@@ -451,7 +467,7 @@ void Application::BlitCursor()
         dest.y -= dest.h/2;
     }
 
-    SDL_BlitSurface(surface, &src, m_screen, &dest);
+    SDL_BlitSurface(surface, NULL, m_screen, &dest);
 };
 
 

@@ -25,13 +25,7 @@ IntroState::IntroState()
     m_currentFrame = 0;
     m_frametime = 0.0f;
 
-    int len;
-    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
     
-    Palettefile pal (data, len);
-
-    Application::Instance()->SetPalette(pal.getPalette());
-
     m_wsa = NULL;
 
     next();
