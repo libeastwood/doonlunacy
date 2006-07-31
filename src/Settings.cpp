@@ -12,7 +12,7 @@ Settings::Settings()
 
   m_debug = false;
 
-  m_dataDir = "/home/dunk/downloads/dune/";
+  m_dataDir = "paks/";
 
   m_doubleBuffered = false;
 };

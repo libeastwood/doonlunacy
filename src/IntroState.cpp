@@ -9,6 +9,7 @@ IntroState::IntroState()
     /*
     enque("INTRO:INTRO2.WSA");
     enque("INTRO:INTRO3.WSA");
+    enque("INTRO:INTRO4.WSA");
     enque("INTRO:INTRO5.WSA");
     enque("INTRO:INTRO6.WSA");
     enque("INTRO:INTRO7A.WSA");
