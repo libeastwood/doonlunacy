@@ -59,4 +59,5 @@ env.Append(LIBPATH = [	"${SDL_LIB_PATH}",
 
 Export('env')
 
+#SConscript("src/pakfile/SConscript")
 SConscript("src/SConscript")

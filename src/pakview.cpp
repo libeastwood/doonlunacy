@@ -1,7 +1,5 @@
 #include "Application.h"
 #include "Settings.h"
-#include "MainMenu.h"
-#include "IntroState.h"
 
 namespace boost {
 
@@ -18,8 +16,11 @@ int main(int argc, char *argv[])
     Settings::Instance()->ParseOptions(argc, argv);
 
     Application::Instance()->Init();
-    Application::Instance()->RootState()->PushState( new MainMenuState() );
-    Application::Instance()->RootState()->PushState( new IntroState() );
+    //Application::Instance()->PushState( new MainMenuState() );
+    //Application::Instance()->PushState( new IntroState() );
+
+
+    
     Application::Instance()->Run();
     
     Application::Destroy();

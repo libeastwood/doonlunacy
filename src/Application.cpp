@@ -22,8 +22,6 @@
 #include "Settings.h"
 #include "Font.h"
 #include "TopLevelState.h"
-#include "MainMenu.h"
-#include "IntroState.h"
 #include "DataFile.h"
 
 //#include "pakfile/Pakfile.h"
@@ -126,8 +124,8 @@ void Application::Init()
 
     InitVideo();
 
-    char versionString[100];
-    sprintf(versionString, "%s", VERSION);
+    //char versionString[100];
+    //sprintf(versionString, "%s", VERSION);
     //menuText = TTF_RenderText_Solid(font[16], versionString, palette->colors[COLOUR_BLACK]);
     
     //init_loadWindow();
@@ -135,8 +133,8 @@ void Application::Init()
     //realign_buttons();
 
     m_rootState = new TopLevelState();
-    m_rootState->PushState( new MainMenuState() );
-    m_rootState->PushState( new IntroState() );
+    //m_rootState->PushState( new MainMenuState() );
+    //m_rootState->PushState( new IntroState() );
     //m_rootState->PushState( new MainMenuState() );
 }
 

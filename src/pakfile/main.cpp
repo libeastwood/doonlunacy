@@ -1,6 +1,3 @@
-/* Created by Anjuta version 1.2.4 */
-/*	This file will not be overwritten */
-
 #include <iostream>
 #include <string.h>
 #include <SDL.h>

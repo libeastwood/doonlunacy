@@ -1,5 +1,7 @@
 Import('env')
 
+SConscript("pakfile/SConscript")
+
 from glob import glob
 
 gui_sources = glob("gui/*.cpp")
@@ -24,27 +26,33 @@ all_sources = [ "Application.cpp",
                 "SingleMenu.cpp", 
 
                 "ResMan.cpp",
+              ]
 
+gui_sources = [
                 "gui2/Widget.cpp",
                 "gui2/Container.cpp",
                 "gui2/Button.cpp",
                 "gui2/VBox.cpp",
 
-                "pakfile/Cpsfile.cpp",
+              ]
+
+pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Decode.cpp",
                 "pakfile/Icnfile.cpp",
                 "pakfile/Pakfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
                 "pakfile/Palette.cpp",
-
-                "main.cpp",
               ]
 
-#all_sources = ["ResMan.cpp"]
+gamelib = env.StaticLibrary("dune_game", all_sources)
+guilib  = env.StaticLibrary("dune_gui", gui_sources)
+paklib  = env.StaticLibrary("dune_pak", pak_sources)
 
-#all_sources += [env.Object('SDL_rwops_zzip.c')]
+dunelegacy = env.Program("../dunelegacy", ["main.cpp", gamelib, guilib, paklib] )
+pakview = env.Program("../pakview", ["pakview.cpp", gamelib, guilib, paklib] )
 
-env.Program("../dunelegacy", all_sources)
+Default(dunelegacy)
+Default(pakview)
 
 
