@@ -350,6 +350,9 @@ void Application::Run()
         fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
         fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 
+#endif 
+
+#if 1
         SDL_Rect pdest = {10, 10, 5, 10};
 
         for (Uint32 i=0; i!=256; i++)

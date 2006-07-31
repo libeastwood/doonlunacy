@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "Settings.h"
 #include "State.h"
+#include "ResMan.h"
+#include "pakfile/Palette.h"
 
 #include "gui2/Button.h"
 
@@ -18,12 +20,20 @@ class PakViewState : public State
     public:
        PakViewState()
        {
-            m_button = new BoringButton("test");
+            int len;
+            unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
+            
+            Palettefile pal (data, len);
+
+            Application::Instance()->SetPalette(pal.getPalette());
+
+            m_button = new BoringButton("Test");
             m_button->setSize(100, 50);
             m_button->setPos(10, 10);
             m_button->setVisible(true);
 
             Application::Instance()->RootWidget()->addChild(m_button);
+
        };
 
        ~PakViewState()
