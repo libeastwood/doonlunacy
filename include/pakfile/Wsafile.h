@@ -12,7 +12,7 @@ public:
 	Wsafile(unsigned char * bufFiledata, int bufsize);
 	~Wsafile();
 
-	SDL_Surface * getPicture(Uint32 FrameNumber, SDL_Palette* pal);
+	SDL_Surface * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
 
 	inline int getNumFrames() { return (int) NumFrames; };
 	inline Uint32 getFramesPer1024ms() { return FramesPer1024ms; };

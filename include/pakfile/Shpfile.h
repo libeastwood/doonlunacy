@@ -16,7 +16,7 @@ public:
 	Shpfile(unsigned char * bufFiledata, int bufsize);
 	~Shpfile();
 
-	SDL_Surface* getPicture(Uint32 IndexOfFile);
+	SDL_Surface* getPicture(Uint32 IndexOfFile, SDL_Palette *palette);
 
 	inline int getNumFiles() {return (int) NumFiles;};
 
