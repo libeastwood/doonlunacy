@@ -187,7 +187,7 @@ struct Point
         //@{
 
         //! Constructor
-        Point(T x, T y) : x(x), y(y) {  };
+        Point(T x = 0, T y = 0) : x(x), y(y) {  };
         //! Copy constructor
         Point(const Point &point) { *this = point; };
         
