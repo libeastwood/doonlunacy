@@ -1,12 +1,12 @@
 #include "IntroState.h"
 #include "ResMan.h"
 #include "Application.h"
+#include "Settings.h"
 #include "pakfile/Palette.h"
-
+#include "boost/bind.hpp"
 IntroState::IntroState()
 {
     enque("INTRO:INTRO1.WSA");
-    /*
     enque("INTRO:INTRO2.WSA");
     enque("INTRO:INTRO3.WSA");
     enque("INTRO:INTRO4.WSA");
@@ -20,7 +20,6 @@ IntroState::IntroState()
     enque("INTRO:INTRO9.WSA");
     enque("INTRO:INTRO10.WSA");
     enque("INTRO:INTRO11.WSA");
-    */
 
     m_currentFrame = 0;
     m_frametime = 0.0f;
@@ -29,6 +28,11 @@ IntroState::IntroState()
     m_wsa = NULL;
 
     next();
+    m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),
+                                  Settings::Instance()->GetHeight());
+                                  
+    m_butIntro->onClick.connect(
+            boost::bind(&IntroState::SkipIntro, this) );
 };
 
 IntroState::~IntroState()
@@ -36,14 +40,21 @@ IntroState::~IntroState()
     if (m_wsa != NULL) delete m_wsa;
 };
 
+void IntroState::SkipIntro()
+{
+    mp_parent->PopState();
+}
+
 void IntroState::JustMadeActive()
 {
-    
+ 
+    Application::Instance()->RootWidget()->addChild(m_butIntro);
     State::JustMadeActive();
 };
 
 void IntroState::JustMadeInactive()
 {
+    Application::Instance()->RootWidget()->deleteChild(m_butIntro);
     State::JustMadeInactive();
 };
 

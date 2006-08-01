@@ -50,5 +50,12 @@ class BoringButton : public GraphicButton
         virtual void redraw();
 };
 
+class TranspButton : public Button
+{
+    public:
+        TranspButton(Uint16 w, Uint16 h);
+        ~TranspButton();
+};
+
 #endif // DUNE_GUI2_BUTTON
 
