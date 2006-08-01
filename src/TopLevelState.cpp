@@ -20,7 +20,6 @@ void TopLevelState::JustMadeInactive()
 
 int TopLevelState::Execute(float dt)
 {
-    StateMachine::Execute(dt);
+    return StateMachine::Execute(dt);
 
-    return 0;
 };
