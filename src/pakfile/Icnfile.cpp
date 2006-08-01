@@ -98,7 +98,7 @@ Icnfile::~Icnfile()
 	;
 };
 
-SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
+SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette) {
 	SDL_Surface * pic;
 	
 	if(IndexOfFile >= NumFiles) {
@@ -119,7 +119,7 @@ SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
 		return NULL;
 	}
 			
-	//SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
 	SDL_LockSurface(pic);	
 
 	//Now we can copy to surface
