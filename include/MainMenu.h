@@ -15,11 +15,10 @@ class MainMenuState : public MenuBaseState
         //void JustMadeInactive();
 
         //int Execute(float dt);
-
+        void doOptions();
         void doSkirmish();
         void doSingle();
         void doQuit();
-        
         virtual const char* GetName() { return "MainMenuState"; }
 
     private:

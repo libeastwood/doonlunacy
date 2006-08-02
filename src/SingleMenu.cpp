@@ -9,43 +9,46 @@
 
 SingleMenuState::SingleMenuState()
 {
-    m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
+    //m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
     //m_menu = new Window();
     //m_menu->setHeight(m_menuBackground->h);
     //m_menu->setWidth(m_menuBackground->w);
 
+    const int bw = 200;
+    const int bh = 20;
+
     m_vbox = new VBox();
     
-    m_butCampaign = new GraphicButton((SDL_Surface*)(dataFile[UI_Single_Campaign].dat),
-                       (SDL_Surface*)(dataFile[UI_Single_Campaign_Pressed].dat));
+    m_butCampaign = new BoringButton("Campaign");
+    m_butCampaign->setSize(bw, bh);
     m_butCampaign->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butCampaign);
 
-    m_butCustom = new GraphicButton((SDL_Surface*)(dataFile[UI_Single_Custom].dat),
-                       (SDL_Surface*)(dataFile[UI_Single_Custom_Pressed].dat));
+    m_butCustom = new BoringButton("Custom Game");
+    m_butCustom->setSize(bw,bh);
     m_butCustom->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butCustom);
 
-    m_butSkirmish = new GraphicButton((SDL_Surface*)(dataFile[UI_Single_Skirmish].dat),
-                       (SDL_Surface*)(dataFile[UI_Single_Skirmish_Pressed].dat));
+    m_butSkirmish = new BoringButton("Skirmish");
+    m_butSkirmish->setSize(bw, bh);
     m_butSkirmish->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butSkirmish);
 
-    m_butLoad = new GraphicButton((SDL_Surface*)(dataFile[UI_Load].dat),
-                       (SDL_Surface*)(dataFile[UI_Load_Pressed].dat));
+    m_butLoad = new BoringButton("Load Game");
+    m_butLoad->setSize(bw, bh);
     m_butLoad->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butLoad);
 
-    m_butCancel = new GraphicButton((SDL_Surface*)(dataFile[UI_Cancel].dat),
-                       (SDL_Surface*)(dataFile[UI_Cancel_Pressed].dat));
+    m_butCancel = new BoringButton("Cancel");
+    m_butCancel->setSize(bw, bh);
     m_butCancel->onClick.connect(
             boost::bind(&SingleMenuState::doCancel, this) );
    
@@ -71,7 +74,7 @@ SingleMenuState::~SingleMenuState()
 
 void SingleMenuState::doSkirmish()
 {
-    printf("skirmish!\n");
+    printf("Skirmish\n");
 };
 
 void SingleMenuState::doCancel()
@@ -94,7 +97,7 @@ void SingleMenuState::JustMadeInactive()
 
 int SingleMenuState::Execute(float dt)
 {
-    Application::Instance()->BlitCentered(m_menuBackground);
+    //Application::Instance()->BlitCentered(m_menuBackground);
 
     return 0;
 };

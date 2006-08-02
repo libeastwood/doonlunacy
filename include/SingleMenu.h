@@ -30,11 +30,11 @@ class SingleMenuState : public State
 
         VBox* m_vbox;
         
-        GraphicButton* m_butCampaign;
-        GraphicButton* m_butCustom;
-        GraphicButton* m_butSkirmish;
-        GraphicButton* m_butLoad;
-        GraphicButton* m_butCancel;
+        BoringButton* m_butCampaign;
+        BoringButton* m_butCustom;
+        BoringButton* m_butSkirmish;
+        BoringButton* m_butLoad;
+        BoringButton* m_butCancel;
 };
 
 #endif // DUNE_SINGLEMENU_H

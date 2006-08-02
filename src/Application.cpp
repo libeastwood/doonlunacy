@@ -239,6 +239,23 @@ void Application::InitVideo()
     m_rootWidget->setPos(0, 0);
 };
 
+void Application::SetVideoMode()
+{
+    Settings* set = Settings::Instance();
+
+    int videoFlags = SDL_HWPALETTE;
+    if (set->m_doubleBuffered)
+        videoFlags |= SDL_HWSURFACE | SDL_DOUBLEBUF;
+    if (set->m_fullscreen)
+        videoFlags |= SDL_FULLSCREEN;
+
+    m_screen = SDL_SetVideoMode(set->m_width, set->m_height, 
+                              8, videoFlags);
+                              
+    m_rootWidget->setSize(set->m_width, set->m_height);
+    m_rootWidget->setPos(0, 0);
+}
+
 void Application::LoadData()
 {
     printf("loading resources\n");

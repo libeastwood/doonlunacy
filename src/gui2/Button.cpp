@@ -101,6 +101,12 @@ void BoringButton::setSize(Uint16 w, Uint16 h)
     redraw();
 };
 
+void BoringButton::setCaption(std::string newcaption)
+{
+    m_caption = newcaption;
+    redraw();
+};
+
 void BoringButton::redraw()
 {
     if (m_surfNormal != NULL) SDL_FreeSurface(m_surfNormal);

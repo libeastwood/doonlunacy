@@ -48,6 +48,7 @@ class Application : public Singleton<Application>
 
         void SetPalette(SDL_Palette* pal);
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
+        void SetVideoMode();
 
     private:
         void InitSettings();
@@ -56,6 +57,7 @@ class Application : public Singleton<Application>
         void InitFont();
         void InitVideo();
         void LoadData();
+
 
         void HandleEvents();
         void BlitCursor();

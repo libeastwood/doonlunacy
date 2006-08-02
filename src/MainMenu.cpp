@@ -5,6 +5,7 @@
 #include "Settings.h"
 
 #include "SingleMenu.h"
+#include "OptionsMenu.h"
 
 #include "boost/bind.hpp"
 
@@ -53,7 +54,7 @@ MainMenuState::MainMenuState()
     //m_butOptions = new GraphicButton((SDL_Surface*)(dataFile[UI_OptionsMM].dat),
     //                   (SDL_Surface*)(dataFile[UI_OptionsMM_Pressed].dat));
     m_butOptions->onClick.connect(
-            boost::bind(&MainMenuState::doSkirmish, this) );
+            boost::bind(&MainMenuState::doOptions, this) );
    
     m_vbox->addChild(m_butOptions);
 
@@ -94,6 +95,11 @@ MainMenuState::~MainMenuState()
     delete m_butQuit;
 
     delete m_vbox;
+};
+
+void MainMenuState::doOptions()
+{
+    mp_parent->PushState( new OptionsMenuState() );
 };
 
 void MainMenuState::doSkirmish()
