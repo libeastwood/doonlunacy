@@ -46,7 +46,7 @@ class Application : public Singleton<Application>
         void Blit(SDL_Surface* surface, SDL_Rect* src, SDL_Rect* dest);
         void BlitCentered(SDL_Surface* surface, SDL_Rect* src=NULL);
 
-        void SetPalette(SDL_Palette* pal);
+        void SetPalette();
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
 
         void UpdateVideoMode(bool fullscreen);

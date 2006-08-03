@@ -25,7 +25,7 @@ class PakViewState : public State
             
             Palettefile pal (data, len);
 
-            Application::Instance()->SetPalette(pal.getPalette());
+            Application::Instance()->SetPalette();
 
             m_button = new BoringButton("Test");
             m_button->setSize(100, 50);

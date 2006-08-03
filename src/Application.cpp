@@ -192,8 +192,15 @@ void Application::InitNet()
 };
 
 
-void Application::SetPalette(SDL_Palette* pal)
+void Application::SetPalette()
 {
+    int len;
+    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
+    
+    Palettefile tmp (data, len);
+
+    SDL_Palette * pal = tmp.getPalette();
+    
     assert(pal != NULL);
     printf("setting palette %d colors\n", pal->ncolors);
     assert( SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors) == 1 );
@@ -224,7 +231,7 @@ void Application::InitVideo()
     
     // reset the palette if we've got one 
     if (m_currentPalette != NULL)
-        SetPalette(m_currentPalette);
+        SetPalette();
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -273,12 +280,10 @@ void Application::LoadData()
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
 
+    SetPalette();
     int len;
-    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
     
-    Palettefile pal (data, len);
-
-    SetPalette(pal.getPalette());
+    unsigned char * data;
 
     data = ResMan::Instance()->readFile("DUNE:MOUSE.SHP", &len);
 
