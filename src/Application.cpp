@@ -222,16 +222,9 @@ void Application::InitVideo()
         Die();
     };
     
-    // set the video palette 
-    // grab the palette from any image, we use menu
-
-    //SDL_Surface* menu = (SDL_Surface*)(dataFile[UI_Menu].dat);
-    //SDL_Palette* palette = new SDL_Palette;
-    //palette->ncolors = menu->format->palette->ncolors;
-    //palette->colors = new SDL_Color[palette->ncolors];
-    //memcpy(palette->colors, menu->format->palette->colors, 
-    //        sizeof(SDL_Color) * palette->ncolors);
-    //SDL_SetColors(m_screen, palette->colors, 0, palette->ncolors);
+    // reset the palette if we've got one 
+    if (m_currentPalette != NULL)
+        SetPalette(m_currentPalette);
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -239,22 +232,26 @@ void Application::InitVideo()
     m_rootWidget->setPos(0, 0);
 };
 
-void Application::SetVideoMode()
+void Application::UpdateVideoMode(bool fs)
 {
-    Settings* set = Settings::Instance();
+    Settings::Instance()->m_fullscreen = fs;
+    InitVideo();
+};
+    
+void Application::UpdateVideoMode(Uint16 w, Uint16 h)
+{
+    Settings::Instance()->m_width = w;
+    Settings::Instance()->m_height = h;
+    InitVideo();
+};
 
-    int videoFlags = SDL_HWPALETTE;
-    if (set->m_doubleBuffered)
-        videoFlags |= SDL_HWSURFACE | SDL_DOUBLEBUF;
-    if (set->m_fullscreen)
-        videoFlags |= SDL_FULLSCREEN;
-
-    m_screen = SDL_SetVideoMode(set->m_width, set->m_height, 
-                              8, videoFlags);
-                              
-    m_rootWidget->setSize(set->m_width, set->m_height);
-    m_rootWidget->setPos(0, 0);
-}
+void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
+{
+    Settings::Instance()->m_width = w;
+    Settings::Instance()->m_height = h;
+    Settings::Instance()->m_fullscreen = fs;
+    InitVideo();
+};
 
 void Application::LoadData()
 {

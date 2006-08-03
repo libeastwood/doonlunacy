@@ -17,6 +17,7 @@ Settings::Settings()
   m_doubleBuffered = false;
 };
 
+
 void Settings::ParseFile(char* fn)
 {
   /*

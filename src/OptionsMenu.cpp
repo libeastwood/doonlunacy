@@ -38,16 +38,16 @@ OptionsMenuState::OptionsMenuState()
     switch (set->GetWidth())
     {
         case 640:
-                m_caption = "640x480";
-                break;
+            m_caption = "640x480";
+            break;
                 
         case 800:
-                m_caption = "800x600";
-                break;
+            m_caption = "800x600";
+            break;
                 
         case 1024:
-                m_caption = "1024x768";
-                break;                
+            m_caption = "1024x768";
+            break;                
     
     }
 
@@ -94,37 +94,39 @@ void OptionsMenuState::doOk()
 
 void OptionsMenuState::doResolution()
 {
-    Settings * set = Settings::Instance();
+    Application* app = Application::Instance();
+    Settings* set = Settings::Instance();
+
     switch (set->GetWidth())
     {
         case 640:
-                set->SetScreenSize(800, 600);
-                m_butResolution->setCaption("800x600");
-                break;
+            app->UpdateVideoMode(800, 600);
+            m_butResolution->setCaption("800x600");
+            break;
                 
         case 800:
-                set->SetScreenSize(1024, 768);
-                m_butResolution->setCaption("1024x768");
-                break;
+            app->UpdateVideoMode(1024, 768);
+            m_butResolution->setCaption("1024x768");
+            break;
                 
         case 1024:
-                set->SetScreenSize(640, 480);
-                m_butResolution->setCaption("640x480");
-                break;                
-    
+            app->UpdateVideoMode(640, 480);
+            m_butResolution->setCaption("640x480");
+            break;                
     }
-    Application::Instance()->SetVideoMode();
 }
 
 void OptionsMenuState::doScreenMode()
 {
     Settings * set = Settings::Instance();
-    set->SetFullScreen(!Settings::Instance()->GetFullScreen());
-    if (set->GetFullScreen())
+    bool newSetting = !set->GetFullScreen();
+    
+    Application::Instance()->UpdateVideoMode(newSetting);
+
+    if (newSetting)
         m_butWindowMode->setCaption("Fullscreen");
     else
         m_butWindowMode->setCaption("Window mode");
-    Application::Instance()->SetVideoMode();
 }
 
 void OptionsMenuState::JustMadeActive()

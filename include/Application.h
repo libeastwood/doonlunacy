@@ -48,7 +48,10 @@ class Application : public Singleton<Application>
 
         void SetPalette(SDL_Palette* pal);
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
-        void SetVideoMode();
+
+        void UpdateVideoMode(bool fullscreen);
+        void UpdateVideoMode(Uint16 w, Uint16 h);
+        void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
 
     private:
         void InitSettings();

@@ -59,7 +59,7 @@ class Settings: public Singleton<Settings>
 {
     friend class Singleton<Settings>;
     friend class Application;
-    friend class OptionsMenuState;
+    
     protected:
         Settings();
 
@@ -80,15 +80,8 @@ class Settings: public Singleton<Settings>
         inline int GetHeight()
                 { return m_height; }
 
-        void SetScreenSize(int width, int height)
-                { m_width = width;
-                  m_height = height; };
-
         inline bool GetFullScreen()
                 { return m_fullscreen; }
-
-        void SetFullScreen(bool x)
-                { m_fullscreen = x; }
 
         inline bool GetDebug()
                 { return m_debug; }
