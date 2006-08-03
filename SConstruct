@@ -57,6 +57,9 @@ env.Append(LIBPATH = [	"${SDL_LIB_PATH}",
 			"${ZZIP_LIB_PATH}",
 			"${BOOST_LIB_PATH}"])
 
+# Uncomment to disable logging
+#env.Append(CCFLAGS=["-DLOG_DISABLED"])
+
 Export('env')
 
 #SConscript("src/pakfile/SConscript")
