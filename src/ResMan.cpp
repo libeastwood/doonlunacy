@@ -49,8 +49,8 @@ DIRResource::DIRResource(bfs::path path)
 
 unsigned char* DIRResource::readFile(bfs::path path, int *size)
 {
-    assert(0); // this doesnt work
-    bfs::path fullpath (m_path.string() + path.string());
+    // TODO: seems to work now, tested on linux, please test it on windows. (otpetrik)
+    bfs::path fullpath (m_path.string() + "/" + path.string());
 
     FILE *file = fopen (fullpath.string().c_str(), "rb");
     fseek(file, 0, SEEK_END);
