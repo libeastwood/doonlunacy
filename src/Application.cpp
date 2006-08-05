@@ -348,7 +348,7 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
-    Font* fnt = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    //Font* fnt = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     
     m_running = true;
 
@@ -442,11 +442,6 @@ void Application::HandleEvents()
                 m_rootWidget->handleButtonUp(   event.button.button,
                                                 event.button.x,
                                                 event.button.y);
-                if (event.button.button == 1)
-                    gpaloff ++;
-                else
-                    gpaloff --;
-                printf("gpla %u\n", gpaloff);
                 break;
             case SDL_KEYDOWN:
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
@@ -460,7 +455,7 @@ void Application::HandleEvents()
 
 void Application::BlitCursor()
 {
-    SDL_Rect dest, src;
+    SDL_Rect dest;
     SDL_Surface* surface = m_cursor; // being lazy, rename me 
 
     dest.x = m_cursorX;

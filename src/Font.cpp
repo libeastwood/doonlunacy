@@ -95,13 +95,9 @@ Font* FontManager::loadFont(const char* fn)
     //FILE* file = fopen(fn, "rb");
     FileLike* file = ResMan::Instance()->readFile(fn);
 
-    printf("sizeof word %u, sizeof byte %u\n", sizeof(word), sizeof(byte));
-
     FNTHeader* header = new FNTHeader();
     
     file->read(header, sizeof(FNTHeader));
-
-    printf("fsize %d\n", header->fsize);
 
     // this checks if its a valid font
     if (header->unknown1 != 0x0500) printf("failed unknown1\n");
@@ -116,7 +112,6 @@ Font* FontManager::loadFont(const char* fn)
 
     byte* wchar = new byte[header->nchars+1];
 
-    printf("wpos %d\n", header->wpos);
     file->seek(header->wpos);
     file->read(wchar, sizeof(byte) * (header->nchars+1));
 
@@ -136,13 +131,10 @@ Font* FontManager::loadFont(const char* fn)
         byte offset = hchar[i] & 0xFF;
         byte height = hchar[i] >> 8;
         byte width =( wchar[i] + 1) / 2;
-        printf("%d width = %hd offset = %hd height = %hd\n", i, width, offset, height);
         
         characters[i].width = width;
         characters[i].height = height;
         characters[i].y_offset = offset;
-        printf("size %hd\n", width * height);
-        printf("dchar %hd\n", dchar[i]);
 
         file->seek(dchar[i]); 
         byte* bitmap = new byte[width * height];

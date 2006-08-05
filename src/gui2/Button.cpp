@@ -62,7 +62,6 @@ void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
 bool GraphicButton::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
 {
     if (!m_visible) return false;   
-    printf("%p down\n", this);
     if (!hitTest(x, y)) 
     {
         m_pressed = false;
@@ -78,7 +77,6 @@ bool GraphicButton::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
     if (!m_visible) return false;   
     m_pressed = false;
-    printf("%p up\n", this);
     return Button::handleButtonUp(button, x, y);
 };
 
@@ -132,8 +130,6 @@ void BoringButton::redraw()
 
     Uint16 textw, texth;
     font->extents(m_caption.c_str(), textw, texth);
-
-    printf("text wh %u %u\n", textw, texth);
 
     font->render(m_caption.c_str(), m_surfNormal,
                     (m_width / 2) - (textw / 2), 

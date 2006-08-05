@@ -29,7 +29,7 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 		FramesPer1024ms = SDL_SwapLE16( *((Uint16*) (Filedata+6)) );		
 	}
 
-        printf("FramesPer1024ms = %d", FramesPer1024ms);
+        printf("FramesPer1024ms = %d\n", FramesPer1024ms);
 	
 	if(Index[0] == 0) {
 		Index++;

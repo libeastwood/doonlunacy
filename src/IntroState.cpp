@@ -20,6 +20,8 @@ IntroState::IntroState()
     enque("INTRO:INTRO9.WSA");
     enque("INTRO:INTRO10.WSA");
     enque("INTRO:INTRO11.WSA");
+    // seems nice to play this again ;)
+    enque("INTRO:INTRO1.WSA");
 
     m_currentFrame = 0;
     m_frametime = 0.0f;
