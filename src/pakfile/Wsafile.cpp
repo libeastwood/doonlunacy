@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
+Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize, 
+                SDL_Surface* lastframe ) : Decode()
 {
 	Filedata = bufFiledata;
 	WsaFilesize = bufsize;
@@ -26,10 +27,14 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 		FramesPer1024ms = SDL_SwapLE32( *((Uint32*) (Filedata+6)) );
 	} else {
 		Index = (Uint32 *) (Filedata + 8);
-		FramesPer1024ms = SDL_SwapLE16( *((Uint16*) (Filedata+6)) );		
+		FramesPer1024ms = SDL_SwapLE16( *((Uint16*) (Filedata+6)) );
 	}
 
+        // surely /1000.0f not 100?!
+        fps = (FramesPer1024ms / 1024.0f) / 100.0f;
+
         printf("FramesPer1024ms = %d\n", FramesPer1024ms);
+        printf("FPS = %.3f\n", fps);
 	
 	if(Index[0] == 0) {
 		Index++;
@@ -45,6 +50,11 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize) : Decode()
 		fprintf(stderr, "Error: Unable to allocate memory for decoded WSA-Frames!\n");
 		exit(EXIT_FAILURE);				
 	}
+
+        if (lastframe != NULL)
+        {
+            memcpy(decodedFrames, lastframe->pixels, SizeX*SizeY);
+        };
 	
 	decodeFrames();
 };

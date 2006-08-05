@@ -4,24 +4,27 @@
 #include "Settings.h"
 #include "pakfile/Palette.h"
 #include "boost/bind.hpp"
+
+
+
 IntroState::IntroState()
 {
-    enque("INTRO:INTRO1.WSA");
-    enque("INTRO:INTRO2.WSA");
-    enque("INTRO:INTRO3.WSA");
-    enque("INTRO:INTRO4.WSA");
-    enque("INTRO:INTRO5.WSA");
-    enque("INTRO:INTRO6.WSA");
-    enque("INTRO:INTRO7A.WSA");
-    enque("INTRO:INTRO7B.WSA");
-    enque("INTRO:INTRO8A.WSA");
-    enque("INTRO:INTRO8B.WSA");
-    enque("INTRO:INTRO8C.WSA");
-    enque("INTRO:INTRO9.WSA");
-    enque("INTRO:INTRO10.WSA");
-    enque("INTRO:INTRO11.WSA");
+    enque(Frame("INTRO:INTRO1.WSA", false, 1.0f));
+    enque(Frame("INTRO:INTRO2.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO3.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO4.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO5.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO6.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO7A.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO7B.WSA", true, 0.0f));
+    enque(Frame("INTRO:INTRO8A.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO8B.WSA", true, 0.0f));
+    enque(Frame("INTRO:INTRO8C.WSA", true, 0.0f));
+    enque(Frame("INTRO:INTRO9.WSA", false, 0.0f));
+    enque(Frame("INTRO:INTRO10.WSA", false, 1.0f));
+    enque(Frame("INTRO:INTRO11.WSA", false, 0.0f));
     // seems nice to play this again ;)
-    enque("INTRO:INTRO1.WSA");
+    enque(Frame("INTRO:INTRO1.WSA", false, 1.0f));
 
     m_currentFrame = 0;
     m_frametime = 0.0f;
@@ -60,17 +63,26 @@ void IntroState::JustMadeInactive()
     State::JustMadeInactive();
 };
 
-void IntroState::load(std::string name)
+void IntroState::load(Frame frame)
 {
-    printf("intro loading %s\n", name.c_str());
-    if (m_wsa != NULL) delete m_wsa;
+    printf("intro loading %s\n", frame.filename.c_str());
+    Wsafile* old_wsa = m_wsa;
     
     int len;
-    unsigned char* data = ResMan::Instance()->readFile(name, &len);
+    unsigned char* data = ResMan::Instance()->readFile(frame.filename, &len);
 
     assert(data != NULL);
 
-    m_wsa = new Wsafile(data, len);
+    if (frame.continuation)
+    {
+        m_wsa = new Wsafile(data, len, m_animSurface);
+    }
+    else
+    {
+        m_wsa = new Wsafile(data, len);
+    }
+
+    if (old_wsa != NULL) delete old_wsa;
 };
 
 bool IntroState::next()
@@ -93,7 +105,7 @@ int IntroState::Execute(float dt)
 {
     m_frametime += dt;
 
-    if (m_frametime > 0.1f)
+    if (m_frametime > m_wsa->getFPS())
     {
         m_frametime = 0.0f;
         m_currentFrame ++;
