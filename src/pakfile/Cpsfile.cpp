@@ -1,4 +1,5 @@
 #include "pakfile/Cpsfile.h"
+#include "Application.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,8 +48,11 @@ SDL_Surface* Cpsfile::getPicture()
 	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,SIZE_X,SIZE_Y,8,0,0,0,0))== NULL) {
 		return NULL;
 	}
-			
-	//SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	
+	
+	SDL_Palette* palette = Application::Instance()->Screen()->format->palette;		
+	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	
 	SDL_LockSurface(pic);	
 
 	//Now we can copy line by line
