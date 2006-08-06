@@ -191,7 +191,6 @@ void Application::InitNet()
     */
 };
 
-
 void Application::SetPalette()
 {
     int len;
@@ -222,7 +221,7 @@ void Application::InitVideo()
         videoFlags |= SDL_FULLSCREEN;
 
     m_screen = SDL_SetVideoMode(set->m_width, set->m_height, 
-                              8, videoFlags);
+                                  8, videoFlags);
     if(!m_screen)
     {
         fprintf(stderr, "ERROR: Couldn't set video mode: %s\n", SDL_GetError());
@@ -291,38 +290,9 @@ void Application::LoadData()
 
     m_cursor = mouse.getPicture(0, m_screen->format->palette);
 
-    //Pakfile intropak ("intro.pak");
-    //int nfiles = intropak.getNumFiles();
-    //for (int i=0; i!=nfiles; i++)
-    //{
-    //    printf("found file %s\n", intropak.getFilename(i));
-    //};
-
-    
-    
-    //loadDataFile();
-    
     /*
-    fprintf(stdout, "loading data.....\n");
-    loadDataFile();
-
     fprintf(stdout, "starting sound...\n");
     soundPlayer = new SoundPlayerClass();
-
-    fprintf(stdout, "starting main menu.......\n");
-
-    menu = (SDL_Surface*)(dataFile[UI_Menu].dat);
-    palette = new SDL_Palette;
-    palette->ncolors = menu->format->palette->ncolors;
-    palette->colors = new SDL_Color[palette->ncolors];
-
-    //i suspect the palette on one of the images is corrupt...so we have to redefine white
-    palette->colors[COLOUR_WHITE].r = 255;
-    palette->colors[COLOUR_WHITE].g = 255;
-    palette->colors[COLOUR_WHITE].b = 255;
-
-    // looks like this should be a function
-    memcpy(palette->colors, menu->format->palette->colors, sizeof(SDL_Color)*palette->ncolors);
     */
 };
 
