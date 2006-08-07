@@ -3,6 +3,7 @@
 #include "Colours.h"
 #include "Font.h"
 #include "Application.h"
+#include "Gfx.h"
 
 bool Button::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
@@ -49,7 +50,7 @@ void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
 
     if (m_pressed)
     {
-        assert(m_pressed != NULL);
+        assert(m_surfPressed != NULL);
         SDL_BlitSurface(m_surfPressed, NULL, dest, &destrect);
     }
     else
@@ -118,13 +119,27 @@ void BoringButton::redraw()
                                         0, 0, 0, 0); 
     assert(m_surfPressed != NULL);
 
+    SDL_LockSurface(m_surfNormal);
+    SDL_LockSurface(m_surfPressed);
+
     SDL_Palette* pal = Application::Instance()->Screen()->format->palette;
 
     SDL_SetColors(m_surfNormal, pal->colors, 0, pal->ncolors);
     SDL_SetColors(m_surfPressed, pal->colors, 0, pal->ncolors);
 
-    SDL_FillRect(m_surfNormal, NULL, 30);
-    SDL_FillRect(m_surfPressed, NULL, 30);
+    SDL_FillRect(m_surfNormal, NULL, 115);
+    SDL_FillRect(m_surfPressed, NULL, 115);
+    
+    /*
+    // dark brown box
+    SDL_Rect r = {0, 0, m_width -1, m_height -1};
+    drawRect(m_surfNormal, r, 229, false);
+
+    // bottom line 
+    drawHLine(m_surfNormal, 1, m_height, m_width, 226);
+    // far right line
+    drawVLine(m_surfNormal, m_width, 0, m_height, 226);
+    */
 
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
