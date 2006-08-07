@@ -1,12 +1,12 @@
 /*!
-    \file String.h
+    \file Strings.h
     \brief String related stuff
 
     @note
     There are only typedefs for now, but soon there will be caches to parse strings easier.
 */    
-#ifndef DUNE_STRING_H
-#define DUNE_STRING_H
+#ifndef DUNE_STRINGS_H
+#define DUNE_STRINGS_H
 
 #include <string>
 #include <sstream>
@@ -57,4 +57,4 @@ T fromString(ConstString string)
 
 //@}
 
-#endif // DUNE_STRING_H
+#endif // DUNE_STRINGS_H

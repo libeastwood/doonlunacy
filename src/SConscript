@@ -27,7 +27,7 @@ all_sources = [ "Application.cpp",
                 "OptionsMenu.cpp",
                 "Gfx.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
-                "String.cpp",
+                "Strings.cpp",
                 "Log.cpp",
 		
                 "ResMan.cpp",

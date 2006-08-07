@@ -28,7 +28,7 @@
 #define DUNE_LOG_H
 
 #include "singleton.h"
-#include "String.h"
+#include "Strings.h"
 
 #include <map>
 #include <boost/shared_ptr.hpp>
