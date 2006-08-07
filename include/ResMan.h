@@ -34,6 +34,7 @@ class Resource
         virtual unsigned char* readFile(boost::filesystem::path path, int *size) { return NULL; }
     protected:
         boost::filesystem::path m_path;
+        bool mb_writable;
 };
 
 
