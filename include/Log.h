@@ -11,44 +11,27 @@
 
     @note
     Do not add new log verbosity levels to this file, instead create your own 
-    enum in file in question. Use LOG_LEVEL_AVAILABLE as basis for your enum:
+    enum in file in question. Use LV_AVAILABLE as basis for your enum:
     
     @code
     enum LogAiVerbosity
     {
-        LOG_AI_WORLDWIDE = LOG_VERBOSITY_AVAILABLE,
-        LOG_AI_PLATOON,
-        LOG_AI_SQUAD
+        LV_AI_WORLDWIDE = LV_AVAILABLE,
+        LV_AI_PLATOON,
+        LV_AI_SQUAD
     };
     @endcode
-    
-    @note
-    To make logging easier for subsystem SOMETHING, define your own macros:
-    
-    @code
-
-    #define SOMETHING_LOG(level,...)   S_LOG("something", level, __VA_ARGS__)
-    #define SOMETHING_LOG_ERROR(...)   SOMETHING_LOG(LOG_ERROR, __VA_ARGS__)
-    #define SOMETHING_LOG_FATAL(...)   SOMETHING_LOG(LOG_FATAL, __VA_ARGS__)
-    #define SOMETHING_LOG_WARNING(...) SOMETHING_LOG(LOG_WARNING, __VA_ARGS__)
-    #define SOMETHING_LOG_INFO(...)    SOMETHING_LOG(LOG_INFO, __VA_ARGS__)
-    
-    @endcode
-        
+            
 */    
 
 #ifndef DUNE_LOG_H
 #define DUNE_LOG_H
 
 #include "singleton.h"
+#include "String.h"
 
-#include <string>
 #include <map>
 #include <boost/shared_ptr.hpp>
-
-// TODO: not sure where these belong, mayby separate file Types.h ? (otpetrik)
-typedef std::string String;
-typedef const std::string &ConstString;
 
 #ifndef LOG_DISABLED
 
@@ -59,17 +42,17 @@ typedef const std::string &ConstString;
 enum LogVerbosity
 {
     //! bye, bye !
-    LOG_FATAL = 0,
+    LV_FATAL = 0,
     //! that hurt...
-    LOG_ERROR,
+    LV_ERROR,
     //! i can handle that
-    LOG_WARNING,
+    LV_WARNING,
     //! look what's happening
-    LOG_INFO,
+    LV_INFO,
     //! first user loglevel
-    LOG_VERBOSITY_AVAILABLE,
+    LV_AVAILABLE,
     //! last loglevel (used to set full logging)
-    LOG_VERBOSITY_MAX = 255
+    LV_MAX = 255
 };
 
 class LogBackend;
@@ -124,8 +107,7 @@ class LogBackendStdout : public LogBackend
     
     @note: For logging itself, do not use this class, use macros !
 
-    @see S_LOG, S_LOG_FATAL, S_LOG_ERROR, S_LOG_WARNING, S_LOG_INFO
-    @see G_LOG, G_LOG_FATAL, G_LOG_ERROR, G_LOG_WARNING, G_LOG_INFO
+    @see LOG, LOG_FATAL, LOG_ERROR, LOG_WARNING, LOG_INFO
 */
 class Log : public Singleton<Log>
 {
@@ -150,9 +132,28 @@ class Log : public Singleton<Log>
             @param format printf-type message string             
         */
         void log(ConstString logSystem, LogVerbosity verbosity, const char *format, ...);
+        void logFatal(ConstString logSystem, const char *format, ...);
+        void logError(ConstString logSystem, const char *format, ...);
+        void logWarning(ConstString logSystem, const char *format, ...);
+        void logInfo(ConstString logSystem, const char *format, ...);
 
         //@}
 
+
+        //! @name Indentation
+        //@{
+        
+        void indent()
+        {
+            indentLevel++;
+        };
+        void unindent()        
+        {
+            if (indentLevel > 0)
+                indentLevel--;
+        };
+        
+        //@}
 
         //! @name Verbosity setting
         //@{
@@ -194,8 +195,10 @@ class Log : public Singleton<Log>
         LogVerbosity defaultVerbosity;
         LogBackendPtr backend;
         std::map<const String, LogVerbosity> verbosities;
+        int indentLevel;
         
-        void doLog(ConstString logSystem, LogVerbosity verbosity, const char *message);
+        bool checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity);
+        void doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, va_list args);
         
 };
 
@@ -206,50 +209,37 @@ class Log : public Singleton<Log>
 //@{
 
 //! Log message of given verbosity emitted by given system
-#define S_LOG(system,verbosity,...) Log::Instance()->log(system, verbosity, __VA_ARGS__)
+#define LOG           Log::Instance()->log
 //! Log fatal message emitted by given system
-#define S_LOG_FATAL(system,...) Log::Instance()->log(system, LOG_FATAL, __VA_ARGS__)
+#define LOG_FATAL     Log::Instance()->logFatal
 //! Log error message emitted by given system
-#define S_LOG_ERROR(system,...) Log::Instance()->log(system, LOG_ERROR, __VA_ARGS__)
+#define LOG_ERROR     Log::Instance()->logError
 //! Log warning message emitted by given system
-#define S_LOG_WARNING(system,...) Log::Instance()->log(system, LOG_WARNING, __VA_ARGS__)
+#define LOG_WARNING   Log::Instance()->logWarning
 //! Log info message emitted by given system
-#define S_LOG_INFO(system,...) Log::Instance()->log(system, LOG_INFO, __VA_ARGS__)
+#define LOG_INFO      Log::Instance()->logInfo
 
-//@}
+//! Increase indentation for following messages
+#define LOG_INDENT      Log::Instance()->indent
 
-//! @name Global log
-//! Messages not bound to any given system
-//@{
-
-//! Log message of given verbosity
-#define G_LOG(level,...) S_LOG("", level, __VA_ARGS__)
-//! Log fatal message
-#define G_LOG_FATAL(...) G_LOG(LOG_FATAL, __VA_ARGS__)
-//! Log error message
-#define G_LOG_ERROR(...) G_LOG(LOG_ERROR, __VA_ARGS__)
-//! Log warning message
-#define G_LOG_WARNING(...) G_LOG(LOG_WARNING, __VA_ARGS__)
-//! Log info message
-#define G_LOG_INFO(...) G_LOG(LOG_INFO, __VA_ARGS__)
+//! Decrease indentation for following messages
+#define LOG_UNINDENT    Log::Instance()->unindent
 
 //@}
 
 #else // LOG_DISABLED
 
 // few useless macros
+// TODO: not sure what to do with these, they raise some warnings... (otpetrik)
 
-#define S_LOG(system,verbosity,...) ((void)(0))
-#define S_LOG_FATAL(system,...)     ((void)(0))
-#define S_LOG_ERROR(system,...)     ((void)(0))
-#define S_LOG_WARNING(system,...)   ((void)(0))
-#define S_LOG_INFO(system,...)      ((void)(0))
-#define G_LOG(level,...)            ((void)(0))
-#define G_LOG_FATAL(...)            ((void)(0))
-#define G_LOG_ERROR(...)            ((void)(0))
-#define G_LOG_WARNING(...)          ((void)(0))
-#define G_LOG_INFO(...)             ((void)(0))
+#define LOG           ((void)(0))
+#define LOG_FATAL     ((void)(0))
+#define LOG_ERROR     ((void)(0))
+#define LOG_WARNING   ((void)(0))
+#define LOG_INFO      ((void)(0))
 
+#define LOG_INDENT      ((void)(0))
+#define LOG_UNINDENT    ((void)(0))
 
 #endif // LOG_DISABLED
 
