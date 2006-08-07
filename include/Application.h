@@ -49,6 +49,8 @@ class Application : public Singleton<Application>
         void SetPalette();
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
 
+        void SetClearColor(Uint32 palIndex) { m_clearColor = palIndex; }
+
         void UpdateVideoMode(bool fullscreen);
         void UpdateVideoMode(Uint16 w, Uint16 h);
         void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
@@ -77,6 +79,8 @@ class Application : public Singleton<Application>
         Uint16 m_cursorX, m_cursorY;
         Cursor m_cursorFrame;
         SDL_Surface* m_cursor;
+
+        Uint32 m_clearColor;
 };
 
 

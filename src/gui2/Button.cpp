@@ -130,16 +130,16 @@ void BoringButton::redraw()
     SDL_FillRect(m_surfNormal, NULL, 115);
     SDL_FillRect(m_surfPressed, NULL, 115);
     
-    /*
+   
     // dark brown box
     SDL_Rect r = {0, 0, m_width -1, m_height -1};
     drawRect(m_surfNormal, r, 229, false);
 
     // bottom line 
-    drawHLine(m_surfNormal, 1, m_height, m_width, 226);
+    drawHLine(m_surfNormal, 0, m_height-1, m_width-1, 226, false);
     // far right line
-    drawVLine(m_surfNormal, m_width, 0, m_height, 226);
-    */
+    drawVLine(m_surfNormal, m_width-1, 0, m_height-1, 226, false);
+   
 
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
@@ -152,6 +152,9 @@ void BoringButton::redraw()
     font->render(m_caption.c_str(), m_surfPressed,
                     (m_width / 2) - (textw / 2), 
                     (m_height / 2) - (texth / 2), 47);
+
+	SDL_UnlockSurface(m_surfNormal);
+    SDL_UnlockSurface(m_surfPressed);
 };
 
 // ------------------------------------------------------------------

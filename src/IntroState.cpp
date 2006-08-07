@@ -170,7 +170,7 @@ void IntroState::Frame::doHolding(float dt)
 
 IntroState::IntroState()
 {
-    Frame* tf;
+	m_currentFrame = NULL;
 
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
@@ -253,7 +253,7 @@ void IntroState::SkipIntro()
 
 void IntroState::JustMadeActive()
 {
- 
+    Application::Instance()->SetClearColor(0);
     Application::Instance()->RootWidget()->addChild(m_butIntro);
     State::JustMadeActive();
 };

@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+//#include "Log.h"
+
 class FileLike
 {
     public:

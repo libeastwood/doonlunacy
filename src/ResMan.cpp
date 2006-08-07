@@ -1,8 +1,10 @@
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem/operations.hpp" 
+#include "boost/format.hpp"
 
 #include "ResMan.h"
 #include "Settings.h"
+//#include "Log.h"
 
 //#include "boost/filesystem/fstream.hpp"    // ditto
 
@@ -87,7 +89,7 @@ unsigned char* PAKResource::readFile(bfs::path path, int *size)
     int filesize;
     unsigned char *buf =  m_pakfile->getFile(path.string().c_str(), &filesize);
     
-    printf("read pak %s size %d\n", path.string().c_str(), filesize);
+    //RESMAN_LOG_INFO(boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);
 
     assert(buf != NULL);
     assert(filesize != 0);

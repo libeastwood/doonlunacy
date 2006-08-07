@@ -27,7 +27,7 @@ all_sources = [ "Application.cpp",
                 "OptionsMenu.cpp",
                 "Gfx.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
-                "Log.cpp",
+                #"Log.cpp",
 
                 "ResMan.cpp",
               ]
@@ -50,7 +50,7 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
               ]
 
 gamelib = env.StaticLibrary("dune_game", all_sources)
-guilib  = env.StaticLibrary("dune_gui", gui_sources)
+guilib  = env.StaticLibrary("dune_gui", gui_sources + gamelib)
 paklib  = env.StaticLibrary("dune_pak", pak_sources)
 
 dunelegacy = env.Program("../dunelegacy", ["main.cpp", gamelib, guilib, paklib] )
@@ -58,5 +58,4 @@ pakview = env.Program("../pakview", ["pakview.cpp", gamelib, guilib, paklib] )
 
 Default(dunelegacy)
 Default(pakview)
-
 

@@ -328,7 +328,7 @@ void Application::Run()
     
     while (m_running)
     {
-        SDL_FillRect(m_screen, NULL, 0);
+        SDL_FillRect(m_screen, NULL, m_clearColor);
 
         HandleEvents();
 

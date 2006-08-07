@@ -2,7 +2,8 @@
 
 #ifndef LOG_DISABLED
 
-#include <stdio.h>
+#include
+<stdio.h>
 #include <stdarg.h>
 
 #define LOG_DEFAULT_VERBOSITY LOG_VERBOSITY_MAX
