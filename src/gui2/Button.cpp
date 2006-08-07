@@ -128,19 +128,57 @@ void BoringButton::redraw()
     SDL_SetColors(m_surfPressed, pal->colors, 0, pal->ncolors);
 
     SDL_FillRect(m_surfNormal, NULL, 115);
-    SDL_FillRect(m_surfPressed, NULL, 115);
+    SDL_FillRect(m_surfPressed, NULL, 116);
     
-   
-    // dark brown box
-    SDL_Rect r = {0, 0, m_width -1, m_height -1};
-    drawRect(m_surfNormal, r, 229, false);
+    /*
+     * Button normal
+     */   
+    // top lines 
+    drawHLine(m_surfNormal, 0, 0, m_width-1, 229, false);
+    drawHLine(m_surfNormal, 0, 1, m_width-3, 108, false);
 
-    // bottom line 
-    drawHLine(m_surfNormal, 0, m_height-1, m_width-1, 226, false);
-    // far right line
-    drawVLine(m_surfNormal, m_width-1, 0, m_height-1, 226, false);
+    // left lines
+    drawVLine(m_surfNormal, 0, 0, m_height-1, 229, false);
+    drawVLine(m_surfNormal, 1, 1, m_height-2, 108, false);
    
+    // bottom lines
+    drawHLine(m_surfNormal, 1, m_height-2, m_width-2, 226, false);
+    drawHLine(m_surfNormal, 0, m_height-1, m_width-1, 229, false);
+    
+    // right lines
+    drawVLine(m_surfNormal, m_width-1, 0, m_height-1, 229, false);
+    drawVLine(m_surfNormal, m_width-2, 1, m_height-2, 226, false);
+    
+    // final pixels to make it look really duneish
+    putPixel(m_surfNormal, 1, m_height-2, 115);
+    putPixel(m_surfNormal, m_width-2, 1, 115);
+    putPixel(m_surfNormal, m_width-2, m_height-2, 227);
 
+
+    /*
+     * Button pressed
+     */   
+    // top lines 
+    drawHLine(m_surfPressed, 0, 0, m_width-1, 229, false);
+    drawHLine(m_surfPressed, 0, 1, m_width-3, 226, false);
+
+    // left lines
+    drawVLine(m_surfPressed, 0, 0, m_height-1, 229, false);
+    drawVLine(m_surfPressed, 1, 1, m_height-2, 226, false);
+   
+    // bottom lines
+    drawHLine(m_surfPressed, 1, m_height-2, m_width-2, 226, false);
+    drawHLine(m_surfPressed, 0, m_height-1, m_width-1, 229, false);
+    
+    // right lines
+    drawVLine(m_surfPressed, m_width-1, 0, m_height-1, 229, false);
+    drawVLine(m_surfPressed, m_width-2, 1, m_height-2, 226, false);
+    
+    // final pixels to make it look really duneish
+    putPixel(m_surfPressed, 1, m_height-2, 227);
+    putPixel(m_surfPressed, m_width-2, 1, 227);
+    putPixel(m_surfPressed, m_width-2, m_height-2, 227);
+    
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
     Uint16 textw, texth;
@@ -148,10 +186,10 @@ void BoringButton::redraw()
 
     font->render(m_caption.c_str(), m_surfNormal,
                     (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 31);
+                    (m_height / 2) - (texth / 2), 49);
     font->render(m_caption.c_str(), m_surfPressed,
                     (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 47);
+                    (m_height / 2) - (texth / 2), 49);
 
 	SDL_UnlockSurface(m_surfNormal);
     SDL_UnlockSurface(m_surfPressed);
