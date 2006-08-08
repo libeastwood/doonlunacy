@@ -29,6 +29,7 @@ all_sources = [ "Application.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
                 "Strings.cpp",
                 "Log.cpp",
+                "ConfigFile.cpp",
 		
                 "ResMan.cpp",
               ]
