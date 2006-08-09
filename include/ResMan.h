@@ -63,20 +63,20 @@ class Resource
 			@param size if not NULL the file size is put here 
 			@return file data
 		*/
-        virtual unsigned char* readFile(boost::filesystem::path path, int *size) { return NULL; }
+        virtual unsigned char* readFile(std::string path, int *size) { return NULL; }
 		
 		/*!
 			read a text file from resource
 			@param path path to the file to open 
 			@return text from the file
 		*/
-		virtual std::string readText(boost::filesystem::path path) { return ""; }
+		virtual std::string readText(std::string path) { return ""; }
 		/*!
 			write a text file to a resource
 			@param path path to write the file
 			@param text text to write to file 
 		*/
-		virtual void writeText(boost::filesystem::path path, std::string text) {}
+		virtual void writeText(std::string, std::string text) {}
 
 		/*!
 			return true if the resource can be written to 
@@ -97,8 +97,8 @@ class DIRResource : public Resource
 {
     public:
         DIRResource(boost::filesystem::path path) ;
-        unsigned char* readFile(boost::filesystem::path path, int *size);
-		std::string readText(boost::filesystem::path path);
+        unsigned char* readFile(std::string path, int *size);
+		std::string readText(std::string path);
 };
 
 /*!
@@ -107,8 +107,8 @@ class DIRResource : public Resource
 class WritableDIRResource : public DIRResource
 {
 	public:
-		WritableDIRResource(boost::filesystem::path path);
-		void writeText(boost::filesystem::path path, std::string text);
+		WritableDIRResource(std::string path);
+		void writeText(std::string path, std::string text);
 };
 
 /*!
@@ -119,7 +119,7 @@ class PAKResource : public Resource
     public:
         PAKResource(boost::filesystem::path path) ;
         ~PAKResource();
-        unsigned char* readFile(boost::filesystem::path path, int *size);
+		unsigned char* readFile(std::string path, int *size);
     
     private:
         Pakfile *m_pakfile;

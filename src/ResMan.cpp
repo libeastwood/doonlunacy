@@ -58,7 +58,7 @@ DIRResource::DIRResource(bfs::path path)
    m_path = path; 
 };
 
-unsigned char* DIRResource::readFile(bfs::path path, int *size)
+unsigned char* DIRResource::readFile(std::string path, int *size)
 {
     // TODO: seems to work now, tested on linux, please test it on windows. (otpetrik)
     bfs::path fullpath (m_path);
@@ -81,7 +81,7 @@ unsigned char* DIRResource::readFile(bfs::path path, int *size)
     return buf;
 };
 
-std::string DIRResource::readText(boost::filesystem::path path) 
+std::string DIRResource::readText(std::string path) 
 {
 	bfs::path fullpath (m_path);
 	fullpath /= path;
@@ -103,12 +103,12 @@ std::string DIRResource::readText(boost::filesystem::path path)
 
 // ------------------------------------------------------------------
 
-WritableDIRResource::WritableDIRResource(boost::filesystem::path path) : DIRResource(path)
+WritableDIRResource::WritableDIRResource(std::string path) : DIRResource(path)
 {
 	mb_writable = true;
 };
 
-void WritableDIRResource::writeText(boost::filesystem::path path, std::string text)
+void WritableDIRResource::writeText(std::string path, std::string text)
 {
 	bfs::path fullpath(m_path);
 	fullpath /= path;
@@ -132,10 +132,10 @@ PAKResource::~PAKResource()
     delete m_pakfile;
 };
 
-unsigned char* PAKResource::readFile(bfs::path path, int *size)
+unsigned char* PAKResource::readFile(std::string path, int *size)
 {
     int filesize;
-    unsigned char *buf =  m_pakfile->getFile(path.string().c_str(), &filesize);
+    unsigned char *buf =  m_pakfile->getFile(path.c_str(), &filesize);
     
     //RESMAN_LOG_INFO(boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);
 
@@ -270,10 +270,17 @@ void ResMan::writeText(std::string name, std::string text)
 	Resource* res = getResource(name, filename);
 	if (res == NULL) 
 	{
-		printf("resource not found!\n");		
+		printf("resource not found!\n");
+		assert(0);
+		return;
 	};
 
-	assert(res != NULL);
+	if (!res->isWritable())
+	{
+		printf("resource not writable!\n");
+		assert(0);
+		return;
+	};
 
 	res->writeText(filename, text);
 }

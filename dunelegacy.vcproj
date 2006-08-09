@@ -66,6 +66,12 @@
 				RelativePath=".\include\CommViewClass.h">
 			</File>
 			<File
+				RelativePath=".\src\ConfigFile.cpp">
+			</File>
+			<File
+				RelativePath=".\include\ConfigFile.h">
+			</File>
+			<File
 				RelativePath=".\src\CutScene.cpp">
 			</File>
 			<File
