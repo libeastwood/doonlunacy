@@ -261,6 +261,10 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 
 void Application::LoadData()
 {
+	// for config files 
+	// set to the current directory for the moment 
+	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
+
     printf("loading resources\n");
     ResMan::Instance()->addRes("ATRE");
     ResMan::Instance()->addRes("DUNE");
@@ -278,6 +282,13 @@ void Application::LoadData()
     ResMan::Instance()->addRes("VOC");
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
+
+	// example of reading the config file - remove me 
+	std::string config = ResMan::Instance()->readText("CONFIG:config.txt");
+	printf("%s\n", config.c_str());
+
+	config += "newline\n";
+	ResMan::Instance()->writeText("CONFIG:config.txt", config);
 
     SetPalette();
     int len;
@@ -354,7 +365,6 @@ void Application::Run()
 #if 0
         fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
         fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
-
 #endif 
 
 #if 1

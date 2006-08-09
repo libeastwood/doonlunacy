@@ -11,14 +11,33 @@
 
 //#include "Log.h"
 
+/*!
+	Class to emulate a file object using an unsigned char* buffer
+*/
 class FileLike
 {
     public:
+		//! @name Constructors & Destructor
+        //@{
         FileLike(unsigned char* buf, int size);
         ~FileLike();
-        
+		//@}
+
+		//! @name FileLike methods
+        //@{
+		
+        /*! 
+			read data from the buffer
+            @param buf buffer to read data into 
+			@param size amount of bytes to read
+        */
         void read(void* buf, int size);
+		/*!
+			seek to a position in the buffer
+			@param offset offset from the beginning of the buffer in bytes
+		*/
         void seek(int offset);    
+		//@}
 
     private:
         unsigned char* m_buf;
@@ -26,26 +45,75 @@ class FileLike
         int m_pos;
 };
 
+/*!
+	Base class for all resources. 
+*/
 class Resource
 {
     public:
-        Resource() {};
+        //! @name Constructors & Destructor
+        //@{
+		Resource();
         virtual ~Resource();
+		//@}
+
+		/*!
+			read a file from the resource.
+			@param path path to the file to read
+			@param size if not NULL the file size is put here 
+			@return file data
+		*/
         virtual unsigned char* readFile(boost::filesystem::path path, int *size) { return NULL; }
+		
+		/*!
+			read a text file from resource
+			@param path path to the file to open 
+			@return text from the file
+		*/
+		virtual std::string readText(boost::filesystem::path path) { return ""; }
+		/*!
+			write a text file to a resource
+			@param path path to write the file
+			@param text text to write to file 
+		*/
+		virtual void writeText(boost::filesystem::path path, std::string text) {}
+
+		/*!
+			return true if the resource can be written to 
+		*/
+		inline bool isWritable() { return mb_writable; }
+
     protected:
         boost::filesystem::path m_path;
-        bool mb_writable;
+
+		bool mb_writable;
+
 };
 
-
+/*!
+	Directory Resource - all files are read/written from a directory. Supports writing.
+*/
 class DIRResource : public Resource
 {
     public:
         DIRResource(boost::filesystem::path path) ;
         unsigned char* readFile(boost::filesystem::path path, int *size);
+		std::string readText(boost::filesystem::path path);
 };
 
+/*!
+	Writable directory resource for storing config files 
+*/
+class WritableDIRResource : public DIRResource
+{
+	public:
+		WritableDIRResource(boost::filesystem::path path);
+		void writeText(boost::filesystem::path path, std::string text);
+};
 
+/*!
+	PAK file resource - all files are read from a PAK file. Does not support writing.
+*/
 class PAKResource : public Resource
 {
     public:
@@ -57,7 +125,9 @@ class PAKResource : public Resource
         Pakfile *m_pakfile;
 };
 
-
+/*!
+	Class to simplify reading and writing from different resource files. 
+*/
 class ResMan : public Singleton<ResMan>
 {
     friend class Singleton<ResMan>;
@@ -69,14 +139,58 @@ class ResMan : public Singleton<ResMan>
         ~ResMan();
 
     public:
+		//! @name resource management
+		//@{
+		/*!
+			add a resource to the manager. the resource will be searched for 
+			in the directory pointed to by Settings::GetDataDir. It will 
+			first search for a directory and then for the pak file
+			@ param name name of the resource to open 
+			@ return true on success
+		*/
         bool addRes(std::string name);
+		/*!
+			add an existing resource to the resource manager.
+		*/
+		bool addRes(std::string name, Resource *res);
 
+		Resource* getResource(std::string name, std::string& filename);
+		//@}
+
+		//! @name binary functions
+        //@{
+		/*!
+			read a file from the resource.
+			@param path path to the file to read
+			@param size if not NULL the file size is put here 
+			@return file data
+		*/
         unsigned char* readFile(std::string name, int *size);
-        FileLike* readFile(std::string name);
+		/*!
+			read a file from the resource.
+			@param path path to the file to read
+			@return FileLike object
+		*/
+        FileLike* readFile(std::string path);
+		//@}
 
+		//! @name textmode functions
+        //@{
+		/*!
+			read a text file from resource
+			@param path path to the file to open 
+			@return text from the file
+		*/
+		virtual std::string readText(std::string name);
+		/*!
+			write a text file to a resource
+			@param path path to write the file
+			@param text text to write to file 
+		*/
+		virtual void writeText(std::string name, std::string text);
+		//@}
     private:
         ResList m_resources;
-
 };
 
 #endif // DUNE_RESMAN_H
