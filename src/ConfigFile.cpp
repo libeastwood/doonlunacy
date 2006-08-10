@@ -439,6 +439,8 @@ void ValueNode::save(StringOutputCache &cache)
 {
     if (binder != NULL)
         value = binder->getString();
+    if (value.find_first_of("\n\t /*,);") != String::npos)
+        value = "\"" + value + "\"";
     cache.add(value);
 };
         
@@ -505,7 +507,10 @@ String saveFile(NodePtr root)
     assert(root != NULL);
     root->save(c);
     
+    // file should end with a newline
+    c.add("\n");
+    
     return c.getString();
 };
-       
+     
 } // namespace ConfigFile

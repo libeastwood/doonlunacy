@@ -1,6 +1,9 @@
 #include "Settings.h"
 #include <fstream>
 
+#include "Strings.h"
+#include "ResMan.h"
+
 SETTINGSTYPE settings;
 
 Settings::Settings()
@@ -17,6 +20,32 @@ Settings::Settings()
   m_doubleBuffered = false;
 };
 
+
+void Settings::load()
+{
+    String configText = ResMan::Instance()->readText("CONFIG:config.txt");
+    configFile = ConfigFile::loadFile(configText.c_str());
+    ConfigFile::bind("graphics.width", configFile, m_width, 640);
+    ConfigFile::bind("graphics.height", configFile, m_height, 480);
+    ConfigFile::bind("graphics.fullscreen", configFile, m_fullscreen, false);
+    ConfigFile::bind("graphics.double_buffer", configFile, m_doubleBuffered, false);
+    ConfigFile::bind("debug", configFile, m_debug, true);
+    ConfigFile::bind("data_dir", configFile, m_dataDir, String("paks/"));
+
+/*        root = ConfigFile::loadFile((const char *)data);
+	std::string config = ResMan::Instance()->readText("CONFIG:config.txt");
+	printf("%s\n", config.c_str());
+
+	config += "newline\n";
+	ResMan::Instance()->writeText("CONFIG:config.txt", config);
+
+*/
+};
+void Settings::save()
+{
+    String configText = ConfigFile::saveFile(configFile);
+	ResMan::Instance()->writeText("CONFIG:config.txt", configText);    
+};
 
 void Settings::ParseFile(char* fn)
 {

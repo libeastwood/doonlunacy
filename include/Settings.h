@@ -55,6 +55,8 @@ extern SETTINGSTYPE settings;
 
 #include "singleton.h"
 
+#include "ConfigFile.h"
+
 class Settings: public Singleton<Settings>
 {
     friend class Singleton<Settings>;
@@ -70,8 +72,13 @@ class Settings: public Singleton<Settings>
         bool m_doubleBuffered;
 
         std::string m_dataDir;
+        
+        ConfigFile::NodePtr configFile;
 
     public:
+        void load();
+        void save();
+    
         void ParseFile(char* fn);
         void ParseOptions(int argc, char* argv[]);
 

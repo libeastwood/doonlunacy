@@ -1,0 +1,10 @@
+{
+    data_dir = "paks/";
+    debug = false;
+    graphics = {
+        double_buffer = false;
+        fullscreen = false;
+        height = 600;
+        width = 800;
+    };
+}

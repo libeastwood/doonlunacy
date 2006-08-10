@@ -196,7 +196,7 @@ void StringOutputCache::add(ConstString str)
     {
         data += str.substr(index, nlIndex-index);
         data += '\n';
-        for (int i = 0; i <= indentLevel; i++)
+        for (int i = 0; i < indentLevel; i++)
             data += "    "; // 4 spaces for one indent level
         // start next search after the newline
         index = nlIndex+1; 

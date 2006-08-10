@@ -29,10 +29,20 @@ typedef const std::string &ConstString;
 Tries to convert value to string (uses std::ostringstream).
 */
 template <typename T>
-String toString(const T &something)
+inline String toString(const T &something)
 {
     std::ostringstream s;
     s << something;
+    return s.str();
+};
+template <>
+inline String toString(const bool &something)
+{
+    std::ostringstream s;
+    if (something)
+        s << "true";
+    else
+        s << "false";
     return s.str();
 };
 
@@ -46,12 +56,23 @@ Tries to convert string to something (uses std::ostringstream).
 @endcode
 */
 template <typename T>
-T fromString(ConstString string)
+inline T fromString(ConstString string)
 {
     T something;
     std::istringstream s(string);
     s >> something;
     return something;
+};
+template <>
+inline bool fromString(ConstString string)
+{
+    String something;
+    std::istringstream s(string);
+    s >> something;
+    if (something == "true")
+        return true;
+    else
+        return false;
 };
 
 //@}

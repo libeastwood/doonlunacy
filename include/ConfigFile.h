@@ -306,7 +306,12 @@ class MapNode : public Node
 //------------------------------------------------------------------------------
 //! Value node
 /*!
-    Leaf node containg a string
+    Leaf node containg a string.
+
+    @note
+    The string cannot contain any of the following characters: '\n', '\t', ' ', '/', '*', ',', ')', ';'
+    String containing those characters can be escaped by ' or ", but escaped string cannot contain '"' !
+    
 */
 class ValueNode : public Node
 {

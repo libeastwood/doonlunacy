@@ -46,6 +46,9 @@ Application::Application()
 
 Application::~Application()
 {
+    // TODO: not sure where this belongs... (otpetrik)
+    Settings::Instance()->save();
+
     delete m_rootState;
     delete m_rootWidget;
     
@@ -283,13 +286,8 @@ void Application::LoadData()
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
 
-	// example of reading the config file - remove me 
-	std::string config = ResMan::Instance()->readText("CONFIG:config.txt");
-	printf("%s\n", config.c_str());
-
-	config += "newline\n";
-	ResMan::Instance()->writeText("CONFIG:config.txt", config);
-
+    Settings::Instance()->load();
+ 
     SetPalette();
     int len;
     
