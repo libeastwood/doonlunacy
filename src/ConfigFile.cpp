@@ -1,13 +1,9 @@
 /*
-notes: node->load gets string that starts on the real value (= no whitespace on the beginning)
-update Log to allow indentation !! (and use it !)
+note: node->load gets string that starts on the real value (= no whitespace on the beginning)
 
-
-
-todo: change to
-map:
-loading = get node, node->loadvalue
-
+TODO:
+1) fix ValueNode to allow classic single word (see documentation of valuenode for delimiters) or " (drop ') string with ESCAPING !!! (extend Strings.cpp for escaping)
+2) make an unified loading (see loading of map & array, it is a mess)
 */
 #include "ConfigFile.h"
 
@@ -25,19 +21,6 @@ Node::Node()
 Node::~Node()
 {
 };
-        
-void Node::load(StringInputCache &cache)
-{
-};
-void Node::save(StringOutputCache &cache)
-{
-};
-
-NodePtr Node::getNode(StringInputCache &path)
-{
-    return shared_from_this();
-};
-       
 
 //------------------------------------------------------------------------------
 // ArrayNode class
@@ -207,7 +190,43 @@ NodePtr ArrayNode::getNode(StringInputCache &path)
     return node->getNode(path);
 };
 
-//        ArrayNodeNodes nodes;
+NodePtr ArrayNode::getChild(ConstString child)
+{
+    unsigned index;
+
+    assert(child.size() != 0);        
+    if (child[0] != '[')
+        LOG_ERROR("CfgFile", "ArrayNode::getChild - requested invalid child '%s'", child.c_str());    
+    index = fromString<unsigned>(child.substr(1, child.size() - 2));
+    if (index >= nodes.size())
+        LOG_ERROR("CfgFile", "ArrayNode::getChild - requested invalid index '%u'", index);
+        
+    return nodes[index];    
+};
+
+void ArrayNode::addChild(ConstString name, NodePtr child)
+{
+    unsigned index;
+
+    assert(name.size() != 0);        
+
+    LOG_INFO("CfgFile", "ArrayNode::addChild - adding child '%s'...", name.c_str());
+    LOG_INDENT();
+
+    if (name[0] != '[')
+        LOG_ERROR("CfgFile", "ArrayNode::addChild - requested to add an invalid child '%s'", name.c_str());    
+    index = fromString<unsigned>(name.substr(1, name.size() - 2));
+    if (index < nodes.size())
+        LOG_ERROR("CfgFile", "ArrayNode::addChild - child of that index (%u) is already present !", index);
+    if (index > nodes.size())
+        LOG_ERROR("CfgFile", "ArrayNode::addChild - child of that index (%u) would create gap in indexes !", index);
+
+    LOG_UNINDENT();
+    LOG_INFO("CfgFile", "ArrayNode::addChild - done");
+
+    nodes.push_back(child);
+};
+
 
 //------------------------------------------------------------------------------
 // MapNode class
@@ -242,14 +261,15 @@ void MapNode::load(StringInputCache &cache)
             // (this run can be an update called on this node)
             nodes.clear();
 
+            // skip whitespace before name of child node
+            cache.skipWhitespace();
+
             // till the end of map            
             while (cache.peekChar() != '}')
             {
            
                 // skip whitespace before name of child node
                 cache.skipWhitespace();
-
-                // TODO: skip possible comment (end by continue !)
                 
                 // load the child element (childelement = something)
                 loadChild(cache);                
@@ -308,9 +328,7 @@ NodePtr MapNode::getNode(StringInputCache &path)
     // skip possible leading '.'
     if (path.peekChar() == '.')
         path.advance();
-
-//    path.skipChars(".");
-    
+   
     path.skipWhitespace();
 
     // am i requested ?
@@ -329,12 +347,74 @@ NodePtr MapNode::getNode(StringInputCache &path)
     if (i == nodes.end())
     {
         // TODO: remove this warning, it would fill the log while querying the config file !
-        LOG_WARNING("CfgFile", "MapNode::get - child unknown ('%s'), but not allowed to create it !", childName.c_str());
+        LOG_WARNING("CfgFile", "MapNode::get - child unknown ('%s') !", childName.c_str());
         return NodePtr((Node *)NULL);
     };
     
     return (i->second)->getNode(path);
 };
+NodePtr MapNode::getChild(ConstString child)
+{
+    unsigned base;
+    String realChild;
+
+    assert(child.size() != 0);    
+    base = child.find_first_not_of(".");
+    if (base == String::npos)
+    {
+        LOG_ERROR("CfgFile", "MapNode::getChild - requested non dot starting child '%s', this is not supported !", child.c_str());
+        return NodePtr((Node *)NULL);
+    };
+    realChild = child.substr(base, child.size() - base);
+    
+    MapNodeNodes::iterator i = nodes.find(realChild);
+    if (i == nodes.end())
+    {
+        LOG_ERROR("CfgFile", "MapNode::getChild - requested non-existent child '%s'", realChild.c_str());
+        return NodePtr((Node *)NULL);
+    }            
+    return i->second;    
+};
+
+// TODO: recode, looks like a mess
+void MapNode::addChild(ConstString name, NodePtr child)
+{
+    unsigned base;
+    String realName;
+
+    assert(name.size() != 0);    
+
+    LOG_INFO("CfgFile", "MapNode::addChild - adding child '%s'...", name.c_str());
+    LOG_INDENT();
+
+    base = name.find_first_not_of(".");
+    if (base == String::npos)
+    {
+        LOG_ERROR("CfgFile", "MapNode::addChild - requested non dot starting child '%s', this is not supported !", name.c_str());
+        LOG_UNINDENT();
+        LOG_INFO("CfgFile", "MapNode::addChild - FAILED !");
+        return;        
+    };
+    realName = name.substr(base, name.size() - base);
+    
+    MapNodeNodes::iterator i = nodes.find(realName);
+    if (i == nodes.end())
+    {
+        LOG_INFO("CfgFile", "MapNode::addChild - requested non-existent child '%s'", realName.c_str());
+        nodes[realName] = child;
+    }            
+    else
+    {
+        LOG_ERROR("CfgFile", "ArrayNode::addChild - child of that name (%s) is already present !", realName.c_str());
+        LOG_UNINDENT();
+        LOG_INFO("CfgFile", "MapNode::addChild - FAILED !");
+        return;
+    }
+
+    LOG_UNINDENT();
+    LOG_INFO("CfgFile", "MapNode::addChild - done");
+
+}
 
 void MapNode::loadChild(StringInputCache &cache)
 {
@@ -469,12 +549,167 @@ NodePtr ValueNode::getNode(StringInputCache &path)
     
     return shared_from_this();
 };
+NodePtr ValueNode::getChild(ConstString child)
+{
+    if (child.size() != 0)
+    {
+        LOG_ERROR("CfgFile", "ValueNode::getChild - requested a child on ValueNode, child '%s'", child.c_str());
+        return NodePtr((Node *)NULL);
+    };
+    return shared_from_this();
+};
+void ValueNode::addChild(ConstString name, NodePtr child)
+{
+    LOG_ERROR("CfgFile", "ValueNode::addChild - requested adding a child on ValueNode, child '%s'", name.c_str());    
+};
 
 //        String value;
 
 //------------------------------------------------------------------------------
 // Functions
 //------------------------------------------------------------------------------
+
+ParsedPath parsePath(ConstString path)
+{
+    StringInputCache sic(path);
+    ParsedPath output;
+    bool inArray = false; // if not set, then in map
+
+    LOG_INFO("CfgFile", "parsePath - parsing path: '%s'", path.c_str());
+    
+    if (sic.peekChar() == '[')
+    {
+        inArray = true;
+        // skip '['
+        sic.advance();
+    }
+    else if (sic.peekChar() == '.')
+    {
+        // skip '.'
+        sic.advance();
+    }
+    
+    while (sic.isEos() == false)
+    {           
+        if (inArray)
+        {
+            // in array
+            output.push_back("[" + sic.getWord("]") + "]");
+            
+            // skip ]
+            sic.advance();
+        }
+        else
+        {
+            // in map
+            output.push_back("." + sic.getWord(".["));
+        };
+        
+        // check the end of path
+        if (sic.isEos())
+            break;        
+            
+        switch (sic.peekChar())
+        {
+            case '.':
+                inArray = false;
+                break;
+            case '[':
+                inArray = true;
+                break;                
+            default:
+                LOG_INFO("CfgFile", "parsePath - malformed path ! '%s' (part: '%s')", path.c_str(), sic.c_str() + sic.getPosition());
+                return ParsedPath();
+        };
+        
+        // skip '.' or '['
+        sic.advance();
+        
+    };
+    
+    for (ParsedPath::iterator i = output.begin(); i != output.end(); i++)
+    {
+        LOG_INFO("CfgFile", "path part: '%s'", i->c_str());            
+    };
+    
+    return output;    
+};
+
+String assemblePath(const ParsedPath &path)
+{
+    String output;
+    for (ParsedPath::const_iterator i = path.begin(); i != path.end(); i++)
+    {
+        output += *i;
+    }
+    return output;
+};
+
+NodePtr getNode(ConstString path, NodePtr base)
+{
+    assert(base != NULL);
+
+    ParsedPath parsed = parsePath(path);
+    NodePtr currentNode = base;    
+   
+    for (ParsedPath::iterator i = parsed.begin(); (i != parsed.end()) && (currentNode != NULL); i++)
+        currentNode = currentNode->getChild(*i);
+
+    return currentNode;
+};
+
+NodePtr createPathToNode(ParsedPath::const_iterator begin, ParsedPath::const_iterator end, NodePtr targetNode)
+{
+    // the last link, just return the requested target
+    if (begin+1 == end)
+        return targetNode;
+    
+    // child node (begin+1)
+    NodePtr child = createPathToNode(begin+1, end, targetNode);
+    
+    // this node (begin)
+    NodePtr parent = createParent(*(begin+1));
+    parent->addChild(*(begin+1), child);
+    return parent;
+};
+
+void assurePathToNode(NodePtr root, const ParsedPath &path, NodePtr targetNode)
+{
+    assert(root != NULL);
+
+    LOG_INFO("CfgFile", "assurePathToNode for '%s'", assemblePath(path).c_str());    
+
+    ParsedPath::const_iterator i = path.begin();
+    NodePtr currentParent = root;    
+    NodePtr currentChild = currentParent->getChild(*i);
+    i++;
+   
+    // go to the last existent node
+    while (currentChild != NULL && i != path.end())
+    {
+        currentParent = currentChild;
+        currentChild = currentChild->getChild(*i);
+        i++;
+    };
+
+    
+    if (currentChild == NULL)
+    {
+
+        // one step back, we need name of the chid
+        i--;
+        LOG_INFO("CfgFile", "creating path from '%s' ...", i->c_str());            
+        
+        // currentParent is the last existent node
+        // i points to name of child of currentParent that should exist
+        currentParent->addChild(*i, createPathToNode(i, path.end(), targetNode));
+    }
+    else
+    {
+        LOG_INFO("CfgFile", "path found to '%s' ", i->c_str());    
+    };
+};
+
 
 NodePtr newNode(StringInputCache &cache)
 {
@@ -492,11 +727,42 @@ NodePtr newNode(StringInputCache &cache)
     }
 };
 
+NodePtr createParent(ConstString child)
+{
+    assert(child.size() != 0);
+
+    LOG_INFO("CfgFile", "createParent for  '%s'", child.c_str());    
+    
+    switch (child[0])
+    {
+        case '[':   // parent is an array
+            return NodePtr(new ArrayNode());
+        case '.':   // parent is a map
+            return NodePtr(new MapNode());
+        default:
+            LOG_ERROR("CfgFile", "failed to create parent !");                
+            return NodePtr((Node *) NULL);
+    };
+};
+
 NodePtr loadFile(ConstString input)
 {
     StringInputCache c(input);
-    ConfigFile::NodePtr node = ConfigFile::newNode(c);
-    node->load(c);
+    c.skipWhitespace();
+    ConfigFile::NodePtr node;
+    
+    switch (c.peekChar())
+    {
+        case '{':   // map config file
+        case '(':   // array only config file
+            node = ConfigFile::newNode(c);
+            node->load(c);
+            break;
+        default:
+            // not guessable, probably bad file, default to map node...
+            LOG_ERROR("CfgFile", "loadFile - bad file !, contents: '%s'", input.c_str());                
+            node = NodePtr(new MapNode());
+    }
     return node;
 };
 

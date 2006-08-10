@@ -194,6 +194,17 @@ typedef boost::shared_ptr<ValueNode> ValueNodePtr;
 typedef std::vector<NodePtr> ArrayNodeNodes;
 typedef std::map<const String, NodePtr> MapNodeNodes;
 
+
+//! vector of path elements
+/*!
+    Holds parsed path, every string is name of a child.
+    (eg: "[3]" for array or ".test" for map)
+    
+    @note
+    It is possoble to determine the type of parent by the name of a child
+*/
+typedef std::vector<String> ParsedPath;
+
 //------------------------------------------------------------------------------
 // Node class
 //------------------------------------------------------------------------------
@@ -236,11 +247,24 @@ class Node : public boost::enable_shared_from_this<Node>
         //! @name Accessing child nodes
         //@{
         
-        //! Save contents of current node
+        //! Return an node deeper in the tree
         /*!
             @param path input cache containing the path to the node (eg: something.another[2].thing)
         */
         virtual NodePtr getNode(StringInputCache &path) = 0;
+        
+        //! Return an child node
+        /*!
+            @param child name of the child (eg. ".mychild" or "[2]")
+        */
+        virtual NodePtr getChild(ConstString child) = 0;
+        
+        //! Add an child to this node
+        /*!
+            @param name name of the child (eg. ".mychild" or "[2]")
+            @param child the child node
+        */
+        virtual void addChild(ConstString name, NodePtr child) = 0;
 
         //@}        
     protected:
@@ -260,6 +284,8 @@ class ArrayNode : public Node
         virtual void save(StringOutputCache &cache);
 
         virtual NodePtr getNode(StringInputCache &path);
+        virtual NodePtr getChild(ConstString child);
+        virtual void addChild(ConstString name, NodePtr child);
         
         //! Return underlying std::vector
         /*!
@@ -286,6 +312,8 @@ class MapNode : public Node
         virtual void save(StringOutputCache &cache);
         
         virtual NodePtr getNode(StringInputCache &path);
+        virtual NodePtr getChild(ConstString child);
+        virtual void addChild(ConstString name, NodePtr child);
 
         //! Return underlying std::map
         /*!
@@ -330,6 +358,8 @@ class ValueNode : public Node
         virtual void save(StringOutputCache &cache);
         
         virtual NodePtr getNode(StringInputCache &path);
+        virtual NodePtr getChild(ConstString child);
+        virtual void addChild(ConstString name, NodePtr child);
 
         //! @name Value access
         //@{
@@ -342,8 +372,8 @@ class ValueNode : public Node
             @warning
             It is your responsibility to set the string to a value, that can be parsed again
             
-            TODO: Remove this warning once there is protection agains special chars
-            (add escape & unescape to Strings)
+            TODO: Remove this warning once there is protection agains special chars (add escape & unescape to Strings)
+            (for now, it should be safe if not using " in value)            
         */
         void setValue(ConstString value);
 
@@ -381,6 +411,68 @@ class ValueNode : public Node
 // Functions
 //------------------------------------------------------------------------------
 
+//! @name Path handling
+//@{
+
+//! Parse path
+/*
+    Convert path from string to more useful format.
+    
+    @param path string containing path to be parsed
+    
+    @return parsed path
+*/
+ParsedPath parsePath(ConstString path);
+
+//! assemblePath
+/*
+    Convert path from the useful format to plain string.
+    
+    @param path parsed path to be assembled
+    
+    @return string containing the path
+*/
+String assemblePath(const ParsedPath &path);
+
+//@}
+
+//! @name Node access
+//@{
+
+//! Return given node 
+/*
+    @param path path to the node
+    @param base node the path is relative to
+    
+    @return pointer to the given node (or NULL if node not found)
+*/
+NodePtr getNode(ConstString path, NodePtr base);
+
+//! Create nodes on the way to given node 
+/*
+    @param begin first part of path to be constructed
+    @param end iterator pointing right beyon the last part of path to be constructed
+    @param targetNode node to be inserted as last part of the path
+    
+    @return pointer to the root node
+*/
+NodePtr createPathToNode(ParsedPath::const_iterator begin, ParsedPath::const_iterator end, NodePtr targetNode);
+
+//! Make sure, there is a path to given node
+/*
+    @param root root of the tree
+    @param path path to targetNode relative to the root
+    @param targetNode node requested to be accessible by path
+
+    @node
+    Function will not assure the path if
+    - there is note of wrong type on the way (array expected, map found or the other way around
+    - there is another node accessible by given path
+*/
+void assurePathToNode(NodePtr root, const ParsedPath &path, NodePtr targetNode);
+
+//@}
+
 //! Return a new node
 /*
     Returns new node, type is guessed from contents of the cache
@@ -391,6 +483,7 @@ class ValueNode : public Node
     Do not use this function, it will be probably removed in the future !    
 */
 NodePtr newNode(StringInputCache &cache);
+NodePtr createParent(ConstString child);
 
 //! @name Load & Save
 //@{
@@ -413,23 +506,6 @@ String saveFile(NodePtr root);
 
 //! @name Get nodes by path
 //@{
-
-//! Return given node 
-/*
-    @param path path to the node
-    @param base node the path is relative to
-    
-    @return pointer to the given node (or NULL if node not found)
-*/
-inline NodePtr getNode(ConstString path, NodePtr base)
-{
-    StringInputCache cache(path);
-    NodePtr node;
-    
-    // TODO: or silently return NULL if base is NULL ?
-    assert(base != NULL);
-    return base->getNode(cache);
-};
 
 //! Return given node as array node (if possible)
 /*
@@ -467,6 +543,15 @@ inline MapNodePtr getMapNode(ConstString path, NodePtr base)
 inline ValueNodePtr getValueNode(ConstString path, NodePtr base)
 {
     NodePtr node = getNode(path, base);
+/*    try
+    {
+        return boost::dynamic_pointer_cast<ValueNode>(node);
+    }
+    catch(...)
+    {
+        return ValueNodePtr((ValueNode *)NULL);
+    }*/
+    
     return (node != NULL) ? (boost::dynamic_pointer_cast<ValueNode>(node)) : ValueNodePtr((ValueNode *)NULL);
 }
 
@@ -502,15 +587,19 @@ T get(ConstString path, NodePtr base, const T &defaultValue)
     The order of parameters is different from set on purpose !
     
     @note
-    It will crash if node is not found.
-    TODO: once the implemntation is changed, update this note
-    
+    Not existing node will be created.    
 */
 template <typename T>
 void set(ConstString path, const T &value, NodePtr base)
 {
-    // TODO: create node if possible !
-    getValueNode(path,base)->setValue(toString(value));
+    ValueNodePtr node = getValueNode(path,base);
+    if (node == NULL)        
+    {
+        node = ValueNodePtr(new ValueNode);
+        assurePathToNode(base, parsePath(path), node);
+    }    
+    
+    node->setValue(toString(value));
 };
 
 //@}
@@ -527,14 +616,19 @@ void set(ConstString path, const T &value, NodePtr base)
     @param defaultValue value to set newly created node to (if node is not found) !!! currently unused !!!
     
     @note
-    It will crash if node is not found.
-    TODO: once the implemntation is changed, update this note    
+    Not existing node will be created.    
 */
 template <typename T>
 void bind(ConstString path, NodePtr base, T& variable, const T &defaultValue)
 {
-    // TODO: create node if possible ! (and set it to defaultValue)
-    getValueNode(path,base)->setBinder(BinderPtr(new Binder<T>(variable)));
+    ValueNodePtr node = getValueNode(path,base);
+    if (node == NULL)        
+    {
+        node = ValueNodePtr(new ValueNode);
+        node->setValue(toString(variable));
+        assurePathToNode(base, parsePath(path), node);
+    }    
+    node->setBinder(BinderPtr(new Binder<T>(variable)));
 };
 
 //@}

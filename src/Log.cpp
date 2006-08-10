@@ -30,6 +30,7 @@ void LogBackend::log(const char *message)
 void LogBackendStdout::log(const char *message)
 {
     printf("%s", message);
+    fflush(stdout);
 };
 
 //------------------------------------------------------------------------------
