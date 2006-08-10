@@ -11,10 +11,6 @@ class MainMenuState : public MenuBaseState
         MainMenuState();
         ~MainMenuState();
 
-        //void JustMadeActive();
-        //void JustMadeInactive();
-
-        //int Execute(float dt);
         void doOptions();
         void doSkirmish();
         void doSingle();
@@ -23,13 +19,6 @@ class MainMenuState : public MenuBaseState
 
     private:
         VBox* m_vbox;
-        
-        //GraphicButton* m_butSingle;
-        //GraphicButton* m_butMulti;
-        //GraphicButton* m_butMapEd;
-        //GraphicButton* m_butOptions;
-        //GraphicButton* m_butAbout;
-        //GraphicButton* m_butQuit;
 
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;

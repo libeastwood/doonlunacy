@@ -1,23 +1,19 @@
 #ifndef DUNE_OPTIONSMENU_H
 #define DUNE_OPTIONSMENU_H
 
-#include "State.h"
+#include "MenuBase.h"
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 
 #include "SDL.h"
 
 
-class OptionsMenuState : public State 
+class OptionsMenuState  : public MenuBaseState 
 {
     public:
         OptionsMenuState();
         ~OptionsMenuState();
 
-        void JustMadeActive();
-        void JustMadeInactive();
-
-        int Execute(float dt);
         void doOptions();
         void doOk();
         void doResolution();
@@ -26,9 +22,6 @@ class OptionsMenuState : public State
         virtual const char* GetName() { return "OptionsMenuState"; }
 
     private:
-        SDL_Surface* m_menuBackground;
-        //Window* m_menu;
-
         VBox* m_vbox;
         
         BoringButton* m_butResolution;

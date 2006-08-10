@@ -25,7 +25,6 @@ class FileLike
 
 		//! @name FileLike methods
         //@{
-		
         /*! 
 			read data from the buffer
             @param buf buffer to read data into 
@@ -76,7 +75,7 @@ class Resource
 			@param path path to write the file
 			@param text text to write to file 
 		*/
-		virtual void writeText(std::string, std::string text) {}
+		virtual void writeText(std::string path, std::string text) {}
 
 		/*!
 			return true if the resource can be written to 
@@ -91,7 +90,7 @@ class Resource
 };
 
 /*!
-	Directory Resource - all files are read/written from a directory. Supports writing.
+	Directory Resource - all files are read from a directory
 */
 class DIRResource : public Resource
 {
@@ -112,7 +111,7 @@ class WritableDIRResource : public DIRResource
 };
 
 /*!
-	PAK file resource - all files are read from a PAK file. Does not support writing.
+	PAK file resource - all files are read from a PAK file
 */
 class PAKResource : public Resource
 {
@@ -165,7 +164,7 @@ class ResMan : public Singleton<ResMan>
 			@param size if not NULL the file size is put here 
 			@return file data
 		*/
-        unsigned char* readFile(std::string name, int *size);
+        unsigned char* readFile(std::string path, int *size);
 		/*!
 			read a file from the resource.
 			@param path path to the file to read
@@ -181,13 +180,13 @@ class ResMan : public Singleton<ResMan>
 			@param path path to the file to open 
 			@return text from the file
 		*/
-		virtual std::string readText(std::string name);
+		virtual std::string readText(std::string path);
 		/*!
 			write a text file to a resource
 			@param path path to write the file
 			@param text text to write to file 
 		*/
-		virtual void writeText(std::string name, std::string text);
+		virtual void writeText(std::string path, std::string text);
 		//@}
     private:
         ResList m_resources;

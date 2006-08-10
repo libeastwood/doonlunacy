@@ -9,11 +9,6 @@
 
 SingleMenuState::SingleMenuState()
 {
-    //m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
-    //m_menu = new Window();
-    //m_menu->setHeight(m_menuBackground->h);
-    //m_menu->setWidth(m_menuBackground->w);
-
     const int bw = 200;
     const int bh = 20;
 
@@ -55,10 +50,12 @@ SingleMenuState::SingleMenuState()
     m_vbox->addChild(m_butCancel);
 
     m_vbox->fit(2);
-    Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
+	Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
                 (m_vbox->getWidth() / 2);
     m_vbox->setPos(x - 5, 312);
     m_vbox->reshape();
+    
+    m_container->addChild(m_vbox);
 };
 
 SingleMenuState::~SingleMenuState()
@@ -83,21 +80,3 @@ void SingleMenuState::doCancel()
     PopState();
 };
 
-void SingleMenuState::JustMadeActive()
-{
-    State::JustMadeActive();
-    Application::Instance()->RootWidget()->addChild(m_vbox);
-};
-
-void SingleMenuState::JustMadeInactive()
-{
-    State::JustMadeInactive();
-    Application::Instance()->RootWidget()->deleteChild(m_vbox);
-};
-
-int SingleMenuState::Execute(float dt)
-{
-    //Application::Instance()->BlitCentered(m_menuBackground);
-
-    return 0;
-};

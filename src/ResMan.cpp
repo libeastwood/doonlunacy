@@ -60,7 +60,6 @@ DIRResource::DIRResource(bfs::path path)
 
 unsigned char* DIRResource::readFile(std::string path, int *size)
 {
-    // TODO: seems to work now, tested on linux, please test it on windows. (otpetrik)
     bfs::path fullpath (m_path);
 	fullpath /= path;
 
