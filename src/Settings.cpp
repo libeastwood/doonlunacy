@@ -8,6 +8,10 @@ SETTINGSTYPE settings;
 
 Settings::Settings()
 {
+	// for config files 
+	// set to the current directory for the moment 
+	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
+
   m_width = 640;
   m_height = 480;
 

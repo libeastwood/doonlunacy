@@ -125,6 +125,7 @@ void Application::Init()
     //MentatClass* m = new MentatClass();
     //setMentat( m );
     //MentatClass::Instance();
+    Settings::Instance()->load();
 
     InitVideo();
 
@@ -264,10 +265,6 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 
 void Application::LoadData()
 {
-	// for config files 
-	// set to the current directory for the moment 
-	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
-
     printf("loading resources\n");
     ResMan::Instance()->addRes("ATRE");
     ResMan::Instance()->addRes("DUNE");
@@ -286,8 +283,6 @@ void Application::LoadData()
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
 
-    Settings::Instance()->load();
- 
     SetPalette();
     int len;
     

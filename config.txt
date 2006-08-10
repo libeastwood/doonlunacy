@@ -4,7 +4,7 @@
     graphics = {
         double_buffer = false;
         fullscreen = false;
-        height = 600;
-        width = 800;
+        height = 480;
+        width = 640;
     };
 }
