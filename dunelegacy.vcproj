@@ -306,6 +306,12 @@
 				RelativePath=".\include\State.h">
 			</File>
 			<File
+				RelativePath=".\src\Strings.cpp">
+			</File>
+			<File
+				RelativePath=".\include\Strings.h">
+			</File>
+			<File
 				RelativePath=".\src\TerrainClass.cpp">
 			</File>
 			<File

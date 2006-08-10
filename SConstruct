@@ -34,7 +34,7 @@ if sys.platform != "win32":
 else:
 	env.Append(LIBS = ["zzipdll", "zdll", "SDLmain"])
 	env.Append(LINKFLAGS = ["/SUBSYSTEM:CONSOLE", "/DEBUG"])
-	env.Append(CCFLAGS = ["/O2", "/EHsc", "/MD", "/Op", "/DEBUG", "/Zi"])
+	env.Append(CCFLAGS = ["/O2", "/EHsc", "/MD", "/Op", "/DEBUG", "/Zi", "/GR"])
 
 env.Append(LIBS = [ 	"SDL",
                         "SDL_mixer", 
