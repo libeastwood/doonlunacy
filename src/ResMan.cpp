@@ -99,6 +99,12 @@ std::string DIRResource::readText(std::string path)
 	return file_contents;
 };
 
+bool DIRResource::exists(std::string path)
+{
+	bfs::path fullpath(m_path);
+	fullpath /= path;
+	return bfs::exists(fullpath);
+};
 
 // ------------------------------------------------------------------
 
@@ -144,6 +150,15 @@ unsigned char* PAKResource::readFile(std::string path, int *size)
     if (size != NULL) *size = filesize;
 
     return buf;
+};
+
+bool PAKResource::exists(std::string path)
+{
+	for (int i=0; i!= m_pakfile->getNumFiles(); i++)
+	{
+		if (m_pakfile->getFilename(i) == path) return true;
+	};
+	return false;
 };
 
 // ------------------------------------------------------------------
@@ -225,6 +240,19 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     };
 
 	return res;
+};
+
+bool ResMan::exists(std::string path)
+{
+	std::string filename;
+	Resource* res = getResource(path, filename);
+
+	if (res == NULL)
+	{
+		return false;
+	};
+
+	return res->exists(filename);
 };
 
 unsigned char*  ResMan::readFile(std::string name, int *size)

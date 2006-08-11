@@ -442,16 +442,16 @@ void Application::BlitCursor()
 
     if (m_cursorFrame == CURSOR_RIGHT)
     {
-        dest.x -= dest.w/2;
+        dest.x -= surface->w/2;
     }
     else if (m_cursorFrame == CURSOR_DOWN)
     {
-        dest.y -= dest.h/2;
+        dest.y -= surface->w/2;
     }
     else if ((m_cursorFrame == CURSOR_TARGET) || (m_cursorFrame == CURSOR_SELECTION))
     {
-        dest.x -= dest.w/2;
-        dest.y -= dest.h/2;
+        dest.x -= surface->w/2;
+        dest.y -= surface->h/2;
     }
 
     SDL_BlitSurface(surface, NULL, m_screen, &dest);

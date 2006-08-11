@@ -6,7 +6,7 @@
 struct PakFileEntry {
 	long StartOffset;
 	long EndOffset;
-	char * Filename;
+	char* Filename; // dunk - better to be const char* ? ( or even std::string ? )
 };
 
 class Pakfile

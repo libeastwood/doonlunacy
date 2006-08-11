@@ -82,6 +82,11 @@ class Resource
 		*/
 		inline bool isWritable() { return mb_writable; }
 
+		/*!
+			return true if the file exists
+		*/
+		virtual bool exists(std::string path) { return false; }
+
     protected:
         boost::filesystem::path m_path;
 
@@ -98,6 +103,7 @@ class DIRResource : public Resource
         DIRResource(boost::filesystem::path path) ;
         unsigned char* readFile(std::string path, int *size);
 		std::string readText(std::string path);
+		bool exists(std::string path);
 };
 
 /*!
@@ -119,7 +125,7 @@ class PAKResource : public Resource
         PAKResource(boost::filesystem::path path) ;
         ~PAKResource();
 		unsigned char* readFile(std::string path, int *size);
-    
+		bool exists(std::string path);
     private:
         Pakfile *m_pakfile;
 };
@@ -188,6 +194,12 @@ class ResMan : public Singleton<ResMan>
 		*/
 		virtual void writeText(std::string path, std::string text);
 		//@}
+
+		/*!
+			return true if the path exists
+		*/
+		bool exists(std::string path);
+
     private:
         ResList m_resources;
 };
