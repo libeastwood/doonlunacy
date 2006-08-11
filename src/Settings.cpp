@@ -28,10 +28,17 @@ Settings::Settings()
 void Settings::load()
 {
 	const char* settingsfile = "CONFIG:config.txt";
-	if (ResMan::Instance()->exists(settingsfile))
-	{
-		String configText = ResMan::Instance()->readText(settingsfile);
-		configFile = ConfigFile::loadFile(configText.c_str());
+
+    // try loading config file
+    if (ResMan::Instance()->exists(settingsfile))
+    {
+        String configText = ResMan::Instance()->readText(settingsfile);
+        configFile = ConfigFile::loadFile(configText.c_str());
+    }
+    else
+    {
+        // just parse empty string...
+        configFile = ConfigFile::loadFile("");
 	};
 
     ConfigFile::bind(".graphics.width", configFile, m_width, 640);
