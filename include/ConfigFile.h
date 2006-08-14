@@ -575,7 +575,7 @@ T get(ConstString path, NodePtr base, const T &defaultValue)
     if (valueNode == NULL)
         return defaultValue;
     return fromString<T>(valueNode->getValue());
-};
+}
 
 //! Set value of given node
 /*
@@ -600,7 +600,7 @@ void set(ConstString path, const T &value, NodePtr base)
     }    
     
     node->setValue(toString(value));
-};
+}
 
 //@}
 
@@ -629,7 +629,7 @@ void bind(ConstString path, NodePtr base, T& variable, const T &defaultValue)
         assurePathToNode(base, parsePath(path), node);
     }    
     node->setBinder(BinderPtr(new Binder<T>(variable)));
-};
+}
 
 //@}
 

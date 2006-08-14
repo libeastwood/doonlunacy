@@ -18,7 +18,7 @@ class IntroState : public State
             typedef enum Transition
             {
                 NO_TRANSITION,
-                FADE_OUT,
+                FADE_OUT
             };
             
             typedef enum TransitionState
@@ -26,7 +26,7 @@ class IntroState : public State
                 TRANSITION_IN,
                 TRANSITION_OUT,
                 PLAYING,
-                HOLDING,
+                HOLDING
             };
         
             Frame(std::string file, Transition in, Transition out, bool cont); 

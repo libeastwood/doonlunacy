@@ -19,9 +19,9 @@ Palettefile::Palettefile(unsigned char* buf, int bufsize)
     };
 
     delete [] buf;
-};
+}
 
 Palettefile::~Palettefile()
 {
     delete m_palette;
-};
+}

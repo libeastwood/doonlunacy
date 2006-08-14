@@ -56,7 +56,7 @@ SingleMenuState::SingleMenuState()
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
-};
+}
 
 SingleMenuState::~SingleMenuState()
 {
@@ -67,16 +67,16 @@ SingleMenuState::~SingleMenuState()
     delete m_butCancel;
 
     delete m_vbox;
-};
+}
 
 void SingleMenuState::doSkirmish()
 {
     printf("Skirmish\n");
-};
+}
 
 void SingleMenuState::doCancel()
 {
     assert(mp_parent != NULL);
     PopState();
-};
+}
 

@@ -13,7 +13,7 @@ void Container::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
     {
         (*it)->draw(dest, offx + m_x, offy + m_y);
     };
-};
+}
 
 bool Container::handleMotion(Uint16 x, Uint16 y)
 {
@@ -29,7 +29,7 @@ bool Container::handleMotion(Uint16 x, Uint16 y)
     };
 
     return false;
-};
+}
 
 bool Container::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
 {
@@ -45,7 +45,7 @@ bool Container::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
     };
 
     return false;
-};
+}
 
 bool Container::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
@@ -61,7 +61,7 @@ bool Container::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
     };
 
     return false;
-};
+}
 
 bool Container::handleKeyDown(SDL_keysym *key)
 {
@@ -75,7 +75,7 @@ bool Container::handleKeyDown(SDL_keysym *key)
     };
 
     return false;
-};
+}
 
 bool Container::handleKeyUp(SDL_keysym *key)
 {
@@ -89,17 +89,17 @@ bool Container::handleKeyUp(SDL_keysym *key)
     };
 
     return false;
-};
+}
 
 void Container::addChild(Widget* child)
 {
     m_children.push_back(child);
-};
+}
 
 void Container::deleteChild(Widget* child)
 {
     m_children.remove(child);
-};
+}
 
 
 

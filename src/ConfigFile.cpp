@@ -17,10 +17,10 @@ namespace ConfigFile
 //------------------------------------------------------------------------------
 Node::Node()
 {
-};
+}
 Node::~Node()
 {
-};
+}
 
 //------------------------------------------------------------------------------
 // ArrayNode class
@@ -129,7 +129,7 @@ void ArrayNode::load(StringInputCache &cache)
             LOG_ERROR("CfgFile", "ArrayNode::load - tried to load array in unknown mode (char '%c') !", cache.peekChar());
     };
     LOG_INFO("CfgFile", "ArrayNode::load - done");   
-};
+}
 void ArrayNode::save(StringOutputCache &cache)
 {
     cache.add("(");
@@ -140,7 +140,7 @@ void ArrayNode::save(StringOutputCache &cache)
         (*i)->save(cache);
     }
     cache.add(")");
-};
+}
 
 // understands [something]
 NodePtr ArrayNode::getNode(StringInputCache &path)
@@ -188,7 +188,7 @@ NodePtr ArrayNode::getNode(StringInputCache &path)
     };
     
     return node->getNode(path);
-};
+}
 
 NodePtr ArrayNode::getChild(ConstString child)
 {
@@ -202,7 +202,7 @@ NodePtr ArrayNode::getChild(ConstString child)
         LOG_ERROR("CfgFile", "ArrayNode::getChild - requested invalid index '%u'", index);
         
     return nodes[index];    
-};
+}
 
 void ArrayNode::addChild(ConstString name, NodePtr child)
 {
@@ -225,7 +225,7 @@ void ArrayNode::addChild(ConstString name, NodePtr child)
     LOG_INFO("CfgFile", "ArrayNode::addChild - done");
 
     nodes.push_back(child);
-};
+}
 
 
 //------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ void MapNode::load(StringInputCache &cache)
             LOG_ERROR("CfgFile", "MapNode::load - tried to load map in unknown mode !");
     };      
     LOG_INFO("CfgFile", "MapNode::load - done");
-};
+}
 void MapNode::save(StringOutputCache &cache)
 {    
     cache.add("{");
@@ -315,7 +315,7 @@ void MapNode::save(StringOutputCache &cache)
     }
     cache.unindent();
     cache.add("\n}");
-};
+}
         
 NodePtr MapNode::getNode(StringInputCache &path)
 {    
@@ -352,7 +352,7 @@ NodePtr MapNode::getNode(StringInputCache &path)
     };
     
     return (i->second)->getNode(path);
-};
+}
 NodePtr MapNode::getChild(ConstString child)
 {
     unsigned base;
@@ -374,7 +374,7 @@ NodePtr MapNode::getChild(ConstString child)
         return NodePtr((Node *)NULL);
     }            
     return i->second;    
-};
+}
 
 // TODO: recode, looks like a mess
 void MapNode::addChild(ConstString name, NodePtr child)
@@ -457,7 +457,7 @@ void MapNode::loadChild(StringInputCache &cache)
         loadChildValue(childName, cache);                
     };
     LOG_INFO("CfgFile", "MapNode::loadChild - child '%s' loaded", childName.c_str());                
-};
+}
 
 
 void MapNode::loadChildValue(ConstString childName, StringInputCache &cache)
@@ -514,7 +514,7 @@ void ValueNode::load(StringInputCache &cache)
         binder->setString(value);
         
     LOG_INFO("CfgFile", "ValueNode::load - value: '%s'", value.c_str());
-};
+}
 void ValueNode::save(StringOutputCache &cache)
 {
     if (binder != NULL)
@@ -522,17 +522,17 @@ void ValueNode::save(StringOutputCache &cache)
     if (value.find_first_of("\n\t /*,);") != String::npos)
         value = "\"" + value + "\"";
     cache.add(value);
-};
+}
         
 ConstString ValueNode::getValue()
 {
     LOG_WARNING("CfgFile", "ValueNode::getValue - returned ('%s') !", value.c_str());
     return value;
-};
+}
 void ValueNode::setValue(ConstString value)
 {
     this->value = value;
-};
+}
 
 NodePtr ValueNode::getNode(StringInputCache &path)
 {
@@ -548,7 +548,7 @@ NodePtr ValueNode::getNode(StringInputCache &path)
     #endif
     
     return shared_from_this();
-};
+}
 NodePtr ValueNode::getChild(ConstString child)
 {
     if (child.size() != 0)
@@ -557,11 +557,11 @@ NodePtr ValueNode::getChild(ConstString child)
         return NodePtr((Node *)NULL);
     };
     return shared_from_this();
-};
+}
 void ValueNode::addChild(ConstString name, NodePtr child)
 {
     LOG_ERROR("CfgFile", "ValueNode::addChild - requested adding a child on ValueNode, child '%s'", name.c_str());    
-};
+}
 
 //        String value;
 
@@ -633,7 +633,7 @@ ParsedPath parsePath(ConstString path)
     };
     
     return output;    
-};
+}
 
 String assemblePath(const ParsedPath &path)
 {
@@ -643,7 +643,7 @@ String assemblePath(const ParsedPath &path)
         output += *i;
     }
     return output;
-};
+}
 
 NodePtr getNode(ConstString path, NodePtr base)
 {
@@ -656,7 +656,7 @@ NodePtr getNode(ConstString path, NodePtr base)
         currentNode = currentNode->getChild(*i);
 
     return currentNode;
-};
+}
 
 NodePtr createPathToNode(ParsedPath::const_iterator begin, ParsedPath::const_iterator end, NodePtr targetNode)
 {
@@ -671,7 +671,7 @@ NodePtr createPathToNode(ParsedPath::const_iterator begin, ParsedPath::const_ite
     NodePtr parent = createParent(*(begin+1));
     parent->addChild(*(begin+1), child);
     return parent;
-};
+}
 
 void assurePathToNode(NodePtr root, const ParsedPath &path, NodePtr targetNode)
 {
@@ -708,7 +708,7 @@ void assurePathToNode(NodePtr root, const ParsedPath &path, NodePtr targetNode)
     {
         LOG_INFO("CfgFile", "path found to '%s' ", i->c_str());    
     };
-};
+}
 
 
 NodePtr newNode(StringInputCache &cache)
@@ -725,7 +725,7 @@ NodePtr newNode(StringInputCache &cache)
         default:
             return NodePtr(new ValueNode());
     }
-};
+}
 
 NodePtr createParent(ConstString child)
 {
@@ -743,7 +743,7 @@ NodePtr createParent(ConstString child)
             LOG_ERROR("CfgFile", "failed to create parent !");                
             return NodePtr((Node *) NULL);
     };
-};
+}
 
 NodePtr loadFile(ConstString input)
 {
@@ -764,7 +764,7 @@ NodePtr loadFile(ConstString input)
             node = NodePtr(new MapNode());
     }
     return node;
-};
+}
 
 String saveFile(NodePtr root)
 {
@@ -777,6 +777,6 @@ String saveFile(NodePtr root)
     c.add("\n");
     
     return c.getString();
-};
+}
      
 } // namespace ConfigFile

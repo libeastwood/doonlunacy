@@ -34,7 +34,7 @@ inline String toString(const T &something)
     std::ostringstream s;
     s << something;
     return s.str();
-};
+}
 template <>
 inline String toString(const bool &something)
 {
@@ -44,7 +44,7 @@ inline String toString(const bool &something)
     else
         s << "false";
     return s.str();
-};
+}
 
 //! Convert string to something
 /*
@@ -62,7 +62,7 @@ inline T fromString(ConstString string)
     std::istringstream s(string);
     s >> something;
     return something;
-};
+}
 template <>
 inline bool fromString(ConstString string)
 {
@@ -73,7 +73,7 @@ inline bool fromString(ConstString string)
         return true;
     else
         return false;
-};
+}
 
 //@}
 

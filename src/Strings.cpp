@@ -22,7 +22,7 @@ StringInputCache::StringInputCache(const char *input) : data(NULL), length(0), i
     data = (char *) malloc(length);
     strncpy(data, input, length); // copy with NULL character from source
 //    LOG_INFO("String", "StringInputCache: initialized !!! '%s' !!!", data);        
-};
+}
 StringInputCache::StringInputCache(ConstString input) : data(NULL), length(0), index(0)
 {
     const char *chars = input.c_str();
@@ -30,11 +30,11 @@ StringInputCache::StringInputCache(ConstString input) : data(NULL), length(0), i
     data = (char *) malloc(length);
     strncpy(data, chars, length); // copy with NULL character from source
 //    LOG_INFO("String", "StringInputCache: initialized '%s'", data);        
-};
+}
 StringInputCache::~StringInputCache()
 {
     free(data);
-};
+}
         
 String StringInputCache::getWord(ConstString delimiters)
 {
@@ -44,7 +44,7 @@ String StringInputCache::getWord(ConstString delimiters)
     index += wordLength;
 //    LOG_INFO("String", "getWord: '%c' | '%c' '%c'", *(data+index-1), *(data+index), *(data+index+1));    
     return String(data + index - wordLength, wordLength);;
-};
+}
 
 String StringInputCache::peekWord(ConstString delimiters)
 {
@@ -53,19 +53,19 @@ String StringInputCache::peekWord(ConstString delimiters)
     
 //    LOG_INFO("String", "peekWord: '%c' | '%c' '%c'", *(data+index-1-wordLength), *(data+index-wordLength), *(data+index+1-wordLength));    
     return String(data + index, wordLength);;
-};
+}
 
 char StringInputCache::getChar()
 {
 //     LOG_INFO("String", "getChar: '%c'", *(data+index));    
      return *(data + (index++)); // TODO: remove this todo once sure that it really works ;-)
-};
+}
 
 char StringInputCache::peekChar()
 {
 //     LOG_INFO("String", "peekChar: '%c'", *(data+index));    
     return *(data + index);
-};
+}
 
 void StringInputCache::skipChars(ConstString chars)
 {
@@ -74,7 +74,7 @@ void StringInputCache::skipChars(ConstString chars)
 //        LOG_INFO("String", "StringInputCache: skipping(normal = '%s') '%c'", chars.c_str(), *(data+index));    
         index++;
     }
-};
+}
 
 void StringInputCache::skipCharsUntil(ConstString chars)
 {
@@ -83,7 +83,7 @@ void StringInputCache::skipCharsUntil(ConstString chars)
 //        LOG_INFO("String", "StringInputCache: skipping(until = '%s') '%c'", chars.c_str(), *(data+index));    
         index++;
     }
-};
+}
 
 void StringInputCache::skipWhitespace()
 {
@@ -139,19 +139,19 @@ void StringInputCache::skipWhitespace()
     
     // remove whitespace after comment
     skipChars();
-};
+}
 
 bool StringInputCache::isEos()
 {
     // NOTE: if this assert fails, then some method crossed the EOS boundary !!!
     assert(index < length);
     return (index == length-1);
-};
+}
 
 int StringInputCache::getPosition()
 {
     return index;
-};
+}
 void StringInputCache::seek(int position)
 {
     index = position;
@@ -159,7 +159,7 @@ void StringInputCache::seek(int position)
         index = 0;
     if (index >= length)
         index = length - 1;
-};
+}
 
 void StringInputCache::advance(int number)
 {
@@ -168,13 +168,13 @@ void StringInputCache::advance(int number)
     // otpetrik: need someone with Windows to check and fix somehow if possible... 
     
     seek(index + number);
-};
+}
 
 // returns rest of the string (make your own copy !)
 const char *StringInputCache::c_str()
 {
     return (data + index);
-};
+}
 
 
 //------------------------------------------------------------------------------
@@ -182,10 +182,10 @@ const char *StringInputCache::c_str()
 //------------------------------------------------------------------------------
 StringOutputCache::StringOutputCache() : indentLevel(0)
 {
-};
+}
 StringOutputCache::~StringOutputCache()
 {
-};
+}
                 
 void StringOutputCache::add(ConstString str)
 {
@@ -202,4 +202,4 @@ void StringOutputCache::add(ConstString str)
         index = nlIndex+1; 
     }
     data += str.substr(index);    
-};
+}

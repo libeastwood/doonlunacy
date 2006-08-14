@@ -10,13 +10,13 @@ Font::Font(FNTCharacter* characters, FNTHeader* header)
 {
     m_characters = characters;
     m_header = header;
-};
+}
 
 Font::~Font()
 {
     delete [] m_characters;
     delete m_header;
-};
+}
 
 void Font::extents(const char* text, Uint16& w, Uint16& h)
 {
@@ -30,7 +30,7 @@ void Font::extents(const char* text, Uint16& w, Uint16& h)
         ch = &m_characters[text[c]];
         w += (2 * ch->width) + 1;
     };
-};
+}
 
 void Font::render(const char* text, SDL_Surface* surface, int offx, int offy, Uint8 paloff)
 {
@@ -65,17 +65,17 @@ void Font::render(const char* text, SDL_Surface* surface, int offx, int offy, Ui
         offx += (2*ch->width) + 1;
     };
 
-};
+}
 
 FontManager::FontManager()
 {
 
-};
+}
 
 FontManager::~FontManager()
 {
 
-};
+}
 
 Font* FontManager::getFont(const char* fn)
 {
@@ -87,7 +87,7 @@ Font* FontManager::getFont(const char* fn)
     };
 
     return m_fonts[fn];
-};
+}
 
 Font* FontManager::loadFont(const char* fn)
 {
@@ -148,7 +148,7 @@ Font* FontManager::loadFont(const char* fn)
 
     return font;
  
-};
+}
 
 // ------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ TTFFontManager::TTFFontManager()
             fprintf(stdout, "loaded font %s %d\n", fn, i);
         };
     };
-};
+}
 
 TTFFontManager::~TTFFontManager()
 {
@@ -191,7 +191,7 @@ TTFFontManager::~TTFFontManager()
     */
 
     TTF_Quit();
-};
+}
 
 TTF_Font* TTFFontManager::GetFont(int size)
 {
@@ -202,4 +202,4 @@ TTF_Font* TTFFontManager::GetFont(int size)
     };
 
     return m_fonts[size - MIN_FONT_SIZE];
-};
+}

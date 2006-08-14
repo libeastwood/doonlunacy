@@ -26,7 +26,7 @@ Pakfile::Pakfile(const char *Pakfilename)
 	}
 	
 	readIndex();	
-};
+}
 
 Pakfile::~Pakfile()
 {
@@ -39,7 +39,7 @@ Pakfile::~Pakfile()
 	}
 	
 	free(FileEntry);
-};
+}
 
 void Pakfile::readIndex()
 {
@@ -111,14 +111,14 @@ void Pakfile::readIndex()
 		perror("ftell()");
 		exit(EXIT_FAILURE);		
 	}
-};
+}
 
 char * Pakfile::getFilename(int index) {
 	if((index >= NumFileEntry) || (index < 0))
 		return NULL;
 	
 	return FileEntry[index].Filename;
-};
+}
 
 unsigned char *Pakfile::getFile(const char *fname, int *size)
 {
@@ -160,4 +160,4 @@ unsigned char *Pakfile::getFile(const char *fname, int *size)
 	}
 	
 	return content;	
-};
+}

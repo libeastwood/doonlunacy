@@ -153,7 +153,7 @@ void remapSurfaceByHouse(SDL_Surface *surface, int house);
 inline void remapSurfaceByColor(SDL_Surface *surface, int color)
 {
     remapSurface(surface, DEFAULT_SURFACE_REMAP_BEGIN, color);
-};
+}
 
 //@}
 
@@ -319,17 +319,17 @@ typedef const PointFloat &ConstPointFloat;
 inline SPoint operator-(const SPoint &point)
 {
     return SPoint(point.x, point.y);
-};
+}
 
 inline SPointBig operator-(const SPointBig &point)
 {
     return SPointBig(point.x, point.y);
-};
+}
 
 inline PointFloat operator-(const PointFloat &point)
 {
     return PointFloat(point.x, point.y);
-};
+}
 //@}
 
 
@@ -447,7 +447,7 @@ struct Rect : public SDL_Rect
             return (
                     (x <= p.x && p.x <= x+w) &&
                     (y <= p.y && p.y <= y+h));
-        };
+        }
         
         //! Is a rect inside this Rect ? (partial match required)
         /*!
@@ -875,12 +875,12 @@ class Image
 /*!
     @deprecated Use putPixel(SDL_Surface *surface, int x, int y, Uint32 color) instead.
 */
-inline void putpixel(SDL_Surface *surface, int x, int y, Uint32 colour) { putPixel(surface, x, y, colour); };
+inline void putpixel(SDL_Surface *surface, int x, int y, Uint32 colour) { putPixel(surface, x, y, colour); }
 
 /*!
     @deprecated Use getPixel(SDL_Surface *surface, int x, int y); instead.
 */
-inline Uint32 getpixel(SDL_Surface *surface, int x, int y) { return getPixel(surface, x, y); };
+inline Uint32 getpixel(SDL_Surface *surface, int x, int y) { return getPixel(surface, x, y); }
 
 /*!
     @deprecated Use drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock = true) with lock = false instead.
@@ -888,7 +888,7 @@ inline Uint32 getpixel(SDL_Surface *surface, int x, int y) { return getPixel(sur
 inline void hlineNoLock(SDL_Surface *surface, int x1, int y, int x2, Uint32 colour)
 {
     drawHLine(surface, x1, y, x2, colour, false);
-};
+}
 
 /*!
     @deprecated Use void drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock = true) instead.
@@ -896,7 +896,7 @@ inline void hlineNoLock(SDL_Surface *surface, int x1, int y, int x2, Uint32 colo
 inline void drawhline(SDL_Surface *surface, int x1, int y, int x2, Uint32 colour)
 {
     drawHLine(surface, x1, y, x2, colour, true);
-};
+}
 
 /*!
     @deprecated Use drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool lock = true) instead.
@@ -909,7 +909,7 @@ inline void drawrect(SDL_Surface *surface, int x1, int y1, int x2, int y2, Uint3
     r.w = x2-x1;
     r.h = y2-y1;
     drawRect(surface, r, colour, true);
-};
+}
 
 // DEPRECATED (works with surface, not with the 'Image' wrapper):
 /*!
@@ -918,7 +918,7 @@ inline void drawrect(SDL_Surface *surface, int x1, int y1, int x2, int y2, Uint3
 inline void mapImageHouseColour(SDL_Surface* graphic, int house)
 {
     remapSurfaceByHouse(graphic, house);
-};
+}
 
 /*!
     @deprecated If you really need to use this function, then your code is bad !
@@ -929,7 +929,7 @@ inline void mapImageHouseColourBase(SDL_Surface* graphic, int house, int baseCol
     // slow, but it avoids additional include ;-) (it has to be enough till removed)
     remapSurface(graphic, baseCol, 144); // remap back to harkonnen
     remapSurfaceByHouse(graphic, house);
-};
+}
 
 //@}
 

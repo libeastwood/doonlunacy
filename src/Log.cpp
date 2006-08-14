@@ -14,14 +14,14 @@
 
 LogBackend::LogBackend()
 {
-};
+}
 LogBackend::~LogBackend()
 {
-};
+}
         
 void LogBackend::log(const char *message)
 {
-};
+}
 
 //------------------------------------------------------------------------------
 // LogBackendStdout class
@@ -31,7 +31,7 @@ void LogBackendStdout::log(const char *message)
 {
     printf("%s", message);
     fflush(stdout);
-};
+}
 
 //------------------------------------------------------------------------------
 // Log class
@@ -40,7 +40,7 @@ void LogBackendStdout::log(const char *message)
 void Log::log(ConstString logSystem, LogVerbosity verbosity, ConstString message)
 {
     doLog(logSystem, verbosity, "%s", (char *)message.c_str());
-};
+}
 void Log::log(ConstString logSystem, LogVerbosity verbosity, const char *format, ...)
 {
     va_list args;
@@ -51,7 +51,7 @@ void Log::log(ConstString logSystem, LogVerbosity verbosity, const char *format,
         doLog(logSystem, verbosity, format, args);
         
     va_end(args);
-};
+}
 void Log::logFatal(ConstString logSystem, const char *format, ...)
 {
     va_list args;
@@ -62,7 +62,7 @@ void Log::logFatal(ConstString logSystem, const char *format, ...)
         doLog(logSystem, LV_FATAL, format, args);
         
     va_end(args);
-};
+}
 void Log::logError(ConstString logSystem, const char *format, ...)
 {
     va_list args;
@@ -73,7 +73,7 @@ void Log::logError(ConstString logSystem, const char *format, ...)
         doLog(logSystem, LV_ERROR, format, args);
         
     va_end(args);
-};
+}
 void Log::logWarning(ConstString logSystem, const char *format, ...)
 {
     va_list args;
@@ -84,7 +84,7 @@ void Log::logWarning(ConstString logSystem, const char *format, ...)
         doLog(logSystem, LV_WARNING, format, args);
         
     va_end(args);
-};
+}
 void Log::logInfo(ConstString logSystem, const char *format, ...)
 {
     va_list args;
@@ -95,25 +95,25 @@ void Log::logInfo(ConstString logSystem, const char *format, ...)
         doLog(logSystem, LV_INFO, format, args);
         
     va_end(args);
-};
+}
        
 void Log::setVerbosity(ConstString logSystem, LogVerbosity verbosity)
 {
     verbosities[logSystem] = verbosity;
-};        
+}        
         
 void Log::setBackend(LogBackendPtr backend)
 {
     assert(backend != NULL);
     this->backend = backend;    
-};
+}
 
 Log::Log() : defaultVerbosity(LOG_DEFAULT_VERBOSITY), backend(new LogBackendStdout()), indentLevel(0)
 {
-};
+}
 Log::~Log()
 {
-};
+}
 
 bool Log::checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity)
 {

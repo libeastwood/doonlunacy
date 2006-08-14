@@ -17,7 +17,7 @@ void VBox::reshape()
         (*it)->setPos(0, y);
         y += d;
     }; 
-};
+}
 
 void VBox::fit(int margin)
 {
@@ -28,7 +28,7 @@ void VBox::fit(int margin)
     m_width = child->getWidth();
     m_height = child->getHeight() * m_children.size();
     m_height += m_children.size() * margin;
-};
+}
 
 
 

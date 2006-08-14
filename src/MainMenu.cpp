@@ -83,7 +83,7 @@ MainMenuState::MainMenuState()
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
-};
+}
 
 MainMenuState::~MainMenuState()
 {
@@ -95,40 +95,40 @@ MainMenuState::~MainMenuState()
     delete m_butQuit;
 
     delete m_vbox;
-};
+}
 
 void MainMenuState::doOptions()
 {
     mp_parent->PushState( new OptionsMenuState() );
-};
+}
 
 void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
-};
+}
 
 void MainMenuState::doSingle()
 {
     mp_parent->PushState( new SingleMenuState() );
-};
+}
 
 void MainMenuState::doQuit()
 {
     PopState();
-};
+}
 
 /*
 void MainMenuState::JustMadeActive()
 {
     Application::Instance()->RootWidget()->addChild(m_vbox);
     State::JustMadeActive();
-};
+}
 
 void MainMenuState::JustMadeInactive()
 {
     Application::Instance()->RootWidget()->deleteChild(m_vbox);
     State::JustMadeInactive();
-};
+}
 
 
 int MainMenuState::Execute(float dt)
@@ -136,5 +136,5 @@ int MainMenuState::Execute(float dt)
     Application::Instance()->BlitCentered(m_menuBackground);
 
     return 0;
-};
+}
 */

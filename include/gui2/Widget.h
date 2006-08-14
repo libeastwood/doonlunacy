@@ -55,7 +55,7 @@ inline bool Widget::hitTest(Uint16 x, Uint16 y)
 {
     return ((x > m_x) && (x < m_x + m_width) &&
             (y > m_y) && (y < m_y + m_height));
-};
+}
 
 #endif // DUNE_GUI2_WIDGET
 

@@ -17,7 +17,7 @@ Image::Image(SDL_Surface *surface) : surface(surface)
 	    // TODO: throw better exception !!
         throw "Image::Image(SDL_Surface *) - got NULL !";
 	};
-};
+}
 Image::Image(ConstUPoint size)
 {
     assert(size.x != 0);
@@ -39,19 +39,19 @@ Image::Image(ConstUPoint size)
 	
 	// copy palette from the screen (otherwise you'll get only black image)
     SDL_SetColors(surface, Application::Instance()->Screen()->format->palette->colors, 0, 256);
-};
+}
 Image::~Image()
 {
     SDL_FreeSurface(surface);
-};
+}
 Image::operator SDL_Surface*()
 {
     return surface;
-};
+}
 SDL_Surface *Image::getSurface()
 {
     return surface;
-};
+}
 
 // TODO: once Application::Instance()->Screen() returns ImagePtr, change
 // these methods to use Image::blitTo !
@@ -59,21 +59,21 @@ void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
 {
     Rect dstRect(Rect(dstPoint, getSize()));
     SDL_BlitSurface(surface, const_cast<SDL_Rect *>(static_cast<const SDL_Rect *>(&srcRect)), Application::Instance()->Screen(), &dstRect); 
-};
+}
 void Image::blitToScreen(ConstUPoint dstPoint) const
 {
     Rect dstRect(Rect(dstPoint, getSize()));
     SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), &dstRect); 
-};
+}
 void Image::blitToScreen() const
 {
     SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), NULL); 
-};
+}
 void Image::blitToScreenCentered() const
 {
     Rect dstRect(Rect(UPoint(Application::Instance()->Screen()->w, Application::Instance()->Screen()->h)/2 - getSize()/2, getSize()));
     SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), &dstRect); 
-};
+}
 
 
 void Image::fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
@@ -100,7 +100,7 @@ void Image::fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
         // fillit
         fillRect(color1 + i, r);
     }
-};
+}
 void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 {
     int numColors = color2 - color1 + 1;
@@ -125,7 +125,7 @@ void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
         // fillit
         fillRect(color1 + i, r);
     }
-};
+}
 
 //------------------------------------------------------------------------------
 // Single pixel operations
@@ -166,7 +166,7 @@ void putPixel(SDL_Surface *surface, int x, int y, Uint32 color)
 			break;
 		}
 	}
-};
+}
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y)
 {
@@ -190,7 +190,7 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
         return 0;       // shouldn't happen, but avoids warnings
 
     }
-};
+}
 
 //------------------------------------------------------------------------------
 // Drawing operations
@@ -214,7 +214,7 @@ void drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lo
         if (lock == false || SDL_MUSTLOCK(surface))
             SDL_UnlockSurface(surface);
     }
-};
+}
 
 void drawVLine(SDL_Surface *surface, int x, int y, int y2, Uint32 color, bool lock)
 {
@@ -234,7 +234,7 @@ void drawVLine(SDL_Surface *surface, int x, int y, int y2, Uint32 color, bool lo
         if (lock == false || SDL_MUSTLOCK(surface))
             SDL_UnlockSurface(surface);
     }
-};
+}
 
 void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool lock)
 {
@@ -250,7 +250,7 @@ void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool loc
         if (lock == false || SDL_MUSTLOCK(surface))
             SDL_UnlockSurface(surface);
     }
-};
+}
 
 //------------------------------------------------------------------------------
 // Surface operations
@@ -262,7 +262,7 @@ SDL_Surface* copySurface(SDL_Surface* surface)
     
 	//return SDL_DisplayFormat(surface);
 	return SDL_ConvertSurface(surface, surface->format, surface->flags);
-};
+}
 
 SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
 {
@@ -308,14 +308,14 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
     if (SDL_MUSTLOCK(surface))
         SDL_UnlockSurface(surface);
     return resized;
-};
+}
 
 
 SDL_Surface* resizeSurface(SDL_Surface *surface, double ratio)
 {
     assert(surface != NULL);
     return resizeSurface(surface, (Uint16)(surface->w*ratio), (Uint16)(surface->h*ratio));
-};
+}
 
 //------------------------------------------------------------------------------
 // Color mapping
@@ -342,9 +342,9 @@ void remapSurface(SDL_Surface *surface, int colorSrc, int colorDst, int colorNum
         if (SDL_MUSTLOCK(surface))
             SDL_UnlockSurface(surface);
     }    
-};
+}
 
 void remapSurfaceByHouse(SDL_Surface *surface, int house)
 {
     remapSurface(surface, COLOUR_HARKONNEN, houseColour[house]);
-};
+}

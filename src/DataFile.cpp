@@ -1375,7 +1375,7 @@ void scaleData(int count, double zoom)
     //SDL_FreeSurface((SDL_Surface*)dataFile[count].dat);
 
     //dataFile[count].dat = (char*)scaled;
-};
+}
 
 void scaleUnits()
 {
@@ -1389,5 +1389,5 @@ void scaleUnits()
     {
       scaleData(x, 2.0);
     };
-};
+}
 

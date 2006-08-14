@@ -8,12 +8,12 @@
 Decode::Decode()
 {
 
-};
+}
 
 Decode::~Decode()
 {
 
-};
+}
 
 int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned int checksum)
 {
@@ -120,7 +120,7 @@ int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned 
 			!= checksum)
 		return -1;
 	return 0;
-};
+}
 
 void Decode::my_memcpy(unsigned char *dst, unsigned char *src, unsigned cnt)
 {
@@ -136,7 +136,7 @@ void Decode::my_memcpy(unsigned char *dst, unsigned char *src, unsigned cnt)
 		dst++;
 		src++;
 	};
-};
+}
 
 void Decode::shp_correct_lf(unsigned char *in, unsigned char *out, int size)
 {
@@ -160,7 +160,7 @@ void Decode::shp_correct_lf(unsigned char *in, unsigned char *out, int size)
 			out += count;
 		}
 	}
-};
+}
 
 
 void Decode::apply_pal_offsets(unsigned char *offsets, unsigned char *data,unsigned int length)
@@ -168,7 +168,7 @@ void Decode::apply_pal_offsets(unsigned char *offsets, unsigned char *data,unsig
 	Uint16 i;
 	for (i = 0; i < length; i ++)
 		data[i] = offsets[data[i]];
-};
+}
 
 int Decode::decode40(unsigned char *image_in, unsigned char *image_out)
 {
@@ -254,4 +254,4 @@ int Decode::decode40(unsigned char *image_in, unsigned char *image_out)
 		}
 	}
 	return (writep - image_out);
-};
+}

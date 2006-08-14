@@ -12,14 +12,14 @@ Shpfile::Shpfile(unsigned char * bufFiledata, int bufsize) : Decode()
 	ShpFilesize = bufsize;
 	Index = NULL;
 	readIndex();
-};
+}
 
 Shpfile::~Shpfile()
 {
 	if(Index != NULL) {
 		free(Index);
 	}
-};
+}
 
 SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette)
 {
@@ -132,7 +132,7 @@ SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette)
 	}
 	
 	return pic;
-};
+}
 
 void Shpfile::readIndex()
 {
@@ -197,4 +197,4 @@ void Shpfile::readIndex()
 		// Add the EndOffset for the last file
 		Index[NumFiles-1].EndOffset = ((Uint32) SDL_SwapLE16( *((Uint16*) (Filedata + 2 + (NumFiles * 4))))) - 1 + 2;
 	}
-};
+}

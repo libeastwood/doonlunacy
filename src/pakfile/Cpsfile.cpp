@@ -18,7 +18,7 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize) : Decode()
 Cpsfile::~Cpsfile()
 {	
 	;
-};
+}
 
 SDL_Surface* Cpsfile::getPicture()
 {
@@ -65,4 +65,4 @@ SDL_Surface* Cpsfile::getPicture()
 	free(ImageOut);
 	
 	return pic;
-};
+}

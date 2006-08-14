@@ -22,7 +22,7 @@ Settings::Settings()
   m_dataDir = "paks/";
 
   m_doubleBuffered = false;
-};
+}
 
 
 void Settings::load()
@@ -56,12 +56,12 @@ void Settings::load()
 	ResMan::Instance()->writeText("CONFIG:config.txt", config);
 
 */
-};
+}
 void Settings::save()
 {
     String configText = ConfigFile::saveFile(configFile);
 	ResMan::Instance()->writeText("CONFIG:config.txt", configText);    
-};
+}
 
 void Settings::ParseFile(char* fn)
 {
@@ -83,9 +83,9 @@ void Settings::ParseFile(char* fn)
 
   };
   */
-};
+}
 
 void Settings::ParseOptions(int argc, char* argv[])
 {
 
-};
+}

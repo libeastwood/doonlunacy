@@ -67,7 +67,7 @@ OptionsMenuState::OptionsMenuState()
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
-};
+}
 
 OptionsMenuState::~OptionsMenuState()
 {
@@ -76,12 +76,12 @@ OptionsMenuState::~OptionsMenuState()
     delete m_butOk;
 
     delete m_vbox;
-};
+}
 
 void OptionsMenuState::doOptions()
 {
     printf("Options");
-};
+}
 
 void OptionsMenuState::doOk()
 {

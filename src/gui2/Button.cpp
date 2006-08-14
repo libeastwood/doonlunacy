@@ -11,7 +11,7 @@ bool Button::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
     if (!hitTest(x, y)) return false;
     onClick();
     return true;
-};
+}
 
 //-------------------------------------------------------------------
 
@@ -20,13 +20,13 @@ GraphicButton::GraphicButton()
     m_surfNormal = NULL;
     m_surfPressed = NULL;
     m_pressed = false;
-};
+}
 
 GraphicButton::GraphicButton(SDL_Surface* normal, SDL_Surface* pressed)
 {
     setGraphics(normal, pressed);
     m_pressed = false;
-};
+}
 
 void GraphicButton::setGraphics(SDL_Surface* normal, SDL_Surface* pressed)
 {
@@ -38,7 +38,7 @@ void GraphicButton::setGraphics(SDL_Surface* normal, SDL_Surface* pressed)
 
     m_width = normal->w;
     m_height = normal->h;
-};
+}
 
 void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
 {
@@ -58,7 +58,7 @@ void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
         assert(m_surfNormal != NULL);
         SDL_BlitSurface(m_surfNormal, NULL, dest, &destrect);
     };
-};
+}
 
 bool GraphicButton::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
 {
@@ -72,39 +72,39 @@ bool GraphicButton::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
     m_pressed = true;
     
     return true;
-};
+}
 
 bool GraphicButton::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
     if (!m_visible) return false;   
     m_pressed = false;
     return Button::handleButtonUp(button, x, y);
-};
+}
 
 // ------------------------------------------------------------------
 
 BoringButton::BoringButton(std::string caption)
 {
     m_caption = caption;
-};
+}
 
 BoringButton::~BoringButton()
 {
     SDL_FreeSurface(m_surfNormal);
     SDL_FreeSurface(m_surfPressed);
-};
+}
 
 void BoringButton::setSize(Uint16 w, Uint16 h)
 {
     GraphicButton::setSize(w, h);
     redraw();
-};
+}
 
 void BoringButton::setCaption(std::string newcaption)
 {
     m_caption = newcaption;
     redraw();
-};
+}
 
 void BoringButton::redraw()
 {
@@ -193,16 +193,16 @@ void BoringButton::redraw()
 
 	SDL_UnlockSurface(m_surfNormal);
     SDL_UnlockSurface(m_surfPressed);
-};
+}
 
 // ------------------------------------------------------------------
 
 TranspButton::TranspButton(Uint16 w, Uint16 h)
 {
     Button::setSize(w, h);
-};
+}
 
 TranspButton::~TranspButton()
 {
 
-};
+}

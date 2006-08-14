@@ -7,11 +7,11 @@
 State::State()
 {
     mp_parent = NULL;
-};
+}
 
 State::~State()
 {
-};
+}
 
 
 void State::JustMadeActive()
@@ -19,19 +19,19 @@ void State::JustMadeActive()
 #ifdef STATE_DEBUG
     printf("--> %s just made active\n", GetName());
 #endif 
-};
+}
 
 void State::JustMadeInactive()
 {
 #ifdef STATE_DEBUG
     printf("<-- %s just made inactive\n", GetName());
 #endif 
-};
+}
 
 void State::PopState()
 { 
     mp_parent->PopState(); 
-};
+}
 
 
 
@@ -39,11 +39,11 @@ void State::PopState()
 
 StateMachine::StateMachine()
 {
-};
+}
 
 StateMachine::~StateMachine()
 {
-};
+}
 
 void StateMachine::PushState(State* state)
 {
@@ -56,7 +56,7 @@ void StateMachine::PushState(State* state)
 
     state->SetParent(this);
     state->JustMadeActive();
-};
+}
 
 void StateMachine::PopState()
 {
@@ -80,7 +80,7 @@ void StateMachine::PopState()
     {
         GetCurrentState()->JustMadeActive();
     };
-};
+}
 
 int StateMachine::Execute(float dt)
 {
@@ -93,7 +93,7 @@ int StateMachine::Execute(float dt)
     };
 
     return 0;
-};
+}
 
 
 

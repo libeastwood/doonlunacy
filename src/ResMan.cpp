@@ -21,42 +21,42 @@ FileLike::FileLike(unsigned char* buf, int size)
     m_buf = buf;
     m_size = size;
     m_pos = 0;
-};
+}
 
 FileLike::~FileLike()
 {
     delete m_buf;
-};
+}
 
 void FileLike::read(void* buf, int size)
 {
     memcpy(buf, &m_buf[m_pos], size);
     m_pos += size; 
-};
+}
 
 void FileLike::seek(int offset)
 {
     m_pos = offset;
-};
+}
 
 // ------------------------------------------------------------------
 
 Resource::Resource()
 {
 	mb_writable = false;
-};
+}
 
 Resource::~Resource()
 {
 
-};
+}
 
 // ------------------------------------------------------------------
 
 DIRResource::DIRResource(bfs::path path)
 {
    m_path = path; 
-};
+}
 
 unsigned char* DIRResource::readFile(std::string path, int *size)
 {
@@ -78,7 +78,7 @@ unsigned char* DIRResource::readFile(std::string path, int *size)
     if (size != NULL) *size = filesize;
 
     return buf;
-};
+}
 
 std::string DIRResource::readText(std::string path) 
 {
@@ -97,21 +97,21 @@ std::string DIRResource::readText(std::string path)
 	//std::cout << file_contents << std::endl;
 
 	return file_contents;
-};
+}
 
 bool DIRResource::exists(std::string path)
 {
 	bfs::path fullpath(m_path);
 	fullpath /= path;
 	return bfs::exists(fullpath);
-};
+}
 
 // ------------------------------------------------------------------
 
 WritableDIRResource::WritableDIRResource(std::string path) : DIRResource(path)
 {
 	mb_writable = true;
-};
+}
 
 void WritableDIRResource::writeText(std::string path, std::string text)
 {
@@ -122,7 +122,7 @@ void WritableDIRResource::writeText(std::string path, std::string text)
 	file.open(fullpath.string().c_str());
 	file << text;
 	file.close();
-};
+}
 
 // ------------------------------------------------------------------
 
@@ -130,12 +130,12 @@ PAKResource::PAKResource(bfs::path path)
 {
     m_path = path;
     m_pakfile = new Pakfile(path.string().c_str());
-};
+}
 
 PAKResource::~PAKResource()
 {
     delete m_pakfile;
-};
+}
 
 unsigned char* PAKResource::readFile(std::string path, int *size)
 {
@@ -150,7 +150,7 @@ unsigned char* PAKResource::readFile(std::string path, int *size)
     if (size != NULL) *size = filesize;
 
     return buf;
-};
+}
 
 bool PAKResource::exists(std::string path)
 {
@@ -159,14 +159,14 @@ bool PAKResource::exists(std::string path)
 		if (m_pakfile->getFilename(i) == path) return true;
 	};
 	return false;
-};
+}
 
 // ------------------------------------------------------------------
 
 ResMan::ResMan()
 {
 
-};
+}
 
 ResMan::~ResMan()
 {
@@ -179,7 +179,7 @@ ResMan::~ResMan()
     };
 
     m_resources.clear();
-};
+}
 
 bool ResMan::addRes(std::string name)
 {
@@ -210,14 +210,14 @@ bool ResMan::addRes(std::string name)
     };
 
     return addRes(name, res);
-};
+}
 
 bool ResMan::addRes(std::string name, Resource *res)
 {
 	m_resources[name.c_str()] = res;	
 
 	return true;
-};
+}
 
 Resource* ResMan::getResource(std::string name, std::string& filename)
 {
@@ -240,7 +240,7 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     };
 
 	return res;
-};
+}
 
 bool ResMan::exists(std::string path)
 {
@@ -253,7 +253,7 @@ bool ResMan::exists(std::string path)
 	};
 
 	return res->exists(filename);
-};
+}
 
 unsigned char*  ResMan::readFile(std::string name, int *size)
 {
@@ -271,14 +271,14 @@ unsigned char*  ResMan::readFile(std::string name, int *size)
     assert(buf != NULL);
     
     return buf;
-};
+}
 
 FileLike* ResMan::readFile(std::string name)
 {
     int size;
     unsigned char* buf = readFile(name, &size);
     return new FileLike(buf, size);
-};
+}
 
 std::string ResMan::readText(std::string name)
 {
@@ -289,8 +289,8 @@ std::string ResMan::readText(std::string name)
 	assert(res != NULL);
 
 	return res->readText(filename);
-};
-	
+}
+
 void ResMan::writeText(std::string name, std::string text)
 {
 	std::string filename;

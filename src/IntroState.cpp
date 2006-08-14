@@ -20,7 +20,7 @@ IntroState::Frame::Frame(std::string filename,
     m_state = TRANSITION_IN;
     m_hold = 0.0f;
     m_transitionPalette = NULL;
-};
+}
 
 void IntroState::Frame::Load(Frame* lastframe)
 {
@@ -46,7 +46,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
     m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
-};
+}
 
 bool IntroState::Frame::Execute(float dt)
 {
@@ -73,7 +73,7 @@ bool IntroState::Frame::Execute(float dt)
     Application::Instance()->BlitCentered(m_animSurface);
 
     return mb_finished;
-};
+}
 
 
 void IntroState::Frame::doPlaying(float dt)
@@ -94,20 +94,20 @@ void IntroState::Frame::doPlaying(float dt)
             m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
         };
     };
-};
+}
 
 void IntroState::Frame::setupTransitionIn()
 {
-};
+}
 
 void IntroState::Frame::cleanupTransitionIn()
 {
-};
+}
 
 void IntroState::Frame::doTransitionIn(float dt) 
 {
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
-};
+}
 
 void IntroState::Frame::setupTransitionOut()
 {
@@ -115,12 +115,12 @@ void IntroState::Frame::setupTransitionOut()
     memcpy((unsigned char*)m_transitionPalette, 
             Application::Instance()->Screen()->format->palette->colors,
             sizeof(SDL_Color) * 256);
-};
+}
 
 void IntroState::Frame::cleanupTransitionOut()
 {
     delete m_transitionPalette;
-};
+}
 
 void IntroState::Frame::doTransitionOut(float dt) 
 {
@@ -158,12 +158,12 @@ void IntroState::Frame::doTransitionOut(float dt)
         cleanupTransitionOut();
         mb_finished = true;
     };
-};
+}
 
 void IntroState::Frame::doHolding(float dt)
 {
     m_state = TRANSITION_OUT;
-};
+}
 
 // ------------------------------------------------------------------
 // IntroState
@@ -240,11 +240,11 @@ IntroState::IntroState()
                                   
     m_butIntro->onClick.connect(
             boost::bind(&IntroState::SkipIntro, this) );
-};
+}
 
 IntroState::~IntroState()
 {
-};
+}
 
 void IntroState::SkipIntro()
 {
@@ -256,13 +256,13 @@ void IntroState::JustMadeActive()
     Application::Instance()->SetClearColor(0);
     Application::Instance()->RootWidget()->addChild(m_butIntro);
     State::JustMadeActive();
-};
+}
 
 void IntroState::JustMadeInactive()
 {
     Application::Instance()->RootWidget()->deleteChild(m_butIntro);
     State::JustMadeInactive();
-};
+}
 
 
 bool IntroState::next()
@@ -282,7 +282,7 @@ bool IntroState::next()
     m_currentFrame = nextFrame;
 
     return true;
-};
+}
 
 int IntroState::Execute(float dt)
 {
@@ -292,7 +292,7 @@ int IntroState::Execute(float dt)
     };
 
     return 0;
-};
+}
 
 
 

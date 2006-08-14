@@ -57,12 +57,12 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
         };
 	
 	decodeFrames();
-};
+}
 
 Wsafile::~Wsafile()
 {
 	free(decodedFrames);
-};
+}
 
 SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
@@ -100,7 +100,7 @@ SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 	
 	return pic;
 
-};
+}
 
 void Wsafile::decodeFrames()
 {
@@ -122,4 +122,4 @@ void Wsafile::decodeFrames()
 			memcpy(decodedFrames + (i+1) * SizeX * SizeY, decodedFrames + i * SizeX * SizeY,SizeX * SizeY);
 		}
 	}
-};
+}

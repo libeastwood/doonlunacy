@@ -42,7 +42,7 @@ Application::Application()
     m_cursorX = 0;
     m_cursorY = 0;
     m_cursorFrame = CURSOR_NORMAL;
-};
+}
 
 Application::~Application()
 {
@@ -59,7 +59,7 @@ Application::~Application()
     //Mix_CloseAudio();
     //SDLNet_Quit();
     SDL_Quit();
-};
+}
 
 void Application::Init()
 {
@@ -160,7 +160,7 @@ void Application::InitSettings()
 
     strcpy(settings.localPlayerName, "Player");
     */
-};
+}
 
 void Application::InitAudio()
 {
@@ -178,7 +178,7 @@ void Application::InitAudio()
         printf("allocated %d channels.\n", Mix_AllocateChannels(16)); 
     };
     */
-};
+}
 
 void Application::InitNet()
 {
@@ -193,7 +193,7 @@ void Application::InitNet()
     for(int i=0;i<MAX_PLAYERS;i++)
         sockets[i] = NULL;
     */
-};
+}
 
 void Application::SetPalette()
 {
@@ -212,7 +212,7 @@ void Application::SetPalette()
     SDL_Palette* palette = m_screen->format->palette;
     
     palette = m_currentPalette;
-};
+}
 
 void Application::InitVideo()
 {
@@ -240,20 +240,20 @@ void Application::InitVideo()
 
     m_rootWidget->setSize(set->m_width, set->m_height);
     m_rootWidget->setPos(0, 0);
-};
+}
 
 void Application::UpdateVideoMode(bool fs)
 {
     Settings::Instance()->m_fullscreen = fs;
     InitVideo();
-};
+}
     
 void Application::UpdateVideoMode(Uint16 w, Uint16 h)
 {
     Settings::Instance()->m_width = w;
     Settings::Instance()->m_height = h;
     InitVideo();
-};
+}
 
 void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 {
@@ -261,7 +261,7 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
     Settings::Instance()->m_height = h;
     Settings::Instance()->m_fullscreen = fs;
     InitVideo();
-};
+}
 
 void Application::LoadData()
 {
@@ -298,7 +298,7 @@ void Application::LoadData()
     fprintf(stdout, "starting sound...\n");
     soundPlayer = new SoundPlayerClass();
     */
-};
+}
 
 void Application::Die()
 {
@@ -308,7 +308,7 @@ void Application::Die()
     //SDLNet_Quit();
     SDL_Quit();
     exit(1);
-};
+}
 
 void Application::Run()
 {
@@ -386,7 +386,7 @@ void Application::Run()
     };
     
     printf("done\n");
-};
+}
 
 void Application::HandleEvents()
 {
@@ -424,7 +424,7 @@ void Application::HandleEvents()
                 break;
         };
     };
-};
+}
 
 void Application::BlitCursor()
 {
@@ -455,13 +455,13 @@ void Application::BlitCursor()
     }
 
     SDL_BlitSurface(surface, NULL, m_screen, &dest);
-};
+}
 
 
 void Application::Blit(SDL_Surface* surface, SDL_Rect* src, SDL_Rect* dest)
 {
     assert( SDL_BlitSurface(surface, src, m_screen, dest) == 0 );
-};
+}
 
 void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
 {
@@ -479,6 +479,6 @@ void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
     
     //printf("blitting %d %d %d %d\n", dest.x, dest.y, surface->w, surface->h);
     Blit(surface, src, &dest);
-};
+}
 
 

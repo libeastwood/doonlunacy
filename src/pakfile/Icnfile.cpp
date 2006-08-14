@@ -96,7 +96,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize)
 Icnfile::~Icnfile()
 {	
 	;
-};
+}
 
 SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette) {
 	SDL_Surface * pic;
@@ -143,9 +143,9 @@ SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile, SDL_Palette *palette) {
 	printf("File Nr.: %d (Size: %dx%d)\n",IndexOfFile,SIZE_X,SIZE_Y);
 	
 	return pic;
-};
+}
 
 int Icnfile::getNumFiles()
 {
 	return NumFiles;
-};
+}

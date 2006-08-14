@@ -10,30 +10,30 @@ Widget::Widget()
     m_height = 0;
     m_enabled = true;
     m_visible = true;
-};
+}
 
 Widget::~Widget()
 {
 
-};
+}
 
 bool Widget::handleMotion(Uint16 x, Uint16 y)
 {
     if (hitTest(x, y)) return true;
     return false;
-};
+}
 
 bool Widget::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
 {
     if (hitTest(x, y)) return true;
     return false;
-};
+}
 
 bool Widget::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
 {
     if (hitTest(x, y)) return true;
     return false;
-};
+}
 
 void Widget::setFocus()
 {
@@ -49,4 +49,4 @@ void Widget::setFocus()
     m_focusedWidget = this;
 
     this->gotFocus();
-};
+}
