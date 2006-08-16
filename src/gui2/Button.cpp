@@ -5,10 +5,10 @@
 #include "Application.h"
 #include "Gfx.h"
 
-bool Button::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
+bool Button::handleButtonUp(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;
-    if (!hitTest(x, y)) return false;
+    if (!contains(p)) return false;
     onClick();
     return true;
 }
@@ -36,17 +36,15 @@ void GraphicButton::setGraphics(SDL_Surface* normal, SDL_Surface* pressed)
     m_surfNormal = normal;
     m_surfPressed = pressed;
 
-    m_width = normal->w;
-    m_height = normal->h;
+    w = normal->w;
+    h = normal->h;
 }
 
-void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
+void GraphicButton::draw(SDL_Surface* dest, SPoint off)
 {
     if (!m_visible) return;
     
-    SDL_Rect destrect;
-    destrect.x = offx + m_x;
-    destrect.y = offy + m_y;
+    Rect destrect (off.x + x, off.y + y, 0, 0);
 
     if (m_pressed)
     {
@@ -60,10 +58,10 @@ void GraphicButton::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
     };
 }
 
-bool GraphicButton::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
+bool GraphicButton::handleButtonDown(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;   
-    if (!hitTest(x, y)) 
+    if (!contains(p)) 
     {
         m_pressed = false;
         return false;
@@ -74,11 +72,11 @@ bool GraphicButton::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
     return true;
 }
 
-bool GraphicButton::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
+bool GraphicButton::handleButtonUp(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;   
     m_pressed = false;
-    return Button::handleButtonUp(button, x, y);
+    return Button::handleButtonUp(button, p);
 }
 
 // ------------------------------------------------------------------
@@ -94,11 +92,13 @@ BoringButton::~BoringButton()
     SDL_FreeSurface(m_surfPressed);
 }
 
+/*
 void BoringButton::setSize(Uint16 w, Uint16 h)
 {
     GraphicButton::setSize(w, h);
     redraw();
 }
+*/
 
 void BoringButton::setCaption(std::string newcaption)
 {
@@ -111,11 +111,11 @@ void BoringButton::redraw()
     if (m_surfNormal != NULL) SDL_FreeSurface(m_surfNormal);
     if (m_surfPressed != NULL) SDL_FreeSurface(m_surfPressed);
 
-    m_surfNormal  = SDL_CreateRGBSurface(SDL_SWSURFACE, m_width, m_height, 8,
+    m_surfNormal  = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 8,
                                         0, 0, 0, 0); 
     assert(m_surfNormal != NULL);
 
-    m_surfPressed = SDL_CreateRGBSurface(SDL_SWSURFACE, m_width, m_height, 8,
+    m_surfPressed = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 8,
                                         0, 0, 0, 0); 
     assert(m_surfPressed != NULL);
 
@@ -134,50 +134,50 @@ void BoringButton::redraw()
      * Button normal
      */   
     // top lines 
-    drawHLine(m_surfNormal, 0, 0, m_width-1, 229, false);
-    drawHLine(m_surfNormal, 0, 1, m_width-3, 108, false);
+    drawHLine(m_surfNormal, 0, 0, w-1, 229, false);
+    drawHLine(m_surfNormal, 0, 1, w-3, 108, false);
 
     // left lines
-    drawVLine(m_surfNormal, 0, 0, m_height-1, 229, false);
-    drawVLine(m_surfNormal, 1, 1, m_height-2, 108, false);
+    drawVLine(m_surfNormal, 0, 0, h-1, 229, false);
+    drawVLine(m_surfNormal, 1, 1, h-2, 108, false);
    
     // bottom lines
-    drawHLine(m_surfNormal, 1, m_height-2, m_width-2, 226, false);
-    drawHLine(m_surfNormal, 0, m_height-1, m_width-1, 229, false);
+    drawHLine(m_surfNormal, 1, h-2, w-2, 226, false);
+    drawHLine(m_surfNormal, 0, h-1, w-1, 229, false);
     
     // right lines
-    drawVLine(m_surfNormal, m_width-1, 0, m_height-1, 229, false);
-    drawVLine(m_surfNormal, m_width-2, 1, m_height-2, 226, false);
+    drawVLine(m_surfNormal, w-1, 0, w-1, 229, false);
+    drawVLine(m_surfNormal, w-2, 1, w-2, 226, false);
     
     // final pixels to make it look really duneish
-    putPixel(m_surfNormal, 1, m_height-2, 115);
-    putPixel(m_surfNormal, m_width-2, 1, 115);
-    putPixel(m_surfNormal, m_width-2, m_height-2, 227);
+  //  putPixel(m_surfNormal, 1, h-2, 115);
+   // putPixel(m_surfNormal, w-2, 1, 115);
+   // putPixel(m_surfNormal, w-2, h-2, 227);
 
 
     /*
      * Button pressed
      */   
     // top lines 
-    drawHLine(m_surfPressed, 0, 0, m_width-1, 229, false);
-    drawHLine(m_surfPressed, 0, 1, m_width-3, 226, false);
+//    drawHLine(m_surfPressed, 0, 0, w-1, 229, false);
+  //  drawHLine(m_surfPressed, 0, 1, w-3, 226, false);
 
     // left lines
-    drawVLine(m_surfPressed, 0, 0, m_height-1, 229, false);
-    drawVLine(m_surfPressed, 1, 1, m_height-2, 226, false);
+//    drawVLine(m_surfPressed, 0, 0, h-1, 229, false);
+  //  drawVLine(m_surfPressed, 1, 1, h-2, 226, false);
    
     // bottom lines
-    drawHLine(m_surfPressed, 1, m_height-2, m_width-2, 226, false);
-    drawHLine(m_surfPressed, 0, m_height-1, m_width-1, 229, false);
+//drawHLine(m_surfPressed, 1, h-2, w-2, 226, false);
+//drawHLine(m_surfPressed, 0, h-1, w-1, 229, false);
     
     // right lines
-    drawVLine(m_surfPressed, m_width-1, 0, m_height-1, 229, false);
-    drawVLine(m_surfPressed, m_width-2, 1, m_height-2, 226, false);
+   // drawVLine(m_surfPressed, w-1, 0, h-1, 229, false);
+  //  drawVLine(m_surfPressed, w-2, 1, h-2, 226, false);
     
     // final pixels to make it look really duneish
-    putPixel(m_surfPressed, 1, m_height-2, 227);
-    putPixel(m_surfPressed, m_width-2, 1, 227);
-    putPixel(m_surfPressed, m_width-2, m_height-2, 227);
+   // putPixel(m_surfPressed, 1, h-2, 227);
+  //  putPixel(m_surfPressed, w-2, 1, 227);
+  //  putPixel(m_surfPressed, w-2, h-2, 227);
     
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
@@ -185,11 +185,11 @@ void BoringButton::redraw()
     font->extents(m_caption.c_str(), textw, texth);
 
     font->render(m_caption.c_str(), m_surfNormal,
-                    (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 49);
+                    (w / 2) - (textw / 2), 
+                    ((h / 2) - (texth / 2)), 49);
     font->render(m_caption.c_str(), m_surfPressed,
-                    (m_width / 2) - (textw / 2), 
-                    (m_height / 2) - (texth / 2), 49);
+                    (w / 2) - (textw / 2), 
+                    ((h / 2) - (texth / 2)), 49);
 
 	SDL_UnlockSurface(m_surfNormal);
     SDL_UnlockSurface(m_surfPressed);
@@ -199,7 +199,7 @@ void BoringButton::redraw()
 
 TranspButton::TranspButton(Uint16 w, Uint16 h)
 {
-    Button::setSize(w, h);
+	setSize(SPoint(w, h));
 }
 
 TranspButton::~TranspButton()

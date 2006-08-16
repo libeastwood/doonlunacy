@@ -238,8 +238,8 @@ void Application::InitVideo()
 
     SDL_ShowCursor(SDL_DISABLE);
 
-    m_rootWidget->setSize(set->m_width, set->m_height);
-    m_rootWidget->setPos(0, 0);
+    m_rootWidget->setSize(UPoint(set->m_width, set->m_height));
+    m_rootWidget->setPosition(UPoint(0, 0));
 }
 
 void Application::UpdateVideoMode(bool fs)
@@ -351,7 +351,7 @@ void Application::Run()
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
 
-        m_rootWidget->draw(m_screen);
+        m_rootWidget->draw(m_screen, SPoint(0, 0));
 
         BlitCursor();
         
@@ -404,17 +404,15 @@ void Application::HandleEvents()
                 m_cursorX = event.motion.x;
                 m_cursorY = event.motion.y;
 
-                m_rootWidget->handleMotion(event.motion.x, event.motion.y); 
+                m_rootWidget->handleMotion(SPoint(event.motion.x, event.motion.y)); 
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 m_rootWidget->handleButtonDown( event.button.button,
-                                                event.button.x,
-                                                event.button.y);
+                                                SPoint(event.button.x, event.button.y));
                 break;
             case SDL_MOUSEBUTTONUP:
                 m_rootWidget->handleButtonUp(   event.button.button,
-                                                event.button.x,
-                                                event.button.y);
+                                                SPoint(event.button.x, event.button.y));
                 break;
             case SDL_KEYDOWN:
                 m_rootWidget->handleKeyDown(&(event.key.keysym));

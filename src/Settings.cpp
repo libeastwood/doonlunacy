@@ -12,16 +12,17 @@ Settings::Settings()
 	// set to the current directory for the moment 
 	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
 
-  m_width = 640;
-  m_height = 480;
+	m_width = 640;
+	m_height = 480;
 
-  m_fullscreen = false;
+	m_fullscreen = false;
 
-  m_debug = false;
+	//dunk- should we get rid of this for a verbosity/logging level switch?
+	m_debug = false; 
 
-  m_dataDir = "paks/";
+	m_dataDir = "paks/";
 
-  m_doubleBuffered = false;
+	m_doubleBuffered = false;
 }
 
 

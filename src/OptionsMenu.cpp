@@ -10,7 +10,7 @@
 OptionsMenuState::OptionsMenuState()
 {
     const int bw = 200;
-    const int bh = 20;
+    const int bh = 24;
     
     std::string m_caption;
     
@@ -24,7 +24,7 @@ OptionsMenuState::OptionsMenuState()
         m_caption = "Window mode";
         
     m_butWindowMode = new BoringButton(m_caption);
-    m_butWindowMode->setSize(bw, bh);
+    m_butWindowMode->setSize(UPoint(bw, bh));
     m_butWindowMode->onClick.connect(
             boost::bind(&OptionsMenuState::doScreenMode, this) );
    
@@ -47,14 +47,14 @@ OptionsMenuState::OptionsMenuState()
     }
 
     m_butResolution = new BoringButton(m_caption);
-    m_butResolution->setSize(bw,bh);
+    m_butResolution->setSize(UPoint(bw,bh));
     m_butResolution->onClick.connect(
             boost::bind(&OptionsMenuState::doResolution, this) );
    
     m_vbox->addChild(m_butResolution);
 
     m_butOk = new BoringButton("Ok");
-    m_butOk->setSize(bw, bh);
+    m_butOk->setSize(UPoint(bw, bh));
     m_butOk->onClick.connect(
             boost::bind(&OptionsMenuState::doOk, this) );
    
@@ -62,8 +62,8 @@ OptionsMenuState::OptionsMenuState()
 
 	m_vbox->fit(2);
     Uint16 x = (set->GetWidth() / 2) - 
-                (m_vbox->getWidth() / 2);
-    m_vbox->setPos(x - 5, 312);
+                (m_vbox->w / 2);
+    m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);

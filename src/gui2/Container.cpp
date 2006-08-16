@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-void Container::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
+void Container::draw(SDL_Surface* dest, SPoint off)
 {
     if (!m_visible) return;
 
@@ -11,53 +11,59 @@ void Container::draw(SDL_Surface* dest, Uint16 offx, Uint16 offy)
           it != m_children.end();
           ++it )
     {
-        (*it)->draw(dest, offx + m_x, offy + m_y);
+        (*it)->draw(dest, SPoint(off.x + x, off.y + y));
     };
 }
 
-bool Container::handleMotion(Uint16 x, Uint16 y)
+bool Container::handleMotion(SPoint p)
 {
     if (!m_visible) return false;
-    if (!hitTest(x, y)) return false;
+	if (!contains(p)) return false;
     
+	SPoint op (p.x - x, p.y - y);
+
     WidgetList::iterator it;
     for ( it  = m_children.begin();
           it != m_children.end();
           ++it )
     {
-        if ((*it)->handleMotion(x - m_x, y - m_y)) return true;
+        if ((*it)->handleMotion(op)) return true;
     };
 
     return false;
 }
 
-bool Container::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
+bool Container::handleButtonDown(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;
-    if (!hitTest(x, y)) return false;
+    if (!contains(p)) return false;
+
+	SPoint op (p.x - x, p.y - y);
 
     WidgetList::iterator it;
     for ( it  = m_children.begin();
           it != m_children.end();
           ++it )
     {
-        if ((*it)->handleButtonDown(button, x - m_x, y- m_y)) return true;
+        if ((*it)->handleButtonDown(button, op)) return true;
     };
 
     return false;
 }
 
-bool Container::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
+bool Container::handleButtonUp(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;
-    if (!hitTest(x, y)) return false;
+    if (!contains(p)) return false;
+
+	SPoint op (p.x - x, p.y - y);
 
     WidgetList::iterator it;
     for ( it  = m_children.begin();
           it != m_children.end();
           ++it )
     {
-        if ((*it)->handleButtonUp(button, x - m_x, y - m_y)) return true;
+        if ((*it)->handleButtonUp(button, op)) return true;
     };
 
     return false;

@@ -15,35 +15,35 @@ SingleMenuState::SingleMenuState()
     m_vbox = new VBox();
     
     m_butCampaign = new BoringButton("Campaign");
-    m_butCampaign->setSize(bw, bh);
+    m_butCampaign->setSize(UPoint(bw, bh));
     m_butCampaign->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butCampaign);
 
     m_butCustom = new BoringButton("Custom Game");
-    m_butCustom->setSize(bw,bh);
+    m_butCustom->setSize(UPoint(bw,bh));
     m_butCustom->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butCustom);
 
     m_butSkirmish = new BoringButton("Skirmish");
-    m_butSkirmish->setSize(bw, bh);
+    m_butSkirmish->setSize(UPoint(bw, bh));
     m_butSkirmish->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butSkirmish);
 
     m_butLoad = new BoringButton("Load Game");
-    m_butLoad->setSize(bw, bh);
+    m_butLoad->setSize(UPoint(bw, bh));
     m_butLoad->onClick.connect(
             boost::bind(&SingleMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butLoad);
 
     m_butCancel = new BoringButton("Cancel");
-    m_butCancel->setSize(bw, bh);
+    m_butCancel->setSize(UPoint(bw, bh));
     m_butCancel->onClick.connect(
             boost::bind(&SingleMenuState::doCancel, this) );
    
@@ -51,8 +51,8 @@ SingleMenuState::SingleMenuState()
 
     m_vbox->fit(2);
 	Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
-                (m_vbox->getWidth() / 2);
-    m_vbox->setPos(x - 5, 312);
+                (m_vbox->w / 2);
+    m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);

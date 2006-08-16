@@ -2,14 +2,9 @@
 
 Widget* Widget::m_focusedWidget = NULL;
 
-Widget::Widget()
+Widget::Widget() : Rect(0, 0, 0, 0), m_enabled(true), m_visible(true)
 {
-    m_x = 0;
-    m_y = 0;
-    m_width = 0;
-    m_height = 0;
-    m_enabled = true;
-    m_visible = true;
+   
 }
 
 Widget::~Widget()
@@ -17,21 +12,21 @@ Widget::~Widget()
 
 }
 
-bool Widget::handleMotion(Uint16 x, Uint16 y)
+bool Widget::handleMotion(SPoint p)
 {
-    if (hitTest(x, y)) return true;
+	if (contains(p)) return true;
     return false;
 }
 
-bool Widget::handleButtonDown(Uint8 button, Uint16 x, Uint16 y)
+bool Widget::handleButtonDown(Uint8 button, SPoint& p)
 {
-    if (hitTest(x, y)) return true;
+    if (contains(p)) return true;
     return false;
 }
 
-bool Widget::handleButtonUp(Uint8 button, Uint16 x, Uint16 y)
+bool Widget::handleButtonUp(Uint8 button, SPoint& p)
 {
-    if (hitTest(x, y)) return true;
+    if (contains(p)) return true;
     return false;
 }
 

@@ -19,9 +19,9 @@ MenuBaseState::MenuBaseState()
     //m_menu->setWidth(m_menuBackground->w);
 
     m_container = new Container();
-    m_container->setPos(0, 0);
-    m_container->setSize(Settings::Instance()->GetWidth(),
-                         Settings::Instance()->GetHeight());
+    m_container->setPosition(UPoint(0, 0));
+    m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
+								Settings::Instance()->GetHeight()));
     
     Application::Instance()->RootWidget()->addChild(m_container);
 }

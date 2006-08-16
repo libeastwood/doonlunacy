@@ -367,7 +367,7 @@ struct Rect : public SDL_Rect
             setPosition(position);
             setSize(size);
         };
-        //! Copy onstructor
+        //! Copy constructor
         Rect(const Rect &rect)
         {
             x = rect.x;
@@ -375,7 +375,7 @@ struct Rect : public SDL_Rect
             w = rect.w;
             h = rect.h;
         };
-        //! Copy onstructor
+        //! Copy constructor
         Rect(const SDL_Rect &rect)
         {
             x = rect.x;

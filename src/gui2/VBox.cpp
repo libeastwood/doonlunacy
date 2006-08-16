@@ -4,7 +4,7 @@
 
 void VBox::reshape()
 {
-    Uint16 d = m_height / m_children.size(); 
+    Uint16 d = h / m_children.size(); 
 
     Uint16 y = 0;
 
@@ -14,7 +14,7 @@ void VBox::reshape()
          it != m_children.end();
          ++it)
     {
-        (*it)->setPos(0, y);
+        (*it)->setPosition(SPoint(0, y));
         y += d;
     }; 
 }
@@ -25,9 +25,8 @@ void VBox::fit(int margin)
     
     Widget* child = *(m_children.begin());
     
-    m_width = child->getWidth();
-    m_height = child->getHeight() * m_children.size();
-    m_height += m_children.size() * margin;
+    w = child->w;
+    h = child->h * m_children.size() + (m_children.size() * margin);
 }
 
 

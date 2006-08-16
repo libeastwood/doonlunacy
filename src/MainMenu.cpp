@@ -20,10 +20,11 @@ MainMenuState::MainMenuState()
     m_vbox = new VBox();
 
     const int bw = 200;
-    const int bh = 20;
+    const int bh = 24;
     
     m_butSingle = new BoringButton("Single Player");
-    m_butSingle->setSize(bw, bh);
+    m_butSingle->setSize(SPoint(bw, bh));
+	m_butSingle->redraw();
     //m_butSingle = new GraphicButton((SDL_Surface*)(dataFile[UI_Single].dat),
     //                   (SDL_Surface*)(dataFile[UI_Single_Pressed].dat));
     m_butSingle->onClick.connect(
@@ -32,7 +33,8 @@ MainMenuState::MainMenuState()
     m_vbox->addChild(m_butSingle);
 
     m_butMulti = new BoringButton("Multi Player");
-    m_butMulti->setSize(bw, bh);
+    m_butMulti->setSize(UPoint(bw, bh));
+	m_butMulti->redraw();
     //m_butMulti = new GraphicButton((SDL_Surface*)(dataFile[UI_Multi].dat),
     //                   (SDL_Surface*)(dataFile[UI_Multi_Pressed].dat));
     m_butMulti->onClick.connect(
@@ -41,7 +43,8 @@ MainMenuState::MainMenuState()
     m_vbox->addChild(m_butMulti);
 
     m_butMapEd = new BoringButton("Map Editor");
-    m_butMapEd->setSize(bw, bh);
+    m_butMapEd->setSize(UPoint(bw, bh));
+	m_butMapEd->redraw();
     //m_butMapEd = new GraphicButton((SDL_Surface*)(dataFile[UI_MapEdit].dat),
     //                   (SDL_Surface*)(dataFile[UI_MapEdit_Pressed].dat));
     m_butMapEd->onClick.connect(
@@ -50,7 +53,8 @@ MainMenuState::MainMenuState()
     m_vbox->addChild(m_butMapEd);
 
     m_butOptions = new BoringButton("Options");
-    m_butOptions->setSize(bw, bh);
+    m_butOptions->setSize(UPoint(bw, bh));
+	m_butOptions->redraw();
     //m_butOptions = new GraphicButton((SDL_Surface*)(dataFile[UI_OptionsMM].dat),
     //                   (SDL_Surface*)(dataFile[UI_OptionsMM_Pressed].dat));
     m_butOptions->onClick.connect(
@@ -59,7 +63,8 @@ MainMenuState::MainMenuState()
     m_vbox->addChild(m_butOptions);
 
     m_butAbout = new BoringButton("About");
-    m_butAbout->setSize(bw, bh);
+    m_butAbout->setSize(UPoint(bw, bh));
+	m_butAbout->redraw();
     //m_butAbout = new GraphicButton((SDL_Surface*)(dataFile[UI_About].dat),
     //                   (SDL_Surface*)(dataFile[UI_About_Pressed].dat));
     m_butAbout->onClick.connect(
@@ -68,7 +73,8 @@ MainMenuState::MainMenuState()
     m_vbox->addChild(m_butAbout);
 
     m_butQuit = new BoringButton("Quit");
-    m_butQuit->setSize(bw, bh);
+    m_butQuit->setSize(UPoint(bw, bh));
+	m_butQuit->redraw();
     //m_butQuit = new GraphicButton((SDL_Surface*)(dataFile[UI_Quit].dat),
     //                   (SDL_Surface*)(dataFile[UI_Quit_Pressed].dat));
     m_butQuit->onClick.connect(
@@ -78,8 +84,8 @@ MainMenuState::MainMenuState()
 
     m_vbox->fit(2);
     Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
-                (m_vbox->getWidth() / 2);
-    m_vbox->setPos(x - 5, 312);
+                (m_vbox->w / 2);
+	m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
