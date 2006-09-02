@@ -17,7 +17,7 @@ all_sources = [ "Application.cpp",
                 "Settings.cpp",
                 "Font.cpp",
                 "State.cpp",            
-                "DataFile.cpp",
+#                "DataFile.cpp",
 
                 "TopLevelState.cpp",
                 "MenuBase.cpp", 

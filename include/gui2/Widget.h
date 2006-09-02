@@ -15,7 +15,7 @@ class Widget : public Rect
         virtual ~Widget();
 		//@}
 
-        virtual void draw(SDL_Surface* dest, SPoint &off) {}
+        virtual void draw(SDL_Surface* dest, SPoint off) {}
 
 		//! @name Event handling functions
 		//@{

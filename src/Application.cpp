@@ -22,7 +22,7 @@
 #include "Settings.h"
 #include "Font.h"
 #include "TopLevelState.h"
-#include "DataFile.h"
+//#include "DataFile.h"
 
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
@@ -409,6 +409,7 @@ void Application::HandleEvents()
             case SDL_MOUSEBUTTONDOWN:
                 m_rootWidget->handleButtonDown( event.button.button,
                                                 SPoint(event.button.x, event.button.y));
+                printf("X:%d, Y:%d\n", event.button.x, event.button.y);                               
                 break;
             case SDL_MOUSEBUTTONUP:
                 m_rootWidget->handleButtonUp(   event.button.button,

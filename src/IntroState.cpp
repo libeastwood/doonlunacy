@@ -176,7 +176,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false) );
-    enque( new Frame("INTRO:INTRO2.WSA",  
+    /*enque( new Frame("INTRO:INTRO2.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false) );
@@ -232,7 +232,7 @@ IntroState::IntroState()
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false) );
+                     false) );*/
 
     next();
     m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),

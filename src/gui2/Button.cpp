@@ -146,13 +146,13 @@ void BoringButton::redraw()
     drawHLine(m_surfNormal, 0, h-1, w-1, 229, false);
     
     // right lines
-    drawVLine(m_surfNormal, w-1, 0, w-1, 229, false);
-    drawVLine(m_surfNormal, w-2, 1, w-2, 226, false);
+    drawVLine(m_surfNormal, w-1, 0, h-1, 229, false);
+    drawVLine(m_surfNormal, w-2, 1, h-2, 226, false);
     
     // final pixels to make it look really duneish
-  //  putPixel(m_surfNormal, 1, h-2, 115);
-   // putPixel(m_surfNormal, w-2, 1, 115);
-   // putPixel(m_surfNormal, w-2, h-2, 227);
+    putPixel(m_surfNormal, 1, h-2, 115);
+    putPixel(m_surfNormal, w-2, 1, 115);
+    putPixel(m_surfNormal, w-2, h-2, 227);
 
 
     /*
