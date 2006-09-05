@@ -33,14 +33,14 @@ class Widget : public Rect
 			@param p cursor location relative to the widget
 			@return true if the event was handled
 		*/
-        virtual bool handleButtonDown(Uint8 button, SPoint &p);
+        virtual bool handleButtonDown(Uint8 button, SPoint p);
 		/*! 
 			called when a mouse button is released
 			@param button button number. You can use SDL button constants.
 			@param p cursor location relative to the widget
 			@return true if the event was handled
 		*/
-        virtual bool handleButtonUp(Uint8 button, SPoint &p);
+        virtual bool handleButtonUp(Uint8 button, SPoint p);
 
 		/*!
 			called when a key is pressed

@@ -43,7 +43,7 @@ void GraphicButton::setGraphics(SDL_Surface* normal, SDL_Surface* pressed)
 void GraphicButton::draw(SDL_Surface* dest, SPoint off)
 {
     if (!m_visible) return;
-    
+
     Rect destrect (off.x + x, off.y + y, 0, 0);
 
     if (m_pressed)
@@ -92,13 +92,13 @@ BoringButton::~BoringButton()
     SDL_FreeSurface(m_surfPressed);
 }
 
-/*
-void BoringButton::setSize(Uint16 w, Uint16 h)
+
+void BoringButton::setSize(SPoint p)
 {
-    GraphicButton::setSize(w, h);
+    Widget::setSize(p);
     redraw();
 }
-*/
+
 
 void BoringButton::setCaption(std::string newcaption)
 {
@@ -159,25 +159,25 @@ void BoringButton::redraw()
      * Button pressed
      */   
     // top lines 
-//    drawHLine(m_surfPressed, 0, 0, w-1, 229, false);
-  //  drawHLine(m_surfPressed, 0, 1, w-3, 226, false);
+    drawHLine(m_surfPressed, 0, 0, w-1, 229, false);
+    drawHLine(m_surfPressed, 0, 1, w-3, 226, false);
 
     // left lines
-//    drawVLine(m_surfPressed, 0, 0, h-1, 229, false);
-  //  drawVLine(m_surfPressed, 1, 1, h-2, 226, false);
+    drawVLine(m_surfPressed, 0, 0, h-1, 229, false);
+    drawVLine(m_surfPressed, 1, 1, h-2, 226, false);
    
     // bottom lines
-//drawHLine(m_surfPressed, 1, h-2, w-2, 226, false);
-//drawHLine(m_surfPressed, 0, h-1, w-1, 229, false);
+    drawHLine(m_surfPressed, 1, h-2, w-2, 226, false);
+    drawHLine(m_surfPressed, 0, h-1, w-1, 229, false);
     
     // right lines
-   // drawVLine(m_surfPressed, w-1, 0, h-1, 229, false);
-  //  drawVLine(m_surfPressed, w-2, 1, h-2, 226, false);
+    drawVLine(m_surfPressed, w-1, 0, h-1, 229, false);
+    drawVLine(m_surfPressed, w-2, 1, h-2, 226, false);
     
     // final pixels to make it look really duneish
-   // putPixel(m_surfPressed, 1, h-2, 227);
-  //  putPixel(m_surfPressed, w-2, 1, 227);
-  //  putPixel(m_surfPressed, w-2, h-2, 227);
+    putPixel(m_surfPressed, 1, h-2, 227);
+    putPixel(m_surfPressed, w-2, 1, 227);
+    putPixel(m_surfPressed, w-2, h-2, 227);
     
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 

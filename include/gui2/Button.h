@@ -42,7 +42,7 @@ class BoringButton : public GraphicButton
         BoringButton(std::string caption);
         ~BoringButton();
 
-        //virtual void setSize(Uint16 w, Uint16 h);
+        virtual void setSize(SPoint p);
         std::string getCaption() { return m_caption;} ;
         void setCaption(std::string newcaption);
 		virtual void redraw();
