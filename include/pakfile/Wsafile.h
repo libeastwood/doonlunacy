@@ -17,7 +17,7 @@ public:
 
 	inline int getNumFrames() { return (int) NumFrames; };
 	inline Uint32 getFramesPer1024ms() { return FramesPer1024ms; };
-        inline float getFPS() { return fps; }
+    inline float getFPS() { return fps; }
 
 private:
 	void decodeFrames();

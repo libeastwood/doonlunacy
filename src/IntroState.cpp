@@ -46,10 +46,24 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
     m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
+    
+    SDL_FreeSurface(m_scaledSurface);
+    
+    m_scaledSurface =
+    SDL_CreateRGBSurface(SDL_SWSURFACE,
+               			 m_animSurface->w*2,
+              			 m_animSurface->h*2, 
+               			 8,
+              	 		 0,0,0,0);
+
+    SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
+
+    scale2x(m_animSurface, m_scaledSurface);
 }
 
 bool IntroState::Frame::Execute(float dt)
 {
+
     switch (m_state)
     {
         case TRANSITION_IN:
@@ -69,8 +83,9 @@ bool IntroState::Frame::Execute(float dt)
             break;
     };
 
-    assert(m_animSurface != NULL);
-    Application::Instance()->BlitCentered(m_animSurface);
+    assert(m_scaledSurface != NULL);
+    
+    Application::Instance()->BlitCentered(m_scaledSurface);
 
     return mb_finished;
 }
@@ -92,6 +107,19 @@ void IntroState::Frame::doPlaying(float dt)
         {
             SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
             m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
+            
+            SDL_FreeSurface(m_scaledSurface);
+
+            m_scaledSurface =
+            SDL_CreateRGBSurface(SDL_SWSURFACE,
+               			 m_animSurface->w*2,
+              			 m_animSurface->h*2, 
+               			 8,
+              	 		 0,0,0,0);
+
+            SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
+
+            scale2x(m_animSurface, m_scaledSurface);
         };
     };
 }
@@ -133,7 +161,7 @@ void IntroState::Frame::doTransitionOut(float dt)
     if (m_transitionPalette == NULL) setupTransitionOut();
     
     bool done = true;
-    SDL_Surface* screen = m_animSurface; //Application::Instance()->Screen();
+    SDL_Surface* screen = m_scaledSurface; //Application::Instance()->Screen();
     SDL_Color* col = m_transitionPalette;
 
     const int fadeAmt = 3;
@@ -176,7 +204,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false) );
-    /*enque( new Frame("INTRO:INTRO2.WSA",  
+    enque( new Frame("INTRO:INTRO2.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false) );
@@ -195,7 +223,7 @@ IntroState::IntroState()
     enque( new Frame("INTRO:INTRO6.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false) );
+                     false) ); 
     enque( new Frame("INTRO:INTRO7A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
@@ -232,7 +260,7 @@ IntroState::IntroState()
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false) );*/
+                     false) );
 
     next();
     m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),
