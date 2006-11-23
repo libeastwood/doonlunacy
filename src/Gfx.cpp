@@ -316,54 +316,6 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, double ratio)
     return resizeSurface(surface, (Uint16)(surface->w*ratio), (Uint16)(surface->h*ratio));
 }
 
-// Defines used by scale2x
-
-#ifndef MAX
-#define MAX(a,b)    (((a) > (b)) ? (a) : (b))
-#define MIN(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-
-
-#define READINT24(x)      ((x)[0]<<16 | (x)[1]<<8 | (x)[2]) 
-#define WRITEINT24(x, i)  {(x)[0]=i>>16; (x)[1]=(i>>8)&0xff; x[2]=i&0xff; }
-
-
-void scale2x(SDL_Surface *src, SDL_Surface *dst)
-{
-	int looph, loopw;
-	
-	Uint8* srcpix = (Uint8*)src->pixels;
-	Uint8* dstpix = (Uint8*)dst->pixels;
-
-	const int srcpitch = src->pitch;
-	const int dstpitch = dst->pitch;
-	const int width = src->w;
-	const int height = src->h;
-
-
-    	Uint8 E0, E1, E2, E3, B, D, E, F, H;
-		for(looph = 0; looph < height; ++looph)
-		{
-			for(loopw = 0; loopw < width; ++ loopw)
-			{
-			    	B = *(Uint8*)(srcpix + (MAX(0,looph-1)*srcpitch) + (1*loopw));
-			    	D = *(Uint8*)(srcpix + (looph*srcpitch) + (1*MAX(0,loopw-1)));
-			    	E = *(Uint8*)(srcpix + (looph*srcpitch) + (1*loopw));
-			    	F = *(Uint8*)(srcpix + (looph*srcpitch) + (1*MIN(width-1,loopw+1)));
-			    	H = *(Uint8*)(srcpix + (MIN(height-1,looph+1)*srcpitch) + (1*loopw));
-				
-				E0 = D == B && B != F && D != H ? D : E;
-    	    	    	    	E1 = B == F && B != D && F != H ? F : E;
-				E2 = D == H && D != B && H != F ? D : E;
-				E3 = H == F && D != H && B != F ? F : E;
-
-				*(Uint8*)(dstpix + looph*2*dstpitch + loopw*2*1) = E0;
-				*(Uint8*)(dstpix + looph*2*dstpitch + (loopw*2+1)*1) = E1;
-				*(Uint8*)(dstpix + (looph*2+1)*dstpitch + loopw*2*1) = E2;
-				*(Uint8*)(dstpix + (looph*2+1)*dstpitch + (loopw*2+1)*1) = E3;
-			}
-		}
-}
 //------------------------------------------------------------------------------
 // Color mapping
 //------------------------------------------------------------------------------

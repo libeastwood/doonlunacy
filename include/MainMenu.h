@@ -4,6 +4,8 @@
 #include "MenuBase.h"
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
+#include "Gfx.h"
+#include "SDL.h"
 
 class MainMenuState : public MenuBaseState 
 {
@@ -15,11 +17,13 @@ class MainMenuState : public MenuBaseState
         void doSkirmish();
         void doSingle();
         void doQuit();
+        int Execute(float dt);
         virtual const char* GetName() { return "MainMenuState"; }
 
     private:
         VBox* m_vbox;
-
+        Rect m_rect;
+        SDL_Surface * m_surf;
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;
         BoringButton* m_butMapEd;

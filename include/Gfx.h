@@ -113,7 +113,6 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h);
 */
 SDL_Surface* resizeSurface(SDL_Surface *surface, double ratio);
 
-void scale2x(SDL_Surface *src, SDL_Surface *dst);
 //@}
 
 //------------------------------------------------------------------------------

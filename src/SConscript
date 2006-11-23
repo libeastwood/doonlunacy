@@ -39,6 +39,7 @@ gui_sources = [
                 "gui2/Container.cpp",
                 "gui2/Button.cpp",
                 "gui2/VBox.cpp",
+                "gui2/Label.cpp",
 
               ]
 

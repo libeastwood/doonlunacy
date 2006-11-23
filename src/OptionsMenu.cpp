@@ -2,6 +2,9 @@
 
 #include "Application.h"
 //#include "DataFile.h"
+#include "ResMan.h"
+#include "Gfx.h"
+#include "pakfile/Wsafile.h"
 #include "Settings.h"
 
 #include "boost/bind.hpp"
@@ -65,8 +68,8 @@ OptionsMenuState::OptionsMenuState()
                 (m_vbox->w / 2);
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
-    
     m_container->addChild(m_vbox);
+
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -125,4 +128,3 @@ void OptionsMenuState::doScreenMode()
     else
         m_butWindowMode->setCaption("Window mode");
 }
-

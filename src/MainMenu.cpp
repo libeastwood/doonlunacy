@@ -3,12 +3,12 @@
 #include "Application.h"
 //#include "DataFile.h"
 #include "Settings.h"
-
+#include "ResMan.h"
 #include "SingleMenu.h"
 #include "OptionsMenu.h"
 
 #include "boost/bind.hpp"
-
+#include "pakfile/Wsafile.h"
 
 MainMenuState::MainMenuState()
 {
@@ -83,6 +83,53 @@ MainMenuState::MainMenuState()
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
+
+//TODO:I guess that most of this should be wrapped into some function as
+//we'll be doing a lot of image cropping like this
+
+    int len;
+    unsigned char * data = ResMan::Instance()->readFile("MENTAT:FARTR.WSA", &len);
+
+    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
+
+    Wsafile * m_wsa = new Wsafile(data, len);
+
+    SDL_Surface * tmp = copySurface(m_wsa->getPicture(1, palette));
+
+    m_surf = SDL_CreateRGBSurface(SDL_SWSURFACE, 258, 65, 8,0,0,0,0);
+
+    SDL_SetColors(m_surf, palette->colors, 0, palette->ncolors);
+
+    Rect src (6,31, 82, 65);
+
+    Rect cp(0, 0, 82, 65);
+
+    SDL_BlitSurface(tmp, &src, m_surf, &cp); 
+
+
+    data = ResMan::Instance()->readFile("MENTAT:FHARK.WSA", &len);
+
+    m_wsa = new Wsafile(data, len);
+    tmp = copySurface(m_wsa->getPicture(1, palette));
+
+    cp.setPosition(SPoint(88, 0));
+
+    SDL_BlitSurface(tmp, &src, m_surf, &cp); 
+
+    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
+
+    m_wsa = new Wsafile(data, len);
+    tmp = copySurface(m_wsa->getPicture(1, palette));
+
+    cp.setPosition(SPoint(176, 0));
+    SDL_BlitSurface(tmp, &src, m_surf, &cp);
+
+    m_surf = resizeSurface(m_surf, 2);
+
+    m_rect.setPosition(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->w/2, 
+                        Settings::Instance()->GetHeight() / 4)); 
+
+    m_rect.setSize(UPoint(m_surf->w, m_surf->h));
 }
 
 MainMenuState::~MainMenuState()
@@ -128,13 +175,12 @@ void MainMenuState::JustMadeInactive()
 {
     Application::Instance()->RootWidget()->deleteChild(m_vbox);
     State::JustMadeInactive();
-}
+}*/
 
 
 int MainMenuState::Execute(float dt)
 {
-    Application::Instance()->BlitCentered(m_menuBackground);
+    Application::Instance()->Blit(m_surf, NULL, &m_rect);
 
     return 0;
 }
-*/

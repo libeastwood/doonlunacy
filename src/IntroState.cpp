@@ -1,6 +1,7 @@
 #include "IntroState.h"
 #include "ResMan.h"
 #include "Application.h"
+#include "Gfx.h"
 #include "Settings.h"
 #include "pakfile/Palette.h"
 #include "boost/bind.hpp"
@@ -58,7 +59,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
 
-    scale2x(m_animSurface, m_scaledSurface);
+    m_scaledSurface = resizeSurface(m_animSurface, 2);
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -119,7 +120,7 @@ void IntroState::Frame::doPlaying(float dt)
 
             SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
 
-            scale2x(m_animSurface, m_scaledSurface);
+            m_scaledSurface = resizeSurface(m_animSurface, 2);
         };
     };
 }
