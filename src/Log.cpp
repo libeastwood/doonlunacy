@@ -138,8 +138,9 @@ bool Log::checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity)
     return true;
 }
 
-void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, va_list args)
+void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, ...)
 {
+    va_list args ;
     static char message[LOG_MAX_STRING_LENGTH];
     static char formated[LOG_MAX_STRING_LENGTH];
     const char *verb;

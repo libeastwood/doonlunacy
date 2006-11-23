@@ -198,7 +198,7 @@ class Log : public Singleton<Log>
         int indentLevel;
         
         bool checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity);
-        void doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, va_list args);
+        void doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, ...);
         
 };
 
