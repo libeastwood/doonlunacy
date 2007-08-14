@@ -26,8 +26,11 @@
 
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
+#include "pakfile/Cpsfile.h"
 
 #include "ResMan.h"
+
+#include "houses.h"
 
 #define VERSION "0.94.1"
 
@@ -111,15 +114,13 @@ void Application::Init()
 
     m_rootWidget = new Container();
 
-    //get the house palettes
-    /*
+
     houseColour[HOUSE_ATREIDES]     = COLOUR_ATREIDES;
     houseColour[HOUSE_ORDOS]        = COLOUR_ORDOS;
     houseColour[HOUSE_HARKONNEN]    = COLOUR_HARKONNEN;
     houseColour[HOUSE_SARDAUKAR]    = COLOUR_SARDAUKAR;
     houseColour[HOUSE_FREMEN]       = COLOUR_FREMEN;
     houseColour[HOUSE_MERCENARY]    = COLOUR_MERCENARY;
-    */
 
     //printf("loading mentat.....\n");
     //MentatClass* m = new MentatClass();
@@ -203,6 +204,12 @@ void Application::SetPalette()
     Palettefile tmp (data, len);
 
     SDL_Palette * pal = tmp.getPalette();
+    
+    //This fixes white wheels. Is palette broken or sth??
+
+    pal->colors[205].r = 109;
+    pal->colors[205].g = 109;
+    pal->colors[205].b = 153;
     
     assert(pal != NULL);
     printf("setting palette %d colors\n", pal->ncolors);
@@ -292,7 +299,8 @@ void Application::LoadData()
 
     Shpfile mouse (data, len);
 
-    m_cursor = mouse.getPicture(0, m_screen->format->palette);
+    m_cursor = mouse.getPicture(0);
+
 
     /*
     fprintf(stdout, "starting sound...\n");
@@ -360,7 +368,7 @@ void Application::Run()
         fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 #endif 
 
-#if 1
+#if 0
         SDL_Rect pdest = {10, 10, 5, 10};
 
         for (Uint32 i=0; i!=256; i++)
@@ -369,7 +377,7 @@ void Application::Run()
             SDL_FillRect(m_screen, &pdest, i);
         }    
 #endif 
-            
+
         SDL_Flip(m_screen);
 
         fps_frames ++;
@@ -407,6 +415,7 @@ void Application::HandleEvents()
                 m_rootWidget->handleMotion(SPoint(event.motion.x, event.motion.y)); 
                 break;
             case SDL_MOUSEBUTTONDOWN:
+                gpaloff++;
                 m_rootWidget->handleButtonDown( event.button.button,
                                                 SPoint(event.button.x, event.button.y));
                 break;

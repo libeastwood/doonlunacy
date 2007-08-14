@@ -18,7 +18,7 @@ all_sources = [ "Application.cpp",
                 "Font.cpp",
                 "State.cpp",            
 #                "DataFile.cpp",
-
+                "PictureFactory.cpp",
                 "TopLevelState.cpp",
                 "MenuBase.cpp", 
                 "MainMenu.cpp", 
@@ -52,13 +52,27 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Palette.cpp",
               ]
 
+pakview_sources = [  "Application.cpp", 
+                     "ConfigFile.cpp",
+                     "DataCache.cpp",
+                     "Font.cpp",
+                     "Gfx.cpp", 
+                     "houses.cpp",
+                     "Log.cpp",
+                     "ResMan.cpp",                     
+                     "Settings.cpp",
+                     "Strings.cpp",
+                     "State.cpp",
+                     "TopLevelState.cpp",
+                  ]
+
 #gamelib = env.StaticLibrary("dune_game", all_sources)
 #guilib  = env.StaticLibrary("dune_gui", gui_sources + gamelib)
 #paklib  = env.StaticLibrary("dune_pak", pak_sources)
 
 dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
-#pakview = env.Program("../pakview", ["pakview.cpp", gamelib, guilib, paklib] )
+pakview = env.Program("../test", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
 
-Default(dunelegacy)
-#Default(pakview)
+#Default(dunelegacy)
+Default(pakview)
 
