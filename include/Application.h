@@ -6,6 +6,8 @@
 #include "SDL.h"
 #include "gui2/Container.h"
 
+#include "State.h"
+#include "TopLevelState.h"
 typedef enum
 {
 	CURSOR_NORMAL,
@@ -54,7 +56,7 @@ class Application : public Singleton<Application>
         void UpdateVideoMode(bool fullscreen);
         void UpdateVideoMode(Uint16 w, Uint16 h);
         void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
-
+        
     private:
         void InitSettings();
         void InitAudio();

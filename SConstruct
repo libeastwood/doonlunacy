@@ -43,9 +43,12 @@ env.Append(LIBS = [ 	"SDL",
                     	"SDL_ttf",
                   ])
 
+
+# If boost fails for you make sure you remove -mt from lines 49 and 50
+# It's a debian fix.
 if sys.platform != 'win32':
-    env.Append(LIBS=[   "boost_signals",
-                        "boost_filesystem",
+    env.Append(LIBS=[   "boost_signals-mt",
+                        "boost_filesystem-mt",
                     ])
 
 env.Append(CPPPATH = [	"${SDL_INCLUDE_PATH}",
