@@ -1,10 +1,15 @@
 #ifndef WSAFILE_H_INCLUDED
 #define WSAFILE_H_INCLUDED
 
+#include "Gfx.h"
 #include "pakfile/Decode.h"
 #include "SDL.h"
 
-//extern SDL_Palette* palette;
+#include <boost/shared_ptr.hpp>
+
+class Wsafile;
+
+typedef boost::shared_ptr<Wsafile> WsafilePtr;
 
 class Wsafile : public Decode
 {
@@ -13,7 +18,7 @@ public:
                 SDL_Surface* lastframe = NULL);
 	~Wsafile();
 
-	SDL_Surface * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
+	Image * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
 
 	inline int getNumFrames() { return (int) NumFrames; };
 	inline Uint32 getFramesPer1024ms() { return FramesPer1024ms; };
@@ -32,7 +37,7 @@ private:
 	Uint16 SizeX;
 	Uint16 SizeY;
 	Uint32 FramesPer1024ms;
-        float fps;
+    float fps;
 };
 
 #endif // WSAFILE_H_INCLUDED

@@ -633,11 +633,11 @@ class Image
         /*!
             @param size size of the new image
         */
-        ImagePtr getResized(ConstUPoint size)
+/*        ImagePtr getResized(ConstUPoint size)
         {
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
         };
-
+*/
         
         //! Set colorkey
         /*!

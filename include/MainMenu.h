@@ -23,7 +23,7 @@ class MainMenuState : public MenuBaseState
     private:
         VBox* m_vbox;
         Rect m_rect;
-        SDL_Surface * m_surf;
+        ImagePtr m_surf;
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;
         BoringButton* m_butMapEd;

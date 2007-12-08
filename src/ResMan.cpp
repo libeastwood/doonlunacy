@@ -225,8 +225,7 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     assert(p != std::string::npos);
 
     std::string fsname = std::string(name, 0, p);
-    filename = std::string(name, p+1, 
-                                       name.length() - fsname.length() - 1);
+    filename = std::string(name, p+1, name.length() - fsname.length() - 1);
 
     printf("opening file from %s named %s...\n", fsname.c_str(), filename.c_str());
 
@@ -265,11 +264,11 @@ unsigned char*  ResMan::readFile(std::string name, int *size)
 		if (size != NULL) size = 0;
 		return NULL;
 	};
-    
+
     unsigned char *buf = res->readFile(filename.c_str(), size);
 
     assert(buf != NULL);
-    
+
     return buf;
 }
 

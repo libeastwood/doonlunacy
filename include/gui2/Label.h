@@ -22,11 +22,11 @@ public:
     ~Label();
     //@}
 
-    virtual void draw(SDL_Surface* dest, SPoint off);
+    virtual void draw(Image * dest, SPoint off);
 
 protected:
 
-    SDL_Surface * m_surface;    
+    ImagePtr m_surface;    
     std::string m_caption;
 };
 

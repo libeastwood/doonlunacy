@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-void Container::draw(SDL_Surface* dest, SPoint off)
+void Container::draw(Image * dest, SPoint off)
 {
     if (!m_visible) return;
 

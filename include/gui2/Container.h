@@ -9,7 +9,7 @@ class Container: public Widget
     public:
         typedef std::list<Widget*> WidgetList;
 
-        virtual void draw(SDL_Surface* dest, SPoint offset);
+        virtual void draw(Image * dest, SPoint offset);
 
 		virtual bool handleMotion(SPoint p);
         virtual bool handleButtonDown(Uint8 button, SPoint p);

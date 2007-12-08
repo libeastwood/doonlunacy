@@ -50,7 +50,7 @@ SDL_Surface* Cpsfile::getPicture()
 	}
 	
 	
-	SDL_Palette* palette = Application::Instance()->Screen()->format->palette;		
+	SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;		
 	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
 	
 	SDL_LockSurface(pic);	

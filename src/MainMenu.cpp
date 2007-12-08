@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 
 #include "Application.h"
+#include "Gfx.h"
 //#include "DataFile.h"
 #include "Settings.h"
 #include "ResMan.h"
@@ -90,46 +91,27 @@ MainMenuState::MainMenuState()
     int len;
     unsigned char * data = ResMan::Instance()->readFile("MENTAT:FARTR.WSA", &len);
 
-    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
 
-    Wsafile * m_wsa = new Wsafile(data, len);
+    WsafilePtr m_wsa (new Wsafile(data, len));
 
-    SDL_Surface * tmp = copySurface(m_wsa->getPicture(1, palette));
-
-    m_surf = SDL_CreateRGBSurface(SDL_SWSURFACE, 258, 65, 8,0,0,0,0);
-
-    SDL_SetColors(m_surf, palette->colors, 0, palette->ncolors);
-
+    ImagePtr tmp (m_wsa->getPicture(1, palette));
+    m_surf.reset(new Image(UPoint(258, 65)));
     Rect src (6,31, 82, 65);
-
-    Rect cp(0, 0, 82, 65);
-
-    SDL_BlitSurface(tmp, &src, m_surf, &cp); 
-
+    m_surf->blitFrom(tmp.get(), src, UPoint(0, 0));
 
     data = ResMan::Instance()->readFile("MENTAT:FHARK.WSA", &len);
-
-    m_wsa = new Wsafile(data, len);
-    tmp = copySurface(m_wsa->getPicture(1, palette));
-
-    cp.setPosition(SPoint(88, 0));
-
-    SDL_BlitSurface(tmp, &src, m_surf, &cp); 
+    m_wsa.reset(new Wsafile(data, len));
+    tmp.reset(m_wsa->getPicture(1, palette));
+    m_surf->blitFrom(tmp.get(), src, UPoint(88, 0));
 
     data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
+    m_wsa.reset(new Wsafile(data, len));
+    tmp.reset(m_wsa->getPicture(1, palette));
+    m_surf->blitFrom(tmp.get(), src, UPoint(176, 0));
 
-    m_wsa = new Wsafile(data, len);
-    tmp = copySurface(m_wsa->getPicture(1, palette));
+    m_surf = m_surf->getResized(2);
 
-    cp.setPosition(SPoint(176, 0));
-    SDL_BlitSurface(tmp, &src, m_surf, &cp);
-
-    m_surf = resizeSurface(m_surf, 2);
-
-    m_rect.setPosition(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->w/2, 
-                        Settings::Instance()->GetHeight() / 4)); 
-
-    m_rect.setSize(UPoint(m_surf->w, m_surf->h));
 }
 
 MainMenuState::~MainMenuState()
@@ -180,7 +162,8 @@ void MainMenuState::JustMadeInactive()
 
 int MainMenuState::Execute(float dt)
 {
-    Application::Instance()->Blit(m_surf, NULL, &m_rect);
+    m_surf.get()->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
+                        Settings::Instance()->GetHeight() / 4));
 
     return 0;
 }

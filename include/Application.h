@@ -34,7 +34,7 @@ class Application : public Singleton<Application>
 
         void Die();
 
-        inline SDL_Surface* Screen() { return m_screen; }
+        inline Image * Screen() { return m_screen; }
 
         inline Uint16 CursorX() { return m_cursorX; }
         inline Uint16 CursorY() { return m_cursorY; }
@@ -44,9 +44,6 @@ class Application : public Singleton<Application>
         StateMachine* RootState() { return m_rootState; }
 
         Container* RootWidget() { return m_rootWidget; }
-
-        void Blit(SDL_Surface* surface, SDL_Rect* src, SDL_Rect* dest);
-        void BlitCentered(SDL_Surface* surface, SDL_Rect* src=NULL);
 
         void SetPalette();
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
@@ -69,7 +66,7 @@ class Application : public Singleton<Application>
         void HandleEvents();
         void BlitCursor();
 
-        SDL_Surface* m_screen;
+        Image * m_screen;
         SDL_Palette* m_currentPalette;
         
         StateMachine* m_rootState;
@@ -80,7 +77,7 @@ class Application : public Singleton<Application>
 
         Uint16 m_cursorX, m_cursorY;
         Cursor m_cursorFrame;
-        SDL_Surface* m_cursor;
+        ImagePtr m_cursor;
 
         Uint32 m_clearColor;
 };

@@ -24,7 +24,7 @@ Shpfile::~Shpfile()
 
 SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile)
 {
-    SDL_Palette *palette = Application::Instance()->Screen()->format->palette;
+    SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
 	unsigned char *DecodeDestination = NULL;
 	unsigned char *ImageOut = NULL;
@@ -135,7 +135,7 @@ SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile)
 }
 
 SDL_Surface* Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) {
-    SDL_Palette *palette = Application::Instance()->Screen()->format->palette;
+    SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
 	unsigned char *DecodeDestination = NULL;
 	unsigned char *ImageOut = NULL;

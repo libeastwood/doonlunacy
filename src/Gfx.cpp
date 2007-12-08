@@ -38,7 +38,7 @@ Image::Image(ConstUPoint size)
 	};
 	
 	// copy palette from the screen (otherwise you'll get only black image)
-    SDL_SetColors(surface, Application::Instance()->Screen()->format->palette->colors, 0, 256);
+    SDL_SetColors(surface, Application::Instance()->Screen()->getSurface()->format->palette->colors, 0, 256);
 }
 Image::~Image()
 {
@@ -53,26 +53,21 @@ SDL_Surface *Image::getSurface()
     return surface;
 }
 
-// TODO: once Application::Instance()->Screen() returns ImagePtr, change
-// these methods to use Image::blitTo !
 void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
 {
-    Rect dstRect(Rect(dstPoint, getSize()));
-    SDL_BlitSurface(surface, const_cast<SDL_Rect *>(static_cast<const SDL_Rect *>(&srcRect)), Application::Instance()->Screen(), &dstRect); 
+    blitTo(Application::Instance()->Screen(), srcRect, dstPoint);
 }
 void Image::blitToScreen(ConstUPoint dstPoint) const
 {
-    Rect dstRect(Rect(dstPoint, getSize()));
-    SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), &dstRect); 
+    blitTo(Application::Instance()->Screen(), dstPoint);
 }
 void Image::blitToScreen() const
 {
-    SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), NULL); 
+    blitTo(Application::Instance()->Screen());
 }
 void Image::blitToScreenCentered() const
 {
-    Rect dstRect(Rect(UPoint(Application::Instance()->Screen()->w, Application::Instance()->Screen()->h)/2 - getSize()/2, getSize()));
-    SDL_BlitSurface(surface, NULL, Application::Instance()->Screen(), &dstRect); 
+    blitToCentered(Application::Instance()->Screen());
 }
 
 
@@ -134,7 +129,7 @@ void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 void putPixel(SDL_Surface *surface, int x, int y, Uint32 color)
 {
     assert(surface != NULL);
-    SDL_Surface *screen = Application::Instance()->Screen();
+    SDL_Surface *screen = Application::Instance()->Screen()->getSurface();
 	if (x >= 0 && x < screen->w && y >=0 && y < screen->h)
 	{
 		int bpp = surface->format->BytesPerPixel;

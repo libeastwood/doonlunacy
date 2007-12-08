@@ -23,7 +23,7 @@
 #include "Font.h"
 #include "TopLevelState.h"
 //#include "DataFile.h"
-
+#include "Gfx.h"
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Cpsfile.h"
@@ -40,7 +40,6 @@ Application::Application()
 {
     m_running = false;
     m_rootState = NULL;
-    m_screen = NULL;
 
     m_cursorX = 0;
     m_cursorY = 0;
@@ -55,13 +54,13 @@ Application::~Application()
     delete m_rootState;
     delete m_rootWidget;
     
-    FontManager::Destroy();
+    //FontManager::Destroy();
     //destroyDataFile();
     //MentatClass::Destroy();
 
     //Mix_CloseAudio();
     //SDLNet_Quit();
-    SDL_Quit();
+    //SDL_Quit();
 }
 
 void Application::Init()
@@ -213,10 +212,10 @@ void Application::SetPalette()
     
     assert(pal != NULL);
     printf("setting palette %d colors\n", pal->ncolors);
-    assert( SDL_SetColors(m_screen, pal->colors, 0, pal->ncolors) == 1 );
+    assert( SDL_SetColors(m_screen->getSurface(), pal->colors, 0, pal->ncolors) == 1 );
     m_currentPalette = pal;
 
-    SDL_Palette* palette = m_screen->format->palette;
+    SDL_Palette* palette = m_screen->getSurface()->format->palette;
     
     palette = m_currentPalette;
 }
@@ -231,13 +230,15 @@ void Application::InitVideo()
     if (set->m_fullscreen)
         videoFlags |= SDL_FULLSCREEN;
 
-    m_screen = SDL_SetVideoMode(set->m_width, set->m_height, 
-                                  8, videoFlags);
-    if(!m_screen)
+    SDL_Surface * surf = SDL_SetVideoMode(set->m_width, set->m_height, 8, videoFlags);
+    
+    if(!surf)
     {
         fprintf(stderr, "ERROR: Couldn't set video mode: %s\n", SDL_GetError());
         Die();
     };
+
+    m_screen = new Image(surf);
     
     // reset the palette if we've got one 
     if (m_currentPalette != NULL)
@@ -299,7 +300,7 @@ void Application::LoadData()
 
     Shpfile mouse (data, len);
 
-    m_cursor = mouse.getPicture(0);
+    m_cursor.reset(new Image(mouse.getPicture(0)));
 
 
     /*
@@ -340,7 +341,7 @@ void Application::Run()
     
     while (m_running)
     {
-        SDL_FillRect(m_screen, NULL, m_clearColor);
+        SDL_FillRect(m_screen->getSurface(), NULL, m_clearColor);
 
         HandleEvents();
 
@@ -378,7 +379,7 @@ void Application::Run()
         }    
 #endif 
 
-        SDL_Flip(m_screen);
+        SDL_Flip(m_screen->getSurface());
 
         fps_frames ++;
 
@@ -405,7 +406,7 @@ void Application::HandleEvents()
         switch (event.type)
         {
             case SDL_QUIT:
-                printf("QUIT!\n");
+                fprintf(stderr,"QUIT!\n");
                 m_running = false;
                 break;
             case SDL_MOUSEMOTION:
@@ -435,8 +436,8 @@ void Application::HandleEvents()
 
 void Application::BlitCursor()
 {
-    SDL_Rect dest;
-    SDL_Surface* surface = m_cursor; // being lazy, rename me 
+    UPoint dest;
+    SDL_Surface * surface  = m_cursor->getSurface(); // being lazy, rename me 
 
     dest.x = m_cursorX;
     dest.y = m_cursorY;
@@ -461,31 +462,8 @@ void Application::BlitCursor()
         dest.y -= surface->h/2;
     }
 
-    SDL_BlitSurface(surface, NULL, m_screen, &dest);
+    m_screen->blitFrom(m_cursor.get(), dest);
+
+    //SDL_BlitSurface(surface, NULL, m_screen, &dest);
 }
-
-
-void Application::Blit(SDL_Surface* surface, SDL_Rect* src, SDL_Rect* dest)
-{
-    assert( SDL_BlitSurface(surface, src, m_screen, dest) == 0 );
-}
-
-void Application::BlitCentered(SDL_Surface* surface, SDL_Rect* src)
-{
-    SDL_Rect dest;
-    if (src == NULL)
-    {
-        dest.x = (Settings::Instance()->m_width / 2) - (surface->w / 2);
-        dest.y = (Settings::Instance()->m_height / 2) - (surface->h / 2);
-    }
-    else
-    {
-        dest.x = (Settings::Instance()->m_width / 2) - (src->w / 2);
-        dest.y = (Settings::Instance()->m_height / 2) - (src->h / 2);
-    };
-    
-    //printf("blitting %d %d %d %d\n", dest.x, dest.y, surface->w, surface->h);
-    Blit(surface, src, &dest);
-}
-
 

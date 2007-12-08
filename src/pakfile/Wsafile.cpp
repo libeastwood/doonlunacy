@@ -1,3 +1,4 @@
+#include "Gfx.h"
 #include "pakfile/Wsafile.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
@@ -17,7 +18,8 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 	}
 	
 	NumFrames = SDL_SwapLE16(*((Uint16*) Filedata) );
-        printf("numframes = %d\n", NumFrames);
+    printf("numframes = %d\n", NumFrames);
+
 	SizeX = SDL_SwapLE16(*((Uint16*) (Filedata + 2)) );
 	SizeY = SDL_SwapLE16(*((Uint16*) (Filedata + 4)) );
         printf("size %d x %d\n", SizeX, SizeY);
@@ -25,16 +27,18 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 	if( ((unsigned short *) Filedata)[4] == 0) {
 		Index = (Uint32 *) (Filedata + 10);
 		FramesPer1024ms = SDL_SwapLE32( *((Uint32*) (Filedata+6)) );
-	} else {
+	} 
+	else 
+	{
 		Index = (Uint32 *) (Filedata + 8);
 		FramesPer1024ms = SDL_SwapLE16( *((Uint16*) (Filedata+6)) );
 	}
 
-        // surely /1000.0f not 100?!
-        fps = (FramesPer1024ms / 1024.0f) / 100.0f;
+    // surely /1000.0f not 100?!
+    fps = (FramesPer1024ms / 1024.0f) / 100.0f;
 
-        printf("FramesPer1024ms = %d\n", FramesPer1024ms);
-        printf("FPS = %.3f\n", fps);
+    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
+    printf("FPS = %.3f\n", fps);
 	
 	if(Index[0] == 0) {
 		Index++;
@@ -51,10 +55,10 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 		exit(EXIT_FAILURE);				
 	}
 
-        if (lastframe != NULL)
-        {
-            memcpy(decodedFrames, lastframe->pixels, SizeX*SizeY);
-        };
+    if (lastframe != NULL)
+    {
+        memcpy(decodedFrames, lastframe->pixels, SizeX*SizeY);
+    }
 	
 	decodeFrames();
 }
@@ -64,17 +68,18 @@ Wsafile::~Wsafile()
 	free(decodedFrames);
 }
 
-SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
+Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
 	if(FrameNumber >= NumFrames) {
 		return NULL;
 	}
 	
 	SDL_Surface * pic;
-	unsigned char * Image = decodedFrames + (FrameNumber * SizeX * SizeY);
+	unsigned char * Frame = decodedFrames + (FrameNumber * SizeX * SizeY);
 	
 	// create new picture surface
-	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,SizeX,SizeY,8,0,0,0,0))== NULL) {
+	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,SizeX,SizeY,8,0,0,0,0))== NULL) 
+	{
 		return NULL;
 	}
 	
@@ -92,13 +97,16 @@ SDL_Surface * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
         //printf("%u\n", Image[0]);
 
 	//Now we can copy line by line
-	for(int y = 0; y < SizeY;y++) {
-		memcpy(	((unsigned char*) (pic->pixels)) + y * pic->pitch , Image + y * SizeX, SizeX);
+	for(int y = 0; y < SizeY;y++) 
+	{
+		memcpy(	((unsigned char*) (pic->pixels)) + y * pic->pitch , Frame + y * SizeX, SizeX);
 	}
 		
 	SDL_UnlockSurface(pic);
 	
-	return pic;
+	Image * img = new Image(pic);
+    	
+	return img;
 
 }
 
@@ -106,8 +114,10 @@ void Wsafile::decodeFrames()
 {
 	unsigned char *dec80;
 	
-	for(int i=0;i<NumFrames;i++) {
-		if( (dec80 = (unsigned char*) calloc(1,SizeX*SizeY*2)) == NULL) {
+	for(int i=0;i<NumFrames;i++) 
+	{
+		if( (dec80 = (unsigned char*) calloc(1,SizeX*SizeY*2)) == NULL) 
+		{
 			fprintf(stderr, "Error: Unable to allocate memory for decoded WSA-Frames!\n");
 			exit(EXIT_FAILURE);	
 		}

@@ -153,7 +153,7 @@ Icnfile::~Icnfile()
 }
 
 SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
-    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;	
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
 	if(IndexOfFile >= NumFiles) {
@@ -201,7 +201,7 @@ SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
 }
 
 SDL_Surface* Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tilesY, int tilesN) {
-    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;	
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
 	if(MapfileIndex >= NumTilesets) {
@@ -316,7 +316,7 @@ SDL_Surface* Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tiles
 }
 
 SDL_Surface* Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
-    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;	
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
 	if((StartIndex >= NumFiles)||(EndIndex >= NumFiles)||(StartIndex > EndIndex)) {

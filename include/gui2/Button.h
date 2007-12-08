@@ -18,19 +18,18 @@ class GraphicButton : public Button
 {
     public:
         GraphicButton();
-        GraphicButton(SDL_Surface* normal, SDL_Surface* pressed=NULL);
+        GraphicButton(ImagePtr normal, ImagePtr pressed);
             
-        void setGraphics(SDL_Surface* normal, 
-                         SDL_Surface* pressed = NULL);
+        void setGraphics(ImagePtr normal, ImagePtr pressed);
 
-        virtual void draw(SDL_Surface* dest, SPoint off);
+        virtual void draw(Image * dest, SPoint off);
 
         virtual bool handleButtonDown(Uint8 button, SPoint p);
         virtual bool handleButtonUp(Uint8 button, SPoint p);
 
     protected:
-        SDL_Surface* m_surfNormal;
-        SDL_Surface* m_surfPressed;
+        ImagePtr m_surfNormal;
+        ImagePtr m_surfPressed;
 
         bool m_pressed;
 };

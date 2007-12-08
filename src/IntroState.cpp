@@ -25,6 +25,8 @@ IntroState::Frame::Frame(std::string filename,
 
 void IntroState::Frame::Load(Frame* lastframe)
 {
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+
     printf("intro loading %s\n", m_filename.c_str());
     
     int len;
@@ -34,32 +36,20 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     if (m_continuation)
     {
-        m_wsa = new Wsafile(data, len, lastframe->m_animSurface);
+        m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface()));
     }
     else
     {
-        m_wsa = new Wsafile(data, len);
+        m_wsa.reset(new Wsafile(data, len));
     }
     
     m_frametime = 0;
     m_currentFrame = 0;
     mb_finished = false;
 
-    SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
-    m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
+    m_animSurface.reset(m_wsa->getPicture(m_currentFrame, palette));
+    m_scaledSurface = m_animSurface->getResized(2.0);
     
-    SDL_FreeSurface(m_scaledSurface);
-    
-    m_scaledSurface =
-    SDL_CreateRGBSurface(SDL_SWSURFACE,
-               			 m_animSurface->w*2,
-              			 m_animSurface->h*2, 
-               			 8,
-              	 		 0,0,0,0);
-
-    SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
-
-    m_scaledSurface = resizeSurface(m_animSurface, 2);
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -84,16 +74,16 @@ bool IntroState::Frame::Execute(float dt)
             break;
     };
 
-    assert(m_scaledSurface != NULL);
-    
-    Application::Instance()->BlitCentered(m_scaledSurface);
-
+    m_scaledSurface->blitToScreenCentered();
+   
     return mb_finished;
 }
 
 
 void IntroState::Frame::doPlaying(float dt)
 {
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+    
     m_frametime += dt;
 
     if (m_frametime > m_wsa->getFPS())
@@ -106,21 +96,8 @@ void IntroState::Frame::doPlaying(float dt)
         }
         else
         {
-            SDL_Palette* palette = Application::Instance()->Screen()->format->palette;
-            m_animSurface = m_wsa->getPicture(m_currentFrame, palette);
-            
-            SDL_FreeSurface(m_scaledSurface);
-
-            m_scaledSurface =
-            SDL_CreateRGBSurface(SDL_SWSURFACE,
-               			 m_animSurface->w*2,
-              			 m_animSurface->h*2, 
-               			 8,
-              	 		 0,0,0,0);
-
-            SDL_SetColors(m_scaledSurface, palette->colors, 0, palette->ncolors);
-
-            m_scaledSurface = resizeSurface(m_animSurface, 2);
+            m_animSurface.reset(m_wsa->getPicture(m_currentFrame, palette));
+            m_scaledSurface = m_animSurface->getResized(2.0);
         };
     };
 }
@@ -142,7 +119,7 @@ void IntroState::Frame::setupTransitionOut()
 {
     m_transitionPalette = new SDL_Color[256];
     memcpy((unsigned char*)m_transitionPalette, 
-            Application::Instance()->Screen()->format->palette->colors,
+            Application::Instance()->Screen()->getSurface()->format->palette->colors,
             sizeof(SDL_Color) * 256);
 }
 
@@ -162,7 +139,7 @@ void IntroState::Frame::doTransitionOut(float dt)
     if (m_transitionPalette == NULL) setupTransitionOut();
     
     bool done = true;
-    SDL_Surface* screen = m_scaledSurface; //Application::Instance()->Screen();
+    SDL_Surface* screen = m_scaledSurface->getSurface(); //Application::Instance()->Screen();
     SDL_Color* col = m_transitionPalette;
 
     const int fadeAmt = 3;
@@ -278,6 +255,7 @@ IntroState::~IntroState()
 void IntroState::SkipIntro()
 {
     mp_parent->PopState();
+    
 }
 
 void IntroState::JustMadeActive()
@@ -296,7 +274,7 @@ void IntroState::JustMadeInactive()
 
 bool IntroState::next()
 {
-    printf("loading next..\n");
+    fprintf(stderr, "loading next..\n");
     IntroList::iterator it = m_wsaNames.begin();
     if (it == m_wsaNames.end() )
     {

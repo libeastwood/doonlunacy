@@ -26,7 +26,7 @@ class PakViewState : public State
     public:
        PakViewState()
        {
-            img = 0;
+            img = ObjImg_Terrain;
             house = HOUSE_ATREIDES;
             m_button = new BoringButton("Click me, bitte!");
             m_button->setSize(SPoint(160, 50));

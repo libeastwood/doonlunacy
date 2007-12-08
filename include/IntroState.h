@@ -1,6 +1,7 @@
 #ifndef DUNE_INTROSTATE_H
 #define DUNE_INTROSTATE_H
 
+#include "Gfx.h"
 #include "State.h"
 #include "gui2/Button.h"
 #include "pakfile/Wsafile.h"
@@ -45,11 +46,11 @@ class IntroState : public State
             Transition m_transition_out;
             bool mb_finished;
             
-            Wsafile *m_wsa; 
+            WsafilePtr m_wsa; 
             int m_currentFrame;
             float m_frametime;
 
-            SDL_Surface* m_animSurface, *m_scaledSurface;
+            ImagePtr m_animSurface, m_scaledSurface;
             SDL_Color* m_transitionPalette;
 
             void setupTransitionIn();
