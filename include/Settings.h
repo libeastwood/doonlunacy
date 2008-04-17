@@ -79,7 +79,7 @@ class Settings: public Singleton<Settings>
         void load();
         void save();
     
-        void ParseFile(char* fn);
+        void ParseFile(const char* fn);
         void ParseOptions(int argc, char* argv[]);
 
         inline int GetWidth() 

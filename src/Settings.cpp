@@ -64,7 +64,7 @@ void Settings::save()
 	ResMan::Instance()->writeText("CONFIG:config.txt", configText);    
 }
 
-void Settings::ParseFile(char* fn)
+void Settings::ParseFile(const char* fn)
 {
   /*
   ifstream file(fn);
