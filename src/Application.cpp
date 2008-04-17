@@ -395,6 +395,7 @@ void Application::Run()
     };
     
     printf("done\n");
+	Die();
 }
 
 void Application::HandleEvents()
