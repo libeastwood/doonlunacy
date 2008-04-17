@@ -375,7 +375,7 @@ void Application::Run()
         for (Uint32 i=0; i!=256; i++)
         {
             pdest.x = 7 * i;
-            SDL_FillRect(m_screen, &pdest, i);
+            SDL_FillRect(m_screen->getSurface(), &pdest, i);
         }    
 #endif 
 
