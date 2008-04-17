@@ -365,8 +365,8 @@ void Application::Run()
         BlitCursor();
         
 #if 0
-        fnt->render("ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
-        fnt->render("abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
+        fnt->render((const char*)"ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
+        fnt->render((const char*)"abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
 #endif 
 
 #if 0
