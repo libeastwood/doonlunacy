@@ -36,11 +36,11 @@ void LogBackendStdout::log(const char *message)
 //------------------------------------------------------------------------------
 // Log class
 //------------------------------------------------------------------------------
-   
+   /*
 void Log::log(ConstString logSystem, LogVerbosity verbosity, ConstString message)
 {
     doLog(logSystem, verbosity, "%s", (char *)message.c_str());
-}
+}*/
 void Log::log(ConstString logSystem, LogVerbosity verbosity, const char *format, ...)
 {
     va_list args;
