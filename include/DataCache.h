@@ -6,6 +6,7 @@
 #include "Settings.h"
 #include "ResMan.h"
 #include "singleton.h"
+#include "SDL_mixer.h"
 
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
@@ -290,7 +291,7 @@ typedef enum {
 	HouseHarkonnen,
 	PlaceStructure,
 	ButtonClick,
-	InvalidAction,
+//	InvalidAction,
 	CreditsTick,
 	RadarNoise,
 	Sound_ExplosionGas,
@@ -309,8 +310,64 @@ typedef enum {
 	Sound_Scream4,
 	Sound_Scream5,	
 	Sound_MachineGun,
-	Sound_Sonic,
+//	Sound_Sonic,
 	Sound_RocketSmall,
+	Intro_3Houses,
+	Intro_AndNow,
+	Intro_Battle,
+	Intro_Begins,
+	Intro_Blaster,
+	Intro_TheBuilding,
+	Intro_Blowup_1,
+	Intro_Blowup_2,
+	Intro_Brakes_2p,
+	Intro_Clank,
+	Intro_Click,
+	Intro_ControlsDune,
+	Intro_ControlsTheSpice,
+	Intro_ForControl,
+	Intro_Controls,
+	Intro_Dune,
+	Intro_OfADynasty,
+	Intro_ToEachOfTheHouses,
+	Intro_AndNo,
+	Intro_WillControlDune,
+	Intro_TheHouse,
+	Intro_TheMostSpice,
+	Intro_TheEmpire,	
+	Intro_ThereAreNoSetTerritories,
+	Intro_ThatProduces,
+	Intro_RulesOfEngagement,
+	Intro_Territories,
+	Intro_AndThe,
+//	Intro_Filler,
+	Intro_Flesh,
+	Intro_Glass_6,
+	Intro_Glass,
+	Intro_GunShot,
+	Intro_EvilHarkonnen,	
+	Intro_Home,
+	Intro_OnlyOneHouse,
+	Intro_TheInsideous,
+	Intro_TheEmperor,
+	Intro_KnownAsDune,
+	Intro_Worm,
+	Intro_Melange,
+	Intro_Missile_8,
+	Intro_TheNobleAtreides,
+	Intro_Now,
+	Intro_OfDune,
+	Intro_Ordos,
+	Intro_ThePlanetArrakis,
+	Intro_WillPrevail,
+	Intro_HasProposedAChallenge,
+	Intro_LandOfSand,
+	Intro_OfTheSpice,
+	Intro_TheSpice,
+	Intro_VastArmies,
+	Intro_WhoEver,
+	Intro_Wind_2bp,
+	Intro_Your,
 	NUM_SOUNDCHUNK
 } Sound_enum;
 
@@ -327,13 +384,22 @@ class DataCache : public Singleton<DataCache>
 
     public:
         void addObjPic(unsigned ID, SDL_Surface * tmp);
-		void addVoice(unsigned ID, std::string vocFile); 
+		void addSoundChunk(unsigned ID, Mix_Chunk* tmp); 
         ImagePtr	getObjPic(unsigned ID, unsigned house = HOUSE_HARKONNEN);
+		Mix_Chunk* getSoundChunk(unsigned ID);
 
     private:
         bool addObjPic(unsigned ID) { return false;};
         remapped_images m_objImg;
         remapped_images m_guiImg;
+		
+		Mix_Chunk* getChunkFromFile(std::string fileName);
+		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
+		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
+		Mix_Chunk* createEmptyChunk();
+
+		Mix_Chunk*		soundChunk[NUM_SOUNDCHUNK];
+
 };
 
 #endif // DUNE_DATACACHE_H

@@ -3,7 +3,7 @@
 #include "SDL.h"
 //#include "SDL_ttf.h"
 //#include "SDL_net.h"
-//#include "SDL_mixer.h"
+#include "SDL_mixer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,12 +17,12 @@
 //#include "Net.h"
 //#include "data.h"
 //#include "ui.h"
-//#include "SoundPlayerClass.h"
+#include "SoundPlayerClass.h"
 #include "Colours.h"
 #include "Settings.h"
 #include "Font.h"
 #include "TopLevelState.h"
-//#include "DataFile.h"
+#include "DataCache.h"
 #include "Gfx.h"
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
@@ -65,7 +65,7 @@ Application::~Application()
 
 void Application::Init()
 {
-    /*
+	int lookDist[11];
     lookDist[0] = 10; 
     lookDist[1] = 10;
     lookDist[2] = 9;
@@ -82,7 +82,6 @@ void Application::Init()
     InitSettings();
 
     srand(time(NULL));
-    */
 
     Uint32 flags = SDL_INIT_AUDIO | \
                    SDL_INIT_TIMER | \
@@ -100,7 +99,7 @@ void Application::Init()
     // replace NULL with a path to a 32x32 icon
     SDL_WM_SetCaption("Dune Legacy", NULL);
 
-    //InitAudio();
+    InitAudio();
     //InitNet();
 
     // force font manager to be loaded 
@@ -147,7 +146,6 @@ void Application::Init()
 
 void Application::InitSettings()
 {
-    /*
     settings.concreteRequired = true;
     settings.gameType = ORIGINAL;
     settings.playerType = SINGLE;
@@ -159,12 +157,11 @@ void Application::InitSettings()
     settings.playerHouse[settings.playerNum] = settings.playerNum;
 
     strcpy(settings.localPlayerName, "Player");
-    */
 }
 
 void Application::InitAudio()
 {
-    /*
+    
     printf("initialising sound.....\n");
 
     if ( Mix_OpenAudio(11025, MIX_DEFAULT_FORMAT, 2, 512) < 0 )
@@ -177,7 +174,6 @@ void Application::InitAudio()
     {
         printf("allocated %d channels.\n", Mix_AllocateChannels(16)); 
     };
-    */
 }
 
 void Application::InitNet()
@@ -277,6 +273,7 @@ void Application::LoadData()
     ResMan::Instance()->addRes("ATRE");
     ResMan::Instance()->addRes("DUNE");
     ResMan::Instance()->addRes("ENGLISH");
+	ResMan::Instance()->addRes("GERMAN");
     ResMan::Instance()->addRes("FINALE");
     ResMan::Instance()->addRes("HARK");
     ResMan::Instance()->addRes("HERC");
@@ -303,17 +300,16 @@ void Application::LoadData()
     m_cursor.reset(new Image(mouse.getPicture(0)));
 
 
-    /*
+    
     fprintf(stdout, "starting sound...\n");
-    soundPlayer = new SoundPlayerClass();
-    */
+    SoundPlayerClass* soundPlayer = new SoundPlayerClass();
 }
 
 void Application::Die()
 {
     FontManager::Destroy();
     //TTF_Quit();
-    //Mix_CloseAudio();
+    Mix_CloseAudio();
     //SDLNet_Quit();
     SDL_Quit();
     exit(1);

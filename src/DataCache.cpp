@@ -1,7 +1,5 @@
 #include "DataCache.h" 
-
-
-using namespace std;
+#include "pakfile/Vocfile.h"
 
 DataCache::DataCache() {
     for (int i=0; i< NUM_HOUSES; i++)
@@ -95,11 +93,105 @@ DataCache::DataCache() {
 	addObjPic(ObjPic_RockDamage, icon->getPictureRow(1,6));
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
-}
+
+	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
+	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
+	addSoundChunk(Acknowledged, getChunkFromFile("VOC:ZREPORT3.VOC"));
+	addSoundChunk(Affirmative, getChunkFromFile("VOC:ZAFFIRM.VOC"));
+	addSoundChunk(MovingOut, getChunkFromFile("VOC:ZMOVEOUT.VOC"));
+	addSoundChunk(InfantryOut, getChunkFromFile("VOC:ZOVEROUT.VOC"));
+	addSoundChunk(SomethingUnderTheSand, getChunkFromFile("VOC:SANDBUG.VOC"));
+	addSoundChunk(HouseAtreides, getChunkFromFile("GERMAN:GATRE.VOC"));
+	addSoundChunk(HouseOrdos, getChunkFromFile("GERMAN:GORDOS.VOC"));
+	addSoundChunk(HouseHarkonnen, getChunkFromFile("GERMAN:GHARK.VOC"));
+
+	addSoundChunk(PlaceStructure, getChunkFromFile("VOC:EXDUD.VOC"));
+	addSoundChunk(ButtonClick, getChunkFromFile("VOC:BUTTON.VOC"));
+//	addSoundChunk(InvalidAction, Mix_LoadWAV_RW(pFileManager->OpenFile("CANNOT.WAV"),1));
+	// probably incorrect?
+	addSoundChunk(CreditsTick, getChunkFromFile("INTROVOC:CLICK.VOC"));
+	addSoundChunk(RadarNoise, getChunkFromFile("VOC:STATICP.VOC"));
+	addSoundChunk(Sound_ExplosionGas, getChunkFromFile("VOC:EXGAS.VOC"));
+	addSoundChunk(Sound_ExplosionTiny, getChunkFromFile("VOC:EXTINY.VOC"));
+	addSoundChunk(Sound_ExplosionSmall, getChunkFromFile("VOC:EXSMALL.VOC"));
+	addSoundChunk(Sound_ExplosionMedium, getChunkFromFile("VOC:EXMED.VOC"));
+	addSoundChunk(Sound_ExplosionLarge, getChunkFromFile("VOC:EXLARGE.VOC"));
+	addSoundChunk(Sound_ExplosionStructure, getChunkFromFile("VOC:CRUMBLE.VOC"));
+	addSoundChunk(Sound_WormAttack, getChunkFromFile("VOC:WORMET3P.VOC"));
+	addSoundChunk(Sound_Gun, getChunkFromFile("VOC:GUN.VOC"));
+	addSoundChunk(Sound_Rocket, getChunkFromFile("VOC:ROCKET.VOC"));
+	addSoundChunk(Sound_Bloom, getChunkFromFile("VOC:EXSAND.VOC"));
+	addSoundChunk(Sound_Scream1, getChunkFromFile("VOC:VSCREAM1.VOC"));
+	addSoundChunk(Sound_Scream2, getChunkFromFile("VOC:VSCREAM1.VOC"));
+	addSoundChunk(Sound_Scream3, getChunkFromFile("VOC:VSCREAM1.VOC"));
+	addSoundChunk(Sound_Scream4, getChunkFromFile("VOC:VSCREAM1.VOC"));
+	addSoundChunk(Sound_Scream5, getChunkFromFile("VOC:VSCREAM1.VOC"));
+	addSoundChunk(Sound_MachineGun, getChunkFromFile("VOC:GUNMULTI.VOC"));
+//	addSoundChunk(Sound_Sonic, Mix_LoadWAV_RW(pFileManager->OpenFile("SONIC.WAV"),1);
+	addSoundChunk(Sound_RocketSmall, getChunkFromFile("VOC:MISLTINP.VOC"));
+
+	addSoundChunk(Intro_3Houses, getChunkFromFile("INTROVOC:3HOUSES.VOC"));
+	addSoundChunk(Intro_AndNow, getChunkFromFile("INTROVOC:ANDNOW.VOC"));
+	addSoundChunk(Intro_Battle, getChunkFromFile("INTROVOC:ARRIVED.VOC"));
+	addSoundChunk(Intro_Begins, getChunkFromFile("INTROVOC:BEGINS.VOC"));
+	addSoundChunk(Intro_Blaster, getChunkFromFile("INTROVOC:BLASTER.VOC"));
+	addSoundChunk(Intro_TheBuilding, getChunkFromFile("INTROVOC:BLDING.VOC"));
+	addSoundChunk(Intro_Blowup_1, getChunkFromFile("INTROVOC:BLOWUP1.VOC"));
+	addSoundChunk(Intro_Blowup_2, getChunkFromFile("INTROVOC:BLOWUP2.VOC"));
+	addSoundChunk(Intro_Brakes_2p, getChunkFromFile("INTROVOC:BRAKES2P.VOC"));
+	addSoundChunk(Intro_Clank, getChunkFromFile("INTROVOC:CLANK.VOC"));
+	addSoundChunk(Intro_Click, getChunkFromFile("INTROVOC:CLICK.VOC"));
+	addSoundChunk(Intro_ControlsDune, getChunkFromFile("INTROVOC:CONTROL2.VOC"));
+	addSoundChunk(Intro_ControlsTheSpice, getChunkFromFile("INTROVOC:CONTROL3.VOC"));
+	addSoundChunk(Intro_ForControl, getChunkFromFile("INTROVOC:CONTROL4.VOC"));
+	addSoundChunk(Intro_Controls, getChunkFromFile("INTROVOC:CONTROLS.VOC"));
+	addSoundChunk(Intro_Dune, getChunkFromFile("INTROVOC:DUNE.VOC"));
+	addSoundChunk(Intro_OfADynasty, getChunkFromFile("INTROVOC:DYNASTY.VOC"));
+	addSoundChunk(Intro_ToEachOfTheHouses, getChunkFromFile("INTROVOC:EACHHOME.VOC"));
+	addSoundChunk(Intro_AndNo, getChunkFromFile("INTROVOC:EANDNO.VOC"));
+	addSoundChunk(Intro_WillControlDune, getChunkFromFile("INTROVOC:ECONTROL.VOC"));
+	addSoundChunk(Intro_TheHouse, getChunkFromFile("INTROVOC:EHOUSE.VOC"));
+	addSoundChunk(Intro_TheMostSpice, getChunkFromFile("INTROVOC:EMOST.VOC"));
+	addSoundChunk(Intro_TheEmpire, getChunkFromFile("INTROVOC:EMPIRE.VOC"));
+	addSoundChunk(Intro_ThereAreNoSetTerritories, getChunkFromFile("INTROVOC:ENOSET.VOC"));
+	addSoundChunk(Intro_ThatProduces, getChunkFromFile("INTROVOC:EPRODUCE.VOC"));
+	addSoundChunk(Intro_RulesOfEngagement, getChunkFromFile("INTROVOC:ERULES.VOC"));
+	addSoundChunk(Intro_Territories, getChunkFromFile("INTROVOC:ETERRIT.VOC"));
+	addSoundChunk(Intro_AndThe, getChunkFromFile("INTROVOC:EVIL.VOC"));
+//	addSoundChunk(Intro_Filler, getChunkFromFile("INTROVOC:FILLER.VOC"));
+	addSoundChunk(Intro_Flesh, getChunkFromFile("INTROVOC:FLESH.VOC"));
+	addSoundChunk(Intro_Glass_6, getChunkFromFile("INTROVOC:GLASS6.VOC"));
+	addSoundChunk(Intro_Glass, getChunkFromFile("INTROVOC:GLASS.VOC"));
+	addSoundChunk(Intro_GunShot, getChunkFromFile("INTROVOC:GUNSHOT.VOC"));
+	addSoundChunk(Intro_EvilHarkonnen, getChunkFromFile("INTROVOC:HARK.VOC"));
+	addSoundChunk(Intro_Home, getChunkFromFile("INTROVOC:HOME.VOC"));
+	addSoundChunk(Intro_OnlyOneHouse, getChunkFromFile("INTROVOC:HOUSE2.VOC"));
+	addSoundChunk(Intro_TheInsideous, getChunkFromFile("INTROVOC:INSID.VOC"));
+	addSoundChunk(Intro_TheEmperor, getChunkFromFile("INTROVOC:KING.VOC"));
+	addSoundChunk(Intro_KnownAsDune, getChunkFromFile("INTROVOC:KNOWN.VOC"));
+	addSoundChunk(Intro_Worm, getChunkFromFile("INTROVOC:LIZARD1.VOC"));
+	addSoundChunk(Intro_Melange, getChunkFromFile("INTROVOC:MELANGE.VOC"));
+	addSoundChunk(Intro_Missile_8, getChunkFromFile("INTROVOC:MISSLE8.VOC"));
+	addSoundChunk(Intro_TheNobleAtreides, getChunkFromFile("INTROVOC:NOBLE.VOC"));
+	addSoundChunk(Intro_Now, getChunkFromFile("INTROVOC:NOW.VOC"));
+	addSoundChunk(Intro_OfDune, getChunkFromFile("INTROVOC:OFDUNE.VOC"));
+	addSoundChunk(Intro_Ordos, getChunkFromFile("INTROVOC:ORD.VOC"));
+	addSoundChunk(Intro_ThePlanetArrakis, getChunkFromFile("INTROVOC:PLANET.VOC"));
+	addSoundChunk(Intro_WillPrevail, getChunkFromFile("INTROVOC:PREVAIL.VOC"));
+	addSoundChunk(Intro_HasProposedAChallenge, getChunkFromFile("INTROVOC:PROPOSED.VOC"));
+	addSoundChunk(Intro_LandOfSand, getChunkFromFile("INTROVOC:SANDLAND.VOC"));
+	addSoundChunk(Intro_OfTheSpice, getChunkFromFile("INTROVOC:SPICE.VOC"));
+	addSoundChunk(Intro_TheSpice, getChunkFromFile("INTROVOC:SPICE2.VOC"));
+	addSoundChunk(Intro_VastArmies, getChunkFromFile("INTROVOC:VAST.VOC"));
+	addSoundChunk(Intro_WhoEver, getChunkFromFile("INTROVOC:WHOEVER.VOC"));
+	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
+	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
+
+};
 
 void DataCache::addObjPic(unsigned ID, SDL_Surface * tmp) {
 
-    m_objImg[HOUSE_HARKONNEN]->insert(pair<unsigned, ImagePtr>(ID, 
+    m_objImg[HOUSE_HARKONNEN]->insert(std::pair<unsigned, ImagePtr>(ID, 
                                       ImagePtr(new Image(tmp))));
 }
 
@@ -114,15 +206,39 @@ ImagePtr DataCache::getObjPic(unsigned ID, unsigned house) {
     {
         ImagePtr source = m_objImg[HOUSE_HARKONNEN]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
-        m_objImg[HOUSE_HARKONNEN]->insert(pair<unsigned, ImagePtr>(ID, copy));
+        m_objImg[HOUSE_HARKONNEN]->insert(std::pair<unsigned, ImagePtr>(ID, copy));
         return copy;
     }
 
 }
 
-/*void DataCache::addVoice(unsigned ID, std::string){
+void DataCache::addSoundChunk(unsigned ID, Mix_Chunk* tmp){
+	soundChunk[ID] = tmp;
+}
+
+Mix_Chunk* DataCache::getSoundChunk(unsigned ID){
+	return soundChunk[ID];
+}
+Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
+	Mix_Chunk* returnChunk;
+	SDL_RWops* rwop;
+	unsigned char * data;
+
+	int len;
+	data = ResMan::Instance()->readFile(fileName.c_str(), &len);
+	if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
+		fprintf(stderr,"DataManager::getChunkFromFile(): Cannot open %s!\n",fileName.c_str());
+		exit(EXIT_FAILURE);
+	}
 	
-}*/
+	if((returnChunk = LoadVOC_RW(rwop, 0)) == NULL) {
+		fprintf(stderr,"DataManager::getChunkFromFile(): Cannot load %s!\n",fileName.c_str());
+		exit(EXIT_FAILURE);		
+	}
+	
+	SDL_RWclose(rwop);
+	return returnChunk;
+}
 
 DataCache::~DataCache() {
 
