@@ -26,7 +26,7 @@ class PakViewState : public State
     public:
        PakViewState()
        {
-            img = ObjImg_Terrain;
+            img = ObjPic_Terrain;
             house = HOUSE_ATREIDES;
             m_button = new BoringButton("Click me, bitte!");
             m_button->setSize(SPoint(160, 50));
@@ -42,7 +42,7 @@ class PakViewState : public State
             m_houseBut->onClick.connect(
                 boost::bind(&PakViewState::SwitchHouse, this) );
             
-            m_test = DataCache::Instance()->getObjImg(img, house);
+            m_test = DataCache::Instance()->getObjPic(img, house);
 
             Application::Instance()->RootWidget()->addChild(m_button);            
             Application::Instance()->RootWidget()->addChild(m_houseBut);
@@ -64,10 +64,10 @@ class PakViewState : public State
        {
            img++;
            
-           if (img == NUM_OBJIMGS)
-           img = 0;
+           if (img == NUM_OBJPICS)
+			   img = 0;
            
-           m_test = DataCache::Instance()->getObjImg(img, house);
+           m_test = DataCache::Instance()->getObjPic(img, house);
        };
        
        void SwitchHouse()
@@ -75,8 +75,8 @@ class PakViewState : public State
            house++;
            fprintf(stderr, "HOUSE CHANGED\n");
            if (house == NUM_HOUSES)
-           house = 0;
-           m_test = DataCache::Instance()->getObjImg(img, house);
+			   house = 0;
+           m_test = DataCache::Instance()->getObjPic(img, house);
        };
 
       virtual const char* GetName() { return "PakViewState"; }
