@@ -25,12 +25,12 @@ Label::Label(std::string caption, int bgcolour)
 
 //    Is it needed in case of label. It's not clickable or anything.
 //    Widget::setSize(SPoint(textw, texth));
-};
+}
 
 Label::~Label()
 {
 
-};
+}
 
 void Label::draw(Image * dest, SPoint off)
 {

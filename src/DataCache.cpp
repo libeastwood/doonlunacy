@@ -187,7 +187,7 @@ DataCache::DataCache() {
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
-};
+}
 
 void DataCache::addObjPic(unsigned ID, SDL_Surface * tmp) {
 

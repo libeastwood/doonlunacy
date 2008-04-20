@@ -17,7 +17,7 @@ namespace boost {
 	void throw_exception(std::exception const & e)
 	{
 
-	};
+	}
 
 }
 
@@ -107,4 +107,4 @@ int main(int argc, char *argv[])
     Settings::Destroy();
 
     return 0;
-};
+}
