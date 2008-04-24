@@ -30,9 +30,9 @@ all_sources = [ "Application.cpp",
                 "Strings.cpp",
                 "Log.cpp",
                 "ConfigFile.cpp",
-		
                 "ResMan.cpp",
 				"SoundPlayerClass.cpp",
+				"pakfile/StringFile.cpp",
 				"pakfile/Vocfile.cpp",
 				"pakfile/IntegratedLibSampleRate/samplerate.c",
 				"pakfile/IntegratedLibSampleRate/src_linear.c",
@@ -86,5 +86,5 @@ dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sourc
 pakview = env.Program("../test", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
 
 Default(dunelegacy)
-Default(pakview)
+#Default(pakview)
 
