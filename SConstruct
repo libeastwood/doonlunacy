@@ -24,7 +24,6 @@ env.Append(CPPPATH="#include")
 
 if sys.platform != "win32":
 	env.ParseConfig('sdl-config --cflags --libs')
-	env.ParseConfig('pkg-config --cflags --libs zziplib')
 	env.Append(CCFLAGS=["-Wall", "-pedantic", "-O0"]) #, "-Werror"])
 	#env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])
 	#env.Append(LINKFLAGS = ["-ffast-math"])
