@@ -1,8 +1,14 @@
 #ifndef CPSFILE_H_INCLUDED
 #define CPSFILE_H_INCLUDED
 
+#include "Gfx.h"
 #include "pakfile/Decode.h"
 #include "SDL.h"
+
+#include <boost/shared_ptr.hpp>
+
+class Cpsfile;
+typedef boost::shared_ptr<Cpsfile> CpsfilePtr;
 
 class Cpsfile : public Decode
 {
@@ -11,7 +17,7 @@ public:
 	~Cpsfile();
 
 
-	SDL_Surface * getPicture();
+	Image * getPicture();
 
 private:
 	unsigned char* Filedata;

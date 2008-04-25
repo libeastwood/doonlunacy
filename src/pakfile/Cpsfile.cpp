@@ -20,7 +20,7 @@ Cpsfile::~Cpsfile()
 	;
 }
 
-SDL_Surface* Cpsfile::getPicture()
+Image * Cpsfile::getPicture()
 {
 	unsigned char * ImageOut;
 	SDL_Surface *pic = NULL;
@@ -61,8 +61,10 @@ SDL_Surface* Cpsfile::getPicture()
 	}
 		
 	SDL_UnlockSurface(pic);
+
+	Image * img = new Image(pic);
+
+//	free(ImageOut);
 	
-	free(ImageOut);
-	
-	return pic;
+	return img;
 }
