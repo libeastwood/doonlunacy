@@ -62,9 +62,9 @@ Image * Cpsfile::getPicture()
 		
 	SDL_UnlockSurface(pic);
 
-	Image * img = new Image(pic);
+	free(ImageOut);
 
-//	free(ImageOut);
+	Image * img = new Image(pic);
 	
 	return img;
 }
