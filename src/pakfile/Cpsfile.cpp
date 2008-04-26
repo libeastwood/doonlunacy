@@ -1,13 +1,10 @@
 #include "pakfile/Cpsfile.h"
-#include "Application.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define	SIZE_X	320
 #define SIZE_Y	240
-
-//extern SDL_Palette* palette;
 
 Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize) : Decode()
 {
@@ -20,7 +17,7 @@ Cpsfile::~Cpsfile()
 	;
 }
 
-Image * Cpsfile::getPicture()
+Image * Cpsfile::getPicture(SDL_Palette* palette)
 {
 	unsigned char * ImageOut;
 	SDL_Surface *pic = NULL;
@@ -50,7 +47,6 @@ Image * Cpsfile::getPicture()
 	}
 	
 	
-	SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;		
 	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
 	
 	SDL_LockSurface(pic);	
