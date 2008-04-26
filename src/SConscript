@@ -24,6 +24,7 @@ all_sources = [ "Application.cpp",
                 "MainMenu.cpp", 
                 "IntroState.cpp", 
                 "SingleMenu.cpp",
+				"CampaignMenu.cpp",
                 "OptionsMenu.cpp",
                 "Gfx.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
@@ -46,6 +47,7 @@ gui_sources = [
                 "gui2/Button.cpp",
                 "gui2/VBox.cpp",
                 "gui2/Label.cpp",
+				"gui2/Window.cpp"
 
               ]
 
