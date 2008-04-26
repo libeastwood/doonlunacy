@@ -69,40 +69,6 @@ Image * Cpsfile::getPicture()
 	return img;
 }
 
-Image * Cpsfile::getDoublePicture() {
-	SDL_Surface *inputPic = getPicture()->getSurface();
-	SDL_Surface *returnPic;
-	
-	// create new picture surface
-	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,inputPic->w * 2,inputPic->h * 2,8,0,0,0,0))== NULL) {
-		fprintf(stderr,"DoublePicture: Cannot create new Picture!\n");
-		exit(EXIT_FAILURE);	
-	}
-			
-	SDL_SetColors(returnPic, inputPic->format->palette->colors, 0, inputPic->format->palette->ncolors);
-	SDL_LockSurface(returnPic);
-	SDL_LockSurface(inputPic);
-
-	//Now we can copy pixel by pixel
-	for(int y = 0; y < inputPic->h;y++) {
-		for(int x = 0; x < inputPic->w; x++) {
-			char val = *( ((char*) (inputPic->pixels)) + y*inputPic->pitch + x);
-			*( ((char*) (returnPic->pixels)) + 2*y*returnPic->pitch + 2*x) = val;
-			*( ((char*) (returnPic->pixels)) + 2*y*returnPic->pitch + 2*x+1) = val;
-			*( ((char*) (returnPic->pixels)) + (2*y+1)*returnPic->pitch + 2*x) = val;
-			*( ((char*) (returnPic->pixels)) + (2*y+1)*returnPic->pitch + 2*x+1) = val;
-		}
-	}
-		
-	SDL_UnlockSurface(inputPic);
-	SDL_UnlockSurface(returnPic);
-	
-	SDL_FreeSurface(inputPic);
-	Image * img = new Image(returnPic);
-
-	return img;
-}
-
 Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int width, unsigned int height)
 {
 	SDL_Surface *Pic = getPicture()->getSurface();
