@@ -85,13 +85,13 @@ private:
 		@param volume sound will be played with this volume
 	*/
 	void playSound(Sound_enum soundID, int volume);
-	vector<std::string> getMusicFileNames(std::string dir);
+	std::vector<std::string> getMusicFileNames(std::string dir);
 
-	vector<std::string> AttackMusic;
-	vector<std::string> IntroMusic;
-	vector<std::string> LoseMusic;
-	vector<std::string> PeaceMusic;
-	vector<std::string> WinMusic;
+	std::vector<std::string> AttackMusic;
+	std::vector<std::string> IntroMusic;
+	std::vector<std::string> LoseMusic;
+	std::vector<std::string> PeaceMusic;
+	std::vector<std::string> WinMusic;
 
 	//! whether sound should be played
 	bool	soundOn;
