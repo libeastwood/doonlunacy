@@ -30,7 +30,7 @@ public:
 	@param	IndexOfFile	specifies which picture to return (zero based)
 	@return	nth picture in this shp-File
 */
-	SDL_Surface* getPicture(Uint32 IndexOfFile);
+	Image * getPicture(Uint32 IndexOfFile);
 
 /*!
 	This method returns a SDL_Surface containing an array of pictures from this shp-File.
@@ -54,7 +54,7 @@ public:
 	@param	tilesY	how many pictures in one column
 	@return	picture in this shp-File containing all specified pictures
 */
-	SDL_Surface* getPictureArray(unsigned int tilesX, unsigned int tilesY, ...);
+	Image * getPictureArray(unsigned int tilesX, unsigned int tilesY, ...);
 
 	inline int getNumFiles() {return (int) NumFiles;};
 

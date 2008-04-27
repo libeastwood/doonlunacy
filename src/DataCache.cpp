@@ -14,7 +14,11 @@ DataCache::DataCache() {
    	Shpfile* units;
 	Shpfile* units1;
 	Shpfile* units2;
-	Cpsfile* herald;	
+	Cpsfile* herald;
+	Shpfile* mentat;
+//	CpsfilePtr mentatm;
+	
+
 	
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
@@ -28,7 +32,16 @@ DataCache::DataCache() {
 
 	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
     herald = new Cpsfile(data, len);
+
+	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
+	mentat = new Shpfile(data, len);
+
+	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
     
+    data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
+
+	CpsfilePtr mentatm (new Cpsfile(data, len));
+
     int maplen;
     unsigned char * mapdata;
     
@@ -99,11 +112,14 @@ DataCache::DataCache() {
 
 	//addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 		
-/*	UIGraphic[UI_MentatYes][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(0));
-	UIGraphic[UI_MentatYes_Pressed][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(1));
-	UIGraphic[UI_MentatNo][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(2));
-	UIGraphic[UI_MentatNo_Pressed][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(3));*/
+	/*addGuiPic(UI_MentatYes, mentat->getPicture(0));
+	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
+	addGuiPic(UI_MentatNo, mentat->getPicture(2));
+	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));*/
 
+/*	Palettefile tmp (data, len);
+	SDL_Palette * pal = tmp.getPalette();
+	addGuiPic(UI_Mentat_BeneGesserit, mentatm->getPicture(pal)); */
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
@@ -197,33 +213,18 @@ DataCache::DataCache() {
 	addSoundChunk(Intro_WhoEver, getChunkFromFile("INTROVOC:WHOEVER.VOC"));
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
-#if 0
-	SDL_RWops* text_lng[1];
-	data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
-	text_lng[0] = SDL_RWFromMem(data, len);
-/*	data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);
-	text_lng[1] = SDL_RWFromMem(data, len);
-	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);
-	text_lng[2] = SDL_RWFromMem(data, len);*/
-
-	int i = 0;
-	for(i = 0; i < 1; i++){
-		BriefingStrings[i] = new BriefingText(text_lng[i]);
-		SDL_RWclose(text_lng[i]);
-	}
-#endif
 }
 
-void DataCache::addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
+void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
 
     m_objImg[HOUSE_HARKONNEN]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, 
-                                      ImagePtr(new Image(tmp))));
+                                      ImagePtr(tmp)));
 }
 
-void DataCache::addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
+void DataCache::addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house) {
 
     m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
-                                      ImagePtr(new Image(tmp))));
+                                      ImagePtr(tmp)));
 }
 
 ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {

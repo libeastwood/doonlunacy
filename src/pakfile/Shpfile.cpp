@@ -22,7 +22,7 @@ Shpfile::~Shpfile()
 	}
 }
 
-SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile)
+Image * Shpfile::getPicture(Uint32 IndexOfFile)
 {
     SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
@@ -131,10 +131,12 @@ SDL_Surface *Shpfile::getPicture(Uint32 IndexOfFile)
 	if(ImageOut != NULL) {
 		free(ImageOut);
 	}
-	return pic;
+	Image * img = new Image(pic);
+	
+	return img;
 }
 
-SDL_Surface* Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) {
+Image * Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) {
     SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
 	unsigned char *DecodeDestination = NULL;
@@ -310,7 +312,10 @@ SDL_Surface* Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, 
 	free(tiles);
 	
 	SDL_UnlockSurface(pic);
-	return pic;	
+	Image * img = new Image(pic);
+	
+	return img;
+
 }
 
 void Shpfile::readIndex()

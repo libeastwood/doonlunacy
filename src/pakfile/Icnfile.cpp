@@ -152,7 +152,7 @@ Icnfile::~Icnfile()
 	;
 }
 
-SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
+Image * Icnfile::getPicture(Uint32 IndexOfFile) {
     SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
@@ -196,11 +196,13 @@ SDL_Surface* Icnfile::getPicture(Uint32 IndexOfFile) {
 	SDL_UnlockSurface(pic);
 	
 	printf("File Nr.: %d (Size: %dx%d)\n",IndexOfFile,SIZE_X,SIZE_Y);
+
+	Image * img = new Image(pic);
 	
-	return pic;
+	return img;
 }
 
-SDL_Surface* Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tilesY, int tilesN) {
+Image * Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tilesY, int tilesN) {
     SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
@@ -311,11 +313,13 @@ SDL_Surface* Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tiles
 	}
 		
 	SDL_UnlockSurface(pic);
+
+	Image * img = new Image(pic);
 	
-	return pic;	
+	return img;
 }
 
-SDL_Surface* Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
+Image * Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
     SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
 	SDL_Surface * pic;
 	
@@ -363,7 +367,9 @@ SDL_Surface* Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
 	}
 		
 	SDL_UnlockSurface(pic);
-	return pic;
+	Image * img = new Image(pic);
+	
+	return img;
 }
 
 int Icnfile::getNumFiles()

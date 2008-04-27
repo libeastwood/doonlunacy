@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
+#include <iostream>
 //#include "globals.h"
 //#include "houses.h"
 //#include "MentatClass.h"
@@ -297,12 +297,12 @@ void Application::LoadData()
 
     Shpfile mouse (data, len);
 
-    m_cursor.reset(new Image(mouse.getPicture(0)));
+    m_cursor.reset(mouse.getPicture(0));
 
-
-    
     fprintf(stdout, "starting sound...\n");
     SoundPlayerClass* soundPlayer = new SoundPlayerClass();
+//	Mix_Chunk* sound = DataCache::Instance()->concat2Chunks(Intro_TheBuilding, Intro_OfADynasty);
+//	soundPlayer->playSound(sound);
 }
 
 void Application::Die()

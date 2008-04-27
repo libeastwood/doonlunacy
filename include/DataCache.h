@@ -191,6 +191,7 @@ typedef enum {
 	UI_MentatProcced_Pressed,
 	UI_MentatRepeat,
 	UI_MentatRepeat_Pressed,
+	UI_Mentat_BeneGesserit,
 	UI_PlanetBackground,
 	UI_MenuButtonBorder,
 	UI_DuneLegacy,
@@ -383,8 +384,8 @@ class DataCache : public Singleton<DataCache>
         ~DataCache();
 
     public:
-        void addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
-        void addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+        void addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+        void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);

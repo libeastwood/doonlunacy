@@ -105,7 +105,7 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 	SDL_UnlockSurface(pic);
 	
 	Image * img = new Image(pic);
-    	
+
 	return img;
 
 }
