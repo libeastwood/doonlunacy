@@ -18,6 +18,10 @@ struct ShpfileEntry
 	Uint32 EndOffset;
 };
 
+
+class Shpfile;
+typedef boost::shared_ptr<Shpfile> ShpfilePtr;
+
 class Shpfile : public Decode
 {
 public:
