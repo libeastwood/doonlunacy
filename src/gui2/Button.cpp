@@ -31,8 +31,8 @@ void GraphicButton::setGraphics(ImagePtr normal, ImagePtr pressed)
     assert(pressed != NULL && ((normal->getSurface()->w == pressed->getSurface()->w) &&
                                (normal->getSurface()->h == pressed->getSurface()->h)));
 
-    m_surfNormal.reset(normal.get());
-    m_surfPressed.reset(pressed.get());
+    m_surfNormal = normal;
+    m_surfPressed = pressed;
 
     setSize(normal->getSize());
     //w = normal->getSurfacew;
