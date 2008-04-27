@@ -257,7 +257,7 @@ void SoundPlayerClass::toggleSound()
 	}
 }
 
-void SoundPlayerClass::playSound(int soundID, int volume)
+void SoundPlayerClass::playSound(Sound_enum soundID, int volume)
 {
 	if (soundOn)
 	{
@@ -290,7 +290,7 @@ void SoundPlayerClass::playVoice(int id, int house) {
 }
 #endif
 
-void SoundPlayerClass::playSound(int soundID) {
+void SoundPlayerClass::playSound(Sound_enum soundID) {
 	if (soundOn)
 	{
 		Mix_Chunk* tmp;
@@ -303,6 +303,14 @@ void SoundPlayerClass::playSound(int soundID) {
 		Mix_PlayChannel(-1, tmp, 0);
 	}
 }
+
+void SoundPlayerClass::playSound(Mix_Chunk* sound) {
+	if (soundOn)
+	{
+		Mix_PlayChannel(-1, sound, 0);
+	}
+}
+
 #if 0
 vector<string> SoundPlayerClass::getMusicFileNames(string dir) {
 	vector<string> Files;

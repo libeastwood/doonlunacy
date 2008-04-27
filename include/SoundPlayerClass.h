@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include "ResMan.h"
+#include "DataCache.h"
 #include "dMath.h"
 #include "SDL_mixer.h"
-using namespace std;
 
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
@@ -50,7 +50,7 @@ public:
 		@param soundID id of the sound to be played
 		@param location coordinates where the sound is to be played
 	*/
-	void playSoundAt(int soundID, COORDTYPE* location);
+	void playSoundAt(Sound_enum soundID, COORDTYPE* location);
 	
 	/*!
 		turns music playing on or off
@@ -59,8 +59,9 @@ public:
 	void setMusic(bool value);
 	void toggleSound();
 
-	void playVoice(int id, int house);
-	void playSound(int soundID);
+	void playVoice(Sound_enum id, HOUSETYPE house);
+	void playSound(Sound_enum soundID);
+	void playSound(Mix_Chunk* sound);
 	
 	inline int GetSfxVolume() { return sfxVolume; };
 	void SetSfxVolume(int newVolume) {
@@ -83,14 +84,14 @@ private:
 		@param soundID id of a sound to be played
 		@param volume sound will be played with this volume
 	*/
-	void playSound(int soundID, int volume);
-	vector<string> getMusicFileNames(string dir);
+	void playSound(Sound_enum soundID, int volume);
+	vector<std::string> getMusicFileNames(std::string dir);
 
-	vector<string> AttackMusic;
-	vector<string> IntroMusic;
-	vector<string> LoseMusic;
-	vector<string> PeaceMusic;
-	vector<string> WinMusic;
+	vector<std::string> AttackMusic;
+	vector<std::string> IntroMusic;
+	vector<std::string> LoseMusic;
+	vector<std::string> PeaceMusic;
+	vector<std::string> WinMusic;
 
 	//! whether sound should be played
 	bool	soundOn;

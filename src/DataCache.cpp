@@ -14,6 +14,7 @@ DataCache::DataCache() {
    	Shpfile* units;
 	Shpfile* units1;
 	Shpfile* units2;
+	Cpsfile* herald;	
 	
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
@@ -24,7 +25,9 @@ DataCache::DataCache() {
     
     data = ResMan::Instance()->readFile("DUNE:UNITS2.SHP", &len);
     units2 = new Shpfile(data, len);
-    
+
+	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
+    herald = new Cpsfile(data, len);
     
     int maplen;
     unsigned char * mapdata;
@@ -93,6 +96,14 @@ DataCache::DataCache() {
 	addObjPic(ObjPic_RockDamage, icon->getPictureRow(1,6));
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
+
+	//addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
+		
+/*	UIGraphic[UI_MentatYes][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(0));
+	UIGraphic[UI_MentatYes_Pressed][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(1));
+	UIGraphic[UI_MentatNo][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(2));
+	UIGraphic[UI_MentatNo_Pressed][HOUSE_HARKONNEN] = DoublePicture(mentat->getPicture(3));*/
+
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
@@ -186,16 +197,37 @@ DataCache::DataCache() {
 	addSoundChunk(Intro_WhoEver, getChunkFromFile("INTROVOC:WHOEVER.VOC"));
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
+#if 0
+	SDL_RWops* text_lng[1];
+	data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
+	text_lng[0] = SDL_RWFromMem(data, len);
+/*	data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);
+	text_lng[1] = SDL_RWFromMem(data, len);
+	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);
+	text_lng[2] = SDL_RWFromMem(data, len);*/
 
+	int i = 0;
+	for(i = 0; i < 1; i++){
+		BriefingStrings[i] = new BriefingText(text_lng[i]);
+		SDL_RWclose(text_lng[i]);
+	}
+#endif
 }
 
-void DataCache::addObjPic(unsigned ID, SDL_Surface * tmp) {
+void DataCache::addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
 
-    m_objImg[HOUSE_HARKONNEN]->insert(std::pair<unsigned, ImagePtr>(ID, 
+    m_objImg[HOUSE_HARKONNEN]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, 
                                       ImagePtr(new Image(tmp))));
 }
 
-ImagePtr DataCache::getObjPic(unsigned ID, unsigned house) {
+/*void DataCache::addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
+
+    m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
+                                      ImagePtr(new Image(tmp))));
+}*/
+
+
+ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
     images::iterator iter = m_objImg[house]->find(ID);
     if (iter != m_objImg[house]->end())
@@ -206,17 +238,34 @@ ImagePtr DataCache::getObjPic(unsigned ID, unsigned house) {
     {
         ImagePtr source = m_objImg[HOUSE_HARKONNEN]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
-        m_objImg[HOUSE_HARKONNEN]->insert(std::pair<unsigned, ImagePtr>(ID, copy));
+        m_objImg[HOUSE_HARKONNEN]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
         return copy;
     }
 
 }
 
-void DataCache::addSoundChunk(unsigned ID, Mix_Chunk* tmp){
+/*ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
+
+    images::iterator iter = m_guiImg[house]->find(ID);
+    if (iter != m_guiImg[house]->end())
+    { 
+        return m_guiImg[house]->find(ID)->second;
+    }
+    else
+    {
+        ImagePtr source = m_guiImg[HOUSE_HARKONNEN]->find(ID)->second;
+        ImagePtr copy = source->getRecoloredByHouse(house);
+        m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
+        return copy;
+    }
+
+}*/
+
+void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 	soundChunk[ID] = tmp;
 }
 
-Mix_Chunk* DataCache::getSoundChunk(unsigned ID){
+Mix_Chunk* DataCache::getSoundChunk(Sound_enum ID){
 	return soundChunk[ID];
 }
 Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
@@ -238,6 +287,41 @@ Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
 	
 	SDL_RWclose(rwop);
 	return returnChunk;
+}
+
+Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
+{
+	Mix_Chunk* returnChunk;
+	if((returnChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
+		return NULL;
+	}
+	
+	returnChunk->allocated = 1;
+	returnChunk->volume = sound1->volume;
+	returnChunk->alen = sound1->alen + sound2->alen;
+	
+	if((returnChunk->abuf = (Uint8 *)malloc(returnChunk->alen)) == NULL) {
+		free(returnChunk);
+		return NULL;
+	}
+	
+	memcpy(returnChunk->abuf, sound1->abuf, sound1->alen);
+	memcpy(returnChunk->abuf + sound1->alen, sound2->abuf, sound2->alen);
+
+	return returnChunk;
+}
+/*
+std::string	DataCache::getBriefingText(ObjPic_enum mission, ObjPic_enum texttype, int house) {
+	return BriefingStrings[0]->getString(0,0);
+}
+
+std::string	DataCache::getBriefingText(int i){
+	return BriefingStrings[0]->getString(i);
+}
+*/
+Mix_Chunk* DataCache::concat2Chunks(Sound_enum ID1, Sound_enum ID2)
+{
+	return concat2Chunks(soundChunk[ID1], soundChunk[ID2]);
 }
 
 DataCache::~DataCache() {

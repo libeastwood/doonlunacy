@@ -13,7 +13,7 @@
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
-
+//#include "pakfile/BriefingText.h"
 #include "houses.h"
 
 #include <map>
@@ -135,7 +135,7 @@ typedef enum {
 	Picture_WindTrap,
 	Picture_WOR,
 	NUM_SMALLDETAILPICS
-} SmallDetailPics_Enum;
+} SmallDetailPics_enum;
 
 // UI Graphics
 typedef enum {
@@ -199,7 +199,7 @@ typedef enum {
 	UI_MapChoiceMap,
 	UI_MapChoiceClickMap,
 	NUM_UIGRAPHICS
-} UIGraphics_Enum;
+} GuiPic_enum;
 
 //Animation
 typedef enum {
@@ -371,7 +371,7 @@ typedef enum {
 	NUM_SOUNDCHUNK
 } Sound_enum;
 
-typedef std::map <unsigned, ImagePtr> images;
+typedef std::map <ObjPic_enum, ImagePtr> images;
 typedef std::vector <images*> remapped_images; //One for each house
 
 class DataCache : public Singleton<DataCache> 
@@ -383,13 +383,20 @@ class DataCache : public Singleton<DataCache>
         ~DataCache();
 
     public:
-        void addObjPic(unsigned ID, SDL_Surface * tmp);
-		void addSoundChunk(unsigned ID, Mix_Chunk* tmp); 
-        ImagePtr	getObjPic(unsigned ID, unsigned house = HOUSE_HARKONNEN);
-		Mix_Chunk* getSoundChunk(unsigned ID);
+        void addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+//        void addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
+        ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
+        ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
+		Mix_Chunk* getSoundChunk(Sound_enum ID);
+		Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);
+//		std::string	getBriefingText(ObjPic_enum mission, ObjPic_enum texttype, ObjPic_enum house);
+//		std::string	getBriefingText(ObjPic_enum i);
+
+
 
     private:
-        bool addObjPic(unsigned ID) { return false;};
+        bool addObjPic(ObjPic_enum ID) { return false;};
         remapped_images m_objImg;
         remapped_images m_guiImg;
 		
@@ -398,6 +405,7 @@ class DataCache : public Singleton<DataCache>
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
 		Mix_Chunk* createEmptyChunk();
 
+//		BriefingText*	BriefingStrings[1];
 		Mix_Chunk*		soundChunk[NUM_SOUNDCHUNK];
 
 };
