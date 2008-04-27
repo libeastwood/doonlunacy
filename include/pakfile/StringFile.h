@@ -17,7 +17,7 @@
 class StringFile
 {
 public:
-	StringFile(unsigned char * bufFiledata, int bufsize);
+	StringFile(std::string stringFileName);
 	~StringFile();
 
 	/// This method returns the briefing/debriefing text.

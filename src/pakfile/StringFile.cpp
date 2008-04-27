@@ -1,11 +1,14 @@
 #include "pakfile/StringFile.h"
+#include "ResMan.h"
 #include <SDL_endian.h>
 #include <SDL.h>
 #include <SDL_rwops.h>
 #include <iostream>
 #include <string>
 
-StringFile::StringFile(unsigned char * bufFiledata, int bufsize){
+StringFile::StringFile(std::string stringFileName) {
+	int bufsize;
+	unsigned char* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
 	Uint16* index;
 	SDL_RWops* RWop = SDL_RWFromMem(bufFiledata, bufsize);
 	
