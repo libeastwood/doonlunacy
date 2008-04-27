@@ -217,13 +217,13 @@ DataCache::DataCache() {
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
 
-    m_objImg[HOUSE_HARKONNEN]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, 
+    m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, 
                                       ImagePtr(tmp)));
 }
 
 void DataCache::addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house) {
 
-    m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
+    m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
                                       ImagePtr(tmp)));
 }
 
@@ -236,9 +236,9 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-        ImagePtr source = m_objImg[HOUSE_HARKONNEN]->find(ID)->second;
+        ImagePtr source = m_objImg[house]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
-        m_objImg[HOUSE_HARKONNEN]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
+        m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
         return copy;
     }
 
@@ -253,9 +253,9 @@ ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-        ImagePtr source = m_guiImg[HOUSE_HARKONNEN]->find(ID)->second;
+        ImagePtr source = m_guiImg[house]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
-        m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
+        m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
         return copy;
     }
 
