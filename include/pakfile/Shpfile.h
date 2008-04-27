@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include "pakfile/Decode.h"
+#include <boost/shared_ptr.hpp>
 
 #define	TILE_NORMAL		0x00010000
 #define	TILE_FLIPH		0x00100000
