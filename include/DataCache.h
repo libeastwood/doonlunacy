@@ -371,7 +371,7 @@ typedef enum {
 	NUM_SOUNDCHUNK
 } Sound_enum;
 
-typedef std::map <ObjPic_enum, ImagePtr> images;
+typedef std::map <unsigned, ImagePtr> images;
 typedef std::vector <images*> remapped_images; //One for each house
 
 class DataCache : public Singleton<DataCache> 
@@ -384,7 +384,7 @@ class DataCache : public Singleton<DataCache>
 
     public:
         void addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
-//        void addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+        void addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
@@ -396,7 +396,6 @@ class DataCache : public Singleton<DataCache>
 
 
     private:
-        bool addObjPic(ObjPic_enum ID) { return false;};
         remapped_images m_objImg;
         remapped_images m_guiImg;
 		

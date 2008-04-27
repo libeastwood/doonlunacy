@@ -220,12 +220,11 @@ void DataCache::addObjPic(ObjPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
                                       ImagePtr(new Image(tmp))));
 }
 
-/*void DataCache::addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
+void DataCache::addGuiPic(GuiPic_enum ID, SDL_Surface * tmp, HOUSETYPE house) {
 
     m_guiImg[HOUSE_HARKONNEN]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
                                       ImagePtr(new Image(tmp))));
-}*/
-
+}
 
 ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
@@ -244,7 +243,7 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
 }
 
-/*ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
+ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
 
     images::iterator iter = m_guiImg[house]->find(ID);
     if (iter != m_guiImg[house]->end())
@@ -259,7 +258,7 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
         return copy;
     }
 
-}*/
+}
 
 void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 	soundChunk[ID] = tmp;
