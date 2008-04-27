@@ -5,6 +5,7 @@ DataCache::DataCache() {
     for (int i=0; i< NUM_HOUSES; i++)
     {
         m_objImg.push_back(new images());
+		m_guiImg.push_back(new images());
     }
 
     int len;
@@ -112,14 +113,15 @@ DataCache::DataCache() {
 
 	//addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 		
-	/*addGuiPic(UI_MentatYes, mentat->getPicture(0));
+	addGuiPic(UI_MentatYes, mentat->getPicture(0));
 	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
 	addGuiPic(UI_MentatNo, mentat->getPicture(2));
-	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));*/
+	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
 
-/*	Palettefile tmp (data, len);
+	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
+	Palettefile tmp (data, len);
 	SDL_Palette * pal = tmp.getPalette();
-	addGuiPic(UI_Mentat_BeneGesserit, mentatm->getPicture(pal)); */
+	addGuiPic(UI_Mentat_BeneGesserit, mentatm->getPicture(pal));
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
