@@ -3,6 +3,12 @@
 
 #include "SDL.h"
 
+#include <boost/shared_ptr.hpp>
+
+class Icnfile;
+
+typedef boost::shared_ptr<Icnfile> IcnfilePtr;
+
 /*!
     A class for loading a *.ICN-File and the corresponding *.MAP-File.
     
