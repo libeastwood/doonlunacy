@@ -19,7 +19,7 @@ struct ShpfileEntry
 	Uint32 EndOffset;
 };
 
-
+class Animation;
 class Shpfile;
 typedef boost::shared_ptr<Shpfile> ShpfilePtr;
 
@@ -60,6 +60,17 @@ public:
 	@return	picture in this shp-File containing all specified pictures
 */
 	Image * getPictureArray(unsigned int tilesX, unsigned int tilesY, ...);
+	/// Returns an animation
+/*!
+	This method returns a new animation object with all pictures from startindex to endindex
+	in it. The returned pointer should be freed with delete if no longer needed. If an error
+	occured, NULL is returned.
+	@param	startindex	index of the first picture
+	@param	endindex		index of the last picture
+	@param	SetColorKey	if true, black is set as transparency
+	@return	a new animation object or NULL on error
+*/
+	Animation* getAnimation(unsigned int startindex, unsigned int endindex, bool SetColorKey=true);	
 
 	inline int getNumFiles() {return (int) NumFiles;};
 
