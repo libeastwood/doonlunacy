@@ -3,40 +3,26 @@
 
 #include "MenuBase.h"
 #include "houses.h"
-#include "gui2/Button.h"
-#include "gui2/VBox.h"
-
-#include "SDL.h"
-
+class Label;
+class AnimationLabel;
 class MentatMenuState : public MenuBaseState
 {
 	public:
 		MentatMenuState(HOUSETYPE newHouse);
 		~MentatMenuState();
 
-/*	void DrawSpecificStuff();
-	
-	void setText(std::string text) {
-		TextLabel.SetText(text.c_str());
-		TextLabel.SetVisible(true);
-		TextLabel.Resize(620,120);
-	}*/
+		void setText(std::string text);
 		int Execute(float dt);
 		virtual const char* GetName() { return "MentatMenuState"; }
 	
 	protected:
 		HOUSETYPE house;
 		ImagePtr m_surf;
-        VBox* m_vbox;
-//		void initMenuState(HOUSETYPE newHouse);
-
-/*	StaticContainer	WindowWidget;
-	AnimationLabel	eyesAnim;
-	AnimationLabel	mouthAnim;
-	AnimationLabel	specialAnim;
-	AnimationLabel	shoulderAnim;
-	Label			TextLabel;
-*/	
+		Label* m_textLabel;
+		AnimationLabel*	m_eyesAnim;
+		AnimationLabel*	m_mouthAnim;
+		AnimationLabel*	m_specialAnim;
+		AnimationLabel*	m_shoulderAnim;
 };
 
 #endif // MENTATMENU_H_INCLUDED

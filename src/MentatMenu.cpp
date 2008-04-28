@@ -5,6 +5,7 @@
 #include "DataCache.h"
 #include "pakfile/Cpsfile.h"
 #include "boost/bind.hpp"
+#include "gui2/Label.h"
 
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {
@@ -13,100 +14,74 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 	m_surf.reset(mentat);
     m_surf = m_surf->getResized(2);
 
-    m_vbox = new VBox();
-/*    m_butYes = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatYes)->getResized(2), DataCache::Instance()->getGuiPic(UI_MentatYes_Pressed)->getResized(2));
-    m_vbox->addChild(m_butYes);
-
-    m_vbox->fit(2);
-	m_vbox->setPosition(UPoint(336,366));
-    m_vbox->reshape();
-    
-    m_container->addChild(m_vbox);
-
-	m_vbox = new VBox();
-    m_butNo = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatNo)->getResized(2), DataCache::Instance()->getGuiPic(UI_MentatNo_Pressed)->getResized(2));
-    m_vbox->addChild(m_butNo);
-
-    m_vbox->fit(2);
-	m_vbox->setPosition(UPoint(480,366));
-    m_vbox->reshape();
-    
-    m_container->addChild(m_vbox);*/
-
-/*	
-	// set up window
-	SDL_Surface *surf;	
-	surf = pDataManager->getUIGraphic(UI_MentatBackground,house);
-	
-	SetBackground(surf,false);
-
-	int xpos = std::max(0,(screen->w - surf->w)/2);
-	int ypos = std::max(0,(screen->h - surf->h)/2);
-	
-	SetCurrentPosition(xpos,ypos,surf->w,surf->h);
-	
-	SetWindowWidget(&WindowWidget);
-
 	switch(house) {
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
-			anim = pDataManager->getAnimation(Anim_AtreidesEyes);
-			eyesAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&eyesAnim,Point(80,160),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesEyes));
+			m_eyesAnim->setPosition(UPoint(80, 191));
+			m_container->addChild(m_eyesAnim);
 
-			anim = pDataManager->getAnimation(Anim_AtreidesMouth);
-			mouthAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&mouthAnim,Point(80,192),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesMouth));
+			m_mouthAnim->setPosition(UPoint(80, 223));
+			m_container->addChild(m_mouthAnim);
 
-			anim = pDataManager->getAnimation(Anim_AtreidesBook);
-			specialAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&specialAnim,Point(145,305),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesBook));
+			m_specialAnim->setPosition(UPoint(145, 336));
+			m_container->addChild(m_specialAnim);
 
-			anim = pDataManager->getAnimation(Anim_AtreidesShoulder);
-			shoulderAnim.SetAnimation(anim);
-			// don't add shoulderAnim, draw it in DrawSpecificStuff	
 			break;
 		case HOUSE_ORDOS:
 		case HOUSE_MERCENARY:
-			anim = pDataManager->getAnimation(Anim_OrdosEyes);
-			eyesAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&eyesAnim,Point(32,160),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosEyes));
+			m_eyesAnim->setPosition(UPoint(32, 191));
+			m_container->addChild(m_eyesAnim);
 
-			anim = pDataManager->getAnimation(Anim_OrdosMouth);
-			mouthAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&mouthAnim,Point(32,192),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosMouth));
+			m_mouthAnim->setPosition(UPoint(32, 223));
+			m_container->addChild(m_mouthAnim);
 
-			anim = pDataManager->getAnimation(Anim_OrdosRing);
-			specialAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&specialAnim,Point(178,289),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosRing));
+			m_specialAnim->setPosition(UPoint(178, 320));
+			m_container->addChild(m_specialAnim);
 
-			anim = pDataManager->getAnimation(Anim_OrdosShoulder);
-			shoulderAnim.SetAnimation(anim);
-			// don't add shoulderAnim, draw it in DrawSpecificStuff	
 			break;
 		case HOUSE_HARKONNEN:
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenEyes));
+			m_eyesAnim->setPosition(UPoint(64, 207));
+			m_container->addChild(m_eyesAnim);
+
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenMouth));
+			m_mouthAnim->setPosition(UPoint(64, 239));
+			m_container->addChild(m_mouthAnim);
+
+			break;
 		case HOUSE_SARDAUKAR:
 		default:
-			anim = pDataManager->getAnimation(Anim_HarkonnenEyes);
-			eyesAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&eyesAnim,Point(64,176),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_BeneGesseritEyes));
+			m_eyesAnim->setPosition(UPoint(128, 190));
+			m_container->addChild(m_eyesAnim);
 
-			anim = pDataManager->getAnimation(Anim_HarkonnenMouth);
-			mouthAnim.SetAnimation(anim);
-			WindowWidget.AddWidget(&mouthAnim,Point(64,208),Point(anim->getFrame()->w,anim->getFrame()->h));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_BeneGesseritMouth));
+			m_mouthAnim->setPosition(UPoint(112, 223));
+			m_container->addChild(m_mouthAnim);
 
-			anim = pDataManager->getAnimation(Anim_HarkonnenShoulder);
-			shoulderAnim.SetAnimation(anim);
-			// don't add shoulderAnim, draw it in DrawSpecificStuff				
-			break;		
+			break;
+
 	}
 	
-	TextLabel.SetTextColor(255);
+/*	TextLabel.SetTextColor(255);
 	TextLabel.SetVisible(false);*/
 }
 
 MentatMenuState::~MentatMenuState() {
 }
+
+/*void MentatMenuState::setText(std::string text)
+{
+	m_textLabel.SetText(text.c_str());
+	TextLabel.SetVisible(true);
+	TextLabel.Resize(620,120);
+}*/
 
 int MentatMenuState::Execute(float dt)
 {
