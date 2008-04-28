@@ -3,6 +3,7 @@
 
 #include "Gfx.h"
 #include "pakfile/Decode.h"
+#include "pakfile/Animation.h"
 #include "SDL.h"
 
 #include <boost/shared_ptr.hpp>
@@ -19,6 +20,8 @@ public:
 	~Wsafile();
 
 	Image * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
+
+	Animation* getAnimation(unsigned int startindex, unsigned int endindex, SDL_Palette *palette, bool SetColorKey=true);
 
 	inline int getNumFrames() { return (int) NumFrames; };
 	inline Uint32 getFramesPer1024ms() { return FramesPer1024ms; };

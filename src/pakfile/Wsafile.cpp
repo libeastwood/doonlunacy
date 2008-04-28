@@ -110,6 +110,36 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 
 }
 
+/// Returns an animation
+/**
+	This method returns a new animation object with all pictures from startindex to endindex
+	in it. The returned pointer should be freed with delete if no longer needed. If an error
+	occured, NULL is returned.
+	\param	startindex	index of the first picture
+	\param	endindex	index of the last picture
+	\param	DoublePic	if true, the picture is scaled up by a factor of 2
+	\param	SetColorKey	if true, black is set as transparency
+	\return	a new animation object or NULL on error
+*/
+Animation* Wsafile::getAnimation(unsigned int startindex, unsigned int endindex, SDL_Palette *palette, bool SetColorKey)
+{
+	Animation* tmpAnimation;
+	Image* tmp;
+	
+	if((tmpAnimation = new Animation()) == NULL) {
+		return NULL;
+	}
+	
+	for(unsigned int i = startindex; i <= endindex; i++) {
+		if((tmp = getPicture(i, palette)) == NULL) {
+			delete tmpAnimation;
+			return NULL;
+		}
+		tmpAnimation->addFrame(tmp,SetColorKey);
+	}
+	return tmpAnimation;
+}
+
 void Wsafile::decodeFrames()
 {
 	unsigned char *dec80;
