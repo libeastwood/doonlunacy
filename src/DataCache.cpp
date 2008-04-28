@@ -135,28 +135,17 @@ DataCache::DataCache() {
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
 
-	/*Anim[Anim_AtreidesEyes] = menshpa->getAnimation(0,4,true,true);
-	Anim[Anim_AtreidesEyes]->setFrameRate(0.5);
-	Anim[Anim_AtreidesMouth] = menshpa->getAnimation(5,9,true,true);
-	Anim[Anim_AtreidesMouth]->setFrameRate(5.0);	
-	Anim[Anim_AtreidesShoulder] = menshpa->getAnimation(10,10,true,true);
-	Anim[Anim_AtreidesShoulder]->setFrameRate(1.0);
-	Anim[Anim_AtreidesBook] = menshpa->getAnimation(11,12,true,true);
-	Anim[Anim_AtreidesBook]->setFrameRate(0.1);
-	Anim[Anim_HarkonnenEyes] = menshph->getAnimation(0,4,true,true);
-	Anim[Anim_HarkonnenEyes]->setFrameRate(0.3);
-	Anim[Anim_HarkonnenMouth] = menshph->getAnimation(5,9,true,true);
-	Anim[Anim_HarkonnenMouth]->setFrameRate(5.0);
-	Anim[Anim_HarkonnenShoulder] = menshph->getAnimation(10,10,true,true);
-	Anim[Anim_HarkonnenShoulder]->setFrameRate(1.0);
-	Anim[Anim_OrdosEyes] = menshpo->getAnimation(0,4,true,true);
-	Anim[Anim_OrdosEyes]->setFrameRate(0.5);
-	Anim[Anim_OrdosMouth] = menshpo->getAnimation(5,9,true,true);
-	Anim[Anim_OrdosMouth]->setFrameRate(5.0);
-	Anim[Anim_OrdosShoulder] = menshpo->getAnimation(10,10,true,true);
-	Anim[Anim_OrdosShoulder]->setFrameRate(1.0);
-	Anim[Anim_OrdosRing] = menshpo->getAnimation(11,14,true,true);
-	Anim[Anim_OrdosRing]->setFrameRate(6.0);*/
+	addAnimation(Anim_AtreidesEyes, menshpa->getAnimation(0,4,true), 0.5);
+	addAnimation(Anim_AtreidesMouth, menshpa->getAnimation(5,9,true), 5.0);
+	addAnimation(Anim_AtreidesShoulder, menshpa->getAnimation(10,10,true), 1.0);
+	addAnimation(Anim_AtreidesBook, menshpa->getAnimation(11,12,true), 0.1);
+	addAnimation(Anim_HarkonnenEyes, menshph->getAnimation(0,4,true), 0.3);
+	addAnimation(Anim_HarkonnenMouth, menshph->getAnimation(5,9,true), 0.5);
+	addAnimation(Anim_HarkonnenShoulder, menshph->getAnimation(10,10,true), 1.0);
+	addAnimation(Anim_OrdosEyes, menshpo->getAnimation(0,4,true), 0.5);
+	addAnimation(Anim_OrdosMouth, menshpo->getAnimation(5,9,true), 5.0);
+	addAnimation(Anim_OrdosShoulder, menshpo->getAnimation(10,10,true), 1.0);
+	addAnimation(Anim_OrdosRing, menshpo->getAnimation(11,14,true), 6.0);
 	addAnimation(Anim_AtreidesPlanet, "MENTAT:FARTR.WSA", 12);
 	addAnimation(Anim_HarkonnenPlanet, "MENTAT:FHARK.WSA", 12);
 	addAnimation(Anim_OrdosPlanet, "MENTAT:FORDOS.WSA", 12);
@@ -426,17 +415,23 @@ std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUS
 	return BriefingStrings[0]->getString(i);
 }*/
 
-void DataCache::addAnimation(Animation_enum ID, std::string fileName, uint16_t frameRate) {
+void DataCache::addAnimation(Animation_enum ID, std::string fileName, double frameRate) {
 	int len;
     uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
     WsafilePtr wsafile(new Wsafile(data, len));
     SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	
-	Animation* ret = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
+	Animation* animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
 	if(frameRate)
-		ret->setFrameRate(frameRate);
-	Anim[ID] = ret;
+		animation->setFrameRate(frameRate);
+	Anim[ID] = animation;
 	delete data;
+}
+
+void DataCache::addAnimation(Animation_enum ID, Animation* animation, double frameRate) {
+	if(frameRate)
+		animation->setFrameRate(frameRate);
+	Anim[ID] = animation;
 }
 
 Animation* DataCache::getAnimation(Animation_enum id) {

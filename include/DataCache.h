@@ -21,6 +21,7 @@
 
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
+class Animation;
 
 // ObjPics
 typedef enum {
@@ -385,9 +386,12 @@ class DataCache : public Singleton<DataCache>
     public:
         void addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
         void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);
+		void addAnimation(Animation_enum ID, Animation* animation, double frameRate = 0);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
+		Animation*		getAnimation(Animation_enum id);
 		Mix_Chunk* getSoundChunk(Sound_enum ID);
 		Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);
 		std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
@@ -406,6 +410,7 @@ class DataCache : public Singleton<DataCache>
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
 		Mix_Chunk* createEmptyChunk();
 
+		Animation*		Anim[NUM_ANIMATION];
 		Stringfile*	BriefingStrings[3];
 		Mix_Chunk*		soundChunk[NUM_SOUNDCHUNK];
 
