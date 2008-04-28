@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-Stringfile::Stringfile(std::string stringfileName) {
+Stringfile::Stringfile(std::string stringFileName) {
 	int bufsize;
 	unsigned char* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
 	Uint16* index;
