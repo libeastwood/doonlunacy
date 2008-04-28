@@ -16,9 +16,10 @@ public:
     /*! 
         Caption of label should always be set when constructing label
         @param caption std::string a caption of label
-        @param bgcolour sets background colour of label. 115(dune yellow) by default
+		@param textColour sets text colour of label. 49(dune red) by default
+        @param bgColour sets background colour of label. 115(dune yellow) by default
     */
-    Label(std::string caption, int bgcolour = 115);
+    Label(std::string caption, int textColour = 49, int bgColour = 115);
 
     ~Label();
     //@}

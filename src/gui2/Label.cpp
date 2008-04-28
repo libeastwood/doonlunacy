@@ -5,7 +5,7 @@
 #include "Application.h"
 #include "Gfx.h"
 
-Label::Label(std::string caption, int bgcolour)
+Label::Label(std::string caption, int textColour, int bgColour)
 {
     m_caption = caption;
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
@@ -17,11 +17,11 @@ Label::Label(std::string caption, int bgcolour)
     /*If surface width was not %4 == 0 then you'd get a text in italics */
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4) , texth)));
 
-    m_surface->fillRect(bgcolour);
+    m_surface->fillRect(bgColour);
 
     font->render(m_caption.c_str(), m_surface,
                     m_surface->getSurface()->w/2 - textw/2, 
-                    m_surface->getSurface()->h/2 - texth/2, 49);
+                    m_surface->getSurface()->h/2 - texth/2, textColour);
 
 //    Is it needed in case of label. It's not clickable or anything.
 //    Widget::setSize(SPoint(textw, texth));
