@@ -21,12 +21,13 @@ struct ShpfileEntry
 
 class Animation;
 class Shpfile;
+class SDL_Palette;
 typedef boost::shared_ptr<Shpfile> ShpfilePtr;
 
 class Shpfile : public Decode
 {
 public:
-	Shpfile(unsigned char * bufFiledata, int bufsize);
+	Shpfile(unsigned char * bufFiledata, int bufsize, SDL_Palette * palette = NULL);
 	~Shpfile();
 
 /*!
@@ -81,6 +82,7 @@ private:
 	unsigned char* Filedata;
 	Uint32 ShpFilesize;
 	Uint16 NumFiles;
+	SDL_Palette * m_palette;
 };
 
 

@@ -8,12 +8,16 @@
 
 //extern SDL_Palette* palette;
 
-Shpfile::Shpfile(unsigned char * bufFiledata, int bufsize) : Decode()
+Shpfile::Shpfile(unsigned char * bufFiledata, int bufsize, SDL_Palette * palette) : Decode()
 {
 	Filedata = bufFiledata;
 	ShpFilesize = bufsize;
 	Index = NULL;
 	readIndex();
+	if (palette == NULL)
+		m_palette = Application::Instance()->Screen()->getSurface()->format->palette;
+	else
+		m_palette = palette;
 }
 
 Shpfile::~Shpfile()
@@ -25,7 +29,6 @@ Shpfile::~Shpfile()
 
 Image * Shpfile::getPicture(Uint32 IndexOfFile)
 {
-    SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
 	unsigned char *DecodeDestination = NULL;
 	unsigned char *ImageOut = NULL;
@@ -117,7 +120,7 @@ Image * Shpfile::getPicture(Uint32 IndexOfFile)
 	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,sizeX,sizeY,8,0,0,0,0))== NULL) {
 		return NULL;
 	}
-	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	SDL_SetColors(pic, m_palette->colors, 0, m_palette->ncolors);
 	SDL_LockSurface(pic);	
 
 	//Now we can copy line by line
@@ -138,7 +141,6 @@ Image * Shpfile::getPicture(Uint32 IndexOfFile)
 }
 
 Image * Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) {
-    SDL_Palette *palette = Application::Instance()->Screen()->getSurface()->format->palette;
 	SDL_Surface *pic = NULL;
 	unsigned char *DecodeDestination = NULL;
 	unsigned char *ImageOut = NULL;
@@ -187,7 +189,7 @@ Image * Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) 
 		exit(EXIT_FAILURE);
 	}
 	
-	SDL_SetColors(pic, palette->colors, 0, palette->ncolors);
+	SDL_SetColors(pic, m_palette->colors, 0, m_palette->ncolors);
 	SDL_LockSurface(pic);	
 	
 	for(j = 0; j < tilesY; j++)	{
