@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include "pakfile/Shpfile.h"
-#include "pakfile/Animation."
+#include "pakfile/Animation.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string.h>
