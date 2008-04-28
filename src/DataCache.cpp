@@ -14,6 +14,11 @@ DataCache::DataCache() {
     int maplen;
     uint8_t * mapdata;
 
+
+	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
+	Palettefile tmp (data, len);
+	SDL_Palette * pal = tmp.getPalette();
+
 	
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
@@ -37,6 +42,8 @@ DataCache::DataCache() {
 	ShpfilePtr menshph(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
 	ShpfilePtr menshpo(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
+	ShpfilePtr menshpm(new Shpfile(data, len, pal));
 	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
 	ShpfilePtr choam(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
@@ -54,7 +61,7 @@ DataCache::DataCache() {
     data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-	CpsfilePtr mentatm (new Cpsfile(data, len));
+	CpsfilePtr mentatm (new Cpsfile(data, len, pal));
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 	ShpfilePtr mentat (new Shpfile(data, len));
 
@@ -146,6 +153,9 @@ DataCache::DataCache() {
 	addAnimation(Anim_OrdosMouth, menshpo->getAnimation(5,9,true), 5.0);
 	addAnimation(Anim_OrdosShoulder, menshpo->getAnimation(10,10,true), 1.0);
 	addAnimation(Anim_OrdosRing, menshpo->getAnimation(11,14,true), 6.0);
+	addAnimation(Anim_BeneGesseritEyes, menshpm->getAnimation(0,4,true), 0.5);
+	addAnimation(Anim_BeneGesseritMouth, menshpm->getAnimation(5,9,true), 5.0);
+	addAnimation(Anim_BeneGesseritShoulder, menshpm->getAnimation(10,10,true), 1.0);
 	addAnimation(Anim_AtreidesPlanet, "MENTAT:FARTR.WSA", 12);
 	addAnimation(Anim_HarkonnenPlanet, "MENTAT:FHARK.WSA", 12);
 	addAnimation(Anim_OrdosPlanet, "MENTAT:FORDOS.WSA", 12);
@@ -208,10 +218,7 @@ DataCache::DataCache() {
 
 	//addAnimation(Anim_OrdosPlanet, ordosplanet);
 
-	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
-	Palettefile tmp (data, len);
-	SDL_Palette * pal = tmp.getPalette();
-	addGuiPic(UI_MentatBackground, mentatm->getPicture(pal), HOUSE_SARDAUKAR);
+	addGuiPic(UI_MentatBackground, mentatm->getPicture(), HOUSE_SARDAUKAR);
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
