@@ -39,3 +39,21 @@ void Label::draw(Image * dest, SPoint off)
     m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));
 
 }
+
+AnimationLabel::AnimationLabel(Animation* pAnim)
+{
+	m_anim = pAnim;
+}
+
+AnimationLabel::~AnimationLabel()
+{
+
+}
+void AnimationLabel::draw(Image * screen, SPoint off)
+{
+    if (!m_visible) return;
+
+	Image * surface = m_anim->getFrame();
+	
+	screen->blitFrom(surface->getResized(2).get(), UPoint(off.x + x, off.y + y));
+}

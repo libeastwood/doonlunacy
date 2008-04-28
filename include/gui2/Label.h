@@ -2,6 +2,7 @@
 #define DUNE_GUI2_LABEL_H
 
 #include "gui2/Widget.h"
+#include "pakfile/Animation.h"
 #include <string>
 
 /* Label widget using dune's fonts
@@ -30,4 +31,18 @@ protected:
     std::string m_caption;
 };
 
+class AnimationLabel : public Widget
+{
+	public:
+		AnimationLabel(Animation* pAnim);
+		
+		~AnimationLabel();
+
+
+		virtual void draw(Image * dest, SPoint off);
+
+	private:
+		Animation* m_anim;
+	
+};
 #endif //DUNE_GUI2_LABEL_H
