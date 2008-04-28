@@ -13,7 +13,7 @@
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
-//#include "pakfile/BriefingText.h"
+#include "pakfile/Stringfile.h"
 #include "houses.h"
 
 #include <map>
@@ -191,7 +191,6 @@ typedef enum {
 	UI_MentatProcced_Pressed,
 	UI_MentatRepeat,
 	UI_MentatRepeat_Pressed,
-	UI_Mentat_BeneGesserit,
 	UI_PlanetBackground,
 	UI_MenuButtonBorder,
 	UI_DuneLegacy,
@@ -391,6 +390,8 @@ class DataCache : public Singleton<DataCache>
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
 		Mix_Chunk* getSoundChunk(Sound_enum ID);
 		Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);
+		std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
+
 //		std::string	getBriefingText(ObjPic_enum mission, ObjPic_enum texttype, ObjPic_enum house);
 //		std::string	getBriefingText(ObjPic_enum i);
 
@@ -405,7 +406,7 @@ class DataCache : public Singleton<DataCache>
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
 		Mix_Chunk* createEmptyChunk();
 
-//		BriefingText*	BriefingStrings[1];
+		Stringfile*	BriefingStrings[3];
 		Mix_Chunk*		soundChunk[NUM_SOUNDCHUNK];
 
 };

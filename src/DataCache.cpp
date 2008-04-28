@@ -15,9 +15,6 @@ DataCache::DataCache() {
    	Shpfile* units;
 	Shpfile* units1;
 	Shpfile* units2;
-	Cpsfile* herald;
-	Shpfile* mentat;
-//	CpsfilePtr mentatm;
 	
 
 	
@@ -31,18 +28,24 @@ DataCache::DataCache() {
     data = ResMan::Instance()->readFile("DUNE:UNITS2.SHP", &len);
     units2 = new Shpfile(data, len);
 
-	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
-    herald = new Cpsfile(data, len);
-
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
-	mentat = new Shpfile(data, len);
-
-	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
-    
+	ShpfilePtr mentat (new Shpfile(data, len));
+   
+	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
+	CpsfilePtr herald(new Cpsfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:MENTATA.CPS", &len);
+	CpsfilePtr mentata (new Cpsfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:MENTATO.CPS", &len);
+	CpsfilePtr mentato (new Cpsfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
+	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-
 	CpsfilePtr mentatm (new Cpsfile(data, len));
 
+//	Anim[Anim_OrdosPlanet]->setFrameRate(12);
+/*    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
+	WsafilePtr ordosplanet (new Wsafile(data, len));
+*/
     int maplen;
     unsigned char * mapdata;
     
@@ -111,17 +114,25 @@ DataCache::DataCache() {
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
 
-	//addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
+	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 		
 	addGuiPic(UI_MentatYes, mentat->getPicture(0));
 	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
 	addGuiPic(UI_MentatNo, mentat->getPicture(2));
 	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
 
+	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ATREIDES);
+	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ORDOS);
+	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_FREMEN);
+	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
+	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
+
+	//addAnim(Anim_OrdosPlanet, ordosplanet);
+
 	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
 	Palettefile tmp (data, len);
 	SDL_Palette * pal = tmp.getPalette();
-	addGuiPic(UI_Mentat_BeneGesserit, mentatm->getPicture(pal));
+	addGuiPic(UI_MentatBackground, mentatm->getPicture(pal), HOUSE_SARDAUKAR);
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
@@ -215,6 +226,27 @@ DataCache::DataCache() {
 	addSoundChunk(Intro_WhoEver, getChunkFromFile("INTROVOC:WHOEVER.VOC"));
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
+
+	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
+	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
+	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
+/*	SDL_RWops* text[3];
+	data = ResMan::Instance()->readFile("TEXTA.ENG", &len);
+	text[0] = SDL_RWFromMem(data, len);
+	data = ResMan::Instance()->readFile("TEXTO.ENG", &len);
+	text[1] = SDL_RWFromMem(data, len);	
+	data = ResMan::Instance()->readFile("TEXTH.ENG", &len);
+	text[2] = SDL_RWFromMem(data, len);
+
+	
+	for(int i=0;i<3;i++) {
+		if(text[i] == NULL) {
+			fprintf(stderr,"DataManager::DataManager: Can not open language file\n");
+			exit(EXIT_FAILURE);			
+		}
+		BriefingStrings[i] = new Stringfile();
+		SDL_RWclose(text[i]);
+	}	*/
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
@@ -312,15 +344,15 @@ Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
 
 	return returnChunk;
 }
-/*
-std::string	DataCache::getBriefingText(ObjPic_enum mission, ObjPic_enum texttype, int house) {
-	return BriefingStrings[0]->getString(0,0);
+
+std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
+	return BriefingStrings[house]->getString(mission,textType);
 }
 
-std::string	DataCache::getBriefingText(int i){
+/*std::string	DataCache::getBriefingText(int i){
 	return BriefingStrings[0]->getString(i);
-}
-*/
+}*/
+
 Mix_Chunk* DataCache::concat2Chunks(Sound_enum ID1, Sound_enum ID2)
 {
 	return concat2Chunks(soundChunk[ID1], soundChunk[ID2]);
