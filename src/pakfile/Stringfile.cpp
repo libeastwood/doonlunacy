@@ -1,4 +1,4 @@
-#include "pakfile/StringFile.h"
+#include "pakfile/Stringfile.h"
 #include "ResMan.h"
 #include <SDL_endian.h>
 #include <SDL.h>
@@ -6,39 +6,39 @@
 #include <iostream>
 #include <string>
 
-StringFile::StringFile(std::string stringFileName) {
+Stringfile::Stringfile(std::string stringfileName) {
 	int bufsize;
 	unsigned char* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
 	Uint16* index;
 	SDL_RWops* RWop = SDL_RWFromMem(bufFiledata, bufsize);
 	
 	if(RWop == NULL) {
-		fprintf(stderr, "StringFile: RWop == NULL!\n");
+		fprintf(stderr, "Stringfile: RWop == NULL!\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if(bufsize <= 0) {
-		fprintf(stderr,"StringFile: Cannot determine size!\n");
+		fprintf(stderr,"Stringfile: Cannot determine size!\n");
 		exit(EXIT_FAILURE);	
 	}
 	
 	if(bufsize < 2) {
-		fprintf(stderr, "StringFile: Invalid string file: File too small!\n");
+		fprintf(stderr, "Stringfile: Invalid string file: File too small!\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	if(SDL_RWseek(RWop,0,SEEK_SET) != 0) {
-		fprintf(stderr,"StringFile: Seeking string file failed!\n");
+		fprintf(stderr,"Stringfile: Seeking string file failed!\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	if( (bufFiledata = (unsigned char*) malloc(bufsize)) == NULL) {
-		fprintf(stderr,"StringFile: Allocating memory failed!\n");
+		fprintf(stderr,"Stringfile: Allocating memory failed!\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	if(SDL_RWread(RWop, bufFiledata, bufsize, 1) != 1) {
-		fprintf(stderr,"StringFile: Reading string file failed!\n");
+		fprintf(stderr,"Stringfile: Reading string file failed!\n");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -59,7 +59,7 @@ StringFile::StringFile(std::string stringFileName) {
 	SDL_RWclose(RWop);
 }
 
-StringFile::~StringFile() {
+Stringfile::~Stringfile() {
 	delete [] stringArray;
 }
 
@@ -69,7 +69,7 @@ StringFile::~StringFile() {
 	\param text	Text to decode
 	\return	The decoded text
 */
-std::string StringFile::decodeString(std::string text) {
+std::string Stringfile::decodeString(std::string text) {
 	std::string out = "";
 	unsigned char databyte;
 
@@ -221,7 +221,7 @@ std::string StringFile::decodeString(std::string text) {
 				// special character
 				i++;
 				if(i == text.length()) {
-					fprintf(stderr,"StringFile:decodeString: Special character escape sequence at end of string!\n");
+					fprintf(stderr,"Stringfile:decodeString: Special character escape sequence at end of string!\n");
 					exit(EXIT_FAILURE);
 				}
 

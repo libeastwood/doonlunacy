@@ -14,11 +14,11 @@
 /**
 	This class can read encoded textfiles and return their content in decoded ANSI Code.
 */
-class StringFile
+class Stringfile
 {
 public:
-	StringFile(std::string stringFileName);
-	~StringFile();
+	Stringfile(std::string stringfileName);
+	~Stringfile();
 
 	/// This method returns the briefing/debriefing text.
 	/**
@@ -34,7 +34,7 @@ public:
 		if(index < numStrings) {
 			return stringArray[index];
 		} else {
-			return "StringFile::getString(): mission number or text type is invalid!\n";
+			return "Stringfile::getString(): mission number or text type is invalid!\n";
 		}
 	}
 	std::string getString(int i){
