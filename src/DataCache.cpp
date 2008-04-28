@@ -201,8 +201,8 @@ DataCache::DataCache() {
 	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
 
 	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ATREIDES);
-	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ORDOS);
-	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_FREMEN);
+	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_FREMEN);
+	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_ORDOS);
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
 	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
 
