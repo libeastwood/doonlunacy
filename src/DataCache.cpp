@@ -9,28 +9,42 @@ DataCache::DataCache() {
     }
 
     int len;
-    unsigned char * data;
+    uint8_t * data;
     
-   	Icnfile* icon;
-   	Shpfile* units;
-	Shpfile* units1;
-	Shpfile* units2;
-	
+    int maplen;
+    uint8_t * mapdata;
 
 	
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
-    units = new Shpfile(data, len);
-    
+    ShpfilePtr units(new Shpfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:UNITS1.SHP", &len);
-    units1 = new Shpfile(data, len);
-    
+    ShpfilePtr units1(new Shpfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:UNITS2.SHP", &len);
-    units2 = new Shpfile(data, len);
+    ShpfilePtr units2(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:MOUSE.SHP", &len);
+	ShpfilePtr mouse(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:SHAPES.SHP", &len);
+	ShpfilePtr shapes(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:ICON.ICN", &len);
+	mapdata = ResMan::Instance()->readFile("DUNE:ICON.MAP", &maplen);
+	IcnfilePtr icon(new Icnfile(data, len, mapdata, maplen));
+	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
+	WsafilePtr radar(new Wsafile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:MENSHPA.SHP", &len);
+	ShpfilePtr menshpa(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:MENSHPH.SHP", &len);
+	ShpfilePtr menshph(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
+	ShpfilePtr menshpo(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
+	ShpfilePtr choam(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
+	ShpfilePtr bttn(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
+	CpsfilePtr bigplan(new Cpsfile(data, len));
 
-	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
-	ShpfilePtr mentat (new Shpfile(data, len));
-   
+
 	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
 	CpsfilePtr herald(new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATA.CPS", &len);
@@ -41,18 +55,25 @@ DataCache::DataCache() {
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
 	CpsfilePtr mentatm (new Cpsfile(data, len));
+	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
+	ShpfilePtr mentat (new Shpfile(data, len));
+
+	data = ResMan::Instance()->readFile("DUNE:DUNEMAP.CPS", &len);
+	CpsfilePtr dunemap(new Cpsfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:DUNERGN.CPS", &len);
+	CpsfilePtr dunergn(new Cpsfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:RGNCLK.CPS", &len);
+	CpsfilePtr rgnclk(new Cpsfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:PIECES.SHP", &len);
+	ShpfilePtr pieces(new Shpfile(data, len));
+	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
+	ShpfilePtr arrows(new Shpfile(data, len));
+ 
 
 //	Anim[Anim_OrdosPlanet]->setFrameRate(12);
 /*    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
 	WsafilePtr ordosplanet (new Wsafile(data, len));
 */
-    int maplen;
-    unsigned char * mapdata;
-    
-    data = ResMan::Instance()->readFile("DUNE:ICON.ICN", &len);
-    mapdata = ResMan::Instance()->readFile("DUNE:ICON.MAP", &maplen);
-    icon = new Icnfile(data, len, mapdata, maplen);
-
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
 	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
@@ -114,6 +135,75 @@ DataCache::DataCache() {
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
 
+	/*Anim[Anim_AtreidesEyes] = menshpa->getAnimation(0,4,true,true);
+	Anim[Anim_AtreidesEyes]->setFrameRate(0.5);
+	Anim[Anim_AtreidesMouth] = menshpa->getAnimation(5,9,true,true);
+	Anim[Anim_AtreidesMouth]->setFrameRate(5.0);	
+	Anim[Anim_AtreidesShoulder] = menshpa->getAnimation(10,10,true,true);
+	Anim[Anim_AtreidesShoulder]->setFrameRate(1.0);
+	Anim[Anim_AtreidesBook] = menshpa->getAnimation(11,12,true,true);
+	Anim[Anim_AtreidesBook]->setFrameRate(0.1);
+	Anim[Anim_HarkonnenEyes] = menshph->getAnimation(0,4,true,true);
+	Anim[Anim_HarkonnenEyes]->setFrameRate(0.3);
+	Anim[Anim_HarkonnenMouth] = menshph->getAnimation(5,9,true,true);
+	Anim[Anim_HarkonnenMouth]->setFrameRate(5.0);
+	Anim[Anim_HarkonnenShoulder] = menshph->getAnimation(10,10,true,true);
+	Anim[Anim_HarkonnenShoulder]->setFrameRate(1.0);
+	Anim[Anim_OrdosEyes] = menshpo->getAnimation(0,4,true,true);
+	Anim[Anim_OrdosEyes]->setFrameRate(0.5);
+	Anim[Anim_OrdosMouth] = menshpo->getAnimation(5,9,true,true);
+	Anim[Anim_OrdosMouth]->setFrameRate(5.0);
+	Anim[Anim_OrdosShoulder] = menshpo->getAnimation(10,10,true,true);
+	Anim[Anim_OrdosShoulder]->setFrameRate(1.0);
+	Anim[Anim_OrdosRing] = menshpo->getAnimation(11,14,true,true);
+	Anim[Anim_OrdosRing]->setFrameRate(6.0);*/
+	addAnimation(Anim_AtreidesPlanet, "MENTAT:FARTR.WSA", 12);
+	addAnimation(Anim_HarkonnenPlanet, "MENTAT:FHARK.WSA", 12);
+	addAnimation(Anim_OrdosPlanet, "MENTAT:FORDOS.WSA", 12);
+	addAnimation(Anim_Win1, "DUNE:WIN1.WSA");
+	addAnimation(Anim_Win2, "DUNE:WIN2.WSA");
+	addAnimation(Anim_Lose1, "DUNE:LOSTBILD.WSA");
+	addAnimation(Anim_Lose2, "DUNE:LOSTVEHC.WSA");
+	addAnimation(Anim_Barracks, "MENTAT:BARRAC.WSA");
+	addAnimation(Anim_Carryall, "MENTAT:CARRYALL.WSA");
+	addAnimation(Anim_ConstructionYard, "MENTAT:CONSTRUC.WSA");
+	addAnimation(Anim_Fremen, "MENTAT:FREMEN.WSA");
+	addAnimation(Anim_DeathHand, "MENTAT:GOLD-BB.WSA");
+	addAnimation(Anim_Devastator, "MENTAT:HARKTANK.WSA");
+	addAnimation(Anim_Harvester, "MENTAT:HARVEST.WSA");
+	addAnimation(Anim_Radar, "MENTAT:HEADQRTS.WSA");
+	addAnimation(Anim_HighTechFactory, "MENTAT:HITCFTRY.WSA");
+	addAnimation(Anim_SiegeTank, "MENTAT:HTANK.WSA");
+	addAnimation(Anim_HeavyFactory, "MENTAT:HVYFTRY.WSA");
+	addAnimation(Anim_Trooper, "MENTAT:HYINFY.WSA");
+	addAnimation(Anim_Infantry, "MENTAT:INFANTRY.WSA");
+	addAnimation(Anim_IX, "MENTAT:IX.WSA");
+	addAnimation(Anim_LightFactory, "MENTAT:LITEFTRY.WSA");
+	addAnimation(Anim_Tank, "MENTAT:LTANK.WSA");
+	addAnimation(Anim_MCV, "MENTAT:MCV.WSA");
+	addAnimation(Anim_Deviator, "MENTAT:ORDRTANK.WSA");
+	addAnimation(Anim_Ornithopter, "MENTAT:ORNI.WSA");
+	addAnimation(Anim_Raider, "MENTAT:OTRIKE.WSA");
+	addAnimation(Anim_Palace, "MENTAT:PALACE.WSA");
+	addAnimation(Anim_Quad, "MENTAT:QUAD.WSA");
+	addAnimation(Anim_Refinery, "MENTAT:REFINERY.WSA");
+	addAnimation(Anim_RepairYard, "MENTAT:REPAIR.WSA");
+	addAnimation(Anim_Launcher, "MENTAT:RTANK.WSA");
+	addAnimation(Anim_RocketTurret, "MENTAT:RTURRET.WSA");
+	addAnimation(Anim_Saboteur, "MENTAT:SABOTURE.WSA");
+	addAnimation(Anim_Slab1, "MENTAT:SLAB.WSA");
+	addAnimation(Anim_SonicTank, "MENTAT:STANK.WSA");
+	addAnimation(Anim_StarPort, "MENTAT:STARPORT.WSA");
+	addAnimation(Anim_Silo, "MENTAT:STORAGE.WSA");
+	addAnimation(Anim_Trike, "MENTAT:TRIKE.WSA");
+	addAnimation(Anim_GunTurret, "MENTAT:TURRET.WSA");
+	addAnimation(Anim_Wall, "MENTAT:WALL.WSA");
+	addAnimation(Anim_WindTrap, "MENTAT:WINDTRAP.WSA");
+	addAnimation(Anim_WOR, "MENTAT:WOR.WSA");
+	addAnimation(Anim_Sandworm, "MENTAT:WORM.WSA");
+	addAnimation(Anim_Sardaukar, "MENTAT:SARDUKAR.WSA");
+	addAnimation(Anim_Frigate, "MENTAT:FRIGATE.WSA");
+
 	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 		
 	addGuiPic(UI_MentatYes, mentat->getPicture(0));
@@ -127,7 +217,7 @@ DataCache::DataCache() {
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
 	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
 
-	//addAnim(Anim_OrdosPlanet, ordosplanet);
+	//addAnimation(Anim_OrdosPlanet, ordosplanet);
 
 	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
 	Palettefile tmp (data, len);
@@ -230,23 +320,6 @@ DataCache::DataCache() {
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
-/*	SDL_RWops* text[3];
-	data = ResMan::Instance()->readFile("TEXTA.ENG", &len);
-	text[0] = SDL_RWFromMem(data, len);
-	data = ResMan::Instance()->readFile("TEXTO.ENG", &len);
-	text[1] = SDL_RWFromMem(data, len);	
-	data = ResMan::Instance()->readFile("TEXTH.ENG", &len);
-	text[2] = SDL_RWFromMem(data, len);
-
-	
-	for(int i=0;i<3;i++) {
-		if(text[i] == NULL) {
-			fprintf(stderr,"DataManager::DataManager: Can not open language file\n");
-			exit(EXIT_FAILURE);			
-		}
-		BriefingStrings[i] = new Stringfile();
-		SDL_RWclose(text[i]);
-	}	*/
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
@@ -352,6 +425,28 @@ std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUS
 /*std::string	DataCache::getBriefingText(int i){
 	return BriefingStrings[0]->getString(i);
 }*/
+
+void DataCache::addAnimation(Animation_enum ID, std::string fileName, uint16_t frameRate) {
+	int len;
+    uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
+    WsafilePtr wsafile(new Wsafile(data, len));
+    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+	
+	Animation* ret = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
+	if(frameRate)
+		ret->setFrameRate(frameRate);
+	Anim[ID] = ret;
+	delete data;
+}
+
+Animation* DataCache::getAnimation(Animation_enum id) {
+	if(id >= NUM_ANIMATION) {
+		fprintf(stderr,"DataManager::getAnimation(): Animation with id %d is not available!\n",id);
+		exit(EXIT_FAILURE);
+	}
+	
+	return Anim[id];
+}
 
 Mix_Chunk* DataCache::concat2Chunks(Sound_enum ID1, Sound_enum ID2)
 {

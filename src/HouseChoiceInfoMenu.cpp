@@ -8,23 +8,18 @@
 #include "pakfile/Animation.h"
 #include "gui2/Label.h"
 #include "gui2/Button.h"
+#include <string>
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
 {
-    int len;
-    uint8_t * data;
+	Animation* ret;
 	if (newHouse == HOUSE_ATREIDES)
-		data = ResMan::Instance()->readFile("MENTAT:FARTR.WSA", &len);
+		ret = DataCache::Instance()->getAnimation(Anim_AtreidesPlanet);
 	else if (newHouse == HOUSE_ORDOS)
-		data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
+		ret = DataCache::Instance()->getAnimation(Anim_OrdosPlanet);
 	else if (newHouse == HOUSE_HARKONNEN)
-		data = ResMan::Instance()->readFile("MENTAT:FHARK.WSA", &len);
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+		ret = DataCache::Instance()->getAnimation(Anim_HarkonnenPlanet);
 
-    WsafilePtr m_wsa (new Wsafile(data, len));
-
-	Animation* ret = m_wsa->getAnimation(0, m_wsa->getNumFrames() - 1, palette, false);
-	ret->setFrameRate(12);
 	
 	m_planetAnimation = new AnimationLabel(ret);
 	m_planetAnimation->setPosition(UPoint(256,127));
@@ -37,6 +32,12 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
     m_butNo = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatNo)->getResized(2), DataCache::Instance()->getGuiPic(UI_MentatNo_Pressed)->getResized(2));
 	m_butNo->setPosition(UPoint(480,366));    
     m_container->addChild(m_butNo);
+
+	std::string desc = DataCache::Instance()->getBriefingText(0, MISSION_DESCRIPTION, newHouse);
+	int linebreak = desc.find("\n",0) + 1;
+	m_textLabel = new Label(desc.substr(linebreak,desc.length()-linebreak), 158, 0); //DataCache::Instance()->getBriefingText(0, MISSION_DESCRIPTION, newHouse), 0);
+	m_textLabel->setPosition(UPoint(0,35));
+	m_container->addChild(m_textLabel);
 
 }
 
