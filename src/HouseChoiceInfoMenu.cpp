@@ -38,6 +38,7 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 	m_textLabel = new Label(desc.substr(linebreak,desc.length()-linebreak), 158, 0); //DataCache::Instance()->getBriefingText(0, MISSION_DESCRIPTION, newHouse), 0);
 	m_textLabel->setPosition(UPoint(0,35));
 	m_container->addChild(m_textLabel);
+	drawSpecificStuff();
 
 }
 

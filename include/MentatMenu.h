@@ -23,6 +23,7 @@ class MentatMenuState : public MenuBaseState
 		AnimationLabel*	m_mouthAnim;
 		AnimationLabel*	m_specialAnim;
 		AnimationLabel*	m_shoulderAnim;
+		void drawSpecificStuff();
 };
 
 #endif // MENTATMENU_H_INCLUDED

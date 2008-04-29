@@ -29,6 +29,10 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_specialAnim->setPosition(UPoint(145, 336));
 			m_container->addChild(m_specialAnim);
 
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesShoulder));
+			m_shoulderAnim->setPosition(UPoint(256,286));
+
+
 			break;
 		case HOUSE_ORDOS:
 		case HOUSE_MERCENARY:
@@ -44,6 +48,10 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_specialAnim->setPosition(UPoint(178, 320));
 			m_container->addChild(m_specialAnim);
 
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosShoulder));
+			m_shoulderAnim->setPosition(UPoint(256,286));
+
+
 			break;
 		case HOUSE_HARKONNEN:
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenEyes));
@@ -53,6 +61,9 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenMouth));
 			m_mouthAnim->setPosition(UPoint(64, 239));
 			m_container->addChild(m_mouthAnim);
+
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenShoulder));
+			m_shoulderAnim->setPosition(UPoint(256,238));
 
 			break;
 		case HOUSE_SARDAUKAR:
@@ -69,19 +80,10 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 	}
 	
-/*	TextLabel.SetTextColor(255);
-	TextLabel.SetVisible(false);*/
 }
 
 MentatMenuState::~MentatMenuState() {
 }
-
-/*void MentatMenuState::setText(std::string text)
-{
-	m_textLabel.SetText(text.c_str());
-	TextLabel.SetVisible(true);
-	TextLabel.Resize(620,120);
-}*/
 
 int MentatMenuState::Execute(float dt)
 {
@@ -91,24 +93,8 @@ int MentatMenuState::Execute(float dt)
     return 0;
 }
 
-/*void MentatMenu::DrawSpecificStuff() {
-	Point shoulderPos;
-	switch(house) {
-		case HOUSE_ATREIDES:
-		case HOUSE_FREMEN: {
-			shoulderPos = Point(256,257) + GetPosition();
-		} break;
-		case HOUSE_ORDOS:
-		case HOUSE_MERCENARY: {
-			shoulderPos = Point(256,257) + GetPosition();
-		} break;
-		case HOUSE_HARKONNEN:
-		case HOUSE_SARDAUKAR:
-		default: {
-			shoulderPos = Point(256,209) + GetPosition();
-		} break;
-	}
-	
-	shoulderAnim.Draw(screen,shoulderPos);
-	TextLabel.Draw(screen,Point(10,5) + GetPosition());
-}*/
+// Should needs to be drawn later, otherwise graphics will be drawn on top of it
+void MentatMenuState::drawSpecificStuff() {
+	if(house != HOUSE_SARDAUKAR)
+		m_container->addChild(m_shoulderAnim);
+}
