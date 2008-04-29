@@ -38,11 +38,14 @@ all_sources = [ "Application.cpp",
 				"SoundPlayerClass.cpp",
 				"pakfile/Animation.cpp",
 				"pakfile/Stringfile.cpp",
-				"pakfile/Vocfile.cpp",
-				"pakfile/IntegratedLibSampleRate/samplerate.c",
-				"pakfile/IntegratedLibSampleRate/src_linear.c",
-				"pakfile/IntegratedLibSampleRate/src_sinc.c",
-				"pakfile/IntegratedLibSampleRate/src_zoh.c"
+				"pakfile/sound/Vocfile.cpp",
+				"pakfile/sound/IntegratedLibSampleRate/samplerate.c",
+				"pakfile/sound/IntegratedLibSampleRate/src_linear.c",
+				"pakfile/sound/IntegratedLibSampleRate/src_sinc.c",
+				"pakfile/sound/IntegratedLibSampleRate/src_zoh.c",
+				"pakfile/sound/adl/adl.cpp",
+				"pakfile/sound/adl/emuopl.cpp",
+				"pakfile/sound/adl/fmopl.cpp"
               ]
 
 gui_sources = [
