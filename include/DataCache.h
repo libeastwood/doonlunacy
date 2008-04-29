@@ -217,7 +217,6 @@ typedef enum {
 	Anim_OrdosRing,
 	Anim_BeneGesseritEyes,
 	Anim_BeneGesseritMouth,
-	Anim_BeneGesseritShoulder,
 	Anim_AtreidesPlanet,
 	Anim_HarkonnenPlanet,
 	Anim_OrdosPlanet,
@@ -295,7 +294,7 @@ typedef enum {
 	HouseHarkonnen,
 	PlaceStructure,
 	ButtonClick,
-//	InvalidAction,
+	//	InvalidAction,
 	CreditsTick,
 	RadarNoise,
 	Sound_ExplosionGas,
@@ -314,7 +313,7 @@ typedef enum {
 	Sound_Scream4,
 	Sound_Scream5,	
 	Sound_MachineGun,
-//	Sound_Sonic,
+	//	Sound_Sonic,
 	Sound_RocketSmall,
 	Intro_3Houses,
 	Intro_AndNow,
@@ -344,7 +343,7 @@ typedef enum {
 	Intro_RulesOfEngagement,
 	Intro_Territories,
 	Intro_AndThe,
-//	Intro_Filler,
+	//	Intro_Filler,
 	Intro_Flesh,
 	Intro_Glass_6,
 	Intro_Glass,
@@ -380,13 +379,13 @@ typedef std::vector <images*> remapped_images; //One for each house
 
 class DataCache : public Singleton<DataCache> 
 {
-    friend class Singleton<DataCache>;
-    
-    protected:
-        DataCache();
-        ~DataCache();
+	friend class Singleton<DataCache>;
 
-    public:
+	protected:
+	DataCache();
+	~DataCache();
+
+	public:
         void addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
         void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
 		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);

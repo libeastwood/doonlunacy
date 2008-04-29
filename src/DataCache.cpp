@@ -151,7 +151,6 @@ DataCache::DataCache() {
 	addAnimation(Anim_OrdosRing, menshpo->getAnimation(11,14,true), 6.0);
 	addAnimation(Anim_BeneGesseritEyes, menshpm->getAnimation(0,4,true), 0.5);
 	addAnimation(Anim_BeneGesseritMouth, menshpm->getAnimation(5,9,true), 5.0);
-	addAnimation(Anim_BeneGesseritShoulder, menshpm->getAnimation(10,10,true), 1.0);
 	addAnimation(Anim_AtreidesPlanet, "MENTAT:FARTR.WSA", 12);
 	addAnimation(Anim_HarkonnenPlanet, "MENTAT:FHARK.WSA", 12);
 	addAnimation(Anim_OrdosPlanet, "MENTAT:FORDOS.WSA", 12);
