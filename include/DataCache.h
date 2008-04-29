@@ -14,6 +14,7 @@
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
 #include "pakfile/Stringfile.h"
+
 #include "houses.h"
 
 #include <map>
@@ -22,6 +23,17 @@
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
 class Animation;
+
+//! \enum MUSICTYPE
+/*! Types of music available in the game*/
+typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
+			   MUSIC_INTRO,  /*!<Background music for intro. */
+			   MUSIC_LOSE,   /*!<Failure screen background music. */
+			   MUSIC_PEACE,  /*!<Played most of the time when the enemy is not attacking. */
+			   MUSIC_WIN,    /*!<Victory screen background music.. */
+			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
+			 } MUSICTYPE;
+
 
 // ObjPics
 typedef enum {
@@ -377,6 +389,11 @@ typedef enum {
 typedef std::map <unsigned, ImagePtr> images;
 typedef std::vector <images*> remapped_images; //One for each house
 
+typedef std::map <unsigned, Mix_Chunk*> music;
+typedef std::vector <music*> remapped_music;
+
+typedef std::map <unsigned, std::string> musicFile;
+typedef std::vector <musicFile*> remapped_musicFile;
 class DataCache : public Singleton<DataCache> 
 {
 	friend class Singleton<DataCache>;
@@ -391,10 +408,13 @@ class DataCache : public Singleton<DataCache>
 		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);
 		void addAnimation(Animation_enum ID, Animation* animation, double frameRate = 0);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
+		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum, uint16_t ID);
+		void addMusic(MUSICTYPE musicType, Mix_Chunk* tmp, uint16_t ID);		
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
 		Animation*		getAnimation(Animation_enum id);
 		Mix_Chunk* getSoundChunk(Sound_enum ID);
+		Mix_Chunk* getMusic(MUSICTYPE musicType, uint16_t ID);
 		Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);
 		std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
 
@@ -406,7 +426,9 @@ class DataCache : public Singleton<DataCache>
     private:
         remapped_images m_objImg;
         remapped_images m_guiImg;
-		
+		remapped_music m_music;
+		remapped_musicFile m_musicFile;
+
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
