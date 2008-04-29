@@ -4,12 +4,15 @@
 #include <string>
 #include <iostream>
 DataCache::DataCache() {
-    for (int i=0; i< NUM_HOUSES; i++)
+    for (uint8_t i=0; i< NUM_HOUSES; i++)
     {
         m_objImg.push_back(new images());
 		m_guiImg.push_back(new images());
-		m_music.push_back(new music());
     }
+	for (uint8_t i = 0; i < MUSIC_RANDOM; i++)
+	{
+		m_music.push_back(new music());
+	}
 
     int len, maplen;
     uint8_t *data, *mapdata;
@@ -310,23 +313,23 @@ DataCache::DataCache() {
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2, 0);
-	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3, 0);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6, 0);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE3.ADL", 6, 1);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE4.ADL", 6, 2);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE5.ADL", 6, 3);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE6.ADL", 6, 4);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 4, 5);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE10.ADL", 2, 6);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE11.ADL", 7, 0);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE12.ADL", 7, 1);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE13.ADL", 7, 2);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE14.ADL", 7, 3);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE15.ADL", 7, 4);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE18.ADL", 6, 0);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 4, 1);
-	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2 ,0);
+	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
+	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE3.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE4.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE5.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE6.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 4);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE10.ADL", 2);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE11.ADL", 7);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE12.ADL", 7);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE13.ADL", 7);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE14.ADL", 7);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE15.ADL", 7);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE18.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 4);
+	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
 
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
@@ -384,30 +387,38 @@ void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 	soundChunk[ID] = tmp;
 }
 
-void DataCache::addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum, uint16_t ID)
+void DataCache::addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum)
 {
+	songFiles[musicType].push_back(songFile(filename, trackNum));
+}
+
+Mix_Chunk* DataCache::addMusic(MUSICTYPE musicType, uint16_t ID)
+{
+	songFile song = songFiles[musicType][ID];
 	int len;
-	uint8_t * data = ResMan::Instance()->readFile(filename, &len);
+	uint8_t * data = ResMan::Instance()->readFile(song.first, &len);
 	SDL_RWops* test = SDL_RWFromMem(data, len);
 	CadlPlayer *p = new CadlPlayer(test);
-	Mix_Chunk* tmp = p->getUpsampledSubsong(trackNum, 22050, AUDIO_S16LSB, 1);
+	Mix_Chunk* tmp = p->getUpsampledSubsong(song.second, 22050, AUDIO_S16LSB, 1);
 	SDL_RWclose(test);
     m_music[musicType]->insert(std::pair<uint16_t, Mix_Chunk*>(ID, tmp));
 	delete data;
 	delete p;
+	return tmp;
 }
 
+// Searches through list of loaded songs to see if the specific song is loaded.
+// If loaded, it will return the song, if not it will load and return the song.
 Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
     music::iterator iter = m_music[musicType]->find(ID);
     if (iter != m_music[musicType]->end())
-    { 
+    {
         return m_music[musicType]->find(ID)->second;
     }
     else
     {
-        Mix_Chunk* source = m_music[musicType]->find(ID)->second;
-        return source;
+		return addMusic(musicType, ID);
     }
 }
 

@@ -392,8 +392,8 @@ typedef std::vector <images*> remapped_images; //One for each house
 typedef std::map <unsigned, Mix_Chunk*> music;
 typedef std::vector <music*> remapped_music;
 
-typedef std::map <unsigned, std::string> musicFile;
-typedef std::vector <musicFile*> remapped_musicFile;
+typedef std::pair <std::string, uint16_t> songFile;
+
 class DataCache : public Singleton<DataCache> 
 {
 	friend class Singleton<DataCache>;
@@ -408,8 +408,8 @@ class DataCache : public Singleton<DataCache>
 		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);
 		void addAnimation(Animation_enum ID, Animation* animation, double frameRate = 0);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
-		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum, uint16_t ID);
-		void addMusic(MUSICTYPE musicType, Mix_Chunk* tmp, uint16_t ID);		
+		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum);
+		Mix_Chunk* addMusic(MUSICTYPE musicType, uint16_t ID);		
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
 		Animation*		getAnimation(Animation_enum id);
@@ -427,16 +427,16 @@ class DataCache : public Singleton<DataCache>
         remapped_images m_objImg;
         remapped_images m_guiImg;
 		remapped_music m_music;
-		remapped_musicFile m_musicFile;
+		std::vector<songFile> songFiles[MUSIC_RANDOM];
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
 		Mix_Chunk* createEmptyChunk();
 
-		Animation*		Anim[NUM_ANIMATION];
-		Stringfile*	BriefingStrings[3];
-		Mix_Chunk*		soundChunk[NUM_SOUNDCHUNK];
+		Animation* Anim[NUM_ANIMATION];
+		Stringfile* BriefingStrings[3];
+		Mix_Chunk* soundChunk[NUM_SOUNDCHUNK];
 
 };
 
