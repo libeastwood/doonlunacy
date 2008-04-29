@@ -62,7 +62,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_container->addChild(m_eyesAnim);
 
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_BeneGesseritMouth));
-			m_mouthAnim->setPosition(UPoint(112, 223));
+			m_mouthAnim->setPosition(UPoint(112, 222));
 			m_container->addChild(m_mouthAnim);
 
 			break;
