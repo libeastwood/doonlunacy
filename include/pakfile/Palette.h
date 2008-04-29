@@ -6,7 +6,7 @@
 class Palettefile
 {
     public:
-        Palettefile(unsigned char* buf, int bufsize);
+        Palettefile(uint8_t * buf, uint16_t bufsize);
         ~Palettefile();
 
         SDL_Palette* getPalette() { return m_palette; }

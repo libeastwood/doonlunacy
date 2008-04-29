@@ -1,6 +1,6 @@
 #include "pakfile/Palette.h"
 
-Palettefile::Palettefile(unsigned char* buf, int bufsize)
+Palettefile::Palettefile(unsigned char* buf, uint16_t bufsize)
 {
     printf("loading palette...\n");
     
@@ -9,9 +9,9 @@ Palettefile::Palettefile(unsigned char* buf, int bufsize)
 
     m_palette->colors = new SDL_Color[m_palette->ncolors];
     SDL_Color* c = m_palette->colors;
-    unsigned char* dunepal = buf;
+    uint8_t* dunepal = buf;
     
-    for (int i=0; i!=m_palette->ncolors; i++, c++, dunepal+=3)
+    for (uint16_t i=0; i!=m_palette->ncolors; i++, c++, dunepal+=3)
     {
         c->r = (dunepal[0] << 2) + 3;
         c->g = (dunepal[1] << 2) + 3;
