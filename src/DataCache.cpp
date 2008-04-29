@@ -1,5 +1,5 @@
 #include "DataCache.h" 
-#include "pakfile/Vocfile.h"
+#include "pakfile/sound/Vocfile.h"
 #include <string>
 #include <iostream>
 DataCache::DataCache() {

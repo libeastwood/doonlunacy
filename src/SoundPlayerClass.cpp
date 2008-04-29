@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pakfile/Vocfile.h"
+#include "pakfile/sound/Vocfile.h"
 #include "SoundPlayerClass.h"
 #include "SDL_mixer.h"
 #include "DuneConstants.h"
