@@ -22,7 +22,7 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 	
 	m_planetAnimation = new AnimationLabel(ret);
-	m_planetAnimation->setPosition(UPoint(256,127));
+	m_planetAnimation->setPosition(UPoint(256,126));
 	m_container->addChild(m_planetAnimation);
 
     m_butYes = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatYes)->getResized(2), DataCache::Instance()->getGuiPic(UI_MentatYes_Pressed)->getResized(2));
