@@ -1,6 +1,7 @@
 #include "DataCache.h" 
 #include "pakfile/Vocfile.h"
-
+#include <string>
+#include <iostream>
 DataCache::DataCache() {
     for (int i=0; i< NUM_HOUSES; i++)
     {
@@ -8,11 +9,9 @@ DataCache::DataCache() {
 		m_guiImg.push_back(new images());
     }
 
-    int len;
-    uint8_t * data;
+    int len, maplen;
+    uint8_t *data, *mapdata;
     
-    int maplen;
-    uint8_t * mapdata;
 
 
 	// FIXM: Something seems to be fscked up with this palette, the Bene Gesserit
@@ -35,6 +34,8 @@ DataCache::DataCache() {
 	data = ResMan::Instance()->readFile("DUNE:ICON.ICN", &len);
 	mapdata = ResMan::Instance()->readFile("DUNE:ICON.MAP", &maplen);
 	IcnfilePtr icon(new Icnfile(data, len, mapdata, maplen));
+	delete mapdata;
+
 	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
 	WsafilePtr radar(new Wsafile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPA.SHP", &len);
@@ -76,12 +77,6 @@ DataCache::DataCache() {
 	ShpfilePtr pieces(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
 	ShpfilePtr arrows(new Shpfile(data, len));
- 
-
-//	Anim[Anim_OrdosPlanet]->setFrameRate(12);
-/*    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
-	WsafilePtr ordosplanet (new Wsafile(data, len));
-*/
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
 	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
@@ -317,6 +312,7 @@ DataCache::DataCache() {
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
+	delete data;
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
