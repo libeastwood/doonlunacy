@@ -15,10 +15,11 @@ DataCache::DataCache() {
     uint8_t * mapdata;
 
 
+	// FIXM: Something seems to be fscked up with this palette, the Bene Gesserit
+	// mentat ends up looking a bit unhealthy greenish, needs to be corrected!
 	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
 	Palettefile tmp (data, len);
 	SDL_Palette * pal = tmp.getPalette();
-
 	
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
