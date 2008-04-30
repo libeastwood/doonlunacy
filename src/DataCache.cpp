@@ -31,8 +31,8 @@ void DataCache::Init(){
     addPalette(BENE_PAL, "DUNE:BENE.PAL");
     // For some reason things crashes if we fetch the palette and use it here.. :/
     data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
-    Palettefile tmp (data, len);
-    SDL_Palette * pal = tmp.getPalette();
+    PalettefilePtr tmp(new Palettefile(data, len));
+    SDL_Palette * pal = tmp->getPalette();
 
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
     addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
@@ -63,7 +63,7 @@ void DataCache::Init(){
 	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
 	ShpfilePtr menshpo(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
-	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));
+	ShpfilePtr menshpm(new Shpfile(data, len, pal)); //getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
 	ShpfilePtr choam(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
@@ -81,7 +81,7 @@ void DataCache::Init(){
     data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));
+	CpsfilePtr mentatm (new Cpsfile(data, len, pal)); //getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 	ShpfilePtr mentat (new Shpfile(data, len));
 
@@ -435,9 +435,9 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 {
     int len;
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
-    Palettefile tmp (data, len);
+    PalettefilePtr tmp (new Palettefile(data, len));
 
-    SDL_Palette * pal = tmp.getPalette();
+    SDL_Palette * pal = tmp->getPalette();
     m_palette[palette] = pal;
 }
 
