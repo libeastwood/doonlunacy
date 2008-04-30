@@ -433,7 +433,11 @@ void DataCache::addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house) {
 
 ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
-    images::iterator iter = m_objImg[house]->find(ID);
+    images::iterator iter;
+#ifdef THREADS
+	spinlock:
+#endif	
+	iter = m_objImg[house]->find(ID);
     if (iter != m_objImg[house]->end())
     { 
         return m_objImg[house]->find(ID)->second;
@@ -441,6 +445,10 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
     else
     {
         ImagePtr source = m_objImg[house]->find(ID)->second;
+#ifdef THREADS
+		if (source == NULL)
+			goto spinlock;
+#endif
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
         return copy;
@@ -450,14 +458,23 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
 ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
 
-    images::iterator iter = m_guiImg[house]->find(ID);
+    images::iterator iter;
+#ifdef THREADS
+	spinlock:
+#endif
+	iter = m_guiImg[house]->find(ID);
     if (iter != m_guiImg[house]->end())
     { 
         return m_guiImg[house]->find(ID)->second;
     }
     else
     {
+
         ImagePtr source = m_guiImg[house]->find(ID)->second;
+#ifdef THREADS
+		if (source == NULL)
+			goto spinlock;
+#endif
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
         return copy;
