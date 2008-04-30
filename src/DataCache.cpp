@@ -489,7 +489,7 @@ void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 void DataCache::addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum)
 {
 	songFiles[musicType].push_back(songFile(filename, trackNum));
-#ifdef __linux__
+#ifdef THREADS
 	addMusic(musicType, songFiles[musicType].size()-1);
 #endif
 }
