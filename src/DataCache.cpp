@@ -429,7 +429,7 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
     PalettefilePtr tmp (new Palettefile(data, len));
 
-    m_palette[palette] = tmp; //pal;
+    m_palette[palette] = tmp;
 }
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
@@ -581,6 +581,7 @@ Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
 	}
 	
 	SDL_RWclose(rwop);
+	delete data;
 	return returnChunk;
 }
 
