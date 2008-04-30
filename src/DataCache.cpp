@@ -206,22 +206,100 @@ void DataCache::Init(){
 	addAnimation(Anim_Sardaukar, "MENTAT:SARDUKAR.WSA");
 	addAnimation(Anim_Frigate, "MENTAT:FRIGATE.WSA");
 
-	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
-		
-	addGuiPic(UI_MentatYes, mentat->getPicture(0));
-	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
-	addGuiPic(UI_MentatNo, mentat->getPicture(2));
-	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
+//	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
+	addGuiPic(UI_CursorShape, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
+//	SDL_SetColorKey(addGuiPic(UI_CursorShape][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
+																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
+//	addGuiPic(UI_GameBar, PicFactory->createGameBar();
+	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
+//	SDL_SetColorKey(addGuiPic(UI_Indicator][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+//	addGuiPic(UI_InvalidPlace, PicFactory->createInvalidPlace();
+//	addGuiPic(UI_ValidPlace, PicFactory->createValidPlace();
+//	addGuiPic(UI_MenuBackground, PicFactory->createMainBackground();
+//	addGuiPic(UI_Background, PicFactory->createBackground();
+//	addGuiPic(UI_SelectionBox, SDL_LoadBMP_RW(pFileManager->OpenFile("UI_SelectionBox.bmp"),true);
+//	SDL_SetColorKey(addGuiPic(UI_SelectionBox][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+//	addGuiPic(UI_TopBar, PicFactory->createTopBar();
+	addGuiPic(UI_ButtonUp, choam->getPicture(0));
+	addGuiPic(UI_ButtonUp_Pressed, choam->getPicture(1));
+	addGuiPic(UI_ButtonDown, choam->getPicture(2));
+	addGuiPic(UI_ButtonDown_Pressed, choam->getPicture(3));
+//	addGuiPic(UI_MessageBox, PicFactory->createMessageBoxBorder();
+	addGuiPic(UI_Mentat, bttn->getPicture(0));
+	addGuiPic(UI_Mentat_Pressed, bttn->getPicture(1));
+	addGuiPic(UI_Options, bttn->getPicture(2));
+	addGuiPic(UI_Options_Pressed, bttn->getPicture(3));
+	addGuiPic(UI_Upgrade, choam->getPicture(4));
+//	SDL_SetColorKey(addGuiPic(UI_Upgrade][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	addGuiPic(UI_Upgrade_Pressed, choam->getPicture(5));
+//	SDL_SetColorKey(addGuiPic(UI_Upgrade_Pressed][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+//	addGuiPic(UI_Repair, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_Repair.bmp"),true);
+//	addGuiPic(UI_Repair_Pressed, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_RepairPushed.bmp"),true);
+//	addGuiPic(UI_Difficulty, SDL_LoadBMP_RW(pFileManager->OpenFile("Menu_Difficulty.bmp"),true);
+//	SDL_Rect dest1 = { 0,0,addGuiPic(UI_Difficulty][HOUSE_HARKONNEN]->w,30};
+//	PicFactory->drawFrame(addGuiPic(UI_Difficulty][HOUSE_HARKONNEN],PictureFactory::DecorationFrame1,&dest1);
+//	SDL_SetColorKey(addGuiPic(UI_Difficulty][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+//	addGuiPic(UI_Dif_Easy, SDL_LoadBMP_RW(pFileManager->OpenFile("Difficulty_Easy.bmp"),true);
+//	addGuiPic(UI_Dif_Hard, SDL_LoadBMP_RW(pFileManager->OpenFile("Difficulty_Hard.bmp"),true);
+//	addGuiPic(UI_Dif_Medium, SDL_LoadBMP_RW(pFileManager->OpenFile("Difficulty_Medium.bmp"),true);
+//	addGuiPic(UI_Minus, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_Minus.bmp"),true);
+//	addGuiPic(UI_Minus_Pressed, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_MinusPushed.bmp"),true);
+//	addGuiPic(UI_Plus,  SDL_LoadBMP_RW(pFileManager->OpenFile("Button_Plus.bmp"),true);
+//	addGuiPic(UI_Plus_Pressed, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_PlusPushed.bmp"),true);
+//	addGuiPic(UI_MissionSelect, SDL_LoadBMP_RW(pFileManager->OpenFile("Menu_MissionSelect.bmp"),true);
+//	PicFactory->drawFrame(addGuiPic(UI_MissionSelect][HOUSE_HARKONNEN],PictureFactory::SimpleFrame,NULL);
+//	SDL_SetColorKey(addGuiPic(UI_MissionSelect][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+//	addGuiPic(UI_OptionsMenu, PicFactory->createOptionsMenu();
+//	SDL_Surface* tmp;
+//	if((tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,192,27,8,0,0,0,0)) == NULL) {
+//		fprintf(stderr,"DataManager::DataManager(): Cannot create surface!\n");
+//		exit(EXIT_FAILURE);	
+//	}
+//	SDL_SetColors(tmp, palette->colors, 0, palette->ncolors);
+//	SDL_FillRect(tmp,NULL,133);
+//	addGuiPic(UI_LoadSaveWindow, PicFactory->createMenu(tmp,208);
+//	SDL_FreeSurface(tmp);
+//	addGuiPic(UI_DuneLegacy, SDL_LoadBMP_RW(pFileManager->OpenFile("DuneLegacy.bmp"),true);
+//	addGuiPic(UI_GameMenu, PicFactory->createMenu(addGuiPic(UI_DuneLegacy][HOUSE_HARKONNEN],158);
+//	PicFactory->drawFrame(addGuiPic(UI_DuneLegacy][HOUSE_HARKONNEN],PictureFactory::SimpleFrame);
+
+	addGuiPic(UI_PlanetBackground, bigplan->getPicture());
+//	PicFactory->drawFrame(addGuiPic(UI_PlanetBackground, PictureFactory::SimpleFrame);
+//	addGuiPic(UI_MenuButtonBorder, PicFactory->createFrame(PictureFactory::DecorationFrame1,190,123,false);
+
+//	PicFactory->drawFrame(addGuiPic(UI_DuneLegacy, PictureFactory::SimpleFrame);
 
 	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ATREIDES);
 	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_FREMEN);
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_ORDOS);
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
 	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
-
-	//addAnimation(Anim_OrdosPlanet, ordosplanet);
-
 	addGuiPic(UI_MentatBackground, mentatm->getPicture(), HOUSE_SARDAUKAR);
+	addGuiPic(UI_MentatYes, mentat->getPicture(0));
+	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
+	addGuiPic(UI_MentatNo, mentat->getPicture(2));
+	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
+	addGuiPic(UI_MentatExit,mentat->getPicture(4));
+	addGuiPic(UI_MentatExit_Pressed, mentat->getPicture(5));
+	addGuiPic(UI_MentatProcced, mentat->getPicture(6));
+	addGuiPic(UI_MentatProcced_Pressed, mentat->getPicture(7));
+	addGuiPic(UI_MentatRepeat, mentat->getPicture(8));
+	addGuiPic(UI_MentatRepeat_Pressed, mentat->getPicture(9));
+	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
+//	addGuiPic(UI_HouseSelect, PicFactory->createHouseSelect(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN]);
+//	addGuiPic(UI_HeraldAtre_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],20,54,83,91);
+//	addGuiPic(UI_HeraldOrd_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],117,54,83,91);
+//	addGuiPic(UI_HeraldHark_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],215,54,82,91);
+
+//	addGuiPic(UI_MapChoiceScreen,[HOUSE_ATREIDES] = PicFactory->createMapChoiceScreen(HOUSE_ATREIDES);
+//	addGuiPic(UI_MapChoiceScreen,[HOUSE_ORDOS] = PicFactory->createMapChoiceScreen(HOUSE_ORDOS);
+//	addGuiPic(UI_MapChoiceScreen,[HOUSE_HARKONNEN] = PicFactory->createMapChoiceScreen(HOUSE_HARKONNEN);
+	addGuiPic(UI_MapChoiceMapOnly,dunemap->getPicture());
+//	SDL_SetColorKey(m_guiImgUIGraphic,UI_MapChoiceMapOnly][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	addGuiPic(UI_MapChoiceMap, dunergn->getPicture());
+//	SDL_SetColorKey(UIGraphic,UI_MapChoiceMap][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	addGuiPic(UI_MapChoiceClickMap, rgnclk->getPicture());
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
