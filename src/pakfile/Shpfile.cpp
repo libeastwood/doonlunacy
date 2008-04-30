@@ -1,12 +1,9 @@
-#include "Application.h"
-
+#include "DataCache.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Animation.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string.h>
-
-//extern SDL_Palette* palette;
 
 Shpfile::Shpfile(unsigned char * bufFiledata, int bufsize, SDL_Palette * palette) : Decode()
 {
@@ -15,7 +12,7 @@ Shpfile::Shpfile(unsigned char * bufFiledata, int bufsize, SDL_Palette * palette
 	Index = NULL;
 	readIndex();
 	if (palette == NULL)
-		m_palette = Application::Instance()->Screen()->getSurface()->format->palette;
+		m_palette = DataCache::Instance()->getPalette(IBM_PAL);
 	else
 		m_palette = palette;
 }

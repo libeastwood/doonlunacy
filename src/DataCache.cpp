@@ -429,7 +429,7 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
     PalettefilePtr tmp (new Palettefile(data, len));
 
-    m_palette[palette] = tmp;
+    m_palette[palette] = tmp; //pal;
 }
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
@@ -438,12 +438,12 @@ SDL_Palette* DataCache::getPalette(Palette_enum palette)
 #ifdef THREADS
     spinlock:
 #endif
-    pal = m_palette[palette];
+//    pal = m_palette[palette];
 #ifdef THREADS
-    if(pal == NULL)
+    if(!m_palette[palette]->getPalette())
         goto spinlock;
 #endif
-    return pal->getPalette();
+    return m_palette[palette]->getPalette();
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
@@ -619,7 +619,7 @@ void DataCache::addAnimation(Animation_enum ID, std::string fileName, double fra
 	int len;
     uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
     WsafilePtr wsafile(new Wsafile(data, len));
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+    SDL_Palette* palette = getPalette(IBM_PAL);
 	
 	Animation* animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
 	if(frameRate)

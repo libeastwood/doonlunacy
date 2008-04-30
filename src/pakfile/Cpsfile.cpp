@@ -1,6 +1,6 @@
 #include "pakfile/Cpsfile.h"
 #include <SDL_endian.h>
-#include "Application.h"
+#include "DataCache.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -12,7 +12,7 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize, SDL_Palette* palette)
 	Filedata = bufFiledata;
 	CpsFilesize = bufsize;
 	if (palette == NULL)
-		m_palette = Application::Instance()->Screen()->getSurface()->format->palette;
+		m_palette = DataCache::Instance()->getPalette(IBM_PAL);
 	else
 		m_palette = palette;
 }
