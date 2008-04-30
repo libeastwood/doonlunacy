@@ -35,15 +35,11 @@
 
 #define VERSION "0.94.1"
 
-#ifdef __linux__
-#  define _P __P
-#include <pthread.h>
+#ifdef THREADS
 #include "DataCache.h"
-extern "C" void *dataCacheThread(void * arg);
-
 void *dataCacheThread(void * arg)
 {
-	DataCache::Instance();
+	DataCache::Instance()->Init();
 	return NULL;
 }
 
@@ -325,24 +321,10 @@ void Application::LoadData()
     fprintf(stdout, "starting sound...\n");
     SoundPlayerClass* soundPlayer = new SoundPlayerClass();
 
-	//Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
-//	myChunk = DataCache::Instance()->getMusic(MUSIC_PEACE, 0);
-
-	//soundPlayer->playSound(myChunk);
-}
-#if 0
-extern "C" void *testis(void * arg);
-
-void *testis(void * arg){
-    fprintf(stdout, "starting sound...\n");
-    SoundPlayerClass* soundPlayer = new SoundPlayerClass();
 	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
-//	myChunk = DataCache::Instance()->getMusic(MUSIC_PEACE, 0);
-
 	soundPlayer->playSound(myChunk);
-	return NULL;
 }
-#endif
+
 void Application::Die()
 {
     FontManager::Destroy();

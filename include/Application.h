@@ -2,12 +2,18 @@
 #define DUNE_APPLICATION_H
 
 #include "singleton.h"
-#include "State.h"
 #include "SDL.h"
 #include "gui2/Container.h"
 
 #include "State.h"
 #include "TopLevelState.h"
+
+#ifdef __linux__
+#define THREADS 1
+#include <pthread.h>
+extern "C" void *dataCacheThread(void * arg);
+#endif
+
 typedef enum
 {
 	CURSOR_NORMAL,
@@ -55,6 +61,7 @@ class Application : public Singleton<Application>
         void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
         
     private:
+//		void *testis(void * arg);
         void InitSettings();
         void InitAudio();
         void InitNet();
@@ -84,9 +91,4 @@ class Application : public Singleton<Application>
 
 
 #endif // DUNE_APPLICATION_H
-
-
-
-
-
 

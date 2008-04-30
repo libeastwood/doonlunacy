@@ -419,7 +419,7 @@ Mix_Chunk* DataCache::addMusic(MUSICTYPE musicType, uint16_t ID)
 Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
     music::iterator iter;
-#ifdef __linux__
+#ifdef THREADS
 	spinlock:
 #endif
 	iter = m_music[musicType]->find(ID);
@@ -429,7 +429,7 @@ Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
     }
     else
     {
-#ifdef	__linux__
+#ifdef	THREADS
 		goto spinlock;
 #endif
 		return addMusic(musicType, ID);
