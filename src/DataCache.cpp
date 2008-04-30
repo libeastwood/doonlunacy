@@ -5,9 +5,6 @@
 #include <iostream>
 
 DataCache::DataCache() {
-	for(uint8_t i = 0; i < NUM_PALETTES; i++)
-		m_palette[i] = NULL;
-
 }
 
 void DataCache::Init(){
@@ -29,11 +26,6 @@ void DataCache::Init(){
     // FIXME: Something seems to be fscked up with this palette, the Bene Gesserit
     // mentat ends up looking a bit unhealthy greenish, needs to be corrected!
     addPalette(BENE_PAL, "DUNE:BENE.PAL");
-    // For some reason things crashes if we fetch the palette and use it here.. :/
-    data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
-    PalettefilePtr tmp(new Palettefile(data, len));
-    SDL_Palette * pal = tmp->getPalette();
-
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
     addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
 
@@ -63,7 +55,7 @@ void DataCache::Init(){
 	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
 	ShpfilePtr menshpo(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
-	ShpfilePtr menshpm(new Shpfile(data, len, pal)); //getPalette(BENE_PAL)));
+	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
 	ShpfilePtr choam(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
@@ -81,7 +73,7 @@ void DataCache::Init(){
     data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-	CpsfilePtr mentatm (new Cpsfile(data, len, pal)); //getPalette(BENE_PAL)));
+	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 	ShpfilePtr mentat (new Shpfile(data, len));
 
@@ -437,13 +429,12 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
     PalettefilePtr tmp (new Palettefile(data, len));
 
-    SDL_Palette * pal = tmp->getPalette();
-    m_palette[palette] = pal;
+    m_palette[palette] = tmp; //pal;
 }
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
 {
-    SDL_Palette* pal;
+    PalettefilePtr pal;
 #ifdef THREADS
     spinlock:
 #endif
@@ -452,7 +443,7 @@ SDL_Palette* DataCache::getPalette(Palette_enum palette)
     if(pal == NULL)
         goto spinlock;
 #endif
-    return pal;
+    return pal->getPalette();
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {

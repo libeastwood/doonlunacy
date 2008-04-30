@@ -439,7 +439,7 @@ class DataCache : public Singleton<DataCache>
         remapped_images m_guiImg;
 		remapped_music m_music;
 		std::vector<songFile> songFiles[MUSIC_RANDOM];
-		SDL_Palette* m_palette[NUM_PALETTES];
+		PalettefilePtr m_palette[NUM_PALETTES];
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
