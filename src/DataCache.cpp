@@ -408,7 +408,6 @@ Mix_Chunk* DataCache::addMusic(MUSICTYPE musicType, uint16_t ID)
 	CadlPlayer *p = new CadlPlayer(test);
 	Mix_Chunk* tmp = p->getUpsampledSubsong(song.second, 22050, AUDIO_S16LSB, 1);
 	SDL_RWclose(test);
-	std::cout << "ferdig" << std::endl;
     m_music[musicType]->insert(std::pair<uint16_t, Mix_Chunk*>(ID, tmp));
 	delete data;
 	delete p;
@@ -427,11 +426,9 @@ Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
     else
     {
 #ifdef	__linux__
-		std::cout << "NULL" << std::endl;
-		exit(1);
 		return NULL;
 #endif
-//		return addMusic(musicType, ID);
+		return addMusic(musicType, ID);
     }
 }
 
