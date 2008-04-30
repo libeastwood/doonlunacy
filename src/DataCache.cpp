@@ -605,10 +605,20 @@ Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
 }
 
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
+#ifdef THREADS
+	spinlock:
+	if(!BriefingStrings[house])
+		goto spinlock;
+#endif
 	return BriefingStrings[house]->getString(mission,textType);
 }
 
 std::string	DataCache::getIntroString(uint16_t i){
+#ifdef THREADS
+	spinlock:
+	if(!IntroStrings)
+		goto spinlock;
+#endif
 	return IntroStrings->getString(i);
 }
 
