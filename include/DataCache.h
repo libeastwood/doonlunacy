@@ -403,6 +403,7 @@ class DataCache : public Singleton<DataCache>
 	~DataCache();
 
 	public:
+		void Init();
         void addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
         void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
 		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);
