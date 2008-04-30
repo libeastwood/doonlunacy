@@ -204,12 +204,7 @@ void Application::InitNet()
 
 void Application::SetPalette()
 {
-    int len;
-    unsigned char* data = ResMan::Instance()->readFile("INTRO:INTRO.PAL", &len);
-    
-    Palettefile tmp (data, len);
-
-    SDL_Palette * pal = tmp.getPalette();
+    SDL_Palette * pal = DataCache::Instance()->getPalette(INTRO_PAL);
     
     //This fixes white wheels. Is palette broken or sth??
 
@@ -308,15 +303,7 @@ void Application::LoadData()
 
 
     SetPalette();
-    int len;
-    
-    unsigned char * data;
-
-    data = ResMan::Instance()->readFile("DUNE:MOUSE.SHP", &len);
-
-    Shpfile mouse (data, len);
-
-    m_cursor.reset(mouse.getPicture(0));
+    m_cursor.reset(DataCache::Instance()->getGuiPic(UI_MouseCursor).get()); //mouse.getPicture(0));
 
     fprintf(stdout, "starting sound...\n");
     SoundPlayerClass* soundPlayer = new SoundPlayerClass();

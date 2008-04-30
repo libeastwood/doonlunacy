@@ -4,7 +4,11 @@
 #include <string>
 #include <iostream>
 
-DataCache::DataCache() {}
+DataCache::DataCache() {
+	for(uint8_t i = 0; i < NUM_PALETTES; i++)
+		m_palette[i] = NULL;
+
+}
 
 void DataCache::Init(){
     for (uint8_t i=0; i< NUM_HOUSES; i++)
@@ -21,13 +25,19 @@ void DataCache::Init(){
     uint8_t *data, *mapdata;
     
 
+    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
+    // FIXME: Something seems to be fscked up with this palette, the Bene Gesserit
+    // mentat ends up looking a bit unhealthy greenish, needs to be corrected!
+    addPalette(BENE_PAL, "DUNE:BENE.PAL");
+    // For some reason things crashes if we fetch the palette and use it here.. :/
+    data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
+    Palettefile tmp (data, len);
+    SDL_Palette * pal = tmp.getPalette();
 
-	// FIXM: Something seems to be fscked up with this palette, the Bene Gesserit
-	// mentat ends up looking a bit unhealthy greenish, needs to be corrected!
-	data = ResMan::Instance()->readFile("DUNE:BENE.PAL", &len);
-	Palettefile tmp (data, len);
-	SDL_Palette * pal = tmp.getPalette();
-	
+    addPalette(IBM_PAL, "DUNE:IBM.PAL");
+    addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
+
+
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
     ShpfilePtr units(new Shpfile(data, len));
@@ -53,7 +63,7 @@ void DataCache::Init(){
 	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
 	ShpfilePtr menshpo(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
-	ShpfilePtr menshpm(new Shpfile(data, len, pal));
+	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
 	ShpfilePtr choam(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
@@ -71,7 +81,7 @@ void DataCache::Init(){
     data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-	CpsfilePtr mentatm (new Cpsfile(data, len, pal));
+	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 	ShpfilePtr mentat (new Shpfile(data, len));
 
@@ -395,6 +405,10 @@ void DataCache::Init(){
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
+	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
+	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
+	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
+
 	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6);
@@ -413,11 +427,32 @@ void DataCache::Init(){
 	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 4);
 	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
 
-	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
-	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
-	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
 	delete data;
 
+}
+
+void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
+{
+    int len;
+    uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
+    Palettefile tmp (data, len);
+
+    SDL_Palette * pal = tmp.getPalette();
+    m_palette[palette] = pal;
+}
+
+SDL_Palette* DataCache::getPalette(Palette_enum palette)
+{
+    SDL_Palette* pal;
+#ifdef THREADS
+    spinlock:
+#endif
+    pal = m_palette[palette];
+#ifdef THREADS
+    if(pal == NULL)
+        goto spinlock;
+#endif
+    return pal;
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
@@ -437,7 +472,7 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
     images::iterator iter;
 #ifdef THREADS
 	spinlock:
-#endif	
+#endif
 	iter = m_objImg[house]->find(ID);
     if (iter != m_objImg[house]->end())
     { 

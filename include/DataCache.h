@@ -23,7 +23,7 @@
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
 class Animation;
-
+//class SDL_Palette;
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
 typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
@@ -34,6 +34,13 @@ typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was 
 			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
 			 } MUSICTYPE;
 
+typedef enum {
+	INTRO_PAL,
+	BENE_PAL,
+	IBM_PAL,
+	WESTWOOD_PAL,
+	NUM_PALETTES
+} Palette_enum;
 
 // ObjPics
 typedef enum {
@@ -411,6 +418,8 @@ class DataCache : public Singleton<DataCache>
 		void addAnimation(Animation_enum ID, Animation* animation, double frameRate = 0);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
 		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum);
+		void addPalette(Palette_enum palette, std::string paletteFile);
+		SDL_Palette* getPalette(Palette_enum palette);
 		Mix_Chunk* addMusic(MUSICTYPE musicType, uint16_t ID);		
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
@@ -430,6 +439,7 @@ class DataCache : public Singleton<DataCache>
         remapped_images m_guiImg;
 		remapped_music m_music;
 		std::vector<songFile> songFiles[MUSIC_RANDOM];
+		SDL_Palette* m_palette[NUM_PALETTES];
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
