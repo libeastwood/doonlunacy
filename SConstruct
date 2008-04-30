@@ -36,7 +36,6 @@ else:
 	env.Append(CCFLAGS = ["/O2", "/EHsc", "/MD", "/Op", "/DEBUG", "/Zi", "/GR"])
 
 env.Append(LIBS = [ 	"SDL",
-                        "SDL_mixer", 
                     	"SDL_image",
                     	"SDL_net",
                     	"SDL_ttf",
