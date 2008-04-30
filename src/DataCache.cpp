@@ -397,6 +397,7 @@ void DataCache::Init(){
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
+	IntroStrings = new Stringfile("ENGLISH:INTRO.ENG");
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
@@ -434,13 +435,9 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
 {
-    PalettefilePtr pal;
 #ifdef THREADS
     spinlock:
-#endif
-//    pal = m_palette[palette];
-#ifdef THREADS
-    if(!m_palette[palette]->getPalette())
+    if(!m_palette[palette])
         goto spinlock;
 #endif
     return m_palette[palette]->getPalette();
@@ -611,9 +608,9 @@ std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUS
 	return BriefingStrings[house]->getString(mission,textType);
 }
 
-/*std::string	DataCache::getBriefingText(int i){
-	return BriefingStrings[0]->getString(i);
-}*/
+std::string	DataCache::getIntroString(uint16_t i){
+	return IntroStrings->getString(i);
+}
 
 void DataCache::addAnimation(Animation_enum ID, std::string fileName, double frameRate) {
 	int len;

@@ -3,13 +3,22 @@
 
 #include "Gfx.h"
 #include "State.h"
+
 #include "gui2/Button.h"
 #include "pakfile/Wsafile.h"
+#include "DataCache.h"
 
 #include "SDL.h"
+
 #include <list>
 #include <string>
 
+typedef std::pair <uint16_t, std::string> introText;
+
+class StringFile;
+class Button;
+class Label;
+class Container;
 class IntroState : public State 
 {
    
@@ -30,7 +39,8 @@ class IntroState : public State
                 HOLDING
             };
         
-            Frame(std::string file, Transition in, Transition out, bool cont); 
+            Frame(std::string file, Transition in, Transition out, std::vector<introText> introStrings, bool cont, Palette_enum pal = INTRO_PAL);
+			~Frame();
             
             bool Execute(float ft);
             void Load(Frame* lastframe);
@@ -52,6 +62,11 @@ class IntroState : public State
 
             ImagePtr m_animSurface, m_scaledSurface;
             SDL_Color* m_transitionPalette;
+			Label* m_subText;
+			Container* m_container;
+			std::vector<introText> m_introStrings;
+			SDL_Palette* m_palette;
+
 
             void setupTransitionIn();
             void setupTransitionOut();
@@ -66,6 +81,7 @@ class IntroState : public State
     
     
     typedef std::list<Frame*> IntroList;
+
     
     
     public:
@@ -81,14 +97,17 @@ class IntroState : public State
         bool next();
         void load(Frame frame);
         virtual const char* GetName() { return "IntroState"; }
+		StringFile* m_introStringFile;
 
     private:
-
         IntroList m_wsaNames;
 
         TranspButton *m_butIntro;
 
         Frame* m_currentFrame;
+		std::vector<introText> m_introStrings;
+		
+//		Font* font;
 };
 
 

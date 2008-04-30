@@ -1,17 +1,21 @@
 #include "IntroState.h"
 #include "ResMan.h"
 #include "Application.h"
+#include "DataCache.h"
 #include "Gfx.h"
 #include "Settings.h"
 #include "pakfile/Palette.h"
 #include "boost/bind.hpp"
+#include "gui2/Label.h"
+#include "gui2/Container.h"
 
 // ------------------------------------------------------------------
 // IntroState::Frame
 
 IntroState::Frame::Frame(std::string filename, 
                             Transition in, Transition out,
-                            bool continuation)
+						 	std::vector<introText> introStrings,
+                            bool continuation, Palette_enum pal)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -21,16 +25,25 @@ IntroState::Frame::Frame(std::string filename,
     m_state = TRANSITION_IN;
     m_hold = 0.0f;
     m_transitionPalette = NULL;
+	m_introStrings = introStrings;
+	m_container = new Container();
+//    m_container->setPosition(UPoint(250, 400));
+    m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
+								Settings::Instance()->GetHeight()));
+	m_palette = DataCache::Instance()->getPalette(pal);
+    
+    Application::Instance()->RootWidget()->addChild(m_container);
+
 }
 
 void IntroState::Frame::Load(Frame* lastframe)
 {
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+//    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
 
     printf("intro loading %s\n", m_filename.c_str());
     
     int len;
-    unsigned char* data = ResMan::Instance()->readFile(m_filename, &len);
+    uint8_t * data = ResMan::Instance()->readFile(m_filename, &len);
 
     assert(data != NULL);
 
@@ -47,9 +60,13 @@ void IntroState::Frame::Load(Frame* lastframe)
     m_currentFrame = 0;
     mb_finished = false;
 
-    m_animSurface.reset(m_wsa->getPicture(m_currentFrame, palette));
+    m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
-    
+	if(m_introStrings.size() > 0){
+		m_subText = new Label(m_introStrings[0].second, 49, 0);
+		m_container->setPosition(UPoint(50, 420));
+		m_container->addChild(m_subText);
+	}    
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -82,8 +99,6 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
-    
     m_frametime += dt;
 
     if (m_frametime > m_wsa->getFPS())
@@ -96,7 +111,7 @@ void IntroState::Frame::doPlaying(float dt)
         }
         else
         {
-            m_animSurface.reset(m_wsa->getPicture(m_currentFrame, palette));
+            m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
             m_scaledSurface = m_animSurface->getResized(2.0);
         };
     };
@@ -118,8 +133,8 @@ void IntroState::Frame::doTransitionIn(float dt)
 void IntroState::Frame::setupTransitionOut()
 {
     m_transitionPalette = new SDL_Color[256];
-    memcpy((unsigned char*)m_transitionPalette, 
-            Application::Instance()->Screen()->getSurface()->format->palette->colors,
+    memcpy((unsigned char*)m_transitionPalette,
+			m_palette->colors,
             sizeof(SDL_Color) * 256);
 }
 
@@ -139,7 +154,7 @@ void IntroState::Frame::doTransitionOut(float dt)
     if (m_transitionPalette == NULL) setupTransitionOut();
     
     bool done = true;
-    SDL_Surface* screen = m_scaledSurface->getSurface(); //Application::Instance()->Screen();
+    SDL_Surface* screen = m_scaledSurface->getSurface();
     SDL_Color* col = m_transitionPalette;
 
     const int fadeAmt = 3;
@@ -156,7 +171,6 @@ void IntroState::Frame::doTransitionOut(float dt)
         }
     };
 
-    //SDL_SetPalette(screen, SDL_LOGPAL|SDL_PHYSPAL, m_tempPal, 0, 256);
     SDL_SetPalette(screen, SDL_LOGPAL, m_transitionPalette, 0, 256);
 
     if (done)
@@ -171,73 +185,138 @@ void IntroState::Frame::doHolding(float dt)
     m_state = TRANSITION_OUT;
 }
 
+IntroState::Frame::~Frame()
+{
+	m_container->deleteChild(m_subText);
+}
 // ------------------------------------------------------------------
 // IntroState
 
 IntroState::IntroState()
 {
-	m_currentFrame = NULL;
+	m_introStrings.push_back(introText(0, "Original copyright by:"));
+    enque( new Frame("INTRO:WESTWOOD.WSA",  
+                     Frame::NO_TRANSITION, 
+                     Frame::NO_TRANSITION,
+					 m_introStrings,
+                     false, WESTWOOD_PAL) );
+	m_introStrings.clear();
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(2)));
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
+
     enque( new Frame("INTRO:INTRO2.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(4)));
+
     enque( new Frame("INTRO:INTRO3.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
-    enque( new Frame("INTRO:INTRO4.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false) );
-    enque( new Frame("INTRO:INTRO5.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false) );
-    enque( new Frame("INTRO:INTRO6.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false) ); 
-    enque( new Frame("INTRO:INTRO7A.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     false) );
-    enque( new Frame("INTRO:INTRO7B.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     true) );
-    enque( new Frame("INTRO:INTRO8A.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     false) );
-    enque( new Frame("INTRO:INTRO8B.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     true) );
-    enque( new Frame("INTRO:INTRO8C.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     true) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(5)));
+
     enque( new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
-    enque( new Frame("INTRO:INTRO10.WSA", 
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(6)));
+
+    enque( new Frame("INTRO:INTRO10.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
-    enque( new Frame("INTRO:INTRO11.WSA", 
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(7)));
+
+    enque( new Frame("INTRO:INTRO11.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
+                     false) ); 
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(8)));
+
+    enque( new Frame("INTRO:INTRO4.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+					 m_introStrings,
+                     false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(9)));
+
+    enque( new Frame("INTRO:INTRO6.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+					 m_introStrings,
+                     false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(10)));
+
+    enque( new Frame("INTRO:INTRO7A.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::NO_TRANSITION,
+					 m_introStrings,
+                     false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(11)));
+
+    enque( new Frame("INTRO:INTRO7B.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+					 m_introStrings,
+                     true) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(12)));
+
+    enque( new Frame("INTRO:INTRO8A.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::NO_TRANSITION,
+					 m_introStrings,
+                     false) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(13)));
+
+    enque( new Frame("INTRO:INTRO8B.WSA",  
+                     Frame::NO_TRANSITION, 
+                     Frame::NO_TRANSITION,
+					 m_introStrings,
+                     true) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(14)));
+
+    enque( new Frame("INTRO:INTRO8C.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+					 m_introStrings,
+                     true) );
+	m_introStrings.clear();
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(15)));
+
+    enque( new Frame("INTRO:INTRO5.WSA", 
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
     // seems nice to play this again ;)
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
+					 m_introStrings,
                      false) );
 
     next();
