@@ -4,7 +4,8 @@
 //#include "SDL_ttf.h"
 //#include "SDL_net.h"
 #include "SDL_mixer.h"
-
+#include "SDL_rwops.h"
+#include "pakfile/sound/adl/adl.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -33,6 +34,20 @@
 #include "houses.h"
 
 #define VERSION "0.94.1"
+
+#ifdef __linux__
+#  define _P __P
+#include <pthread.h>
+#include "DataCache.h"
+extern "C" void *dataCacheThread(void * arg);
+
+void *dataCacheThread(void * arg)
+{
+	DataCache::Instance();
+	return NULL;
+}
+
+#endif
 
 Uint8 gpaloff;
 
@@ -287,6 +302,14 @@ void Application::LoadData()
     ResMan::Instance()->addRes("VOC");
     ResMan::Instance()->addRes("XTRE");
     printf("done loading resources\n");
+#ifdef __linux__
+    pthread_t threads[1];
+    pthread_create(&threads[0],
+			NULL,
+			dataCacheThread,
+			NULL);
+#endif
+
 
     SetPalette();
     int len;
@@ -301,10 +324,25 @@ void Application::LoadData()
 
     fprintf(stdout, "starting sound...\n");
     SoundPlayerClass* soundPlayer = new SoundPlayerClass();
-//	Mix_Chunk* sound = DataCache::Instance()->concat2Chunks(Intro_TheBuilding, Intro_OfADynasty);
-//	soundPlayer->playSound(sound);
-}
 
+	//Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
+//	myChunk = DataCache::Instance()->getMusic(MUSIC_PEACE, 0);
+
+	//soundPlayer->playSound(myChunk);
+}
+#if 0
+extern "C" void *testis(void * arg);
+
+void *testis(void * arg){
+    fprintf(stdout, "starting sound...\n");
+    SoundPlayerClass* soundPlayer = new SoundPlayerClass();
+	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
+//	myChunk = DataCache::Instance()->getMusic(MUSIC_PEACE, 0);
+
+	soundPlayer->playSound(myChunk);
+	return NULL;
+}
+#endif
 void Application::Die()
 {
     FontManager::Destroy();
@@ -327,14 +365,15 @@ void Application::Run()
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
 
-    //Font* fnt = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+//    Font* fnt = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     
     m_running = true;
 
     assert(m_rootWidget != NULL);
 
     gpaloff = 0 ;
-    
+
+
     while (m_running)
     {
         SDL_FillRect(m_screen->getSurface(), NULL, m_clearColor);
@@ -359,13 +398,10 @@ void Application::Run()
         m_rootWidget->draw(m_screen, SPoint(0, 0));
 
         BlitCursor();
-        
-#if 0
-        fnt->render((const char*)"ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen, 10, 10, gpaloff);
-        fnt->render((const char*)"abcdefghijklmnopqrstuvwxz", m_screen, 10, 30, gpaloff);
-#endif 
+#if 0 
+        fnt->render((const char*)"ABCDEFGHIJKLMOPQRSTUVWXYZ", m_screen->getSurface(), 10, 10, gpaloff);
+        fnt->render((const char*)"abcdefghijklmnopqrstuvwxz", m_screen->getSurface(), 10, 30, gpaloff);
 
-#if 0
         SDL_Rect pdest = {10, 10, 5, 10};
 
         for (Uint32 i=0; i!=256; i++)
@@ -373,8 +409,7 @@ void Application::Run()
             pdest.x = 7 * i;
             SDL_FillRect(m_screen->getSurface(), &pdest, i);
         }    
-#endif 
-
+#endif
         SDL_Flip(m_screen->getSurface());
 
         fps_frames ++;
