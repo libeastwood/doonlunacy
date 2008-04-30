@@ -418,7 +418,11 @@ Mix_Chunk* DataCache::addMusic(MUSICTYPE musicType, uint16_t ID)
 // If loaded, it will return the song, if not it will load and return the song.
 Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
-    music::iterator iter = m_music[musicType]->find(ID);
+    music::iterator iter;
+#ifdef __linux__
+	spinlock:
+#endif
+	iter = m_music[musicType]->find(ID);
     if (iter != m_music[musicType]->end())
     {
         return m_music[musicType]->find(ID)->second;
@@ -426,7 +430,7 @@ Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
     else
     {
 #ifdef	__linux__
-		return NULL;
+		goto spinlock;
 #endif
 		return addMusic(musicType, ID);
     }
@@ -439,9 +443,9 @@ Mix_Chunk* DataCache::getSoundChunk(Sound_enum ID){
 Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
 	Mix_Chunk* returnChunk;
 	SDL_RWops* rwop;
-	unsigned char * data;
-
 	int len;
+	uint8_t * data;
+
 	data = ResMan::Instance()->readFile(fileName.c_str(), &len);
 	if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
 		fprintf(stderr,"DataManager::getChunkFromFile(): Cannot open %s!\n",fileName.c_str());
