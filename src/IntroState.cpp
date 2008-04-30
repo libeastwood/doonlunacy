@@ -364,7 +364,7 @@ bool IntroState::next()
     nextFrame->Load(m_currentFrame);
     m_wsaNames.pop_front();
 
-    if (m_currentFrame != NULL) delete m_currentFrame;
+//    if (m_currentFrame != NULL) delete m_currentFrame;
     m_currentFrame = nextFrame;
 
     return true;
