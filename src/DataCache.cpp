@@ -208,6 +208,7 @@ void DataCache::Init(){
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
 	addGuiPic(UI_CursorShape, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
+	addGuiPic(UI_MouseCursor, mouse->getPicture(0));
 //	SDL_SetColorKey(addGuiPic(UI_CursorShape][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
 																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
@@ -444,11 +445,13 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-        ImagePtr source = m_objImg[house]->find(ID)->second;
 #ifdef THREADS
-		if (source == NULL)
+		// If house is harkonnen we know that there shouldn't be any other
+		// to look for and therefore must be that graphic hasn't been loaded yet.
+		if (house == HOUSE_HARKONNEN)
 			goto spinlock;
 #endif
+        ImagePtr source = m_objImg[house]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
         return copy;
@@ -469,12 +472,11 @@ ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-
-        ImagePtr source = m_guiImg[house]->find(ID)->second;
 #ifdef THREADS
-		if (source == NULL)
+		if (house == HOUSE_HARKONNEN)
 			goto spinlock;
 #endif
+        ImagePtr source = m_guiImg[house]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
         return copy;

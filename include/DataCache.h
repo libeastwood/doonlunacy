@@ -154,6 +154,7 @@ typedef enum {
 typedef enum {
 	UI_RadarAnimation,
 	UI_CursorShape,
+	UI_MouseCursor,
 	UI_CreditsDigits,
 	UI_GameBar,
 	UI_Indicator,
