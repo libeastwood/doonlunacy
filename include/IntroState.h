@@ -39,7 +39,7 @@ class IntroState : public State
                 HOLDING
             };
         
-            Frame(std::string file, Transition in, Transition out, std::vector<introText> introStrings, bool cont, Palette_enum pal = INTRO_PAL);
+            Frame(std::string file, Transition in, Transition out, std::vector<introText> introStrings, bool cont, int8_t song = -1, Palette_enum pal = INTRO_PAL);
 			~Frame();
             
             bool Execute(float ft);
@@ -59,6 +59,7 @@ class IntroState : public State
             WsafilePtr m_wsa; 
             int m_currentFrame;
             float m_frametime;
+			int m_song;
 
             ImagePtr m_animSurface, m_scaledSurface;
             SDL_Color* m_transitionPalette;

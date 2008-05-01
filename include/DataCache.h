@@ -431,7 +431,7 @@ class DataCache : public Singleton<DataCache>
 
 //		std::string	getBriefingText(ObjPic_enum mission, ObjPic_enum texttype, ObjPic_enum house);
 		std::string	getIntroString(uint16_t i);
-
+		std::string	getCreditsString(uint16_t i);
 
 
     private:
@@ -449,6 +449,7 @@ class DataCache : public Singleton<DataCache>
 		Animation* Anim[NUM_ANIMATION];
 		Stringfile* BriefingStrings[3];
 		Stringfile* IntroStrings;
+		Stringfile* CreditsStrings;
 		Mix_Chunk* soundChunk[NUM_SOUNDCHUNK];
 
 };

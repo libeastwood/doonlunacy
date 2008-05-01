@@ -20,14 +20,38 @@ void DataCache::Init(){
 
     int len, maplen;
     uint8_t *data, *mapdata;
-    
 
-    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
+    ResMan::Instance()->addRes("ENGLISH");
+
+    addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
+	// Not properly decoded yet..
+	// CreditsStrings = new Stringfile("ENGLISH:CREDITS.ENG");
+
+    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");	
+	IntroStrings = new Stringfile("ENGLISH:INTRO.ENG");
+
+    ResMan::Instance()->addRes("DUNE");
+
     // FIXME: Something seems to be fscked up with this palette, the Bene Gesserit
     // mentat ends up looking a bit unhealthy greenish, needs to be corrected!
     addPalette(BENE_PAL, "DUNE:BENE.PAL");
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
-    addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
+
+    ResMan::Instance()->addRes("SOUND");
+	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
+
+    ResMan::Instance()->addRes("ATRE");
+	ResMan::Instance()->addRes("GERMAN");
+    ResMan::Instance()->addRes("FINALE");
+    ResMan::Instance()->addRes("HARK");
+    ResMan::Instance()->addRes("HERC");
+    ResMan::Instance()->addRes("INTROVOC");
+    ResMan::Instance()->addRes("MENTAT");
+    ResMan::Instance()->addRes("MERC");
+    ResMan::Instance()->addRes("ORDOS");
+    ResMan::Instance()->addRes("SCENARIO");
+    ResMan::Instance()->addRes("VOC");
+    ResMan::Instance()->addRes("XTRE");
 
 
     //LOADING FILES    
@@ -44,7 +68,7 @@ void DataCache::Init(){
 	data = ResMan::Instance()->readFile("DUNE:ICON.ICN", &len);
 	mapdata = ResMan::Instance()->readFile("DUNE:ICON.MAP", &maplen);
 	IcnfilePtr icon(new Icnfile(data, len, mapdata, maplen));
-	delete mapdata;
+	//delete mapdata;
 
 	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
 	WsafilePtr radar(new Wsafile(data, len));
@@ -216,6 +240,8 @@ void DataCache::Init(){
 																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
 //	addGuiPic(UI_GameBar, PicFactory->createGameBar();
 	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
+//	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);	
+
 //	SDL_SetColorKey(addGuiPic(UI_Indicator][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_InvalidPlace, PicFactory->createInvalidPlace();
 //	addGuiPic(UI_ValidPlace, PicFactory->createValidPlace();
@@ -397,12 +423,11 @@ void DataCache::Init(){
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
-	IntroStrings = new Stringfile("ENGLISH:INTRO.ENG");
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
 
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
+	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);	
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE3.ADL", 6);
@@ -620,6 +645,15 @@ std::string	DataCache::getIntroString(uint16_t i){
 		goto spinlock;
 #endif
 	return IntroStrings->getString(i);
+}
+
+std::string	DataCache::getCreditsString(uint16_t i){
+#ifdef THREADS
+	spinlock:
+	if(!IntroStrings)
+		goto spinlock;
+#endif
+	return CreditsStrings->getString(i);
 }
 
 void DataCache::addAnimation(Animation_enum ID, std::string fileName, double frameRate) {

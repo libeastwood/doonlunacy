@@ -15,7 +15,7 @@
 IntroState::Frame::Frame(std::string filename, 
                             Transition in, Transition out,
 						 	std::vector<introText> introStrings,
-                            bool continuation, Palette_enum pal)
+                            bool continuation, int8_t song, Palette_enum pal)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -31,6 +31,8 @@ IntroState::Frame::Frame(std::string filename,
     m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
 								Settings::Instance()->GetHeight()));
 	m_palette = DataCache::Instance()->getPalette(pal);
+
+	m_song = song;
     
     Application::Instance()->RootWidget()->addChild(m_container);
 
@@ -99,6 +101,7 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
+
     m_frametime += dt;
 
     if (m_frametime > m_wsa->getFPS())
@@ -127,6 +130,10 @@ void IntroState::Frame::cleanupTransitionIn()
 
 void IntroState::Frame::doTransitionIn(float dt) 
 {
+	if(m_song != -1){
+		Application::Instance()->playSound(DataCache::Instance()->getMusic(MUSIC_INTRO, m_song));
+	}
+
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
 }
 
@@ -194,12 +201,13 @@ IntroState::Frame::~Frame()
 
 IntroState::IntroState()
 {
-	m_introStrings.push_back(introText(0, "Original copyright by:"));
+	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
+												// DataCache::Instance()->getCreditsString(20)));
     enque( new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
 					 m_introStrings,
-                     false, WESTWOOD_PAL) );
+                     false, 0, WESTWOOD_PAL) );
 	m_introStrings.clear();
 
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(2)));
@@ -207,7 +215,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 1) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
 
