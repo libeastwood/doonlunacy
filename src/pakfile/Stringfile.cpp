@@ -81,7 +81,7 @@ std::string Stringfile::decodeString(std::string text) {
 			case 0x04: break;
 			case 0x03: break;
 			case 0x0C: out += "\n"; break;
-			case 0x0D: out += "\n"; break;
+			case 0x0D: out += " "; break;
 
 			case 0x80: out += " t"; break;
 			case 0x81: out += " a"; break;
