@@ -42,6 +42,11 @@ void IntroState::Frame::addText(uint16_t playAt, std::string text)
 	m_introStrings.push_back(introText(playAt, text));
 }
 
+void IntroState::Frame::addSound(uint16_t playAt, Sound_enum sound)
+{
+	m_introSounds.push_back(introSound(playAt, sound));
+}
+
 void IntroState::Frame::setPalette(Palette_enum palette)
 {
 	m_palette = DataCache::Instance()->getPalette(palette);
@@ -117,6 +122,14 @@ void IntroState::Frame::doPlaying(float dt)
 			m_introStrings.erase(m_introStrings.begin());
 			m_container->setPosition(UPoint(50, 420));
 			m_container->addChild(m_subText);
+		}
+	}
+
+	if(m_introSounds.size() > 0){
+		if(m_currentFrame ==  m_introSounds[0].first){
+			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_introSounds[0].second);
+			Application::Instance()->playSound(sound);
+			m_introSounds.erase(m_introSounds.begin());
 		}
 	}
 
@@ -246,7 +259,7 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-	frame = new Frame("INTRO:WESTWOOD.WSA",  
+/*	frame = new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 5000);
@@ -259,13 +272,18 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false, 2000);
 	frame->setSong(1);
+	frame->addSound(5, Intro_Dune);
+	frame->addSound(25, Intro_TheBuilding);
+	frame->addSound(49, Intro_OfADynasty);
 	frame->addText(48, "The Building of a Dynasty");
 	enque(frame);
-	
-    frame = new Frame("INTRO:INTRO2.WSA",  
+
+    frame = new Frame("INTRO:INTRO2.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 2000);
+	frame->addSound(0, Intro_ThePlanetArrakis);
+	frame->addSound(11, Intro_KnownAsDune);
 	frame->addText(0, DataCache::Instance()->getIntroString(3));
 	enque(frame);
 
@@ -273,14 +291,27 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 2000);
+	frame->addSound(0, Intro_LandOfSand);
 	frame->addText(0, DataCache::Instance()->getIntroString(4));
+	frame->addSound(20, Intro_Home);
+	frame->addSound(33, Intro_OfTheSpice);
+	frame->addSound(39, Intro_Melange);
 	frame->addText(33, DataCache::Instance()->getIntroString(5));
 	enque(frame);
-
+*/
     frame = new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 3000);
+	frame->addSound(0, Intro_TheSpice);
+	frame->addSound(3, Intro_Controls);
+	frame->addSound(7, Intro_TheEmpire);
+	frame->addSound(3, Intro_ControlsDune);
+	frame->addSound(9, Intro_WhoEver);	
+	frame->addSound(10, Intro_Clank);	
+	frame->addSound(10, Intro_ControlsTheSpice);
+	frame->addSound(50, Intro_Brakes_2p);
+	frame->addSound(58, Intro_Clank);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
 	frame->addText(50, DataCache::Instance()->getIntroString(7));
 	enque(frame);
