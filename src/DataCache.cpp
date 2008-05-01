@@ -18,6 +18,7 @@ void DataCache::Init(){
 		m_music.push_back(new music());
 	}
 
+	soundChunk.resize(NUM_SOUNDCHUNK);
     int len, maplen;
     uint8_t *data, *mapdata;
 
@@ -428,6 +429,7 @@ void DataCache::Init(){
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
 
 	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
+#if 0
 	// These are actually all the same song, but three different versions..
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 4);
@@ -468,7 +470,7 @@ void DataCache::Init(){
 	 * addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 3);
 	 */
 	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
-
+#endif
 	delete data;
 
 }
@@ -606,6 +608,11 @@ Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 }
 
 Mix_Chunk* DataCache::getSoundChunk(Sound_enum ID){
+#ifdef	THREADS
+spinlock:
+	if(!soundChunk[ID])
+		goto spinlock;
+#endif
 	return soundChunk[ID];
 }
 

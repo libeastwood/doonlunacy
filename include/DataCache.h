@@ -450,7 +450,7 @@ class DataCache : public Singleton<DataCache>
 		Stringfile* BriefingStrings[3];
 		Stringfile* IntroStrings;
 		Stringfile* CreditsStrings;
-		Mix_Chunk* soundChunk[NUM_SOUNDCHUNK];
+		std::vector<Mix_Chunk*> soundChunk;
 
 };
 
