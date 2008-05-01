@@ -8,6 +8,7 @@
 #include "boost/bind.hpp"
 #include "gui2/Label.h"
 #include "gui2/Container.h"
+#include <iostream>
 
 // ------------------------------------------------------------------
 // IntroState::Frame
@@ -15,7 +16,7 @@
 IntroState::Frame::Frame(std::string filename, 
                             Transition in, Transition out,
 						 	std::vector<introText> introStrings,
-                            bool continuation, int8_t song, Palette_enum pal)
+                            bool continuation, uint16_t endWait, int8_t song, Palette_enum pal)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -33,6 +34,7 @@ IntroState::Frame::Frame(std::string filename,
 	m_palette = DataCache::Instance()->getPalette(pal);
 
 	m_song = song;
+	m_endWait = endWait;
     
     Application::Instance()->RootWidget()->addChild(m_container);
 
@@ -94,7 +96,7 @@ bool IntroState::Frame::Execute(float dt)
     };
 
     m_scaledSurface->blitToScreenCentered();
-   
+
     return mb_finished;
 }
 
@@ -152,6 +154,7 @@ void IntroState::Frame::cleanupTransitionOut()
 
 void IntroState::Frame::doTransitionOut(float dt) 
 {
+
     if (m_transition_out == NO_TRANSITION) 
     {
         mb_finished = true;
@@ -189,6 +192,25 @@ void IntroState::Frame::doTransitionOut(float dt)
 
 void IntroState::Frame::doHolding(float dt)
 {
+	uint16_t startTicks = SDL_GetTicks();
+	uint16_t curTicks;
+
+	SDL_Event event;
+	bool wait = true;
+	while(wait && ((curTicks = SDL_GetTicks()) - startTicks)  <  m_endWait)
+		while(SDL_PollEvent(&event))
+			switch (event.type)
+				case (SDL_KEYDOWN):
+					switch( event.key.keysym.sym ){
+						case SDLK_ESCAPE:
+						case SDLK_RETURN:
+						case SDLK_SPACE:
+							Application::Instance()->RootState()->PopState();
+							wait = false;
+						default:
+							break;
+					}
+
     m_state = TRANSITION_OUT;
 }
 
@@ -201,13 +223,14 @@ IntroState::Frame::~Frame()
 
 IntroState::IntroState()
 {
+	m_currentFrame = NULL;
 	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
     enque( new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
 					 m_introStrings,
-                     false, 0, WESTWOOD_PAL) );
+                     false, 5000, 0, WESTWOOD_PAL) );
 	m_introStrings.clear();
 
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(2)));
@@ -215,7 +238,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false, 1) );
+                     false, 2000, 1) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
 
@@ -223,7 +246,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 2000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(4)));
 
@@ -231,7 +254,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 2000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(5)));
 
@@ -239,7 +262,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 3000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(6)));
 
@@ -247,7 +270,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 2000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(7)));
 
@@ -255,7 +278,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) ); 
+                     false, 2000) ); 
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(8)));
 
@@ -263,7 +286,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     false) );
+                     false, 3000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(9)));
 
@@ -287,7 +310,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     true) );
+                     true, 2000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(12)));
 
@@ -311,7 +334,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
-                     true) );
+                     true, 2000) );
 	m_introStrings.clear();
 	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(15)));
 
@@ -358,9 +381,9 @@ void IntroState::JustMadeInactive()
     State::JustMadeInactive();
 }
 
-
 bool IntroState::next()
 {
+
     fprintf(stderr, "loading next..\n");
     IntroList::iterator it = m_wsaNames.begin();
     if (it == m_wsaNames.end() )
@@ -370,9 +393,32 @@ bool IntroState::next()
 
     Frame* nextFrame = *it;
     nextFrame->Load(m_currentFrame);
+/*	uint16_t startTicks = SDL_GetTicks();
+	uint16_t curTicks;
+
+	SDL_Event event;
+	if(m_currentFrame != NULL)
+		while(((curTicks = SDL_GetTicks()) - startTicks)  <  m_currentFrame->m_endWait){
+			while(SDL_PollEvent(&event))
+			{
+				switch (event.type)
+				{
+					case (SDL_KEYDOWN):
+						switch( event.key.keysym.sym )
+					{
+						case SDLK_ESCAPE:
+							SkipIntro();
+							return true;
+						default:
+							break;
+					}
+				}
+			}
+		}*/
     m_wsaNames.pop_front();
 
-//    if (m_currentFrame != NULL) delete m_currentFrame;
+
+    if (m_currentFrame != NULL) delete m_currentFrame;
     m_currentFrame = nextFrame;
 
     return true;
