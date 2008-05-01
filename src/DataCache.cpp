@@ -427,22 +427,46 @@ void DataCache::Init(){
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
 
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);	
+	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
+	// These are actually all the same song, but three different versions..
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
+	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 4);
+	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 5);
+	/* Looping..
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE1.ADL", 2);*/
 	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE3.ADL", 6);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE4.ADL", 6);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE5.ADL", 6);
 	addMusic(MUSIC_PEACE, "SOUND:DUNE6.ADL", 6);
+	/* These are looping
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE1.ADL", 6);
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 2);
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 3);
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 4);
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 6);*/
 	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 4);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 5);	
 	addMusic(MUSIC_PEACE, "SOUND:DUNE10.ADL", 2);
+	addMusic(MUSIC_ATTACK, "SOUND:DUNE10.ADL", 7);
 	addMusic(MUSIC_ATTACK, "SOUND:DUNE11.ADL", 7);
 	addMusic(MUSIC_ATTACK, "SOUND:DUNE12.ADL", 7);
 	addMusic(MUSIC_ATTACK, "SOUND:DUNE13.ADL", 7);
 	addMusic(MUSIC_ATTACK, "SOUND:DUNE14.ADL", 7);
 	addMusic(MUSIC_ATTACK, "SOUND:DUNE15.ADL", 7);
+	/* Looping..
+	 * addMusic(MUSIC_ATTACK, "SOUND:DUNE16.ADL", 7);*/
+	addMusic(MUSIC_PEACE, "SOUND:DUNE16.ADL", 8);
+	/* Looping..
+	 * addMusic(MUSIC_PEACE, "SOUND:DUNE17.ADL", 4);*/
 	addMusic(MUSIC_PEACE, "SOUND:DUNE18.ADL", 6);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 2);
+	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 3);	
 	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 4);
+	/* These are looping
+	 * addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 2);
+	 * addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 3);
+	 */
 	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
 
 	delete data;
