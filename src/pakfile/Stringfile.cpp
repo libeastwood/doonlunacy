@@ -8,7 +8,7 @@
 
 Stringfile::Stringfile(std::string stringFileName) {
 	int bufsize;
-	unsigned char* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
+	uint8_t* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
 	Uint16* index;
 	SDL_RWops* RWop = SDL_RWFromMem(bufFiledata, bufsize);
 	
@@ -78,6 +78,8 @@ std::string Stringfile::decodeString(std::string text) {
 
 		switch(databyte) {
 			case 0x00: break;
+			case 0x04: break;
+			case 0x03: break;
 			case 0x0C: out += "\n"; break;
 			case 0x0D: out += "\n"; break;
 
