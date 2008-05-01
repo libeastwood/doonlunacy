@@ -5,7 +5,7 @@
 #include <string.h>
 
 Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize, 
-                SDL_Surface* lastframe ) : Decode()
+                SDL_Surface* lastframe, float setFps ) : Decode()
 {
 	Filedata = bufFiledata;
 	WsaFilesize = bufsize;
@@ -35,7 +35,10 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 	}
 
     // surely /1000.0f not 100?!
-    fps = (FramesPer1024ms / 1024.0f) / 100.0f;
+	if(setFps)
+		fps = setFps;
+	else
+		fps = (FramesPer1024ms / 1024.0f) / 100.0f;
 
     printf("FramesPer1024ms = %d\n", FramesPer1024ms);
     printf("FPS = %.3f\n", fps);

@@ -369,7 +369,8 @@ void DataCache::Init(){
 
 	addSoundChunk(Intro_3Houses, getChunkFromFile("INTROVOC:3HOUSES.VOC"));
 	addSoundChunk(Intro_AndNow, getChunkFromFile("INTROVOC:ANDNOW.VOC"));
-	addSoundChunk(Intro_Battle, getChunkFromFile("INTROVOC:ARRIVED.VOC"));
+	addSoundChunk(Intro_HasArrived, getChunkFromFile("INTROVOC:ARRIVED.VOC"));
+	addSoundChunk(Intro_Battle, getChunkFromFile("INTROVOC:BATTLE.VOC"));	
 	addSoundChunk(Intro_Begins, getChunkFromFile("INTROVOC:BEGINS.VOC"));
 	addSoundChunk(Intro_Blaster, getChunkFromFile("INTROVOC:BLASTER.VOC"));
 	addSoundChunk(Intro_TheBuilding, getChunkFromFile("INTROVOC:BLDING.VOC"));
@@ -390,7 +391,7 @@ void DataCache::Init(){
 	addSoundChunk(Intro_TheHouse, getChunkFromFile("INTROVOC:EHOUSE.VOC"));
 	addSoundChunk(Intro_TheMostSpice, getChunkFromFile("INTROVOC:EMOST.VOC"));
 	addSoundChunk(Intro_TheEmpire, getChunkFromFile("INTROVOC:EMPIRE.VOC"));
-	addSoundChunk(Intro_ThereAreNoSetTerritories, getChunkFromFile("INTROVOC:ENOSET.VOC"));
+	addSoundChunk(Intro_ThereAreNoSet, getChunkFromFile("INTROVOC:ENOSET.VOC"));
 	addSoundChunk(Intro_ThatProduces, getChunkFromFile("INTROVOC:EPRODUCE.VOC"));
 	addSoundChunk(Intro_RulesOfEngagement, getChunkFromFile("INTROVOC:ERULES.VOC"));
 	addSoundChunk(Intro_Territories, getChunkFromFile("INTROVOC:ETERRIT.VOC"));

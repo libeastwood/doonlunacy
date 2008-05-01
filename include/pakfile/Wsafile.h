@@ -16,7 +16,7 @@ class Wsafile : public Decode
 {
 public:
 	Wsafile(unsigned char * bufFiledata, int bufsize, 
-                SDL_Surface* lastframe = NULL);
+                SDL_Surface* lastframe = NULL, float setFps = 0 );
 	~Wsafile();
 
 	Image * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
