@@ -15,6 +15,7 @@
 
 typedef std::pair <uint16_t, std::string> introText;
 typedef std::pair <uint16_t, Sound_enum> introSound;
+typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 
 class StringFile;
 class Button;
@@ -48,6 +49,7 @@ class IntroState : public State
             void Load(Frame* lastframe);
 			void addText(uint16_t playAt, std::string introText);
 			void addSound(uint16_t playAt, Sound_enum sound);
+			void concatSound(uint16_t playAt, Sound_enum sound);
 			void setPalette(Palette_enum palette);
 			void setSong(uint8_t song);
 
@@ -75,6 +77,7 @@ class IntroState : public State
 			Container* m_container;
 			std::vector<introText> m_introStrings;
 			std::vector<introSound> m_introSounds;
+			std::vector<soundChunk> m_soundChunks;
 
 			SDL_Palette* m_palette;
 
