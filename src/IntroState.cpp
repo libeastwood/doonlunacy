@@ -14,8 +14,7 @@
 // IntroState::Frame
 
 IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
-						 	std::vector<introText> introStrings,  //std::vector<introSound> sounds,
-                            bool continuation, uint16_t endWait, int8_t song, Palette_enum pal)
+                            bool continuation, uint16_t endWait)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -25,25 +24,37 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
     m_state = TRANSITION_IN;
     m_hold = 0.0f;
     m_transitionPalette = NULL;
-	m_introStrings = introStrings;
 	m_container = new Container();
     m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
 								Settings::Instance()->GetHeight()));
 	m_subText = NULL;
-	m_palette = DataCache::Instance()->getPalette(pal);
+	m_palette = DataCache::Instance()->getPalette(INTRO_PAL);
 
-	m_song = song;
+	m_song = -1;
 	m_endWait = endWait;
     
     Application::Instance()->RootWidget()->addChild(m_container);
 
 }
 
+void IntroState::Frame::addText(uint16_t playAt, std::string text)
+{
+	m_introStrings.push_back(introText(playAt, text));
+}
+
+void IntroState::Frame::setPalette(Palette_enum palette)
+{
+	m_palette = DataCache::Instance()->getPalette(palette);
+}
+
+void IntroState::Frame::setSong(uint8_t song)
+{
+	m_song = song;
+}
+
 void IntroState::Frame::Load(Frame* lastframe)
 {
 //    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
-
-	m_startTick = SDL_GetTicks();
 
     printf("intro loading %s\n", m_filename.c_str());
     
@@ -202,8 +213,6 @@ void IntroState::Frame::doHolding(float dt)
 	SDL_Event event;
 	bool wait = true;
 	while(wait && (SDL_GetTicks() - startTicks)  <  m_endWait){
-		std::cout << "curticks:\t" << SDL_GetTicks() - startTicks << std::endl;
-		std::cout << "endwait:\t" << m_endWait << std::endl;
 		while(SDL_PollEvent(&event)){
 			switch (event.type){
 				case (SDL_KEYDOWN):
@@ -237,134 +246,124 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-    enque( new Frame("INTRO:WESTWOOD.WSA",  
+	frame = new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 5000, 0, WESTWOOD_PAL) );
-	m_introStrings.clear();
+                     false, 5000);
+	frame->setSong(0);
+	frame->setPalette(WESTWOOD_PAL);
+	enque(frame);
 
-	m_introStrings.push_back(introText(48, "The Building of a Dynasty"));
-    enque( new Frame("INTRO:INTRO1.WSA",  
+	frame =  new Frame("INTRO:INTRO1.WSA",
+                     Frame::NO_TRANSITION,
+                     Frame::FADE_OUT,
+                     false, 2000);
+	frame->setSong(1);
+	frame->addText(48, "The Building of a Dynasty");
+	enque(frame);
+	
+    frame = new Frame("INTRO:INTRO2.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 2000, 1) );
-	m_introStrings.clear();
+                     false, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(3));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
-    enque( new Frame("INTRO:INTRO2.WSA",  
+    frame = new Frame("INTRO:INTRO3.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 2000) );
-	m_introStrings.clear();
+                     false, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(4));
+	frame->addText(33, DataCache::Instance()->getIntroString(5));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(4)));
-	m_introStrings.push_back(introText(33, DataCache::Instance()->getIntroString(5)));
-    enque( new Frame("INTRO:INTRO3.WSA",  
+    frame = new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 2000) );
-	m_introStrings.clear();
+                     false, 3000);
+	frame->addText(0, DataCache::Instance()->getIntroString(6));
+	frame->addText(50, DataCache::Instance()->getIntroString(7));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(6)));
-	m_introStrings.push_back(introText(50, DataCache::Instance()->getIntroString(7)));
-    enque( new Frame("INTRO:INTRO9.WSA",  
+    frame = new Frame("INTRO:INTRO10.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 3000) );
-	m_introStrings.clear();
+                     false, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(8));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(8)));
-    enque( new Frame("INTRO:INTRO10.WSA",  
+    frame = new Frame("INTRO:INTRO11.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 2000) );
-	m_introStrings.clear();
+                     false, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(9));
+	frame->addText(25, DataCache::Instance()->getIntroString(10));
+	frame->addText(41, DataCache::Instance()->getIntroString(11));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(9)));
-	m_introStrings.push_back(introText(25, DataCache::Instance()->getIntroString(10)));
-	m_introStrings.push_back(introText(41, DataCache::Instance()->getIntroString(11)));
-    enque( new Frame("INTRO:INTRO11.WSA",  
+    frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 2000) ); 
-	m_introStrings.clear();
+                     false, 3000);
+	frame->addText(0, DataCache::Instance()->getIntroString(12));
+	frame->addText(25, DataCache::Instance()->getIntroString(13));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(12)));
-	m_introStrings.push_back(introText(25, DataCache::Instance()->getIntroString(13)));
-    enque( new Frame("INTRO:INTRO4.WSA", 
+    frame = new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false, 3000) );
-	m_introStrings.clear();
+                     false);
+	frame->addText(0, DataCache::Instance()->getIntroString(14));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(14)));
-    enque( new Frame("INTRO:INTRO6.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-					 m_introStrings,
-                     false) );
-	m_introStrings.clear();
-
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(15)));
-    enque( new Frame("INTRO:INTRO7A.WSA", 
+    frame =  new Frame("INTRO:INTRO7A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
-					 m_introStrings,
-                     false) );
-	m_introStrings.clear();
+                     false);
+	frame->addText(0, DataCache::Instance()->getIntroString(15));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(16)));
-    enque( new Frame("INTRO:INTRO7B.WSA", 
+    frame = new Frame("INTRO:INTRO7B.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     true, 2000) );
-	m_introStrings.clear();
+                     true, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(16));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(17)));
-    enque( new Frame("INTRO:INTRO8A.WSA", 
+    frame = new Frame("INTRO:INTRO8A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
-					 m_introStrings,
-                     false) );
-	m_introStrings.clear();
+                     false);
+	frame->addText(0, DataCache::Instance()->getIntroString(17));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(18)));
-    enque( new Frame("INTRO:INTRO8B.WSA",  
+    frame = new Frame("INTRO:INTRO8B.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
-					 m_introStrings,
-                     true) );
-	m_introStrings.clear();
+                     true);
+	frame->addText(0, DataCache::Instance()->getIntroString(18));
+	enque(frame);
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(19)));
-    enque( new Frame("INTRO:INTRO8C.WSA", 
+    frame = new Frame("INTRO:INTRO8C.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     true, 2000) );
-	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(20)));
+                     true, 2000);
+	frame->addText(0, DataCache::Instance()->getIntroString(19));
+	enque(frame);
 
-    enque( new Frame("INTRO:INTRO5.WSA", 
+    frame = new Frame("INTRO:INTRO5.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false) );
+                     false);
+	frame->addText(0, DataCache::Instance()->getIntroString(20));
+	enque(frame);
+
     // seems nice to play this again ;)
-    enque( new Frame("INTRO:INTRO1.WSA",  
+    frame = new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-					 m_introStrings,
-                     false) );
+                     false);
+	enque(frame);
 
     next();
     m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),

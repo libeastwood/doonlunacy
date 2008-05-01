@@ -41,12 +41,14 @@ class IntroState : public State
             };
         
             Frame(std::string filename, Transition in, Transition out,
-					bool cont, uint16_t endWait = 0, int8_t song = -1, Palette_enum pal = INTRO_PAL);
+					bool cont, uint16_t endWait = 0);
 			~Frame();
             
             bool Execute(float ft);
             void Load(Frame* lastframe);
-			addTextString(introText);
+			void addText(uint16_t playAt, std::string introText);
+			void setPalette(Palette_enum palette);
+			void setSong(uint8_t song);
 
         private:
             std::string m_filename;
@@ -112,6 +114,7 @@ class IntroState : public State
         TranspButton *m_butIntro;
 
         Frame* m_currentFrame;
+		Frame* frame;
 		std::vector<introText> m_introStrings;
 		std::vector<introSound> m_introSounds;
 		
