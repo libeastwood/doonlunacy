@@ -259,7 +259,7 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-/*	frame = new Frame("INTRO:WESTWOOD.WSA",  
+	frame = new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 5000);
@@ -298,18 +298,18 @@ IntroState::IntroState()
 	frame->addSound(39, Intro_Melange);
 	frame->addText(33, DataCache::Instance()->getIntroString(5));
 	enque(frame);
-*/
+
     frame = new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 3000);
 	frame->addSound(0, Intro_TheSpice);
-	frame->addSound(3, Intro_Controls);
-	frame->addSound(7, Intro_TheEmpire);
-	frame->addSound(3, Intro_ControlsDune);
-	frame->addSound(9, Intro_WhoEver);	
-	frame->addSound(10, Intro_Clank);	
-	frame->addSound(10, Intro_ControlsTheSpice);
+	frame->addSound(5, Intro_Controls);
+	frame->addSound(9, Intro_TheEmpire);
+	frame->addSound(10, Intro_Clank);
+	frame->addSound(25, Intro_WhoEver);
+	frame->addSound(29, Intro_ControlsDune);
+	frame->addSound(35, Intro_ControlsTheSpice);
 	frame->addSound(50, Intro_Brakes_2p);
 	frame->addSound(58, Intro_Clank);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
@@ -321,6 +321,7 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false, 2000);
 	frame->addText(0, DataCache::Instance()->getIntroString(8));
+	frame->addSong(0, Intro_TheEmperor);
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO11.WSA",  
