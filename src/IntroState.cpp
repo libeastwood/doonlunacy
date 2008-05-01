@@ -31,6 +31,7 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_palette = DataCache::Instance()->getPalette(INTRO_PAL);
 
 	m_song = -1;
+	m_fps = 0;
 	m_endWait = endWait;
     
     Application::Instance()->RootWidget()->addChild(m_container);
@@ -96,6 +97,11 @@ void IntroState::Frame::setSong(uint8_t song)
 	m_song = song;
 }
 
+void IntroState::Frame::setFps(float fps)
+{
+	m_fps = fps;
+}
+
 void IntroState::Frame::Load(Frame* lastframe)
 {
 //    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
@@ -109,11 +115,11 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     if (m_continuation)
     {
-        m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface()));
+        m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
     }
     else
     {
-        m_wsa.reset(new Wsafile(data, len));
+        m_wsa.reset(new Wsafile(data, len, NULL, m_fps));
     }
     
     m_frametime = 0;
@@ -318,6 +324,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION,
                      Frame::FADE_OUT,
                      false, 2000);
+	frame->setFps(0.05);
 	frame->setSong(1);
 	frame->addSound(5, Intro_Dune);
 	frame->concatSound(48, Intro_TheBuilding);
@@ -350,6 +357,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 3000);
+	frame->setFps(0.18);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
 	frame->concatSound(0, Intro_TheSpice);
 	frame->concatSound(0, Intro_Controls);
@@ -392,14 +400,13 @@ IntroState::IntroState()
 	frame->addText(44, DataCache::Instance()->getIntroString(11));
 	enque(frame);
 
-
     frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 3000);
-	frame->addText(0, DataCache::Instance()->getIntroString(12));
-	frame->concatSound(0, Intro_VastArmies);
-	frame->concatSound(0, Intro_HasArrived);
+	frame->addText(10, DataCache::Instance()->getIntroString(12));
+	frame->concatSound(11, Intro_VastArmies);
+	frame->concatSound(11, Intro_HasArrived);
 	frame->addText(25, DataCache::Instance()->getIntroString(13));
 	frame->concatSound(25, Intro_AndNow);
 	frame->concatSound(25, Intro_3Houses);
@@ -407,10 +414,21 @@ IntroState::IntroState()
 	frame->concatSound(25, Intro_OfDune);
 	enque(frame);
 
+	frame = new Frame(DataCache::Instance()->getIntroString(13) ,
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+                     false, 3000);
+	frame->concatSound(0, Intro_AndNow);
+	frame->concatSound(0, Intro_3Houses);
+	frame->concatSound(0, Intro_ForControl);
+	frame->concatSound(0, Intro_OfDune);
+	enque(frame);
+*
     frame = new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false);
+	frame->setFps(0.1);
 	frame->addText(0, DataCache::Instance()->getIntroString(14));
 	frame->addSound(0, Intro_TheNobleAtreides);
 	frame->addSound(31, Intro_Glass);
@@ -448,8 +466,7 @@ IntroState::IntroState()
 	frame->addText(0, DataCache::Instance()->getIntroString(17));
 	frame->concatSound(0, Intro_AndThe);
 	frame->concatSound(0, Intro_EvilHarkonnen);
-	frame->addSound(0, Sound_Gun);
-	frame->addSound(3, Sound_Gun);
+	frame->addSound(5, Sound_Gun);
 	frame->addSound(8, Sound_Gun);
 	enque(frame);
 
@@ -457,14 +474,14 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
                      true);
-	frame->addText(0, DataCache::Instance()->getIntroString(18));
 	enque(frame);
+	frame->addSound(1, Sound_Gun);
+	
 
     frame = new Frame("INTRO:INTRO8C.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     true, 2000);
-	frame->addText(0, DataCache::Instance()->getIntroString(19));
+                     true);
 	frame->addSound(16, Sound_ExplosionSmall);
 	frame->addSound(25, Sound_ExplosionMedium);
 	enque(frame);
@@ -473,7 +490,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false);
-	frame->addText(0, DataCache::Instance()->getIntroString(20));
+	frame->addText(0, DataCache::Instance()->getIntroString(18));
 	frame->concatSound(0, Intro_OnlyOneHouse);
 	frame->concatSound(0, Intro_WillPrevail);
 	enque(frame);
