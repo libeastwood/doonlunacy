@@ -14,6 +14,7 @@
 #include <string>
 
 typedef std::pair <uint16_t, std::string> introText;
+typedef std::pair <uint16_t, Mix_Chunk*> introSound;
 
 class StringFile;
 class Button;
@@ -39,11 +40,13 @@ class IntroState : public State
                 HOLDING
             };
         
-            Frame(std::string file, Transition in, Transition out, std::vector<introText> introStrings, bool cont, uint16_t endWait = 0, int8_t song = -1, Palette_enum pal = INTRO_PAL);
+            Frame(std::string filename, Transition in, Transition out,
+					bool cont, uint16_t endWait = 0, int8_t song = -1, Palette_enum pal = INTRO_PAL);
 			~Frame();
             
             bool Execute(float ft);
             void Load(Frame* lastframe);
+			addTextString(introText);
 
         private:
             std::string m_filename;
@@ -110,6 +113,7 @@ class IntroState : public State
 
         Frame* m_currentFrame;
 		std::vector<introText> m_introStrings;
+		std::vector<introSound> m_introSounds;
 		
 //		Font* font;
 };

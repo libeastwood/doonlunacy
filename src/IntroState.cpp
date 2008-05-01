@@ -13,9 +13,8 @@
 // ------------------------------------------------------------------
 // IntroState::Frame
 
-IntroState::Frame::Frame(std::string filename, 
-                            Transition in, Transition out,
-						 	std::vector<introText> introStrings,
+IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
+						 	std::vector<introText> introStrings,  //std::vector<introSound> sounds,
                             bool continuation, uint16_t endWait, int8_t song, Palette_enum pal)
 {
     m_filename = filename;
@@ -28,9 +27,9 @@ IntroState::Frame::Frame(std::string filename,
     m_transitionPalette = NULL;
 	m_introStrings = introStrings;
 	m_container = new Container();
-//    m_container->setPosition(UPoint(250, 400));
     m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
 								Settings::Instance()->GetHeight()));
+	m_subText = NULL;
 	m_palette = DataCache::Instance()->getPalette(pal);
 
 	m_song = song;
@@ -43,6 +42,8 @@ IntroState::Frame::Frame(std::string filename,
 void IntroState::Frame::Load(Frame* lastframe)
 {
 //    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+
+	m_startTick = SDL_GetTicks();
 
     printf("intro loading %s\n", m_filename.c_str());
     
@@ -66,11 +67,6 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
-	if(m_introStrings.size() > 0){
-		m_subText = new Label(m_introStrings[0].second, 49, 0);
-		m_container->setPosition(UPoint(50, 420));
-		m_container->addChild(m_subText);
-	}    
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -103,6 +99,15 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
+	if(m_introStrings.size() > 0){
+		if(m_currentFrame ==  m_introStrings[0].first){
+			if(m_subText != NULL) m_container->deleteChild(m_subText);
+			m_subText = new Label(m_introStrings[0].second, 49, 0);
+			m_introStrings.erase(m_introStrings.begin());
+			m_container->setPosition(UPoint(50, 420));
+			m_container->addChild(m_subText);
+		}
+	}
 
     m_frametime += dt;
 
@@ -193,30 +198,35 @@ void IntroState::Frame::doTransitionOut(float dt)
 void IntroState::Frame::doHolding(float dt)
 {
 	uint16_t startTicks = SDL_GetTicks();
-	uint16_t curTicks;
 
 	SDL_Event event;
 	bool wait = true;
-	while(wait && ((curTicks = SDL_GetTicks()) - startTicks)  <  m_endWait)
-		while(SDL_PollEvent(&event))
-			switch (event.type)
+	while(wait && (SDL_GetTicks() - startTicks)  <  m_endWait){
+		std::cout << "curticks:\t" << SDL_GetTicks() - startTicks << std::endl;
+		std::cout << "endwait:\t" << m_endWait << std::endl;
+		while(SDL_PollEvent(&event)){
+			switch (event.type){
 				case (SDL_KEYDOWN):
 					switch( event.key.keysym.sym ){
-						case SDLK_ESCAPE:
 						case SDLK_RETURN:
 						case SDLK_SPACE:
-							Application::Instance()->RootState()->PopState();
 							wait = false;
+							break;
+						case SDLK_ESCAPE:
+							if(m_subText != NULL) m_container->deleteChild(m_subText);
+							Application::Instance()->RootState()->PopState();
+							return;
 						default:
 							break;
-					}
+					}}}
+	}
 
     m_state = TRANSITION_OUT;
 }
 
 IntroState::Frame::~Frame()
 {
-	m_container->deleteChild(m_subText);
+	if(m_subText != NULL) m_container->deleteChild(m_subText);
 }
 // ------------------------------------------------------------------
 // IntroState
@@ -224,119 +234,125 @@ IntroState::Frame::~Frame()
 IntroState::IntroState()
 {
 	m_currentFrame = NULL;
-	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
+
+//	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
     enque( new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
+                     Frame::FADE_OUT,
 					 m_introStrings,
                      false, 5000, 0, WESTWOOD_PAL) );
 	m_introStrings.clear();
 
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(2)));
+	m_introStrings.push_back(introText(48, "The Building of a Dynasty"));
     enque( new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 2000, 1) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(3)));
     enque( new Frame("INTRO:INTRO2.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 2000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(4)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(4)));
+	m_introStrings.push_back(introText(33, DataCache::Instance()->getIntroString(5)));
     enque( new Frame("INTRO:INTRO3.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 2000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(5)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(6)));
+	m_introStrings.push_back(introText(50, DataCache::Instance()->getIntroString(7)));
     enque( new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 3000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(6)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(8)));
     enque( new Frame("INTRO:INTRO10.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 2000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(7)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(9)));
+	m_introStrings.push_back(introText(25, DataCache::Instance()->getIntroString(10)));
+	m_introStrings.push_back(introText(41, DataCache::Instance()->getIntroString(11)));
     enque( new Frame("INTRO:INTRO11.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 2000) ); 
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(8)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(12)));
+	m_introStrings.push_back(introText(25, DataCache::Instance()->getIntroString(13)));
     enque( new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false, 3000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(9)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(14)));
     enque( new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      false) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(10)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(15)));
     enque( new Frame("INTRO:INTRO7A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
 					 m_introStrings,
                      false) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(11)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(16)));
     enque( new Frame("INTRO:INTRO7B.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      true, 2000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(12)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(17)));
     enque( new Frame("INTRO:INTRO8A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
 					 m_introStrings,
                      false) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(13)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(18)));
     enque( new Frame("INTRO:INTRO8B.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
 					 m_introStrings,
                      true) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(14)));
 
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(19)));
     enque( new Frame("INTRO:INTRO8C.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
 					 m_introStrings,
                      true, 2000) );
 	m_introStrings.clear();
-	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(15)));
+	m_introStrings.push_back(introText(0, DataCache::Instance()->getIntroString(20)));
 
     enque( new Frame("INTRO:INTRO5.WSA", 
                      Frame::NO_TRANSITION, 
@@ -364,6 +380,7 @@ IntroState::~IntroState()
 
 void IntroState::SkipIntro()
 {
+	delete m_currentFrame;
     mp_parent->PopState();
     
 }
@@ -393,28 +410,6 @@ bool IntroState::next()
 
     Frame* nextFrame = *it;
     nextFrame->Load(m_currentFrame);
-/*	uint16_t startTicks = SDL_GetTicks();
-	uint16_t curTicks;
-
-	SDL_Event event;
-	if(m_currentFrame != NULL)
-		while(((curTicks = SDL_GetTicks()) - startTicks)  <  m_currentFrame->m_endWait){
-			while(SDL_PollEvent(&event))
-			{
-				switch (event.type)
-				{
-					case (SDL_KEYDOWN):
-						switch( event.key.keysym.sym )
-					{
-						case SDLK_ESCAPE:
-							SkipIntro();
-							return true;
-						default:
-							break;
-					}
-				}
-			}
-		}*/
     m_wsaNames.pop_front();
 
 
