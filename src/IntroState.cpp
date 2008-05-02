@@ -14,7 +14,7 @@
 // IntroState::Frame
 
 IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
-                            bool continuation, uint16_t endWait)
+                            bool continuation, uint8_t endWait)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -35,9 +35,8 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_endWait = endWait;
 	m_loop = videoLoop(0,0);
 	m_loopTime = videoLoop(0,0);
-/*	if(endWait)
-		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, 30);
-*/
+	m_textColor = 49;
+
     Application::Instance()->RootWidget()->addChild(m_container);
 
 }
@@ -112,6 +111,11 @@ void IntroState::Frame::setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoo
 	m_loopTime = videoLoop(numLoops, wait);
 }
 
+void IntroState::Frame::setTextColor(uint8_t textColor)
+{
+	m_textColor = textColor;
+}
+
 void IntroState::Frame::Load(Frame* lastframe)
 {
     printf("intro loading %s\n", m_filename.c_str());
@@ -175,7 +179,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
 			if(m_subText != NULL) m_container->deleteChild(m_subText);
-			m_subText = new Label(m_introStrings[0].second, 49, 0);
+			m_subText = new Label(m_introStrings[0].second, m_textColor, 0);
 			m_introStrings.erase(m_introStrings.begin());
 			m_container->setPosition(UPoint(50, 420));
 			m_container->addChild(m_subText);
@@ -386,6 +390,7 @@ IntroState::IntroState()
                      false);
 	frame->setFps(0.095);
 	frame->addText(0, DataCache::Instance()->getIntroString(9));
+	frame->setTextColor(208);
 	frame->concatSound(0, Intro_TheHouse);
 	frame->concatSound(0, Intro_ThatProduces);
 	frame->concatSound(0, Intro_TheMostSpice);
