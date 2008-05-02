@@ -33,7 +33,11 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_song = -1;
 	m_fps = 0;
 	m_endWait = endWait;
-    
+	m_loop = videoLoop(0,0);
+	m_loopTime = videoLoop(0,0);
+/*	if(endWait)
+		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, 30);
+*/
     Application::Instance()->RootWidget()->addChild(m_container);
 
 }
@@ -102,10 +106,14 @@ void IntroState::Frame::setFps(float fps)
 	m_fps = fps;
 }
 
+void IntroState::Frame::setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
+{
+	m_loop = videoLoop(loopAt, rewindTo);
+	m_loopTime = videoLoop(numLoops, wait);
+}
+
 void IntroState::Frame::Load(Frame* lastframe)
 {
-//    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
-
     printf("intro loading %s\n", m_filename.c_str());
     
     int len;
@@ -124,10 +132,15 @@ void IntroState::Frame::Load(Frame* lastframe)
     
     m_frametime = 0;
     m_currentFrame = 0;
+	m_framesPlayed = 0;
     mb_finished = false;
 
     m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
+	if(m_endWait && !m_loop.first)
+		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
+
+
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -160,8 +173,16 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
+	std::cout << "\n\nframes played:\t\t" <<  (int)m_framesPlayed << std::endl;
+	/*m_framesPlayed++;
+	if(m_numLoops != 0 && m_currentFrame == m_loop.first)
+	{
+		m_currentFrame = m_loop.second;
+		m_numLoops--;
+	}*/
+
 	if(m_introStrings.size() > 0){
-		if(m_currentFrame ==  m_introStrings[0].first){
+		if(m_framesPlayed ==  m_introStrings[0].first){
 			if(m_subText != NULL) m_container->deleteChild(m_subText);
 			m_subText = new Label(m_introStrings[0].second, 49, 0);
 			m_introStrings.erase(m_introStrings.begin());
@@ -171,14 +192,14 @@ void IntroState::Frame::doPlaying(float dt)
 	}
 
 	if(m_introSounds.size() > 0){
-		if(m_currentFrame ==  m_introSounds[0].first){
+		if(m_framesPlayed ==  m_introSounds[0].first){
 			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_introSounds[0].second);
 			Application::Instance()->playSound(sound);
 			m_introSounds.erase(m_introSounds.begin());
 		}
 	}
 	if(m_soundChunks.size() > 0){
-		if(m_currentFrame ==  m_soundChunks[0].first){
+		if(m_framesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
 			Application::Instance()->playSound(sound);
 //			delete(m_soundChunks[0].second);
@@ -186,11 +207,33 @@ void IntroState::Frame::doPlaying(float dt)
 		}
 	}
 
+/*	if(m_loopTime.first != 0 && m_currentFrame == m_loop.first)
+	{
+		m_currentFrame = m_loop.second;
+		m_loopTime.first--;
+	}*/
+
+/*	if(m_numLoops != 0 && m_currentFrame == m_loop.first)
+	{
+		std::cout << "jaggu!" << std::endl;
+		m_currentFrame = m_loop.second;
+		m_numLoops--;
+	}
+*/
     m_frametime += dt;
 
     if (m_frametime > m_wsa->getFPS())
     {
-        m_currentFrame ++;
+		if(!(m_currentFrame == m_loop.first - 1 && m_framesPlayed < m_loop.first + m_loopTime.second))
+			m_currentFrame++;
+	if(m_loopTime.first != 0 && m_currentFrame == m_loop.first)
+	{
+		m_currentFrame = m_loop.second;
+		m_loopTime.first--;
+	}
+
+
+		m_framesPlayed++;		
         m_frametime = 0.0f;
         if (m_currentFrame >= m_wsa->getNumFrames())
         {
@@ -274,7 +317,7 @@ void IntroState::Frame::doTransitionOut(float dt)
 
 void IntroState::Frame::doHolding(float dt)
 {
-	uint16_t startTicks = SDL_GetTicks();
+/*	uint16_t startTicks = SDL_GetTicks();
 
 	SDL_Event event;
 	bool wait = true;
@@ -295,7 +338,7 @@ void IntroState::Frame::doHolding(float dt)
 							break;
 					}}}
 	}
-
+*/
     m_state = TRANSITION_OUT;
 }
 
@@ -315,7 +358,7 @@ IntroState::IntroState()
 	frame = new Frame("INTRO:WESTWOOD.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 5000);
+                     false, 30);
 	frame->setSong(0);
 	frame->setPalette(WESTWOOD_PAL);
 	enque(frame);
@@ -323,32 +366,32 @@ IntroState::IntroState()
 	frame =  new Frame("INTRO:INTRO1.WSA",
                      Frame::NO_TRANSITION,
                      Frame::FADE_OUT,
-                     false, 2000);
+                     false, 50);
 	frame->setFps(0.05);
 	frame->setSong(1);
-	frame->addSound(5, Intro_Dune);
-	frame->concatSound(48, Intro_TheBuilding);
-	frame->concatSound(48, Intro_OfADynasty);
-	frame->addText(48, "The Building of a Dynasty");
+	frame->concatSound(66, Intro_Dune);
+	frame->concatSound(66, Intro_TheBuilding);
+	frame->concatSound(66, Intro_OfADynasty);
+	frame->addText(66, "The Building of a Dynasty");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO2.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 2000);
-	frame->concatSound(0, Intro_ThePlanetArrakis);
-	frame->concatSound(0, Intro_KnownAsDune);
-	frame->addText(0, DataCache::Instance()->getIntroString(3));
+                     false, 5);
+	frame->concatSound(5, Intro_ThePlanetArrakis);
+	frame->concatSound(5, Intro_KnownAsDune);
+	frame->addText(5, DataCache::Instance()->getIntroString(3));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO3.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 2000);
+                     false, 30);
 	frame->addSound(0, Intro_LandOfSand);
 	frame->addText(0, DataCache::Instance()->getIntroString(4));
-	frame->concatSound(23, Intro_Home);
-	frame->concatSound(23, Intro_OfTheSpice);
+	frame->concatSound(33, Intro_Home);
+	frame->concatSound(33, Intro_OfTheSpice);
 	frame->concatSound(33, Intro_Melange);
 	frame->addText(33, DataCache::Instance()->getIntroString(5));
 	enque(frame);
@@ -356,7 +399,7 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 3000);
+                     false, 2);
 	frame->setFps(0.18);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
 	frame->concatSound(0, Intro_TheSpice);
@@ -374,7 +417,7 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO10.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 7500);
+                     false, 25);
 	frame->addText(0, DataCache::Instance()->getIntroString(8));
 	frame->concatSound(0, Intro_TheEmperor);
 	frame->concatSound(0, Intro_HasProposedAChallenge);
@@ -384,26 +427,27 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO11.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 2000);
+                     false);
+	frame->setFps(0.095);
 	frame->addText(0, DataCache::Instance()->getIntroString(9));
 	frame->concatSound(0, Intro_TheHouse);
 	frame->concatSound(0, Intro_ThatProduces);
 	frame->concatSound(0, Intro_TheMostSpice);
 	frame->concatSound(0, Intro_WillControlDune);
-	// The video should actually loop a bit here, needs to be implemented..
-	frame->concatSound(41, Intro_ThereAreNoSet);
-	frame->concatSound(41, Intro_Territories);
-	frame->concatSound(41, Intro_AndNo);
-	frame->concatSound(41, Intro_RulesOfEngagement);
+	frame->setLoop(45, 0, 1, 15);
+	frame->concatSound(61, Intro_ThereAreNoSet);
+	frame->concatSound(61, Intro_Territories);
+	frame->concatSound(61, Intro_AndNo);
+	frame->concatSound(61, Intro_RulesOfEngagement);
 
-	frame->addText(41, DataCache::Instance()->getIntroString(10));
-	frame->addText(44, DataCache::Instance()->getIntroString(11));
+	frame->addText(61, DataCache::Instance()->getIntroString(10));
+	frame->addText(66, DataCache::Instance()->getIntroString(11));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 3000);
+                     false, 10);
 	frame->addText(10, DataCache::Instance()->getIntroString(12));
 	frame->concatSound(11, Intro_VastArmies);
 	frame->concatSound(11, Intro_HasArrived);
@@ -417,13 +461,13 @@ IntroState::IntroState()
 	frame = new Frame(DataCache::Instance()->getIntroString(13) ,
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 3000);
+                     false, 20);
 	frame->concatSound(0, Intro_AndNow);
 	frame->concatSound(0, Intro_3Houses);
 	frame->concatSound(0, Intro_ForControl);
 	frame->concatSound(0, Intro_OfDune);
 	enque(frame);
-*
+
     frame = new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
@@ -449,13 +493,13 @@ IntroState::IntroState()
 	frame->addSound(2, Intro_Missile_8);
 	frame->addSound(7, Intro_Missile_8);
 	frame->addSound(26, Intro_Missile_8);
-	frame->addSound(37, Intro_Missile_8);
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO7B.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     true, 2000);
+                     true, 5);
+	frame->addSound(10, Intro_Missile_8);
 	frame->addText(0, DataCache::Instance()->getIntroString(16));
 	enque(frame);
 
@@ -490,6 +534,8 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false);
+	frame->setFps(0.2);
+	frame->setLoop(3, 0, 10, 0);
 	frame->addText(0, DataCache::Instance()->getIntroString(18));
 	frame->concatSound(0, Intro_OnlyOneHouse);
 	frame->concatSound(0, Intro_WillPrevail);
@@ -514,11 +560,11 @@ IntroState::IntroState()
 	enque(frame);*/
 
     // seems nice to play this again ;)
-    frame = new Frame("INTRO:INTRO1.WSA",  
+  /*  frame = new Frame("INTRO:INTRO1.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false);
-	enque(frame);
+	enque(frame);*/
 
     next();
     m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),
