@@ -119,20 +119,33 @@ void IntroState::Frame::setTextColor(uint8_t textColor)
 void IntroState::Frame::Load(Frame* lastframe)
 {
     printf("intro loading %s\n", m_filename.c_str());
-    
-    int len;
-    uint8_t * data = ResMan::Instance()->readFile(m_filename, &len);
 
-    assert(data != NULL);
+    std::string::size_type wsaSuffix = m_filename.rfind(".WSA", m_filename.size() - 1);
+    std::string::size_type cpsSuffix = m_filename.rfind(".CPS", m_filename.size() - 1);
+	bool isWsa = m_filename.size() > 3 && wsaSuffix == m_filename.size() - 4;
+	bool isCps = m_filename.size() > 3 && cpsSuffix == m_filename.size() - 4;
 
-    if (m_continuation)
-    {
-        m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
-    }
-    else
-    {
-        m_wsa.reset(new Wsafile(data, len, NULL, m_fps));
-    }
+	if(isWsa || isCps){
+		int len;
+		uint8_t * data = ResMan::Instance()->readFile(m_filename, &len);
+		
+		assert(data != NULL);
+		
+		if(isWsa){
+			if (m_continuation)
+			{
+				m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
+			}
+			else
+			{
+				m_wsa.reset(new Wsafile(data, len, NULL, m_fps));
+			}
+		}else if(isCps){
+			m_wsa.reset(new Wsafile(new Cpsfile(data, len, m_palette)));
+		}
+	}
+	else
+		m_wsa.reset(new Wsafile(m_filename));
     
     m_frametime = 0;
     m_currentFrame = 0;
@@ -143,7 +156,6 @@ void IntroState::Frame::Load(Frame* lastframe)
     m_scaledSurface = m_animSurface->getResized(2.0);
 	if(m_endWait && !m_loop.first)
 		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
-
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -315,7 +327,7 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-	frame = new Frame("INTRO:WESTWOOD.WSA",  
+	frame = new Frame("INTRO:WESTWOOD.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 30);
@@ -323,6 +335,26 @@ IntroState::IntroState()
 	frame->setPalette(WESTWOOD_PAL);
 	enque(frame);
 
+	frame = new Frame("and",
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+                     false, 30);
+	enque(frame);
+
+	// VIRGIN.CPS has it's own palette, handling of this needs to be implemented..
+	frame = new Frame("INTRO:VIRGIN.CPS",
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+                     false, 30);
+	enque(frame);
+
+	frame = new Frame(DataCache::Instance()->getIntroString(1),
+                     Frame::NO_TRANSITION, 
+                     Frame::FADE_OUT,
+                     false, 20);
+	enque(frame);
+
+	
 	frame =  new Frame("INTRO:INTRO1.WSA",
                      Frame::NO_TRANSITION,
                      Frame::FADE_OUT,
@@ -419,16 +451,17 @@ IntroState::IntroState()
 	frame->concatSound(25, Intro_OfDune);
 	enque(frame);
 
-/*	frame = new Frame(DataCache::Instance()->getIntroString(13) ,
+    frame = new Frame(DataCache::Instance()->getIntroString(13), 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 20);
+                     false, 50);
 	frame->concatSound(0, Intro_AndNow);
 	frame->concatSound(0, Intro_3Houses);
 	frame->concatSound(0, Intro_ForControl);
 	frame->concatSound(0, Intro_OfDune);
 	enque(frame);
-*/
+
+
     frame = new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
@@ -502,23 +535,23 @@ IntroState::IntroState()
 	frame->concatSound(0, Intro_WillPrevail);
 	enque(frame);
 
-/*    frame = new Frame("Your battle for Dune begins", 
+
+    frame = new Frame(DataCache::Instance()->getIntroString(18),
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false);
+                     false, 20);
 	frame->concatSound(0, Intro_Your);
-	frame->concatSound(0, Intro_Battle);
-	frame->concatSound(0, Intro_ForDune);
-	frame->concatSound(0, Intro_Begins);	
+	frame->concatSound(0, Intro_BattleForDune);
+	frame->concatSound(0, Intro_Begins);
 	enque(frame);
 
 
-    frame = new Frame("Now", 
+    frame = new Frame(DataCache::Instance()->getIntroString(19), 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false);
+                     false, 15);
 	frame->addSound(0, Intro_Now);
-	enque(frame);*/
+	enque(frame);
 
     // seems nice to play this again ;)
   /*  frame = new Frame("INTRO:INTRO1.WSA",  

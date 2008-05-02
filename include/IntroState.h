@@ -16,6 +16,7 @@
 typedef std::pair <uint16_t, std::string> introText;
 typedef std::pair <uint16_t, Sound_enum> introSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
+typedef std::pair <uint8_t, uint8_t> videoLoop;
 
 class StringFile;
 class Button;
@@ -42,7 +43,7 @@ class IntroState : public State
             };
         
             Frame(std::string filename, Transition in, Transition out,
-					bool cont, uint16_t endWait = 0);
+					bool cont, uint8_t endWait = 0);
 			~Frame();
             
             bool Execute(float ft);
@@ -52,6 +53,9 @@ class IntroState : public State
 			void concatSound(uint16_t playAt, Sound_enum sound);
 			void setPalette(Palette_enum palette);
 			void setSong(uint8_t song);
+			void setFps(float fps);
+			void setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
+			void setTextColor(uint8_t textColor);
 
         private:
             std::string m_filename;
@@ -65,11 +69,14 @@ class IntroState : public State
             bool mb_finished;
             
             WsafilePtr m_wsa; 
-            int m_currentFrame;
+            uint8_t m_currentFrame, m_framesPlayed;
+
             float m_frametime;
 			int8_t m_song;
-			uint16_t m_endWait;
-
+			uint8_t m_endWait;
+			uint8_t m_textColor;
+			float m_fps;
+			videoLoop m_loop, m_loopTime;
 
             ImagePtr m_animSurface, m_scaledSurface;
             SDL_Color* m_transitionPalette;
