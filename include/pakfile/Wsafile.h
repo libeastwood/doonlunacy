@@ -5,18 +5,24 @@
 #include "pakfile/Decode.h"
 #include "pakfile/Animation.h"
 #include "SDL.h"
+#include <string>
 
 #include <boost/shared_ptr.hpp>
 
 class Wsafile;
-
 typedef boost::shared_ptr<Wsafile> WsafilePtr;
+
+class Cpsfile;
 
 class Wsafile : public Decode
 {
 public:
-	Wsafile(unsigned char * bufFiledata, int bufsize, 
+	Wsafile(uint8_t * bufFiledata, int bufsize, 
                 SDL_Surface* lastframe = NULL, float setFps = 0 );
+	Wsafile(std::string text);
+	Wsafile(Cpsfile* cpsFile);
+//	wsafil
+
 	~Wsafile();
 
 	Image * getPicture(Uint32 FrameNumber, SDL_Palette *palette);
@@ -29,6 +35,9 @@ public:
 
 private:
 	void decodeFrames();
+	ImagePtr m_fakeWsa;
+	std::string m_text;
+	Cpsfile* m_cpsFile;
 
 	unsigned char *decodedFrames;
 

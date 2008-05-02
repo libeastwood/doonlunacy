@@ -1,8 +1,10 @@
 #include "Gfx.h"
 #include "pakfile/Wsafile.h"
+#include "pakfile/Cpsfile.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
+#include "Font.h"
 
 Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize, 
                 SDL_Surface* lastframe, float setFps ) : Decode()
@@ -66,6 +68,37 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 	decodeFrames();
 }
 
+Wsafile::Wsafile(std::string text) : Decode()
+{
+	WsaFilesize = -1;
+
+    printf("loading fake wsa...\n");
+	
+	NumFrames = 1;
+	fps = 0.1;
+
+    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
+    printf("FPS = %.3f\n", fps);
+	decodedFrames = NULL;
+	m_text = text;
+	m_fakeWsa = ImagePtr(new Image(UPoint(100,100)));
+}
+
+Wsafile::Wsafile(Cpsfile* cpsFile) : Decode()
+{
+	WsaFilesize = -2;
+
+    printf("loading cps file as wsa...\n");
+	
+	NumFrames = 1;
+	fps = 0.1;
+
+    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
+    printf("FPS = %.3f\n", fps);
+	decodedFrames = NULL;
+	m_cpsFile = cpsFile;
+}
+
 Wsafile::~Wsafile()
 {
 	free(decodedFrames);
@@ -73,12 +106,39 @@ Wsafile::~Wsafile()
 
 Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
+	if(WsaFilesize == -1){
+//		ImagePtr m_surface = m_fakeWsa; //ImagePtr(new Image(UPoint(10,10)));
+		Image* m_surface = new Image(UPoint(320,240));
+
+		std::string m_caption = m_text;
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+
+    Uint16 textw, texth;
+
+    font->extents(m_caption.c_str(), textw, texth);
+
+    /*If surface width was not %4 == 0 then you'd get a text in italics */
+//    m_surface.reset(new Image(UPoint(textw + 4-(textw%4) , texth)));
+
+    m_surface->fillRect(0);
+
+    font->render(m_caption.c_str(), m_surface->getSurface(),
+                    m_surface->getSurface()->w/2 - textw/2, 
+                    m_surface->getSurface()->h/2 - texth/2, 49);
+
+	return m_surface;
+//		return m_fakeWsa->getCopy().get();
+	}
+	if(WsaFilesize == -2){
+		return m_cpsFile->getPicture();
+	}
+
 	if(FrameNumber >= NumFrames) {
 		return NULL;
 	}
 	
 	SDL_Surface * pic;
-	unsigned char * Frame = decodedFrames + (FrameNumber * SizeX * SizeY);
+	uint8_t * Frame = decodedFrames + (FrameNumber * SizeX * SizeY);
 	
 	// create new picture surface
 	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,SizeX,SizeY,8,0,0,0,0))== NULL) 
