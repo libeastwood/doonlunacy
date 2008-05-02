@@ -119,6 +119,7 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 		uint8_t numLines = 0;
 		int linebreak = text.find("\n",0)+ 1;
 		std::string thisLine;
+		// This is a bit hairy and needs to be cleaned up a bit..
 		while(text.substr(0, linebreak-1).length() > 0){
 			thisLine = text.substr(0, linebreak-1);
 			
@@ -127,7 +128,7 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 			font->render(thisLine, img->getSurface(),
 					img->getSurface()->w/2 - textw/2, 
 					img->getSurface()->h/2+(numLines++*20) - texth/2, m_textColor);
-			if(linebreak == -1)
+			if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
 				break;
 			text = text.substr(linebreak, text.length()-linebreak);
 			linebreak = text.find("\n",0);
