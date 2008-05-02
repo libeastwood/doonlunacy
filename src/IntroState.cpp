@@ -145,7 +145,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 		}
 	}
 	else
-		m_wsa.reset(new Wsafile(m_filename));
+		m_wsa.reset(new Wsafile(m_filename, m_textColor));
     
     m_frametime = 0;
     m_currentFrame = 0;
@@ -440,15 +440,10 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 10);
+                     false, 5);
 	frame->addText(11, DataCache::Instance()->getIntroString(12));
 	frame->concatSound(11, Intro_VastArmies);
 	frame->concatSound(11, Intro_HasArrived);
-	frame->addText(25, DataCache::Instance()->getIntroString(13));
-	frame->concatSound(25, Intro_AndNow);
-	frame->concatSound(25, Intro_3Houses);
-	frame->concatSound(25, Intro_ForControl);
-	frame->concatSound(25, Intro_OfDune);
 	enque(frame);
 
     frame = new Frame(DataCache::Instance()->getIntroString(13), 
