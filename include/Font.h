@@ -46,8 +46,10 @@ class Font
         Font(FNTCharacter* characters, FNTHeader* header);
         ~Font();
 
-        void extents(const char* text, Uint16& w, Uint16& h);
-        void render(const char* text, ImagePtr image, int x, int y, Uint8 paloff);
+        void extents(std::string text, Uint16& w, Uint16& h);
+        void render(std::string text, ImagePtr image, int x, int y, Uint8 paloff);
+        void render(std::string text, SDL_Surface* image, int x, int y, Uint8 paloff);
+
 
     private:
         FNTHeader* m_header;
@@ -60,19 +62,19 @@ class FontManager : public Singleton<FontManager>
 {
     friend class Singleton<FontManager>;
 
-    typedef std::map<const char*, Font*> FontList;
+    typedef std::map<std::string, Font*> FontList;
 
     protected:
         FontManager();
         ~FontManager();
 
     public:
-        Font* getFont(const char* fn);
+        Font* getFont(std::string fn);
 
     private:
         FontList m_fonts;
 
-        Font* loadFont(const char* fn);
+        Font* loadFont(std::string fn);
 };
 
 class TTFFontManager : public Singleton<TTFFontManager>

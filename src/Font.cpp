@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 
 Font::Font(FNTCharacter* characters, FNTHeader* header)
 {
@@ -18,21 +19,21 @@ Font::~Font()
     delete m_header;
 }
 
-void Font::extents(const char* text, Uint16& w, Uint16& h)
+void Font::extents(std::string text, Uint16& w, Uint16& h)
 {
     FNTCharacter* ch;
 
     w = 0;
     h = m_header->height;
 
-    for (unsigned int c=0; c!=strlen(text); c++)
+    for (unsigned int c=0; c!=text.length(); c++)
     {
         ch = &m_characters[text[c]];
         w += (2 * ch->width) + 1;
     };
 }
 
-void Font::render(const char* text, ImagePtr image, int offx, int offy, Uint8 paloff)
+void Font::render(std::string text, ImagePtr image, int offx, int offy, Uint8 paloff)
 {
     FNTCharacter* ch;
     byte* bitmap;
@@ -41,7 +42,46 @@ void Font::render(const char* text, ImagePtr image, int offx, int offy, Uint8 pa
     
     Uint8* pixels = (Uint8*)surface->pixels;
 
-    for (unsigned int c=0; c!=strlen(text); c++)
+    for (unsigned int c=0; c!=text.length(); c++)
+    {
+        ch = &m_characters[text[c]];
+        bitmap = ch->bitmap;
+
+        for (byte y=0; y!=ch->height; y++)
+        {
+            for (byte x=0; x!=ch->width*2; x+=2)
+            {
+                byte lobyte = bitmap[(x/2) + (y*ch->width)] >> 4;
+                byte hibyte = bitmap[(x/2) + (y*ch->width)] & 0x0F;
+                
+                if (hibyte!=0)
+                {
+                    pixels[(offx + x) + ((ch->y_offset + y + offy) * surface->w)] = paloff + Uint8(hibyte);
+                };
+
+                if (lobyte!=0) //(2 < ch->width) lobyte!=0)
+                {
+                    pixels[(offx + x + 1) + ((ch->y_offset + y + offy) * surface->w)] = paloff + Uint8(lobyte);
+                };
+            };
+
+        };
+        offx += (2*ch->width) + 1;
+    };
+
+}
+
+void Font::render(std::string text, SDL_Surface* image, int offx, int offy, Uint8 paloff)
+{
+	std::string test = text;
+    FNTCharacter* ch;
+    byte* bitmap;
+
+    SDL_Surface * surface = image;
+    
+    Uint8* pixels = (Uint8*)surface->pixels;
+
+    for (unsigned int c=0; c!=text.length(); c++)
     {
         ch = &m_characters[text[c]];
         bitmap = ch->bitmap;
@@ -80,21 +120,21 @@ FontManager::~FontManager()
 
 }
 
-Font* FontManager::getFont(const char* fn)
+Font* FontManager::getFont(std::string fn)
 {
     FontList::iterator it = m_fonts.find(fn);
     if (it == m_fonts.end())
     {
-        printf("loading %s\n", fn);
+		std::cout << "loading" << fn << std::endl;
         m_fonts[fn] = loadFont(fn);
     };
 
     return m_fonts[fn];
 }
 
-Font* FontManager::loadFont(const char* fn)
+Font* FontManager::loadFont(std::string fn)
 {
-    printf("loadFont  %s\n", fn);
+	std::cout << "loadFont  " << fn << std::endl;
     //FILE* file = fopen(fn, "rb");
     FileLike* file = ResMan::Instance()->readFile(fn);
 
@@ -118,7 +158,7 @@ Font* FontManager::loadFont(const char* fn)
     file->seek(header->wpos);
     file->read(wchar, sizeof(byte) * (header->nchars+1));
 
-    if (wchar[0] != 8) printf("bad!!\n");
+    if (wchar[0] != 8) printf("%d: bad!!\n", wchar[0]);
 
     word* hchar = new word[header->nchars+1];
 
@@ -133,7 +173,7 @@ Font* FontManager::loadFont(const char* fn)
     {
         byte offset = hchar[i] & 0xFF;
         byte height = hchar[i] >> 8;
-        byte width =( wchar[i] + 1) / 2;
+        byte width =( wchar[i] + 1)/ 2;
         
         characters[i].width = width;
         characters[i].height = height;
@@ -168,18 +208,18 @@ TTFFontManager::TTFFontManager()
 
     fprintf(stdout, "loading fonts...\n");
 
-    const char *fn = "data/font.ttf";
+	std::string fn = "data/font.ttf";
 
     for (int i=MIN_FONT_SIZE; i < MAX_FONT_SIZE; i++)
     {
-        if ( (m_fonts[i - MIN_FONT_SIZE] = TTF_OpenFont(fn, i)) = NULL )
+        if ( (m_fonts[i - MIN_FONT_SIZE] = TTF_OpenFont(fn.c_str(), i)) = NULL )
         {
-            fprintf(stderr, "ERROR: unable to load %s size %d\n", fn, i);  
+			std::cerr << "ERROR: unable to load " << fn << " size " << i << std::endl;
             Application::Instance()->Die();
         }
         else
         {
-            fprintf(stdout, "loaded font %s %d\n", fn, i);
+			std::cout << "loaded font " << fn << " " << i << std::endl;
         };
     };
 }
