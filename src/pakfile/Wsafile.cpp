@@ -6,7 +6,7 @@
 #include <string>
 #include "Font.h"
 
-Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize, 
+Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize, 
                 SDL_Surface* lastframe, float setFps ) : Decode()
 {
 	Filedata = bufFiledata;
@@ -68,7 +68,7 @@ Wsafile::Wsafile(unsigned char * bufFiledata, int bufsize,
 	decodeFrames();
 }
 
-Wsafile::Wsafile(std::string text) : Decode()
+Wsafile::Wsafile(std::string text, uint8_t textColor) : Decode()
 {
 	WsaFilesize = -1;
 
@@ -81,7 +81,7 @@ Wsafile::Wsafile(std::string text) : Decode()
     printf("FPS = %.3f\n", fps);
 	decodedFrames = NULL;
 	m_text = text;
-	m_fakeWsa = ImagePtr(new Image(UPoint(100,100)));
+	m_textColor = textColor;
 }
 
 Wsafile::Wsafile(Cpsfile* cpsFile) : Decode()
@@ -107,28 +107,34 @@ Wsafile::~Wsafile()
 Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
 	if(WsaFilesize == -1){
-//		ImagePtr m_surface = m_fakeWsa; //ImagePtr(new Image(UPoint(10,10)));
-		Image* m_surface = new Image(UPoint(320,240));
-
-		std::string m_caption = m_text;
-    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-
-    Uint16 textw, texth;
-
-    font->extents(m_caption.c_str(), textw, texth);
-
-    /*If surface width was not %4 == 0 then you'd get a text in italics */
-//    m_surface.reset(new Image(UPoint(textw + 4-(textw%4) , texth)));
-
-    m_surface->fillRect(0);
-
-    font->render(m_caption.c_str(), m_surface->getSurface(),
-                    m_surface->getSurface()->w/2 - textw/2, 
-                    m_surface->getSurface()->h/2 - texth/2, 49);
-
-	return m_surface;
-//		return m_fakeWsa->getCopy().get();
+		Image* img = new Image(UPoint(320,240));
+		
+		std::string text = m_text;
+		Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+		
+		Uint16 textw, texth;
+		
+		img->fillRect(0);
+		
+		uint8_t numLines = 0;
+		int linebreak = text.find("\n",0)+ 1;
+		std::string thisLine;
+		while(text.substr(0, linebreak-1).length() > 0){
+			thisLine = text.substr(0, linebreak-1);
+			
+			font->extents(thisLine, textw, texth);
+			
+			font->render(thisLine, img->getSurface(),
+					img->getSurface()->w/2 - textw/2, 
+					img->getSurface()->h/2+(numLines++*20) - texth/2, m_textColor);
+			if(linebreak == -1)
+				break;
+			text = text.substr(linebreak, text.length()-linebreak);
+			linebreak = text.find("\n",0);
+		}
+		return img;
 	}
+
 	if(WsaFilesize == -2){
 		return m_cpsFile->getPicture();
 	}
@@ -162,7 +168,7 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 	//Now we can copy line by line
 	for(int y = 0; y < SizeY;y++) 
 	{
-		memcpy(	((unsigned char*) (pic->pixels)) + y * pic->pitch , Frame + y * SizeX, SizeX);
+		memcpy(	((uint8_t*) (pic->pixels)) + y * pic->pitch , Frame + y * SizeX, SizeX);
 	}
 		
 	SDL_UnlockSurface(pic);
