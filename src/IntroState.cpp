@@ -140,7 +140,6 @@ void IntroState::Frame::Load(Frame* lastframe)
 	if(m_endWait && !m_loop.first)
 		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
 
-
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -173,14 +172,6 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
-	std::cout << "\n\nframes played:\t\t" <<  (int)m_framesPlayed << std::endl;
-	/*m_framesPlayed++;
-	if(m_numLoops != 0 && m_currentFrame == m_loop.first)
-	{
-		m_currentFrame = m_loop.second;
-		m_numLoops--;
-	}*/
-
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
 			if(m_subText != NULL) m_container->deleteChild(m_subText);
@@ -207,19 +198,6 @@ void IntroState::Frame::doPlaying(float dt)
 		}
 	}
 
-/*	if(m_loopTime.first != 0 && m_currentFrame == m_loop.first)
-	{
-		m_currentFrame = m_loop.second;
-		m_loopTime.first--;
-	}*/
-
-/*	if(m_numLoops != 0 && m_currentFrame == m_loop.first)
-	{
-		std::cout << "jaggu!" << std::endl;
-		m_currentFrame = m_loop.second;
-		m_numLoops--;
-	}
-*/
     m_frametime += dt;
 
     if (m_frametime > m_wsa->getFPS())
@@ -317,34 +295,12 @@ void IntroState::Frame::doTransitionOut(float dt)
 
 void IntroState::Frame::doHolding(float dt)
 {
-/*	uint16_t startTicks = SDL_GetTicks();
-
-	SDL_Event event;
-	bool wait = true;
-	while(wait && (SDL_GetTicks() - startTicks)  <  m_endWait){
-		while(SDL_PollEvent(&event)){
-			switch (event.type){
-				case (SDL_KEYDOWN):
-					switch( event.key.keysym.sym ){
-						case SDLK_RETURN:
-						case SDLK_SPACE:
-							wait = false;
-							break;
-						case SDLK_ESCAPE:
-							if(m_subText != NULL) m_container->deleteChild(m_subText);
-							Application::Instance()->RootState()->PopState();
-							return;
-						default:
-							break;
-					}}}
-	}
-*/
     m_state = TRANSITION_OUT;
+	if(m_subText != NULL) m_container->deleteChild(m_subText);	
 }
 
 IntroState::Frame::~Frame()
 {
-	if(m_subText != NULL) m_container->deleteChild(m_subText);
 }
 // ------------------------------------------------------------------
 // IntroState
@@ -441,14 +397,14 @@ IntroState::IntroState()
 	frame->concatSound(61, Intro_RulesOfEngagement);
 
 	frame->addText(61, DataCache::Instance()->getIntroString(10));
-	frame->addText(66, DataCache::Instance()->getIntroString(11));
+	frame->addText(83, DataCache::Instance()->getIntroString(11));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 10);
-	frame->addText(10, DataCache::Instance()->getIntroString(12));
+	frame->addText(11, DataCache::Instance()->getIntroString(12));
 	frame->concatSound(11, Intro_VastArmies);
 	frame->concatSound(11, Intro_HasArrived);
 	frame->addText(25, DataCache::Instance()->getIntroString(13));
@@ -458,7 +414,7 @@ IntroState::IntroState()
 	frame->concatSound(25, Intro_OfDune);
 	enque(frame);
 
-	frame = new Frame(DataCache::Instance()->getIntroString(13) ,
+/*	frame = new Frame(DataCache::Instance()->getIntroString(13) ,
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 20);
@@ -467,7 +423,7 @@ IntroState::IntroState()
 	frame->concatSound(0, Intro_ForControl);
 	frame->concatSound(0, Intro_OfDune);
 	enque(frame);
-
+*/
     frame = new Frame("INTRO:INTRO6.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
