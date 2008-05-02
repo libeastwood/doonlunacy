@@ -370,7 +370,7 @@ void DataCache::Init(){
 	addSoundChunk(Intro_3Houses, getChunkFromFile("INTROVOC:3HOUSES.VOC"));
 	addSoundChunk(Intro_AndNow, getChunkFromFile("INTROVOC:ANDNOW.VOC"));
 	addSoundChunk(Intro_HasArrived, getChunkFromFile("INTROVOC:ARRIVED.VOC"));
-	addSoundChunk(Intro_Battle, getChunkFromFile("INTROVOC:BATTLE.VOC"));	
+	addSoundChunk(Intro_BattleForDune, getChunkFromFile("INTROVOC:BATTLE.VOC"));	
 	addSoundChunk(Intro_Begins, getChunkFromFile("INTROVOC:BEGINS.VOC"));
 	addSoundChunk(Intro_Blaster, getChunkFromFile("INTROVOC:BLASTER.VOC"));
 	addSoundChunk(Intro_TheBuilding, getChunkFromFile("INTROVOC:BLDING.VOC"));

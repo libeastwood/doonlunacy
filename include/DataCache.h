@@ -338,7 +338,7 @@ typedef enum {
 	Intro_3Houses,
 	Intro_AndNow,
 	Intro_HasArrived,	
-	Intro_Battle,
+	Intro_BattleForDune,
 	Intro_Begins,
 	Intro_Blaster,
 	Intro_TheBuilding,
