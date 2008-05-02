@@ -18,6 +18,7 @@ typedef std::pair <uint16_t, Sound_enum> introSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 typedef std::pair <uint8_t, uint8_t> videoLoop;
 
+class Font;
 class StringFile;
 class Button;
 class Label;
@@ -78,10 +79,9 @@ class IntroState : public State
 			float m_fps;
 			videoLoop m_loop, m_loopTime;
 
-            ImagePtr m_animSurface, m_scaledSurface;
+            ImagePtr m_animSurface, m_scaledSurface, m_textSurface;
             SDL_Color* m_transitionPalette;
-			Label* m_subText;
-			Container* m_container;
+			Font* font;			
 			std::vector<introText> m_introStrings;
 			std::vector<introSound> m_introSounds;
 			std::vector<soundChunk> m_soundChunks;

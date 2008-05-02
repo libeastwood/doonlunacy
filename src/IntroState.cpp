@@ -6,9 +6,8 @@
 #include "Settings.h"
 #include "pakfile/Palette.h"
 #include "boost/bind.hpp"
-#include "gui2/Label.h"
-#include "gui2/Container.h"
 #include <iostream>
+#include "Font.h"
 
 // ------------------------------------------------------------------
 // IntroState::Frame
@@ -24,10 +23,6 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
     m_state = TRANSITION_IN;
     m_hold = 0.0f;
     m_transitionPalette = NULL;
-	m_container = new Container();
-    m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
-								Settings::Instance()->GetHeight()));
-	m_subText = NULL;
 	m_palette = DataCache::Instance()->getPalette(INTRO_PAL);
 
 	m_song = -1;
@@ -36,8 +31,8 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_loop = videoLoop(0,0);
 	m_loopTime = videoLoop(0,0);
 	m_textColor = 49;
-
-    Application::Instance()->RootWidget()->addChild(m_container);
+	m_textSurface.reset(new Image(UPoint(320,40)));
+	font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
 }
 
@@ -145,7 +140,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 		}
 	}
 	else
-		m_wsa.reset(new Wsafile(m_filename, m_textColor));
+		m_wsa.reset(new Wsafile());
     
     m_frametime = 0;
     m_currentFrame = 0;
@@ -188,13 +183,36 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
+		Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+		
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
-			if(m_subText != NULL) m_container->deleteChild(m_subText);
-			m_subText = new Label(m_introStrings[0].second, m_textColor, 0);
+			ImagePtr tmp(new Image(UPoint(320,40)));
+			std::string text = m_introStrings[0].second;
+
+			uint8_t numLines = 0;
+			int linebreak = text.find("\n",0)+ 1;
+			std::string thisLine;
+			// This is a bit hairy and needs to be cleaned up a bit..
+
+			Uint16 textw, texth;
+
+			while(text.substr(0, linebreak-1).length() > 0){
+				thisLine = text.substr(0, linebreak-1);
+				if(linebreak != -1)
+					thisLine += " ";
+				
+				font->extents(thisLine, textw, texth);
+				
+				font->render(thisLine, tmp->getSurface(), tmp->getSurface()->w/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+				if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
+					break;
+				text = text.substr(linebreak, text.length()-linebreak);
+				linebreak = text.find("\n",0);
+			}
+			m_textSurface = tmp->getResized(2);
+
 			m_introStrings.erase(m_introStrings.begin());
-			m_container->setPosition(UPoint(50, 420));
-			m_container->addChild(m_subText);
 		}
 	}
 
@@ -238,7 +256,11 @@ void IntroState::Frame::doPlaying(float dt)
             m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
             m_scaledSurface = m_animSurface->getResized(2.0);
         };
+
     };
+	m_textSurface->blitToScreen(SPoint(0,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + 20));
+
+
 }
 
 void IntroState::Frame::setupTransitionIn()
@@ -312,7 +334,6 @@ void IntroState::Frame::doTransitionOut(float dt)
 void IntroState::Frame::doHolding(float dt)
 {
     m_state = TRANSITION_OUT;
-	if(m_subText != NULL) m_container->deleteChild(m_subText);	
 }
 
 IntroState::Frame::~Frame()
@@ -335,10 +356,11 @@ IntroState::IntroState()
 	frame->setPalette(WESTWOOD_PAL);
 	enque(frame);
 
-	frame = new Frame("and",
+	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 30);
+	frame->addText(0, "and");
 	enque(frame);
 
 	// VIRGIN.CPS has it's own palette, handling of this needs to be implemented..
