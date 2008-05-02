@@ -19,8 +19,8 @@ class Wsafile : public Decode
 public:
 	Wsafile(uint8_t * bufFiledata, int bufsize, 
                 SDL_Surface* lastframe = NULL, float setFps = 0 );
-	Wsafile(std::string text, uint8_t textColor);
 	Wsafile(Cpsfile* cpsFile);
+	Wsafile();
 
 	~Wsafile();
 

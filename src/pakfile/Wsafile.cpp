@@ -68,22 +68,6 @@ Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize,
 	decodeFrames();
 }
 
-Wsafile::Wsafile(std::string text, uint8_t textColor) : Decode()
-{
-	WsaFilesize = -1;
-
-    printf("loading fake wsa...\n");
-	
-	NumFrames = 1;
-	fps = 0.1;
-
-    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
-    printf("FPS = %.3f\n", fps);
-	decodedFrames = NULL;
-	m_text = text;
-	m_textColor = textColor;
-}
-
 Wsafile::Wsafile(Cpsfile* cpsFile) : Decode()
 {
 	WsaFilesize = -2;
@@ -99,6 +83,20 @@ Wsafile::Wsafile(Cpsfile* cpsFile) : Decode()
 	m_cpsFile = cpsFile;
 }
 
+Wsafile::Wsafile() : Decode()
+{
+	WsaFilesize = -1;
+
+    printf("loading empty image as wsa...\n");
+	
+	NumFrames = 1;
+	fps = 0.1;
+
+    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
+    printf("FPS = %.3f\n", fps);
+	decodedFrames = NULL;
+}
+
 Wsafile::~Wsafile()
 {
 	free(decodedFrames);
@@ -106,33 +104,9 @@ Wsafile::~Wsafile()
 
 Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 {
+	Image* img;
 	if(WsaFilesize == -1){
-		Image* img = new Image(UPoint(320,240));
-		
-		std::string text = m_text;
-		Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-		
-		Uint16 textw, texth;
-		
-		img->fillRect(0);
-		
-		uint8_t numLines = 0;
-		int linebreak = text.find("\n",0)+ 1;
-		std::string thisLine;
-		// This is a bit hairy and needs to be cleaned up a bit..
-		while(text.substr(0, linebreak-1).length() > 0){
-			thisLine = text.substr(0, linebreak-1);
-			
-			font->extents(thisLine, textw, texth);
-			
-			font->render(thisLine, img->getSurface(),
-					img->getSurface()->w/2 - textw/2, 
-					img->getSurface()->h/2+(numLines++*20) - texth/2, m_textColor);
-			if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
-				break;
-			text = text.substr(linebreak, text.length()-linebreak);
-			linebreak = text.find("\n",0);
-		}
+		img = new Image(UPoint(1,1));
 		return img;
 	}
 
@@ -174,7 +148,7 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 		
 	SDL_UnlockSurface(pic);
 	
-	Image * img = new Image(pic);
+	img = new Image(pic);
 
 	return img;
 
