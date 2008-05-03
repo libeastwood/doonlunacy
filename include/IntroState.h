@@ -59,11 +59,12 @@ class IntroState : public State
 			void setTextColor(uint8_t textColor);
 			void setTextLocation(SPoint textLocation);
 			void setTextSize(float setTextSize);
+			void setTextFade(bool textFade);
 
         private:
             std::string m_filename;
             
-            bool m_continuation;
+            bool m_continuation, m_textFade;
             float m_hold;
             
             TransitionState m_state;
