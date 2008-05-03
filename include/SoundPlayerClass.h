@@ -8,6 +8,7 @@
 #include "dMath.h"
 #include "SDL_mixer.h"
 
+#if 0
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
 typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
@@ -17,7 +18,7 @@ typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was 
 			   MUSIC_WIN,    /*!<Victory screen background music.. */
 			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
 			 } MUSICTYPE;
-
+#endif
 /*!
 	Class that handles sounds and music.
 */
@@ -61,7 +62,7 @@ public:
 
 	void playVoice(Sound_enum id, HOUSETYPE house);
 	void playSound(Sound_enum soundID);
-	void playSound(Mix_Chunk* sound);
+	void playSound(Mix_Chunk* sound, int channel = 0);
 	
 	inline int GetSfxVolume() { return sfxVolume; };
 	void SetSfxVolume(int newVolume) {

@@ -304,10 +304,10 @@ void SoundPlayerClass::playSound(Sound_enum soundID) {
 	}
 }
 
-void SoundPlayerClass::playSound(Mix_Chunk* sound) {
+void SoundPlayerClass::playSound(Mix_Chunk* sound, int channel) {
 	if (soundOn)
 	{
-		Mix_PlayChannel(-1, sound, 0);
+		Mix_PlayChannel(channel, sound, 0);
 	}
 }
 
