@@ -394,7 +394,7 @@ IntroState::IntroState()
 	frame->concatSound(66, Intro_TheBuilding);
 	frame->concatSound(66, Intro_OfADynasty);
 	frame->addText(66, DataCache::Instance()->getIntroString(2));
-	frame->setTextLocation(SPoint(0,-20));
+	frame->setTextLocation(SPoint(25,-20));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO2.WSA",
