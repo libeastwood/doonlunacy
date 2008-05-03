@@ -370,10 +370,11 @@ IntroState::IntroState()
                      false, 30);
 	enque(frame);
 
-	frame = new Frame(DataCache::Instance()->getIntroString(1),
+	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 20);
+	DataCache::Instance()->getIntroString(1),
 	enque(frame);
 
 	
@@ -386,7 +387,7 @@ IntroState::IntroState()
 	frame->concatSound(66, Intro_Dune);
 	frame->concatSound(66, Intro_TheBuilding);
 	frame->concatSound(66, Intro_OfADynasty);
-	frame->addText(66, "The Building of a Dynasty");
+	frame->addText(66, DataCache::Instance()->getIntroString(2));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO2.WSA",
@@ -511,14 +512,13 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      true, 5);
 	frame->addSound(10, Intro_Missile_8);
-	frame->addText(0, DataCache::Instance()->getIntroString(16));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO8A.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::NO_TRANSITION,
                      false);
-	frame->addText(0, DataCache::Instance()->getIntroString(17));
+	frame->addText(0, DataCache::Instance()->getIntroString(16));
 	frame->concatSound(0, Intro_AndThe);
 	frame->concatSound(0, Intro_EvilHarkonnen);
 	frame->addSound(5, Sound_Gun);
@@ -547,26 +547,28 @@ IntroState::IntroState()
                      false);
 	frame->setFps(0.2);
 	frame->setLoop(3, 0, 10, 0);
-	frame->addText(0, DataCache::Instance()->getIntroString(18));
+	frame->addText(0, DataCache::Instance()->getIntroString(17));
 	frame->concatSound(0, Intro_OnlyOneHouse);
 	frame->concatSound(0, Intro_WillPrevail);
 	enque(frame);
 
 
-    frame = new Frame(DataCache::Instance()->getIntroString(18),
+    frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 20);
+	frame->addText(0, DataCache::Instance()->getIntroString(18));
 	frame->concatSound(0, Intro_Your);
 	frame->concatSound(0, Intro_BattleForDune);
 	frame->concatSound(0, Intro_Begins);
 	enque(frame);
 
 
-    frame = new Frame(DataCache::Instance()->getIntroString(19), 
+    frame = new Frame("", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 15);
+	frame->addText(0, DataCache::Instance()->getIntroString(19));
 	frame->addSound(0, Intro_Now);
 	enque(frame);
 
