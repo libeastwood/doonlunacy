@@ -76,7 +76,8 @@ class IntroState : public State
 
             float m_frametime, m_textSize;
 			int8_t m_song;
-			uint8_t m_endWait, m_textColor;
+			uint8_t m_endWait, m_textColor, m_textTransition;
+			uint16_t m_totalFrames;
 			SPoint m_textLocation;
 
 			float m_fps;
@@ -100,6 +101,7 @@ class IntroState : public State
             
             void doTransitionIn(float dt);
             void doTransitionOut(float dt);
+			void doTransitionOut(ImagePtr img, bool done = false, bool forceTransition = false, const int fadeAmt = 4);
             void doPlaying(float dt);
             void doHolding(float dt);
     };

@@ -32,6 +32,7 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_textSurface.reset(new Image(UPoint(320,40)));
 	m_textSize = 1.7;
 	m_textLocation = SPoint(20,20);
+	m_textTransition = 0;
 	font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
 }
@@ -155,6 +156,12 @@ void IntroState::Frame::Load(Frame* lastframe)
     m_currentFrame = 0;
 	m_framesPlayed = 0;
     mb_finished = false;
+	uint8_t loopFrames = 0;
+	for(uint8_t i = 0; i < m_loops.size(); i = i+2)
+	{
+		 loopFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
+	}
+	m_totalFrames = m_wsa->getNumFrames() + m_endWait + loopFrames;
 
     m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
@@ -198,7 +205,9 @@ void IntroState::Frame::doPlaying(float dt)
 		if(m_framesPlayed ==  m_introStrings[0].first){
 			ImagePtr tmp(new Image(UPoint(360,50)));
 			std::string text = m_introStrings[0].second;
-
+			// Here we try to figure out how long the text should be displayed
+			// relative to it's length. Room for improval..
+			m_textTransition = m_framesPlayed + (text.length()/m_wsa->getFPS()/100*9);
 			uint8_t numLines = 0;
 			int linebreak = text.find("\n",0)+ 1;
 			std::string thisLine;
@@ -220,9 +229,17 @@ void IntroState::Frame::doPlaying(float dt)
 				linebreak = text.find("\n",0);
 			}
 			m_textSurface = tmp->getResized(m_textSize);
-
 			m_introStrings.erase(m_introStrings.begin());
+			// Something wrong happens here that prevents the fading and only removes the text
+			if(m_introStrings.size() > 0)
+				if(m_textTransition > m_introStrings[0].first - 4)
+					m_textTransition = m_introStrings[0].first - 4;
+				else if(m_textTransition > m_totalFrames - 2)
+					m_textTransition = m_totalFrames - 2;
 		}
+	}
+	if(m_framesPlayed >= m_textTransition){
+		doTransitionOut(m_textSurface, false, true, 6);
 	}
 
 	if(m_introSounds.size() > 0){
@@ -232,6 +249,7 @@ void IntroState::Frame::doPlaying(float dt)
 			m_introSounds.erase(m_introSounds.begin());
 		}
 	}
+
 	if(m_soundChunks.size() > 0){
 		if(m_framesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
@@ -308,10 +326,15 @@ void IntroState::Frame::cleanupTransitionOut()
     delete m_transitionPalette;
 }
 
-void IntroState::Frame::doTransitionOut(float dt) 
+void IntroState::Frame::doTransitionOut(float dt)
 {
+	doTransitionOut(m_scaledSurface, true);
+	doTransitionOut(m_textSurface, true, true);
+}
 
-    if (m_transition_out == NO_TRANSITION) 
+void IntroState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
+{
+    if (m_transition_out == NO_TRANSITION && !forceTransition) 
     {
         mb_finished = true;
         return;
@@ -319,12 +342,9 @@ void IntroState::Frame::doTransitionOut(float dt)
 
     if (m_transitionPalette == NULL) setupTransitionOut();
     
-    bool done = true;
-    SDL_Surface* screen = m_scaledSurface->getSurface();
-	SDL_Surface* text = m_textSurface->getSurface();
+    SDL_Surface* screen = img->getSurface();
     SDL_Color* col = m_transitionPalette;
 
-    const int fadeAmt = 4;
 
     for (int i=0; i!=256; i++, col++)
     {
@@ -339,7 +359,6 @@ void IntroState::Frame::doTransitionOut(float dt)
     };
 
     SDL_SetPalette(screen, SDL_LOGPAL, m_transitionPalette, 0, 256);
-    SDL_SetPalette(text, SDL_LOGPAL, m_transitionPalette, 0, 256);
 
     if (done)
     {
@@ -377,7 +396,7 @@ IntroState::IntroState()
 	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 3);
+                     false, 4);
 	frame->addText(0, "and");
 	frame->setTextSize(2.0);
 	frame->setTextLocation(SPoint(-25,0));
@@ -393,7 +412,7 @@ IntroState::IntroState()
 	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 2);
+                     false, 4);
 	frame->addText(0,DataCache::Instance()->getIntroString(1));
 	frame->setTextLocation(SPoint(-25,0));
 	frame->setTextSize(2.0);
