@@ -57,6 +57,7 @@ class IntroState : public State
 			void setFps(float fps);
 			void setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
 			void setTextColor(uint8_t textColor);
+			void setTextLocation(SPoint textLocation);
 
         private:
             std::string m_filename;
@@ -74,8 +75,9 @@ class IntroState : public State
 
             float m_frametime;
 			int8_t m_song;
-			uint8_t m_endWait;
-			uint8_t m_textColor;
+			uint8_t m_endWait, m_textColor;
+			SPoint m_textLocation;
+
 			float m_fps;
 			videoLoop m_loop, m_loopTime;
 

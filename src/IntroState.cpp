@@ -32,6 +32,7 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_loopTime = videoLoop(0,0);
 	m_textColor = 49;
 	m_textSurface.reset(new Image(UPoint(320,40)));
+	m_textLocation = SPoint(0,0);
 	font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
 }
@@ -109,6 +110,11 @@ void IntroState::Frame::setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoo
 void IntroState::Frame::setTextColor(uint8_t textColor)
 {
 	m_textColor = textColor;
+}
+
+void IntroState::Frame::setTextLocation(SPoint textLocation)
+{
+	m_textLocation = textLocation;
 }
 
 void IntroState::Frame::Load(Frame* lastframe)
@@ -258,7 +264,7 @@ void IntroState::Frame::doPlaying(float dt)
         };
 
     };
-	m_textSurface->blitToScreen(SPoint(0,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + 20));
+	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + 20 + m_textLocation.y));
 
 
 }
@@ -348,7 +354,7 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-	frame = new Frame("INTRO:WESTWOOD.WSA",
+	/*frame = new Frame("INTRO:WESTWOOD.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 30);
@@ -374,9 +380,9 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 20);
-	DataCache::Instance()->getIntroString(1),
+	frame->addText(0,DataCache::Instance()->getIntroString(1));
 	enque(frame);
-
+*/
 	
 	frame =  new Frame("INTRO:INTRO1.WSA",
                      Frame::NO_TRANSITION,
@@ -388,6 +394,7 @@ IntroState::IntroState()
 	frame->concatSound(66, Intro_TheBuilding);
 	frame->concatSound(66, Intro_OfADynasty);
 	frame->addText(66, DataCache::Instance()->getIntroString(2));
+	frame->setTextLocation(SPoint(0,-20));
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO2.WSA",
