@@ -318,7 +318,7 @@ void IntroState::Frame::doTransitionOut(float dt)
 	SDL_Surface* text = m_textSurface->getSurface();
     SDL_Color* col = m_transitionPalette;
 
-    const int fadeAmt = 3;
+    const int fadeAmt = 8;
 
     for (int i=0; i!=256; i++, col++)
     {
@@ -387,7 +387,7 @@ IntroState::IntroState()
 	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 1);
+                     false, 2);
 	frame->addText(0,DataCache::Instance()->getIntroString(1));
 	frame->setTextLocation(SPoint(-25,0));
 	frame->setTextSize(2.0);
