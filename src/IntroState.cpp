@@ -32,7 +32,8 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_loopTime = videoLoop(0,0);
 	m_textColor = 49;
 	m_textSurface.reset(new Image(UPoint(320,40)));
-	m_textLocation = SPoint(0,0);
+	m_textSize = 1.7;
+	m_textLocation = SPoint(20,20);
 	font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
 }
@@ -117,6 +118,10 @@ void IntroState::Frame::setTextLocation(SPoint textLocation)
 	m_textLocation = textLocation;
 }
 
+void IntroState::Frame::setTextSize(float textSize)
+{
+	m_textSize = textSize;
+}
 void IntroState::Frame::Load(Frame* lastframe)
 {
     printf("intro loading %s\n", m_filename.c_str());
@@ -182,6 +187,7 @@ bool IntroState::Frame::Execute(float dt)
     };
 
     m_scaledSurface->blitToScreenCentered();
+	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + m_textLocation.y));
 
     return mb_finished;
 }
@@ -193,7 +199,7 @@ void IntroState::Frame::doPlaying(float dt)
 		
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
-			ImagePtr tmp(new Image(UPoint(320,40)));
+			ImagePtr tmp(new Image(UPoint(360,50)));
 			std::string text = m_introStrings[0].second;
 
 			uint8_t numLines = 0;
@@ -216,7 +222,7 @@ void IntroState::Frame::doPlaying(float dt)
 				text = text.substr(linebreak, text.length()-linebreak);
 				linebreak = text.find("\n",0);
 			}
-			m_textSurface = tmp->getResized(2);
+			m_textSurface = tmp->getResized(m_textSize);
 
 			m_introStrings.erase(m_introStrings.begin());
 		}
@@ -264,9 +270,6 @@ void IntroState::Frame::doPlaying(float dt)
         };
 
     };
-	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + 20 + m_textLocation.y));
-
-
 }
 
 void IntroState::Frame::setupTransitionIn()
@@ -312,6 +315,7 @@ void IntroState::Frame::doTransitionOut(float dt)
     
     bool done = true;
     SDL_Surface* screen = m_scaledSurface->getSurface();
+	SDL_Surface* text = m_textSurface->getSurface();
     SDL_Color* col = m_transitionPalette;
 
     const int fadeAmt = 3;
@@ -329,6 +333,7 @@ void IntroState::Frame::doTransitionOut(float dt)
     };
 
     SDL_SetPalette(screen, SDL_LOGPAL, m_transitionPalette, 0, 256);
+    SDL_SetPalette(text, SDL_LOGPAL, m_transitionPalette, 0, 256);
 
     if (done)
     {
@@ -354,47 +359,52 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-	/*frame = new Frame("INTRO:WESTWOOD.WSA",
+	frame = new Frame("INTRO:WESTWOOD.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 30);
+                     false, 20);
 	frame->setSong(0);
+	frame->setFps(0.15);
 	frame->setPalette(WESTWOOD_PAL);
 	enque(frame);
 
 	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 30);
+                     false, 3);
 	frame->addText(0, "and");
+	frame->setTextSize(2.0);
+	frame->setTextLocation(SPoint(-25,0));
 	enque(frame);
 
 	// VIRGIN.CPS has it's own palette, handling of this needs to be implemented..
 	frame = new Frame("INTRO:VIRGIN.CPS",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 30);
+                     false, 12);
 	enque(frame);
 
 	frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 20);
+                     false, 1);
 	frame->addText(0,DataCache::Instance()->getIntroString(1));
+	frame->setTextLocation(SPoint(-25,0));
+	frame->setTextSize(2.0);
 	enque(frame);
-*/
-	
+
 	frame =  new Frame("INTRO:INTRO1.WSA",
                      Frame::NO_TRANSITION,
                      Frame::FADE_OUT,
                      false, 50);
 	frame->setFps(0.05);
 	frame->setSong(1);
-	frame->concatSound(66, Intro_Dune);
+	frame->addSound(46, Intro_Dune);
 	frame->concatSound(66, Intro_TheBuilding);
 	frame->concatSound(66, Intro_OfADynasty);
 	frame->addText(66, DataCache::Instance()->getIntroString(2));
-	frame->setTextLocation(SPoint(25,-20));
+	frame->setTextLocation(SPoint(-13,-35));
+	frame->setTextSize(2.0);
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO2.WSA",
@@ -409,7 +419,7 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO3.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 30);
+                     false, 25);
 	frame->addSound(0, Intro_LandOfSand);
 	frame->addText(0, DataCache::Instance()->getIntroString(4));
 	frame->concatSound(33, Intro_Home);
@@ -422,7 +432,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 2);
-	frame->setFps(0.18);
+	frame->setFps(0.16);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
 	frame->concatSound(0, Intro_TheSpice);
 	frame->concatSound(0, Intro_Controls);
@@ -438,7 +448,7 @@ IntroState::IntroState()
 
     frame = new Frame("INTRO:INTRO10.WSA",  
                      Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
+                     Frame::NO_TRANSITION,
                      false, 25);
 	frame->addText(0, DataCache::Instance()->getIntroString(8));
 	frame->concatSound(0, Intro_TheEmperor);
@@ -457,7 +467,7 @@ IntroState::IntroState()
 	frame->concatSound(0, Intro_ThatProduces);
 	frame->concatSound(0, Intro_TheMostSpice);
 	frame->concatSound(0, Intro_WillControlDune);
-	frame->setLoop(45, 0, 1, 15);
+	frame->setLoop(45, 0, 1, 14);
 	frame->concatSound(61, Intro_ThereAreNoSet);
 	frame->concatSound(61, Intro_Territories);
 	frame->concatSound(61, Intro_AndNo);
@@ -470,16 +480,19 @@ IntroState::IntroState()
     frame = new Frame("INTRO:INTRO4.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 5);
+                     false);
 	frame->addText(11, DataCache::Instance()->getIntroString(12));
 	frame->concatSound(11, Intro_VastArmies);
 	frame->concatSound(11, Intro_HasArrived);
 	enque(frame);
 
-    frame = new Frame(DataCache::Instance()->getIntroString(13), 
+    frame = new Frame("", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 50);
+                     false, 23);
+	frame->addText(0,DataCache::Instance()->getIntroString(13));
+	frame->setTextLocation(SPoint(-25,0));
+	frame->setTextSize(2.0);	
 	frame->concatSound(0, Intro_AndNow);
 	frame->concatSound(0, Intro_3Houses);
 	frame->concatSound(0, Intro_ForControl);
@@ -491,7 +504,7 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false);
-	frame->setFps(0.1);
+	frame->setFps(0.08);
 	frame->addText(0, DataCache::Instance()->getIntroString(14));
 	frame->addSound(0, Intro_TheNobleAtreides);
 	frame->addSound(31, Intro_Glass);
@@ -553,7 +566,7 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false);
 	frame->setFps(0.2);
-	frame->setLoop(3, 0, 10, 0);
+	frame->setLoop(3, 0, 5, 0);
 	frame->addText(0, DataCache::Instance()->getIntroString(17));
 	frame->concatSound(0, Intro_OnlyOneHouse);
 	frame->concatSound(0, Intro_WillPrevail);
@@ -563,8 +576,10 @@ IntroState::IntroState()
     frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 20);
+                     false, 19);
 	frame->addText(0, DataCache::Instance()->getIntroString(18));
+	frame->setTextLocation(SPoint(-20,0));
+	frame->setTextSize(2.0);	
 	frame->concatSound(0, Intro_Your);
 	frame->concatSound(0, Intro_BattleForDune);
 	frame->concatSound(0, Intro_Begins);
@@ -576,6 +591,8 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false, 15);
 	frame->addText(0, DataCache::Instance()->getIntroString(19));
+	frame->setTextLocation(SPoint(-20,0));
+	frame->setTextSize(2.0);
 	frame->addSound(0, Intro_Now);
 	enque(frame);
 

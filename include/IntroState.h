@@ -49,15 +49,16 @@ class IntroState : public State
             
             bool Execute(float ft);
             void Load(Frame* lastframe);
-			void addText(uint16_t playAt, std::string introText);
 			void addSound(uint16_t playAt, Sound_enum sound);
 			void concatSound(uint16_t playAt, Sound_enum sound);
-			void setPalette(Palette_enum palette);
 			void setSong(uint8_t song);
+			void setPalette(Palette_enum palette);
 			void setFps(float fps);
 			void setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
+			void addText(uint16_t playAt, std::string introText);
 			void setTextColor(uint8_t textColor);
 			void setTextLocation(SPoint textLocation);
+			void setTextSize(float setTextSize);
 
         private:
             std::string m_filename;
@@ -73,7 +74,7 @@ class IntroState : public State
             WsafilePtr m_wsa; 
             uint8_t m_currentFrame, m_framesPlayed;
 
-            float m_frametime;
+            float m_frametime, m_textSize;
 			int8_t m_song;
 			uint8_t m_endWait, m_textColor;
 			SPoint m_textLocation;
