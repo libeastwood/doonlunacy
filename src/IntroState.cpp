@@ -201,18 +201,17 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
+	if(!m_textTransition && !Mix_Playing(10)){
+		m_textTransition = m_framesPlayed + 2;
+	}
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
 			ImagePtr tmp(new Image(UPoint(360,50)));
 			std::string text = m_introStrings[0].second;
-			// Here we try to figure out how long the text should be displayed
-			// relative to it's length. Room for improval..
-			m_textTransition = m_framesPlayed + (text.length()/m_wsa->getFPS()/100*9);
 			uint8_t numLines = 0;
 			int linebreak = text.find("\n",0)+ 1;
 			std::string thisLine;
 			// This is a bit hairy and needs to be cleaned up a bit..
-
 			Uint16 textw, texth;
 
 			while(text.substr(0, linebreak-1).length() > 0){
@@ -230,15 +229,11 @@ void IntroState::Frame::doPlaying(float dt)
 			}
 			m_textSurface = tmp->getResized(m_textSize);
 			m_introStrings.erase(m_introStrings.begin());
-			// Something wrong happens here that prevents the fading and only removes the text
-			if(m_introStrings.size() > 0)
-				if(m_textTransition > m_introStrings[0].first - 4)
-					m_textTransition = m_introStrings[0].first - 4;
-				else if(m_textTransition > m_totalFrames - 2)
-					m_textTransition = m_totalFrames - 2;
+			m_textTransition = 0;
 		}
 	}
-	if(m_framesPlayed >= m_textTransition){
+
+	if(m_textTransition && m_framesPlayed >= m_textTransition){
 		doTransitionOut(m_textSurface, false, true, 6);
 	}
 
@@ -253,7 +248,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_soundChunks.size() > 0){
 		if(m_framesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
-			Application::Instance()->playSound(sound);
+			Application::Instance()->playSound(sound, 10);
 //			delete(m_soundChunks[0].second);
 			m_soundChunks.erase(m_soundChunks.begin());
 		}
@@ -384,7 +379,7 @@ IntroState::IntroState()
 
 //	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-	frame = new Frame("INTRO:WESTWOOD.WSA",
+	/*frame = new Frame("INTRO:WESTWOOD.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 20);
@@ -453,7 +448,7 @@ IntroState::IntroState()
 	frame->concatSound(33, Intro_Melange);
 	frame->addText(33, DataCache::Instance()->getIntroString(5));
 	enque(frame);
-
+*/
     frame = new Frame("INTRO:INTRO9.WSA",  
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
@@ -494,13 +489,13 @@ IntroState::IntroState()
 	frame->concatSound(0, Intro_TheMostSpice);
 	frame->concatSound(0, Intro_WillControlDune);
 	frame->addLoop(45, 0, 1, 14);
+	frame->addText(61, DataCache::Instance()->getIntroString(10));
 	frame->concatSound(61, Intro_ThereAreNoSet);
 	frame->concatSound(61, Intro_Territories);
-	frame->concatSound(61, Intro_AndNo);
-	frame->concatSound(61, Intro_RulesOfEngagement);
-
-	frame->addText(61, DataCache::Instance()->getIntroString(10));
 	frame->addText(83, DataCache::Instance()->getIntroString(11));
+	frame->concatSound(83, Intro_AndNo);
+	frame->concatSound(83, Intro_RulesOfEngagement);
+
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO4.WSA", 
