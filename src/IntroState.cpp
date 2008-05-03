@@ -28,8 +28,6 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 	m_song = -1;
 	m_fps = 0;
 	m_endWait = endWait;
-	m_loop = videoLoop(0,0);
-	m_loopTime = videoLoop(0,0);
 	m_textColor = 49;
 	m_textSurface.reset(new Image(UPoint(320,40)));
 	m_textSize = 1.7;
@@ -102,10 +100,10 @@ void IntroState::Frame::setFps(float fps)
 	m_fps = fps;
 }
 
-void IntroState::Frame::setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
+void IntroState::Frame::addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
 {
-	m_loop = videoLoop(loopAt, rewindTo);
-	m_loopTime = videoLoop(numLoops, wait);
+	m_loops.push_back(videoLoop(loopAt, rewindTo));
+	m_loops.push_back(videoLoop(numLoops, wait));
 }
 
 void IntroState::Frame::setTextColor(uint8_t textColor)
@@ -160,8 +158,8 @@ void IntroState::Frame::Load(Frame* lastframe)
 
     m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
-	if(m_endWait && !m_loop.first)
-		setLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
+	if(m_endWait)
+		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
 }
 
 bool IntroState::Frame::Execute(float dt)
@@ -196,8 +194,6 @@ bool IntroState::Frame::Execute(float dt)
 
 void IntroState::Frame::doPlaying(float dt)
 {
-		Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-		
 	if(m_introStrings.size() > 0){
 		if(m_framesPlayed ==  m_introStrings[0].first){
 			ImagePtr tmp(new Image(UPoint(360,50)));
@@ -249,16 +245,25 @@ void IntroState::Frame::doPlaying(float dt)
 
     if (m_frametime > m_wsa->getFPS())
     {
-		if(!(m_currentFrame == m_loop.first - 1 && m_framesPlayed < m_loop.first + m_loopTime.second))
+		if(m_loops.size() > 0)
+		{
+			if(!(m_currentFrame == m_loops[0].first - 1 && m_framesPlayed < m_loops[0].first + m_loops[1].second))
+				m_currentFrame++;
+			if(m_loops[1].first != 0 && m_currentFrame == m_loops[0].first)
+			{
+				m_currentFrame = m_loops[0].second;
+				m_loops[1].first--;
+			}
+			if(m_loops[1].first == 0){
+				m_loops.erase(m_loops.begin());
+				m_loops.erase(m_loops.begin());
+			}
+		}else
 			m_currentFrame++;
-	if(m_loopTime.first != 0 && m_currentFrame == m_loop.first)
-	{
-		m_currentFrame = m_loop.second;
-		m_loopTime.first--;
-	}
 
 
 		m_framesPlayed++;		
+
         m_frametime = 0.0f;
         if (m_currentFrame >= m_wsa->getNumFrames())
         {
@@ -397,13 +402,14 @@ IntroState::IntroState()
 	frame =  new Frame("INTRO:INTRO1.WSA",
                      Frame::NO_TRANSITION,
                      Frame::FADE_OUT,
-                     false, 50);
-	frame->setFps(0.05);
+                     false, 65);
+	frame->setFps(0.07);
+	frame->addLoop(1,1,0,20);
 	frame->setSong(1);
-	frame->addSound(46, Intro_Dune);
-	frame->concatSound(66, Intro_TheBuilding);
-	frame->concatSound(66, Intro_OfADynasty);
-	frame->addText(66, DataCache::Instance()->getIntroString(2));
+	frame->addSound(30, Intro_Dune);
+	frame->concatSound(70, Intro_TheBuilding);
+	frame->concatSound(70, Intro_OfADynasty);
+	frame->addText(70, DataCache::Instance()->getIntroString(2));
 	frame->setTextLocation(SPoint(-13,-35));
 	frame->setTextSize(2.0);
 	enque(frame);
@@ -412,8 +418,8 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 5);
-	frame->concatSound(5, Intro_ThePlanetArrakis);
-	frame->concatSound(5, Intro_KnownAsDune);
+	frame->concatSound(10, Intro_ThePlanetArrakis);
+	frame->concatSound(10, Intro_KnownAsDune);
 	frame->addText(5, DataCache::Instance()->getIntroString(3));
 	enque(frame);
 
@@ -468,7 +474,7 @@ IntroState::IntroState()
 	frame->concatSound(0, Intro_ThatProduces);
 	frame->concatSound(0, Intro_TheMostSpice);
 	frame->concatSound(0, Intro_WillControlDune);
-	frame->setLoop(45, 0, 1, 14);
+	frame->addLoop(45, 0, 1, 14);
 	frame->concatSound(61, Intro_ThereAreNoSet);
 	frame->concatSound(61, Intro_Territories);
 	frame->concatSound(61, Intro_AndNo);
@@ -490,7 +496,7 @@ IntroState::IntroState()
     frame = new Frame("", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 23);
+                     false, 28);
 	frame->addText(0,DataCache::Instance()->getIntroString(13));
 	frame->setTextLocation(SPoint(-25,0));
 	frame->setTextSize(2.0);	
@@ -567,7 +573,7 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false);
 	frame->setFps(0.2);
-	frame->setLoop(3, 0, 5, 0);
+	frame->addLoop(3, 0, 10, 0);
 	frame->addText(0, DataCache::Instance()->getIntroString(17));
 	frame->concatSound(0, Intro_OnlyOneHouse);
 	frame->concatSound(0, Intro_WillPrevail);
@@ -577,7 +583,7 @@ IntroState::IntroState()
     frame = new Frame("",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 19);
+                     false, 22);
 	frame->addText(0, DataCache::Instance()->getIntroString(18));
 	frame->setTextLocation(SPoint(-20,0));
 	frame->setTextSize(2.0);	
@@ -590,7 +596,7 @@ IntroState::IntroState()
     frame = new Frame("", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
-                     false, 15);
+                     false, 20);
 	frame->addText(0, DataCache::Instance()->getIntroString(19));
 	frame->setTextLocation(SPoint(-20,0));
 	frame->setTextSize(2.0);

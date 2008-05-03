@@ -54,7 +54,7 @@ class IntroState : public State
 			void setSong(uint8_t song);
 			void setPalette(Palette_enum palette);
 			void setFps(float fps);
-			void setLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
+			void addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
 			void addText(uint16_t playAt, std::string introText);
 			void setTextColor(uint8_t textColor);
 			void setTextLocation(SPoint textLocation);
@@ -84,7 +84,8 @@ class IntroState : public State
 
             ImagePtr m_animSurface, m_scaledSurface, m_textSurface;
             SDL_Color* m_transitionPalette;
-			Font* font;			
+			Font* font;
+			std::vector<videoLoop> m_loops;
 			std::vector<introText> m_introStrings;
 			std::vector<introSound> m_introSounds;
 			std::vector<soundChunk> m_soundChunks;
