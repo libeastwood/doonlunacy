@@ -186,7 +186,8 @@ bool IntroState::Frame::Execute(float dt)
             break;
     };
 
-    m_scaledSurface->blitToScreenCentered();
+//    m_scaledSurface->blitToScreen(SPoint(0, Application::Instance()->Screen()->getSurface()->h/2 - m_scaledSurface->getSurface()->h/2 - 55));
+	m_scaledSurface->blitToScreenCentered();
 	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + m_textLocation.y));
 
     return mb_finished;
@@ -318,7 +319,7 @@ void IntroState::Frame::doTransitionOut(float dt)
 	SDL_Surface* text = m_textSurface->getSurface();
     SDL_Color* col = m_transitionPalette;
 
-    const int fadeAmt = 8;
+    const int fadeAmt = 4;
 
     for (int i=0; i!=256; i++, col++)
     {
