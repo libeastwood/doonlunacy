@@ -137,6 +137,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 	bool isWsa = m_filename.size() > 3 && wsaSuffix == m_filename.size() - 4;
 	bool isCps = m_filename.size() > 3 && cpsSuffix == m_filename.size() - 4;
 
+	CpsfilePtr tmp;
 	if(isWsa || isCps){
 		int len;
 		uint8_t * data = ResMan::Instance()->readFile(m_filename, &len);
@@ -152,12 +153,15 @@ void IntroState::Frame::Load(Frame* lastframe)
 			{
 				m_wsa.reset(new Wsafile(data, len, NULL, m_fps));
 			}
-		}else if(isCps){
-			m_wsa.reset(new Wsafile(new Cpsfile(data, len, m_palette)));
+		}else{
+			if(isCps){
+				tmp.reset(new Cpsfile(data, len));
+				m_wsa.reset(new Wsafile());
+			}
 		}
-	}
-	else
+	}else
 		m_wsa.reset(new Wsafile());
+
     
     m_frametime = 0;
     m_currentFrame = 0;
@@ -169,8 +173,14 @@ void IntroState::Frame::Load(Frame* lastframe)
 		 loopFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
 	}
 	m_totalFrames = m_wsa->getNumFrames() + m_endWait + loopFrames;
-
-    m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
+	if(isCps){
+		// A bit retarded, needs to be cleaned up later..
+		m_animSurface.reset(tmp->getPicture());
+		m_palette = m_animSurface->getSurface()->format->palette;
+		m_textSurface = m_animSurface->getResized(2);
+		setTextLocation(SPoint(0,-200));
+	}
+	m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
     m_scaledSurface = m_animSurface->getResized(2.0);
 	if(m_endWait)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
@@ -310,17 +320,16 @@ void IntroState::Frame::doTransitionIn(float dt)
 {
 	if(m_song != -1){
 		Application::Instance()->playSound(DataCache::Instance()->getMusic(MUSIC_INTRO, m_song));
-		std::cout << "play!" << std::endl;
 	}
 
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
 }
 
-void IntroState::Frame::setupTransitionOut()
+void IntroState::Frame::setupTransitionOut(ImagePtr img)
 {
     m_transitionPalette = new SDL_Color[256];
     memcpy((unsigned char*)m_transitionPalette,
-			m_palette->colors,
+			img->getSurface()->format->palette->colors,
             sizeof(SDL_Color) * 256);
 }
 
@@ -343,7 +352,7 @@ void IntroState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTrans
         return;
     }
 
-    if (m_transitionPalette == NULL) setupTransitionOut();
+    if (m_transitionPalette == NULL) setupTransitionOut(img);
     
     SDL_Surface* screen = img->getSurface();
     SDL_Color* col = m_transitionPalette;
@@ -405,7 +414,6 @@ IntroState::IntroState()
 	frame->setTextLocation(SPoint(-25,0));
 	enque(frame);
 
-	// VIRGIN.CPS has it's own palette, handling of this needs to be implemented..
 	frame = new Frame("INTRO:VIRGIN.CPS",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
@@ -428,7 +436,7 @@ IntroState::IntroState()
 	frame->setFps(0.07);
 	frame->addLoop(1,1,0,20);
 	frame->setSong(1);
-	frame->concatSound(30, Intro_Dune);
+	frame->addSound(30, Intro_Dune);
 	frame->concatSound(70, Intro_TheBuilding);
 	frame->concatSound(70, Intro_OfADynasty);
 	frame->addText(70, DataCache::Instance()->getIntroString(2));

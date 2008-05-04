@@ -96,7 +96,7 @@ class IntroState : public State
 
 
             void setupTransitionIn();
-            void setupTransitionOut();
+            void setupTransitionOut(ImagePtr img);
             void cleanupTransitionIn();
             void cleanupTransitionOut();
             
