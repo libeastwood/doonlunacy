@@ -352,7 +352,8 @@ void IntroState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTrans
         return;
     }
 
-    if (m_transitionPalette == NULL) setupTransitionOut(img);
+    //if (m_transitionPalette == NULL) // We want new one created to handle several transitions per cutscene
+	setupTransitionOut(img);
     
     SDL_Surface* screen = img->getSurface();
     SDL_Color* col = m_transitionPalette;
