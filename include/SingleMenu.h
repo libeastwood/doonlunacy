@@ -14,6 +14,7 @@ class SingleMenuState : public MenuBaseState
         SingleMenuState();
         ~SingleMenuState();
 
+		void doCampaign();
         void doSkirmish();
         void doCancel();
 
