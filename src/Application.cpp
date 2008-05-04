@@ -108,7 +108,7 @@ void Application::Init()
     SDL_EnableUNICODE(1);
 
     // replace NULL with a path to a 32x32 icon
-    SDL_WM_SetCaption("Dune Legacy", NULL);
+    SDL_WM_SetCaption("Dune Legacy", "paks/DUNE2.ICO");
 
     InitAudio();
     //InitNet();
@@ -276,22 +276,9 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 void Application::LoadData()
 {
     printf("loading resources\n");
-    ResMan::Instance()->addRes("ATRE");
-    ResMan::Instance()->addRes("DUNE");
-    ResMan::Instance()->addRes("ENGLISH");
-	ResMan::Instance()->addRes("GERMAN");
-    ResMan::Instance()->addRes("FINALE");
-    ResMan::Instance()->addRes("HARK");
-    ResMan::Instance()->addRes("HERC");
     ResMan::Instance()->addRes("INTRO");
-    ResMan::Instance()->addRes("INTROVOC");
-    ResMan::Instance()->addRes("MENTAT");
-    ResMan::Instance()->addRes("MERC");
-    ResMan::Instance()->addRes("ORDOS");
-    ResMan::Instance()->addRes("SCENARIO");
-    ResMan::Instance()->addRes("SOUND");
-    ResMan::Instance()->addRes("VOC");
-    ResMan::Instance()->addRes("XTRE");
+
+
     printf("done loading resources\n");
 #ifdef __linux__
     pthread_t threads[1];
@@ -306,12 +293,16 @@ void Application::LoadData()
     m_cursor.reset(DataCache::Instance()->getGuiPic(UI_MouseCursor).get()); //mouse.getPicture(0));
 
     fprintf(stdout, "starting sound...\n");
-    SoundPlayerClass* soundPlayer = new SoundPlayerClass();
+    soundPlayer = new SoundPlayerClass();
 
-	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
-	soundPlayer->playSound(myChunk);
+/*	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
+	soundPlayer->playSound(myChunk);*/
 }
 
+void Application::playSound(Mix_Chunk* chunk, int channel)
+{
+	soundPlayer->playSound(chunk, channel);
+}
 void Application::Die()
 {
     FontManager::Destroy();
