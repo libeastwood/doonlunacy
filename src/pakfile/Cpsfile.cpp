@@ -66,13 +66,6 @@ Image * Cpsfile::getPicture()
 		return NULL;
 	}
 
-/*	for (int i = 0; i < 256; i++){
-		m_palette->colors[i].r = *Filedata++ << 2;
-		m_palette->colors[i].g = *Filedata++ << 2;
-		m_palette->colors[i].b = *Filedata++ << 2;
-		m_palette->colors[i].reserved = 0;
-	}
-*/	
 	SDL_SetColors(pic, m_palette->colors, 0, m_palette->ncolors);
 	
 	SDL_LockSurface(pic);	
