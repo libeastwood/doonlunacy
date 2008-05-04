@@ -68,21 +68,6 @@ Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize,
 	decodeFrames();
 }
 
-Wsafile::Wsafile(Cpsfile* cpsFile) : Decode()
-{
-	WsaFilesize = -2;
-
-    printf("loading cps file as wsa...\n");
-	
-	NumFrames = 1;
-	fps = 0.1;
-
-    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
-    printf("FPS = %.3f\n", fps);
-	decodedFrames = NULL;
-	m_cpsFile = cpsFile;
-}
-
 Wsafile::Wsafile() : Decode()
 {
 	WsaFilesize = -1;
@@ -108,10 +93,6 @@ Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)
 	if(WsaFilesize == -1){
 		img = new Image(UPoint(1,1));
 		return img;
-	}
-
-	if(WsaFilesize == -2){
-		return m_cpsFile->getPicture();
 	}
 
 	if(FrameNumber >= NumFrames) {
