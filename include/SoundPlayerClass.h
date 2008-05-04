@@ -62,7 +62,7 @@ public:
 
 	void playVoice(Sound_enum id, HOUSETYPE house);
 	void playSound(Sound_enum soundID);
-	void playSound(Mix_Chunk* sound, int channel = 0);
+	void playSound(Mix_Chunk* sound, int channel = -1);
 	
 	inline int GetSfxVolume() { return sfxVolume; };
 	void SetSfxVolume(int newVolume) {

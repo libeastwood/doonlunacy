@@ -18,7 +18,7 @@ class MenuBaseState : public State
         int Execute(float dt);
 
     public:
-        SDL_Surface* m_menuBackground;
+        ImagePtr m_menuBackground;
         Container* m_container;
 };
 
