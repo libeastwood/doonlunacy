@@ -1,8 +1,8 @@
 #include "pakfile/Cpsfile.h"
 #include <SDL_endian.h>
 #include "DataCache.h"
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <string>
 
 #define	SIZE_X	320
 #define SIZE_Y	240
@@ -11,10 +11,25 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize, SDL_Palette* palette)
 {
 	Filedata = bufFiledata;
 	CpsFilesize = bufsize;
-	if (palette == NULL)
-		m_palette = DataCache::Instance()->getPalette(IBM_PAL);
-	else
-		m_palette = palette;
+	if(*(unsigned char *)(bufFiledata + 10 + 9) != 3){
+		std::cout << "CPS has embedded palette, loading..." << std::endl;
+		m_palette = new SDL_Palette;
+		m_palette->ncolors = bufsize / 3;
+		m_palette->colors = new SDL_Color[m_palette->ncolors];
+
+		bufFiledata += 10;
+		for (int i = 0; i < m_palette->ncolors; i++){
+			m_palette->colors[i].r = *bufFiledata++ <<2;
+			m_palette->colors[i].g = *bufFiledata++ <<2;
+			m_palette->colors[i].b = *bufFiledata++ <<2;
+			m_palette->colors[i].unused = 0;
+		}
+	}else{
+		if (palette == NULL)
+			m_palette = DataCache::Instance()->getPalette(IBM_PAL);
+		else
+			m_palette = palette;
+	}
 }
 
 Cpsfile::~Cpsfile()
@@ -43,15 +58,21 @@ Image * Cpsfile::getPicture()
 	}
 	
 	if(decode80(Filedata + 10 + PaletteSize,ImageOut,0) == -2) {
-		fprintf(stderr,"Error: Cannot decode Cps-File\n");
+		std::cerr << "Error: Cannot decode Cps-File" << std::endl;
 	}
 	
 	// create new picture surface
 	if((pic = SDL_CreateRGBSurface(SDL_SWSURFACE,SIZE_X,SIZE_Y,8,0,0,0,0))== NULL) {
 		return NULL;
 	}
-	
-	
+
+/*	for (int i = 0; i < 256; i++){
+		m_palette->colors[i].r = *Filedata++ << 2;
+		m_palette->colors[i].g = *Filedata++ << 2;
+		m_palette->colors[i].b = *Filedata++ << 2;
+		m_palette->colors[i].reserved = 0;
+	}
+*/	
 	SDL_SetColors(pic, m_palette->colors, 0, m_palette->ncolors);
 	
 	SDL_LockSurface(pic);	
@@ -85,7 +106,7 @@ Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int
 	
 	// create new picture surface
 	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,width,height,8,0,0,0,0))== NULL) {
-		fprintf(stderr,"GetSubPicture: Cannot create new Picture!\n");
+		std::cerr << "GetSubPicture: Cannot create new Picture!" << std::endl;
 		exit(EXIT_FAILURE);	
 	}
 			
