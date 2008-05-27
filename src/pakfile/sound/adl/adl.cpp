@@ -57,7 +57,7 @@
 #include "pakfile/sound/adl/adl.h"
 #include "pakfile/sound/adl/emuopl.h"
 
-#include "pakfile/sound/IntegratedLibSampleRate/samplerate.h"
+#include <samplerate.h>
 
 #define BUFSIZE 65536     // Sound buffer size in samples
 #define NUM_SAMPLES_OF_SILENCE	10

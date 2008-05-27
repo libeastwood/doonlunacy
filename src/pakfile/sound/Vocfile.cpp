@@ -19,7 +19,7 @@
  */
 
 #include "pakfile/sound/Vocfile.h"
-#include "pakfile/sound/IntegratedLibSampleRate/samplerate.h"
+#include <samplerate.h>
 #include <string>
 #include <SDL_mixer.h>
 #include <math.h>
