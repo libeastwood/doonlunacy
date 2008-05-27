@@ -5,10 +5,6 @@ opts = Options('config.py')
 # default to using sdl-config if not on windows
 opts.Add('SDL_INCLUDE_PATH', 'include path for SDL', '')
 opts.Add('SDL_LIB_PATH', 'lib path for SDL', '')
-opts.Add('ZLIB_INCLUDE_PATH', 'include path for zlib', '')
-opts.Add('ZLIB_LIB_PATH', 'lib path for zlib', '')
-opts.Add('ZZIP_INCLUDE_PATH', 'include path for zlib', '')
-opts.Add('ZZIP_LIB_PATH', 'lib path for zlib', '')
 
 opts.Add('BOOST_INCLUDE_PATH', 'include path for boost', '')
 # need to get two paths as far as i can tell. these can probably be calculated somehow
