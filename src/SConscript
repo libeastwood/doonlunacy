@@ -1,7 +1,5 @@
 Import('env')
 
-SConscript("pakfile/SConscript")
-
 from glob import glob
 
 gui_sources = glob("gui/*.cpp")
@@ -36,12 +34,12 @@ all_sources = [ "Application.cpp",
                 "ConfigFile.cpp",
                 "ResMan.cpp",
 				"SoundPlayerClass.cpp",
+                "pakfile/sound/adl/adl.cpp",
+                "pakfile/sound/adl/emuopl.cpp",
+                "pakfile/sound/adl/fmopl.c",
 				"pakfile/Animation.cpp",
 				"pakfile/Stringfile.cpp",
 				"pakfile/sound/Vocfile.cpp",
-				"pakfile/sound/adl/adl.cpp",
-				"pakfile/sound/adl/emuopl.cpp",
-				"pakfile/sound/adl/fmopl.c"
               ]
 
 gui_sources = [
@@ -75,7 +73,11 @@ pakview_sources = [  "Application.cpp",
                      "State.cpp",
                      "TopLevelState.cpp",
 					 "SoundPlayerClass.cpp",
-					 "pakfile/Vocfile.cpp"
+					 "pakfile/Vocfile.cpp",
+					 "pakfile/IntegratedLibSampleRate/samplerate.c",
+					 "pakfile/IntegratedLibSampleRate/src_linear.c",
+					 "pakfile/IntegratedLibSampleRate/src_sinc.c",
+					 "pakfile/IntegratedLibSampleRate/src_zoh.c"
                   ]
 
 #gamelib = env.StaticLibrary("dune_game", all_sources)

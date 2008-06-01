@@ -44,7 +44,7 @@ enum LogVerbosity
     //! bye, bye !
     LV_FATAL = 0,
     //! that hurt...
-    LV_ERROR,
+    LV_ERROR = 8,
     //! i can handle that
     LV_WARNING,
     //! look what's happening

@@ -1,6 +1,7 @@
-#include "Settings.h"
 #include <fstream>
+#include "SDL_mixer.h"
 
+#include "Settings.h"
 #include "Strings.h"
 #include "ResMan.h"
 
@@ -12,17 +13,6 @@ Settings::Settings()
 	// set to the current directory for the moment 
 	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
 
-	m_width = 640;
-	m_height = 480;
-
-	m_fullscreen = false;
-
-	//dunk- should we get rid of this for a verbosity/logging level switch?
-	m_debug = false; 
-
-	m_dataDir = "paks/";
-
-	m_doubleBuffered = false;
 }
 
 
@@ -46,8 +36,16 @@ void Settings::load()
     ConfigFile::bind(".graphics.height", configFile, m_height, 480);
     ConfigFile::bind(".graphics.fullscreen", configFile, m_fullscreen, false);
     ConfigFile::bind(".graphics.double_buffer", configFile, m_doubleBuffered, false);
-    ConfigFile::bind(".debug", configFile, m_debug, true);
+    ConfigFile::bind(".debug", configFile, m_debug, int(LV_ERROR));
     ConfigFile::bind(".data_dir", configFile, m_dataDir, String("paks/"));
+    ConfigFile::bind(".sound.sound_on", configFile, m_soundOn, true);
+    ConfigFile::bind(".sound.sound_volume", configFile, m_sfxVolume, MIX_MAX_VOLUME/2);
+    ConfigFile::bind(".sound.response_volume", configFile, m_responseVolume, 100);
+    ConfigFile::bind(".sound.voice_volume", configFile, m_voiceVolume, 128);        
+    ConfigFile::bind(".sound.music_on", configFile, m_musicOn, true);
+    ConfigFile::bind(".sound.music_volume", configFile, m_musicVolume, MIX_MAX_VOLUME/2);
+    
+    Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
 
 /*        root = ConfigFile::loadFile((const char *)data);
 	std::string config = ResMan::Instance()->readText("CONFIG:config.txt");

@@ -1,10 +1,11 @@
 #ifndef DUNE_SETTINGS_H
 #define DUNE_SETTINGS_H
 
-#include "DuneConstants.h"
 #include "SDL.h"
 #include "SDL_net.h"
 #include <string>
+
+#include "DuneConstants.h"
 
 typedef struct
 {
@@ -54,12 +55,13 @@ extern SETTINGSTYPE settings;
 
 
 #include "singleton.h"
-
+#include "Log.h"
 #include "ConfigFile.h"
 
 class Settings: public Singleton<Settings>
 {
     friend class Singleton<Settings>;
+    friend class SoundPlayer;
     friend class Application;
     
     protected:
@@ -68,8 +70,30 @@ class Settings: public Singleton<Settings>
         // protected so Application can change them 
         int m_width, m_height;
         bool m_fullscreen;
-        bool m_debug;
+        int m_debug;
         bool m_doubleBuffered;
+        
+        //SFX
+        //! whether sound should be played
+        bool m_soundOn;
+
+     	//! volume of sound effects
+    	int	m_sfxVolume;
+
+    	//! volume of voice over sounds
+    	int	m_voiceVolume;
+    	
+   		//! volume of unit responses played when a unit is selected
+    	int	m_responseVolume;
+
+
+        //MUSIC
+
+        //! whether music should be played  
+        bool m_musicOn;
+
+    	//! music volume
+    	int	m_musicVolume;
 
         std::string m_dataDir;
         
@@ -90,15 +114,21 @@ class Settings: public Singleton<Settings>
         inline bool GetFullScreen()
                 { return m_fullscreen; }
 
-        inline bool GetDebug()
+/*        inline bool GetDebug()
                 { return m_debug; }
         void SetDebug(bool x) 
                 { m_debug = x; } 
+*/
 
         inline bool GetDoubleBuffered() 
                 { return m_doubleBuffered; }
 
         std::string GetDataDir() { return m_dataDir; }
+        
+        bool GetSound() { return m_soundOn; }
+        bool GetMusic() { return m_musicOn; }
+        void ToggleSound() {m_soundOn = !m_soundOn; }
+        void ToggleMusic() {m_musicOn = !m_musicOn; }
 
 };
 

@@ -625,7 +625,7 @@ void bind(ConstString path, NodePtr base, T& variable, const T &defaultValue)
     if (node == NULL)        
     {
         node = ValueNodePtr(new ValueNode);
-        node->setValue(toString(variable));
+        node->setValue(toString(defaultValue));
         assurePathToNode(base, parsePath(path), node);
     }    
     node->setBinder(BinderPtr(new Binder<T>(variable)));
