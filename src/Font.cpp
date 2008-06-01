@@ -1,12 +1,12 @@
-#include "Font.h"
-#include "Application.h"
-#include "Log.h"
-#include "ResMan.h"
-
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+
+#include "Application.h"
+#include "Font.h"
+#include "Log.h"
+#include "ResMan.h"
 
 Font::Font(FNTCharacter* characters, FNTHeader* header)
 {
@@ -136,7 +136,6 @@ Font* FontManager::getFont(std::string fn)
 Font* FontManager::loadFont(std::string fn)
 {
     LOG_INFO("Font", "LoadFont %s", fn.c_str());
-    //FILE* file = fopen(fn, "rb");
     FileLike* file = ResMan::Instance()->readFile(fn);
 
     FNTHeader* header = new FNTHeader();
@@ -216,13 +215,11 @@ TTFFontManager::TTFFontManager()
         if ( (m_fonts[i - MIN_FONT_SIZE] = TTF_OpenFont(fn.c_str(), i)) = NULL )
         {
             LOG_ERROR("Font", "unable to load %s size %d", fn.c_str(), i);
-            //std::cerr << "ERROR: unable to load " << fn << " size " << i << std::endl;
             Application::Instance()->Die();
         }
         else
         {
             LOG_INFO("Font", "loaded font %s %i", fn.c_str(), i);
-			//std::cout << "loaded font " << fn << " " << i << std::endl;
         };
     };
 }

@@ -114,12 +114,6 @@ class Settings: public Singleton<Settings>
         inline bool GetFullScreen()
                 { return m_fullscreen; }
 
-/*        inline bool GetDebug()
-                { return m_debug; }
-        void SetDebug(bool x) 
-                { m_debug = x; } 
-*/
-
         inline bool GetDoubleBuffered() 
                 { return m_doubleBuffered; }
 

@@ -325,8 +325,7 @@ void IntroState::Frame::cleanupTransitionIn()
 void IntroState::Frame::doTransitionIn(float dt) 
 {
 	if(m_song != -1){
-	    song * songfile = DataCache::Instance()->getMusic(MUSIC_INTRO,m_song);
-		SoundPlayer::Instance()->playMusic(songfile->filename, songfile->track);
+		SoundPlayer::Instance()->playMusic(MUSIC_INTRO, m_song);
 	}
 
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;

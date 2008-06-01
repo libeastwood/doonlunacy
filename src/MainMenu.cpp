@@ -134,7 +134,7 @@ void MainMenuState::doOptions()
 void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
-    SoundPlayer::Instance()->playMusic("SOUND:DUNE5.ADL", 6);
+    SoundPlayer::Instance()->playMusic(MUSIC_ATTACK, 1);
     
 #if 0
     Rect rect(0,0,30, 30);

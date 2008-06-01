@@ -234,7 +234,7 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
 
     if (res == NULL)
     {
-        LOG_INFO("Application", "Cannot find file!");
+        LOG_WARNING("Application", "Cannot find file!");
         
         return NULL;
     };

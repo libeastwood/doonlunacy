@@ -33,8 +33,6 @@ void DataCache::Init(){
 
     ResMan::Instance()->addRes("DUNE");
 
-    // FIXME: Something seems to be fscked up with this palette, the Bene Gesserit
-    // mentat ends up looking a bit unhealthy greenish, needs to be corrected!
     addPalette(BENE_PAL, "DUNE:BENE.PAL");
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
 
@@ -431,7 +429,7 @@ void DataCache::Init(){
 
 	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
     addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
-#if 0
+
 	// These are actually all the same song, but three different versions..
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 4);
@@ -472,7 +470,7 @@ void DataCache::Init(){
 	 * addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 3);
 	 */
 	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
-#endif
+
 	delete data;
 
 }

@@ -1,13 +1,10 @@
-#include "OptionsMenu.h"
+#include "boost/bind.hpp"
 
 #include "Application.h"
-//#include "DataFile.h"
-#include "ResMan.h"
 #include "Gfx.h"
-#include "pakfile/Wsafile.h"
+#include "OptionsMenu.h"
+#include "ResMan.h"
 #include "Settings.h"
-
-#include "boost/bind.hpp"
 
 
 OptionsMenuState::OptionsMenuState()
@@ -21,10 +18,7 @@ OptionsMenuState::OptionsMenuState()
 
     m_vbox = new VBox();
     
-    if (set->GetFullScreen())
-        m_caption = "Fullscreen";
-    else
-        m_caption = "Window mode";
+    set->GetFullScreen() ? m_caption = "Fullscreen" : m_caption = "Window mode";
         
     m_butWindowMode = new BoringButton(m_caption);
     m_butWindowMode->setSize(UPoint(bw, bh));
@@ -48,13 +42,29 @@ OptionsMenuState::OptionsMenuState()
             break;                
     
     }
-
+    
     m_butResolution = new BoringButton(m_caption);
     m_butResolution->setSize(UPoint(bw,bh));
     m_butResolution->onClick.connect(
             boost::bind(&OptionsMenuState::doResolution, this) );
    
     m_vbox->addChild(m_butResolution);
+
+    set->GetSound() ? m_caption = "Sound On" : m_caption = "Sound Off";
+    m_butSound = new BoringButton(m_caption);
+    m_butSound->setSize(UPoint(bw, bh));
+    m_butSound->onClick.connect(
+            boost::bind(&OptionsMenuState::doSound, this) );
+            
+    m_vbox->addChild(m_butSound);            
+    
+    set->GetMusic() ? m_caption = "Music On" : m_caption = "Music Off";
+    m_butMusic = new BoringButton(m_caption);
+    m_butMusic->setSize(UPoint(bw, bh));
+    m_butMusic->onClick.connect(
+            boost::bind(&OptionsMenuState::doMusic, this) );
+            
+    m_vbox->addChild(m_butMusic); 
 
     m_butOk = new BoringButton("Ok");
     m_butOk->setSize(UPoint(bw, bh));
@@ -79,6 +89,26 @@ OptionsMenuState::~OptionsMenuState()
     delete m_butOk;
 
     delete m_vbox;
+}
+
+//FIXME: doSound, doMusic,doScreenMode and future functions with bool value could be
+//handled using one function e.g. toggleSetting(variable_name);
+void OptionsMenuState::doSound()
+{
+    Settings * set = Settings::Instance();
+    set->ToggleSound();
+    std::string caption;
+    set->GetSound() ? caption = "Sound On" : caption = "Sound Off";
+    m_butSound->setCaption(caption);    
+}
+
+void OptionsMenuState::doMusic()
+{
+    Settings * set = Settings::Instance();
+    set->ToggleMusic();
+    std::string caption;
+    set->GetMusic() ? caption = "Music On" : caption = "Music Off";
+    m_butMusic->setCaption(caption);    
 }
 
 void OptionsMenuState::doOptions()
@@ -123,8 +153,6 @@ void OptionsMenuState::doScreenMode()
     
     Application::Instance()->UpdateVideoMode(newSetting);
 
-    if (newSetting)
-        m_butWindowMode->setCaption("Fullscreen");
-    else
+    newSetting ? m_butWindowMode->setCaption("Fullscreen") :
         m_butWindowMode->setCaption("Window mode");
 }

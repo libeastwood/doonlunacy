@@ -1,11 +1,13 @@
-#include "MentatMenu.h"
+#include "boost/bind.hpp"
+
 
 #include "Application.h"
-#include "Settings.h"
 #include "DataCache.h"
-#include "pakfile/Cpsfile.h"
-#include "boost/bind.hpp"
+#include "MentatMenu.h"
+#include "Settings.h"
+
 #include "gui2/Label.h"
+#include "pakfile/Cpsfile.h"
 
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {

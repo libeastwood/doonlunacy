@@ -1,15 +1,14 @@
+#include "SDL_mixer.h"
 #include <stdlib.h>
 #include <math.h>
 
-#include "pakfile/sound/Vocfile.h"
-#include "SoundPlayer.h"
-#include "SDL_mixer.h"
-#include "DuneConstants.h"
 #include "mmath.h"
 #include "DataCache.h"
+#include "DuneConstants.h"
 #include "Log.h"
+#include "SoundPlayer.h"
 
-#include <algorithm>
+#include "pakfile/sound/Vocfile.h"
 
 SoundPlayer::SoundPlayer() {
 
@@ -58,7 +57,11 @@ void SoundPlayer::playSound(Sound_enum soundID, int volume)
 	}
 }
 
-
+void SoundPlayer::playMusic(MUSICTYPE musicType, uint16_t cacheTrackNum)
+{
+    song * songfile = DataCache::Instance()->getMusic(musicType, cacheTrackNum);
+    playMusic(songfile->filename, songfile->track);
+}
 
 void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 {

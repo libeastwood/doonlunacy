@@ -37,12 +37,24 @@ class SoundPlayer : public Singleton<SoundPlayer>
 
 	void playSound(Mix_Chunk* sound, int channel = 0);
     
+
+    /*! play music of certain type
+     *
+     * @param musicType type of music to be played e.g. MUSIC_PEACE
+     * @param cacheTrackNum number of track as stored in cache m_playlists[musicType][cacheTrackNum]
+     */
+
+    void playMusic(MUSICTYPE musicType, uint16_t cacheTrackNum);
+    
     /*! change type of current music
      *
      * @param filename name of file in ResMan format e.g. SOUND:DUNE0.ADL
      * @param trackNum number of track in adl file to be played usually 2,4,6
      */
+    
     void playMusic(std::string filename, uint16_t trackNum);
+    
+    
     
     void stopMusic();
     

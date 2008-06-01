@@ -1,7 +1,6 @@
 #include <iostream>
 #include <SDL_endian.h>
 #include <SDL.h>
-#include <SDL_rwops.h>
 #include <string>
 
 #include "Log.h"
@@ -9,41 +8,11 @@
 #include "pakfile/Stringfile.h"
 
 Stringfile::Stringfile(std::string stringFileName) {
+
 	int bufsize;
 	uint8_t* bufFiledata = ResMan::Instance()->readFile(stringFileName.c_str(), &bufsize);
 	Uint16* index;
-	SDL_RWops* RWop = SDL_RWFromMem(bufFiledata, bufsize);
-	
-	if(RWop == NULL) {
-		LOG_ERROR("Stringfile", "RWop == NULL!");
-		exit(EXIT_FAILURE);
-	}
 
-	if(bufsize <= 0) {
-		LOG_ERROR("Stringfile", " Cannot determine size!");
-		exit(EXIT_FAILURE);	
-	}
-	
-	if(bufsize < 2) {
-		LOG_ERROR("Stringfile", "Invalid string file: File too small!");
-		exit(EXIT_FAILURE);
-	}
-	
-	if(SDL_RWseek(RWop,0,SEEK_SET) != 0) {
-		LOG_ERROR("Stringfile", " Seeking string file failed!");
-		exit(EXIT_FAILURE);
-	}
-	
-	if( (bufFiledata = (unsigned char*) malloc(bufsize)) == NULL) {
-		LOG_ERROR("Stringfile", " Allocating memory failed!");
-		exit(EXIT_FAILURE);
-	}
-	
-	if(SDL_RWread(RWop, bufFiledata, bufsize, 1) != 1) {
-		LOG_ERROR("Stringfile", " Reading string file failed!");
-		exit(EXIT_FAILURE);
-	}
-	
 	numStrings = ((int)SDL_SwapLE16(((Uint16*) bufFiledata)[0]))/2 - 1;
 	index = (Uint16*) bufFiledata;
 	for(int i=0; i <= numStrings; i++) {
@@ -57,20 +26,15 @@ Stringfile::Stringfile(std::string stringFileName) {
 		stringArray[i] = decodeString(tmp);
 	}
 	
-	free(bufFiledata);
-	SDL_RWclose(RWop);
+	delete bufFiledata;
+
 }
 
 Stringfile::~Stringfile() {
 	delete [] stringArray;
 }
 
-/// This methode decodes a string to ANSI Code
-/**
-	The parameter text is decoded to ANSI Code and returned
-	\param text	Text to decode
-	\return	The decoded text
-*/
+
 std::string Stringfile::decodeString(std::string text) {
 	std::string out = "";
 	unsigned char databyte;
