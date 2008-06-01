@@ -63,9 +63,9 @@ Application::~Application()
     //destroyDataFile();
     //MentatClass::Destroy();
 
-    //Mix_CloseAudio();
+    Mix_CloseAudio();
     //SDLNet_Quit();
-    //SDL_Quit();
+    SDL_Quit();
 }
 
 void Application::Init()

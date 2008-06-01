@@ -3,8 +3,8 @@
 
 #include "MenuBase.h"
 
-class TranspButton;
-class VBox;
+#include "gui2/Button.h"
+#include "gui2/VBox.h"
 
 class HouseChoiceMenuState : public MenuBaseState {
 public:
@@ -19,11 +19,13 @@ private:
 	void doAtreides();
 	void doOrdos();
 	void doHarkonnen();
+	void doBack();
 	VBox* m_vbox;	
 
 	TranspButton* m_butAtreides;
 	TranspButton* m_butOrdos;
 	TranspButton* m_butHarkonnen;
+    BoringButton* m_butBack;
 };
 
 #endif // HOUSECHOICEMENU_H_INCLUDED

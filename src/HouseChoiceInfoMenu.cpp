@@ -30,7 +30,9 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 	m_container->addChild(m_butYes);
 
     m_butNo = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatNo)->getResized(2), DataCache::Instance()->getGuiPic(UI_MentatNo_Pressed)->getResized(2));
-	m_butNo->setPosition(UPoint(480,366));    
+	m_butNo->setPosition(UPoint(480,366));
+    m_butNo->onClick.connect(
+        boost::bind(&HouseChoiceInfoMenuState::doNo, this) );    
     m_container->addChild(m_butNo);
 
 	std::string desc = DataCache::Instance()->getBriefingText(0, MISSION_DESCRIPTION, newHouse);
@@ -44,4 +46,10 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 HouseChoiceInfoMenuState::~HouseChoiceInfoMenuState()
 {
+}
+
+void HouseChoiceInfoMenuState::doNo()
+{
+    assert(mp_parent != NULL);
+    PopState();
 }

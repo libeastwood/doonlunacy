@@ -39,13 +39,8 @@ class SoundPlayer : public Singleton<SoundPlayer>
     
     /*! change type of current music
      *
-     * @param value if true music will start playing
-     * @param musicType type of music to be played
-     * 
-     * if value is set to true and musicType is not given
-     * random music will be played
-     * 
-     * if value is set to false music will stop
+     * @param filename name of file in ResMan format e.g. SOUND:DUNE0.ADL
+     * @param trackNum number of track in adl file to be played usually 2,4,6
      */
     void playMusic(std::string filename, uint16_t trackNum);
     
@@ -59,9 +54,6 @@ class SoundPlayer : public Singleton<SoundPlayer>
 	 *  be true
 	 */
 	bool m_musicPlay;
-	
-    //! pointer to music chunk to be played
-	Mix_Chunk * m_music;
 	
 	/*!
 		the function plays a sound with a given volume

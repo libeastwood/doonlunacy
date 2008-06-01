@@ -38,7 +38,7 @@ class GraphicButton : public Button
 class BoringButton : public GraphicButton
 {
     public:
-        BoringButton(std::string caption);
+        BoringButton(std::string caption, bool isMenuButton = true);
         ~BoringButton();
 
         virtual void setSize(SPoint p);
@@ -47,6 +47,7 @@ class BoringButton : public GraphicButton
 		virtual void redraw();
     protected:
         std::string m_caption;
+        bool m_menuButton;
 };
 
 class TranspButton : public Button

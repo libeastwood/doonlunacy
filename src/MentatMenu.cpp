@@ -10,9 +10,7 @@
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {
 	house = newHouse;
-	Image * mentat = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse).get();
-	m_surf.reset(mentat);
-    m_surf = m_surf->getResized(2);
+	m_surf = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized(2);
 
 	switch(house) {
 		case HOUSE_ATREIDES:
@@ -87,7 +85,7 @@ MentatMenuState::~MentatMenuState() {
 
 int MentatMenuState::Execute(float dt)
 {
-    m_surf.get()->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
+    m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
                         Settings::Instance()->GetHeight() / 16));
 
     return 0;

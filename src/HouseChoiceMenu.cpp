@@ -1,18 +1,17 @@
+#include <iostream>
+
+#include "boost/bind.hpp"
+
+#include "Application.h"
+#include "DataCache.h"
 #include "HouseChoiceMenu.h"
 #include "HouseChoiceInfoMenu.h"
 
-#include "DataCache.h"
-#include "Application.h"
-#include "DataCache.h"
-#include "boost/bind.hpp"
-#include <iostream>
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
-    m_menuBackground.reset(DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground).get());
-    m_menuBackground = m_menuBackground->getResized(2);
-
+    m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized(2);;
     m_vbox = new VBox();
 
 	m_butAtreides = new TranspButton(163,182);
@@ -53,7 +52,16 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 	m_vbox->setPosition(UPoint(430,135));
     m_vbox->reshape();
     
+    
+    m_butBack = new BoringButton("Back to menu", false);
+    m_butBack->setPosition(SPoint(30, Settings::Instance()->GetHeight() - m_butBack->h - 50));
+    m_butBack->setSize(UPoint(180, 35));
+   	m_butBack->onClick.connect(
+        boost::bind(&HouseChoiceMenuState::doBack, this) );
+    m_container->addChild(m_butBack);        
+    
     m_container->addChild(m_vbox);
+
 
 }
 
@@ -62,7 +70,7 @@ HouseChoiceMenuState::~HouseChoiceMenuState() {
 
 int HouseChoiceMenuState::Execute(float dt)
 {
-    m_menuBackground.get()->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_menuBackground->getSurface()->w/2, 
+    m_menuBackground->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_menuBackground->getSurface()->w/2, 
                         Settings::Instance()->GetHeight() / 16));
 
     return 0;
@@ -118,3 +126,7 @@ void HouseChoiceMenuState::doHarkonnen() {
 	delete myHouseChoiceInfoMenu;*/
 }
 
+void HouseChoiceMenuState::doBack() {
+	assert(mp_parent != NULL);
+	PopState();
+}

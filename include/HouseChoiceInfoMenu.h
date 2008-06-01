@@ -9,6 +9,8 @@ class HouseChoiceInfoMenuState : public MentatMenuState {
 		HouseChoiceInfoMenuState(HOUSETYPE newHouse);
 		~HouseChoiceInfoMenuState();
 		
+		void doNo();
+		
 		virtual const char* GetName() { return "HouseChoiceInfoMenuState"; }
 		
 	private:

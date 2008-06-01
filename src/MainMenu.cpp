@@ -135,6 +135,26 @@ void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
     SoundPlayer::Instance()->playMusic("SOUND:DUNE5.ADL", 6);
+    
+#if 0
+    Rect rect(0,0,30, 30);
+    
+    Image * img = new Image(UPoint(600, 300));
+    int colour = 0;
+    
+    for (int j=0; j< 10; j++)
+    {
+        for (int i=0; i< 20; i++)
+        {
+            rect.x = 30 * i;
+            rect.y = 30 * j;
+            img->fillRect(colour, rect);
+            colour++;
+        }
+    }
+    SDL_SaveBMP(img->getSurface(), "palette.bmp");
+
+#endif 
 }
 
 void MainMenuState::doSingle()
