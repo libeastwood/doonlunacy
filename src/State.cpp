@@ -1,8 +1,7 @@
+#include "Log.h"
 #include "State.h"
 
 #include <assert.h>
-
-#define STATE_DEBUG
 
 State::State()
 {
@@ -16,16 +15,12 @@ State::~State()
 
 void State::JustMadeActive()
 {
-#ifdef STATE_DEBUG
-    printf("--> %s just made active\n", GetName());
-#endif 
+    LOG_INFO("State", "--> %s just made active", GetName());
 }
 
 void State::JustMadeInactive()
 {
-#ifdef STATE_DEBUG
-    printf("<-- %s just made inactive\n", GetName());
-#endif 
+    LOG_INFO("State", "<-- %s just made inactive", GetName());
 }
 
 void State::PopState()

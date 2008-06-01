@@ -1,5 +1,6 @@
 #include "Font.h"
 #include "Application.h"
+#include "Log.h"
 #include "ResMan.h"
 
 #include <assert.h>
@@ -125,7 +126,7 @@ Font* FontManager::getFont(std::string fn)
     FontList::iterator it = m_fonts.find(fn);
     if (it == m_fonts.end())
     {
-		std::cout << "loading" << fn << std::endl;
+        LOG_INFO("Font", "Loading %s", fn.c_str());
         m_fonts[fn] = loadFont(fn);
     };
 
@@ -134,7 +135,7 @@ Font* FontManager::getFont(std::string fn)
 
 Font* FontManager::loadFont(std::string fn)
 {
-	std::cout << "loadFont  " << fn << std::endl;
+    LOG_INFO("Font", "LoadFont %s", fn.c_str());
     //FILE* file = fopen(fn, "rb");
     FileLike* file = ResMan::Instance()->readFile(fn);
 
@@ -143,11 +144,11 @@ Font* FontManager::loadFont(std::string fn)
     file->read(header, sizeof(FNTHeader));
 
     // this checks if its a valid font
-    if (header->unknown1 != 0x0500) printf("failed unknown1\n");
-    if (header->unknown2 != 0x000e) printf("failed unknown2\n");
-    if (header->unknown3 != 0x0014) printf("failed unknown3\n");
+    if (header->unknown1 != 0x0500) LOG_WARNING("Font", "failed unknown1");
+    if (header->unknown2 != 0x000e) LOG_WARNING("Font", "failed unknown2");
+    if (header->unknown3 != 0x0014) LOG_WARNING("Font", "failed unknown3");
 
-    printf("nchars %u\n", header->nchars);
+    LOG_INFO("Font", "nchars %u", header->nchars);
 
     word* dchar = new word[header->nchars+1];
 
@@ -158,7 +159,7 @@ Font* FontManager::loadFont(std::string fn)
     file->seek(header->wpos);
     file->read(wchar, sizeof(byte) * (header->nchars+1));
 
-    if (wchar[0] != 8) printf("%d: bad!!\n", wchar[0]);
+    if (wchar[0] != 8) LOG_WARNING("Font", "%d: bad!!", wchar[0]);
 
     word* hchar = new word[header->nchars+1];
 
@@ -197,16 +198,16 @@ Font* FontManager::loadFont(std::string fn)
 
 TTFFontManager::TTFFontManager()
 {
-    fprintf(stdout, "initializing font lib...\n");
+    LOG_INFO("Font", "Initializing font lib...");
     
     if (TTF_Init() < 0)
     {
-        fprintf(stderr, "ERROR: Couldn't initialise font library: %s\n", 
+        LOG_ERROR("Font", "Couldn't initialise font library: %s", 
                         SDL_GetError());
         Application::Instance()->Die();
     }
 
-    fprintf(stdout, "loading fonts...\n");
+    LOG_INFO("Font", "Loading fonts...");
 
 	std::string fn = "data/font.ttf";
 
@@ -214,12 +215,14 @@ TTFFontManager::TTFFontManager()
     {
         if ( (m_fonts[i - MIN_FONT_SIZE] = TTF_OpenFont(fn.c_str(), i)) = NULL )
         {
-			std::cerr << "ERROR: unable to load " << fn << " size " << i << std::endl;
+            LOG_ERROR("Font", "unable to load %s size %d", fn.c_str(), i);
+            //std::cerr << "ERROR: unable to load " << fn << " size " << i << std::endl;
             Application::Instance()->Die();
         }
         else
         {
-			std::cout << "loaded font " << fn << " " << i << std::endl;
+            LOG_INFO("Font", "loaded font %s %i", fn.c_str(), i);
+			//std::cout << "loaded font " << fn << " " << i << std::endl;
         };
     };
 }

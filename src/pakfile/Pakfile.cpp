@@ -1,7 +1,10 @@
-#include "pakfile/Pakfile.h"
+#include "SDL_endian.h"
 #include <stdlib.h>
 #include <string>
-#include "SDL_endian.h"
+
+
+#include "Log.h"
+#include "pakfile/Pakfile.h"
 
 Pakfile::Pakfile(const char *Pakfilename)
 {
@@ -9,19 +12,19 @@ Pakfile::Pakfile(const char *Pakfilename)
 	NumFileEntry = 0;
 	
 	if(Pakfilename == NULL) {
-		fprintf(stderr,"Pakfile::Pakfile(): Pakfilename == NULL\n");
+		LOG_ERROR("Pakfile", "Pakfile::Pakfile(): Pakfilename == NULL\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	if((Filename = (char*) malloc(strlen(Pakfilename)+1)) == NULL) {
-		perror("Pakfile::Pakfile()");
+		LOG_ERROR("Pakfile", "Pakfile::Pakfile()");
 		exit(EXIT_FAILURE);
 	}
 	
 	strcpy(Filename,Pakfilename);
 	
 	if( (fPakFile = fopen(Filename, "rb")) == NULL) {
-		perror("Pakfile::Pakfile()");
+		LOG_ERROR("Pakfile", "Pakfile::Pakfile()");
 		exit(EXIT_FAILURE);	
 	}
 	
@@ -82,7 +85,7 @@ void Pakfile::readIndex()
 			}
 			
 			if(i >= 256) {
-				fprintf(stderr,"Pakfile::readIndex(): Filename in Pakfile too long\n");
+				LOG_ERROR("Pakfile", "readIndex(): Filename in Pakfile too long");
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -93,7 +96,7 @@ void Pakfile::readIndex()
 		}
 		
 		strcpy(FileEntry[NumFileEntry].Filename,name);
-                printf("pak: found file %s\n", name);
+        LOG_INFO("Pakfile", "Found file %s", name);
 		
 		if(NumFileEntry > 0) {
 			FileEntry[NumFileEntry - 1].EndOffset = startoffset - 1;

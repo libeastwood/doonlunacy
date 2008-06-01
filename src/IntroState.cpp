@@ -1,13 +1,19 @@
-#include "IntroState.h"
-#include "ResMan.h"
+#include <iostream>
+
+#include "boost/bind.hpp"
+
 #include "Application.h"
 #include "DataCache.h"
-#include "Gfx.h"
-#include "Settings.h"
-#include "pakfile/Palette.h"
-#include "boost/bind.hpp"
-#include <iostream>
 #include "Font.h"
+#include "Gfx.h"
+#include "IntroState.h"
+#include "Log.h"
+#include "ResMan.h"
+#include "Settings.h"
+#include "SoundPlayerClass.h"
+
+#include "pakfile/Palette.h"
+
 
 // ------------------------------------------------------------------
 // IntroState::Frame
@@ -92,7 +98,7 @@ void IntroState::Frame::setPalette(Palette_enum palette)
 	m_palette = DataCache::Instance()->getPalette(palette);
 }
 
-void IntroState::Frame::setSong(uint8_t song)
+void IntroState::Frame::setSong(uint16_t song)
 {
 	m_song = song;
 }
@@ -130,7 +136,7 @@ void IntroState::Frame::setTextFade(bool textFade)
 
 void IntroState::Frame::Load(Frame* lastframe)
 {
-    printf("intro loading %s\n", m_filename.c_str());
+    LOG_INFO("IntroState", "Intro loading %s", m_filename.c_str());
 
     std::string::size_type wsaSuffix = m_filename.rfind(".WSA", m_filename.size() - 1);
     std::string::size_type cpsSuffix = m_filename.rfind(".CPS", m_filename.size() - 1);
@@ -257,7 +263,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_introSounds.size() > 0){
 		if(m_framesPlayed ==  m_introSounds[0].first){
 			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_introSounds[0].second);
-			Application::Instance()->playSound(sound);
+			SoundPlayerClass::Instance()->playSound(sound);
 			m_introSounds.erase(m_introSounds.begin());
 		}
 	}
@@ -265,7 +271,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_soundChunks.size() > 0){
 		if(m_framesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
-			Application::Instance()->playSound(sound, 10);
+			SoundPlayerClass::Instance()->playSound(sound, 10);
 //			delete(m_soundChunks[0].second);
 			m_soundChunks.erase(m_soundChunks.begin());
 		}
@@ -319,7 +325,8 @@ void IntroState::Frame::cleanupTransitionIn()
 void IntroState::Frame::doTransitionIn(float dt) 
 {
 	if(m_song != -1){
-		Application::Instance()->playSound(DataCache::Instance()->getMusic(MUSIC_INTRO, m_song));
+	    song * songfile = DataCache::Instance()->getMusic(MUSIC_INTRO,m_song);
+		SoundPlayerClass::Instance()->playMusic(songfile->filename, songfile->track);
 	}
 
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
@@ -674,13 +681,14 @@ void IntroState::JustMadeActive()
 void IntroState::JustMadeInactive()
 {
     Application::Instance()->RootWidget()->deleteChild(m_butIntro);
+    SoundPlayerClass::Instance()->stopMusic();
     State::JustMadeInactive();
 }
 
 bool IntroState::next()
 {
 
-    fprintf(stderr, "loading next..\n");
+    LOG_INFO("IntroState", "Loading next..");
     IntroList::iterator it = m_wsaNames.begin();
     if (it == m_wsaNames.end() )
     {

@@ -51,7 +51,7 @@ class IntroState : public State
             void Load(Frame* lastframe);
 			void addSound(uint16_t playAt, Sound_enum sound);
 			void concatSound(uint16_t playAt, Sound_enum sound);
-			void setSong(uint8_t song);
+			void setSong(uint16_t song);
 			void setPalette(Palette_enum palette);
 			void setFps(float fps);
 			void addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait);
@@ -76,7 +76,7 @@ class IntroState : public State
             uint8_t m_currentFrame, m_framesPlayed;
 
             float m_frametime, m_textSize;
-			int8_t m_song;
+			int16_t m_song;
 			uint8_t m_endWait, m_textColor, m_textTransition;
 			uint16_t m_totalFrames;
 			SPoint m_textLocation;

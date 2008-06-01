@@ -41,7 +41,7 @@ all_sources = [ "Application.cpp",
 				"pakfile/sound/Vocfile.cpp",
 				"pakfile/sound/adl/adl.cpp",
 				"pakfile/sound/adl/emuopl.cpp",
-				"pakfile/sound/adl/fmopl.cpp"
+				"pakfile/sound/adl/fmopl.c"
               ]
 
 gui_sources = [

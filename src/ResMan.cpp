@@ -1,18 +1,19 @@
-#include "boost/filesystem/path.hpp"
-#include "boost/filesystem/operations.hpp" 
-#include "boost/format.hpp"
-
+#include <assert.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
+#include "boost/filesystem/path.hpp"
+#include "boost/filesystem/operations.hpp" 
+#include "boost/format.hpp"
+
+#include "Log.h"
 #include "ResMan.h"
 #include "Settings.h"
 //#include "Log.h"
 
 //#include "boost/filesystem/fstream.hpp"    // ditto
 
-#include <assert.h>
 
 namespace bfs = boost::filesystem;
 
@@ -85,7 +86,7 @@ std::string DIRResource::readText(std::string path)
 	bfs::path fullpath (m_path);
 	fullpath /= path;
 	std::string file_contents;
-	printf("opening file %s...\n", fullpath.string().c_str());
+	LOG_INFO("ResMan", "Opening file %s...", fullpath.string().c_str());
 	std::ifstream file_stream(fullpath.string().c_str());
 	
 	assert( file_stream.is_open() );
@@ -185,13 +186,13 @@ bool ResMan::addRes(std::string name)
 {
     std::string fullpath = Settings::Instance()->GetDataDir();
     fullpath.append(name);
-    printf("adding resource %s from %s...\n", name.c_str(), fullpath.c_str());
+    LOG_INFO("Application", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
     bfs::path file (fullpath);
     Resource *res = NULL;
 
     if (bfs::exists(file))
     {
-        printf("Using DIRResource for %s\n", name.c_str());
+        LOG_INFO("Application", "Using DIRResource for %s", name.c_str());
         res = new DIRResource(file);
     }
     else 
@@ -202,7 +203,7 @@ bool ResMan::addRes(std::string name)
 
         if (!bfs::exists(pakpath))
         {
-            printf("Neither DIR or PAK found for %s\n", name.c_str());
+            LOG_ERROR("Application", "Neither DIR or PAK found for %s", name.c_str());
             return false;
         }
         
@@ -227,13 +228,13 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     std::string fsname = std::string(name, 0, p);
     filename = std::string(name, p+1, name.length() - fsname.length() - 1);
 
-    printf("opening file from %s named %s...\n", fsname.c_str(), filename.c_str());
+    LOG_INFO("Application", "Opening file from %s named %s...", fsname.c_str(), filename.c_str());
 
     Resource* res = m_resources[fsname];
 
     if (res == NULL)
     {
-        printf("ERROR: cannot find file!\n");
+        LOG_INFO("Application", "Cannot find file!");
         
         return NULL;
     };
@@ -296,14 +297,14 @@ void ResMan::writeText(std::string name, std::string text)
 	Resource* res = getResource(name, filename);
 	if (res == NULL) 
 	{
-		printf("resource not found!\n");
+		LOG_ERROR("Application", "Resource not found!");
 		assert(0);
 		return;
 	};
 
 	if (!res->isWritable())
 	{
-		printf("resource not writable!\n");
+		LOG_ERROR("Application", "Resource not writable!\n");
 		assert(0);
 		return;
 	};

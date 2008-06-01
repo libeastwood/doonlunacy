@@ -6,8 +6,8 @@
 #include "SDL_mixer.h"
 #include "DuneConstants.h"
 #include "mmath.h"
-#include "gui/Graphics.h"
 #include "DataCache.h"
+#include "Log.h"
 
 #include <algorithm>
 
@@ -24,6 +24,7 @@ void VoiceChunkFinishedCallback(int channel) {
 
 SoundPlayerClass::SoundPlayerClass() {
 
+    //FIXME:This should go to settings or somewhere else
 /*	AttackMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/attack/");
 	IntroMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/intro/");
 	LoseMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/lose/");
@@ -37,7 +38,7 @@ SoundPlayerClass::SoundPlayerClass() {
 	voiceVolume = 128;
 
 	Mix_Volume(-1, MIX_MAX_VOLUME);
-	Mix_VolumeMusic(musicVolume);
+	Mix_VolumeMusic(MIX_MAX_VOLUME);
 
 	music = NULL;
 	thisMusicID = NONE;
@@ -56,12 +57,23 @@ SoundPlayerClass::SoundPlayerClass() {
 //	musicOn = true;
 	musicOn = false;
 //	changeMusic(MUSIC_INTRO);
+
+    int freq, channels;
+    Uint16 format;
+
+    Mix_QuerySpec(&freq, &format, &channels);
+    m_opl = new CEmuopl(freq, true, true);
+    m_player = new CadlPlayer(m_opl);
 }
+
 SoundPlayerClass::~SoundPlayerClass() {
 	if(music != NULL) {
 		Mix_FreeMusic(music);
 		music = NULL;
 	}
+	Mix_HookMusic(NULL, NULL);
+    if(m_opl) delete m_opl;
+    if(m_player) delete m_player;
 }
 
 #if 0
@@ -289,6 +301,20 @@ void SoundPlayerClass::playVoice(int id, int house) {
 	}
 }
 #endif
+
+void SoundPlayerClass::playMusic(std::string filename, uint16_t trackNum)
+{
+    m_player->init();
+    m_player->load(filename);
+    m_player->rewind(trackNum);
+
+    Mix_HookMusic(m_player->callback, m_player);
+}
+
+void SoundPlayerClass::stopMusic()
+{
+    Mix_HookMusic(NULL, NULL);
+}
 
 void SoundPlayerClass::playSound(Sound_enum soundID) {
 	if (soundOn)

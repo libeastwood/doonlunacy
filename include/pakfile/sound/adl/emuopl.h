@@ -23,7 +23,9 @@
 #define H_ADPLUG_EMUOPL
 
 #include "opl.h"
+extern "C" {
 #include "fmopl.h"
+}
 
 class CEmuopl: public Copl
 {

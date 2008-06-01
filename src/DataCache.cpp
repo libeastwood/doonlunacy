@@ -1,8 +1,12 @@
-#include "DataCache.h" 
-#include "pakfile/sound/Vocfile.h"
-#include "pakfile/sound/adl/adl.h"
-#include <string>
 #include <iostream>
+#include <string>
+
+
+#include "DataCache.h" 
+#include "Log.h"
+
+#include "pakfile/sound/Vocfile.h"
+
 
 DataCache::DataCache() {
 }
@@ -10,13 +14,9 @@ DataCache::DataCache() {
 void DataCache::Init(){
     for (uint8_t i=0; i< NUM_HOUSES; i++)
     {
-        m_objImg.push_back(new images());
-		m_guiImg.push_back(new images());
+        m_objImg.push_back(new images);
+		m_guiImg.push_back(new images);
     }
-	for (uint8_t i = 0; i < MUSIC_RANDOM; i++)
-	{
-		m_music.push_back(new music());
-	}
 
 	soundChunk.resize(NUM_SOUNDCHUNK);
     int len, maplen;
@@ -39,7 +39,7 @@ void DataCache::Init(){
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
 
     ResMan::Instance()->addRes("SOUND");
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
+	//addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
 
     ResMan::Instance()->addRes("ATRE");
 	ResMan::Instance()->addRes("GERMAN");
@@ -429,7 +429,8 @@ void DataCache::Init(){
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
 
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
+	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
+    addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
 #if 0
 	// These are actually all the same song, but three different versions..
 	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
@@ -487,11 +488,6 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
 {
-#ifdef THREADS
-    spinlock:
-    if(!m_palette[palette])
-        goto spinlock;
-#endif
     return m_palette[palette]->getPalette();
 }
 
@@ -510,9 +506,6 @@ void DataCache::addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house) {
 ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 
     images::iterator iter;
-#ifdef THREADS
-	spinlock:
-#endif
 	iter = m_objImg[house]->find(ID);
     if (iter != m_objImg[house]->end())
     { 
@@ -520,13 +513,7 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-#ifdef THREADS
-		// If house is harkonnen we know that there shouldn't be any other
-		// to look for and therefore must be that graphic hasn't been loaded yet.
-		if (house == HOUSE_HARKONNEN)
-			goto spinlock;
-#endif
-        ImagePtr source = m_objImg[house]->find(ID)->second;
+        ImagePtr source = m_objImg[HOUSE_HARKONNEN]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, copy));
         return copy;
@@ -537,9 +524,6 @@ ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
 ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
 
     images::iterator iter;
-#ifdef THREADS
-	spinlock:
-#endif
 	iter = m_guiImg[house]->find(ID);
     if (iter != m_guiImg[house]->end())
     { 
@@ -547,11 +531,7 @@ ImagePtr DataCache::getGuiPic(GuiPic_enum ID, HOUSETYPE house) {
     }
     else
     {
-#ifdef THREADS
-		if (house == HOUSE_HARKONNEN)
-			goto spinlock;
-#endif
-        ImagePtr source = m_guiImg[house]->find(ID)->second;
+        ImagePtr source = m_guiImg[HOUSE_HARKONNEN]->find(ID)->second;
         ImagePtr copy = source->getRecoloredByHouse(house);
         m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, copy));
         return copy;
@@ -565,55 +545,20 @@ void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 
 void DataCache::addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum)
 {
-	songFiles[musicType].push_back(songFile(filename, trackNum));
-#ifdef THREADS
-	addMusic(musicType, songFiles[musicType].size()-1);
-#endif
+    song newsong;
+    newsong.filename = filename;
+    newsong.track = trackNum;
+  
+    m_playlists[musicType].push_back(newsong);
 }
 
-Mix_Chunk* DataCache::addMusic(MUSICTYPE musicType, uint16_t ID)
+song * DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
-	songFile song = songFiles[musicType][ID];
-	int len;
-	uint8_t * data = ResMan::Instance()->readFile(song.first, &len);
-	SDL_RWops* test = SDL_RWFromMem(data, len);
-	CadlPlayer *p = new CadlPlayer(test);
-	Mix_Chunk* tmp = p->getUpsampledSubsong(song.second, 22050, AUDIO_S16LSB, 1);
-	SDL_RWclose(test);
-    m_music[musicType]->insert(std::pair<uint16_t, Mix_Chunk*>(ID, tmp));
-	delete data;
-	delete p;
-	return tmp;
+    return &m_playlists[musicType][ID];
 }
 
-// Searches through list of loaded songs to see if the specific song is loaded.
-// If loaded, it will return the song, if not it will load and return the song.
-Mix_Chunk* DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
-{
-    music::iterator iter;
-#ifdef THREADS
-	spinlock:
-#endif
-	iter = m_music[musicType]->find(ID);
-    if (iter != m_music[musicType]->end())
-    {
-        return m_music[musicType]->find(ID)->second;
-    }
-    else
-    {
-#ifdef	THREADS
-		goto spinlock;
-#endif
-		return addMusic(musicType, ID);
-    }
-}
 
 Mix_Chunk* DataCache::getSoundChunk(Sound_enum ID){
-#ifdef	THREADS
-spinlock:
-	if(!soundChunk[ID])
-		goto spinlock;
-#endif
 	return soundChunk[ID];
 }
 
@@ -625,12 +570,12 @@ Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
 
 	data = ResMan::Instance()->readFile(fileName.c_str(), &len);
 	if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
-		fprintf(stderr,"DataManager::getChunkFromFile(): Cannot open %s!\n",fileName.c_str());
+		LOG_ERROR("DataCache", "getChunkFromFile(): Cannot open %s!",fileName.c_str());
 		exit(EXIT_FAILURE);
 	}
 	
 	if((returnChunk = LoadVOC_RW(rwop, 0)) == NULL) {
-		fprintf(stderr,"DataManager::getChunkFromFile(): Cannot load %s!\n",fileName.c_str());
+		LOG_ERROR("DataCache", "getChunkFromFile(): Cannot load %s!",fileName.c_str());
 		exit(EXIT_FAILURE);		
 	}
 	
@@ -662,29 +607,14 @@ Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
 }
 
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
-#ifdef THREADS
-	spinlock:
-	if(!BriefingStrings[house])
-		goto spinlock;
-#endif
 	return BriefingStrings[house]->getString(mission,textType);
 }
 
 std::string	DataCache::getIntroString(uint16_t i){
-#ifdef THREADS
-	spinlock:
-	if(!IntroStrings)
-		goto spinlock;
-#endif
 	return IntroStrings->getString(i);
 }
 
 std::string	DataCache::getCreditsString(uint16_t i){
-#ifdef THREADS
-	spinlock:
-	if(!IntroStrings)
-		goto spinlock;
-#endif
 	return CreditsStrings->getString(i);
 }
 
@@ -709,7 +639,7 @@ void DataCache::addAnimation(Animation_enum ID, Animation* animation, double fra
 
 Animation* DataCache::getAnimation(Animation_enum id) {
 	if(id >= NUM_ANIMATION) {
-		fprintf(stderr,"DataManager::getAnimation(): Animation with id %d is not available!\n",id);
+		LOG_ERROR("DataCache", "getAnimation(): Animation with id %d is not available!",id);
 		exit(EXIT_FAILURE);
 	}
 	

@@ -1,10 +1,12 @@
-#include "pakfile/Stringfile.h"
-#include "ResMan.h"
+#include <iostream>
 #include <SDL_endian.h>
 #include <SDL.h>
 #include <SDL_rwops.h>
-#include <iostream>
 #include <string>
+
+#include "Log.h"
+#include "ResMan.h"
+#include "pakfile/Stringfile.h"
 
 Stringfile::Stringfile(std::string stringFileName) {
 	int bufsize;
@@ -13,32 +15,32 @@ Stringfile::Stringfile(std::string stringFileName) {
 	SDL_RWops* RWop = SDL_RWFromMem(bufFiledata, bufsize);
 	
 	if(RWop == NULL) {
-		fprintf(stderr, "Stringfile: RWop == NULL!\n");
+		LOG_ERROR("Stringfile", "RWop == NULL!");
 		exit(EXIT_FAILURE);
 	}
 
 	if(bufsize <= 0) {
-		fprintf(stderr,"Stringfile: Cannot determine size!\n");
+		LOG_ERROR("Stringfile", " Cannot determine size!");
 		exit(EXIT_FAILURE);	
 	}
 	
 	if(bufsize < 2) {
-		fprintf(stderr, "Stringfile: Invalid string file: File too small!\n");
+		LOG_ERROR("Stringfile", "Invalid string file: File too small!");
 		exit(EXIT_FAILURE);
 	}
 	
 	if(SDL_RWseek(RWop,0,SEEK_SET) != 0) {
-		fprintf(stderr,"Stringfile: Seeking string file failed!\n");
+		LOG_ERROR("Stringfile", " Seeking string file failed!");
 		exit(EXIT_FAILURE);
 	}
 	
 	if( (bufFiledata = (unsigned char*) malloc(bufsize)) == NULL) {
-		fprintf(stderr,"Stringfile: Allocating memory failed!\n");
+		LOG_ERROR("Stringfile", " Allocating memory failed!");
 		exit(EXIT_FAILURE);
 	}
 	
 	if(SDL_RWread(RWop, bufFiledata, bufsize, 1) != 1) {
-		fprintf(stderr,"Stringfile: Reading string file failed!\n");
+		LOG_ERROR("Stringfile", " Reading string file failed!");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -223,7 +225,7 @@ std::string Stringfile::decodeString(std::string text) {
 				// special character
 				i++;
 				if(i == text.length()) {
-					fprintf(stderr,"Stringfile:decodeString: Special character escape sequence at end of string!\n");
+					LOG_ERROR("Stringfile", "decodeString: Special character escape sequence at end of string!");
 					exit(EXIT_FAILURE);
 				}
 

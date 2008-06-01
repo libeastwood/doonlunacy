@@ -1,8 +1,10 @@
-#include "pakfile/Cpsfile.h"
-#include <SDL_endian.h>
-#include "DataCache.h"
 #include <iostream>
 #include <string>
+
+#include <SDL_endian.h>
+#include "DataCache.h"
+#include "Log.h"
+#include "pakfile/Cpsfile.h"
 
 #define	SIZE_X	320
 #define SIZE_Y	240
@@ -11,8 +13,8 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize, SDL_Palette* palette)
 {
 	Filedata = bufFiledata;
 	CpsFilesize = bufsize;
-	if(*(unsigned char *)(bufFiledata + 10 + 9) != 3){
-		std::cout << "CPS has embedded palette, loading..." << std::endl;
+	if(*(unsigned char *)(bufFiledata + 9) == 3){
+		LOG_INFO("Cpsfile", "CPS has embedded palette, loading...");
 		m_palette = new SDL_Palette;
 		m_palette->ncolors = bufsize / 3;
 		m_palette->colors = new SDL_Color[m_palette->ncolors];
@@ -58,7 +60,7 @@ Image * Cpsfile::getPicture()
 	}
 	
 	if(decode80(Filedata + 10 + PaletteSize,ImageOut,0) == -2) {
-		std::cerr << "Error: Cannot decode Cps-File" << std::endl;
+		LOG_ERROR("Cpsfile", "Cannot decode Cps-File");
 	}
 	
 	// create new picture surface
@@ -99,7 +101,7 @@ Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int
 	
 	// create new picture surface
 	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,width,height,8,0,0,0,0))== NULL) {
-		std::cerr << "GetSubPicture: Cannot create new Picture!" << std::endl;
+		LOG_ERROR("Cpsfile", "GetSubPicture: Cannot create new Picture!");
 		exit(EXIT_FAILURE);	
 	}
 			

@@ -17,12 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
-#include "pakfile/Vocfile.h"
-#include "pakfile/IntegratedLibSampleRate/samplerate.h"
+#include <math.h>
 #include <string>
 #include <SDL_mixer.h>
-#include <math.h>
+
+#include "Log.h"
+
+#include "pakfile/Vocfile.h"
 
 using namespace std;
 
@@ -85,52 +86,52 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 	Uint16 id;
 	
 	if(SDL_RWread(rwop,(char*) description,20,1) != 1) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 
 	if (memcmp(description, "Creative Voice File", 19) != 0) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 	
 	if (description[19] != 0x1A) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 	
 	if(SDL_RWread(rwop,&offset,sizeof(offset),1) != 1) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 	offset = SDL_SwapLE16(offset);
 	
 	if(SDL_RWread(rwop,&version,sizeof(version),1) != 1) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 	version = SDL_SwapLE16(version);
 	
 	if(SDL_RWread(rwop,&id,sizeof(id),1) != 1) {
-		fprintf(stderr,"loadVOCFromStream: Invalid header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid header!");
 		return NULL;
 	}
 	id = SDL_SwapLE16(id);
 	
 	if(offset != sizeof(description) + sizeof(offset) + sizeof(version) + sizeof(id)) {
-		fprintf(stderr,"loadVOCFromStream: Invalid datablock offset in header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid datablock offset in header!");
 		return NULL;
 	}
 	
 	// 0x100 is an invalid VOC version used by German version of DOTT (Disk) and
 	// French version of Simon the Sorcerer 2 (CD)
 	if(!(version == 0x010A || version == 0x0114 || version == 0x0100)) {
-		fprintf(stderr,"loadVOCFromStream: Invalid version (0x%X) in header!\n",version);
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid version (0x%X) in header!",version);
 		return NULL;
 	}
 	
 	if(id != (~version + 0x1234)) {
-		fprintf(stderr,"loadVOCFromStream: Invalid id in header!\n");
+		LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid id in header!");
 		return NULL;
 	}
 	
@@ -147,7 +148,7 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 	
 		Uint8 tmp[3];
 		if(SDL_RWread(rwop,tmp,1,3) != 3) {
-			fprintf(stderr,"loadVOCFromStream: Invalid block length!\n");
+			LOG_ERROR("Vocfile", "loadVOCFromStream: Invalid block length!");
 			return ret_sound;
 		}
 		len = tmp[0];
@@ -158,23 +159,23 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 			case VOC_CODE_DATA: {
 				Uint8 time_constant;
 				if(SDL_RWread(rwop,&time_constant,sizeof(Uint8),1) != 1) {
-					fprintf(stderr,"loadVOCFromStream: Cannot read time constant!\n");
+					LOG_ERROR("Vocfile", "loadVOCFromStream: Cannot read time constant!");
 					return ret_sound;
 				}
 					
 				Uint8 packing;
 				if(SDL_RWread(rwop,&packing,sizeof(Uint8),1) != 1) {
-					fprintf(stderr,"loadVOCFromStream: Cannot read packing!\n");
+					LOG_ERROR("Vocfile", "loadVOCFromStream: Cannot read packing!");
 					return ret_sound;
 				}
 				len -= 2;
 				Uint32 tmp_rate = getSampleRateFromVOCRate(time_constant);
 				if((rate != 0) && (rate != tmp_rate)) {
-					fprintf(stderr,"This voc-file contains data blocks with different sampling rates: old rate: %d, new rate: %d\n",rate,tmp_rate);
+					LOG_ERROR("Vocfile", "This voc-file contains data blocks with different sampling rates: old rate: %d, new rate: %d",rate,tmp_rate);
 				}
 				rate = tmp_rate;
 				
-				//fprintf(stderr,"VOC Data Block: Rate: %d, Packing: %d, Length: %d\n", rate, packing, len);
+				//LOG_ERROR("Vocfile", "VOC Data Block: Rate: %d, Packing: %d, Length: %d\n", rate, packing, len);
 				
 				if (packing == 0) {
 					if (size) {
@@ -184,27 +185,27 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 					}
 					
 					if(SDL_RWread(rwop,ret_sound + size,1,len) != len) {
-						fprintf(stderr,"loadVOCFromStream: Cannot read data!\n");
+						LOG_ERROR("Vocfile", "loadVOCFromStream: Cannot read data!");
 						return ret_sound;
 					}
 					
 					size += len;
 				} else {
-					fprintf(stderr,"VOC file packing %d unsupported!\n", packing);
+					LOG_ERROR("Vocfile", "VOC file packing %d unsupported!\n", packing);
 				}
 			} break;
 			
 			case VOC_CODE_SILENCE: {
 				Uint16 SilenceLength;
 				if(SDL_RWread(rwop,&SilenceLength,sizeof(Uint16),1) != 1) {
-					fprintf(stderr,"loadVOCFromStream: Cannot read silence length!\n");
+					LOG_ERROR("Vocfile", "loadVOCFromStream: Cannot read silence length!");
 					return ret_sound;
 				}
 				SilenceLength = SDL_SwapLE16(SilenceLength);
 				
 				Uint8 time_constant;
 				if(SDL_RWread(rwop,&time_constant,sizeof(Uint8),1) != 1) {
-					fprintf(stderr,"loadVOCFromStream: Cannot read time constant!\n");
+					LOG_ERROR("Vocfile", "loadVOCFromStream: Cannot read time constant!");
 					return ret_sound;
 				}
 				
@@ -215,7 +216,7 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 				if(rate != 0) {
 					length = (Uint32) ((((double) SilenceRate)/((double) rate)) * SilenceLength) + 1;
 				} else {
-					fprintf(stderr,"The silence in this voc-file is right at the beginning. Therefore it is not possible to adjust the silence sample rate to the sample rate of the other sound data in this file!\n");
+					LOG_ERROR("Vocfile", "The silence in this voc-file is right at the beginning. Therefore it is not possible to adjust the silence sample rate to the sample rate of the other sound data in this file!");
 					length = SilenceLength; 
 				}
 				
@@ -239,7 +240,7 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 			case VOC_CODE_EXTENDED:
 			case VOC_CODE_DATA_16:
 			default:
-				fprintf(stderr,"Unhandled code in VOC file : %d\n", code);
+				LOG_ERROR("Vocfile", "Unhandled code in VOC file : %d", code);
 				return ret_sound;
 		}
 	}

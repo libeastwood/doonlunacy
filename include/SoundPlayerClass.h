@@ -7,23 +7,17 @@
 #include "DataCache.h"
 #include "dMath.h"
 #include "SDL_mixer.h"
+#include "singleton.h"
 
-#if 0
-//! \enum MUSICTYPE
-/*! Types of music available in the game*/
-typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
-			   MUSIC_INTRO,  /*!<Background music for intro. */
-			   MUSIC_LOSE,   /*!<Failure screen background music. */
-			   MUSIC_PEACE,  /*!<Played most of the time when the enemy is not attacking. */
-			   MUSIC_WIN,    /*!<Victory screen background music.. */
-			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
-			 } MUSICTYPE;
-#endif
+#include "pakfile/sound/adl/adl.h"
+#include "pakfile/sound/adl/emuopl.h"
+
 /*!
 	Class that handles sounds and music.
 */
-class SoundPlayerClass
+class SoundPlayerClass : public Singleton<SoundPlayerClass>
 {
+    friend class Singleton<SoundPlayerClass>;
 public:
 	//! @name Constructor & Destructor
 	//@{
@@ -63,7 +57,8 @@ public:
 	void playVoice(Sound_enum id, HOUSETYPE house);
 	void playSound(Sound_enum soundID);
 	void playSound(Mix_Chunk* sound, int channel = -1);
-	
+    void playMusic(std::string filename, uint16_t trackNum);
+    void stopMusic();
 	inline int GetSfxVolume() { return sfxVolume; };
 	void SetSfxVolume(int newVolume) {
 		if(newVolume >= 0 && newVolume <= MIX_MAX_VOLUME) {
@@ -87,7 +82,7 @@ private:
 	*/
 	void playSound(Sound_enum soundID, int volume);
 	std::vector<std::string> getMusicFileNames(std::string dir);
-
+    void MusicHook (void *userdata, Uint8 *audiobuf, int len);
 	std::vector<std::string> AttackMusic;
 	std::vector<std::string> IntroMusic;
 	std::vector<std::string> LoseMusic;
@@ -114,5 +109,8 @@ private:
 	int currentMusicNum;
 
 	Mix_Music*      music;
+	
+	Copl *m_opl;
+	CadlPlayer *m_player;
 };
 #endif //SOUNDPLAYERCLASS_H_INCLUDED

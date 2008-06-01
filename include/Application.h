@@ -1,22 +1,14 @@
 #ifndef DUNE_APPLICATION_H
 #define DUNE_APPLICATION_H
 
-#include "singleton.h"
-#include "SDL.h"
-#include "gui2/Container.h"
 
+#include "SDL.h"
+
+#include "singleton.h"
 #include "State.h"
 #include "TopLevelState.h"
 
-#ifdef __linux__
-#define THREADS 1
-#include <pthread.h>
-extern "C" void *dataCacheThread(void * arg);
-#endif
-//#include "SoundPlayerClass.h"
-
-class SoundPlayerClass;
-class Mix_Chunk;
+#include "gui2/Container.h"
 
 typedef enum
 {
@@ -63,12 +55,8 @@ class Application : public Singleton<Application>
         void UpdateVideoMode(bool fullscreen);
         void UpdateVideoMode(Uint16 w, Uint16 h);
         void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
-//		SoundPlayerClass* soundPlayer;
-		void playSound(Mix_Chunk* chunk, int channel = 0);
         
     private:
-		SoundPlayerClass* soundPlayer;
-//		void *testis(void * arg);
         void InitSettings();
         void InitAudio();
         void InitNet();

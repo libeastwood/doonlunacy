@@ -398,10 +398,14 @@ typedef enum {
 typedef std::map <unsigned, ImagePtr> images;
 typedef std::vector <images*> remapped_images; //One for each house
 
-typedef std::map <unsigned, Mix_Chunk*> music;
-typedef std::vector <music*> remapped_music;
+typedef struct {
+    //ResMan filename to song file e.g. SOUND:DUNE0.ADL
+    std::string filename;
+    //it's track number in adl file. they usually have several tracks.
+    uint16_t track;
+} song;
 
-typedef std::pair <std::string, uint16_t> songFile;
+typedef std::vector<song> playlist;
 
 class DataCache : public Singleton<DataCache> 
 {
@@ -421,12 +425,12 @@ class DataCache : public Singleton<DataCache>
 		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum);
 		void addPalette(Palette_enum palette, std::string paletteFile);
 		SDL_Palette* getPalette(Palette_enum palette);
-		Mix_Chunk* addMusic(MUSICTYPE musicType, uint16_t ID);		
+		//Mix_Chunk* addMusic(MUSICTYPE musicType, uint16_t ID);		
         ImagePtr	getObjPic(ObjPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
 		Animation*		getAnimation(Animation_enum id);
 		Mix_Chunk* getSoundChunk(Sound_enum ID);
-		Mix_Chunk* getMusic(MUSICTYPE musicType, uint16_t ID);
+		song * getMusic(MUSICTYPE musicType, uint16_t ID);
 		Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);
 		std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
 
@@ -438,8 +442,9 @@ class DataCache : public Singleton<DataCache>
     private:
         remapped_images m_objImg;
         remapped_images m_guiImg;
-		remapped_music m_music;
-		std::vector<songFile> songFiles[MUSIC_RANDOM];
+
+        playlist m_playlists[MUSIC_RANDOM];
+        
 		PalettefilePtr m_palette[NUM_PALETTES];
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);

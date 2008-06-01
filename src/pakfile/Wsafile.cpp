@@ -1,10 +1,15 @@
-#include "Gfx.h"
-#include "pakfile/Wsafile.h"
-#include "pakfile/Cpsfile.h"
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string>
+
+
 #include "Font.h"
+#include "Gfx.h"
+#include "Log.h"
+
+#include "pakfile/Wsafile.h"
+#include "pakfile/Cpsfile.h"
+
 
 Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize, 
                 SDL_Surface* lastframe, float setFps ) : Decode()
@@ -12,19 +17,19 @@ Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize,
 	Filedata = bufFiledata;
 	WsaFilesize = bufsize;
 	
-        printf("loading wsa with size %d...\n", bufsize);
+    LOG_INFO("Wsafile", "Loading wsa with size %d...", bufsize);
         
 	if(WsaFilesize < 10) {
-		fprintf(stderr, "Error: No valid WSA-File: File too small!\n");
+		LOG_ERROR("Wsafile", "No valid WSA-File: File too small!");
 		exit(EXIT_FAILURE);
 	}
 	
 	NumFrames = SDL_SwapLE16(*((Uint16*) Filedata) );
-    printf("numframes = %d\n", NumFrames);
+    LOG_INFO("Wsafile", "numframes = %d", NumFrames);
 
 	SizeX = SDL_SwapLE16(*((Uint16*) (Filedata + 2)) );
 	SizeY = SDL_SwapLE16(*((Uint16*) (Filedata + 4)) );
-        printf("size %d x %d\n", SizeX, SizeY);
+    LOG_INFO("Wsafile", "size %d x %d", SizeX, SizeY);
 	
 	if( ((unsigned short *) Filedata)[4] == 0) {
 		Index = (Uint32 *) (Filedata + 10);
@@ -42,8 +47,8 @@ Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize,
 	else
 		fps = (FramesPer1024ms / 1024.0f) / 100.0f;
 
-    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
-    printf("FPS = %.3f\n", fps);
+    LOG_INFO("Wsafile", "FramesPer1024ms = %d", FramesPer1024ms);
+    LOG_INFO("Wsafile", "FPS = %.3f", fps);
 	
 	if(Index[0] == 0) {
 		Index++;
@@ -51,12 +56,12 @@ Wsafile::Wsafile(uint8_t * bufFiledata, int bufsize,
 	}
 	
 	if(Filedata + WsaFilesize < (((unsigned char *) Index) + 4 * NumFrames)) {
-		fprintf(stderr, "Error: No valid WSA-File: File too small -2-!\n");
+		LOG_ERROR("Wsafile", "No valid WSA-File: File too small -2-!");
 		exit(EXIT_FAILURE);		
 	}
 	
 	if( (decodedFrames = (unsigned char*) calloc(1,SizeX*SizeY*NumFrames)) == NULL) {
-		fprintf(stderr, "Error: Unable to allocate memory for decoded WSA-Frames!\n");
+		LOG_ERROR("Wsafile", "Unable to allocate memory for decoded WSA-Frames!");
 		exit(EXIT_FAILURE);				
 	}
 
@@ -72,13 +77,13 @@ Wsafile::Wsafile() : Decode()
 {
 	WsaFilesize = -1;
 
-    printf("loading empty image as wsa...\n");
+    LOG_INFO("Wsafile", "Loading empty image as wsa...");
 	
 	NumFrames = 1;
 	fps = 0.1;
 
-    printf("FramesPer1024ms = %d\n", FramesPer1024ms);
-    printf("FPS = %.3f\n", fps);
+    LOG_INFO("Wsafile", "FramesPer1024ms = %d", FramesPer1024ms);
+    LOG_INFO("Wsafile", "FPS = %.3f", fps);
 	decodedFrames = NULL;
 }
 
@@ -173,7 +178,7 @@ void Wsafile::decodeFrames()
 	{
 		if( (dec80 = (unsigned char*) calloc(1,SizeX*SizeY*2)) == NULL) 
 		{
-			fprintf(stderr, "Error: Unable to allocate memory for decoded WSA-Frames!\n");
+			LOG_ERROR("Wsafile", "Unable to allocate memory for decoded WSA-Frames!");
 			exit(EXIT_FAILURE);	
 		}
 

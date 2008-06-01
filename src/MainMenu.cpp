@@ -7,7 +7,7 @@
 #include "ResMan.h"
 #include "SingleMenu.h"
 #include "OptionsMenu.h"
-
+#include "SoundPlayerClass.h"
 #include "boost/bind.hpp"
 #include "pakfile/Wsafile.h"
 
@@ -134,6 +134,7 @@ void MainMenuState::doOptions()
 void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
+    SoundPlayerClass::Instance()->playMusic("SOUND:DUNE4.ADL", 6);
 }
 
 void MainMenuState::doSingle()

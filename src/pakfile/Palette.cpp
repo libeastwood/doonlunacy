@@ -1,8 +1,10 @@
+#include "Log.h"
+
 #include "pakfile/Palette.h"
 
 Palettefile::Palettefile(unsigned char* buf, uint16_t bufsize)
 {
-    printf("loading palette...\n");
+    LOG_INFO("Palette", "Loading palette...");
     
     m_palette = new SDL_Palette;
     m_palette->ncolors = bufsize / 3;

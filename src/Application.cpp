@@ -1,37 +1,31 @@
 #include "Application.h"
+#include "Colours.h"
+#include "DataCache.h"
+#include "Font.h"
+#include "Gfx.h"
+#include "Log.h"
+#include "ResMan.h"
+#include "Settings.h"
+#include "SoundPlayerClass.h"
+#include "TopLevelState.h"
+
+#include "houses.h"
+#include "pakfile/Palette.h"
+#include "pakfile/Shpfile.h"
+#include "pakfile/Cpsfile.h"
+
+#include <assert.h>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "SDL.h"
 //#include "SDL_ttf.h"
 //#include "SDL_net.h"
 #include "SDL_mixer.h"
 #include "SDL_rwops.h"
-#include "pakfile/sound/adl/adl.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <iostream>
-//#include "globals.h"
-//#include "houses.h"
-//#include "MentatClass.h"
-//#include "Game.h"
-//#include "Menu.h"
-//#include "Net.h"
-//#include "data.h"
-//#include "ui.h"
-#include "SoundPlayerClass.h"
-#include "Colours.h"
-#include "Settings.h"
-#include "Font.h"
-#include "TopLevelState.h"
-#include "DataCache.h"
-#include "Gfx.h"
-#include "pakfile/Palette.h"
-#include "pakfile/Shpfile.h"
-#include "pakfile/Cpsfile.h"
 
-#include "ResMan.h"
 
-#include "houses.h"
 
 #define VERSION "0.94.1"
 
@@ -101,7 +95,7 @@ void Application::Init()
     
     if (SDL_Init(flags) < 0)
     {
-        fprintf(stderr, "ERROR: Couldn't initialise SDL: %s\n", SDL_GetError());
+        LOG_ERROR("Application", "ERROR: Couldn't initialise SDL: %s", SDL_GetError());
         //Die();
     }
 
@@ -172,18 +166,18 @@ void Application::InitSettings()
 
 void Application::InitAudio()
 {
-    
+
     printf("initialising sound.....\n");
 
-    if ( Mix_OpenAudio(11025, MIX_DEFAULT_FORMAT, 2, 512) < 0 )
+    if ( Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0 )
     {
-        fprintf(stderr,"Warning: Couldn't set 11025 Hz 16-bit audio\n"
-                       "- Reason: %s\n",SDL_GetError());
+        LOG_ERROR("Application","Warning: Couldn't set 22050 Hz 16-bit audio\n"
+                       "- Reason: %s",SDL_GetError());
         Die();
     }
     else
     {
-        printf("allocated %d channels.\n", Mix_AllocateChannels(16)); 
+        LOG_INFO("Application", "Allocated %d channels. n", Mix_AllocateChannels(16)); 
     };
 }
 
@@ -213,7 +207,7 @@ void Application::SetPalette()
     pal->colors[205].b = 153;
     
     assert(pal != NULL);
-    printf("setting palette %d colors\n", pal->ncolors);
+    LOG_INFO("Application", "Setting palette %d colors", pal->ncolors);
     assert( SDL_SetColors(m_screen->getSurface(), pal->colors, 0, pal->ncolors) == 1 );
     m_currentPalette = pal;
 
@@ -236,7 +230,7 @@ void Application::InitVideo()
     
     if(!surf)
     {
-        fprintf(stderr, "ERROR: Couldn't set video mode: %s\n", SDL_GetError());
+        LOG_ERROR("Application", "Couldn't set video mode: %s", SDL_GetError());
         Die();
     };
 
@@ -275,34 +269,21 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 
 void Application::LoadData()
 {
-    printf("loading resources\n");
+    LOG_INFO("Application", "Loading resources");
     ResMan::Instance()->addRes("INTRO");
 
-
-    printf("done loading resources\n");
-#ifdef __linux__
-    pthread_t threads[1];
-    pthread_create(&threads[0],
-			NULL,
-			dataCacheThread,
-			NULL);
-#endif
-
-
+    DataCache::Instance()->Init();
+    
     SetPalette();
     m_cursor.reset(DataCache::Instance()->getGuiPic(UI_MouseCursor).get()); //mouse.getPicture(0));
 
-    fprintf(stdout, "starting sound...\n");
-    soundPlayer = new SoundPlayerClass();
+    LOG_INFO("Application", "Starting sound...");
+    SoundPlayerClass::Instance();
 
 /*	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
 	soundPlayer->playSound(myChunk);*/
 }
 
-void Application::playSound(Mix_Chunk* chunk, int channel)
-{
-	soundPlayer->playSound(chunk, channel);
-}
 void Application::Die()
 {
     FontManager::Destroy();
@@ -385,8 +366,7 @@ void Application::Run()
         };
     };
     
-    printf("done\n");
-	Die();
+    LOG_INFO("Application", "done");
 }
 
 void Application::HandleEvents()

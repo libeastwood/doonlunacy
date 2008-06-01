@@ -1,10 +1,12 @@
-#include "Application.h"
-
-#include "pakfile/Icnfile.h"
-
 #include <SDL_endian.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+#include "Application.h"
+#include "Log.h"
+#include "pakfile/Icnfile.h"
+
 
 #define	SIZE_X	16
 #define SIZE_Y	16
@@ -22,19 +24,19 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 
 	// now we can start creating the Tilesetindex
 	if(MapFilesize < 2) {
-		fprintf(stderr,"Mapfile: This *.map-File is too short!\n");
+		LOG_ERROR("Icnfile","Mapfile: This *.map-File is too short!");
 		exit(EXIT_FAILURE);		
 	}
 	
 	NumTilesets = SDL_SwapLE16( *((Uint16 *) MapFiledata));
 	
 	if(MapFilesize < NumTilesets * 2) {
-		fprintf(stderr,"Mapfile: This *.map-File is too short!\n");
+		LOG_ERROR("Icnfile", "Mapfile: This *.map-File is too short!");
 		exit(EXIT_FAILURE);		
 	}	
 	
 	if((Tileset = (MapfileEntry*) malloc(sizeof(MapfileEntry)*NumTilesets)) == NULL) {
-		fprintf(stderr,"Mapfile: Allocating memory failed!\n");
+		LOG_ERROR("Icnfile","Mapfile: Allocating memory failed!");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -50,14 +52,14 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 	for(i = 0; i < NumTilesets; i++) {
 	
 		if((Tileset[i].TileIndex = (Uint16*) malloc(sizeof(Uint16)*Tileset[i].NumTiles)) == NULL) {
-			fprintf(stderr,"Mapfile: Allocating memory failed!\n");
+			LOG_ERROR("Icnfile","Mapfile: Allocating memory failed!");
 			exit(EXIT_FAILURE);
 		}
 		
 		index = SDL_SwapLE16( ((Uint16*) MapFiledata)[i]);
 		
 		if((unsigned int)MapFilesize < (index+Tileset[i].NumTiles)*2 ) {
-			fprintf(stderr,"Mapfile: This *.map-File is too short!\n");
+			LOG_ERROR("Icnfile","Mapfile: This *.map-File is too short!");
 			exit(EXIT_FAILURE);			
 		}
 		
@@ -72,7 +74,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 
 	// check if we can access first section;
 	if(IcnFilesize < 0x20) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: No SSET-Section found!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: No SSET-Section found!");
 		exit(EXIT_FAILURE);
 	}
 	
@@ -84,7 +86,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 		||	(SSET[1] != 'S')
 		||	(SSET[2] != 'E')
 		||	(SSET[3] != 'T')) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: No SSET-Section found!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: No SSET-Section found!");
 		exit(EXIT_FAILURE);			
 	}
 	
@@ -93,7 +95,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 	SSET += 16;
 	
 	if(Filedata + IcnFilesize < SSET + SSET_Length) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: SSET-Section is bigger than ICN-File!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: SSET-Section is bigger than ICN-File!");
 		exit(EXIT_FAILURE);					
 	}
 	
@@ -104,7 +106,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 		||	(RPAL[1] != 'P')
 		||	(RPAL[2] != 'A')
 		||	(RPAL[3] != 'L')) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: No RPAL-Section found!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: No RPAL-Section found!");
 		exit(EXIT_FAILURE);			
 	}
 	
@@ -113,7 +115,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 	RPAL += 8;
 	
 	if(Filedata + IcnFilesize < RPAL + RPAL_Length) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: RPAL-Section is bigger than ICN-File!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: RPAL-Section is bigger than ICN-File!");
 		exit(EXIT_FAILURE);					
 	}
 	
@@ -124,7 +126,7 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 		||	(RTBL[1] != 'T')
 		||	(RTBL[2] != 'B')
 		||	(RTBL[3] != 'L')) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: No RTBL-Section found!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: No RTBL-Section found!");
 		exit(EXIT_FAILURE);			
 	}
 	
@@ -135,14 +137,14 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 	RTBL += 8;
 	
 	if(Filedata + IcnFilesize < RTBL + RTBL_Length) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: RTBL-Section is bigger than ICN-File!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: RTBL-Section is bigger than ICN-File!");
 		exit(EXIT_FAILURE);					
 	}
 	
 	NumFiles = SSET_Length / ((SIZE_X * SIZE_Y) / 2);
 		
 	if(RTBL_Length < NumFiles) {
-		fprintf(stderr, "ERROR: Invalid ICN-File: RTBL-Section is too small!\n");
+		LOG_ERROR("Icnfile", "Invalid ICN-File: RTBL-Section is too small!");
 		exit(EXIT_FAILURE);			
 	}
 }
@@ -195,7 +197,7 @@ Image * Icnfile::getPicture(Uint32 IndexOfFile) {
 		
 	SDL_UnlockSurface(pic);
 	
-	printf("File Nr.: %d (Size: %dx%d)\n",IndexOfFile,SIZE_X,SIZE_Y);
+	LOG_INFO("Icnfile", "File Nr.: %d (Size: %dx%d)",IndexOfFile,SIZE_X,SIZE_Y);
 
 	Image * img = new Image(pic);
 	
