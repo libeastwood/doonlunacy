@@ -4,6 +4,7 @@
 
 
 #include "Application.h"
+#include "DataCache.h"
 #include "Log.h"
 #include "pakfile/Icnfile.h"
 
@@ -155,7 +156,7 @@ Icnfile::~Icnfile()
 }
 
 Image * Icnfile::getPicture(Uint32 IndexOfFile) {
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
+    SDL_Palette* palette = DataCache::Instance()->getPalette(IBM_PAL);	
 	SDL_Surface * pic;
 	
 	if(IndexOfFile >= NumFiles) {
@@ -205,7 +206,7 @@ Image * Icnfile::getPicture(Uint32 IndexOfFile) {
 }
 
 Image * Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tilesY, int tilesN) {
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
+    SDL_Palette* palette = DataCache::Instance()->getPalette(IBM_PAL);	
 	SDL_Surface * pic;
 	
 	if(MapfileIndex >= NumTilesets) {
@@ -322,7 +323,7 @@ Image * Icnfile::getPictureArray(Uint32 MapfileIndex, int tilesX, int tilesY, in
 }
 
 Image * Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;	
+    SDL_Palette* palette = DataCache::Instance()->getPalette(IBM_PAL);
 	SDL_Surface * pic;
 	
 	if((StartIndex >= NumFiles)||(EndIndex >= NumFiles)||(StartIndex > EndIndex)) {

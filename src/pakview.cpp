@@ -7,7 +7,7 @@
 #include "pakview.h"
 #include "pakfile/Palette.h"
 
-#include "gui2/Button.h"
+#include "gui2/Label.h"
 #include "houses.h"
 
 #include "boost/bind.hpp"
@@ -26,63 +26,71 @@ class PakViewState : public State
     public:
        PakViewState()
        {
-            img = ObjPic_Terrain;
-            house = HOUSE_ATREIDES;
-            m_button = new BoringButton("Click me, bitte!");
-            m_button->setSize(SPoint(160, 50));
-            m_button->setPosition(SPoint(10, 10));
-            m_button->setVisible(true);
-            m_button->onClick.connect(
-                boost::bind(&PakViewState::NextImg, this) );
-            
-            m_houseBut = new BoringButton("Change house");
-            m_houseBut->setSize(SPoint(132, 50));
-            m_houseBut->setPosition(SPoint(200, 10));
-            m_houseBut->setVisible(true);
-            m_houseBut->onClick.connect(
-                boost::bind(&PakViewState::SwitchHouse, this) );
-            
-            m_test = DataCache::Instance()->getObjPic(img, house);
+            img = 0;
+            house = 0;
 
-            Application::Instance()->RootWidget()->addChild(m_button);            
-            Application::Instance()->RootWidget()->addChild(m_houseBut);
+            m_label = new Label("Use arrows (up,down,left,right) to switch houses and drawn sprites");
+            m_label->setPosition(UPoint(10, 10));
+            
+            m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
+
+            Application::Instance()->RootWidget()->addChild(m_label);            
 
        };
 
        ~PakViewState()
        {
-            delete m_button;
+            delete m_label;
        };
        
        int Execute(float dt)
        {
+		   SDL_Event event;
+		   SDL_PollEvent(&event);
+		   if (event.type == SDL_KEYDOWN) {
+			   switch (event.key.keysym.sym) {
+				case SDLK_RIGHT : SwitchImg(1); break;
+				case SDLK_LEFT : SwitchImg(-1); break;
+				case SDLK_UP : SwitchHouse(+1); break;
+				case SDLK_DOWN : SwitchHouse(-1); break;
+				case SDLK_ESCAPE : Application::Instance()->Die(); break;
+				default : break;
+			   }
+		   }
+		 
            m_test->blitToScreenCentered();
            return 0;
        };
 
-       void NextImg()
+       void SwitchImg(int i)
        {
-           img++;
+           img+=i;
            
            if (img == NUM_OBJPICS)
 			   img = 0;
-           
-           m_test = DataCache::Instance()->getObjPic(img, house);
+		   
+		   if (img < 0)
+			   img = NUM_OBJPICS-1;
+
+           m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
        };
        
-       void SwitchHouse()
+       void SwitchHouse(int i)
        {
-           house++;
+           house+=i;
            fprintf(stderr, "HOUSE CHANGED\n");
            if (house == NUM_HOUSES)
 			   house = 0;
-           m_test = DataCache::Instance()->getObjPic(img, house);
+		   if (house < 0)
+			   house = NUM_HOUSES-1;
+
+           m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
        };
 
       virtual const char* GetName() { return "PakViewState"; }
 
     private:
-       BoringButton* m_button, *m_houseBut;
+       Label * m_label;
        ImagePtr m_test;
        int img, house;
 };
