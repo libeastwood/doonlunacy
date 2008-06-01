@@ -1,9 +1,11 @@
 #ifndef DUNE_GUI2_LABEL_H
 #define DUNE_GUI2_LABEL_H
 
+#include <string>
+#include <vector>
+
 #include "gui2/Widget.h"
 #include "pakfile/Animation.h"
-#include <string>
 
 /* Label widget using dune's fonts
 */
@@ -19,7 +21,7 @@ public:
 		@param textColour sets text colour of label. 49(dune red) by default
         @param bgColour sets background colour of label. 115(dune yellow) by default
     */
-    Label(std::string caption, int textColour = 49, int bgColour = 115);
+    Label(std::string caption, int textColour = 49, int bgColour = 115, int maxLineLength = -1);
 
     ~Label();
     //@}
@@ -30,6 +32,8 @@ protected:
 
     ImagePtr m_surface;    
     std::string m_caption;
+private:
+    std::vector<std::string> splitString(std::string ParseString, int maxLineLength);
 };
 
 class AnimationLabel : public Widget
