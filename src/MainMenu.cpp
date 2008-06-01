@@ -1,14 +1,14 @@
-#include "MainMenu.h"
+#include "boost/bind.hpp"
 
 #include "Application.h"
 #include "Gfx.h"
-//#include "DataFile.h"
-#include "Settings.h"
+#include "MainMenu.h"
+#include "OptionsMenu.h"
 #include "ResMan.h"
 #include "SingleMenu.h"
-#include "OptionsMenu.h"
-#include "SoundPlayerClass.h"
-#include "boost/bind.hpp"
+#include "Settings.h"
+#include "SoundPlayer.h"
+
 #include "pakfile/Wsafile.h"
 
 MainMenuState::MainMenuState()
@@ -134,7 +134,7 @@ void MainMenuState::doOptions()
 void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
-    SoundPlayerClass::Instance()->playMusic("SOUND:DUNE4.ADL", 6);
+    SoundPlayer::Instance()->playMusic("SOUND:DUNE5.ADL", 6);
 }
 
 void MainMenuState::doSingle()

@@ -33,7 +33,7 @@ all_sources = [ "Application.cpp",
                 "Log.cpp",
                 "ConfigFile.cpp",
                 "ResMan.cpp",
-				"SoundPlayerClass.cpp",
+				"SoundPlayer.cpp",
               ]
 
 gui_sources = [
@@ -72,7 +72,7 @@ pakview_sources = [  "Application.cpp",
                      "Strings.cpp",
                      "State.cpp",
                      "TopLevelState.cpp",
-					 "SoundPlayerClass.cpp",
+					 "SoundPlayer.cpp",
                   ]
 
 

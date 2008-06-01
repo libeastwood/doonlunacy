@@ -6,7 +6,7 @@
 #include "Log.h"
 #include "ResMan.h"
 #include "Settings.h"
-#include "SoundPlayerClass.h"
+#include "SoundPlayer.h"
 #include "TopLevelState.h"
 
 #include "houses.h"
@@ -278,7 +278,7 @@ void Application::LoadData()
     m_cursor.reset(DataCache::Instance()->getGuiPic(UI_MouseCursor).get()); //mouse.getPicture(0));
 
     LOG_INFO("Application", "Starting sound...");
-    SoundPlayerClass::Instance();
+    SoundPlayer::Instance();
 
 /*	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
 	soundPlayer->playSound(myChunk);*/

@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "ResMan.h"
 #include "Settings.h"
-#include "SoundPlayerClass.h"
+#include "SoundPlayer.h"
 
 #include "pakfile/Palette.h"
 
@@ -263,7 +263,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_introSounds.size() > 0){
 		if(m_framesPlayed ==  m_introSounds[0].first){
 			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_introSounds[0].second);
-			SoundPlayerClass::Instance()->playSound(sound);
+			SoundPlayer::Instance()->playSound(sound);
 			m_introSounds.erase(m_introSounds.begin());
 		}
 	}
@@ -271,7 +271,7 @@ void IntroState::Frame::doPlaying(float dt)
 	if(m_soundChunks.size() > 0){
 		if(m_framesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
-			SoundPlayerClass::Instance()->playSound(sound, 10);
+			SoundPlayer::Instance()->playSound(sound, 10);
 //			delete(m_soundChunks[0].second);
 			m_soundChunks.erase(m_soundChunks.begin());
 		}
@@ -326,7 +326,7 @@ void IntroState::Frame::doTransitionIn(float dt)
 {
 	if(m_song != -1){
 	    song * songfile = DataCache::Instance()->getMusic(MUSIC_INTRO,m_song);
-		SoundPlayerClass::Instance()->playMusic(songfile->filename, songfile->track);
+		SoundPlayer::Instance()->playMusic(songfile->filename, songfile->track);
 	}
 
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
@@ -681,7 +681,7 @@ void IntroState::JustMadeActive()
 void IntroState::JustMadeInactive()
 {
     Application::Instance()->RootWidget()->deleteChild(m_butIntro);
-    SoundPlayerClass::Instance()->stopMusic();
+    SoundPlayer::Instance()->stopMusic();
     State::JustMadeInactive();
 }
 

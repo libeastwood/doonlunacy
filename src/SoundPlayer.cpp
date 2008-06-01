@@ -2,7 +2,7 @@
 #include <math.h>
 
 #include "pakfile/sound/Vocfile.h"
-#include "SoundPlayerClass.h"
+#include "SoundPlayer.h"
 #include "SDL_mixer.h"
 #include "DuneConstants.h"
 #include "mmath.h"
@@ -11,52 +11,13 @@
 
 #include <algorithm>
 
+SoundPlayer::SoundPlayer() {
 
-Mix_Chunk* curVoiceChunk = NULL;
-int voiceChannel = 0;
-bool PlayingVoiceATM = false;
+    Settings * set = Settings::Instance();
+	Mix_Volume(-1, set->m_sfxVolume);
 
-void VoiceChunkFinishedCallback(int channel) {
-	if(channel == voiceChannel) {
-		PlayingVoiceATM = false;
-	}
-}
-
-SoundPlayerClass::SoundPlayerClass() {
-
-    //FIXME:This should go to settings or somewhere else
-/*	AttackMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/attack/");
-	IntroMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/intro/");
-	LoseMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/lose/");
-	PeaceMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/peace/");
-	WinMusic = getMusicFileNames("./data/" + settings.Audio.MusicDirectory + "/win/");
-*/
-	sfxVolume = MIX_MAX_VOLUME/2;
-
-	musicVolume = MIX_MAX_VOLUME/2;
-	responseVolume = 100;
-	voiceVolume = 128;
-
-	Mix_Volume(-1, MIX_MAX_VOLUME);
-	Mix_VolumeMusic(MIX_MAX_VOLUME);
-
-	music = NULL;
-	thisMusicID = NONE;
-	currentMusicType = MUSIC_RANDOM;
-	currentMusicNum = 0;
-
-	// init global variables
-	curVoiceChunk = NULL;
-	PlayingVoiceATM = false;
-
-	voiceChannel = Mix_ReserveChannels(1);	//Reserve a channel for voice over
-	Mix_ChannelFinished(VoiceChunkFinishedCallback);
-
-	soundOn = true;
-	//soundOn = false;
-//	musicOn = true;
-	musicOn = false;
-//	changeMusic(MUSIC_INTRO);
+    m_musicChannel = Mix_ReserveChannels(1);
+    Mix_Volume(m_musicChannel, set->m_musicVolume);
 
     int freq, channels;
     Uint16 format;
@@ -66,18 +27,96 @@ SoundPlayerClass::SoundPlayerClass() {
     m_player = new CadlPlayer(m_opl);
 }
 
-SoundPlayerClass::~SoundPlayerClass() {
-	if(music != NULL) {
-		Mix_FreeMusic(music);
-		music = NULL;
-	}
+SoundPlayer::~SoundPlayer() {
+
 	Mix_HookMusic(NULL, NULL);
     if(m_opl) delete m_opl;
     if(m_player) delete m_player;
 }
 
+
+
+void SoundPlayer::VoiceChunkFinishedCallback(int channel) {
+//	if(channel == m_voiceChannel) {
+//		PlayingVoiceATM = false;
+//	}
+}
+
+void SoundPlayer::playSound(Sound_enum soundID, int volume)
+{
+	if (Settings::Instance()->m_soundOn)
+	{
+		Mix_Chunk* tmp;
+		
+		if((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL) {
+			return;
+		}
+		
+		int channel = Mix_PlayChannel(-1,tmp, 0);
+		if (channel != -1)
+			Mix_Volume(channel, (volume*Settings::Instance()->m_sfxVolume)/MIX_MAX_VOLUME);
+	}
+}
+
+
+
+void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
+{
+    if (Settings::Instance()->m_musicOn)
+    {
+        m_player->init();
+        m_player->load(filename);
+        m_player->rewind(trackNum);
+
+        Mix_HookMusic(m_player->callback, m_player);
+    }
+}
+
+void SoundPlayer::stopMusic()
+{
+    Mix_HookMusic(NULL, NULL);
+}
+
+void SoundPlayer::playSound(Sound_enum soundID) {
+	if (Settings::Instance()->m_soundOn)
+	{
+		Mix_Chunk* tmp;
+
+		if((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL) {
+			LOG_ERROR("SoundPlayer","There is no sound with id %d!",soundID);
+			exit(EXIT_FAILURE);
+		}
+	
+		Mix_PlayChannel(-1, tmp, 0);
+	}
+}
+
+void SoundPlayer::playSound(Mix_Chunk* sound, int channel) {
+	if (Settings::Instance()->m_soundOn)
+	{
+		Mix_PlayChannel(channel, sound, 0);
+	}
+}
+
+//FIXME:Remove this eventually and reuse all useful functions
+
 #if 0
-void SoundPlayerClass::changeMusic(MUSICTYPE musicType)
+void SoundPlayer::playVoice(int id, int house) {
+	if (soundOn)
+	{
+		Mix_Chunk* tmp;
+	
+		if((tmp = pDataManager->GetVoice(id,house)) == NULL) {
+			fprintf(stderr,"There is no voice with id %d!\n",id);
+			exit(EXIT_FAILURE);
+		}
+	
+		int channel = Mix_PlayChannel(-1, tmp, 0);
+		Mix_Volume(channel,sfxVolume);
+	}
+}
+
+void SoundPlayer::changeMusic(MUSICTYPE musicType)
 {
 	int musicNum = -1;
 	string filename = "";
@@ -184,17 +223,17 @@ void SoundPlayerClass::changeMusic(MUSICTYPE musicType)
 		Mix_PlayChannel(-1, sample, 0);*/
 	}
 }
-/*void SoundPlayerClass::musicCheck()
+
+void SoundPlayer::musicCheck()
 {
 	if (musicOn)
 	{
 		if ( ! Mix_PlayingMusic() )
 			changeMusic(MUSIC_PEACE);
 	}
-}*/
-#endif
-#if 0
-void SoundPlayerClass::playSoundAt(int soundID, COORDTYPE* location)
+}
+
+void SoundPlayer::playSoundAt(int soundID, COORDTYPE* location)
 {
 	if (soundOn)
 	{
@@ -225,9 +264,8 @@ void SoundPlayerClass::playSoundAt(int soundID, COORDTYPE* location)
 		playSound(soundID, volume);
 	}
 }
-#endif
-#if 0
-void SoundPlayerClass::setMusic(bool value)
+
+void SoundPlayer::setMusic(bool value)
 {
 	musicOn = value;
 
@@ -236,109 +274,8 @@ void SoundPlayerClass::setMusic(bool value)
 	else if (music != NULL)
 		Mix_HaltMusic();
 }
-#endif
 
-void SoundPlayerClass::toggleSound()
-{
-	if (!soundOn && !musicOn)
-	{
-		soundOn = true;
-//		currentGame->AddToNewsTicker("sound on, music off");
-	}
-	else if (soundOn && !musicOn)
-	{
-		musicOn = true;
-		soundOn = false;
-//		currentGame->AddToNewsTicker("sound off, music on");
-		currentMusicType = MUSIC_RANDOM;
-//		changeMusic(MUSIC_PEACE);
-	}
-	else if (!soundOn && musicOn)
-	{
-		soundOn = true;
-//		currentGame->AddToNewsTicker("sound on, music on");
-	}
-	else if (soundOn && musicOn)
-	{
-		soundOn = false;
-		musicOn = false;
-//		currentGame->AddToNewsTicker("sound off, music off");
-
-		if (music != NULL)
-			Mix_HaltMusic();
-	}
-}
-
-void SoundPlayerClass::playSound(Sound_enum soundID, int volume)
-{
-	if (soundOn)
-	{
-		Mix_Chunk* tmp;
-		
-		if((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL) {
-			return;
-		}
-		
-		int channel = Mix_PlayChannel(-1,tmp, 0);
-		if (channel != -1)
-			Mix_Volume(channel, (volume*sfxVolume)/MIX_MAX_VOLUME);
-	}
-}
-
-#if 0
-void SoundPlayerClass::playVoice(int id, int house) {
-	if (soundOn)
-	{
-		Mix_Chunk* tmp;
-	
-		if((tmp = pDataManager->GetVoice(id,house)) == NULL) {
-			fprintf(stderr,"There is no voice with id %d!\n",id);
-			exit(EXIT_FAILURE);
-		}
-	
-		int channel = Mix_PlayChannel(-1, tmp, 0);
-		Mix_Volume(channel,sfxVolume);
-	}
-}
-#endif
-
-void SoundPlayerClass::playMusic(std::string filename, uint16_t trackNum)
-{
-    m_player->init();
-    m_player->load(filename);
-    m_player->rewind(trackNum);
-
-    Mix_HookMusic(m_player->callback, m_player);
-}
-
-void SoundPlayerClass::stopMusic()
-{
-    Mix_HookMusic(NULL, NULL);
-}
-
-void SoundPlayerClass::playSound(Sound_enum soundID) {
-	if (soundOn)
-	{
-		Mix_Chunk* tmp;
-
-		if((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL) {
-			fprintf(stderr,"There is no sound with id %d!\n",soundID);
-			exit(EXIT_FAILURE);
-		}
-	
-		Mix_PlayChannel(-1, tmp, 0);
-	}
-}
-
-void SoundPlayerClass::playSound(Mix_Chunk* sound, int channel) {
-	if (soundOn)
-	{
-		Mix_PlayChannel(channel, sound, 0);
-	}
-}
-
-#if 0
-vector<string> SoundPlayerClass::getMusicFileNames(string dir) {
+vector<string> SoundPlayer::getMusicFileNames(string dir) {
 	vector<string> Files;
 	std::list<std::string> tmp;
 	std::list<std::string>::const_iterator iter;
