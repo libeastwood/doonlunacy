@@ -411,8 +411,6 @@ void Application::BlitCursor()
     Rect src;
     UPoint dest;
     src.setSize(SPoint(16,16));
-    SDL_Surface * surface  = m_cursor->getSurface(); // being lazy, rename me 
-
     dest.x = m_cursorX;
     dest.y = m_cursorY;
     //src.w = surface->w / NUM_CURSORS;

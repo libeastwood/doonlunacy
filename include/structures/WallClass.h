@@ -8,13 +8,10 @@ class PlayerClass;
 class WallClass : public StructureClass
 {
 public:
-        WallClass(PlayerClass* newOwner);
+    WallClass(PlayerClass* newOwner);
 	~WallClass();
 
-	void checkSelf();
-	void doSpecificStuff();
-
-	inline void setTile(int newTile) { animFrame = newTile; }
+	inline void setTile(int newTile) { m_animFrame = newTile; }
 };
 
 #endif // DUNE_STRUCTURES_WALLCLASS_H

@@ -42,9 +42,11 @@ class MapClass : public Rect
     };
     
     inline TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
+    void fixWalls(int xPos, int yPos);
 
   protected:
-
+    void fixWall(int xPos, int yPos);
+    
     Cells m_cells;
 };
 

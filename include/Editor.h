@@ -15,7 +15,7 @@ public:
 
 
 private:
-    MapWidget * m_mapWidget;
+    MapWidget *m_mapWidget, *m_mapWidget2;
 };
 
 #endif // HOUSECHOICEMENU_H_INCLUDED

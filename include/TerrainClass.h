@@ -4,6 +4,7 @@
 #include "DataCache.h"
 #include "Gfx.h"
 #include "mmath.h"
+//#include "ObjectClass.h"
 
 class TerrainClass
 {
@@ -12,8 +13,24 @@ class TerrainClass
     ~TerrainClass();
 
     void draw(Image * dest, SPoint pos);
+/*    
+   	inline bool hasADeadObject() { return !m_assignedDeadObjects.empty(); }
+	inline bool hasAGroundObject() { return (hasInfantry() || hasANonInfantryGroundObject()); }
+	inline bool hasAnAirUnit() { return !m_assignedAirUnits.empty(); }
+	inline bool hasAnUndergroundUnit() { return !m_assignedUndergroundUnits.empty(); }
+	inline bool hasANonInfantryGroundObject() { return !m_assignedNonInfantryGroundObjects.empty(); }
+	inline bool hasInfantry() { return !m_assignedInfantry.empty(); }
+	inline bool hasSpice() { return (fixDouble(m_spice) > 0.0); }
 
-    	inline int getType() { return m_type; }
+    ObjectClass* getAirUnit();
+	ObjectClass* getDeadObject();
+    ObjectClass* getNonInfantryGroundObject();
+	ObjectClass* getUndergroundUnit();
+	ObjectClass* getGroundObject();
+	ObjectClass* getInfantry();
+*/
+
+   	inline int getType() { return m_type; }
     inline int getTile() { return m_tile; }
 
     inline bool isMountain() { return (m_type == Terrain_Mountain);}
@@ -28,6 +45,11 @@ class TerrainClass
     inline void setType(int newType) { m_type = newType; }
 
   private:
+
+    double	m_difficulty,
+
+    //! How much spice on this particular cell is left    			
+			m_spice;	
  
     /*!
      * tile assigned to current cell
@@ -38,7 +60,13 @@ class TerrainClass
     int m_type;
     
     ImagePtr m_img;
-    
+/*    
+    List    m_assignedAirUnits,
+            m_assignedDeadObjects,
+            m_assignedNonInfantryGroundObjects,
+            m_assignedUndergroundUnits,
+            m_assignedInfantry;
+*/    
 };
 
 #endif // DUNE_TERRAINCLASS_H

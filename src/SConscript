@@ -41,6 +41,11 @@ all_sources = [ "Application.cpp",
 				"MapGenerator.cpp",
 				"mmath.cpp",
 				"MapSeed.cpp",
+				"PlayerClass.cpp",
+				"ObjectClass.cpp",
+				"structures/StructureClass.cpp",
+				"structures/WallClass.cpp",				
+				"structures/SiloClass.cpp",
               ]
 
 gui_sources = [

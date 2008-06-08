@@ -4,6 +4,7 @@
 #include "MapClass.h"
 #include "MapGenerator.h"
 #include "MapSeed.h"
+#include "ObjectClass.h"
 
 #include "pakfile/Inifile.h"
 
@@ -54,6 +55,9 @@ bool MapGenerator::loadOldMap(std::string mapName)
 		delete m_map;
 		return false;
 	}
+	
+	m_players = new Players;
+	m_structureList = new List;
 	
 	unsigned short SeedMap[64*64];
 	createMapWithSeed(SeedNum,SeedMap);
@@ -166,10 +170,10 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	
 	smoothTerrain();
 	
-	/*
+
 	
 	// now set up all the players
-	// TODO
+
 	addPlayer(ATREIDES, false, 1);
 	addPlayer(ORDOS, false, 1);
 	addPlayer(HARKONNEN, false, 1);
@@ -178,7 +182,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	addPlayer(MERCENERY, false, 2);
 
 	Inifile::KeyListHandle myListHandle;
-
+/*
 	myListHandle = myInifile->KeyList_Open("UNITS");
 	
 	while(!myInifile->KeyList_EOF(myListHandle)) {
@@ -257,28 +261,27 @@ bool MapGenerator::loadOldMap(std::string mapName)
 		else if (UnitStr == "Trooper")
 			unitID = Unit_Trooper;
 		else {
-			fprintf(stderr,"GameClass::loadINIMap: Invalid unit string: %s\n",UnitStr.c_str());
+			LOG_WARNING("MapGenerator", "Invalid unit string: %s",UnitStr.c_str());
 			unitID = Unit_Quad;
 		}
 		
-		if(player[(int)house] == NULL) {
-			fprintf(stderr,"player[%d]== NULL\n",(int) house); fflush(stdout);
+		if(m_players[(int)house] == NULL) {
+			LOG_ERROR("MapGenerator", "player[%d]== NULL",(int) house));
 			exit(EXIT_FAILURE);
 		}
 
 		for(int i = 0; i < Num2Place; i++) {
 			UnitClass* newUnit = player[(int) house]->placeUnit(unitID, pos%64, pos/64);
 			if (newUnit == NULL) {
-				fprintf(stderr, "This file is not a valid unit entry: %d. (invalid unit position)\n", pos);
+				LOG_WARNING("MapGenerator", "This file is not a valid unit entry: %d. (invalid unit position)", pos);
 			}
 		}
 	}
 	
 	myInifile->KeyList_Close(&myListHandle);
+*/
 
-	
 	myListHandle = myInifile->KeyList_Open("STRUCTURES");
-	
 	while(!myInifile->KeyList_EOF(myListHandle)) {
 		string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
 		string tmp = myInifile->getStringValue("STRUCTURES",tmpkey);
@@ -310,15 +313,15 @@ bool MapGenerator::loadOldMap(std::string mapName)
 				house = HOUSE_ATREIDES;
 			}
 			
-			if(m_map->m_players[(int)house] == NULL) {
+			if(m_players->at((int)house) == NULL) {
 				LOG_ERROR("MapGenerator","player[%d]== NULL",(int) house);
 				exit(EXIT_FAILURE);
 			}
 			
 			if(BuildingStr == "Concrete") {
-				m_map->m_players[house]->placeStructure(NONE, NONE, Structure_Slab1, UPoint(pos%64, pos/64));
+				m_players->at(house)->placeStructure(NONE, NONE, Structure_Slab1, UPoint(pos%64, pos/64));
 			} else if(BuildingStr == "Wall") {
-				m_map->m_players[house]->placeStructure(NONE, NONE, Structure_Wall, UPoint(pos%64, pos/64));
+				m_players->at(house)->placeStructure(NONE, NONE, Structure_Wall, UPoint(pos%64, pos/64));
 			} else {
 				LOG_WARNING("MapGenerator", "loadINIMap: Invalid building string: %s",BuildingStr.c_str());
 			}
@@ -387,17 +390,18 @@ bool MapGenerator::loadOldMap(std::string mapName)
 				itemID = 0;
 			}
 
-			if ((m_map->m_players[house] != NULL) && (itemID != 0)) {
-				ObjectClass* newStructure = (ObjectClass*)m_map->m_players[house]->placeStructure(NONE, NONE, itemID, UPoint(pos%64, pos/64));
+			if ((m_players->at(house) != NULL) && (itemID != 0)) {
+				ObjectClass* newStructure = (ObjectClass*)m_players->at(house)->placeStructure(NONE, NONE, itemID, UPoint(pos%64, pos/64));
 				if(newStructure == NULL) {
 					LOG_WARNING("MapGenerator", "loadINIMap: Invalid position: %s",PosStr.c_str());
 				}
 			}
+
 		}
 	}
-	
+
 	myInifile->KeyList_Close(&myListHandle);	
-	*/
+
 	return true;
 }
 
@@ -505,7 +509,21 @@ void MapGenerator::takeMapScreenshot(std::string filename)
     delete img;
 }
 
+void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai,int team)
+{
+	if(m_players->size() > House) {
+		LOG_ERROR("MapGenerator" ,"Trying to create already existing player!");
+		exit(EXIT_FAILURE);
+	}
 
+	if(ai == true) {
+		//player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
+		LOG_WARNING("MapGenerator" ,"Trying to create unimplemented ai player!");
+	} else {
+		m_players->push_back(new PlayerClass(House,House,House,DEFAULT_STARTINGCREDITS, team, m_map, m_structureList));
+	}
+	m_players->at(House)->assignMapPlayerNum(House);
+}
 
 void MapGenerator::addRockBits()
 {

@@ -76,6 +76,7 @@
 #define BLOCKSIZE 16		//size of tile pieces 16x16
 #define GAMEBARWIDTH 144
 #define NONE -1
+#define INVALID_POS	(-1)
 #define RANDOM -2
 
 #define DEVIATIONTIME 1000

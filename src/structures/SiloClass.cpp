@@ -1,38 +1,25 @@
-//#include "../sand.h"
-//#include "../Items.h"
-
+#include "DataCache.h"
 #include "structures/SiloClass.h"
-#include "PlayerClass.h"
-#include "gui/Graphics.h"
-#include "data.h"
 
 SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
-	itemID = Structure_Silo;
+    m_isAnimating = true;
+    DataCache * cache = DataCache::Instance();
+    w = 2;
+    h = 2;
+	m_maxHealth = 100;
+	m_powerRequirement = 5;
+	m_health = m_maxHealth;
+	m_viewRange = 3;
 
-	structureSize.x = 2;
-	structureSize.y = 2;
+	m_pic = DataCache::Instance()->getObjPic(ObjPic_Silo, HOUSETYPE(getOwner()->getColour()));
+    
+    m_offset = UPoint(0,0);
+    m_animFrames = 4;
 
-	maxHealth = SILO_HITPOINTS;
-	powerRequirement = 5;
-	health = maxHealth;
-	viewRange = SILO_VIEWRANGE;
-
-	graphic = (SDL_Surface*)(dataFile[itemID].dat);
-	graphic = copySurface(graphic);
-	mapImageHouseColour(graphic, getOwner()->getColour());
-	placeGraphic = (SDL_Surface*)(dataFile[Structure_Building22].dat);
-	imageW = graphic->w;
-	imageH = graphic->h/2;
-	xOffset = 0;                    //this is where it actually draws the graphic
-	yOffset = 0;                    //cause it draws at top left, not middle
 }
 
 SiloClass::~SiloClass()
 {
-}
-void SiloClass::doSpecificStuff()
-{
 
 }
-

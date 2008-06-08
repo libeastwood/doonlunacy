@@ -19,7 +19,6 @@ env.Append(CPPPATH="#include")
 
 
 if sys.platform != "win32":
-    CC="ccache g++"
     env.ParseConfig('pkg-config --cflags sdl samplerate')
     env.Append(CCFLAGS=["-Wall", "-pedantic", "-O0"]) #, "-Werror"])
     #env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])

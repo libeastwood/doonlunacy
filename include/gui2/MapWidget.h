@@ -4,6 +4,7 @@
 #include "gui2/Widget.h"
 #include "Gfx.h"
 #include "MapClass.h"
+#include "ObjectClass.h"
 
 class MapWidget : public Widget {
   public:
@@ -15,8 +16,10 @@ class MapWidget : public Widget {
     bool handleKeyDown(SDL_keysym* key);
 
 	void setMap(MapClass* map) { m_map = map; }
+	void setStructureList(List* list) { m_structureList = list; }
   private:
     MapClass * m_map;
+    List* m_structureList;
     SPoint m_speed;
     SPoint m_view;
 };
