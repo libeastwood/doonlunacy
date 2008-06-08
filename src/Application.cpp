@@ -408,7 +408,9 @@ void Application::HandleEvents()
 
 void Application::BlitCursor()
 {
+    Rect src;
     UPoint dest;
+    src.setSize(SPoint(16,16));
     SDL_Surface * surface  = m_cursor->getSurface(); // being lazy, rename me 
 
     dest.x = m_cursorX;
@@ -420,22 +422,17 @@ void Application::BlitCursor()
 
     //reposition image so pointing on right spot
 
-    if (m_cursorFrame == CURSOR_RIGHT)
+    switch (m_cursorFrame)
     {
-        dest.x -= surface->w/2;
+    case CURSOR_NORMAL: src.setPosition(UPoint(0,0)); break;
+    case CURSOR_UP: src.setPosition(UPoint(16,0)); break;
+    case CURSOR_RIGHT: src.setPosition(UPoint(32,0)); break;
+    case CURSOR_DOWN: src.setPosition(UPoint(48,0)); break;
+    case CURSOR_LEFT: src.setPosition(UPoint(64,0)); break;
+    case CURSOR_TARGET: src.setPosition(UPoint(80,0)); break;
+    case CURSOR_SELECTION: src.setPosition(UPoint(96,0)); break;
     }
-    else if (m_cursorFrame == CURSOR_DOWN)
-    {
-        dest.y -= surface->w/2;
-    }
-    else if ((m_cursorFrame == CURSOR_TARGET) || (m_cursorFrame == CURSOR_SELECTION))
-    {
-        dest.x -= surface->w/2;
-        dest.y -= surface->h/2;
-    }
-
-    m_screen->blitFrom(m_cursor.get(), dest);
-
-    //SDL_BlitSurface(surface, NULL, m_screen, &dest);
+    
+    m_screen->blitFrom(m_cursor.get(), src, dest);
 }
 

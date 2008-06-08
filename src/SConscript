@@ -34,6 +34,13 @@ all_sources = [ "Application.cpp",
                 "ConfigFile.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
+				"TerrainClass.cpp",
+				"MapClass.cpp",
+				"Editor.cpp",
+				"gui2/MapWidget.cpp",
+				"MapGenerator.cpp",
+				"mmath.cpp",
+				"MapSeed.cpp",
               ]
 
 gui_sources = [
@@ -48,6 +55,7 @@ gui_sources = [
 pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Decode.cpp",
                 "pakfile/Icnfile.cpp",
+                "pakfile/Inifile.cpp",
                 "pakfile/Pakfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",

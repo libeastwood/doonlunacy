@@ -1,50 +1,10 @@
-//#include "sand.h"
-
 #include "mmath.h"
-
 #include <math.h>
-#include "globals.h"
 #include <stdlib.h>
 #include "MapClass.h"
 #include <iostream>
-#include <math.h>
 
 
-bool checkCell(int cellX, int cellY)
-{
-	if ((cellX < 0) || (cellX >= map->sizeX) || (cellY < 0) || (cellY >= map->sizeY))
-		return true;
-
-	return false;
-}
-
-bool fix_cell(int& cellX, int& cellY)
-{
-	bool error = false;
-
-	if (cellX < 0)
-	{
-		cellX = 0;
-		error = true;
-	}
-	else if (cellX >= map->sizeX)
-	{
-		cellX = map->sizeX - 1;
-		error = true;
-	}
-	if (cellY < 0)
-	{
-		cellY = 0;
-		error = true;
-	}
-	else if (cellY >= map->sizeY)
-	{
-		cellY = map->sizeY - 1;
-		error = true;
-	}
-
-	return error;
-}
 /*
 int min(int num1, int num2)
 {

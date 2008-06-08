@@ -7,6 +7,7 @@
 
 #include "dMath.h"
 #include "DataCache.h"
+#include "Definitions.h"
 #include "houses.h"
 #include "ResMan.h"
 #include "singleton.h"

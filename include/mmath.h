@@ -4,14 +4,12 @@
 #include "DuneConstants.h"
 #include "dMath.h"
 
-bool checkCell(int cellX, int cellY);
-bool fix_cell(int& cellX, int& cellY);
 int power(int num1, int num2);
 bool testIfInt(double number);
 double fixDouble(double number);
 int roundUp(double number);
 
-#if ! defined(__linux__)
+#ifdef _WIN32
 inline int round(double number) { return ((int)(number + 0.5)); }
 #endif
 

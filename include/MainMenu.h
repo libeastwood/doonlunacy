@@ -13,6 +13,7 @@ class MainMenuState : public MenuBaseState
         MainMenuState();
         ~MainMenuState();
 
+        void doEditor();
         void doOptions();
         void doSkirmish();
         void doSingle();

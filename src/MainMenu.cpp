@@ -1,6 +1,7 @@
 #include "boost/bind.hpp"
 
 #include "Application.h"
+#include "Editor.h"
 #include "Gfx.h"
 #include "MainMenu.h"
 #include "OptionsMenu.h"
@@ -46,7 +47,7 @@ MainMenuState::MainMenuState()
     //m_butMapEd = new GraphicButton((SDL_Surface*)(dataFile[UI_MapEdit].dat),
     //                   (SDL_Surface*)(dataFile[UI_MapEdit_Pressed].dat));
     m_butMapEd->onClick.connect(
-            boost::bind(&MainMenuState::doSkirmish, this) );
+            boost::bind(&MainMenuState::doEditor, this) );
    
     m_vbox->addChild(m_butMapEd);
 
@@ -126,6 +127,11 @@ MainMenuState::~MainMenuState()
     delete m_vbox;
 }
 
+void MainMenuState::doEditor()
+{
+    mp_parent->PushState( new EditorState() );
+}
+
 void MainMenuState::doOptions()
 {
     mp_parent->PushState( new OptionsMenuState() );
@@ -183,7 +189,7 @@ void MainMenuState::JustMadeInactive()
 
 int MainMenuState::Execute(float dt)
 {
-    m_surf.get()->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
+    m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
                         Settings::Instance()->GetHeight() / 4));
 
     return 0;
