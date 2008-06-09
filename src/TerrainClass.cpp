@@ -20,7 +20,7 @@ void TerrainClass::draw(Image * dest, SPoint pos)
     Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
     m_img->blitTo(dest, source, pos);
 }
-/*
+
 ObjectClass* TerrainClass::getAirUnit()
 {
     return (ObjectClass*)m_assignedAirUnits.front();
@@ -55,4 +55,20 @@ ObjectClass* TerrainClass::getUndergroundUnit()
 {
     return (ObjectClass*)m_assignedUndergroundUnits.front();
 }
-*/
+
+void TerrainClass::assignAirUnit(ObjectClass* newObjectID) {
+	m_assignedAirUnits.push_back(newObjectID);
+}
+
+void TerrainClass::assignDeadObject(ObjectClass* newObjectID) {
+	m_assignedDeadObjects.push_back(newObjectID);
+}
+
+void TerrainClass::assignNonInfantryGroundObject(ObjectClass* newObjectID) {
+	m_assignedNonInfantryGroundObjects.push_back(newObjectID);
+}
+
+void TerrainClass::assignUndergroundUnit(ObjectClass* newObjectID) {
+	m_assignedUndergroundUnits.push_back(newObjectID);
+}
+

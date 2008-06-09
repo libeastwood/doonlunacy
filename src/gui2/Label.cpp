@@ -10,14 +10,21 @@
 
 Label::Label(std::string caption, int textColour, int bgColour, int maxLineLength)
 {
-    m_caption = caption;
+    setLabel(caption);
+    m_textColour = textColour;
+    m_bgColour = bgColour;
+    m_maxLineLength = maxLineLength;
+}
+
+void Label::redraw()
+{
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     Uint16 textw, texth;
 
-    if (maxLineLength > 0)
+    if (m_maxLineLength > 0)
     {    
         Uint16 width = 0;
-        std::vector<std::string> textLines  = splitString(m_caption, maxLineLength);
+        std::vector<std::string> textLines  = splitString(m_caption, m_maxLineLength);
         int numLines = textLines.size();
         
         for (int i=0; i < numLines; i++)
@@ -32,20 +39,20 @@ Label::Label(std::string caption, int textColour, int bgColour, int maxLineLengt
 
         //If surface width was not %4 == 0 then you'd get a text in italics 
         m_surface.reset(new Image(UPoint(width + 4-(width%4), texth * numLines) ) );
-        if (bgColour < 0)
+        if (m_bgColour < 0)
         {
             //Make it transparent
             m_surface->setColorKey();
         } else 
         {
-            m_surface->fillRect(bgColour);
+            m_surface->fillRect(m_bgColour);
         }
 
         
         for (int i=0; i < numLines; i++)
         {
             font->render(textLines[i].c_str(), m_surface,
-                0, 0 + texth * i, textColour);
+                0, 0 + texth * i, m_textColour);
         }
     } else
     {
@@ -53,9 +60,15 @@ Label::Label(std::string caption, int textColour, int bgColour, int maxLineLengt
         m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth) ) );
         font->render(m_caption.c_str(), m_surface,
             m_surface->getSurface()->w/2 - textw/2, 
-            m_surface->getSurface()->h/2 - texth/2, textColour);
+            m_surface->getSurface()->h/2 - texth/2, m_textColour);
     }
 
+}
+
+void Label::setLabel(std::string caption)
+{
+    m_caption = caption;
+    redraw();
 }
 
 Label::~Label()

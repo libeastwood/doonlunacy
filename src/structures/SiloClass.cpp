@@ -15,8 +15,9 @@ SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 	m_pic = DataCache::Instance()->getObjPic(ObjPic_Silo, HOUSETYPE(getOwner()->getColour()));
     
     m_offset = UPoint(0,0);
-    m_animFrames = 4;
-
+    m_firstAnimFrame = 2;
+    m_lastAnimFrame = 3;
+    m_itemID = Structure_Silo;
 }
 
 SiloClass::~SiloClass()

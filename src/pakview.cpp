@@ -53,6 +53,7 @@ class PakViewState : public State
 				case SDLK_LEFT : SwitchImg(-1); break;
 				case SDLK_UP : SwitchHouse(+1); break;
 				case SDLK_DOWN : SwitchHouse(-1); break;
+				case SDLK_s: SDL_SaveBMP(m_test->getSurface(), "surface.bmp"); break;
 				case SDLK_ESCAPE : Application::Instance()->Die(); break;
 				default : break;
 			   }

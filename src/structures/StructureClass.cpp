@@ -1,10 +1,13 @@
 #include "DuneConstants.h"
 #include "Log.h"
+#include "MapClass.h"
 #include "structures/StructureClass.h"
 
 StructureClass::StructureClass(PlayerClass* newOwner) : ObjectClass(newOwner)
 {
-    m_animFrame = 1;
+    m_justPlacedTimer = 0;
+	m_itemID = Unknown;
+	w = h = 0;
 }
 
 StructureClass::~StructureClass()
@@ -12,9 +15,27 @@ StructureClass::~StructureClass()
 
 }
 
-void StructureClass::assignToMap(UPoint pos)
+void StructureClass::assignToMap(SPoint pos)
 {
+    MapClass * map = m_owner->getMap();
+	SPoint temp;
+	for (int i = x; i < x + w; i++)
+		for (int j = y; j < y + h; j++)
+		{
+			temp.x = i; temp.y = j;
+			if (map->cellExists(i, j))
+			{
+				map->getCell(i,j)->assignNonInfantryGroundObject(this);
+				//if ((m_itemID != Structure_Wall) && (m_itemID != Structure_ConstructionYard) && !map->getCell(i,j)->isConcrete()) //&& currentGame->concreteRequired && (gameState != START))
+				//	health -= (int)(0.5*(double)maxHealth/((double)(structureSize.x*structureSize.y)));
+				map->getCell(i,j)->setType(Terrain_Rock);
+				//map->getCell(i,j)->setOwner(getOwner()->getPlayerNumber());
+				//map->viewMap(getOwner()->getTeam(), &temp, getViewRange());
 
+				//setVisible(VIS_ALL, true);
+				//setRespondable(true);
+			}
+		}
 }
 
 int StructureClass::getDrawnX()
@@ -27,31 +48,43 @@ int StructureClass::getDrawnY()
 	return ((int)(m_realPos.y - m_offset.y));
 }
 
+void StructureClass::setJustPlaced()
+{
+    if (!m_destroyed)
+    {
+        m_justPlacedTimer = 4;
+        m_curAnimFrame = 0;
+    }
+}
+
 void StructureClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    if (!m_destroyed&&m_isAnimating)
-    {
-    	//Animation for buildings
-    	if (++m_animCounter > ANIMMOVETIMER)
-    	{	
-    		m_animFrame++;
-
-    		if(m_animFrame == m_animFrames)
-    			m_animFrame = 2;
-    		
-    		m_animCounter = 0;
-    	}
-
-    }
-
- 
-    Rect src(m_animFrame * w*BLOCKSIZE,0,w*BLOCKSIZE,h*BLOCKSIZE);
+    Rect src(m_curAnimFrame * w*BLOCKSIZE,0,w*BLOCKSIZE,h*BLOCKSIZE);
     m_pic->blitTo(dest, src, UPoint(off.x+m_realPos.x-view.x*16,off.y+m_realPos.y-view.y*16));
-        
-    //LOG_ERROR("ObjectClass", "x-y:%d-%d, RealX-RealY:%d-%d, drawnX-Y:%d-%d", x,y, (int)m_realPos.x, (int)m_realPos.y, getDrawnX(), getDrawnY());
 }
+
+
 
 void StructureClass::update()
 {
-
+    if (!m_destroyed)
+    {
+		// update animations
+		m_animCounter++;
+		if(m_animCounter > ANIMATIONTIMER) 
+		{
+			m_animCounter = 0;
+			m_curAnimFrame++;
+			if((m_curAnimFrame < m_firstAnimFrame) || (m_curAnimFrame > m_lastAnimFrame)) 
+			{
+				m_curAnimFrame = m_firstAnimFrame;
+			}
+		    
+			m_justPlacedTimer--;
+			if((m_justPlacedTimer > 0) && (m_justPlacedTimer % 2 == 0)) 
+			{
+				m_curAnimFrame = 0;
+			}
+        }
+    }	
 }

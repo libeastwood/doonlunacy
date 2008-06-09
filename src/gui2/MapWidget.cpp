@@ -1,10 +1,10 @@
-#include "gui2/MapWidget.h"
 #include "Application.h"
 #include "Font.h"
 #include "Gfx.h"
 #include "MapGenerator.h"
 #include "TerrainClass.h"
 
+#include "gui2/MapWidget.h"
 #include "structures/StructureClass.h"
 MapWidget::MapWidget()
 {
@@ -99,6 +99,7 @@ void MapWidget::draw(Image * dest, SPoint off)
         for (unsigned int i=0; i< m_structureList->size(); i++)
         {
             tmp = (StructureClass*)m_structureList->at(i);
+            tmp->update();
             if (tmp->isOnScreen(Rect(m_view.x*16, m_view.y*16, m_view.x*16+w, m_view.y*16+h)))
             {
                 tmp->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));

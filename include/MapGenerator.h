@@ -38,7 +38,7 @@ class MapGenerator : public Singleton<MapGenerator>
      *        make sure you delete it when needed.
      */
     MapClass * getMap();
-    List* getStructureList() { return m_structureList; }
+    SList* getStructureList() { return m_structureList; }
     //! Creates a random map
     /*!
      *  @return true if map was successfully generated, false if something went wrong
@@ -65,7 +65,9 @@ class MapGenerator : public Singleton<MapGenerator>
 
     //@}
     
-    /*! As the name suggests it saves current map to a BMP file.
+    /*! 
+     *  As the name suggests it saves current map to a BMP file.
+     *  Currently only terrain without units, buildings, etc.
      *  @param filename of file to which mapshot should be saved. By default: mapshot.bmp
      */
     void takeMapScreenshot(std::string filename = "mapshot.bmp");
@@ -127,7 +129,7 @@ class MapGenerator : public Singleton<MapGenerator>
     
     //! Vector with all players
     Players * m_players;
-    List * m_structureList;
+    SList * m_structureList;
 };
 
 #endif // DUNE_MAPGENERATOR_H

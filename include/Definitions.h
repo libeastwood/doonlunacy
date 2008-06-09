@@ -674,7 +674,7 @@ typedef enum
 } TERRAINTYPE;
 
 typedef enum {
-	Unknownn = 0,
+	Unknown = 0,
 	Bullet_DRocket = 1,
 	Bullet_GasHit = 2,
 	Bullet_Gun = 3,

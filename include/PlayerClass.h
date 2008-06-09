@@ -4,16 +4,16 @@
 #include <vector>
 #include "DuneConstants.h"
 #include "Gfx.h"
-#include "MapClass.h"
 
-class ObjectClass;
+class MapClass;
+class StructureClass;
 
-typedef std::vector<ObjectClass*> List;
+typedef std::vector<StructureClass*> SList;
 
 class PlayerClass 
 {
   public:
-    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, List * list);
+    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList * list);
 	virtual ~PlayerClass();
 	
 	void assignMapPlayerNum(int newMapPlayerNum);
@@ -105,8 +105,8 @@ class PlayerClass
     std::string m_name;
     
     MapClass* m_map;
-    List* m_structureList;
     
+    SList* m_structureList;
     //@}
 };
 

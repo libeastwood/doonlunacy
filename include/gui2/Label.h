@@ -21,7 +21,9 @@ public:
 		@param textColour sets text colour of label. 49(dune red) by default
         @param bgColour sets background colour of label. 115(dune yellow) by default
     */
-    Label(std::string caption, int textColour = 49, int bgColour = 115, int maxLineLength = -1);
+    Label(std::string caption="none", int textColour = 49, int bgColour = 115, int maxLineLength = -1);
+    void setLabel(std::string);
+    void redraw();
 
     ~Label();
     //@}
@@ -34,6 +36,10 @@ protected:
     std::string m_caption;
 private:
     std::vector<std::string> splitString(std::string ParseString, int maxLineLength);
+    int m_textColour,
+    m_bgColour,
+    m_maxLineLength;
+
 };
 
 class AnimationLabel : public Widget

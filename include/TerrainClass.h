@@ -4,7 +4,9 @@
 #include "DataCache.h"
 #include "Gfx.h"
 #include "mmath.h"
-//#include "ObjectClass.h"
+#include "ObjectClass.h"
+
+typedef std::vector <ObjectClass*> List;
 
 class TerrainClass
 {
@@ -13,7 +15,12 @@ class TerrainClass
     ~TerrainClass();
 
     void draw(Image * dest, SPoint pos);
-/*    
+
+	void assignAirUnit(ObjectClass* newObjectID);
+	void assignDeadObject(ObjectClass* newObjectID);
+	void assignNonInfantryGroundObject(ObjectClass* newObjectID);
+	void assignUndergroundUnit(ObjectClass* newObjectID);
+
    	inline bool hasADeadObject() { return !m_assignedDeadObjects.empty(); }
 	inline bool hasAGroundObject() { return (hasInfantry() || hasANonInfantryGroundObject()); }
 	inline bool hasAnAirUnit() { return !m_assignedAirUnits.empty(); }
@@ -28,7 +35,7 @@ class TerrainClass
 	ObjectClass* getUndergroundUnit();
 	ObjectClass* getGroundObject();
 	ObjectClass* getInfantry();
-*/
+
 
    	inline int getType() { return m_type; }
     inline int getTile() { return m_tile; }
@@ -60,13 +67,13 @@ class TerrainClass
     int m_type;
     
     ImagePtr m_img;
-/*    
+
     List    m_assignedAirUnits,
             m_assignedDeadObjects,
             m_assignedNonInfantryGroundObjects,
             m_assignedUndergroundUnits,
             m_assignedInfantry;
-*/    
+    
 };
 
 #endif // DUNE_TERRAINCLASS_H

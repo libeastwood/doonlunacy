@@ -116,7 +116,7 @@ void Application::Init()
 
 
     m_rootWidget = new Container();
-
+    
 
     houseColour[HOUSE_ATREIDES]     = COLOUR_ATREIDES;
     houseColour[HOUSE_ORDOS]        = COLOUR_ORDOS;

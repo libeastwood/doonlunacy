@@ -57,7 +57,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	}
 	
 	m_players = new Players;
-	m_structureList = new List;
+	m_structureList = new SList;
 	
 	unsigned short SeedMap[64*64];
 	createMapWithSeed(SeedNum,SeedMap);
@@ -391,9 +391,10 @@ bool MapGenerator::loadOldMap(std::string mapName)
 			}
 
 			if ((m_players->at(house) != NULL) && (itemID != 0)) {
-				ObjectClass* newStructure = (ObjectClass*)m_players->at(house)->placeStructure(NONE, NONE, itemID, UPoint(pos%64, pos/64));
-				if(newStructure == NULL) {
-					LOG_WARNING("MapGenerator", "loadINIMap: Invalid position: %s",PosStr.c_str());
+				ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(NONE, NONE, itemID, UPoint(pos%64, pos/64));
+            
+                if(newStructure == NULL) {
+				    LOG_WARNING("MapGenerator", "loadINIMap: Invalid position: %s",PosStr.c_str());
 				}
 			}
 

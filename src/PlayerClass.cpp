@@ -2,6 +2,7 @@
 #include "houses.h"
 #include "Log.h"
 #include "PlayerClass.h"
+#include "MapClass.h"
 
 //FIXME:When it's done these includes should be moved to Items.h
 #include "structures/SiloClass.h"
@@ -9,7 +10,7 @@
 #include "structures/WallClass.h"
 
 
-PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, List * list)
+PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList * list)
 {
     m_mapPlayerNum = newPlayerNumber;
 
@@ -52,7 +53,6 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
     m_map = map;
     m_structureList = list;
 
-    Log::Instance()->setVerbosity("PlayerClass", LV_MAX);
 }
 
 PlayerClass::~PlayerClass()
@@ -71,9 +71,9 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos)
 {
     m_numStructures++;
-    
+
     StructureClass* tempStructure = NULL;
-    
+
     switch (itemID)
     {
         case (Structure_Silo):
@@ -98,11 +98,9 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 			for(int j=0;j<tempStructure->h;j++)
 			{
 			    //FIXME: No idea what it does
-				LOG_INFO("PlayerClass", "Clear x: %d, y: %d", itemPos.x + i, itemPos.y + j);
 
 				if (m_map->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
 				{
-					LOG_INFO("PlayerClass", "Clearing damage");
 					//m_map->getCell(UPoint(itemPos.x+i, itemPos.y+j))->clearDamage();
 
 				}
@@ -111,12 +109,12 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
 
 
-		tempStructure->setPosition(itemPos);
+        tempStructure->setPosition(itemPos);
 
-//		if (itemID == Structure_Wall)
-//			m_map->fixWalls(itemPos.x, itemPos.y);
-        tempStructure->setLocation(itemPos);
-		m_structureList->push_back(tempStructure);
+        if (itemID == Structure_Wall)
+            m_map->fixWalls(itemPos.x, itemPos.y);
+
+        m_structureList->push_back(tempStructure);
     }
        
     return tempStructure;

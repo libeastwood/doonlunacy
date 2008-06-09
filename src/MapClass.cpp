@@ -1,5 +1,5 @@
 #include "MapClass.h"
-
+#include "structures/WallClass.h"
 MapClass::MapClass(UPoint size)
 {
     w = size.x;
@@ -16,10 +16,11 @@ MapClass::~MapClass()
 {
 
 }
-/*
+
 void MapClass::fixWall(int xPos, int yPos)
 {
-	if (getCell(xPos,yPos)->hasAGroundObject() && getCell(xPos,yPos)->getGroundObject()->getItemID() == Structure_Wall)
+	if (getCell(xPos,yPos)->hasAGroundObject() && 
+	    getCell(xPos,yPos)->getGroundObject()->getItemID() == Structure_Wall)
 	{
 		int up, down, left, right;
 
@@ -33,11 +34,13 @@ void MapClass::fixWall(int xPos, int yPos)
 				//|| (cell[i][j-1].getGroundObject()->getItemID() == Structure_RocketTurret))));
 		down = (!cellExists(i, j+1) || (getCell(i,j+1)->hasAGroundObject()
 			&& (getCell(i,j+1)->getGroundObject()->getItemID() == Structure_Wall)));
+			
 		left = (!cellExists(i-1, j) || (getCell(i-1,j)->hasAGroundObject()
 			&& (getCell(i-1,j)->getGroundObject()->getItemID() == Structure_Wall)));
+			
 		right = (!cellExists(i+1, j) || (getCell(i+1,j)->hasAGroundObject()
 			&& (getCell(i+1,j)->getGroundObject()->getItemID() == Structure_Wall)));
-
+			
 			// Now perform the test
 		if ((left == 1) && (right == 1) && (up == 1) && (down == 1))
 				maketile = Structure_w7; //solid wall
@@ -85,7 +88,8 @@ void MapClass::fixWall(int xPos, int yPos)
 				maketile = Structure_w6; //missing left and right
 	///////
 		((WallClass*)getCell(i,j)->getGroundObject())->setTile(maketile);
-	}	
+
+	}
 }
 
 void MapClass::fixWalls(int xPos, int yPos)
@@ -101,4 +105,4 @@ void MapClass::fixWalls(int xPos, int yPos)
 	if (cellExists(xPos+1, yPos))
 		fixWall(xPos+1, yPos);
 }
-*/
+

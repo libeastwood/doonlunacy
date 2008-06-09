@@ -9,6 +9,7 @@
 #include "TopLevelState.h"
 
 #include "gui2/Container.h"
+#include "gui2/Label.h"
 
 typedef enum
 {
@@ -74,7 +75,7 @@ class Application : public Singleton<Application>
         StateMachine* m_rootState;
 
         Container* m_rootWidget;
-        
+                
         bool m_running;
 
         Uint16 m_cursorX, m_cursorY;

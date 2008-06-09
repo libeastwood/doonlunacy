@@ -27,7 +27,7 @@ class ObjectClass : public Rect
     virtual ~ObjectClass();
     //@}
     
-    virtual void assignToMap(UPoint pos) = 0;
+    virtual void assignToMap(SPoint pos) = 0;
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
     
@@ -54,10 +54,12 @@ class ObjectClass : public Rect
 	inline bool isRespondable() { return m_respondable; }
 	inline bool isSelected() { return m_selected; }
 	
-	void setLocation(SPoint pos);
+	void setPosition(SPoint pos);
 	inline PlayerClass* getOwner() { return m_owner; }
 	inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
-  
+    inline Uint32 getObjectID() { return m_objectID; }
+    inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
+    
   protected:
 
     bool m_active,    
@@ -94,18 +96,17 @@ class ObjectClass : public Rect
      *        4,5,6,... Refinery, Starport,etc. when a unit docks, brings spice, whatever
      *
      */
-    int m_animFrame,
+    int m_curAnimFrame,
     
     //! Total number of frames
         m_animFrames,
     
         m_drawnAngle,
     
+    //! Type of current object e.g. Structure_Silo
         m_itemID,
     
         m_maxHealth,
-    
-        m_objectID,
     
     //! Used for fog of war and area exploring.
         m_viewRange;
@@ -115,6 +116,8 @@ class ObjectClass : public Rect
     
     //! Pointer to map to which object is assigned.
     PlayerClass * m_owner;
+
+    Uint32 m_objectID;
 
     UPoint m_destination;
 
