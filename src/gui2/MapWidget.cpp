@@ -21,7 +21,7 @@ MapWidget::~MapWidget()
 
 bool MapWidget::handleMotion(SPoint p) 
 {
-    if (contains(p) && p.x > x+w-10 && m_view.x < m_map->w - w /16) {
+    if (contains(p) && p.x > x+w-10 && m_view.x < m_map->w - w /BLOCKSIZE) {
         Application::Instance()->SetCursor(CURSOR_RIGHT);
         m_speed.x = 1;
         return true; 
@@ -33,7 +33,7 @@ bool MapWidget::handleMotion(SPoint p)
         return true; 
     }
 
-    if (contains(p) && p.y > y+h-10 && m_view.y < m_map->h - h /16) { 
+    if (contains(p) && p.y > y+h-10 && m_view.y < m_map->h - h /BLOCKSIZE) { 
         Application::Instance()->SetCursor(CURSOR_DOWN);
         m_speed.y = 1;
         return true; 
@@ -71,16 +71,16 @@ void MapWidget::draw(Image * dest, SPoint off)
         m_view.y += m_speed.y;
 
         if (m_view.x < 0) { m_view.x = 0; m_speed.x = 0;}
-        if (m_view.x > m_map->w - w /16) { m_view.x = m_map->w - w /16; m_speed.x = 0;}
+        if (m_view.x > m_map->w - w /BLOCKSIZE) { m_view.x = m_map->w - w /BLOCKSIZE; m_speed.x = 0;}
         if (m_view.y < 0) { m_view.y = 0; m_speed.y = 0;}
-        if (m_view.y > m_map->h - h /16) { m_view.y = m_map->h - h /16; m_speed.y = 0;}
+        if (m_view.y > m_map->h - h /BLOCKSIZE) { m_view.y = m_map->h - h /BLOCKSIZE; m_speed.y = 0;}
         
 
-        for (int i = 0; i < w / 16; i++)
+        for (int i = 0; i < w / BLOCKSIZE; i++)
         {
-            for (int j = 0; j < h / 16; j++)
+            for (int j = 0; j < h / BLOCKSIZE; j++)
             {
-                m_map->getCell(UPoint(i+m_view.x, j+m_view.y))->draw(dest, SPoint(off.x + x + 16*i, off.y + y + 16*j));
+                m_map->getCell(UPoint(i+m_view.x, j+m_view.y))->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
             }
         }
     }
@@ -100,7 +100,7 @@ void MapWidget::draw(Image * dest, SPoint off)
         {
             tmp = (StructureClass*)m_structureList->at(i);
             tmp->update();
-            if (tmp->isOnScreen(Rect(m_view.x*16, m_view.y*16, m_view.x*16+w, m_view.y*16+h)))
+            if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
             {
                 tmp->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
             }
