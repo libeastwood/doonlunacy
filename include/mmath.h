@@ -11,6 +11,7 @@ int roundUp(double number);
 
 #ifdef _WIN32
 inline int round(double number) { return ((int)(number + 0.5)); }
+inline int lround(double number) { return round(number); }
 #endif
 
 double dest_angle(COORDTYPE* p1, COORDTYPE* p2);
