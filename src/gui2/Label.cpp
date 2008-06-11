@@ -10,10 +10,10 @@
 
 Label::Label(std::string caption, int textColour, int bgColour, int maxLineLength)
 {
-    setLabel(caption);
     m_textColour = textColour;
     m_bgColour = bgColour;
     m_maxLineLength = maxLineLength;
+    setLabel(caption);
 }
 
 void Label::redraw()
