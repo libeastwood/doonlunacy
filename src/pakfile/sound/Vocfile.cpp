@@ -22,6 +22,7 @@
 #include <string>
 #include <SDL_mixer.h>
 
+#include "mmath.h"
 #include "Log.h"
 
 #include "pakfile/sound/Vocfile.h"

@@ -9,7 +9,6 @@
 #define H_ADPLUG_ADLPLAYER
 
 #include <string>
-#include <inttypes.h>
 
 #include "pakfile/sound/adl/emuopl.h"
 
