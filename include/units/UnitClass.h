@@ -58,5 +58,7 @@ class UnitClass : public ObjectClass
     
 };
 
+typedef std::vector<UnitClass*> Units;
+
 #endif // DUNE_UNITCLASS_H
 

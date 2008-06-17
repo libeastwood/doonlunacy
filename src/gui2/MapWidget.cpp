@@ -11,9 +11,6 @@ MapWidget::MapWidget()
 {
     m_view = SPoint(0,0);
     m_speed = SPoint(0,0);
-
-    m_map = NULL;
-    m_structureList = NULL;
 }
 
 MapWidget::~MapWidget()
@@ -52,6 +49,13 @@ bool MapWidget::handleMotion(SPoint p)
     return false;
 }
 
+void MapWidget::setGameState(GameState* gs)
+{
+    m_map = gs->m_map;
+    m_structures = gs->m_structures;
+    m_units = gs->m_units;
+}
+
 bool MapWidget::handleKeyDown(SDL_keysym* key)
 {
     switch (key->sym)
@@ -64,6 +68,7 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
 void MapWidget::draw(Image * dest, SPoint off)
 {
     // We have to be sure we're not trying to draw cell with coordinates below zero or above mapsize
+    
 
     assert (m_map != NULL);
 
@@ -84,22 +89,15 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     }
     
-    assert (m_structureList != NULL);
+    assert (m_structures != NULL);
 
     StructureClass* tmp;
-    #if 0
-         tmp = (StructureClass*)m_structureList->at(0);
-         if (true || tmp->isOnScreen(Rect(m_view.x, m_view.y, m_view.x + w, m_view.y+h)))
-         {
-             tmp->draw(dest, SPoint(x, y), SPoint(m_view.x, m_view.y));
-         }
-    #endif 
 
-    for (unsigned int i=0; i< m_structureList->size(); i++)
+    for (unsigned int i=0; i< m_structures->size(); i++)
     {
-        tmp = (StructureClass*)m_structureList->at(i);
+        tmp = (StructureClass*)m_structures->at(i);
         tmp->update();
-        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
+        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
         {
             tmp->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
         }
@@ -107,11 +105,11 @@ void MapWidget::draw(Image * dest, SPoint off)
     
     UnitClass* tmp2;
     
-    for (unsigned int j=0; j< m_unitList->size(); j++)
+    for (unsigned int j=0; j< m_units->size(); j++)
     {
-        tmp2 = (UnitClass*)m_unitList->at(j);
+        tmp2 = (UnitClass*)m_units->at(j);
         tmp2->update();
-        if (tmp2->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
+        if (tmp2->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
         {
             tmp2->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
 

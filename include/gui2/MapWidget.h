@@ -4,8 +4,8 @@
 #include "gui2/Widget.h"
 #include "Gfx.h"
 #include "MapClass.h"
-#include "ObjectClass.h"
-
+#include "structures/StructureClass.h"
+#include "units/UnitClass.h"
 /*!
  *  Widget used to display battle scene
  *  Since we're not using global variables anymore, it's got to have pointers
@@ -32,17 +32,13 @@ class MapWidget : public Widget {
     bool handleMotion(SPoint p);
     bool handleKeyDown(SDL_keysym* key);
     //@}
-    
-    //! @name methods setting pointers to lists and maps
-    //@{
-	void setMap(MapClass* map) { m_map = map; }
-	void setStructureList(SList* list) { m_structureList = list; }
-	void setUnitList(UList* list) { m_unitList = list; }
-	//@}
+    void setGameState(GameState* gs);
+
   private:
+    GameState* m_gs;    
     MapClass * m_map;
-    SList* m_structureList;
-    UList* m_unitList;
+    Structures* m_structures;
+    Units* m_units;
     /*!  
      *  Scroll speed multiplied by BLOCKSIZE. E.g. m_speed equal to (1,1)
      *  means that every time widget is updated, visible area is scrolled by

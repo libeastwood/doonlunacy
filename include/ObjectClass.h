@@ -14,9 +14,6 @@
  *        - real  - coordinates on the map in pixels e.g. cell 16*BLOCKSIZE(16)
  *        - normal - coordinates of a cell an object is in
  */
-class ObjectClass;
-
-typedef std::vector <ObjectClass*> List;
 
 class ObjectClass : public Rect
 {

@@ -3,27 +3,23 @@
 #include <string>
 #include <vector>
 #include "DuneConstants.h"
+
 #include "Gfx.h"
 
-
-class StructureClass;
-class UnitClass;
 class MapClass;
-
-typedef std::vector<StructureClass*> SList;
-typedef std::vector<UnitClass*> UList;
+class GameState;
 
 class PlayerClass 
 {
   public:
-    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList* slist, UList* ulist);
+    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, GameState* gs);
 	virtual ~PlayerClass();
 	
 	void assignMapPlayerNum(int newMapPlayerNum);
 	
 	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
 	
-	MapClass* getMap() { return m_map; }
+	MapClass* getMap();
 	
 	void* createUnit(int itemID);
 	void* placeUnit(int itemID, UPoint itemPos);
@@ -110,10 +106,7 @@ class PlayerClass
     //! Name of player
     std::string m_name;
     
-    MapClass* m_map;
-    
-    SList* m_structureList;
-    UList* m_unitList;
+    GameState* m_gs;
     //@}
 };
 

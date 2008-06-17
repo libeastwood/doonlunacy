@@ -1,5 +1,6 @@
 #include "DataCache.h" //It should not be included here, but all enums are here
 #include "DuneConstants.h"
+#include "GameState.h"
 #include "Log.h"
 #include "MapClass.h"
 #include "MapGenerator.h"
@@ -17,7 +18,6 @@ MapGenerator::MapGenerator ()
     m_spiceFields = 4;//SPICEFIELDS;
     m_spiceBlooms = 10;
     m_rockBits = 10;
-    m_map = NULL;
     Log::Instance()->setVerbosity("MapGenerator", LV_MAX);
 }
 
@@ -26,28 +26,16 @@ MapGenerator::~MapGenerator()
 
 }
 
-MapClass * MapGenerator::getMap()
-{
-    if (m_map == NULL)
-    {
-        //FIXME:Should not appear as no maps are deleted for the time being, but just to be sure.
-        LOG_ERROR("MapGenerator", "Trying to use map that doesn't exist");
-        return NULL;
-    }
-    else
-    {
-        return m_map; 
-    }
-}
-
 bool MapGenerator::loadOldMap(std::string mapName)
 {
 	bool	done = false;	//this will be set to false if any errors, so level won't load
 	
 	Inifile * myInifile = new Inifile(mapName);
-	
+
+	m_gs = new GameState();
 	m_map = new MapClass(UPoint(64, 64));
-	
+    m_gs->m_map = m_map;
+    	
 	int SeedNum = myInifile->getIntValue("MAP","Seed",-1);
 	
 	if(SeedNum == -1) {
@@ -56,9 +44,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 		return false;
 	}
 	
-	m_players = new Players;
-	m_structureList = new SList;
-	m_unitList = new UList;
+	Players *m_players = m_gs->m_players;
 	
 	unsigned short SeedMap[64*64];
 	createMapWithSeed(SeedNum,SeedMap);
@@ -513,9 +499,10 @@ void MapGenerator::takeMapScreenshot(std::string filename)
     delete img;
 }
 
+
 void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai,int team)
 {
-	if(m_players->size() > House) {
+	if(m_gs->m_players->size() > House) {
 		LOG_ERROR("MapGenerator" ,"Trying to create already existing player!");
 		exit(EXIT_FAILURE);
 	}
@@ -524,9 +511,9 @@ void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai,int team)
 		//player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
 		LOG_WARNING("MapGenerator" ,"Trying to create unimplemented ai player!");
 	} else {
-		m_players->push_back(new PlayerClass(House,House,House,DEFAULT_STARTINGCREDITS, team, m_map, m_structureList, m_unitList));
+		m_gs->m_players->push_back(new PlayerClass(House,House,House,DEFAULT_STARTINGCREDITS, team, m_gs));
 	}
-	m_players->at(House)->assignMapPlayerNum(House);
+	m_gs->m_players->at(House)->assignMapPlayerNum(House);
 }
 
 void MapGenerator::addRockBits()

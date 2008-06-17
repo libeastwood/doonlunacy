@@ -55,7 +55,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 }
 
 bool ObjectClass::isOnScreen(Rect rect) {
-    return rect.containsPartial(Rect(m_realPos.x,m_realPos.y,w,h)); 
+    return rect.containsPartial(Rect(m_realPos.x,m_realPos.y,w*16,h*16)); 
 }
 
 void ObjectClass::setPosition(SPoint pos) 

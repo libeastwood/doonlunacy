@@ -1,4 +1,5 @@
 #include "DataCache.h"
+#include "GameState.h"
 #include "houses.h"
 #include "Log.h"
 #include "PlayerClass.h"
@@ -11,7 +12,7 @@
 #include "units/UnitClass.h"
 #include "units/QuadClass.h"
 
-PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList *slist, UList *ulist)
+PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, GameState* gs)
 {
     m_mapPlayerNum = newPlayerNumber;
 
@@ -51,9 +52,7 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
     m_numWalls = 0;
     m_numStructures = 0;
     
-    m_map = map;
-    m_structureList = slist;
-    m_unitList = ulist;
+    m_gs = gs;
 
 }
 
@@ -151,7 +150,7 @@ void* PlayerClass::createUnit(int itemID)
 
 	if (newUnit)
 	{
-		m_unitList->push_back(newUnit);
+		m_gs->m_units->push_back(newUnit);
 		if (itemID != Unit_Sandworm)
 			m_numUnits++;
 	}
@@ -159,11 +158,16 @@ void* PlayerClass::createUnit(int itemID)
 	return newUnit;
 }
 
+MapClass* PlayerClass::getMap()
+{
+    return m_gs->m_map;
+}
+
 void* PlayerClass::placeUnit(int itemID, UPoint itemPos)
 {
 
 	UnitClass* newUnit = NULL;
-	if (m_map->cellExists(itemPos))
+	if (m_gs->m_map->cellExists(itemPos))
 		newUnit = (UnitClass*)createUnit(itemID);
 
 	if (newUnit)
@@ -211,7 +215,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 			{
 			    //FIXME: No idea what it does
 
-				if (m_map->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
+				if (m_gs->m_map->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
 				{
 					//m_map->getCell(UPoint(itemPos.x+i, itemPos.y+j))->clearDamage();
 
@@ -224,9 +228,9 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
         tempStructure->setPosition(itemPos);
 
         if (itemID == Structure_Wall)
-            m_map->fixWalls(itemPos.x, itemPos.y);
+            m_gs->m_map->fixWalls(itemPos.x, itemPos.y);
 
-        m_structureList->push_back(tempStructure);
+        m_gs->m_structures->push_back(tempStructure);
     }
        
     return tempStructure;

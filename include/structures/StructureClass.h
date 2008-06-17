@@ -50,4 +50,6 @@ class StructureClass : public ObjectClass
         m_justPlacedTimer;
 };
 
+typedef std::vector<StructureClass*> Structures;
+
 #endif // DUNE_STRUCTURECLASS_H

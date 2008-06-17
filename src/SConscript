@@ -49,6 +49,7 @@ all_sources = [ "Application.cpp",
 				"units/UnitClass.cpp",
 				"units/GroundUnit.cpp",				
 				"units/QuadClass.cpp",				
+				"GameState.cpp",
               ]
 
 gui_sources = [
