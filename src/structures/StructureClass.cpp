@@ -38,16 +38,6 @@ void StructureClass::assignToMap(SPoint pos)
 		}
 }
 
-int StructureClass::getDrawnX()
-{
-	return ((int)(m_realPos.x - m_offset.x));
-}
-
-int StructureClass::getDrawnY()
-{
-	return ((int)(m_realPos.y - m_offset.y));
-}
-
 void StructureClass::setJustPlaced()
 {
     if (!m_destroyed)
@@ -60,7 +50,10 @@ void StructureClass::setJustPlaced()
 void StructureClass::draw(Image * dest, SPoint off, SPoint view)
 {
     Rect src(m_curAnimFrame * w*BLOCKSIZE,0,w*BLOCKSIZE,h*BLOCKSIZE);
-    m_pic->blitTo(dest, src, UPoint(off.x+m_realPos.x-view.x*16,off.y+m_realPos.y-view.y*16));
+    
+    UPoint dst(off.x+m_realPos.x-view.x*BLOCKSIZE,off.y+m_realPos.y-view.y*BLOCKSIZE);
+    
+    m_pic->blitTo(dest, src, dst);
 }
 
 

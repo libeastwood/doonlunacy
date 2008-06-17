@@ -33,6 +33,22 @@ ObjectClass::~ObjectClass()
 
 }
 
+void ObjectClass::assignToMap(SPoint pos)
+
+{
+    MapClass* map = m_owner->getMap();
+	if (map->cellExists(pos))
+
+	{
+
+		map->getCell(pos)->assignNonInfantryGroundObject(this);
+
+//		map->viewMap(owner->getTeam(), &location, viewRange);
+
+	}
+
+}
+
 void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 {
     m_pic->blitTo(dest, UPoint(x+off.x,y+off.y));

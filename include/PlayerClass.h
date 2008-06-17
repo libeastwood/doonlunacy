@@ -5,15 +5,18 @@
 #include "DuneConstants.h"
 #include "Gfx.h"
 
-class MapClass;
+
 class StructureClass;
+class UnitClass;
+class MapClass;
 
 typedef std::vector<StructureClass*> SList;
+typedef std::vector<UnitClass*> UList;
 
 class PlayerClass 
 {
   public:
-    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList * list);
+    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList* slist, UList* ulist);
 	virtual ~PlayerClass();
 	
 	void assignMapPlayerNum(int newMapPlayerNum);
@@ -21,6 +24,9 @@ class PlayerClass
 	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
 	
 	MapClass* getMap() { return m_map; }
+	
+	void* createUnit(int itemID);
+	void* placeUnit(int itemID, UPoint itemPos);
 	
 	//! @name Functions used to fetch information from non-public attributes
 	//@{
@@ -107,6 +113,7 @@ class PlayerClass
     MapClass* m_map;
     
     SList* m_structureList;
+    UList* m_unitList;
     //@}
 };
 

@@ -20,8 +20,7 @@ class StructureClass : public ObjectClass
     //@} 
     
     void assignToMap(SPoint pos);
-   	int getDrawnX();
-	int getDrawnY();
+
     virtual void destroy() {};
     
     virtual void draw(Image * dest, SPoint off, SPoint view);

@@ -6,8 +6,6 @@
 #include "MapClass.h"
 #include "ObjectClass.h"
 
-typedef std::vector <ObjectClass*> List;
-
 /*!
  *  Widget used to display battle scene
  *  Since we're not using global variables anymore, it's got to have pointers
@@ -39,10 +37,12 @@ class MapWidget : public Widget {
     //@{
 	void setMap(MapClass* map) { m_map = map; }
 	void setStructureList(SList* list) { m_structureList = list; }
+	void setUnitList(UList* list) { m_unitList = list; }
 	//@}
   private:
     MapClass * m_map;
     SList* m_structureList;
+    UList* m_unitList;
     /*!  
      *  Scroll speed multiplied by BLOCKSIZE. E.g. m_speed equal to (1,1)
      *  means that every time widget is updated, visible area is scrolled by

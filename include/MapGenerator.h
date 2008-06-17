@@ -39,6 +39,7 @@ class MapGenerator : public Singleton<MapGenerator>
      */
     MapClass * getMap();
     SList* getStructureList() { return m_structureList; }
+    UList* getUnitList() { return m_unitList; }    
     //! Creates a random map
     /*!
      *  @return true if map was successfully generated, false if something went wrong
@@ -130,6 +131,7 @@ class MapGenerator : public Singleton<MapGenerator>
     //! Vector with all players
     Players * m_players;
     SList * m_structureList;
+    UList * m_unitList;
 };
 
 #endif // DUNE_MAPGENERATOR_H

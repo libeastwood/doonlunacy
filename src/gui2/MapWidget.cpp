@@ -6,6 +6,7 @@
 
 #include "gui2/MapWidget.h"
 #include "structures/StructureClass.h"
+#include "units/UnitClass.h"
 MapWidget::MapWidget()
 {
     m_view = SPoint(0,0);
@@ -64,30 +65,28 @@ void MapWidget::draw(Image * dest, SPoint off)
 {
     // We have to be sure we're not trying to draw cell with coordinates below zero or above mapsize
 
-    // Theoretically this should not happen, but you never know.
-    if (m_map != NULL)
-    {    
-        m_view.x += m_speed.x;
-        m_view.y += m_speed.y;
+    assert (m_map != NULL);
 
-        if (m_view.x < 0) { m_view.x = 0; m_speed.x = 0;}
-        if (m_view.x > m_map->w - w /BLOCKSIZE) { m_view.x = m_map->w - w /BLOCKSIZE; m_speed.x = 0;}
-        if (m_view.y < 0) { m_view.y = 0; m_speed.y = 0;}
-        if (m_view.y > m_map->h - h /BLOCKSIZE) { m_view.y = m_map->h - h /BLOCKSIZE; m_speed.y = 0;}
-        
+    m_view.x += m_speed.x;
+    m_view.y += m_speed.y;
 
-        for (int i = 0; i < w / BLOCKSIZE; i++)
+    if (m_view.x < 0) { m_view.x = 0; m_speed.x = 0;}
+    if (m_view.x > m_map->w - w /BLOCKSIZE) { m_view.x = m_map->w - w /BLOCKSIZE; m_speed.x = 0;}
+    if (m_view.y < 0) { m_view.y = 0; m_speed.y = 0;}
+    if (m_view.y > m_map->h - h /BLOCKSIZE) { m_view.y = m_map->h - h /BLOCKSIZE; m_speed.y = 0;}
+    
+
+    for (int i = 0; i < w / BLOCKSIZE; i++)
+    {
+        for (int j = 0; j < h / BLOCKSIZE; j++)
         {
-            for (int j = 0; j < h / BLOCKSIZE; j++)
-            {
-                m_map->getCell(UPoint(i+m_view.x, j+m_view.y))->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-            }
+            m_map->getCell(UPoint(i+m_view.x, j+m_view.y))->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
         }
     }
     
-    if (m_structureList != NULL)
-    {
-        StructureClass* tmp;
+    assert (m_structureList != NULL);
+
+    StructureClass* tmp;
     #if 0
          tmp = (StructureClass*)m_structureList->at(0);
          if (true || tmp->isOnScreen(Rect(m_view.x, m_view.y, m_view.x + w, m_view.y+h)))
@@ -96,15 +95,28 @@ void MapWidget::draw(Image * dest, SPoint off)
          }
     #endif 
 
-        for (unsigned int i=0; i< m_structureList->size(); i++)
+    for (unsigned int i=0; i< m_structureList->size(); i++)
+    {
+        tmp = (StructureClass*)m_structureList->at(i);
+        tmp->update();
+        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
         {
-            tmp = (StructureClass*)m_structureList->at(i);
-            tmp->update();
-            if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
-            {
-                tmp->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
-            }
+            tmp->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
         }
     }
+    
+    UnitClass* tmp2;
+    
+    for (unsigned int j=0; j< m_unitList->size(); j++)
+    {
+        tmp2 = (UnitClass*)m_unitList->at(j);
+        tmp2->update();
+        if (tmp2->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, m_view.x*BLOCKSIZE+w, m_view.y*BLOCKSIZE+h)))
+        {
+            tmp2->draw(dest, SPoint(off.x+x, off.y+y), SPoint(m_view.x, m_view.y));
+
+        }
+    }
+
 }
 

@@ -58,6 +58,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	
 	m_players = new Players;
 	m_structureList = new SList;
+	m_unitList = new UList;
 	
 	unsigned short SeedMap[64*64];
 	createMapWithSeed(SeedNum,SeedMap);
@@ -182,7 +183,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	addPlayer(MERCENERY, false, 2);
 
 	Inifile::KeyListHandle myListHandle;
-/*
+
 	myListHandle = myInifile->KeyList_Open("UNITS");
 	
 	while(!myInifile->KeyList_EOF(myListHandle)) {
@@ -265,13 +266,14 @@ bool MapGenerator::loadOldMap(std::string mapName)
 			unitID = Unit_Quad;
 		}
 		
-		if(m_players[(int)house] == NULL) {
-			LOG_ERROR("MapGenerator", "player[%d]== NULL",(int) house));
+/*        //FIXME: Fix this here and in addPlayer
+		if(m_players->size() > house) {
+			LOG_ERROR("MapGenerator", "player[%d]== NULL",(int) house);
 			exit(EXIT_FAILURE);
 		}
-
+*/
 		for(int i = 0; i < Num2Place; i++) {
-			UnitClass* newUnit = player[(int) house]->placeUnit(unitID, pos%64, pos/64);
+			ObjectClass* newUnit = (ObjectClass*)m_players->at(house)->placeUnit(unitID, UPoint(pos%64, pos/64));
 			if (newUnit == NULL) {
 				LOG_WARNING("MapGenerator", "This file is not a valid unit entry: %d. (invalid unit position)", pos);
 			}
@@ -279,7 +281,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 	}
 	
 	myInifile->KeyList_Close(&myListHandle);
-*/
+
 
 	myListHandle = myInifile->KeyList_Open("STRUCTURES");
 	while(!myInifile->KeyList_EOF(myListHandle)) {
@@ -312,12 +314,13 @@ bool MapGenerator::loadOldMap(std::string mapName)
 				LOG_WARNING("MapGenerator","loadOldMap: Invalid house string: %s",HouseStr.c_str());
 				house = HOUSE_ATREIDES;
 			}
-			
-			if(m_players->at((int)house) == NULL) {
+/*			
+            //FIXME: Fix this here and in addPlayer
+    		if(m_players->size() > house) {
 				LOG_ERROR("MapGenerator","player[%d]== NULL",(int) house);
 				exit(EXIT_FAILURE);
 			}
-			
+*/			
 			if(BuildingStr == "Concrete") {
 				m_players->at(house)->placeStructure(NONE, NONE, Structure_Slab1, UPoint(pos%64, pos/64));
 			} else if(BuildingStr == "Wall") {
@@ -521,7 +524,7 @@ void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai,int team)
 		//player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
 		LOG_WARNING("MapGenerator" ,"Trying to create unimplemented ai player!");
 	} else {
-		m_players->push_back(new PlayerClass(House,House,House,DEFAULT_STARTINGCREDITS, team, m_map, m_structureList));
+		m_players->push_back(new PlayerClass(House,House,House,DEFAULT_STARTINGCREDITS, team, m_map, m_structureList, m_unitList));
 	}
 	m_players->at(House)->assignMapPlayerNum(House);
 }

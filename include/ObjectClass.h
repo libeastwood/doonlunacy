@@ -27,15 +27,12 @@ class ObjectClass : public Rect
     virtual ~ObjectClass();
     //@}
     
-    virtual void assignToMap(SPoint pos) = 0;
+    virtual void assignToMap(SPoint pos);
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
     
     virtual void destroy() = 0;
-    
-   	virtual int getDrawnX() = 0;
-	virtual int getDrawnY() = 0;
-    
+  
     virtual void update() = 0;
   
     bool isOnScreen(Rect rect);
@@ -54,7 +51,7 @@ class ObjectClass : public Rect
 	inline bool isRespondable() { return m_respondable; }
 	inline bool isSelected() { return m_selected; }
 	
-	void setPosition(SPoint pos);
+	virtual void setPosition(SPoint pos);
 	inline PlayerClass* getOwner() { return m_owner; }
 	inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
     inline Uint32 getObjectID() { return m_objectID; }
@@ -73,7 +70,7 @@ class ObjectClass : public Rect
          m_selected,
          m_structure,
          m_unit;
-         
+
     /*! 
      *  If set to true, animation frame will change in certain intervals.
      *  We don't want it in case of walls, turrets, etc.
@@ -81,7 +78,8 @@ class ObjectClass : public Rect
     bool m_isAnimating;
 
   
-    double m_health;
+    double  m_angle,
+            m_health;
     
     PointFloat m_realPos;
     
@@ -111,6 +109,11 @@ class ObjectClass : public Rect
     //! Used for fog of war and area exploring.
         m_viewRange;
     
+    int m_deathFrame,
+
+        m_numDeathFrames;
+
+
     //! SharedPtr to image for current object
     ImagePtr m_pic;
     

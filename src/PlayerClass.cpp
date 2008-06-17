@@ -8,9 +8,10 @@
 #include "structures/SiloClass.h"
 #include "structures/StructureClass.h"
 #include "structures/WallClass.h"
+#include "units/UnitClass.h"
+#include "units/QuadClass.h"
 
-
-PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList * list)
+PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, MapClass* map, SList *slist, UList *ulist)
 {
     m_mapPlayerNum = newPlayerNumber;
 
@@ -51,7 +52,8 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
     m_numStructures = 0;
     
     m_map = map;
-    m_structureList = list;
+    m_structureList = slist;
+    m_unitList = ulist;
 
 }
 
@@ -66,6 +68,116 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 		m_mapPlayerNum = newMapPlayerNum;
 	else
 		m_mapPlayerNum = 0;
+}
+
+void* PlayerClass::createUnit(int itemID)
+
+{
+
+	UnitClass* newUnit = NULL;
+	switch (itemID)
+	{
+/*
+	case (Unit_Carryall):
+		newUnit = new Carryall(this);
+		numCarryalls++;
+		break;
+
+	case (Unit_Devastator):
+		newUnit = new DevastatorClass(this);
+		break;
+	case (Unit_Deviator):
+		newUnit = new DeviatorClass(this);
+		break;
+	case (Unit_Frigate):
+		newUnit = new Frigate(this);
+		break;
+	case (Unit_Harvester):
+		newUnit = new HarvesterClass(this);
+		numHarvesters++;
+		break;
+	case (Unit_Infantry):
+		newUnit = new InfantryClass(this);
+		break;
+	case (Unit_Launcher):
+		newUnit = new LauncherClass(this);
+		break;
+	case (Unit_MCV):
+		newUnit = new MCVClass(this);
+		break;
+	case (Unit_Ornithopter):
+		newUnit = new Ornithopter(this);
+		break;
+*/
+	case (Unit_Quad):
+		newUnit = new QuadClass(this);
+		break;
+/*
+	case (Unit_Saboteur):
+		newUnit = new Saboteur(this);
+		break;
+	case (Unit_Sandworm):
+		newUnit = new Sandworm(this);
+		break;
+	case (Unit_SiegeTank):
+		newUnit = new SiegeTankClass(this);
+		break;
+	case (Unit_SonicTank):
+		newUnit = new SonicTankClass(this);
+		break;
+	case (Unit_Tank):
+		newUnit = new TankClass(this);
+		break;
+	case (Unit_Trike):
+		newUnit = new TrikeClass(this);
+		break;
+	case (Unit_Raider):
+		newUnit = new RaiderClass(this);
+		break;
+	case (Unit_Trooper):
+		newUnit = new TrooperClass(this);
+		break;
+	case (Unit_Sardaukar):
+		newUnit = new SardaukarClass(this);
+		break;
+	case (Unit_Fremen):
+		newUnit = new FremenClass(this);
+		break;
+	
+*/  
+    default:
+        break;
+    }
+
+	if (newUnit)
+	{
+		m_unitList->push_back(newUnit);
+		if (itemID != Unit_Sandworm)
+			m_numUnits++;
+	}
+
+	return newUnit;
+}
+
+void* PlayerClass::placeUnit(int itemID, UPoint itemPos)
+{
+
+	UnitClass* newUnit = NULL;
+	if (m_map->cellExists(itemPos))
+		newUnit = (UnitClass*)createUnit(itemID);
+
+	if (newUnit)
+	{
+		if (newUnit->canPass(itemPos))
+			newUnit->deploy(itemPos);
+		else
+		{
+//			newUnit->setVisible(VIS_ALL, false);
+//			newUnit->destroy();
+			newUnit = NULL;
+		}
+	}
+	return newUnit;
 }
 
 void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos)

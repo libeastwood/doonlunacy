@@ -1,41 +1,34 @@
-//#include "../sand.h"
-//#include "../Items.h"
-
-#include "units/QuadClass.h"
+#include "DataCache.h"
+#include "Definitions.h"
 #include "PlayerClass.h"
-#include "DuneConstants.h"
-#include "gui/Graphics.h"
-#include "data.h"
+#include "units/QuadClass.h"
 
 QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
 {
-	baseID = itemID = Unit_Quad;
+	m_baseID = m_itemID = Unit_Quad;
 
-	speed = 0.64;
+    w = h = 1;
+	//m_speed = 0.64;
 
-	armour = 6;
-	maxHealth = 350;
-	health = maxHealth;
-	radius = 6;
-	viewRange = QUAD_VIEWRANGE;
-	weaponRange = QUAD_WEAPONRANGE;
+	//m_armour = 6;
+	m_maxHealth = 350;
+	m_health = m_maxHealth;
+	//radius = 6;
+	//m_viewRange = QUAD_VIEWRANGE;
+	//m_weaponRange = QUAD_WEAPONRANGE;
 		
-	numWeapons = 2;
-	bulletType[0] = Bullet_Gun;
-	primaryWeaponReloadTime = 100;
+	//m_numWeapons = 2;
+	//m_bulletType[0] = Bullet_Gun;
+	//m_primaryWeaponReloadTime = 100;
 
-	graphic = (SDL_Surface*)(dataFile[baseID].dat);
-	graphic =  copySurface(graphic);
-	mapImageHouseColour(graphic, getOwner()->getColour());
-	imageW = graphic->w/NUM_ANGLES;
-	imageH = graphic->h;
-	xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-	yOffset = (imageH - BLOCKSIZE)/2;
+	m_pic = DataCache::Instance()->getObjPic(ObjPic_Quad, HOUSETYPE(getOwner()->getColour()));
 
-	numAttackSounds = 1;
-	attackSound[0] = Sound_machineGun;
+    m_offset = UPoint((w - BLOCKSIZE)/2, (h - BLOCKSIZE)/2);
+
 }
+
 QuadClass::~QuadClass()
 {
+
 }
 

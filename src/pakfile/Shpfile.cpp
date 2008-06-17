@@ -316,7 +316,7 @@ Image * Shpfile::getPictureArray(unsigned int tilesX, unsigned int tilesY, ...) 
 	
 	SDL_UnlockSurface(pic);
 	Image * img = new Image(pic);
-	
+	img->setColorKey(0);
 	return img;
 
 }

@@ -233,7 +233,6 @@ void DataCache::Init(){
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
 	addGuiPic(UI_MouseCursor, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
-    getGuiPic(UI_MouseCursor)->setColorKey(0);
 //	addGuiPic(UI_MouseCursor, mouse->getPicture(0));
 //	SDL_SetColorKey(addGuiPic(UI_CursorShape][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,

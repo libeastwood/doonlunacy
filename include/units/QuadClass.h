@@ -1,5 +1,5 @@
-#ifndef DUNE_UNITS_QUADCLASS_H
-#define DUNE_UNITS_QUADCLASS_H
+#ifndef DUNE_QUADCLASS_H
+#define DUNE_QUADCLASS_H
 
 #include "units/GroundUnit.h"
 
@@ -10,4 +10,4 @@ public:
 	~QuadClass();
 };
 
-#endif // DUNE_UNITS_QUADCLASS_H
+#endif // DUNE_QUADCLASS_H

@@ -4,7 +4,6 @@
 SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
     m_isAnimating = true;
-    DataCache * cache = DataCache::Instance();
     w = 2;
     h = 2;
 	m_maxHealth = 100;
