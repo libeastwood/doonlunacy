@@ -23,14 +23,13 @@ SoundPlayer::SoundPlayer() {
 
     Mix_QuerySpec(&freq, &format, &channels);
     m_opl = new CEmuopl(freq, true, true);
-    m_player = new CadlPlayer(m_opl);
+    m_player = new AdlibPlayer(m_opl);
 }
 
 SoundPlayer::~SoundPlayer() {
-
 	Mix_HookMusic(NULL, NULL);
-    if(m_opl) delete m_opl;
-    if(m_player) delete m_player;
+	if(m_opl) delete m_opl;
+	if(m_player) delete m_player;
 }
 
 
@@ -67,8 +66,7 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 {
     if (Settings::Instance()->m_musicOn)
     {
-        m_player->init();
-        m_player->load(filename);
+        m_player->load(filename, CProvider_Pakfile());
         m_player->rewind(trackNum);
 
         Mix_HookMusic(m_player->callback, m_player);

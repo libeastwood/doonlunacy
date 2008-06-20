@@ -69,12 +69,10 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
                 "pakfile/Palette.cpp",
-                "pakfile/sound/adl/adl.cpp",
-                "pakfile/sound/adl/emuopl.cpp",
-                "pakfile/sound/adl/fmopl.c",
-				"pakfile/Animation.cpp",
-				"pakfile/Stringfile.cpp",
-				"pakfile/sound/Vocfile.cpp",
+                "pakfile/sound/adlwrap.cpp",
+		"pakfile/Animation.cpp",
+		"pakfile/Stringfile.cpp",
+		"pakfile/sound/Vocfile.cpp",
               ]
 
 pakview_sources = [  "Application.cpp", 
@@ -89,7 +87,7 @@ pakview_sources = [  "Application.cpp",
                      "Strings.cpp",
                      "State.cpp",
                      "TopLevelState.cpp",
-					 "SoundPlayer.cpp",
+		     "SoundPlayer.cpp",
                   ]
 
 

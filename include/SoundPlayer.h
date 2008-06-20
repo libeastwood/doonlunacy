@@ -81,6 +81,6 @@ class SoundPlayer : public Singleton<SoundPlayer>
 	MUSICTYPE m_currentMusicType;
 
 	Copl *m_opl;
-	CadlPlayer *m_player;
+	AdlibPlayer *m_player;
 };
 #endif //SOUNDPLAYER_H_INCLUDED
