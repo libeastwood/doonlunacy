@@ -13,8 +13,7 @@
 #include "singleton.h"
 #include "Settings.h"
 
-#include "pakfile/sound/adl/adl.h"
-#include "pakfile/sound/adl/emuopl.h"
+#include "pakfile/sound/adlwrap.h"
 
 /*!
 	Class that handles sounds and music.

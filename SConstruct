@@ -25,8 +25,8 @@ env.Append(CPPPATH="#include")
 
 
 if sys.platform != "win32":
-    env.ParseConfig('pkg-config --cflags sdl samplerate')
-    env.Append(CCFLAGS=["-Wall", "-pedantic", "-O0"]) #, "-Werror"])
+    env.ParseConfig('pkg-config --cflags sdl samplerate adplug')
+    env.Append(CCFLAGS=["-Wall", "-pedantic", "-O0", "-Wno-long-long"]) #, "-Werror"])
     #env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])
     #env.Append(LINKFLAGS = ["-ffast-math"])
     env.Append(LIBS = [ "boost_signals-mt",
@@ -66,6 +66,7 @@ env.Append(LIBS = [ "SDL",
                         "SDL_net",
                         "SDL_ttf",
                         "samplerate",
+			"adplug",
                         ])
 
 
