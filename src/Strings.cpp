@@ -189,10 +189,10 @@ StringOutputCache::~StringOutputCache()
                 
 void StringOutputCache::add(ConstString str)
 {
-    unsigned index = 0; // where to start searching form
-    unsigned nlIndex = 0;
+    size_t index = 0; // where to start searching form
+    size_t nlIndex = 0;
     
-    while ((nlIndex = str.find('\n', index)) != (unsigned)String::npos)
+    while ((nlIndex = str.find('\n', index)) != String::npos)
     {
         data += str.substr(index, nlIndex-index);
         data += '\n';
