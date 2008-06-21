@@ -192,7 +192,7 @@ void StringOutputCache::add(ConstString str)
     unsigned index = 0; // where to start searching form
     unsigned nlIndex = 0;
     
-    while ((nlIndex = str.find('\n', index)) != String::npos)
+    while ((nlIndex = str.find('\n', index)) != (unsigned)String::npos)
     {
         data += str.substr(index, nlIndex-index);
         data += '\n';
