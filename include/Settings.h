@@ -65,64 +65,64 @@ class Settings: public Singleton<Settings>
     friend class Application;
     
     protected:
-        Settings();
+	Settings();
 
-        // protected so Application can change them 
-        int m_width, m_height;
-        bool m_fullscreen;
-        int m_debug;
-        bool m_doubleBuffered;
-        
-        //SFX
-        //! whether sound should be played
-        bool m_soundOn;
+	// protected so Application can change them 
+	int m_width, m_height;
+	bool m_fullscreen;
+	int m_debug;
+	bool m_doubleBuffered;
+	bool m_playIntro;
 
-     	//! volume of sound effects
-    	int	m_sfxVolume;
+	//SFX
+	//! whether sound should be played
+	bool m_soundOn;
 
-    	//! volume of voice over sounds
-    	int	m_voiceVolume;
+	//! volume of sound effects
+	int	m_sfxVolume;
+
+	//! volume of voice over sounds
+	int	m_voiceVolume;
     	
-   		//! volume of unit responses played when a unit is selected
-    	int	m_responseVolume;
+	//! volume of unit responses played when a unit is selected
+	int	m_responseVolume;
 
 
         //MUSIC
 
         //! whether music should be played  
-        bool m_musicOn;
+	bool m_musicOn;
 
     	//! music volume
-    	int	m_musicVolume;
+	int	m_musicVolume;
 
-        std::string m_dataDir;
+	std::string m_dataDir;
         
-        ConfigFile::NodePtr configFile;
+	ConfigFile::NodePtr configFile;
 
     public:
-        void load();
-        void save();
+	void load();
+	void save();
     
-        void ParseFile(const char* fn);
-        void ParseOptions(int argc, char* argv[]);
+	void ParseFile(const char* fn);
+	void ParseOptions(int argc, char* argv[]);
 
-        inline int GetWidth() 
-                { return m_width; }
-        inline int GetHeight()
-                { return m_height; }
+	inline int GetWidth() { return m_width; }
 
-        inline bool GetFullScreen()
-                { return m_fullscreen; }
+	inline int GetHeight() { return m_height; }
 
-        inline bool GetDoubleBuffered() 
-                { return m_doubleBuffered; }
+	inline bool GetFullScreen() { return m_fullscreen; }
 
-        std::string GetDataDir() { return m_dataDir; }
+	inline bool GetDoubleBuffered() { return m_doubleBuffered; }
+
+	std::string GetDataDir() { return m_dataDir; }
         
-        bool GetSound() { return m_soundOn; }
-        bool GetMusic() { return m_musicOn; }
-        void ToggleSound() {m_soundOn = !m_soundOn; }
-        void ToggleMusic() {m_musicOn = !m_musicOn; }
+	bool GetSound() { return m_soundOn; }
+	bool GetMusic() { return m_musicOn; }
+	bool GetPlayIntro() { return m_playIntro; }
+	void ToggleSound() {m_soundOn = !m_soundOn; }
+	void ToggleMusic() {m_musicOn = !m_musicOn; }
+	void ToggleIntro() { m_playIntro = !m_playIntro; }
 
 };
 

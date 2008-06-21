@@ -37,6 +37,8 @@ void Settings::load()
     ConfigFile::bind(".graphics.fullscreen", configFile, m_fullscreen, false);
     ConfigFile::bind(".graphics.double_buffer", configFile, m_doubleBuffered, false);
     ConfigFile::bind(".debug", configFile, m_debug, int(LV_ERROR));
+    ConfigFile::bind(".play_intro", configFile, m_playIntro, true);
+
     ConfigFile::bind(".data_dir", configFile, m_dataDir, String("paks/"));
     ConfigFile::bind(".sound.sound_on", configFile, m_soundOn, true);
     ConfigFile::bind(".sound.sound_volume", configFile, m_sfxVolume, MIX_MAX_VOLUME/2);

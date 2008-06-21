@@ -19,6 +19,7 @@ class OptionsMenuState  : public MenuBaseState
         void doResolution();
         void doScreenMode();
         void doSound();
+	void doIntro();
         
         virtual const char* GetName() { return "OptionsMenuState"; }
 
@@ -29,6 +30,7 @@ class OptionsMenuState  : public MenuBaseState
         BoringButton* m_butOk;
         BoringButton* m_butSound;
         BoringButton* m_butMusic;
+	BoringButton* m_butIntro;
 };
 
 #endif // DUNE_OPTIONSMENU_H

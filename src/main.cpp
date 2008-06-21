@@ -19,7 +19,8 @@ int main(int argc, char *argv[])
 
     Application::Instance()->Init();
     Application::Instance()->RootState()->PushState( new MainMenuState() );
-    Application::Instance()->RootState()->PushState( new IntroState() );
+    if(Settings::Instance()->GetPlayIntro())
+	    Application::Instance()->RootState()->PushState( new IntroState() );
     Application::Instance()->Run();
     
     Application::Destroy();

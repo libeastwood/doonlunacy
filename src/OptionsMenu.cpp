@@ -66,6 +66,14 @@ OptionsMenuState::OptionsMenuState()
             
     m_vbox->addChild(m_butMusic); 
 
+    set->GetPlayIntro() ? m_caption = "Intro On" : m_caption = "Intro Off";
+    m_butIntro = new BoringButton(m_caption);
+    m_butIntro->setSize(UPoint(bw, bh));
+    m_butIntro->onClick.connect(
+            boost::bind(&OptionsMenuState::doIntro, this) );
+            
+    m_vbox->addChild(m_butIntro); 
+
     m_butOk = new BoringButton("Ok");
     m_butOk->setSize(UPoint(bw, bh));
     m_butOk->onClick.connect(
@@ -110,6 +118,16 @@ void OptionsMenuState::doMusic()
     set->GetMusic() ? caption = "Music On" : caption = "Music Off";
     m_butMusic->setCaption(caption);    
 }
+
+void OptionsMenuState::doIntro()
+{
+    Settings * set = Settings::Instance();
+    set->ToggleIntro();
+    std::string caption;
+    set->GetPlayIntro() ? caption = "Intro On" : caption = "Intro Off";
+    m_butIntro->setCaption(caption);    
+}
+
 
 void OptionsMenuState::doOptions()
 {
