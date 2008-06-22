@@ -29,13 +29,13 @@ class IntroState : public State
     class Frame
     {
         public:
-            typedef enum Transition
+            enum Transition
             {
                 NO_TRANSITION,
                 FADE_OUT
             };
             
-            typedef enum TransitionState
+            enum TransitionState
             {
                 TRANSITION_IN,
                 TRANSITION_OUT,
