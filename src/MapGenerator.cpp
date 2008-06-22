@@ -502,7 +502,7 @@ void MapGenerator::takeMapScreenshot(std::string filename)
 
 void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai,int team)
 {
-	if(m_gs->m_players->size() > House) {
+	if(m_gs->m_players->size() > (unsigned)House) {
 		LOG_ERROR("MapGenerator" ,"Trying to create already existing player!");
 		exit(EXIT_FAILURE);
 	}
