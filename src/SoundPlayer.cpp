@@ -11,16 +11,16 @@
 #include "pakfile/sound/Vocfile.h"
 
 SoundPlayer::SoundPlayer() {
-	
+
     	Settings * set = Settings::Instance();
 	Mix_Volume(-1, set->m_sfxVolume);
-	
+
     	m_musicChannel = Mix_ReserveChannels(1);
     	Mix_Volume(m_musicChannel, set->m_musicVolume);
-	
+
     	int freq, channels;
     	Uint16 format;
-	
+
     	Mix_QuerySpec(&freq, &format, &channels);
     	m_opl = new CEmuopl(freq, true, true);
     	m_player = new AdlibPlayer(m_opl);
