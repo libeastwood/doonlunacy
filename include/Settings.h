@@ -26,8 +26,7 @@ typedef struct
 			screen[MAX_LINE],
 			serverString[MAX_LINE];
 
-	int		maxPathSearch,	//how many nodes units will search to path before stopping
-			maxPlayers,
+	int		maxPlayers,
 			width, height,
 			winFlags,
 			
@@ -74,7 +73,8 @@ class Settings: public Singleton<Settings>
 	bool m_doubleBuffered;
 	bool m_playIntro;
 
-	//SFX
+	//! @name SFX
+	//@{
 	//! whether sound should be played
 	bool m_soundOn;
 
@@ -86,15 +86,20 @@ class Settings: public Singleton<Settings>
     	
 	//! volume of unit responses played when a unit is selected
 	int	m_responseVolume;
+    //@}
+    
+    //! @name MUSIC
+    //@{
 
-
-        //MUSIC
-
-        //! whether music should be played  
+    //! whether music should be played  
 	bool m_musicOn;
 
-    	//! music volume
+    //! music volume
 	int	m_musicVolume;
+    //@}
+    
+    //! how many nodes units will search to path before stopping
+    int m_maxPathSearch;
 
 	std::string m_dataDir;
         
@@ -106,6 +111,8 @@ class Settings: public Singleton<Settings>
     
 	void ParseFile(const char* fn);
 	void ParseOptions(int argc, char* argv[]);
+
+    inline int GetMaxSearchPath() { return m_maxPathSearch; }
 
 	inline int GetWidth() { return m_width; }
 

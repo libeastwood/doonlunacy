@@ -25,6 +25,7 @@ class ObjectClass : public Rect
     //@}
     
     virtual void assignToMap(SPoint pos);
+    virtual void unassignFromMap(SPoint pos);
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
     
@@ -34,10 +35,11 @@ class ObjectClass : public Rect
   
     bool isOnScreen(Rect rect);
     
+	virtual UPoint getClosestPoint(UPoint objectLocation);
+
+    virtual void setDestination(SPoint destination);
+    inline UPoint getRealPos() { return m_realPos; }
     inline int getItemID() { return m_itemID; } 
-    inline int getRealX() { return m_realPos.x; }
-    inline int getRealY() { return m_realPos.y; }    
-    
   	inline bool isActive() { return m_active; }
 	inline bool isAFlyingUnit() { return m_flyingUnit; }
 	inline bool isAGroundUnit() { return m_groundUnit; }
@@ -48,13 +50,21 @@ class ObjectClass : public Rect
 	inline bool isRespondable() { return m_respondable; }
 	inline bool isSelected() { return m_selected; }
 	
+	
+	inline void setActive(bool status) { m_active = status; }
+	inline void setForced(bool status) { m_forced = status; }
+	inline void setRespondable(bool status) { m_respondable = status; }
 	virtual void setPosition(SPoint pos);
+	inline void setSelected(bool value) { m_selected = value; }
+
 	inline PlayerClass* getOwner() { return m_owner; }
 	inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
     inline Uint32 getObjectID() { return m_objectID; }
     inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
     
+    int getHealthColour();    
   protected:
+    ATTACKTYPE	m_attackMode;
 
     bool m_active,    
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
@@ -72,7 +82,12 @@ class ObjectClass : public Rect
      *  If set to true, animation frame will change in certain intervals.
      *  We don't want it in case of walls, turrets, etc.
      */
-    bool m_isAnimating;
+    bool m_badlyDamaged,
+         //!can i do damage to stuff?
+         m_canAttackStuff,
+         m_forced,
+         m_isAnimating,
+         m_targetFriendly;
 
   
     double  m_angle,
@@ -91,7 +106,9 @@ class ObjectClass : public Rect
      *        4,5,6,... Refinery, Starport,etc. when a unit docks, brings spice, whatever
      *
      */
-    int m_curAnimFrame,
+    int m_checkTimer,
+    
+        m_curAnimFrame,
     
     //! Total number of frames
         m_animFrames,
@@ -104,7 +121,9 @@ class ObjectClass : public Rect
         m_maxHealth,
     
     //! Used for fog of war and area exploring.
-        m_viewRange;
+        m_viewRange,
+        
+        m_weaponRange;
     
     int m_deathFrame,
 
@@ -119,9 +138,19 @@ class ObjectClass : public Rect
 
     Uint32 m_objectID;
 
-    UPoint m_destination;
+    UPoint m_destination,
+           m_oldPosition;
+    
+    /*! 
+     *  Position on the screen where an object will be drawn. It depends on 
+     *  position of MapWidget, current view position and of course object's position.
+     */
+    UPoint m_drawnPos;
 
     UPoint m_offset;
+    
+    ObjectClass * m_target;
+    
 };
 
 #endif //OBJECTCLASS_H

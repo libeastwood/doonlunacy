@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
     if(Settings::Instance()->GetPlayIntro())
 	    Application::Instance()->RootState()->PushState( new IntroState() );
     Application::Instance()->Run();
-    
     Application::Destroy();
     Settings::Destroy();
 

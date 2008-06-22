@@ -13,6 +13,8 @@ Settings::Settings()
 	// set to the current directory for the moment 
 	ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
 
+    //FIXME:Should this be in config file?? And should this be set for each game seperately??
+    m_maxPathSearch = 100;
 }
 
 
@@ -48,7 +50,10 @@ void Settings::load()
     ConfigFile::bind(".sound.music_volume", configFile, m_musicVolume, MIX_MAX_VOLUME/2);
     
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
-
+    Log::Instance()->setVerbosity("UnitClass", LV_MAX);
+    Log::Instance()->setVerbosity("ObjectClass", LV_MAX);    
+//    Log::Instance()->setVerbosity("TerrainClass", LV_MAX);    
+//    Log::Instance()->setVerbosity("MapClass", LV_MAX);        
 /*        root = ConfigFile::loadFile((const char *)data);
 	std::string config = ResMan::Instance()->readText("CONFIG:config.txt");
 	printf("%s\n", config.c_str());

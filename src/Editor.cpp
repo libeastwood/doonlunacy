@@ -7,7 +7,7 @@ EditorState::EditorState()
 {
     Settings * set = Settings::Instance();
 
-#if 1
+#if 0
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
     m_mapWidget->setSize(UPoint(set->GetWidth(),set->GetHeight()/2 - 20));
@@ -27,11 +27,11 @@ EditorState::EditorState()
 //    m_container->addChild(m_mapWidget2);
 #endif
 
-#if 0
+#if 1
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
     m_mapWidget->setSize(UPoint(set->GetWidth(),set->GetHeight()));
-    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENH019.INI");
+    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENH005.INI");
     m_mapWidget->setGameState(MapGenerator::Instance()->getGameState());
     m_container->addChild(m_mapWidget);
 #endif 

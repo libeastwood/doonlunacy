@@ -11,6 +11,8 @@ class GroundUnit : public UnitClass
     GroundUnit(PlayerClass* newOwner);
     virtual ~GroundUnit();
     
+    void checkPos();
+    
   protected:
   
   

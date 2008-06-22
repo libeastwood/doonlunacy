@@ -1,8 +1,11 @@
+#include <math.h>
+
 #include "ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"
 #include "Log.h"
 #include "MapClass.h"
+
 
 ObjectClass::ObjectClass(PlayerClass* newOwner) : 
     Rect(0,0,0,0)
@@ -26,6 +29,11 @@ ObjectClass::ObjectClass(PlayerClass* newOwner) :
 	m_animFrames = 1;
 	m_curAnimFrame = 0;
 	m_isAnimating = false;
+	m_selected = false;
+	
+    m_checkTimer = 0;
+   	m_drawnAngle = 2;
+	m_angle = 256/8*m_drawnAngle;
 }
 
 ObjectClass::~ObjectClass()
@@ -54,8 +62,33 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
     m_pic->blitTo(dest, UPoint(x+off.x,y+off.y));
 }
 
+UPoint ObjectClass::getClosestPoint(UPoint point)
+{
+	return UPoint(x,y);
+}
+
+int ObjectClass::getHealthColour()
+{
+	double healthPercent = (double)m_health/(double)m_maxHealth;
+
+	if (healthPercent >= 0.7)
+		return COLOUR_LIGHTGREEN;
+	else if (healthPercent >= HEAVILYDAMAGEDRATIO)
+		return COLOUR_YELLOW;
+	else
+		return COLOUR_RED;
+}
+
 bool ObjectClass::isOnScreen(Rect rect) {
-    return rect.containsPartial(Rect(m_realPos.x,m_realPos.y,w*16,h*16)); 
+    return rect.containsPartial(Rect(m_realPos.x,m_realPos.y,w,h)); 
+}
+
+void ObjectClass::setDestination(SPoint destination)
+{
+	if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
+	{
+		m_destination = destination;
+	}
 }
 
 void ObjectClass::setPosition(SPoint pos) 
@@ -74,4 +107,10 @@ void ObjectClass::setPosition(SPoint pos)
 
         assignToMap(pos);
 	}
+}
+
+void ObjectClass::unassignFromMap(SPoint pos)
+{
+	if (m_owner->getMap()->cellExists(pos))
+		m_owner->getMap()->getCell(pos)->unassignObject(getObjectID());
 }

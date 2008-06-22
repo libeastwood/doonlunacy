@@ -150,6 +150,7 @@ void* PlayerClass::createUnit(int itemID)
 
 	if (newUnit)
 	{
+        newUnit->setObjectID(m_gs->getObjectID());
 		m_gs->m_units->push_back(newUnit);
 		if (itemID != Unit_Sandworm)
 			m_numUnits++;
@@ -230,6 +231,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
         if (itemID == Structure_Wall)
             m_gs->m_map->fixWalls(itemPos.x, itemPos.y);
 
+        tempStructure->setObjectID(m_gs->getObjectID());
         m_gs->m_structures->push_back(tempStructure);
     }
        

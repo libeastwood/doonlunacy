@@ -246,7 +246,8 @@ void DataCache::Init(){
 //	addGuiPic(UI_ValidPlace, PicFactory->createValidPlace();
 //	addGuiPic(UI_MenuBackground, PicFactory->createMainBackground();
 //	addGuiPic(UI_Background, PicFactory->createBackground();
-//	addGuiPic(UI_SelectionBox, SDL_LoadBMP_RW(pFileManager->OpenFile("UI_SelectionBox.bmp"),true);
+    
+	addGuiPic(UI_SelectionBox, mouse->getPicture(6));
 //	SDL_SetColorKey(addGuiPic(UI_SelectionBox][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_TopBar, PicFactory->createTopBar();
 	addGuiPic(UI_ButtonUp, choam->getPicture(0));

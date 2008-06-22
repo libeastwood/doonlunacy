@@ -58,6 +58,7 @@ void Label::redraw()
     {
         font->extents(m_caption.c_str(), textw, texth);
         m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth) ) );
+        m_surface->fillRect(m_bgColour);
         font->render(m_caption.c_str(), m_surface,
             m_surface->getSurface()->w/2 - textw/2, 
             m_surface->getSurface()->h/2 - texth/2, m_textColour);
