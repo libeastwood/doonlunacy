@@ -1,6 +1,8 @@
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include <stdlib.h>
 #include <math.h>
+#include <adl.h>
+#include <emuopl.h>
 
 #include "mmath.h"
 #include "DataCache.h"

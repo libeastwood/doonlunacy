@@ -1,3 +1,6 @@
+#include <SDL_mixer.h>
+#include <emuopl.h>
+
 #include "pakfile/sound/adlwrap.h"
 #include "ResMan.h"
 

@@ -1,13 +1,10 @@
 #ifndef H_ADLWRAP
 #define H_ADLWRAP
-#include <emuopl.h>
-
-#include "SDL.h"
-#include "SDL_mixer.h"
+#include <SDL.h>
 
 #include <adl.h>
-#include <libbinio/binio.h>
-#include <libbinio/binstr.h>
+class Copl;
+
 class AdlibPlayer : public CadlPlayer
 {
 	public:
