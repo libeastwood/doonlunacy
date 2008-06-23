@@ -429,6 +429,7 @@ void Application::BlitCursor()
     case CURSOR_LEFT: src.setPosition(UPoint(64,0)); break;
     case CURSOR_TARGET: src.setPosition(UPoint(80,0)); break;
     case CURSOR_SELECTION: src.setPosition(UPoint(96,0)); break;
+    case NUM_CURSORS: break;
     }
     
     m_screen->blitFrom(m_cursor.get(), src, dest);

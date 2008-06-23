@@ -189,8 +189,10 @@ void MainMenuState::JustMadeInactive()
 
 int MainMenuState::Execute(float dt)
 {
-    m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
-                        Settings::Instance()->GetHeight() / 4));
-
-    return 0;
+	if(!Mix_GetMusicHookData()){
+		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
+	}
+	m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2,
+				Settings::Instance()->GetHeight() / 4));
+	return 0;
 }

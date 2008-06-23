@@ -10,7 +10,7 @@
 OptionsMenuState::OptionsMenuState()
 {
     const int bw = 200;
-    const int bh = 24;
+    const int bh = 22;
     
     std::string m_caption;
     
@@ -74,6 +74,17 @@ OptionsMenuState::OptionsMenuState()
             
     m_vbox->addChild(m_butIntro); 
 
+    m_caption = "OPL Emulator ";
+    char num[2];
+    snprintf(num, 2, "%d", Settings::Instance()->GetEmuOpl());
+    m_caption += num;
+    m_butEmuOpl = new BoringButton(m_caption);
+    m_butEmuOpl->setSize(UPoint(bw, bh));
+    m_butEmuOpl->onClick.connect(
+            boost::bind(&OptionsMenuState::doEmuOpl, this) );
+   
+    m_vbox->addChild(m_butEmuOpl);
+
     m_butOk = new BoringButton("Ok");
     m_butOk->setSize(UPoint(bw, bh));
     m_butOk->onClick.connect(
@@ -95,6 +106,10 @@ OptionsMenuState::~OptionsMenuState()
     delete m_butWindowMode;
     delete m_butResolution;
     delete m_butOk;
+    delete m_butSound;
+    delete m_butMusic;
+    delete m_butIntro;
+    delete m_butEmuOpl;
 
     delete m_vbox;
 }
@@ -128,6 +143,14 @@ void OptionsMenuState::doIntro()
     m_butIntro->setCaption(caption);    
 }
 
+void OptionsMenuState::doEmuOpl()
+{
+	std::string caption = "OPL Emulator ";
+	char num[2];
+	snprintf(num, 2, "%d", Settings::Instance()->ToggleEmuOpl());
+	caption += num;
+	m_butEmuOpl->setCaption(caption);
+}
 
 void OptionsMenuState::doOptions()
 {

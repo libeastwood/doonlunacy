@@ -116,7 +116,7 @@ int Decode::decode80(unsigned char *image_in, unsigned char *image_out,unsigned 
 			exit(EXIT_FAILURE);
 		}
 	};
-	if (megacounta + megacountb + megacountc + megacountd + megacounte
+	if ((unsigned)(megacounta + megacountb + megacountc + megacountd + megacounte)
 			!= checksum)
 		return -1;
 	return 0;

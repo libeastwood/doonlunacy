@@ -1,6 +1,10 @@
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include <stdlib.h>
 #include <math.h>
+#include <adl.h>
+#include <emuopl.h>
+#include <kemuopl.h>
+#include <temuopl.h>
 
 #include "mmath.h"
 #include "DataCache.h"
@@ -12,18 +16,15 @@
 
 SoundPlayer::SoundPlayer() {
 
-    Settings * set = Settings::Instance();
+    	Settings * set = Settings::Instance();
 	Mix_Volume(-1, set->m_sfxVolume);
 
-    m_musicChannel = Mix_ReserveChannels(1);
-    Mix_Volume(m_musicChannel, set->m_musicVolume);
+    	m_musicChannel = Mix_ReserveChannels(1);
+    	Mix_Volume(m_musicChannel, set->m_musicVolume);
 
-    int freq, channels;
-    Uint16 format;
-
-    Mix_QuerySpec(&freq, &format, &channels);
-    m_opl = new CEmuopl(freq, true, true);
-    m_player = new AdlibPlayer(m_opl);
+	m_opl = NULL;
+	m_player = NULL;
+	changeEmuOpl(Settings::Instance()->GetEmuOpl());
 }
 
 SoundPlayer::~SoundPlayer() {
@@ -32,7 +33,31 @@ SoundPlayer::~SoundPlayer() {
 	if(m_player) delete m_player;
 }
 
+void SoundPlayer::changeEmuOpl(EMUOPL oplType){
+    	int freq, channels;
+    	Uint16 format;
+	if(Mix_GetMusicHookData())
+		Mix_HookMusic(NULL, NULL);
+	Mix_QuerySpec(&freq, &format, &channels);
 
+	if(m_opl)
+		delete m_opl;
+	if(m_player)
+		delete m_player;
+
+	switch(oplType){
+		case C_EMUOPL:
+			m_opl = new CEmuopl(freq, true, true);
+			break;
+		case CT_EMUOPL:
+			m_opl = new CTemuopl(freq, true, true);
+			break;
+		case CK_EMUOPL:
+			m_opl = new CKemuopl(freq, true, true);
+			break;
+	}
+	m_player = new AdlibPlayer(m_opl);
+}
 
 void SoundPlayer::VoiceChunkFinishedCallback(int channel) {
 //	if(channel == m_voiceChannel) {
@@ -58,24 +83,24 @@ void SoundPlayer::playSound(Sound_enum soundID, int volume)
 
 void SoundPlayer::playMusic(MUSICTYPE musicType, uint16_t cacheTrackNum)
 {
-    song * songfile = DataCache::Instance()->getMusic(musicType, cacheTrackNum);
-    playMusic(songfile->filename, songfile->track);
+    	song * songfile = DataCache::Instance()->getMusic(musicType, cacheTrackNum);
+    	playMusic(songfile->filename, songfile->track);
 }
 
 void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 {
-    if (Settings::Instance()->m_musicOn)
-    {
-        m_player->load(filename, CProvider_Pakfile());
-        m_player->rewind(trackNum);
+	if (Settings::Instance()->m_musicOn)
+	{
+		m_player->load(filename, CProvider_Pakfile());
+		m_player->rewind(trackNum);
 
-        Mix_HookMusic(m_player->callback, m_player);
-    }
+		Mix_HookMusic(m_player->callback, m_player);
+	}
 }
 
 void SoundPlayer::stopMusic()
 {
-    Mix_HookMusic(NULL, NULL);
+	Mix_HookMusic(NULL, NULL);
 }
 
 void SoundPlayer::playSound(Sound_enum soundID) {
@@ -87,7 +112,6 @@ void SoundPlayer::playSound(Sound_enum soundID) {
 			LOG_ERROR("SoundPlayer","There is no sound with id %d!",soundID);
 			exit(EXIT_FAILURE);
 		}
-	
 		Mix_PlayChannel(-1, tmp, 0);
 	}
 }
@@ -111,7 +135,7 @@ void SoundPlayer::playVoice(int id, int house) {
 			fprintf(stderr,"There is no voice with id %d!\n",id);
 			exit(EXIT_FAILURE);
 		}
-	
+
 		int channel = Mix_PlayChannel(-1, tmp, 0);
 		Mix_Volume(channel,sfxVolume);
 	}
@@ -121,7 +145,7 @@ void SoundPlayer::changeMusic(MUSICTYPE musicType)
 {
 	int musicNum = -1;
 	string filename = "";
-	
+
 	if(currentMusicType == musicType) {
 		return;
 	}

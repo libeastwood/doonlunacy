@@ -10,63 +10,140 @@
  *
  *  It's derived from Rect so map coordinates can be accessed by x,y,w,h
  *  @note There are several kinds of coordinates for each object:
- *        - drawn - coordinates on the screen where the object is drawn 
+ *        - drawn - coordinates on the screen where the object is drawn
  *        - real  - coordinates on the map in pixels e.g. cell 16*BLOCKSIZE(16)
  *        - normal - coordinates of a cell an object is in
  */
 
 class ObjectClass : public Rect
 {
+
   public:
     //!
     //@{
     ObjectClass(PlayerClass* newOwner);
     virtual ~ObjectClass();
     //@}
-    
+
     virtual void assignToMap(SPoint pos);
+    
     virtual void unassignFromMap(SPoint pos);
-    
+
     virtual void draw(Image * dest, SPoint off, SPoint view);
-    
+
     virtual void destroy() = 0;
-  
+
     virtual void update() = 0;
-  
+
     bool isOnScreen(Rect rect);
-    
-	virtual UPoint getClosestPoint(UPoint objectLocation);
+
+    virtual UPoint getClosestPoint(UPoint objectLocation);
 
     virtual void setDestination(SPoint destination);
-    inline UPoint getRealPos() { return m_realPos; }
-    inline int getItemID() { return m_itemID; } 
-  	inline bool isActive() { return m_active; }
-	inline bool isAFlyingUnit() { return m_flyingUnit; }
-	inline bool isAGroundUnit() { return m_groundUnit; }
-	inline bool isAStructure() { return m_structure; }
-	inline bool isABuilder() { return m_builder; }
-	inline bool isInfantry() { return m_infantry; }
-	inline bool isAUnit() { return m_unit; }
-	inline bool isRespondable() { return m_respondable; }
-	inline bool isSelected() { return m_selected; }
-	
-	
-	inline void setActive(bool status) { m_active = status; }
-	inline void setForced(bool status) { m_forced = status; }
-	inline void setRespondable(bool status) { m_respondable = status; }
-	virtual void setPosition(SPoint pos);
-	inline void setSelected(bool value) { m_selected = value; }
-
-	inline PlayerClass* getOwner() { return m_owner; }
-	inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
-    inline Uint32 getObjectID() { return m_objectID; }
-    inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
     
-    int getHealthColour();    
-  protected:
-    ATTACKTYPE	m_attackMode;
+    inline UPoint getRealPos()
+    {
+        return m_realPos;
+    }
 
-    bool m_active,    
+    inline int getItemID()
+    {
+        return m_itemID;
+    }
+
+    inline bool isActive()
+    {
+        return m_active;
+    }
+
+    inline bool isAFlyingUnit()
+    {
+        return m_flyingUnit;
+    }
+
+    inline bool isAGroundUnit()
+    {
+        return m_groundUnit;
+    }
+
+    inline bool isAStructure()
+    {
+        return m_structure;
+    }
+
+    inline bool isABuilder()
+    {
+        return m_builder;
+    }
+
+    inline bool isInfantry()
+    {
+        return m_infantry;
+    }
+
+    inline bool isAUnit()
+    {
+        return m_unit;
+    }
+
+    inline bool isRespondable()
+    {
+        return m_respondable;
+    }
+
+    inline bool isSelected()
+    {
+        return m_selected;
+    }
+
+
+    inline void setActive(bool status)
+    {
+        m_active = status;
+    }
+
+    inline void setForced(bool status)
+    {
+        m_forced = status;
+    }
+
+    inline void setRespondable(bool status)
+    {
+        m_respondable = status;
+    }
+
+    virtual void setPosition(SPoint pos);
+    inline void setSelected(bool value)
+    {
+        m_selected = value;
+    }
+
+    inline PlayerClass* getOwner()
+    {
+        return m_owner;
+    }
+
+    inline void setOwner(PlayerClass* newOwner)
+    {
+        m_owner = newOwner;
+    }
+
+    inline Uint32 getObjectID()
+    {
+        return m_objectID;
+    }
+
+    inline void setObjectID(int newObjectID)
+    {
+        if (newObjectID >= 0) m_objectID = newObjectID;
+    }
+
+    int getHealthColour();
+
+  protected:
+    ATTACKTYPE m_attackMode;
+
+    bool m_active,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_builder,
          m_destroyed,
@@ -78,26 +155,26 @@ class ObjectClass : public Rect
          m_structure,
          m_unit;
 
-    /*! 
+    /*!
      *  If set to true, animation frame will change in certain intervals.
      *  We don't want it in case of walls, turrets, etc.
      */
     bool m_badlyDamaged,
-         //!can i do damage to stuff?
+    //!can i do damage to stuff?
          m_canAttackStuff,
          m_forced,
          m_isAnimating,
          m_targetFriendly;
 
-  
+
     double  m_angle,
             m_health;
-    
+
     PointFloat m_realPos;
-    
+
     //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
     int m_animCounter;
-    
+
     /*! Currently drawn frame
      *  @note 0 Just placed
      *        1 Destroyed
@@ -107,24 +184,24 @@ class ObjectClass : public Rect
      *
      */
     int m_checkTimer,
-    
+
         m_curAnimFrame,
-    
-    //! Total number of frames
+
+        //! Total number of frames
         m_animFrames,
-    
+
         m_drawnAngle,
-    
-    //! Type of current object e.g. Structure_Silo
+
+        //! Type of current object e.g. Structure_Silo
         m_itemID,
-    
+
         m_maxHealth,
-    
-    //! Used for fog of war and area exploring.
+
+        //! Used for fog of war and area exploring.
         m_viewRange,
-        
+
         m_weaponRange;
-    
+
     int m_deathFrame,
 
         m_numDeathFrames;
@@ -132,7 +209,7 @@ class ObjectClass : public Rect
 
     //! SharedPtr to image for current object
     ImagePtr m_pic;
-    
+
     //! Pointer to map to which object is assigned.
     PlayerClass * m_owner;
 
@@ -140,17 +217,17 @@ class ObjectClass : public Rect
 
     UPoint m_destination,
            m_oldPosition;
-    
-    /*! 
-     *  Position on the screen where an object will be drawn. It depends on 
+
+    /*!
+     *  Position on the screen where an object will be drawn. It depends on
      *  position of MapWidget, current view position and of course object's position.
      */
     UPoint m_drawnPos;
 
     UPoint m_offset;
-    
+
     ObjectClass * m_target;
-    
+
 };
 
 #endif //OBJECTCLASS_H
