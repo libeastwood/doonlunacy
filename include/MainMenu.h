@@ -31,6 +31,7 @@ class MainMenuState : public MenuBaseState
         BoringButton* m_butOptions;
         BoringButton* m_butAbout;
         BoringButton* m_butQuit;
+	bool m_songPlaying;
         
 };
 
