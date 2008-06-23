@@ -1,16 +1,39 @@
+#include <math.h>
+
 #include "Definitions.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
 #include "ObjectClass.h"
+#include "Settings.h"
 
 #include "units/UnitClass.h"
 
 UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
 {
     m_unit = true;
+    m_attacking = false;
+    m_canAttackStuff = true;
+    m_moving = false;
     m_destroyed = false;
-    m_drawnAngle = 0;
+    m_pickedUp = false;
+    m_justStoppedMoving = false;
+    m_turning = false;
+    m_tracked = false;
+    m_turreted = false;
+    m_goingToRepairYard = false;
+    m_nextSpotFound = false;
+    m_respondable = true;
+    m_attackMode = DEFENSIVE;
+
+    m_speed = 0.0;
+    m_speedCap = NONE;
+    m_turnSpeed = 0.0625;
+
+    m_destination = SPoint(INVALID_POS, INVALID_POS);
+    m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
+    m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
+    setAngle(LEFT);
 }
 
 UnitClass::~UnitClass()
@@ -23,107 +46,680 @@ bool UnitClass::canPass(UPoint pos)
 {
     MapClass * map = m_owner->getMap();
 
-	return (map->cellExists(pos) && !map->getCell(pos)->hasAGroundObject() && !map->getCell(pos)->isMountain());
+    return (map->cellExists(pos) && !map->getCell(pos)->hasAGroundObject() && !map->getCell(pos)->isMountain());
 }
 
-void UnitClass::deploy(UPoint newPosition)
+void UnitClass::deploy(SPoint newPosition)
 {
-	if (m_owner->getMap()->cellExists(newPosition))
-	{
-		setPosition(newPosition);
+    if (m_owner->getMap()->cellExists(newPosition))
+    {
+        setPosition(newPosition);
 
-/*		if ((guardPoint.x == NONE) || (guardPoint.y == NONE))
+        if ((m_guardPoint.x == NONE) || (m_guardPoint.y == NONE))
+            m_guardPoint = UPoint(x, y);
 
-			guardPoint = location;
+        setDestination(m_guardPoint);
 
-		setDestination(&guardPoint);
+        //  pickedUp = false;
 
-		pickedUp = false;
+        setRespondable(true);
 
-		setRespondable(true);
+        setActive(true);
 
-		setActive(true);
+        //  setVisible(VIS_ALL, true);
 
-		setVisible(VIS_ALL, true);
-*/
-    
-	}
+
+    }
 
 }
 
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    UPoint dst(off.x+m_realPos.x-view.x*16,off.y+m_realPos.y-view.y*16);
-    Rect src(0,0, w*16,h*16);
-	
-	if (getItemID() == Unit_Frigate)
-		m_itemID = Unit_Frigate;
+    setDrawnPos(off, view);
 
-	if (!m_destroyed)
-	{
+    Rect src(0, 0, w, h);
 
-		src.x = m_drawnAngle*w*16;
-		src.y = 0;
+    if (getItemID() == Unit_Frigate)
+        m_itemID = Unit_Frigate;
 
-        m_pic->blitTo(dest, src, dst);
-	}
-	else
-	{
-		src.x = m_deathFrame*w;
-		src.y = 0;
+    if (!m_destroyed)
+    {
 
-        m_pic->blitTo(dest, src, dst);
-	}
+        src.x = m_drawnAngle * w;
+        src.y = 0;
+
+        m_pic->blitTo(dest, src, m_drawnPos);
+    }
+
+    else
+    {
+        src.x = m_deathFrame * w;
+        src.y = 0;
+
+        m_pic->blitTo(dest, src, m_drawnPos);
+    }
+}
+
+void UnitClass::drawSelectionBox(Image* dest)
+{
+    ImagePtr selectionBox = DataCache::Instance()->getGuiPic(UI_SelectionBox);
+    selectionBox->blitTo(dest, m_drawnPos);
+    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((double)m_health / (double)m_maxHealth)*(w - 3))), getHealthColour());
+} //want it to start in one from edges  finish one from right edge
+
+
+void UnitClass::move()
+{
+    // if(!m_moving && getRandomInt(0,40) == 0)
+    //TODO:Not implemented yet.
+    //map->viewMap(owner->getTeam(), &location, getViewRange() );
+
+    if (m_moving)
+    {
+        m_oldPosition = UPoint(x, y);
+
+        if (!m_badlyDamaged || isAFlyingUnit())
+        {
+            m_realPos.x += m_xSpeed;
+            m_realPos.y += m_ySpeed;
+        }
+
+        else
+        {
+            m_realPos.x += m_xSpeed / 2;
+            m_realPos.y += m_ySpeed / 2;
+        }
+
+        // if vehicle is half way out of old cell
+
+        if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE / 2)
+                || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE / 2))
+        {
+            unassignFromMap(m_oldPosition); //let something else go in
+
+            // if vehicle is out of old cell
+
+            if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE)
+                    || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE))
+            {
+                x = m_nextSpot.x;
+                y = m_nextSpot.y;
+
+                if (x == m_destination.x && y == m_destination.y)
+                    setForced(false);
+
+                m_moving = false;
+
+                m_justStoppedMoving = true;
+
+                //map->viewMap(owner->getTeam(), &location, getViewRange() );
+            }
+        }
+    }
+
+    else
+    {
+        m_justStoppedMoving = false;
+    }
+
+    checkPos();
+}
+
+void UnitClass::navigate()
+{
+    if (!m_moving)
+    {
+        if ((x != m_destination.x) || (y != m_destination.y))
+        {
+            if (!m_nextSpotFound)
+            {
+                if (m_nextSpotAngle == m_drawnAngle)
+                {
+#if 0
+
+                    if (m_pathList.empty() && (m_checkTimer == 0))
+                    {
+                        m_checkTimer = 0;
+
+                        for (int i = 1; i < 5; i++)
+                        {
+                            m_pathList.push_front(UPoint(x + i, y));
+                        }
+
+                        setTarget(NULL);
+                    }
+
+#else
+                    if (m_pathList.empty() && (m_checkTimer == 0))
+                    {
+                        m_checkTimer = 100;
+
+                        if (!AStarSearch() && (++m_noCloserPointCount >= 3)
+                                && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
+                        { //try searching for a path a number of times then give up
+                            if (m_target && m_targetFriendly
+                                    && (m_target->getItemID() != Structure_RepairYard)
+                                    && ((m_target->getItemID() != Structure_Refinery)
+                                        || (getItemID() != Unit_Harvester)))
+                            {
+
+                                setTarget(NULL);
+                            }
+
+                            setDestination(UPoint(x, y)); //can't get any closer, give up
+
+                            m_forced = false;
+                            m_speedCap = NONE;
+                        }
+                    }
+
+#endif
+                    if (!m_pathList.empty())
+                    {
+                        m_nextSpot = m_pathList.back();
+                        m_pathList.pop_front();
+                        m_nextSpotFound = true;
+                        m_checkTimer = 0;
+                        m_noCloserPointCount = 0;
+                    }
+                }
+            }
+
+            else
+            {
+                int tempAngle;
+
+                if ((tempAngle = m_owner->getMap()->getPosAngle(UPoint(x, y), m_nextSpot)) != -1)
+                    m_nextSpotAngle = tempAngle;
+
+                if (!canPass(m_nextSpot))
+                {
+                    m_nextSpotFound = false;
+                    m_pathList.clear();
+                }
+
+                else if (m_drawnAngle == m_nextSpotAngle)
+                {
+                    m_moving = true;
+                    m_nextSpotFound = false;
+                    assignToMap(m_nextSpot);
+                    m_angle = m_drawnAngle;
+                    setSpeeds();
+
+                }
+            }
+        }
+
+        else if (!m_target) //not moving and not wanting to go anywhere, do some random turning
+        {
+            //if (getRandomInt(0, RANDOMTURNTIMER) == 0)
+            // nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
+        }
+    }
 }
 
 void UnitClass::setAngle(int newAngle)
 {
-	if (!m_moving && (newAngle >= 0) && (newAngle < NUM_ANGLES))
-
-	{
-
-		m_angle = m_drawnAngle = newAngle;
-
-		m_nextSpotAngle = m_drawnAngle; 
-
-		m_nextSpotFound = false;
-
-	}
+    if (!m_moving && (newAngle >= 0) && (newAngle < NUM_ANGLES))
+    {
+        m_angle = m_drawnAngle = newAngle;
+        m_nextSpotAngle = m_drawnAngle;
+        m_nextSpotFound = false;
+    }
 }
 
 void UnitClass::setPosition(SPoint pos)
 {
-	if (m_owner->getMap()->cellExists(pos) || ((pos.x == NONE) && (pos.y == NONE)))
+    if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
+    {
+        ObjectClass::setPosition(pos);
+    }
 
-	{
+    else if (m_owner->getMap()->cellExists(pos))
+    {
+        ObjectClass::setPosition(pos);
+        m_realPos.x += BLOCKSIZE / 2;
+        m_realPos.y += BLOCKSIZE / 2;
+    }
 
-		ObjectClass::setPosition(pos);
+    m_moving = false;
 
-		m_realPos.x += BLOCKSIZE/2;
+    m_nextSpotFound = false;
+    m_nextSpotAngle = m_drawnAngle;
+    m_pickedUp = false;
+    setTarget(NULL);
+    // clearPath
+    m_pathList.clear();
+    m_noCloserPointCount = 0;
+}
 
-		m_realPos.y += BLOCKSIZE/2;
+void UnitClass::setSpeeds()
+{
+    double maxSpeed = m_speed;
 
-		m_moving = false;
+    if (!isAFlyingUnit())
+    {
+        m_speed += m_speed * (1.0 - m_owner->getMap()->getCell(x, y)->getDifficulty());
+        m_speed *= HEAVILYDAMAGEDSPEEDMULTIPLIER;
+    }
 
+    if ((m_speedCap > 0) && (m_speedCap < m_speed))
+        m_speed = m_speedCap;
 
-		m_nextSpotFound = false;
+    switch (m_drawnAngle)
+    {
 
-		m_nextSpotAngle = m_drawnAngle;
-		
-/*
+        case (LEFT):
+            m_xSpeed = -m_speed;
+            m_ySpeed = 0;
+            break;
 
-		m_pickedUp = false;
+        case (LEFTUP):
+            m_xSpeed = -m_speed * DIAGONALSPEEDCONST;
+            m_ySpeed = m_xSpeed;
+            break;
 
-		setTarget(NULL);
+        case (UP):
+            m_xSpeed = 0;
+            m_ySpeed = -m_speed;
+            break;
 
-		clearPath();
+        case (RIGHTUP):
+            m_xSpeed = m_speed * DIAGONALSPEEDCONST;
+            m_ySpeed = -m_xSpeed;
+            break;
 
-		noCloserPointCount = 0;
-*/
-	}
+        case (RIGHT):
+            m_xSpeed = m_speed;
+            m_ySpeed = 0;
+            break;
+
+        case (RIGHTDOWN):
+            m_xSpeed = m_speed * DIAGONALSPEEDCONST;
+            m_ySpeed = m_xSpeed;
+            break;
+
+        case (DOWN):
+            m_xSpeed = 0;
+            m_ySpeed = m_speed;
+            break;
+
+        case (LEFTDOWN):
+            m_xSpeed = -m_speed * DIAGONALSPEEDCONST;
+            m_ySpeed = -m_xSpeed;
+    }
+
+    m_speed = maxSpeed;
+}
+
+void UnitClass::setDrawnPos(SPoint off, SPoint view)
+{
+    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
+    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
+}
+
+void UnitClass::setTarget(ObjectClass* newTarget)
+{
+#if 0
+
+    if (goingToRepairYard && target && (target.getObjPointer()->getItemID() == Structure_RepairYard))
+    {
+        ((RepairYardClass*)target.getObjPointer())->unBook();
+        goingToRepairYard = false;
+    }
+
+    ObjectClass::setTarget(newTarget);
+
+    if (target
+            && (target.getObjPointer()->getOwner() == getOwner())
+            && (target.getObjPointer()->getItemID() == Structure_RepairYard)
+            && (itemID != Unit_Carryall) && (itemID != Unit_Frigate)
+            && (itemID != Unit_Ornithopter))
+    {
+        ((RepairYardClass*)target.getObjPointer())->book();
+        goingToRepairYard = true;
+    }
+
+#endif
+}
+
+void UnitClass::turnLeft()
+{
+    m_angle += m_turnSpeed;
+
+    if (m_angle >= 7.5)
+        m_angle -= 8.0;
+
+    m_drawnAngle = lround(m_angle);
+}
+
+void UnitClass::turnRight()
+{
+    m_angle -= m_turnSpeed;
+
+    if (m_angle < -0.5)
+        m_angle += 8;
+
+    m_drawnAngle = lround(m_angle);
+}
+
+void UnitClass::turn()
+{
+    if (!m_moving)
+    {
+        int wantedAngle;
+//  if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
+
+        if (0)
+            wantedAngle = m_targetAngle;
+        else
+            wantedAngle = m_nextSpotAngle;
+
+        if (wantedAngle != -1)
+        {
+            if (m_justStoppedMoving)
+            {
+                m_angle = wantedAngle;
+                m_drawnAngle = lround(m_angle);
+            }
+
+            else
+            {
+                double angleLeft = 0,
+                                   angleRight = 0;
+
+                if (m_angle > wantedAngle)
+                {
+                    angleRight = m_angle - wantedAngle;
+                    angleLeft = fabs(8 - m_angle) + wantedAngle;
+                }
+
+                else if (m_angle < wantedAngle)
+                {
+                    angleRight = abs(8 - wantedAngle) + m_angle;
+                    angleLeft = wantedAngle - m_angle;
+                }
+
+                if (angleLeft <= angleRight)
+                    turnLeft();
+                else
+                    turnRight();
+            }
+        }
+    }
 }
 
 void UnitClass::update()
 {
+    if (!m_destroyed)
+    {
+        if (m_active)
+        {
+            //targeting();
+            navigate();
+            move();
+
+            if (m_active)
+                turn();
+        }
+    }
+
+#if 0
+
+    if (m_badlyDamaged)
+    {
+        if (m_health <= 0)
+        {
+            netDestroy();
+            return;
+        }
+
+        else if (!goingToRepairYard
+                 && owner->isAI()
+                 && owner->hasRepairYard()
+                 && !forced
+                 && !target
+                 && (currentGame->playerType != CLIENT))
+            repair();
+    }
+}
+
+if (m_smokeFrame != -1)
+{
+    if (++m_smokeFrame > 2)
+        m_smokeFrame = 0;
+}
+
+if (m_frameTimer > 0)  //death frame has started
+{
+    if (m_frameTimer == 1)
+        frameChange();
+
+    m_frameTimer--;
+}
+
+#endif
+
+if (!m_destroyed)
+{
+    if (m_checkTimer > 0) m_checkTimer--;
+
+#if 0
+    if (m_findTargetTimer > 0) findTargetTimer--;
+
+    if (m_primaryWeaponTimer > 0) primaryWeaponTimer--;
+
+    if (m_secondaryWeaponTimer > 0) secondaryWeaponTimer--;
+
+    if (m_deviationTimer > 0)
+    {
+        if (--m_deviationTimer == 0)
+        { //revert back to real owner
+            removeFromSelectionLists();
+            setTarget(NULL);
+            setGuardPoint(&location);
+            setDestination(&location);
+            m_owner = m_realOwner;
+            m_pic = DataCache::Instance->getObjPic(GraphicID, getOwner()->getColour());
+        }
+    }
+
+#endif
+}
+
 
 }
+
+/* search algorithmns */
+void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
+{
+    int dx1, dy1, dx2, dy2;
+    double cost,
+    cross,
+    heuristic,
+    f;
+
+    UPoint  checkedPoint = m_destination,
+                           tempLocation;
+
+    TerrainClass* node;
+    MapClass* map = m_owner->getMap();
+
+    //push a node for each direction we could go
+
+    for (int angle = 0; angle <= 7; angle++) //going from angle 0 to 7 inc
+    {
+        tempLocation = map->getMapPos(angle, UPoint(parent_node->x, parent_node->y));
+
+        if (canPass(tempLocation))
+        {
+            node = map->getCell(tempLocation);
+            cost = parent_node->cost;
+
+            if ((x != parent_node->x) && (tempLocation.y != parent_node->y))
+                cost += DIAGONALCOST * (isAFlyingUnit() ? 1.0 : (double)node->getDifficulty()); //add diagonal movement cost
+            else
+                cost += (isAFlyingUnit() ? 1.0 : (double)node->getDifficulty());
+
+            /*if (parent_node->parent) //add cost of turning time
+            {
+             int posAngle = map->getPosAngle(parent_node->parent->getLocation(), parent_node->getLocation());
+             if (posAngle != angle)
+              cost += (1.0/turnSpeed * (double)min(abs(angle - posAngle), NUM_ANGLES - max(angle, posAngle) + min(angle, posAngle)))/((double)BLOCKSIZE);
+            }*/
+
+            if (m_target)
+                checkedPoint = m_target->getClosestPoint(tempLocation);
+
+            dx1 = tempLocation.x - checkedPoint.x;
+
+            dy1 = tempLocation.y - checkedPoint.y;
+
+            dx2 = x - checkedPoint.x;
+
+            dy2 = y - checkedPoint.y;
+
+            cross = (double)(dx1 * dy2 - dx2 * dy1);
+
+            if ( cross < 0 )
+                cross = -cross;
+
+            heuristic = blockDistance(tempLocation, checkedPoint);// + cross*0.1;//01;
+
+            f = cost + heuristic;
+
+            if (node->m_visited) //if we have already looked at this node before
+                if (node->f <= f) //if got here with shorter travel time before
+                    continue;
+
+            /*
+               TerrainClass* tempNode;
+
+               if ((tempNode = open->findNodeWithKey(tempLocation)))
+               {
+                if (tempNode->f <= f)
+                 continue;
+
+                open->removeNodeWithKey(tempLocation);
+               }
+            */
+            node->cost = cost;
+
+            node->heuristic = heuristic;
+
+            node->f = f;
+
+            node->parent = parent_node;
+
+            open->push(node);
+        }
+    }
+}
+
+bool UnitClass::AStarSearch()
+{
+    MapClass* map = m_owner->getMap();
+    int numNodesChecked = 0;
+    UPoint checkedPoint;
+
+    TerrainClass *node = map->getCell(x, y);//initialise the current node the object is on
+
+    if (m_target)
+        checkedPoint = m_target->getClosestPoint(UPoint(x, y));
+    else
+        checkedPoint = m_destination;
+
+    node->f = node->heuristic = blockDistance(UPoint(x, y), checkedPoint);
+
+    /*for (int i=0; i<max(map->sizeX, map->sizeY)-1; i++)
+     if (map->depthCheckCount[i] != 0) //very very bad if this happens, check if its in visited list and being reset to not visited
+      selected = true;*/
+
+    //if the unit is not directly next to its dest, or it is and the dest is unblocked
+    if ((node->heuristic > 1.5) || canPass(checkedPoint))
+    {
+        double smallestHeuristic = node->heuristic;
+        PriorityQ open;
+        std::list<TerrainClass*> visitedList;
+        TerrainClass    *bestDest = NULL; //if we dont find path to destination, we will head here instead
+
+        node->next = node->parent = node->previous = NULL;
+        node->cost = 0.0;
+        open.push(node);
+
+        //short maxDepth = max(map->sizeX, map->sizeY),
+        short  depth;
+
+        while (!open.empty())
+        {
+            //take the closest node to target out of the queue
+            node = open.top();
+            open.pop();
+
+            if (node->heuristic < smallestHeuristic)
+            {
+                smallestHeuristic = node->heuristic;
+                bestDest = node;
+
+                if (node->heuristic == 0.0) //if the distance from this node to dest is zero, ie this is the dest node
+                    break; //ive found my dest!
+            }
+
+            if (numNodesChecked < Settings::Instance()->GetMaxSearchPath())
+            {
+                nodePushSuccesors(&open, node);
+            }
+
+            if (!node->m_visited)
+            {
+                depth = std::max(abs(node->x - checkedPoint.x), abs(node->y - checkedPoint.y));
+
+                if (++map->depthCheckCount[depth] >= map->depthCheckMax[checkedPoint.x][checkedPoint.y][depth])
+                    break; //we have searched a whole square around destination, it cant be reached
+
+                visitedList.push_front(node);   //so know which ones to reset to unvisited
+
+                node->m_visited = true;
+
+                numNodesChecked++;
+
+                //if (debug) //see all spots checked
+                // owner->placeUnit(Unit_Carryall, node->location.x, node->location.y);
+            }
+        }
+
+        while (!visitedList.empty())
+        {
+            node = visitedList.front();
+            visitedList.pop_front();
+            node->m_visited = false;
+            depth = std::max(abs(node->x - checkedPoint.x), abs(node->y - checkedPoint.y));
+            map->depthCheckCount[depth] = 0;
+        }
+
+        //go to closest point to dest if is one
+
+        if (bestDest != NULL)
+        {
+            node = bestDest;
+
+            while (node->parent != NULL)
+            {
+                LOG_INFO("UnitClass", "Pushing next spot %d-%d", node->x, node->y);
+                m_nextSpot = UPoint(node->x, node->y);
+                m_pathList.push_back(UPoint(node->x, node->y));
+                //if (debug) //see final path
+                //getOwner()->placeUnit(Unit_Carryall, nextSpot.x, nextSpot.y);
+                node = node->parent;
+            }
+
+            LOG_INFO("UnitClass", "Astar result %d at %d,%d to %d, %d: %d", m_itemID, x, y, m_destination.x, m_destination.y, numNodesChecked);
+
+            return true;
+        }
+    }
+
+    //no closer point found
+    return false;
+}
+

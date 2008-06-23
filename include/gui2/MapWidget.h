@@ -4,8 +4,12 @@
 #include "gui2/Widget.h"
 #include "Gfx.h"
 #include "MapClass.h"
+
+#include "ObjectClass.h"
 #include "structures/StructureClass.h"
 #include "units/UnitClass.h"
+
+#include <vector>
 /*!
  *  Widget used to display battle scene
  *  Since we're not using global variables anymore, it's got to have pointers
@@ -31,6 +35,8 @@ class MapWidget : public Widget {
     //@{
     bool handleMotion(SPoint p);
     bool handleKeyDown(SDL_keysym* key);
+    bool handleButtonDown(Uint8 button, SPoint p);
+    bool handleButtonUp(Uint8 button, SPoint p);    
     //@}
     void setGameState(GameState* gs);
 
@@ -58,6 +64,7 @@ class MapWidget : public Widget {
      *        It's a bit confusing.
      */
     SPoint m_view;
+    std::vector<ObjectClass*> m_selectedList;    
 };
 
 #endif // DUNE_MAPWIDGET_H
