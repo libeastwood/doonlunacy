@@ -140,7 +140,7 @@ void MainMenuState::doOptions()
 void MainMenuState::doSkirmish()
 {
     printf("skirmish!\n");
-    SoundPlayer::Instance()->playMusic(MUSIC_ATTACK, 1);
+    SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 3);
     
 #if 0
     Rect rect(0,0,30, 30);

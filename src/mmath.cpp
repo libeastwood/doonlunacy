@@ -63,12 +63,12 @@ int roundUp(double number)
 	return result;
 }
 
-double dest_angle(COORDTYPE* p1, COORDTYPE* p2)
+double dest_angle(UPoint p1, UPoint p2)
 {
         double  destAngle;
 
-        double  diffX = p2->x - p1->x,
-                diffY = p2->y - p1->y;
+        double  diffX = p2.x - p1.x,
+                diffY = p2.y - p1.y;
 
         if (diffX != 0)
         {
@@ -174,10 +174,10 @@ double nearest_coord(double from, double to, double max)
   return(from - min_delta(from, to, max));
 }
 */
-double distance_from(COORDTYPE* p1, COORDTYPE* p2)
+double distance_from(UPoint p1, UPoint p2)
 {
-	double	first = (p1->x - p2->x),
-			second = (p1->y - p2->y);
+	double	first = (p1.x - p2.x),
+			second = (p1.y - p2.y);
 
 	return(sqrt(first*first + second*second));
 }
@@ -192,37 +192,37 @@ double hypotinuse_of(double x, double y)
 {
 	return(sqrt((x * x) + (y * y)));
 }
-double blockDistance(COORDTYPE* p1, COORDTYPE* p2)
+double blockDistance(UPoint p1, UPoint p2)
 {
-	int xDis = abs(p1->x - p2->x),
-		yDis = abs(p1->y - p2->y),
+	int xDis = abs(p1.x - p2.x),
+		yDis = abs(p1.y - p2.y),
 		minDis = std::min(xDis, yDis);
 
 	return ((double)std::max(xDis, yDis) + (double)minDis*(DIAGONALCOST - 1.0));
 	//return (((double)minDis)*DIAGONALCOST + max(xDis, yDis) - minDis);
 }
 
-double closestBlockDistance(COORDTYPE* objectLocation, COORDTYPE* targetLocation, COORDTYPE* size)
+double closestBlockDistance(UPoint objectLocation, UPoint targetLocation, UPoint size)
 {
-	COORDTYPE closestPoint;
+	UPoint closestPoint;
 
 	//find the closest cell of a structure from a location
-	if (objectLocation->x <= targetLocation->x)	//if we are left of the structure
-		closestPoint.x = targetLocation->x;	//set destination, left most point
-	else if (objectLocation->x >= (targetLocation->x + size->x-1))	//vica versa
-		closestPoint.x = targetLocation->x + size->x-1;
+	if (objectLocation.x <= targetLocation.x)	//if we are left of the structure
+		closestPoint.x = targetLocation.x;	//set destination, left most point
+	else if (objectLocation.x >= (targetLocation.x + size.x-1))	//vica versa
+		closestPoint.x = targetLocation.x + size.x-1;
 	else
-		closestPoint.x = objectLocation->x;	//we are above or below at least on cell of the structure, closest path is straight
+		closestPoint.x = objectLocation.x;	//we are above or below at least on cell of the structure, closest path is straight
 
 	//same deal but with y
-	if (objectLocation->y <= targetLocation->y)
-		closestPoint.y = targetLocation->y;
-	else if (objectLocation->y >= (targetLocation->y + size->y-1))
-		closestPoint.y = targetLocation->y + size->y-1;
+	if (objectLocation.y <= targetLocation.y)
+		closestPoint.y = targetLocation.y;
+	else if (objectLocation.y >= (targetLocation.y + size.y-1))
+		closestPoint.y = targetLocation.y + size.y-1;
 	else
-		closestPoint.y = objectLocation->y;
+		closestPoint.y = objectLocation.y;
 
-	return blockDistance(objectLocation, &closestPoint);
+	return blockDistance(objectLocation, closestPoint);
 }
 
 

@@ -4,8 +4,7 @@
 WallClass::WallClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
     m_itemID = Structure_Wall;
-    w = 1;
-	h = 1;
+    w = h = 16;
     m_animFrames = 1;
 //	m_drawnAngle = Structure_w8;
 	m_maxHealth = 500;

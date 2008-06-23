@@ -24,11 +24,13 @@ class StructureClass : public ObjectClass
     virtual void destroy() {};
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
+    void drawStructure(Image * dest);
+    void drawSelectRect(Image * dest);
     
     virtual void update();
 
     void setJustPlaced();
-    
+
   protected:
     int m_powerRequirement,
     
@@ -48,6 +50,8 @@ class StructureClass : public ObjectClass
 
      //! Specifies for how long building is going to be shown as under construction (Frame 0)
         m_justPlacedTimer;
+
+    void setDrawnPos(SPoint off, SPoint view);
 };
 
 typedef std::vector<StructureClass*> Structures;

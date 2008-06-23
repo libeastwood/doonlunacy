@@ -42,7 +42,14 @@ class MapClass : public Rect
     };
     
     inline TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
+    UPoint getMapPos(int angle, UPoint source);
+    int getPosAngle(UPoint source, UPoint pos);
+
     void fixWalls(int xPos, int yPos);
+
+    //FIXME:Remove this later or sth.
+    short *depthCheckCount,
+    ***depthCheckMax;
 
   protected:
     void fixWall(int xPos, int yPos);

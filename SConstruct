@@ -66,7 +66,7 @@ env.Append(LIBS = [ "SDL",
                         "SDL_net",
                         "SDL_ttf",
                         "samplerate",
-			"adplug",
+            			"adplug",
                         ])
 
 

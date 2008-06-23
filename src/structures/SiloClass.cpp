@@ -4,8 +4,8 @@
 SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
     m_isAnimating = true;
-    w = 2;
-    h = 2;
+    w = 32;
+    h = 32;
 	m_maxHealth = 100;
 	m_powerRequirement = 5;
 	m_health = m_maxHealth;

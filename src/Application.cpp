@@ -325,10 +325,10 @@ void Application::Run()
         now = SDL_GetTicks();
 
         // dont steal all the processing time 
+        // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
         if (now - then < min_frame_duration)
         {
             SDL_Delay(min_frame_duration -(now - then));
-
             now = SDL_GetTicks();
         };
         
