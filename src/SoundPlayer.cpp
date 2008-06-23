@@ -36,15 +36,14 @@ SoundPlayer::~SoundPlayer() {
 void SoundPlayer::changeEmuOpl(EMUOPL oplType){
     	int freq, channels;
     	Uint16 format;
+	if(Mix_GetMusicHookData())
+		Mix_HookMusic(NULL, NULL);
+	Mix_QuerySpec(&freq, &format, &channels);
 
 	if(m_opl)
 		delete m_opl;
 	if(m_player)
 		delete m_player;
-
-	if(Mix_GetMusicHookData())
-		Mix_HookMusic(NULL, NULL);
-	Mix_QuerySpec(&freq, &format, &channels);
 
 	switch(oplType){
 		case C_EMUOPL:
@@ -58,7 +57,6 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType){
 			break;
 	}
 	m_player = new AdlibPlayer(m_opl);
-	Mix_HookMusic(m_player->callback, m_player);
 }
 
 void SoundPlayer::VoiceChunkFinishedCallback(int channel) {

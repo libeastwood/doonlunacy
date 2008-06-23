@@ -19,7 +19,6 @@ MainMenuState::MainMenuState()
     //m_menu->setHeight(m_menuBackground->h);
     //m_menu->setWidth(m_menuBackground->w);
 
-	m_songPlaying = false;
     m_vbox = new VBox();
 
     const int bw = 200;
@@ -190,9 +189,8 @@ void MainMenuState::JustMadeInactive()
 
 int MainMenuState::Execute(float dt)
 {
-	if(!m_songPlaying){
+	if(!Mix_GetMusicHookData()){
 		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
-		m_songPlaying = true;
 	}
 	m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2,
 				Settings::Instance()->GetHeight() / 4));
