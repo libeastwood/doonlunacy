@@ -30,6 +30,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
     SoundPlayer();
     ~SoundPlayer();
     //@}
+	void changeEmuOpl(EMUOPL oplType);
   
 	void playVoice(Sound_enum soundID, HOUSETYPE house);
 

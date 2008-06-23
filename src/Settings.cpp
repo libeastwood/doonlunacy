@@ -1,9 +1,10 @@
 #include <fstream>
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 
 #include "Settings.h"
 #include "Strings.h"
 #include "ResMan.h"
+#include "SoundPlayer.h"
 
 SETTINGSTYPE settings;
 
@@ -46,6 +47,8 @@ void Settings::load()
     ConfigFile::bind(".sound.voice_volume", configFile, m_voiceVolume, 128);        
     ConfigFile::bind(".sound.music_on", configFile, m_musicOn, true);
     ConfigFile::bind(".sound.music_volume", configFile, m_musicVolume, MIX_MAX_VOLUME/2);
+    ConfigFile::bind(".sound.opl_emulator", configFile, m_emuOpl, (int)CT_EMUOPL);
+
     
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
 
@@ -88,5 +91,36 @@ void Settings::ParseFile(const char* fn)
 
 void Settings::ParseOptions(int argc, char* argv[])
 {
+
+}
+
+EMUOPL Settings::GetEmuOpl() {
+	// Don't permit other values, in such case, default to CT_EMUOPL
+	switch(m_emuOpl){
+		case CT_EMUOPL:
+		case C_EMUOPL:
+		case CK_EMUOPL:
+			break;
+		default:
+			m_emuOpl = CT_EMUOPL;
+			break;
+	}
+	return (EMUOPL)m_emuOpl;
+}
+
+EMUOPL Settings::ToggleEmuOpl(){
+	switch(m_emuOpl){
+		case CT_EMUOPL:
+			m_emuOpl = C_EMUOPL;
+			break;
+		case C_EMUOPL:
+			m_emuOpl = CK_EMUOPL;
+			break;
+		case CK_EMUOPL:
+			m_emuOpl = CT_EMUOPL;
+			break;
+	}
+	SoundPlayer::Instance()->changeEmuOpl((EMUOPL)m_emuOpl);
+	return (EMUOPL)m_emuOpl;
 
 }

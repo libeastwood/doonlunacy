@@ -736,4 +736,9 @@ typedef enum {
 	Unit_Trooper = 59	
 } ObjectID_enum;
 
+typedef enum {
+	CT_EMUOPL = 1,	
+	C_EMUOPL,
+	CK_EMUOPL
+} EMUOPL;
 #endif // DUNE_DEFINITIONS_H

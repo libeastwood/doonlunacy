@@ -6,6 +6,7 @@
 #include <string>
 
 #include "DuneConstants.h"
+#include "Definitions.h"
 
 typedef struct
 {
@@ -96,6 +97,8 @@ class Settings: public Singleton<Settings>
     	//! music volume
 	int	m_musicVolume;
 
+	int m_emuOpl;
+
 	std::string m_dataDir;
         
 	ConfigFile::NodePtr configFile;
@@ -116,13 +119,16 @@ class Settings: public Singleton<Settings>
 	inline bool GetDoubleBuffered() { return m_doubleBuffered; }
 
 	std::string GetDataDir() { return m_dataDir; }
+
+	EMUOPL GetEmuOpl();
         
 	bool GetSound() { return m_soundOn; }
 	bool GetMusic() { return m_musicOn; }
 	bool GetPlayIntro() { return m_playIntro; }
-	void ToggleSound() {m_soundOn = !m_soundOn; }
-	void ToggleMusic() {m_musicOn = !m_musicOn; }
+	void ToggleSound() { m_soundOn = !m_soundOn; }
+	void ToggleMusic() { m_musicOn = !m_musicOn; }
 	void ToggleIntro() { m_playIntro = !m_playIntro; }
+	EMUOPL ToggleEmuOpl();
 
 };
 

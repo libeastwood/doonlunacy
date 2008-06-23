@@ -3,6 +3,8 @@
 #include <math.h>
 #include <adl.h>
 #include <emuopl.h>
+#include <kemuopl.h>
+#include <temuopl.h>
 
 #include "mmath.h"
 #include "DataCache.h"
@@ -20,12 +22,9 @@ SoundPlayer::SoundPlayer() {
     	m_musicChannel = Mix_ReserveChannels(1);
     	Mix_Volume(m_musicChannel, set->m_musicVolume);
 
-    	int freq, channels;
-    	Uint16 format;
-
-    	Mix_QuerySpec(&freq, &format, &channels);
-    	m_opl = new CEmuopl(freq, true, true);
-    	m_player = new AdlibPlayer(m_opl);
+	m_opl = NULL;
+	m_player = NULL;
+	changeEmuOpl(Settings::Instance()->GetEmuOpl());
 }
 
 SoundPlayer::~SoundPlayer() {
@@ -34,7 +33,33 @@ SoundPlayer::~SoundPlayer() {
 	if(m_player) delete m_player;
 }
 
+void SoundPlayer::changeEmuOpl(EMUOPL oplType){
+    	int freq, channels;
+    	Uint16 format;
 
+	if(m_opl)
+		delete m_opl;
+	if(m_player)
+		delete m_player;
+
+	if(Mix_GetMusicHookData())
+		Mix_HookMusic(NULL, NULL);
+	Mix_QuerySpec(&freq, &format, &channels);
+
+	switch(oplType){
+		case C_EMUOPL:
+			m_opl = new CEmuopl(freq, true, true);
+			break;
+		case CT_EMUOPL:
+			m_opl = new CTemuopl(freq, true, true);
+			break;
+		case CK_EMUOPL:
+			m_opl = new CKemuopl(freq, true, true);
+			break;
+	}
+	m_player = new AdlibPlayer(m_opl);
+	Mix_HookMusic(m_player->callback, m_player);
+}
 
 void SoundPlayer::VoiceChunkFinishedCallback(int channel) {
 //	if(channel == m_voiceChannel) {
