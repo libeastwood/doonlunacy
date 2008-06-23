@@ -6,6 +6,7 @@
 #include <kemuopl.h>
 #include <temuopl.h>
 #include <realopl.h>
+#include <analopl.h>
 
 #include "mmath.h"
 #include "DataCache.h"
@@ -56,8 +57,10 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType){
 		case CK_EMUOPL:
 			m_opl = new CKemuopl(freq, true, true);
 			break;
-		case REAL_EMUOPL:
+		case CREAL_EMUOPL:
 			m_opl = new CRealopl();
+		case CANAL_EMUOPL:
+			m_opl = new CAnalopl();
 	}
 	m_player = new AdlibPlayer(m_opl);
 }

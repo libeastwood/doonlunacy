@@ -100,7 +100,8 @@ EMUOPL Settings::GetEmuOpl() {
 		case CT_EMUOPL:
 		case C_EMUOPL:
 		case CK_EMUOPL:
-		case REAL_EMUOPL:
+		case CREAL_EMUOPL:
+		case CANAL_EMUOPL:
 			break;
 		default:
 			m_emuOpl = CT_EMUOPL;
@@ -118,9 +119,12 @@ EMUOPL Settings::ToggleEmuOpl(){
 			m_emuOpl = CK_EMUOPL;
 			break;
 		case CK_EMUOPL:
-			m_emuOpl = REAL_EMUOPL;
+			m_emuOpl = CREAL_EMUOPL;
 			break;
-		case REAL_EMUOPL:
+		case CREAL_EMUOPL:
+			m_emuOpl = CANAL_EMUOPL;
+			break;
+		case CANAL_EMUOPL:
 			m_emuOpl = CT_EMUOPL;
 			break;
 	}
