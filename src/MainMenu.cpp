@@ -90,28 +90,68 @@ MainMenuState::MainMenuState()
 //we'll be doing a lot of image cropping like this
 
     int len;
-    unsigned char * data = ResMan::Instance()->readFile("MENTAT:FARTR.WSA", &len);
+    unsigned char * data = ResMan::Instance()->readFile("FINALE:MAPPLAN.CPS", &len);
 
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
+//TODO(proyvind): This isn't all that pretty right now, more a proof of concept
+//                based on work done previously with imagemagick.
+//                This should all be moved to some separate class with standard
+//                functions for drawing frames etc..
+//                
+    CpsfilePtr m_cps (new Cpsfile(data, len));
 
-    WsafilePtr m_wsa (new Wsafile(data, len));
+    ImagePtr tmp (m_cps->getPicture());
+    m_surf.reset(m_cps->getPicture());
+    m_surf->blitFromCentered(tmp.get());
 
-    ImagePtr tmp (m_wsa->getPicture(1, palette));
-    m_surf.reset(new Image(UPoint(258, 65)));
-    Rect src (6,31, 82, 65);
-    m_surf->blitFrom(tmp.get(), src, UPoint(0, 0));
+    data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
+    m_cps.reset(new Cpsfile(data, len));
+    tmp.reset(m_cps->getPicture());
+    m_surf->blitFrom(tmp.get(), Rect(64, 9, 8, 8), UPoint(0, 0)); // nw corner
+    m_surf->putPixel(UPoint(6,7), 0); // Edge smoothing..
+    m_surf->putPixel(UPoint(7,6), 0);
+    m_surf->putPixel(UPoint(7,7), 0);
+    
+    m_surf->blitFrom(tmp.get(), Rect(64,23, 8, 8), UPoint(312, 0)); // ne
+    m_surf->putPixel(UPoint(312,6), 0); // Edge smoothing..
+    m_surf->putPixel(UPoint(312,7), 0);
+    m_surf->putPixel(UPoint(313,7), 0);
 
-    data = ResMan::Instance()->readFile("MENTAT:FHARK.WSA", &len);
-    m_wsa.reset(new Wsafile(data, len));
-    tmp.reset(m_wsa->getPicture(1, palette));
-    m_surf->blitFrom(tmp.get(), src, UPoint(88, 0));
+    m_surf->blitFrom(tmp.get(), Rect(248, 9, 8, 8), UPoint(0, 192)); // sw
+    m_surf->putPixel(UPoint(6,192), 0); // Edge smoothing..
+    m_surf->putPixel(UPoint(7,192), 0);
+    m_surf->putPixel(UPoint(7,193), 0);
+    
+    m_surf->blitFrom(tmp.get(), Rect(248, 23, 8, 8), UPoint(312, 192)); // se
+    m_surf->putPixel(UPoint(312,192), 0); // Edge smoothing..
+    m_surf->putPixel(UPoint(312,193), 0);
+    m_surf->putPixel(UPoint(313,192), 0);
+    
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(8, 0)); // top border
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(58, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(108, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(158, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(208, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(258, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(262, 0));
 
-    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
-    m_wsa.reset(new Wsafile(data, len));
-    tmp.reset(m_wsa->getPicture(1, palette));
-    m_surf->blitFrom(tmp.get(), src, UPoint(176, 0));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(8, 196)); // bottom border
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(58, 196));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(108, 196));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(158, 196));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(208, 196));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(258, 196));
+    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(262, 196));
 
-    m_surf = m_surf->getResized(2);
+
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 8)); // left border
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 58));
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 108));
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 142));
+
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 8)); // right border
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 58));
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 108));
+    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 142));
 
 }
 
