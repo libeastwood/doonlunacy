@@ -465,8 +465,6 @@ void DataCache::Init(){
 	addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 3);
 	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
 
-	delete data;
-
 }
 
 void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
