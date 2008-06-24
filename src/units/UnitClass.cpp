@@ -113,7 +113,8 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
             rect.y = off.y + (*iter).y * BLOCKSIZE - view.y * BLOCKSIZE + BLOCKSIZE / 2;
             rect.w = 2;
             rect.h = 2;
-            dest->drawRect(rect, COLOUR_RED);
+            //FIXME:It turns out that colours are not associated correctly. ORDOS == PINK, HARKONNEN == BLUE???
+            dest->drawRect(rect, m_owner->getColour());
             iter++;
         }
     }

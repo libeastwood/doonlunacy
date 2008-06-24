@@ -195,5 +195,5 @@ void OptionsMenuState::doScreenMode()
     Application::Instance()->UpdateVideoMode(newSetting);
 
     newSetting ? m_butWindowMode->setCaption("Fullscreen") :
-        m_butWindowMode->setCaption("Window mode");
+    m_butWindowMode->setCaption("Window mode");
 }

@@ -16,7 +16,6 @@
 
 #include "pakfile/sound/Vocfile.h"
 
-<<<<<<< TREE
 SoundPlayer::SoundPlayer()
 {
 
@@ -69,6 +68,12 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType)
         case CK_EMUOPL:
             m_opl = new CKemuopl(freq, true, true);
             break;
+
+        case CREAL_EMUOPL:
+            m_opl = new CRealopl();
+
+        case CANAL_EMUOPL:
+            m_opl = new CAnalopl();
     }
 
     m_player = new AdlibPlayer(m_opl);
@@ -79,61 +84,6 @@ void SoundPlayer::VoiceChunkFinishedCallback(int channel)
 // if(channel == m_voiceChannel) {
 //  PlayingVoiceATM = false;
 // }
-=======
-SoundPlayer::SoundPlayer() {
-
-    	Settings * set = Settings::Instance();
-	Mix_Volume(-1, set->m_sfxVolume);
-
-    	m_musicChannel = Mix_ReserveChannels(1);
-    	Mix_Volume(m_musicChannel, set->m_musicVolume);
-
-	m_opl = NULL;
-	m_player = NULL;
-	changeEmuOpl(Settings::Instance()->GetEmuOpl());
-}
-
-SoundPlayer::~SoundPlayer() {
-	Mix_HookMusic(NULL, NULL);
-	if(m_opl) delete m_opl;
-	if(m_player) delete m_player;
-}
-
-void SoundPlayer::changeEmuOpl(EMUOPL oplType){
-    	int freq, channels;
-    	Uint16 format;
-	if(Mix_GetMusicHookData())
-		Mix_HookMusic(NULL, NULL);
-	Mix_QuerySpec(&freq, &format, &channels);
-
-	if(m_opl)
-		delete m_opl;
-	if(m_player)
-		delete m_player;
-
-	switch(oplType){
-		case C_EMUOPL:
-			m_opl = new CEmuopl(freq, true, true);
-			break;
-		case CT_EMUOPL:
-			m_opl = new CTemuopl(freq, true, true);
-			break;
-		case CK_EMUOPL:
-			m_opl = new CKemuopl(freq, true, true);
-			break;
-		case CREAL_EMUOPL:
-			m_opl = new CRealopl();
-		case CANAL_EMUOPL:
-			m_opl = new CAnalopl();
-	}
-	m_player = new AdlibPlayer(m_opl);
-}
-
-void SoundPlayer::VoiceChunkFinishedCallback(int channel) {
-//	if(channel == m_voiceChannel) {
-//		PlayingVoiceATM = false;
-//	}
->>>>>>> MERGE-SOURCE
 }
 
 void SoundPlayer::playSound(Sound_enum soundID, int volume)

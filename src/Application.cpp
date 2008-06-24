@@ -397,6 +397,9 @@ void Application::HandleEvents()
                                                 SPoint(event.button.x, event.button.y));
                 break;
             case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_F11)
+                    UpdateVideoMode(!Settings::Instance()->GetFullScreen());
+            
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
                 break;
             case SDL_KEYUP:
