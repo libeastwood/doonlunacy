@@ -87,7 +87,7 @@ Frame2::Frame2(Image *image, UPoint size) : Frame(image,
 }
 
 Frame2::Frame2(Uint32 color, ConstUPoint size, Image *background) : Frame(color,
-        size, UI_Corner3NW, UI_Corner2NE, UI_Corner2SW, UI_Corner2SE, background)
+        size, UI_Corner2NW, UI_Corner2NE, UI_Corner2SW, UI_Corner2SE, background)
 {
 }
 
