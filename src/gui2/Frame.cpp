@@ -35,31 +35,30 @@ Frame::Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
 void Frame::drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se)
 {
-    ImagePtr tmp1;
-    ImagePtr tmp2;
+    ImagePtr corner_nw, corner_ne, corner_sw, corner_se, top, bottom, left, right;
+    
+    corner_nw = DataCache::Instance()->getGuiPic(nw);
+    m_surface->blitFrom(corner_nw.get(), UPoint(0,0));
+    corner_ne = DataCache::Instance()->getGuiPic(ne);
+    m_surface->blitFrom(corner_ne.get(), UPoint(size.x - corner_ne->getSize().x, 0));
+    corner_sw = DataCache::Instance()->getGuiPic(sw);
+    m_surface->blitFrom(corner_sw.get(), UPoint(0, size.y - corner_sw->getSize().y));
+    corner_se = DataCache::Instance()->getGuiPic(se);
+    m_surface->blitFrom(corner_se.get(), UPoint(size.x - corner_se->getSize().x, size.y - corner_se->getSize().y));
 
-    tmp1 = DataCache::Instance()->getGuiPic(nw); //.get());
-    m_surface->blitFrom(tmp1.get(), UPoint(0,0));
-    tmp1 = DataCache::Instance()->getGuiPic(ne);
-    m_surface->blitFrom(tmp1.get(), UPoint(size.x - tmp1->getSize().x, 0));
-    tmp1 = DataCache::Instance()->getGuiPic(sw);
-    m_surface->blitFrom(tmp1.get(), UPoint(0, size.y - tmp1->getSize().y));
-    tmp1 = DataCache::Instance()->getGuiPic(se);
-    m_surface->blitFrom(tmp1.get(), UPoint(size.x - tmp1->getSize().x, size.y - tmp1->getSize().y));
+    top = DataCache::Instance()->getGuiPic(UI_TopBorder);
+    bottom = DataCache::Instance()->getGuiPic(UI_BottomBorder);
 
-    tmp1 = DataCache::Instance()->getGuiPic(UI_TopBorder);
-    tmp2 = DataCache::Instance()->getGuiPic(UI_BottomBorder);
-
-    for(int i = 9; i < size.x - 12; i++){
-        m_surface->blitFrom(tmp1.get(), UPoint(i, 0));
-        m_surface->blitFrom(tmp2.get(), UPoint(i, size.y - tmp2->getSize().y));
+    for(int i = corner_se->getSize().x; i < size.x - corner_se->getSize().y; i++){
+        m_surface->blitFrom(top.get(), UPoint(i, 0));
+        m_surface->blitFrom(top.get(), UPoint(i, size.y - bottom->getSize().y));
     }
 
-    tmp1 = DataCache::Instance()->getGuiPic(UI_LeftBorder);
-    tmp2 = DataCache::Instance()->getGuiPic(UI_RightBorder);
-    for(int i = 12; i < size.y - 10; i++){
-        m_surface->blitFrom(tmp1.get(), UPoint(0, i));
-        m_surface->blitFrom(tmp2.get(), UPoint(size.x - tmp2->getSize().x, i));
+    left = DataCache::Instance()->getGuiPic(UI_LeftBorder);
+    right = DataCache::Instance()->getGuiPic(UI_RightBorder);
+    for(int i = corner_ne->getSize().y; i < size.y - corner_se->getSize().x; i++){
+        m_surface->blitFrom(left.get(), UPoint(0, i));
+        m_surface->blitFrom(right.get(), UPoint(size.x - right->getSize().x, i));
     }
 }
 
