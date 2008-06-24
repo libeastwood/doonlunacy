@@ -11,6 +11,8 @@
 #include "gui2/Container.h"
 #include "gui2/Label.h"
 
+#define VERSION "0.95"
+
 typedef enum
 {
 	CURSOR_NORMAL,
