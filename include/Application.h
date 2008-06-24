@@ -80,7 +80,7 @@ class Application : public Singleton<Application>
 
         Uint16 m_cursorX, m_cursorY;
         Cursor m_cursorFrame;
-        ImagePtr m_cursor;
+        ConstImagePtr m_cursor;
 
         Uint32 m_clearColor;
 };
