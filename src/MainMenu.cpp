@@ -11,6 +11,7 @@
 #include "SoundPlayer.h"
 
 #include "pakfile/Wsafile.h"
+#include "gui2/Frame.h"
 
 MainMenuState::MainMenuState()
 {
@@ -23,7 +24,7 @@ MainMenuState::MainMenuState()
 
     const int bw = 200;
     const int bh = 24;
-    
+
     m_butSingle = new BoringButton("Single Player");
     m_butSingle->setSize(SPoint(bw, bh));
     //m_butSingle = new GraphicButton((SDL_Surface*)(dataFile[UI_Single].dat),
@@ -86,9 +87,13 @@ MainMenuState::MainMenuState()
     
     m_container->addChild(m_vbox);
 
-//TODO:I guess that most of this should be wrapped into some function as
-//we'll be doing a lot of image cropping like this
 
+    Frame3 backgroundFrame(0, UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()), DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+//    m_surf.reset(backgroundFrame.getPicture().get());
+
+    m_surf.reset(new Image(UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight() )));
+
+    m_surf->blitFrom(backgroundFrame.getPicture().get());
     int len;
     unsigned char * data = ResMan::Instance()->readFile("FINALE:MAPPLAN.CPS", &len);
 
@@ -99,59 +104,22 @@ MainMenuState::MainMenuState()
 //                
     CpsfilePtr m_cps (new Cpsfile(data, len));
 
-    ImagePtr tmp (m_cps->getPicture());
-    m_surf.reset(m_cps->getPicture());
-    m_surf->blitFromCentered(tmp.get());
-
-    data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
-    m_cps.reset(new Cpsfile(data, len));
-    tmp.reset(m_cps->getPicture());
-    m_surf->blitFrom(tmp.get(), Rect(64, 9, 8, 8), UPoint(0, 0)); // nw corner
-    m_surf->putPixel(UPoint(6,7), 0); // Edge smoothing..
-    m_surf->putPixel(UPoint(7,6), 0);
-    m_surf->putPixel(UPoint(7,7), 0);
-    
-    m_surf->blitFrom(tmp.get(), Rect(64,23, 8, 8), UPoint(312, 0)); // ne
-    m_surf->putPixel(UPoint(312,6), 0); // Edge smoothing..
-    m_surf->putPixel(UPoint(312,7), 0);
-    m_surf->putPixel(UPoint(313,7), 0);
-
-    m_surf->blitFrom(tmp.get(), Rect(248, 9, 8, 8), UPoint(0, 192)); // sw
-    m_surf->putPixel(UPoint(6,192), 0); // Edge smoothing..
-    m_surf->putPixel(UPoint(7,192), 0);
-    m_surf->putPixel(UPoint(7,193), 0);
-    
-    m_surf->blitFrom(tmp.get(), Rect(248, 23, 8, 8), UPoint(312, 192)); // se
-    m_surf->putPixel(UPoint(312,192), 0); // Edge smoothing..
-    m_surf->putPixel(UPoint(312,193), 0);
-    m_surf->putPixel(UPoint(313,192), 0);
-    
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(8, 0)); // top border
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(58, 0));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(108, 0));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(158, 0));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(208, 0));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(258, 0));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(262, 0));
-
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(8, 196)); // bottom border
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(58, 196));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(108, 196));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(158, 196));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(208, 196));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(258, 196));
-    m_surf->blitFrom(tmp.get(), Rect(12, 73, 50, 4), UPoint(262, 196));
+    ImagePtr tmp;
+    Frame planet(m_cps->getPicture(), UPoint(320, 200));
+    tmp = planet.getPicture();
+    // Not satisfied with this recoloring, what goes wrong here..?
+    tmp->recolor(COLOUR_HARKONNEN, 87);
+    tmp->recolor(92, 95);
+    m_surf->blitFrom(tmp.get(), UPoint(150, 68));
 
 
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 8)); // left border
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 58));
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 108));
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(0, 142));
-
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 8)); // right border
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 58));
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 108));
-    m_surf->blitFrom(tmp.get(), Rect(1, 83, 4, 50), UPoint(316, 142));
+    tmp.reset(new Image(UPoint(192, 153)));
+    Frame menuTopFrame(236, UPoint(192,19));
+    tmp->blitFrom(menuTopFrame.getPicture().get(), UPoint(0, 0));
+    Frame2 menuBottomFrame((Uint32)0, UPoint(192, 134));
+    tmp->setColorKey();
+    tmp->blitFrom(menuBottomFrame.getPicture().get(), UPoint(0, 20));
+    m_surf->blitFrom(tmp.get(), UPoint(219, 276));
 
 }
 
@@ -232,7 +200,7 @@ int MainMenuState::Execute(float dt)
 	if(!Mix_GetMusicHookData()){
 		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
 	}
-	m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2,
-				Settings::Instance()->GetHeight() / 4));
+	m_surf->blitToScreen(SPoint(0, 0));//Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2,
+//				Settings::Instance()->GetHeight() / 4));
 	return 0;
 }

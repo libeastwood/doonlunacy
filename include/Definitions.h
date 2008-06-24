@@ -189,6 +189,23 @@ typedef enum {
 	UI_MapChoiceMapOnly,
 	UI_MapChoiceMap,
 	UI_MapChoiceClickMap,
+    UI_TopBorder,
+    UI_BottomBorder,
+    UI_LeftBorder,
+    UI_RightBorder,
+    UI_Corner1NW,
+    UI_Corner1NE,
+    UI_Corner1SW,
+    UI_Corner1SE,
+    UI_Corner2NW,
+    UI_Corner2NE,
+    UI_Corner2SW,
+    UI_Corner2SE,
+    UI_Corner3NW,
+    UI_Corner3NE,
+    UI_Corner3SW,
+    UI_Corner3SE,
+    UI_BlankFiller,
 	NUM_UIGRAPHICS
 } GuiPic_enum;
 

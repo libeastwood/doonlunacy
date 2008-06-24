@@ -21,6 +21,7 @@ void DataCache::Init(){
 	soundChunk.resize(NUM_SOUNDCHUNK);
     int len, maplen;
     uint8_t *data, *mapdata;
+    Image *tmp;
 
     ResMan::Instance()->addRes("ENGLISH");
 
@@ -110,6 +111,10 @@ void DataCache::Init(){
 	ShpfilePtr pieces(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
 	ShpfilePtr arrows(new Shpfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
+    CpsfilePtr fame(new Cpsfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
+    CpsfilePtr mapmach(new Cpsfile(data, len));
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
 	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
@@ -330,6 +335,95 @@ void DataCache::Init(){
 //	SDL_SetColorKey(UIGraphic,UI_MapChoiceMap][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	addGuiPic(UI_MapChoiceClickMap, rgnclk->getPicture());
 
+    addGuiPic(UI_TopBorder, fame->getSubPicture(12, 73, 1, 4));
+    addGuiPic(UI_BottomBorder, fame->getSubPicture(12, 72, 1, 4));
+    addGuiPic(UI_LeftBorder, fame->getSubPicture(1, 83, 4, 1));
+    addGuiPic(UI_RightBorder, fame->getSubPicture(1, 83, 4, 1));
+
+    tmp = fame->getSubPicture(64, 9, 8, 8);
+    tmp->setColorKey();
+    tmp->putPixel(UPoint(6,7), 0); // Edge smoothing..
+    tmp->putPixel(UPoint(7,6), 0);
+    tmp->putPixel(UPoint(7,7), 0);
+    addGuiPic(UI_Corner1NW, tmp);
+
+    tmp = fame->getSubPicture(64, 23, 8, 8);
+    tmp->setColorKey();
+    tmp->putPixel(UPoint(0,6), 0); // Edge smoothing..
+    tmp->putPixel(UPoint(0,7), 0);
+    tmp->putPixel(UPoint(1,7), 0);
+    addGuiPic(UI_Corner1NE, tmp);
+    
+    tmp = fame->getSubPicture(248, 9, 8, 8);
+    tmp->setColorKey();
+    tmp->putPixel(UPoint(6,0), 0); // Edge smoothing..
+    tmp->putPixel(UPoint(7,0), 0);
+    tmp->putPixel(UPoint(7,1), 0);
+    addGuiPic(UI_Corner1SW, tmp);
+
+    tmp = fame->getSubPicture(248, 23, 8, 8);
+    tmp->setColorKey();
+    tmp->putPixel(UPoint(0, 0), 0); // Edge smoothing..
+    tmp->putPixel(UPoint(0, 1), 0);
+    tmp->putPixel(UPoint(1, 0), 0);
+    addGuiPic(UI_Corner1SE, tmp);
+
+    tmp = fame->getSubPicture(10, 137, 12, 12);
+    tmp->setColorKey();
+    tmp->drawHLine(UPoint(8, 11), 11, 0); // Edge smoothing..
+    tmp->drawHLine(UPoint(10, 9), 11, 0);
+    tmp->drawVLine(UPoint(11, 11), 4, 0);
+    addGuiPic(UI_Corner2NW, tmp);
+
+    tmp = fame->getSubPicture(51, 137, 12, 12);
+    tmp->setColorKey();
+    tmp->drawVLine(UPoint(0, 4), 11, 0); // Edge smoothing..
+    tmp->drawVLine(UPoint(1, 9), 11, 0);
+    tmp->drawVLine(UPoint(2, 10), 11, 0);
+    tmp->drawHLine(UPoint(2, 11), 6, 0);
+    addGuiPic(UI_Corner2NE, tmp);
+
+    tmp = fame->getSubPicture(10, 180, 10, 11);
+    tmp->setColorKey();
+    tmp->drawHLine(UPoint(2, 0), 9, 0); // Edge smoothing..
+    tmp->drawHLine(UPoint(6, 1), 9, 0);
+    tmp->drawVLine(UPoint(7, 2), 9, 0);
+    tmp->drawVLine(UPoint(8, 3), 4, 0);
+    tmp->drawVLine(UPoint(9, 3), 7, 0);
+    addGuiPic(UI_Corner2SW, tmp);
+
+    tmp = fame->getSubPicture(52, 180, 11, 11);
+    tmp->setColorKey();
+    tmp->drawVLine(UPoint(0, 0), 7, 0); // Edge smoothing..
+    tmp->drawVLine(UPoint(1, 0), 3, 0);
+    tmp->drawVLine(UPoint(2, 0), 2, 0);
+    tmp->drawVLine(UPoint(3, 0), 1, 0);
+    tmp->drawHLine(UPoint(0, 0), 7, 0);
+    addGuiPic(UI_Corner2SE, tmp);
+
+    tmp = fame->getSubPicture(0, 72, 12, 12);
+    tmp->setColorKey();
+    addGuiPic(UI_Corner3NW, tmp);
+
+    tmp = fame->getSubPicture(308, 72, 12, 12);
+    tmp->setColorKey();
+    addGuiPic(UI_Corner3NE, tmp);
+    
+    tmp = fame->getSubPicture(0, 188, 12, 12);
+    tmp->setColorKey();
+    addGuiPic(UI_Corner3SW, tmp);
+
+    tmp = fame->getSubPicture(308, 188, 12, 12);
+    tmp->setColorKey();
+    addGuiPic(UI_Corner3SE, tmp);
+
+    tmp = mapmach->getSubPicture(60, 185, 150, 16);
+    addGuiPic(UI_BlankFiller, tmp);
+
+    // Ugly, needs to be improved..
+    tmp = fame->getSubPicture(0, 0, 50, 50);
+    addGuiPic(UI_MenuBackground, tmp);
+    
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
 	addSoundChunk(Acknowledged, getChunkFromFile("VOC:ZREPORT3.VOC"));
