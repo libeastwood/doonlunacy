@@ -347,23 +347,17 @@ void DataCache::Init(){
     tmp->putPixel(UPoint(7,7), 0);
     addGuiPic(UI_Corner1NW, tmp);
 
-    tmp = fame->getSubPicture(65, 23, 8, 8);
+    tmp = fame->getSubPicture(248, 9, 8, 8);
     tmp->setColorKey();
-    for(int i = 5; i < 8; i++)
-        tmp->blitFrom(fame->getSubPicture(1, 83, 4, 1), UPoint(4,i));
-    tmp->fillRect(0, Rect(0, 5, 2, 3));
+    tmp->fillRect(0, Rect(0, 5, 1, 2));
+    tmp->fillRect(0, Rect(0, 6, 2, 2));
     addGuiPic(UI_Corner1NE, tmp);
     
-    tmp = fame->getSubPicture(248, 10, 8, 8);
+    tmp = fame->getSubPicture(64, 23, 8, 8);
     tmp->setColorKey();
-    for(int i = 5; i < 8; i++)
-        tmp->blitFrom(fame->getSubPicture(12, 72, 1, 4), UPoint(i,3));
     tmp->putPixel(UPoint(6,0), 0);
     tmp->putPixel(UPoint(7,0), 0);
     tmp->putPixel(UPoint(7,1), 0);
-    tmp->fillRect(0, Rect(4, 0, 3, 1)); 
-    tmp->fillRect(0, Rect(5, 1, 3, 1));
-    tmp->fillRect(0, Rect(6, 2, 3, 1));
     addGuiPic(UI_Corner1SW, tmp);
 
     tmp = fame->getSubPicture(248, 23, 8, 8);
