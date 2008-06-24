@@ -115,6 +115,8 @@ void DataCache::Init(){
     CpsfilePtr fame(new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
     CpsfilePtr mapmach(new Cpsfile(data, len));
+    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
+    CpsfilePtr screen(new Cpsfile(data, len));
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
 	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
@@ -420,13 +422,15 @@ void DataCache::Init(){
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
 
-    tmp = mapmach->getSubPicture(60, 185, 150, 16);
-    addGuiPic(UI_BlankFiller, tmp);
+    addGuiPic(UI_BlankFiller, mapmach->getSubPicture(60, 185, 150, 16));
 
     // Ugly, needs to be improved..
-    tmp = fame->getSubPicture(0, 0, 50, 50);
-    addGuiPic(UI_MenuBackground, tmp);
-    
+    addGuiPic(UI_MenuBackground, fame->getSubPicture(0, 0, 50, 50));
+
+    addGuiPic(UI_Mentat_HeraldHarkonnen, fame->getSubPicture(9, 136, 56, 56));
+    addGuiPic(UI_Mentat_HeraldAtreides, fame->getSubPicture(65, 136, 56, 56));
+    addGuiPic(UI_Mentat_HeraldOrdos, fame->getSubPicture(121, 136, 56, 56));
+
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));
 	addSoundChunk(Acknowledged, getChunkFromFile("VOC:ZREPORT3.VOC"));

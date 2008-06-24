@@ -206,6 +206,9 @@ typedef enum {
     UI_Corner3SW,
     UI_Corner3SE,
     UI_BlankFiller,
+    UI_Mentat_HeraldHarkonnen,
+    UI_Mentat_HeraldAtreides,
+    UI_Mentat_HeraldOrdos,
 	NUM_UIGRAPHICS
 } GuiPic_enum;
 

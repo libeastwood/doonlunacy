@@ -22,8 +22,8 @@ MainMenuState::MainMenuState()
 
     m_vbox = new VBox();
 
-    const int bw = 200;
-    const int bh = 24;
+    const int bw = 180;
+    const int bh = 20;
 
     m_butSingle = new BoringButton("Single Player");
     m_butSingle->setSize(SPoint(bw, bh));
@@ -88,7 +88,8 @@ MainMenuState::MainMenuState()
     m_container->addChild(m_vbox);
 
 
-    Frame3 backgroundFrame(0, UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()), DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+    Frame3 backgroundFrame(0, UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()),
+            DataCache::Instance()->getGuiPic(UI_MenuBackground).get(), 3);
     m_surf = backgroundFrame.getPicture();
 
     m_surf->blitFrom(backgroundFrame.getPicture().get());
@@ -114,6 +115,13 @@ MainMenuState::MainMenuState()
     tmp->setColorKey();
     tmp->blitFrom(menuBottomFrame.getPicture().get(), UPoint(0, 20));
     m_surf->blitFrom(tmp.get(), UPoint(219, 276));
+
+    m_surf->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get(), UPoint(11, 11));
+    m_surf->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(534, 11));
+    m_surf->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldOrdos).get(), UPoint(11, 413));
+
+    Frame2 versionBox(116, UPoint(77, 30));
+    m_surf->blitFrom(versionBox.getPicture().get(), UPoint(534, 432));
 }
 
 MainMenuState::~MainMenuState()
