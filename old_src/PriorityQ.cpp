@@ -1,5 +1,3 @@
-//#include "sand.h"
-
 #include "PriorityQ.h"
 #include "TerrainClass.h"
 
@@ -78,7 +76,7 @@ bool PriorityQ::insertObject(void* newObject)
 	return true;
 }
 
-TerrainClass* PriorityQ::findNodeWithKey(COORDTYPE* location)
+TerrainClass* PriorityQ::findNodeWithKey(UPoint location)
 {
 	if (isEmpty())
 		return NULL;
@@ -113,7 +111,7 @@ void* PriorityQ::remove()           // delete item with max key
 	return object;
 }
 */
-TerrainClass* PriorityQ::removeNodeWithKey(COORDTYPE* location)
+TerrainClass* PriorityQ::removeNodeWithKey(UPoint location)
 {
 	if (isEmpty())
 		return NULL;
