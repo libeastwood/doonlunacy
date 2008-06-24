@@ -92,6 +92,14 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                 tmp = m_map->getCell(pos)->getObject();
                 LOG_INFO("MapWidget", "%d-%d", pos.x, pos.y);
 
+
+                if (!m_selectedList.empty())
+                {
+                    m_selectedList.front()->setSelected(false);
+                }
+
+                m_selectedList.clear();
+
                 if (tmp != NULL)
                 {
                     //TODO:Yeah. Add code to unselect units.
@@ -100,15 +108,8 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                     tmp->setSelected(true);
                 }
 
-                else
-                {
-                    if (!m_selectedList.empty())
-                    {
-                        m_selectedList.front()->setSelected(false);
-                    }
 
-                    m_selectedList.clear();
-                }
+
             }
 
             return true;

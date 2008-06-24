@@ -53,8 +53,8 @@ void Settings::load()
 
     
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
-    Log::Instance()->setVerbosity("UnitClass", LV_MAX);
-    Log::Instance()->setVerbosity("ObjectClass", LV_MAX);    
+//    Log::Instance()->setVerbosity("UnitClass", LV_MAX);
+//    Log::Instance()->setVerbosity("ObjectClass", LV_MAX);    
 //    Log::Instance()->setVerbosity("TerrainClass", LV_MAX);    
 //    Log::Instance()->setVerbosity("MapClass", LV_MAX);        
 /*        root = ConfigFile::loadFile((const char *)data);

@@ -36,6 +36,7 @@ class UnitClass : public ObjectClass
 	void setAngle(int newAngle);
 
     virtual void update();
+    virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
     virtual void setTarget(ObjectClass* newTarget);
         

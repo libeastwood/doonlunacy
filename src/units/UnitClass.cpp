@@ -36,6 +36,7 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     setAngle(LEFT);
 }
 
+/*virtual*/
 UnitClass::~UnitClass()
 {
 
@@ -49,6 +50,7 @@ bool UnitClass::canPass(UPoint pos)
     return (map->cellExists(pos) && !map->getCell(pos)->hasAGroundObject() && !map->getCell(pos)->isMountain());
 }
 
+/*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
     if (m_owner->getMap()->cellExists(newPosition))
@@ -73,6 +75,7 @@ void UnitClass::deploy(SPoint newPosition)
 
 }
 
+/*virtual*/
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 {
     setDrawnPos(off, view);
@@ -100,7 +103,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
     }
 
     // Show path on the screen
-#if 1
+    #if 1
 
     if (m_selected && !m_pathList.empty())
     {
@@ -118,10 +121,10 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
             iter++;
         }
     }
-
-#endif
+    #endif
 }
 
+/*virtual*/
 void UnitClass::drawSelectionBox(Image* dest)
 {
     ImagePtr selectionBox = DataCache::Instance()->getGuiPic(UI_SelectionBox);
@@ -129,7 +132,7 @@ void UnitClass::drawSelectionBox(Image* dest)
     dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((double)m_health / (double)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
-
+/*virtual*/
 void UnitClass::move()
 {
     // if(!m_moving && getRandomInt(0,40) == 0)
@@ -187,6 +190,7 @@ void UnitClass::move()
     checkPos();
 }
 
+/*virtual*/
 void UnitClass::navigate()
 {
     if (!m_moving)
@@ -197,27 +201,6 @@ void UnitClass::navigate()
             {
                 if (m_nextSpotAngle == m_drawnAngle)
                 {
-#if 0
-
-                    if (m_pathList.empty() && (m_checkTimer == 0))
-                    {
-                        m_checkTimer = 0;
-
-                        for (int i = 1; i < 5; i++)
-                        {
-                            m_pathList.push_back(UPoint(x + i, y));
-                        }
-
-                        for (int j = 1; j < 5; j++)
-                        {
-                            m_pathList.push_back(UPoint(x + 5, y + j));
-                        }
-
-                        setTarget(NULL);
-                    }
-
-#endif
-#if 1
                     if (m_pathList.empty() && (m_checkTimer == 0))
                     {
                         m_checkTimer = 100;
@@ -241,7 +224,6 @@ void UnitClass::navigate()
                         }
                     }
 
-#endif
                     if (!m_pathList.empty())
                     {
                         m_nextSpot = m_pathList.front();
@@ -280,8 +262,8 @@ void UnitClass::navigate()
 
         else if (!m_target) //not moving and not wanting to go anywhere, do some random turning
         {
-            //if (getRandomInt(0, RANDOMTURNTIMER) == 0)
-            // nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
+            if (getRandomInt(0, RANDOMTURNTIMER) == 0)
+                m_nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
         }
     }
 }
@@ -294,6 +276,13 @@ void UnitClass::setAngle(int newAngle)
         m_nextSpotAngle = m_drawnAngle;
         m_nextSpotFound = false;
     }
+}
+
+/*virtual*/
+void UnitClass::setDestination(SPoint destination)
+{
+    m_pathList.clear();
+    ObjectClass::setDestination(destination);
 }
 
 void UnitClass::setPosition(SPoint pos)
@@ -321,6 +310,7 @@ void UnitClass::setPosition(SPoint pos)
     m_noCloserPointCount = 0;
 }
 
+/*virtual*/
 void UnitClass::setSpeeds()
 {
     double maxSpeed = m_speed;
@@ -386,6 +376,7 @@ void UnitClass::setDrawnPos(SPoint off, SPoint view)
     m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
 }
 
+/*virtual*/
 void UnitClass::setTarget(ObjectClass* newTarget)
 {
 #if 0
@@ -431,14 +422,14 @@ void UnitClass::turnRight()
     m_drawnAngle = lround(m_angle);
 }
 
+/*virtual*/
 void UnitClass::turn()
 {
     if (!m_moving)
     {
         int wantedAngle;
-//  if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
-
-        if (0)
+        
+        if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
             wantedAngle = m_targetAngle;
         else
             wantedAngle = m_nextSpotAngle;
@@ -477,6 +468,7 @@ void UnitClass::turn()
     }
 }
 
+/*virtual*/
 void UnitClass::update()
 {
     if (!m_destroyed)
@@ -686,9 +678,7 @@ bool UnitClass::AStarSearch()
                     break; //ive found my dest!
             }
 
-//   if (numNodesChecked < currentGame->maxPathSearch)
-
-            if (numNodesChecked < 100)
+            if (numNodesChecked < Settings::Instance()->GetMaxSearchPath())
                 nodePushSuccesors(&open, node);
 
             if (!node->m_visited)
