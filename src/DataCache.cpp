@@ -403,17 +403,21 @@ void DataCache::Init(){
 
     tmp = fame->getSubPicture(0, 72, 12, 12);
     tmp->setColorKey();
+    tmp->fillRect(0, Rect(7, 7, 5, 5));
     addGuiPic(UI_Corner3NW, tmp);
 
     tmp = fame->getSubPicture(308, 72, 12, 12);
     tmp->setColorKey();
+    tmp->fillRect(0, Rect(0, 7, 5, 5));
     addGuiPic(UI_Corner3NE, tmp);
     
     tmp = fame->getSubPicture(0, 188, 12, 12);
     tmp->setColorKey();
+    tmp->fillRect(0, Rect(7, 0, 5, 5));
     addGuiPic(UI_Corner3SW, tmp);
 
     tmp = fame->getSubPicture(308, 188, 12, 12);
+    tmp->fillRect(0, Rect(0, 0, 5, 5));
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
 
