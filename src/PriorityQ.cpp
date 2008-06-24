@@ -26,12 +26,12 @@ void PriorityQ::trickleDown(int index)
 		int leftChild = 2*index+1;
 		int rightChild = leftChild+1;
 							  // find smaller child
-		if(rightChild < m_currentSize && m_heapArray[leftChild]->f < m_heapArray[rightChild]->f)
+		if(rightChild < m_currentSize && m_heapArray[leftChild]->m_f < m_heapArray[rightChild]->m_f)
 			smallerChild = leftChild;
 		else
 			smallerChild = rightChild;
 							  // top >= largerChild?
-		if(top->f <= m_heapArray[smallerChild]->f)
+		if(top->m_f <= m_heapArray[smallerChild]->m_f)
 			break;
 							  // shift child up
 		m_heapArray[index] = m_heapArray[smallerChild];
@@ -45,7 +45,7 @@ void PriorityQ::trickleUp(int index)
 	int parent = (index - 1)/2;
 	TerrainClass* bottom = m_heapArray[index];
 
-	while (index > 0 && m_heapArray[parent]->f > bottom->f)
+	while (index > 0 && m_heapArray[parent]->m_f > bottom->m_f)
 	{
 		m_heapArray[index] = m_heapArray[parent];
 		index = parent;
