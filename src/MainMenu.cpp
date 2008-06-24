@@ -89,23 +89,16 @@ MainMenuState::MainMenuState()
 
 
     Frame3 backgroundFrame(0, UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()), DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
-//    m_surf.reset(backgroundFrame.getPicture().get());
-
-    m_surf.reset(new Image(UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight() )));
+    m_surf = backgroundFrame.getPicture();
 
     m_surf->blitFrom(backgroundFrame.getPicture().get());
     int len;
-    unsigned char * data = ResMan::Instance()->readFile("FINALE:MAPPLAN.CPS", &len);
+    uint8_t *data = ResMan::Instance()->readFile("FINALE:MAPPLAN.CPS", &len);
 
-//TODO(proyvind): This isn't all that pretty right now, more a proof of concept
-//                based on work done previously with imagemagick.
-//                This should all be moved to some separate class with standard
-//                functions for drawing frames etc..
-//                
     CpsfilePtr m_cps (new Cpsfile(data, len));
 
     ImagePtr tmp;
-    Frame planet(m_cps->getPicture(), UPoint(320, 200));
+    Frame1 planet(m_cps->getPicture(), UPoint(320, 200));
     tmp = planet.getPicture();
     // Not satisfied with this recoloring, what goes wrong here..?
     tmp->recolor(COLOUR_HARKONNEN, 87);
@@ -114,13 +107,13 @@ MainMenuState::MainMenuState()
 
 
     tmp.reset(new Image(UPoint(192, 153)));
-    Frame menuTopFrame(236, UPoint(192,19));
+    Frame1 menuTopFrame(236, UPoint(192,19));
     tmp->blitFrom(menuTopFrame.getPicture().get(), UPoint(0, 0));
     Frame2 menuBottomFrame((Uint32)0, UPoint(192, 134));
+    
     tmp->setColorKey();
     tmp->blitFrom(menuBottomFrame.getPicture().get(), UPoint(0, 20));
     m_surf->blitFrom(tmp.get(), UPoint(219, 276));
-
 }
 
 MainMenuState::~MainMenuState()

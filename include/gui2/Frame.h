@@ -17,8 +17,13 @@ public:
     /*! 
         @param image image..
     */
-    Frame(Image *image, UPoint size = NULL);
-    Frame(Uint32 color, ConstUPoint size, Image *background = NULL);
+    Frame(Image *image, UPoint size, GuiPic_enum nw, GuiPic_enum ne,
+            GuiPic_enum sw, GuiPic_enum se);
+    Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
+            GuiPic_enum sw, GuiPic_enum se, Image *background = NULL);
+    
+    void drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
+            GuiPic_enum sw, GuiPic_enum se);
 
     ~Frame();
     ImagePtr getPicture();
@@ -26,6 +31,13 @@ public:
 
 protected:
     ImagePtr m_surface;    
+};
+
+class Frame1 : public Frame
+{
+public:
+    Frame1(Image *image, UPoint size = NULL);
+    Frame1(Uint32 color, ConstUPoint size, Image *background = NULL);
 };
 
 class Frame2 : public Frame
