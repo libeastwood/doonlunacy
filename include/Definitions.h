@@ -739,6 +739,8 @@ typedef enum {
 typedef enum {
 	CT_EMUOPL = 1,	
 	C_EMUOPL,
-	CK_EMUOPL
+	CK_EMUOPL,
+	CREAL_EMUOPL,
+	CANAL_EMUOPL
 } EMUOPL;
 #endif // DUNE_DEFINITIONS_H

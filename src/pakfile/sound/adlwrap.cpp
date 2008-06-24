@@ -1,5 +1,5 @@
 #include <SDL_mixer.h>
-#include <emuopl.h>
+#include <opl.h>
 
 #include "pakfile/sound/adlwrap.h"
 #include "ResMan.h"
