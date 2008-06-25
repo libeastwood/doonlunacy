@@ -17,7 +17,7 @@ class MenuBaseState : public State
 
         int Execute(float dt);
 
-    public:
+    protected:
         ImagePtr m_menuBackground;
         Container* m_container;
 };
