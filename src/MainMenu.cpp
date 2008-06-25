@@ -9,6 +9,7 @@
 #include "SingleMenu.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+#include "Font.h"
 
 #include "pakfile/Wsafile.h"
 #include "gui2/Frame.h"
@@ -120,8 +121,16 @@ MainMenuState::MainMenuState()
     m_surf->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(534, 11));
     m_surf->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldOrdos).get(), UPoint(11, 413));
 
-    Frame2 versionBox(116, UPoint(77, 30));
-    m_surf->blitFrom(versionBox.getPicture().get(), UPoint(534, 432));
+    // I'd really prefer 77, 30, but then text gets fscked up..?
+    Frame2 versionBox(116, UPoint(100, 30));
+    tmp = versionBox.getPicture();
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    Uint16 textw, texth;
+    font->extents(VERSION, textw, texth);
+    // And here I'd prefer actually black, but I seem to lack understanding of the palette stuff.. :/
+    font->render(VERSION, tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 57);
+
+    m_surf->blitFrom(tmp.get(), UPoint(500, 432));
 }
 
 MainMenuState::~MainMenuState()
