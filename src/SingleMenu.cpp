@@ -11,11 +11,6 @@
 
 SingleMenuState::SingleMenuState()
 {
-    const int bw = 200;
-    const int bh = 24;
-
-    m_vbox = new VBox();
-    
     m_butCampaign = new BoringButton("Campaign");
     m_butCampaign->setSize(SPoint(bw, bh));
     m_butCampaign->onClick.connect(
@@ -51,13 +46,7 @@ SingleMenuState::SingleMenuState()
    
     m_vbox->addChild(m_butCancel);
 
-    m_vbox->fit(2);
-	Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
-                (m_vbox->w / 2);
-    m_vbox->setPosition(UPoint(x - 5, 312));
-    m_vbox->reshape();
-    
-    m_container->addChild(m_vbox);
+    draw();
 }
 
 SingleMenuState::~SingleMenuState()
@@ -67,8 +56,6 @@ SingleMenuState::~SingleMenuState()
     delete m_butSkirmish;
     delete m_butLoad;
     delete m_butCancel;
-
-    delete m_vbox;
 }
 
 void SingleMenuState::doCampaign()
