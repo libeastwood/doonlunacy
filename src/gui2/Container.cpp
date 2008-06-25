@@ -107,6 +107,7 @@ void Container::deleteChild(Widget* child)
     m_children.remove(child);
 }
 
-
-
-
+int Container::getSize()
+{
+    return m_children.size();
+}
