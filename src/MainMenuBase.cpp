@@ -44,18 +44,15 @@ void MainMenuBaseState::draw()
     m_menuBackground->blitFrom(tmp.get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
 
 
-    tmp.reset(new Image(UPoint(192, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 44)));
-    Frame1 menuTopFrame(236, UPoint(192,19));
+    tmp.reset(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 44)));
+    Frame1 menuTopFrame(236, UPoint(bw + 20, 19));
     tmp->blitFrom(menuTopFrame.getPicture().get(), UPoint(0, 0));
 
-    Frame2 menuFrame((Uint32)0, UPoint(192, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25));
+    Frame2 menuFrame((Uint32)0, UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25));
 
     tmp->blitFrom(menuFrame.getPicture().get(), UPoint(0, 20));
     tmp->setColorKey();
-//    tmp = menuFrame.getPicture();
-    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 11, Settings::Instance()->GetHeight()/2 + 36 ));
-
-//    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 11, Settings::Instance()->GetHeight()/2 + 55));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 36 ));
 
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get(), UPoint(11, 11));
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(Settings::Instance()->GetWidth() - 66, 11));
