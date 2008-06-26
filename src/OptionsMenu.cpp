@@ -93,7 +93,6 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
     m_container->addChild(m_vbox);
-    draw();
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -178,7 +177,6 @@ void OptionsMenuState::doResolution()
             m_butResolution->setCaption("640x480");
             break;                
     }
-    draw();
 }
 
 void OptionsMenuState::doScreenMode()

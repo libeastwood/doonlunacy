@@ -76,7 +76,6 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butQuit);
 
-    draw();
 }
 
 MainMenuState::~MainMenuState()
