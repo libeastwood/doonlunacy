@@ -184,6 +184,5 @@ void TerrainClass::unassignObject(Uint32 ObjectID) {
 	unassignUndergroundUnit(ObjectID);
 	unassignNonInfantryGroundObject(ObjectID);
 	unassignAirUnit(ObjectID);
->>>>>>> MERGE-SOURCE
 }
 

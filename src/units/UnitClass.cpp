@@ -266,7 +266,6 @@ void UnitClass::navigate()
                 m_nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
         }
     }
->>>>>>> MERGE-SOURCE
 }
 
 void UnitClass::setAngle(int newAngle)
