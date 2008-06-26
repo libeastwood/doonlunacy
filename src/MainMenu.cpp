@@ -11,7 +11,6 @@
 #include "SoundPlayer.h"
 #include "Font.h"
 
-#include "pakfile/Wsafile.h"
 #include "gui2/Frame.h"
 
 MainMenuState::MainMenuState() : MainMenuBaseState()
