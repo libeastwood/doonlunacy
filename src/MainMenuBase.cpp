@@ -17,10 +17,13 @@ MainMenuBaseState::MainMenuBaseState()
 
 void MainMenuBaseState::draw()
 {
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    Uint16 textw, texth;
+
     m_vbox->fit(2);
     Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
                 (m_vbox->w / 2);
-	m_vbox->setPosition(UPoint(x - 5, Settings::Instance()->GetHeight()/2 + 71));
+	m_vbox->setPosition(UPoint(x - 5, Settings::Instance()->GetHeight()/2 + 93));
     m_vbox->reshape();
 
     m_container->addChild(m_vbox);
@@ -44,15 +47,19 @@ void MainMenuBaseState::draw()
     m_menuBackground->blitFrom(tmp.get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
 
 
-    tmp.reset(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 44)));
-    Frame1 menuTopFrame(236, UPoint(bw + 20, 19));
+    tmp.reset(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55)));
+    Frame1 menuTopFrame(236, UPoint(bw + 20, 30));
+    font->extents("Doon Lunacy", textw, texth);
+    font->render("Doon Lunacy", menuTopFrame.getPicture(), menuTopFrame.getPicture()->getSize().x/2 - textw/2,
+            menuTopFrame.getPicture()->getSize().y/2 - texth/2, 32);
+
     tmp->blitFrom(menuTopFrame.getPicture().get(), UPoint(0, 0));
 
     Frame2 menuFrame((Uint32)0, UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25));
 
-    tmp->blitFrom(menuFrame.getPicture().get(), UPoint(0, 20));
+    tmp->blitFrom(menuFrame.getPicture().get(), UPoint(0, 31));
     tmp->setColorKey();
-    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 36 ));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 47 ));
 
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get(), UPoint(11, 11));
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(Settings::Instance()->GetWidth() - 66, 11));
@@ -61,8 +68,7 @@ void MainMenuBaseState::draw()
     // I'd really prefer 77, 30, but then text gets fscked up..?
     Frame2 versionBox(116, UPoint(100, 30));
     tmp = versionBox.getPicture();
-    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-    Uint16 textw, texth;
+    
     font->extents(VERSION, textw, texth);
     // And here I'd prefer actually black, but I seem to lack understanding of the palette stuff.. :/
     font->render(VERSION, tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 57);
