@@ -23,7 +23,7 @@ void MainMenuBaseState::draw()
     m_vbox->fit(2);
     Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
                 (m_vbox->w / 2);
-	m_vbox->setPosition(UPoint(x - 5, Settings::Instance()->GetHeight()/2 + 93));
+	m_vbox->setPosition(UPoint(x - 5, Settings::Instance()->GetHeight()/2 + 82));
     m_vbox->reshape();
 
     m_container->addChild(m_vbox);
@@ -59,7 +59,7 @@ void MainMenuBaseState::draw()
 
     tmp->blitFrom(menuFrame.getPicture().get(), UPoint(0, 31));
     tmp->setColorKey();
-    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 47 ));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 36));
 
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get(), UPoint(11, 11));
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(Settings::Instance()->GetWidth() - 66, 11));
