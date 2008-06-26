@@ -7,9 +7,8 @@
 #include "ObjectClass.h"
 #include "PlayerClass.h"
 #include "TerrainClass.h"
-
-typedef std::priority_queue<TerrainClass*> PriorityQ;
-
+#include "PriorityQ.h"
+typedef std::list <UPoint> Path;
 //! Base class for all units
 class UnitClass : public ObjectClass
 {
@@ -37,6 +36,7 @@ class UnitClass : public ObjectClass
 	void setAngle(int newAngle);
 
     virtual void update();
+    virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
     virtual void setTarget(ObjectClass* newTarget);
         
@@ -87,7 +87,7 @@ class UnitClass : public ObjectClass
     SPoint  m_nextSpot,
             m_guardPoint;        
 
-    std::list <UPoint> m_pathList;
+    Path m_pathList;
 };
 
 typedef std::vector<UnitClass*> Units;

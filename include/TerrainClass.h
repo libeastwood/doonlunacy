@@ -157,21 +157,26 @@ class TerrainClass  : public UPoint
         return m_difficulty;
     }
 
+
+
+    //! @name Path searching variables
+    //@{ 
+    //! True if A* has already checked the node
     bool m_visited;
-
-    /* for path searching */
-    double cost,       //cost to get here from original location
-           f,          //cost + heuristic
-           heuristic;  //estimate for how much it will cost to get from here to dest
-
+    
+    double //! cost to get here from original location
+           m_cost,       
+           //! cost + heuristic
+           m_f,          
+           //! estimate for how much it will cost to get from here to dest
+           m_heuristic;  
 
     //FIXME:What's this for?
-    TerrainClass *parent,
-                 *previous,
-                 *next;
+    TerrainClass*  m_parent;
+    //@}
 
   private:
-
+    //! How difficult it is to move in this cell
     double m_difficulty,
 
     //! How much spice on this particular cell is left

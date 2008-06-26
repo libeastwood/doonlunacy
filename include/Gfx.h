@@ -519,7 +519,7 @@ class Image
 
         //! Constructor
         /*!
-            @param Size of the image !
+            @param size size of the image !
         */
         Image(ConstUPoint size);
         
@@ -748,26 +748,20 @@ class Image
         }
         //! Blit part of the image to screen
         /*!
-            @param destination destination image
             @param srcRect part of source image to copy
             @param dstPoint target coordinates (top-left corner)
         */
         void blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const;
         //! Blit the whole image to screen
         /*!
-            @param destination destination image
             @param dstPoint target coordinates (top-left corner)
         */
         void blitToScreen(ConstUPoint dstPoint) const;
+
         //! Blit the whole image to destination image (to top-left corner)
-        /*!
-            @param destination destination image
-        */
         void blitToScreen() const;
+
         //! Blit the whole image to destination image (to center)
-        /*!
-            @param destination destination image
-        */
         void blitToScreenCentered() const;
 
         //@}

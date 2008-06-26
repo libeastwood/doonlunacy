@@ -127,7 +127,8 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 	return temp;
 }
 
-void TerrainClass::unassignAirUnit(Uint32 ObjectID) {
+void TerrainClass::unassignAirUnit(Uint32 ObjectID) 
+{
     List::iterator iter = m_assignedAirUnits.find(ObjectID);
     if( iter != m_assignedAirUnits.end() ) 
     {
@@ -136,7 +137,8 @@ void TerrainClass::unassignAirUnit(Uint32 ObjectID) {
 	}
 }
 
-void TerrainClass::unassignDeadObject(Uint32 ObjectID) {
+void TerrainClass::unassignDeadObject(Uint32 ObjectID) 
+{
     List::iterator iter = m_assignedDeadObjects.find(ObjectID);
     if( iter != m_assignedDeadObjects.end() ) 
     {
@@ -146,29 +148,42 @@ void TerrainClass::unassignDeadObject(Uint32 ObjectID) {
     
 }
 
-void TerrainClass::unassignNonInfantryGroundObject(Uint32 ObjectID) {
+void TerrainClass::unassignNonInfantryGroundObject(Uint32 ObjectID) 
+{
     List::iterator iter = m_assignedNonInfantryGroundObjects.find(ObjectID);
-    if( iter != m_assignedNonInfantryGroundObjects.end() ) {
-    LOG_INFO("TerrainClass", "Unassigned non-infantry ground object.");
-	m_assignedNonInfantryGroundObjects.erase(iter);
+    if( iter != m_assignedNonInfantryGroundObjects.end() ) 
+    {
+        LOG_INFO("TerrainClass", "Unassigned non-infantry ground object.");
+	    m_assignedNonInfantryGroundObjects.erase(iter);
 	}
 }
 
-void TerrainClass::unassignUndergroundUnit(Uint32 ObjectID) {
-    LOG_INFO("TerrainClass", "Unassigned underground object.");
-	m_assignedUndergroundUnits.erase(m_assignedUndergroundUnits.find(ObjectID));
+void TerrainClass::unassignUndergroundUnit(Uint32 ObjectID) 
+{
+    List::iterator iter = m_assignedUndergroundUnits.find(ObjectID);
+    if( iter != m_assignedUndergroundUnits.end() ) 
+    {
+        LOG_INFO("TerrainClass", "Unassigned underground object.");
+    	m_assignedUndergroundUnits.erase(iter);
+	}
 }
 
-void TerrainClass::unassignInfantry(Uint32 ObjectID, int currentPosition) {
-    LOG_INFO("TerrainClass", "Unassigned infantry.");
-	m_assignedInfantry.erase(m_assignedInfantry.find(ObjectID));
+void TerrainClass::unassignInfantry(Uint32 ObjectID, int currentPosition) 
+{
+    List::iterator iter = m_assignedInfantry.find(ObjectID);
+    if( iter != m_assignedInfantry.end() ) 
+    {
+        LOG_INFO("TerrainClass", "Unassigned infantry.");
+    	m_assignedInfantry.erase(iter);
+	}
 }
 
 void TerrainClass::unassignObject(Uint32 ObjectID) {
     LOG_INFO("TerrainClass", "Unassigning object with ID: %d", ObjectID);
-//	unassignInfantry(ObjectID,-1);
-//	unassignUndergroundUnit(ObjectID);
+	unassignInfantry(ObjectID,-1);
+	unassignUndergroundUnit(ObjectID);
 	unassignNonInfantryGroundObject(ObjectID);
-//	unassignAirUnit(ObjectID);
+	unassignAirUnit(ObjectID);
+>>>>>>> MERGE-SOURCE
 }
 

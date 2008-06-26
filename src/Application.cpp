@@ -323,11 +323,13 @@ void Application::Run()
 
         // dont steal all the processing time 
         // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
+        #if 0
         if (now - then < min_frame_duration)
         {
             SDL_Delay(min_frame_duration -(now - then));
             now = SDL_GetTicks();
         };
+        #endif 
         
         float dt = float(now - then) / 1000.0f;
 
@@ -394,6 +396,9 @@ void Application::HandleEvents()
                                                 SPoint(event.button.x, event.button.y));
                 break;
             case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_F11)
+                    UpdateVideoMode(!Settings::Instance()->GetFullScreen());
+            
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
                 break;
             case SDL_KEYUP:

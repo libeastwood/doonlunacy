@@ -36,6 +36,7 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     setAngle(LEFT);
 }
 
+/*virtual*/
 UnitClass::~UnitClass()
 {
 
@@ -49,6 +50,7 @@ bool UnitClass::canPass(UPoint pos)
     return (map->cellExists(pos) && !map->getCell(pos)->hasAGroundObject() && !map->getCell(pos)->isMountain());
 }
 
+/*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
     if (m_owner->getMap()->cellExists(newPosition))
@@ -73,6 +75,7 @@ void UnitClass::deploy(SPoint newPosition)
 
 }
 
+/*virtual*/
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 {
     setDrawnPos(off, view);
@@ -98,8 +101,30 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 
         m_pic->blitTo(dest, src, m_drawnPos);
     }
+
+    // Show path on the screen
+    #if 1
+
+    if (m_selected && !m_pathList.empty())
+    {
+        Path::iterator iter = m_pathList.begin();
+        Rect rect;
+
+        while (iter != m_pathList.end())
+        {
+            rect.x = off.x + (*iter).x * BLOCKSIZE - view.x * BLOCKSIZE + BLOCKSIZE / 2;
+            rect.y = off.y + (*iter).y * BLOCKSIZE - view.y * BLOCKSIZE + BLOCKSIZE / 2;
+            rect.w = 2;
+            rect.h = 2;
+            //FIXME:It turns out that colours are not associated correctly. ORDOS == PINK, HARKONNEN == BLUE???
+            dest->drawRect(rect, m_owner->getColour());
+            iter++;
+        }
+    }
+    #endif
 }
 
+/*virtual*/
 void UnitClass::drawSelectionBox(Image* dest)
 {
     ImagePtr selectionBox = DataCache::Instance()->getGuiPic(UI_SelectionBox);
@@ -107,7 +132,7 @@ void UnitClass::drawSelectionBox(Image* dest)
     dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((double)m_health / (double)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
-
+/*virtual*/
 void UnitClass::move()
 {
     // if(!m_moving && getRandomInt(0,40) == 0)
@@ -165,6 +190,7 @@ void UnitClass::move()
     checkPos();
 }
 
+/*virtual*/
 void UnitClass::navigate()
 {
     if (!m_moving)
@@ -175,21 +201,6 @@ void UnitClass::navigate()
             {
                 if (m_nextSpotAngle == m_drawnAngle)
                 {
-#if 0
-
-                    if (m_pathList.empty() && (m_checkTimer == 0))
-                    {
-                        m_checkTimer = 0;
-
-                        for (int i = 1; i < 5; i++)
-                        {
-                            m_pathList.push_front(UPoint(x + i, y));
-                        }
-
-                        setTarget(NULL);
-                    }
-
-#else
                     if (m_pathList.empty() && (m_checkTimer == 0))
                     {
                         m_checkTimer = 100;
@@ -213,10 +224,9 @@ void UnitClass::navigate()
                         }
                     }
 
-#endif
                     if (!m_pathList.empty())
                     {
-                        m_nextSpot = m_pathList.back();
+                        m_nextSpot = m_pathList.front();
                         m_pathList.pop_front();
                         m_nextSpotFound = true;
                         m_checkTimer = 0;
@@ -252,10 +262,11 @@ void UnitClass::navigate()
 
         else if (!m_target) //not moving and not wanting to go anywhere, do some random turning
         {
-            //if (getRandomInt(0, RANDOMTURNTIMER) == 0)
-            // nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
+            if (getRandomInt(0, RANDOMTURNTIMER) == 0)
+                m_nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
         }
     }
+>>>>>>> MERGE-SOURCE
 }
 
 void UnitClass::setAngle(int newAngle)
@@ -266,6 +277,13 @@ void UnitClass::setAngle(int newAngle)
         m_nextSpotAngle = m_drawnAngle;
         m_nextSpotFound = false;
     }
+}
+
+/*virtual*/
+void UnitClass::setDestination(SPoint destination)
+{
+    m_pathList.clear();
+    ObjectClass::setDestination(destination);
 }
 
 void UnitClass::setPosition(SPoint pos)
@@ -293,6 +311,7 @@ void UnitClass::setPosition(SPoint pos)
     m_noCloserPointCount = 0;
 }
 
+/*virtual*/
 void UnitClass::setSpeeds()
 {
     double maxSpeed = m_speed;
@@ -358,6 +377,7 @@ void UnitClass::setDrawnPos(SPoint off, SPoint view)
     m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
 }
 
+/*virtual*/
 void UnitClass::setTarget(ObjectClass* newTarget)
 {
 #if 0
@@ -403,14 +423,14 @@ void UnitClass::turnRight()
     m_drawnAngle = lround(m_angle);
 }
 
+/*virtual*/
 void UnitClass::turn()
 {
     if (!m_moving)
     {
         int wantedAngle;
-//  if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
-
-        if (0)
+        
+        if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
             wantedAngle = m_targetAngle;
         else
             wantedAngle = m_nextSpotAngle;
@@ -449,6 +469,7 @@ void UnitClass::turn()
     }
 }
 
+/*virtual*/
 void UnitClass::update()
 {
     if (!m_destroyed)
@@ -541,20 +562,18 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
 
     UPoint  checkedPoint = m_destination,
                            tempLocation;
-
     TerrainClass* node;
-    MapClass* map = m_owner->getMap();
 
     //push a node for each direction we could go
 
     for (int angle = 0; angle <= 7; angle++) //going from angle 0 to 7 inc
     {
-        tempLocation = map->getMapPos(angle, UPoint(parent_node->x, parent_node->y));
+        tempLocation  = m_owner->getMap()->getMapPos(angle, UPoint(parent_node->x, parent_node->y));
 
         if (canPass(tempLocation))
         {
-            node = map->getCell(tempLocation);
-            cost = parent_node->cost;
+            node = m_owner->getMap()->getCell(tempLocation);
+            cost = parent_node->m_cost;
 
             if ((x != parent_node->x) && (tempLocation.y != parent_node->y))
                 cost += DIAGONALCOST * (isAFlyingUnit() ? 1.0 : (double)node->getDifficulty()); //add diagonal movement cost
@@ -589,29 +608,25 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
             f = cost + heuristic;
 
             if (node->m_visited) //if we have already looked at this node before
-                if (node->f <= f) //if got here with shorter travel time before
+                if (node->m_f <= f) //if got here with shorter travel time before
                     continue;
 
-            /*
-               TerrainClass* tempNode;
+            TerrainClass* tempNode;
 
-               if ((tempNode = open->findNodeWithKey(tempLocation)))
-               {
-                if (tempNode->f <= f)
-                 continue;
+            if ((tempNode = open->find(tempLocation)))
+            {
+                if (tempNode->m_f <= f)
+                    continue;
 
                 open->removeNodeWithKey(tempLocation);
-               }
-            */
-            node->cost = cost;
+            }
 
-            node->heuristic = heuristic;
+            node->m_cost = cost;
 
-            node->f = f;
-
-            node->parent = parent_node;
-
-            open->push(node);
+            node->m_heuristic = heuristic;
+            node->m_f = f;
+            node->m_parent = parent_node;
+            open->push_back(node);
         }
     }
 }
@@ -622,53 +637,50 @@ bool UnitClass::AStarSearch()
     int numNodesChecked = 0;
     UPoint checkedPoint;
 
-    TerrainClass *node = map->getCell(x, y);//initialise the current node the object is on
+    TerrainClass *node = map->getCell(UPoint(x, y));//initialise the current node the object is on
 
     if (m_target)
         checkedPoint = m_target->getClosestPoint(UPoint(x, y));
     else
         checkedPoint = m_destination;
 
-    node->f = node->heuristic = blockDistance(UPoint(x, y), checkedPoint);
+    node->m_f = node->m_heuristic = blockDistance(UPoint(x, y), checkedPoint);
 
     /*for (int i=0; i<max(map->sizeX, map->sizeY)-1; i++)
      if (map->depthCheckCount[i] != 0) //very very bad if this happens, check if its in visited list and being reset to not visited
       selected = true;*/
 
     //if the unit is not directly next to its dest, or it is and the dest is unblocked
-    if ((node->heuristic > 1.5) || canPass(checkedPoint))
+    if ((node->m_heuristic > 1.5) || canPass(checkedPoint))
     {
-        double smallestHeuristic = node->heuristic;
-        PriorityQ open;
+        double smallestHeuristic = node->m_heuristic;
+        PriorityQ open(map->w*map->h);
         std::list<TerrainClass*> visitedList;
-        TerrainClass    *bestDest = NULL; //if we dont find path to destination, we will head here instead
+        TerrainClass *bestDest = NULL; //if we dont find path to destination, we will head here instead
 
-        node->next = node->parent = node->previous = NULL;
-        node->cost = 0.0;
-        open.push(node);
+        node->m_parent = NULL;
+        node->m_cost = 0.0;
+        open.push_back(node);
 
         //short maxDepth = max(map->sizeX, map->sizeY),
-        short  depth;
+        short   depth;
 
         while (!open.empty())
         {
             //take the closest node to target out of the queue
-            node = open.top();
-            open.pop();
+            node = open.pop_front();
 
-            if (node->heuristic < smallestHeuristic)
+            if (node->m_heuristic < smallestHeuristic)
             {
-                smallestHeuristic = node->heuristic;
+                smallestHeuristic = node->m_heuristic;
                 bestDest = node;
 
-                if (node->heuristic == 0.0) //if the distance from this node to dest is zero, ie this is the dest node
+                if (node->m_heuristic == 0.0)   //if the distance from this node to dest is zero, ie this is the dest node
                     break; //ive found my dest!
             }
 
             if (numNodesChecked < Settings::Instance()->GetMaxSearchPath())
-            {
                 nodePushSuccesors(&open, node);
-            }
 
             if (!node->m_visited)
             {
@@ -677,7 +689,7 @@ bool UnitClass::AStarSearch()
                 if (++map->depthCheckCount[depth] >= map->depthCheckMax[checkedPoint.x][checkedPoint.y][depth])
                     break; //we have searched a whole square around destination, it cant be reached
 
-                visitedList.push_front(node);   //so know which ones to reset to unvisited
+                visitedList.push_front(node); //so know which ones to reset to unvisited
 
                 node->m_visited = true;
 
@@ -703,17 +715,16 @@ bool UnitClass::AStarSearch()
         {
             node = bestDest;
 
-            while (node->parent != NULL)
+            while (node->m_parent != NULL)
             {
-                LOG_INFO("UnitClass", "Pushing next spot %d-%d", node->x, node->y);
                 m_nextSpot = UPoint(node->x, node->y);
-                m_pathList.push_back(UPoint(node->x, node->y));
+                m_pathList.push_front(UPoint(node->x, node->y));
                 //if (debug) //see final path
                 //getOwner()->placeUnit(Unit_Carryall, nextSpot.x, nextSpot.y);
-                node = node->parent;
+                node = node->m_parent;
             }
 
-            LOG_INFO("UnitClass", "Astar result %d at %d,%d to %d, %d: %d", m_itemID, x, y, m_destination.x, m_destination.y, numNodesChecked);
+            LOG_INFO("UnitClass", "%d at %d,%d to %d, %d: %d", m_itemID, x, y, m_destination.x, m_destination.y, numNodesChecked);
 
             return true;
         }

@@ -20,6 +20,7 @@ public:
         @param caption std::string a caption of label
 		@param textColour sets text colour of label. 49(dune red) by default
         @param bgColour sets background colour of label. 115(dune yellow) by default
+        @param maxLineLength maximum length of a line (in characters)
     */
     Label(std::string caption="none", int textColour = 49, int bgColour = 115, int maxLineLength = -1);
     void setLabel(std::string);
