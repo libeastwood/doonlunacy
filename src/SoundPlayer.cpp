@@ -71,9 +71,11 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType)
 
         case CREAL_EMUOPL:
             m_opl = new CRealopl();
+            break;
 
         case CANAL_EMUOPL:
             m_opl = new CAnalopl();
+            breal;
     }
 
     m_player = new AdlibPlayer(m_opl);
