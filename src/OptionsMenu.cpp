@@ -7,17 +7,12 @@
 #include "Settings.h"
 
 
-OptionsMenuState::OptionsMenuState()
+OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 {
-    const int bw = 200;
-    const int bh = 22;
-    
     std::string m_caption;
     
     Settings* set = Settings::Instance();
 
-    m_vbox = new VBox();
-    
     set->GetFullScreen() ? m_caption = "Fullscreen" : m_caption = "Window mode";
         
     m_butWindowMode = new BoringButton(m_caption);
@@ -39,7 +34,7 @@ OptionsMenuState::OptionsMenuState()
                 
         case 1024:
             m_caption = "1024x768";
-            break;                
+            break;
     
     }
     
@@ -98,7 +93,6 @@ OptionsMenuState::OptionsMenuState()
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
     m_container->addChild(m_vbox);
-
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -110,8 +104,6 @@ OptionsMenuState::~OptionsMenuState()
     delete m_butMusic;
     delete m_butIntro;
     delete m_butEmuOpl;
-
-    delete m_vbox;
 }
 
 //FIXME: doSound, doMusic,doScreenMode and future functions with bool value could be

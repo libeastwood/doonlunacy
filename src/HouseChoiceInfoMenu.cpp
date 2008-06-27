@@ -12,6 +12,7 @@
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
 {
+
 	Animation* ret;
 	if (newHouse == HOUSE_ATREIDES)
 		ret = DataCache::Instance()->getAnimation(Anim_AtreidesPlanet);

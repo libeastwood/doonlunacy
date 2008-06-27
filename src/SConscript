@@ -19,7 +19,8 @@ all_sources = [ "Application.cpp",
 #                "PictureFactory.cpp",
                 "TopLevelState.cpp",
                 "MenuBase.cpp", 
-                "MainMenu.cpp", 
+                "MainMenu.cpp",
+                "MainMenuBase.cpp",
                 "IntroState.cpp", 
                 "SingleMenu.cpp",
 #				"CampaignMenu.cpp",
@@ -59,6 +60,7 @@ gui_sources = [
                 "gui2/Button.cpp",
                 "gui2/VBox.cpp",
                 "gui2/Label.cpp",
+                "gui2/Frame.cpp",
 
               ]
 

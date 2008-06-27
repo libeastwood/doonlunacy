@@ -1,4 +1,5 @@
 #include "boost/bind.hpp"
+#include "boost/format.hpp"
 
 #include "Application.h"
 #include "Editor.h"
@@ -9,21 +10,20 @@
 #include "SingleMenu.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+#include "Font.h"
 
-#include "pakfile/Wsafile.h"
+#include "gui2/Frame.h"
 
-MainMenuState::MainMenuState()
+
+
+MainMenuState::MainMenuState() : MainMenuBaseState()
 {
     //m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
     //m_menu = new Window();
     //m_menu->setHeight(m_menuBackground->h);
     //m_menu->setWidth(m_menuBackground->w);
 
-    m_vbox = new VBox();
 
-    const int bw = 200;
-    const int bh = 24;
-    
     m_butSingle = new BoringButton("Single Player");
     m_butSingle->setSize(SPoint(bw, bh));
     //m_butSingle = new GraphicButton((SDL_Surface*)(dataFile[UI_Single].dat),
@@ -78,41 +78,6 @@ MainMenuState::MainMenuState()
    
     m_vbox->addChild(m_butQuit);
 
-    m_vbox->fit(2);
-    Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
-                (m_vbox->w / 2);
-	m_vbox->setPosition(UPoint(x - 5, 312));
-    m_vbox->reshape();
-    
-    m_container->addChild(m_vbox);
-
-//TODO:I guess that most of this should be wrapped into some function as
-//we'll be doing a lot of image cropping like this
-
-    int len;
-    unsigned char * data = ResMan::Instance()->readFile("MENTAT:FARTR.WSA", &len);
-
-    SDL_Palette* palette = Application::Instance()->Screen()->getSurface()->format->palette;
-
-    WsafilePtr m_wsa (new Wsafile(data, len));
-
-    ImagePtr tmp (m_wsa->getPicture(1, palette));
-    m_surf.reset(new Image(UPoint(258, 65)));
-    Rect src (6,31, 82, 65);
-    m_surf->blitFrom(tmp.get(), src, UPoint(0, 0));
-
-    data = ResMan::Instance()->readFile("MENTAT:FHARK.WSA", &len);
-    m_wsa.reset(new Wsafile(data, len));
-    tmp.reset(m_wsa->getPicture(1, palette));
-    m_surf->blitFrom(tmp.get(), src, UPoint(88, 0));
-
-    data = ResMan::Instance()->readFile("MENTAT:FORDOS.WSA", &len);
-    m_wsa.reset(new Wsafile(data, len));
-    tmp.reset(m_wsa->getPicture(1, palette));
-    m_surf->blitFrom(tmp.get(), src, UPoint(176, 0));
-
-    m_surf = m_surf->getResized(2);
-
 }
 
 MainMenuState::~MainMenuState()
@@ -123,8 +88,6 @@ MainMenuState::~MainMenuState()
     delete m_butOptions;
     delete m_butAbout;
     delete m_butQuit;
-
-    delete m_vbox;
 }
 
 void MainMenuState::doEditor()
@@ -143,20 +106,19 @@ void MainMenuState::doSkirmish()
     SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 3);
     
 #if 0
-    Rect rect(0,0,30, 30);
+    Font* font = FontManager::Instance()->getFont("DUNE:NEW8P.FNT");
     
-    Image * img = new Image(UPoint(600, 300));
-    int colour = 0;
+    Rect rect(0,0,10, 10);
     
-    for (int j=0; j< 10; j++)
+    Image * img = new Image(UPoint(48, 2000));
+    Uint16 textw, texth;
+    for (Uint32 j=0; j< 200; j++)
     {
-        for (int i=0; i< 20; i++)
-        {
-            rect.x = 30 * i;
-            rect.y = 30 * j;
-            img->fillRect(colour, rect);
-            colour++;
-        }
+        boost::format index("%1%"); index % j;
+        font->extents(index.str(), textw, texth);
+        font->render(index.str(), img->getSurface(), 20, j * 10, j);
+        rect.y = j * 10;
+        img->fillRect(j, rect);
     }
     SDL_SaveBMP(img->getSurface(), "palette.bmp");
 
@@ -186,13 +148,3 @@ void MainMenuState::JustMadeInactive()
     State::JustMadeInactive();
 }*/
 
-
-int MainMenuState::Execute(float dt)
-{
-	if(!Mix_GetMusicHookData()){
-		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
-	}
-	m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2,
-				Settings::Instance()->GetHeight() / 4));
-	return 0;
-}

@@ -260,6 +260,14 @@ struct Point
             return Point(x/times, y/times);
         };
         
+        friend bool operator==(const Point& a, const Point& b){
+            return (a.x == b.x && a.y == b.y);
+        }
+
+        friend bool operator!=(const Point& a, const Point& b){
+            return (a.x != b.x || a.y != b.y);
+        }
+
         //! Type-casting operator
         /*!
             If it doesn't compile, then the types are incompatible.

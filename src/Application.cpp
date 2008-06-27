@@ -26,9 +26,6 @@
 #include "SDL_rwops.h"
 
 
-
-#define VERSION "0.94.1"
-
 #ifdef THREADS
 #include "DataCache.h"
 void *dataCacheThread(void * arg)

@@ -13,10 +13,8 @@
 
 MenuBaseState::MenuBaseState()
 {
-    //m_menuBackground = (SDL_Surface*)(dataFile[UI_Menu].dat); 
-    //m_menu = new Window();
-    //m_menu->setHeight(m_menuBackground->h);
-    //m_menu->setWidth(m_menuBackground->w);
+    // Just initialize it to avoid unitialized variable..
+    m_menuBackground.reset(new Image(UPoint(1,1)));
 
     m_container = new Container();
     m_container->setPosition(UPoint(0, 0));

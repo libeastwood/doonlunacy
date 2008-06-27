@@ -1,14 +1,14 @@
 #ifndef DUNE_OPTIONSMENU_H
 #define DUNE_OPTIONSMENU_H
 
-#include "MenuBase.h"
+#include "MainMenuBase.h"
 
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 #include "Definitions.h"
 #include "SoundPlayer.h"
 
-class OptionsMenuState  : public MenuBaseState 
+class OptionsMenuState  : public MainMenuBaseState 
 {
     public:
         OptionsMenuState();
@@ -25,7 +25,6 @@ class OptionsMenuState  : public MenuBaseState
         virtual const char* GetName() { return "OptionsMenuState"; }
 
     private:
-        VBox* m_vbox;
         BoringButton* m_butResolution;
         BoringButton* m_butWindowMode;
         BoringButton* m_butOk;

@@ -1,14 +1,14 @@
 #ifndef DUNE_SINGLEMENU_H
 #define DUNE_SINGLEMENU_H
 
-#include "MenuBase.h"
+#include "MainMenuBase.h"
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 
 #include "SDL.h"
 
 
-class SingleMenuState : public MenuBaseState 
+class SingleMenuState : public MainMenuBaseState 
 {
     public:
         SingleMenuState();
@@ -21,8 +21,6 @@ class SingleMenuState : public MenuBaseState
         virtual const char* GetName() { return "SingleMenuState"; }
 
     private:
-        VBox* m_vbox;
-        
         BoringButton* m_butCampaign;
         BoringButton* m_butCustom;
         BoringButton* m_butSkirmish;
