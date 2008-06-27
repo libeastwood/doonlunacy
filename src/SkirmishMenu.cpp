@@ -17,7 +17,6 @@ SkirmishMenuState::SkirmishMenuState()
    
     m_vbox->addChild(m_butCancel);
 
-    draw();
 }
 
 SkirmishMenuState::~SkirmishMenuState()
