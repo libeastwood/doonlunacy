@@ -1,4 +1,5 @@
 #include "boost/bind.hpp"
+#include "boost/format.hpp"
 
 #include "Application.h"
 #include "Editor.h"
@@ -12,6 +13,8 @@
 #include "Font.h"
 
 #include "gui2/Frame.h"
+
+
 
 MainMenuState::MainMenuState() : MainMenuBaseState()
 {
@@ -103,20 +106,19 @@ void MainMenuState::doSkirmish()
     SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 3);
     
 #if 0
-    Rect rect(0,0,30, 30);
+    Font* font = FontManager::Instance()->getFont("DUNE:NEW8P.FNT");
     
-    Image * img = new Image(UPoint(600, 300));
-    int colour = 0;
+    Rect rect(0,0,10, 10);
     
-    for (int j=0; j< 10; j++)
+    Image * img = new Image(UPoint(48, 2000));
+    Uint16 textw, texth;
+    for (Uint32 j=0; j< 200; j++)
     {
-        for (int i=0; i< 20; i++)
-        {
-            rect.x = 30 * i;
-            rect.y = 30 * j;
-            img->fillRect(colour, rect);
-            colour++;
-        }
+        boost::format index("%1%"); index % j;
+        font->extents(index.str(), textw, texth);
+        font->render(index.str(), img->getSurface(), 20, j * 10, j);
+        rect.y = j * 10;
+        img->fillRect(j, rect);
     }
     SDL_SaveBMP(img->getSurface(), "palette.bmp");
 

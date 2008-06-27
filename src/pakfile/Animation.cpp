@@ -15,7 +15,7 @@ Animation::~Animation() {
 			SDL_FreeSurface(Frame[i]->getSurface());
 //			Frame[i] = NULL;
 		}
-		free(Frame);
+//		free(Frame);
 	}
 }
 
