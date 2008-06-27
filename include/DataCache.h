@@ -1,21 +1,13 @@
 #ifndef DUNE_DATACACHE_H
 #define DUNE_DATACACHE_H
 
-#include "Application.h"
-#include "ConfigFile.h"
 #include "Definitions.h"
 #include "Gfx.h"
-#include "Settings.h"
 #include "ResMan.h"
 #include "singleton.h"
 #include "SDL_mixer.h"
 
-#include "pakfile/Cpsfile.h"
-#include "pakfile/Icnfile.h"
 #include "pakfile/Palette.h"
-#include "pakfile/Shpfile.h"
-#include "pakfile/Wsafile.h"
-#include "pakfile/Stringfile.h"
 
 #include "houses.h"
 
@@ -26,6 +18,7 @@
 #define NUM_MAPCHOICEARROWS	9
 
 class Animation;
+class Stringfile;
 
 #define GROUNDUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+3)|TILE_FLIPV, (i+4)|TILE_NORMAL,(i+3)|TILE_NORMAL
 #define AIRUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+1)|TILE_ROTATE, i|TILE_FLIPH,(i+1)|TILE_FLIPH

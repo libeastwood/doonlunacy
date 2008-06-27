@@ -3,11 +3,11 @@
 #include "Application.h"
 #include "Settings.h"
 #include "DataCache.h"
-#include "pakfile/Cpsfile.h"
 #include "boost/bind.hpp"
 #include "pakfile/Animation.h"
 #include "gui2/Label.h"
 #include "gui2/Button.h"
+#include "pakfile/Stringfile.h"
 #include <string>
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)

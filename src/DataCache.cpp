@@ -6,6 +6,12 @@
 #include "Log.h"
 
 #include "pakfile/sound/Vocfile.h"
+#include "pakfile/Cpsfile.h"
+#include "pakfile/Icnfile.h"
+#include "pakfile/Palette.h"
+#include "pakfile/Shpfile.h"
+#include "pakfile/Wsafile.h"
+#include "pakfile/Stringfile.h"
 
 
 DataCache::DataCache() {

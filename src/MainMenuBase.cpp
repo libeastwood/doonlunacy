@@ -8,6 +8,7 @@
 #include "SoundPlayer.h"
 #include "Font.h"
 
+#include "pakfile/Cpsfile.h"
 #include "gui2/Frame.h"
 
 MainMenuBaseState::MainMenuBaseState()

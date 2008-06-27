@@ -13,7 +13,7 @@
 #include "SoundPlayer.h"
 
 #include "pakfile/Palette.h"
-
+#include "pakfile/Cpsfile.h"
 
 // ------------------------------------------------------------------
 // IntroState::Frame

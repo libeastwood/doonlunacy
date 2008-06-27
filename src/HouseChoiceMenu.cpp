@@ -6,6 +6,7 @@
 #include "DataCache.h"
 #include "HouseChoiceMenu.h"
 #include "HouseChoiceInfoMenu.h"
+#include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
