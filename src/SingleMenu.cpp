@@ -5,6 +5,7 @@
 //#include "DataFile.h"
 #include "Settings.h"
 #include "HouseChoiceMenu.h"
+#include "SkirmishMenu.h"
 
 #include "boost/bind.hpp"
 
@@ -66,6 +67,8 @@ void SingleMenuState::doCampaign()
 void SingleMenuState::doSkirmish()
 {
     printf("Skirmish\n");
+    mp_parent->PushState( new SkirmishMenuState() );
+
 }
 
 void SingleMenuState::doCancel()
