@@ -19,17 +19,17 @@ MainMenuBaseState::MainMenuBaseState()
 void MainMenuBaseState::draw()
 {
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    Settings* set = Settings::Instance();
     Uint16 textw, texth;
 
     m_vbox->fit(2);
-    Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
-                (m_vbox->w / 2);
-	m_vbox->setPosition(UPoint(x - 5, Settings::Instance()->GetHeight()/2 + 82));
+    Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
+	m_vbox->setPosition(UPoint(x - 5, set->GetHeight()/2 + 82));
     m_vbox->reshape();
 
     m_container->addChild(m_vbox);
 
-    Frame3 backgroundFrame(0, UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()),
+    Frame3 backgroundFrame(0, UPoint(set->GetWidth(), set->GetHeight()),
             DataCache::Instance()->getGuiPic(UI_MenuBackground).get(), 3);
     m_menuBackground = backgroundFrame.getPicture();
 
@@ -50,11 +50,11 @@ void MainMenuBaseState::draw()
 
     tmp->blitFrom(menuFrame.getPicture().get(), UPoint(0, 31));
     tmp->setColorKey();
-    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, Settings::Instance()->GetHeight()/2 + 36));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 15, set->GetHeight()/2 + 36));
 
     m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get(), UPoint(11, 11));
-    m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(Settings::Instance()->GetWidth() - 66, 11));
-    m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldOrdos).get(), UPoint(11, Settings::Instance()->GetHeight() - 67));
+    m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get(), UPoint(set->GetWidth() - 66, 11));
+    m_menuBackground->blitFrom(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldOrdos).get(), UPoint(11, set->GetHeight() - 67));
 
     // I'd really prefer 77, 30, but then text gets fscked up..?
     Frame2 versionBox(116, UPoint(100, 30));
@@ -64,7 +64,7 @@ void MainMenuBaseState::draw()
     // And here I'd prefer actually black, but I seem to lack understanding of the palette stuff.. :/
     font->render(VERSION, tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 57);
 
-    m_menuBackground->blitFrom(tmp.get(), UPoint(Settings::Instance()->GetWidth() - 120, Settings::Instance()->GetHeight() - 48));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(set->GetWidth() - 120, set->GetHeight() - 48));
 
 
 
