@@ -99,7 +99,7 @@ void Application::Init()
     SDL_EnableUNICODE(1);
 
     // replace NULL with a path to a 32x32 icon
-    SDL_WM_SetCaption("Dune Legacy", "paks/DUNE2.ICO");
+    SDL_WM_SetCaption("Doon Lunacy", "paks/DUNE2.ICO");
 
     InitAudio();
     //InitNet();
