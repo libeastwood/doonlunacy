@@ -5,7 +5,7 @@
 #include "DataCache.h" 
 #include "Log.h"
 
-#include "pakfile/sound/Vocfile.h"
+#include "pakfile/Vocfile.h"
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
 #include "pakfile/Palette.h"

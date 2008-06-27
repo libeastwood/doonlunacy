@@ -13,7 +13,7 @@
 #include "singleton.h"
 #include "Settings.h"
 
-#include "pakfile/sound/adlwrap.h"
+#include "AdlibPlayer.h"
 
 /*!
 	Class that handles sounds and music.

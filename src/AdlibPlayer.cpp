@@ -1,7 +1,7 @@
 #include <SDL_mixer.h>
 #include <opl.h>
 
-#include "pakfile/sound/adlwrap.h"
+#include "AdlibPlayer.h"
 #include "ResMan.h"
 
 AdlibPlayer::AdlibPlayer(Copl* newopl) : CadlPlayer(newopl){

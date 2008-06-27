@@ -14,7 +14,7 @@
 #include "Log.h"
 #include "SoundPlayer.h"
 
-#include "pakfile/sound/Vocfile.h"
+#include "pakfile/Vocfile.h"
 
 SoundPlayer::SoundPlayer()
 {

@@ -18,13 +18,14 @@
  *
  */
 #include <math.h>
+#include <samplerate.h>
 #include <string>
 #include <SDL_mixer.h>
 
+#include "mmath.h"
 #include "Log.h"
 
 #include "pakfile/Vocfile.h"
-
 using namespace std;
 
 #define	VOC_CODE_TERM		0
@@ -245,6 +246,7 @@ static Uint8 *LoadVOC_RW(SDL_RWops* rwop, Uint32 &size, Uint32 &rate) {
 		}
 	}
 	return ret_sound;
+return 0;
 }
 
 inline Uint8 Float2Uint8(float x) {
@@ -292,7 +294,6 @@ inline Sint16 Float2Sint16(float x) {
 }
 
 Mix_Chunk* LoadVOC_RW(SDL_RWops* rwop, int freesrc) {
-
 	if(rwop == NULL) {
 		return NULL;
 	}
@@ -596,5 +597,6 @@ Mix_Chunk* LoadVOC_RW(SDL_RWops* rwop, int freesrc) {
 	if(freesrc) {
 		SDL_RWclose(rwop);
 	}
-	return myChunk;
+
+return myChunk;
 }
