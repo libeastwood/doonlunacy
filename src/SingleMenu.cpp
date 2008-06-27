@@ -46,7 +46,6 @@ SingleMenuState::SingleMenuState()
    
     m_vbox->addChild(m_butCancel);
 
-    draw();
 }
 
 SingleMenuState::~SingleMenuState()
