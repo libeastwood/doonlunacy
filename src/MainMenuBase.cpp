@@ -73,18 +73,18 @@ void MainMenuBaseState::draw()
 void MainMenuBaseState::drawMainImage(){
     int len;
     uint8_t *data = ResMan::Instance()->readFile("FINALE:MAPPLAN.CPS", &len);
-
-    CpsfilePtr m_cps (new Cpsfile(data, len));
-    ImagePtr tmp;
     Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
                 (m_vbox->w / 2);
+    CpsfilePtr m_cps (new Cpsfile(data, len));
 
+    ImagePtr tmp;
     Frame1 planet(m_cps->getPicture(), UPoint(320, 200));
     tmp = planet.getPicture();
     // Not satisfied with this recoloring, what goes wrong here..?
     tmp->recolor(COLOUR_HARKONNEN, 87);
     tmp->recolor(92, 95);
     m_menuBackground->blitFrom(tmp.get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
+
 }
 
 MainMenuBaseState::~MainMenuBaseState()

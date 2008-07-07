@@ -18,6 +18,9 @@ class SkirmishMenuState : public MainMenuBaseState
 
         virtual const char* GetName() { return "SkirmishMenuState"; }
 
+    protected:
+        virtual void drawMainImage();
+
     private:
         BoringButton* m_butCancel;
 };
