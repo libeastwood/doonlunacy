@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "houses.h"
-//#include "DataFile.h"
+#include "DataCache.h"
 #include "Settings.h"
 
 #include "gui2/Frame.h"
@@ -29,8 +29,10 @@ SkirmishMenuState::~SkirmishMenuState()
 void SkirmishMenuState::drawMainImage(){
     Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
                 (m_vbox->w / 2);
-    Frame1 planet(236, UPoint(320, 200));
-    m_menuBackground->blitFrom(planet.getPicture().get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
+    Frame1 housechoice(DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground).get(), UPoint(320, 200));
+//    housechoice.getPicture()->recolor(0, 236);
+
+    m_menuBackground->blitFrom(housechoice.getPicture().get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
 }
 
 void SkirmishMenuState::doCancel()
