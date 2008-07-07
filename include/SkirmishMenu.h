@@ -15,6 +15,7 @@ class SkirmishMenuState : public MainMenuBaseState
         ~SkirmishMenuState();
 
         void doCancel();
+        void doStart();
 
         virtual const char* GetName() { return "SkirmishMenuState"; }
 
@@ -22,7 +23,8 @@ class SkirmishMenuState : public MainMenuBaseState
         virtual void drawMainImage();
 
     private:
-        BoringButton* m_butCancel;
+        BoringButton *m_butStart;
+        BoringButton *m_butCancel;
 };
 
 #endif // DUNE_SINGLEMENU_H

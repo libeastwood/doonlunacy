@@ -12,11 +12,16 @@
 
 SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
 {
+    m_butStart = new BoringButton("Start");
+    m_butStart->setSize(SPoint(bw, bh));
+    m_butStart->onClick.connect(
+            boost::bind(&SkirmishMenuState::doStart, this) );
+    m_vbox->addChild(m_butStart);
+
     m_butCancel = new BoringButton("Cancel");
     m_butCancel->setSize(SPoint(bw, bh));
     m_butCancel->onClick.connect(
             boost::bind(&SkirmishMenuState::doCancel, this) );
-   
     m_vbox->addChild(m_butCancel);
 
 }
@@ -33,6 +38,10 @@ void SkirmishMenuState::drawMainImage(){
 //    housechoice.getPicture()->recolor(0, 236);
 
     m_menuBackground->blitFrom(housechoice.getPicture().get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
+}
+
+void SkirmishMenuState::doStart()
+{
 }
 
 void SkirmishMenuState::doCancel()
