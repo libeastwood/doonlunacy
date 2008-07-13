@@ -4,6 +4,7 @@
 #include "houses.h"
 #include "DataCache.h"
 #include "Settings.h"
+#include "Font.h"
 
 #include "gui2/Frame.h"
 
@@ -38,6 +39,28 @@ void SkirmishMenuState::drawMainImage(){
 //    housechoice.getPicture()->recolor(0, 236);
 
     m_menuBackground->blitFrom(housechoice.getPicture().get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
+    ImagePtr tmp;
+    Frame2 difficultyBox(236, UPoint(112, 30));
+    tmp = difficultyBox.getPicture();
+
+    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    Settings* set = Settings::Instance();
+    Uint16 textw, texth;
+
+    font->extents("Difficulty", textw, texth);
+    font->render("Difficulty", tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 32);
+
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 150, set->GetHeight()/2 + 36));
+
+    Frame1 missionBox((Uint32)0, UPoint(113, 58));
+    tmp = missionBox.getPicture();
+    font->extents("Mission", textw, texth);
+    font->render("Mission", tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 32);
+
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x + 250, set->GetHeight()/2 + 36));
+
+    
+
 }
 
 void SkirmishMenuState::doStart()
