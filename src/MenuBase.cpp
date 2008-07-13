@@ -13,8 +13,8 @@
 
 MenuBaseState::MenuBaseState()
 {
-    // Just initialize it to avoid unitialized variable..
-    m_menuBackground.reset(new Image(UPoint(1,1)));
+    m_drawMenu = true;
+    m_menuBackground.reset(new Image(UPoint(set->GetWidth(), set->GetHeight())));
 
 
     m_container = new Container();

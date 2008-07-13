@@ -20,6 +20,7 @@ class MenuBaseState : public State
     protected:
         ImagePtr m_menuBackground;
         Container* m_container;
+	bool m_drawMenu;
 };
 
 #endif // DUNE_MENUBASE_H

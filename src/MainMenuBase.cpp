@@ -30,7 +30,6 @@ void MainMenuBaseState::draw()
 
     Frame3 backgroundFrame(0, UPoint(set->GetWidth(), set->GetHeight()),
             DataCache::Instance()->getGuiPic(UI_MenuBackground).get(), 3);
-    m_menuBackground = backgroundFrame.getPicture();
 
     m_menuBackground->blitFrom(backgroundFrame.getPicture().get());
 
@@ -96,8 +95,10 @@ int MainMenuBaseState::Execute(float dt)
     if(!Mix_GetMusicHookData()){
         SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
     }
-    if(m_menuBackground->getSize() != UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()))
+    if((m_menuBackground->getSize() != UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()) || m_drawMenu)){
         draw();
+	m_drawMenu = false;
+    }
 
 	m_menuBackground->blitToScreen(SPoint(0, 0));
     return 0;
