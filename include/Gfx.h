@@ -646,6 +646,7 @@ class Image
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
         };
 */
+	Image *getPictureCrop(ConstRect rect);
         
         //! Set colorkey
         /*!

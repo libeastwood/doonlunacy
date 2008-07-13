@@ -2,6 +2,7 @@
 
 #include "Application.h"    // for Screen
 #include "houses.h"        // for house colors
+#include "Log.h"
 
 #include <assert.h>
 
@@ -51,6 +52,29 @@ Image::operator SDL_Surface*()
 SDL_Surface *Image::getSurface()
 {
     return surface;
+}
+
+Image *Image::getPictureCrop(ConstRect dstRect)
+{
+	if(((int) (dstRect.x + dstRect.w) > surface->w) || ((int) (dstRect.y + dstRect.h) > surface->h)) {
+		LOG_ERROR("GFX", "getPictureCrop: Cannot create new Picture!");
+		exit(EXIT_FAILURE);	
+	}
+	
+	SDL_Surface *returnPic;
+	
+	// create new picture surface
+	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,dstRect.w, dstRect.h,8,0,0,0,0))== NULL) {
+		LOG_ERROR("GFX", "getPictureCrop: Cannot create new Picture!");
+		exit(EXIT_FAILURE);	
+	}
+			
+	SDL_SetColors(returnPic, surface->format->palette->colors, 0, surface->format->palette->ncolors);
+
+	Rect r(dstRect);
+	SDL_BlitSurface(surface,&r,returnPic,NULL); 
+
+	return new Image(returnPic);
 }
 
 void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
