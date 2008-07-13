@@ -5,7 +5,7 @@
 
 // fwd dec
 class StateMachine;
-
+class Settings;
 /*!
 	Base State class used with StateMachine. 
 */
@@ -52,6 +52,7 @@ class State
     
     protected:
         StateMachine* mp_parent;
+	Settings* set;
 };
 
 /*

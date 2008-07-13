@@ -19,7 +19,6 @@ MainMenuBaseState::MainMenuBaseState()
 void MainMenuBaseState::draw()
 {
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-    Settings* set = Settings::Instance();
     Uint16 textw, texth;
 
     m_vbox->fit(2);

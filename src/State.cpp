@@ -1,11 +1,13 @@
 #include "Log.h"
 #include "State.h"
+#include "Settings.h"
 
 #include <assert.h>
 
 State::State()
 {
     mp_parent = NULL;
+    set = Settings::Instance();
 }
 
 State::~State()
