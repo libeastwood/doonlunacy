@@ -1,5 +1,5 @@
-#ifndef HOUSECHOICEMENU_H_INCLUDED
-#define HOUSECHOICEMENU_H_INCLUDED
+#ifndef EDITOR_H
+#define EDITOR_H
 
 #include "MenuBase.h"
 
@@ -18,4 +18,4 @@ private:
     MapWidget *m_mapWidget, *m_mapWidget2;
 };
 
-#endif // HOUSECHOICEMENU_H_INCLUDED
+#endif // EDITOR_H
