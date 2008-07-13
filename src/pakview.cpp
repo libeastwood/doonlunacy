@@ -32,7 +32,7 @@ class PakViewState : public State
             m_label = new Label("Use arrows (up,down,left,right) to switch houses and drawn sprites");
             m_label->setPosition(UPoint(10, 10));
             
-            m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
+            m_test = DataCache::Instance()->getObjPic((ObjPic_enum)img, HOUSETYPE(house));
 
             Application::Instance()->RootWidget()->addChild(m_label);            
 
@@ -73,7 +73,7 @@ class PakViewState : public State
 		   if (img < 0)
 			   img = NUM_OBJPICS-1;
 
-           m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
+           m_test = DataCache::Instance()->getObjPic((ObjPic_enum)img, HOUSETYPE(house));
        };
        
        void SwitchHouse(int i)
@@ -85,7 +85,7 @@ class PakViewState : public State
 		   if (house < 0)
 			   house = NUM_HOUSES-1;
 
-           m_test = DataCache::Instance()->getObjPic(ObjPic_enum(img), HOUSETYPE(house));
+           m_test = DataCache::Instance()->getObjPic((ObjPic_enum)img, HOUSETYPE(house));
        };
 
       virtual const char* GetName() { return "PakViewState"; }
