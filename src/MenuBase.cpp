@@ -16,10 +16,11 @@ MenuBaseState::MenuBaseState()
     // Just initialize it to avoid unitialized variable..
     m_menuBackground.reset(new Image(UPoint(1,1)));
 
+
     m_container = new Container();
     m_container->setPosition(UPoint(0, 0));
-    m_container->setSize(UPoint(Settings::Instance()->GetWidth(),
-								Settings::Instance()->GetHeight()));
+    m_container->setSize(UPoint(set->GetWidth(),
+			    set->GetHeight()));
     
     Application::Instance()->RootWidget()->addChild(m_container);
 }
