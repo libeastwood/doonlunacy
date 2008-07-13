@@ -94,9 +94,9 @@ MainMenuBaseState::~MainMenuBaseState()
 
 int MainMenuBaseState::Execute(float dt)
 {
-	if(!Mix_GetMusicHookData()){
-		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
-	}
+    if(!Mix_GetMusicHookData()){
+        SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
+    }
     if(m_menuBackground->getSize() != UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()))
         draw();
 
