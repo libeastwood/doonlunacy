@@ -14,6 +14,7 @@ class GameMenuState : public MenuBaseState {
 
     protected:
         MapWidget *m_mapWidget, *m_mapWidget2;
+	void drawMenu();
 };
 
 #endif // GAMEMENU_H

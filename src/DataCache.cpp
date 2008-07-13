@@ -121,8 +121,8 @@ void DataCache::Init(){
     CpsfilePtr fame(new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
     CpsfilePtr mapmach(new Cpsfile(data, len));
-    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
-    CpsfilePtr screen(new Cpsfile(data, len));
+//    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
+//    CpsfilePtr screen(new Cpsfile(data, len));
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
 	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
