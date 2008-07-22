@@ -17,8 +17,6 @@ public:
 	~Cpsfile();
 
 	Image * getPicture();
-	Image * getSubPicture(unsigned int left, unsigned int top, unsigned int width, unsigned int height);
-
 
 private:
 	unsigned char* Filedata;

@@ -343,46 +343,46 @@ void DataCache::Init(){
 //	SDL_SetColorKey(UIGraphic,UI_MapChoiceMap][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	addGuiPic(UI_MapChoiceClickMap, rgnclk->getPicture());
 
-    addGuiPic(UI_TopBorder, fame->getSubPicture(12, 73, 1, 4));
-    addGuiPic(UI_BottomBorder, fame->getSubPicture(12, 72, 1, 4));
-    addGuiPic(UI_LeftBorder, fame->getSubPicture(1, 83, 4, 1));
-    addGuiPic(UI_RightBorder, fame->getSubPicture(1, 83, 4, 1));
+    addGuiPic(UI_TopBorder, fame->getPicture()->getPictureCrop(Rect(12, 73, 1, 4)));
+    addGuiPic(UI_BottomBorder, fame->getPicture()->getPictureCrop(Rect(12, 72, 1, 4)));
+    addGuiPic(UI_LeftBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));
+    addGuiPic(UI_RightBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));
 
-    tmp = fame->getSubPicture(64, 9, 8, 8);
+    tmp = fame->getPicture()->getPictureCrop(Rect(64, 9, 8, 8));
     tmp->setColorKey();
     tmp->putPixel(UPoint(6,7), 0); // Edge smoothing..
     tmp->putPixel(UPoint(7,6), 0);
     tmp->putPixel(UPoint(7,7), 0);
     addGuiPic(UI_Corner1NW, tmp);
 
-    tmp = fame->getSubPicture(248, 9, 8, 8);
+    tmp = fame->getPicture()->getPictureCrop(Rect(248, 9, 8, 8));
     tmp->setColorKey();
     tmp->fillRect(0, Rect(0, 5, 1, 2));
     tmp->fillRect(0, Rect(0, 6, 2, 2));
     addGuiPic(UI_Corner1NE, tmp);
     
-    tmp = fame->getSubPicture(64, 23, 8, 8);
+    tmp = fame->getPicture()->getPictureCrop(Rect(64, 23, 8, 8));
     tmp->setColorKey();
     tmp->putPixel(UPoint(6,0), 0);
     tmp->putPixel(UPoint(7,0), 0);
     tmp->putPixel(UPoint(7,1), 0);
     addGuiPic(UI_Corner1SW, tmp);
 
-    tmp = fame->getSubPicture(248, 23, 8, 8);
+    tmp = fame->getPicture()->getPictureCrop(Rect(248, 23, 8, 8));
     tmp->setColorKey();
     tmp->putPixel(UPoint(0, 0), 0);
     tmp->putPixel(UPoint(0, 1), 0);
     tmp->putPixel(UPoint(1, 0), 0);
     addGuiPic(UI_Corner1SE, tmp);
 
-    tmp = fame->getSubPicture(10, 137, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(10, 137, 12, 12));
     tmp->setColorKey();
     tmp->drawHLine(UPoint(8, 11), 11, 0);
     tmp->drawHLine(UPoint(10, 9), 11, 0);
     tmp->drawVLine(UPoint(11, 11), 4, 0);
     addGuiPic(UI_Corner2NW, tmp);
 
-    tmp = fame->getSubPicture(51, 137, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(51, 137, 12, 12));
     tmp->setColorKey();
     tmp->drawVLine(UPoint(0, 4), 11, 0); // Edge smoothing..
     tmp->drawVLine(UPoint(1, 9), 11, 0);
@@ -390,7 +390,7 @@ void DataCache::Init(){
     tmp->drawHLine(UPoint(2, 11), 6, 0);
     addGuiPic(UI_Corner2NE, tmp);
 
-    tmp = fame->getSubPicture(10, 180, 10, 11);
+    tmp = fame->getPicture()->getPictureCrop(Rect(10, 180, 10, 11));
     tmp->setColorKey();
     tmp->drawHLine(UPoint(2, 0), 9, 0); // Edge smoothing..
     tmp->drawHLine(UPoint(6, 1), 9, 0);
@@ -399,7 +399,7 @@ void DataCache::Init(){
     tmp->drawVLine(UPoint(9, 3), 7, 0);
     addGuiPic(UI_Corner2SW, tmp);
 
-    tmp = fame->getSubPicture(52, 180, 11, 11);
+    tmp = fame->getPicture()->getPictureCrop(Rect(52, 180, 11, 11));
     tmp->setColorKey();
     tmp->drawVLine(UPoint(0, 0), 7, 0); // Edge smoothing..
     tmp->drawVLine(UPoint(1, 0), 3, 0);
@@ -408,34 +408,34 @@ void DataCache::Init(){
     tmp->drawHLine(UPoint(0, 0), 7, 0);
     addGuiPic(UI_Corner2SE, tmp);
 
-    tmp = fame->getSubPicture(1, 73, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(1, 73, 12, 12));
     tmp->setColorKey();
     tmp->fillRect(0, Rect(6, 6, 5, 5));
     addGuiPic(UI_Corner3NW, tmp);
 
-    tmp = fame->getSubPicture(308, 72, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(308, 72, 12, 12));
     tmp->setColorKey();
     tmp->fillRect(0, Rect(0, 7, 5, 5));
     addGuiPic(UI_Corner3NE, tmp);
     
-    tmp = fame->getSubPicture(0, 188, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(0, 188, 12, 12));
     tmp->setColorKey();
     tmp->fillRect(0, Rect(7, 0, 5, 5));
     addGuiPic(UI_Corner3SW, tmp);
 
-    tmp = fame->getSubPicture(308, 188, 12, 12);
+    tmp = fame->getPicture()->getPictureCrop(Rect(308, 188, 12, 12));
     tmp->fillRect(0, Rect(0, 0, 5, 5));
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
 
-    addGuiPic(UI_BlankFiller, mapmach->getSubPicture(60, 185, 150, 16));
+    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 185, 150, 16)));
 
     // Ugly, needs to be improved..
-    addGuiPic(UI_MenuBackground, fame->getSubPicture(0, 0, 50, 50));
+    addGuiPic(UI_MenuBackground, fame->getPicture()->getPictureCrop(Rect(0, 0, 50, 50)));
 
-    addGuiPic(UI_Mentat_HeraldHarkonnen, fame->getSubPicture(9, 136, 56, 56));
-    addGuiPic(UI_Mentat_HeraldAtreides, fame->getSubPicture(65, 136, 56, 56));
-    addGuiPic(UI_Mentat_HeraldOrdos, fame->getSubPicture(121, 136, 56, 56));
+    addGuiPic(UI_Mentat_HeraldHarkonnen, fame->getPicture()->getPictureCrop(Rect(9, 136, 56, 56)));
+    addGuiPic(UI_Mentat_HeraldAtreides, fame->getPicture()->getPictureCrop(Rect(65, 136, 56, 56)));
+    addGuiPic(UI_Mentat_HeraldOrdos, fame->getPicture()->getPictureCrop(Rect(121, 136, 56, 56)));
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));

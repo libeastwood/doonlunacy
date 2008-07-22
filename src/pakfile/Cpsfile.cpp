@@ -85,32 +85,3 @@ Image * Cpsfile::getPicture()
 	
 	return img;
 }
-
-Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int width, unsigned int height)
-{
-	SDL_Surface *Pic = getPicture()->getSurface();
-	if(Pic == NULL) {
-		return NULL;
-	}
-	
-	if(((int) (left+width) > Pic->w) || ((int) (top+height) > Pic->h)) {
-		return NULL;
-	}
-	
-	SDL_Surface *returnPic;
-	
-	// create new picture surface
-	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,width,height,8,0,0,0,0))== NULL) {
-		LOG_ERROR("Cpsfile", "GetSubPicture: Cannot create new Picture!");
-		exit(EXIT_FAILURE);	
-	}
-			
-	SDL_SetColors(returnPic, Pic->format->palette->colors, 0, Pic->format->palette->ncolors);
-
-	SDL_Rect srcRect = {left,top,width,height};
-	SDL_BlitSurface(Pic,&srcRect,returnPic,NULL); 
-
-	Image * img = new Image(returnPic);
-
-	return img;
-}
