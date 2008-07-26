@@ -2,7 +2,6 @@
 #define DUNE_DATACACHE_H
 
 #include "Application.h"
-#include "ConfigFile.h"
 #include "Definitions.h"
 #include "Gfx.h"
 #include "Settings.h"

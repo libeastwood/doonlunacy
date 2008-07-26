@@ -56,7 +56,7 @@ extern SETTINGSTYPE settings;
 
 #include "singleton.h"
 #include "Log.h"
-#include "ConfigFile.h"
+#include <libconfig.h++>
 
 class Settings: public Singleton<Settings>
 {
@@ -64,7 +64,7 @@ class Settings: public Singleton<Settings>
     friend class SoundPlayer;
     friend class Application;
     
-    protected:
+  protected:
 	Settings();
 
 	// protected so Application can change them 
@@ -105,10 +105,10 @@ class Settings: public Singleton<Settings>
 	int m_emuOpl;
 
 	std::string m_dataDir;
+    
+    libconfig::Config * configFile;
         
-	ConfigFile::NodePtr configFile;
-
-    public:
+  public:
 	void load();
 	void save();
     

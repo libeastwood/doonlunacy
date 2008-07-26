@@ -32,7 +32,6 @@ all_sources = [ "Application.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
                 "Strings.cpp",
                 "Log.cpp",
-                "ConfigFile.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
 				"TerrainClass.cpp",
@@ -79,7 +78,6 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
               ]
 
 pakview_sources = [  "Application.cpp", 
-                     "ConfigFile.cpp",
                      "DataCache.cpp",
                      "Font.cpp",
                      "Gfx.cpp", 
