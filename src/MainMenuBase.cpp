@@ -87,7 +87,7 @@ int MainMenuBaseState::Execute(float dt)
 {
     Settings* set = Settings::Instance();
     
-	if(!Mix_GetMusicHookData()){
+	if(set->GetMusic() && !Mix_GetMusicHookData()){
 		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
 	}
     if(m_menuBackground->getSize() != UPoint(set->GetWidth(), set->GetHeight()))
