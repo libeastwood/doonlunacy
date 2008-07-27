@@ -1,0 +1,377 @@
+animations:
+{
+    
+    Anim_AtreidesPlanet = 
+    {
+        filename = "MENTAT:FARTR.WSA";
+        frame_rate = 12.0;
+    };
+    
+    Anim_HarkonnenPlanet = 
+    {
+        filename = "MENTAT:FHARK.WSA";
+        frame_rate = 12.0;
+    };
+    
+    Anim_OrdosPlanet = 
+    {
+        filename = "MENTAT:FORDOS.WSA";
+        frame_rate = 12.0;
+    };
+	
+	// Mentat animations go here
+	Anim_AtreidesEyes = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+    };
+    
+	Anim_AtreidesMouth = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 5.0;
+	    start_index = 5;
+	    end_index = 9;
+	};
+	
+	Anim_AtreidesShoulder = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 1.0;
+	    start_index = 10;
+	    end_index = 10;
+	};
+	
+	Anim_AtreidesBook = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 0.1;
+	    start_index = 11;
+	    end_index = 12;	
+	};
+
+	Anim_HarkonnenEyes = 
+	{
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 0.3;
+	    start_index = 0;
+	    end_index = 4;
+	};
+
+    Anim_HarkonnenMouth = 
+    {
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 0.5;
+	    start_index = 5;
+	    end_index = 9;
+	};
+
+    Anim_HarkonnenShoulder = 
+    {
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 1;
+	    start_index = 10;
+	    end_index = 10;
+	};
+
+	Anim_OrdosEyes =
+	{
+	    filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+	};
+	
+	Anim_OrdosMouth = 
+	{
+        filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 5;
+	    start_index = 5;
+	    end_index = 9;
+	};
+	
+	Anim_OrdosShoulder =
+	{	
+	    filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 1.0;
+	    start_index = 10;
+	    end_index = 10;
+	};
+	
+	Anim_OrdosRing = 
+	{
+		filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 6.0;
+	    start_index = 11;
+	    end_index = 14;
+	};
+
+	Anim_BeneGesseritEyes = 
+	{
+	    filename = "DUNE:MENSHPM.SHP";
+	    frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+    };
+	
+	Anim_BeneGesseritMouth = 
+	{
+	    filename = "DUNE:MENSHPM.SHP";
+	    frame_rate = 5.0;
+	    start_index = 5;
+	    end_index = 9;
+	    
+	};
+	
+	Anim_Win1 =
+	{
+		filename = "DUNE:WIN1.WSA";
+	};
+
+	Anim_Win2 =
+	{
+		filename = "DUNE:WIN2.WSA";
+	};
+
+	Anim_Lose1 =
+	{
+		filename = "DUNE:LOSTBILD.WSA";
+	};
+
+	Anim_Lose2 =
+	{
+		filename = "DUNE:LOSTVEHC.WSA";
+	};
+
+	Anim_Barracks =
+	{
+		filename = "MENTAT:BARRAC.WSA";
+	};
+
+	Anim_Carryall =
+	{
+		filename = "MENTAT:CARRYALL.WSA";
+	};
+
+	Anim_ConstructionYard =
+	{
+		filename = "MENTAT:CONSTRUC.WSA";
+	};
+
+	Anim_Fremen =
+	{
+		filename = "MENTAT:FREMEN.WSA";
+	};
+
+	Anim_DeathHand =
+	{
+		filename = "MENTAT:GOLD-BB.WSA";
+	};
+
+	Anim_Devastator =
+	{
+		filename = "MENTAT:HARKTANK.WSA";
+	};
+
+	Anim_Harvester =
+	{
+		filename = "MENTAT:HARVEST.WSA";
+	};
+
+	Anim_Radar =
+	{
+		filename = "MENTAT:HEADQRTS.WSA";
+	};
+
+	Anim_HighTechFactory =
+	{
+		filename = "MENTAT:HITCFTRY.WSA";
+	};
+
+	Anim_SiegeTank =
+	{
+		filename = "MENTAT:HTANK.WSA";
+	};
+
+	Anim_HeavyFactory =
+	{
+		filename = "MENTAT:HVYFTRY.WSA";
+	};
+
+	Anim_Trooper =
+	{
+		filename = "MENTAT:HYINFY.WSA";
+	};
+
+	Anim_Infantry =
+	{
+		filename = "MENTAT:INFANTRY.WSA";
+	};
+
+	Anim_IX =
+	{
+		filename = "MENTAT:IX.WSA";
+	};
+
+	Anim_LightFactory =
+	{
+		filename = "MENTAT:LITEFTRY.WSA";
+	};
+
+	Anim_Tank =
+	{
+		filename = "MENTAT:LTANK.WSA";
+	};
+
+	Anim_MCV =
+	{
+		filename = "MENTAT:MCV.WSA";
+	};
+
+	Anim_Deviator =
+	{
+		filename = "MENTAT:ORDRTANK.WSA";
+	};
+
+	Anim_Ornithopter =
+	{
+		filename = "MENTAT:ORNI.WSA";
+	};
+
+	Anim_Raider =
+	{
+		filename = "MENTAT:OTRIKE.WSA";
+	};
+
+	Anim_Palace =
+	{
+		filename = "MENTAT:PALACE.WSA";
+	};
+
+	Anim_Quad =
+	{
+		filename = "MENTAT:QUAD.WSA";
+	};
+
+	Anim_Refinery =
+	{
+		filename = "MENTAT:REFINERY.WSA";
+	};
+
+	Anim_RepairYard =
+	{
+		filename = "MENTAT:REPAIR.WSA";
+	};
+
+	Anim_Launcher =
+	{
+		filename = "MENTAT:RTANK.WSA";
+	};
+
+	Anim_RocketTurret =
+	{
+		filename = "MENTAT:RTURRET.WSA";
+	};
+
+	Anim_Saboteur =
+	{
+		filename = "MENTAT:SABOTURE.WSA";
+	};
+
+	Anim_Slab1 =
+	{
+		filename = "MENTAT:SLAB.WSA";
+	};
+
+	Anim_SonicTank =
+	{
+		filename = "MENTAT:STANK.WSA";
+	};
+
+	Anim_StarPort =
+	{
+		filename = "MENTAT:STARPORT.WSA";
+	};
+
+	Anim_Silo =
+	{
+		filename = "MENTAT:STORAGE.WSA";
+	};
+
+	Anim_Trike =
+	{
+		filename = "MENTAT:TRIKE.WSA";
+	};
+
+	Anim_GunTurret =
+	{
+		filename = "MENTAT:TURRET.WSA";
+	};
+
+	Anim_Wall =
+	{
+		filename = "MENTAT:WALL.WSA";
+	};
+
+	Anim_WindTrap =
+	{
+		filename = "MENTAT:WINDTRAP.WSA";
+	};
+
+	Anim_WOR =
+	{
+		filename = "MENTAT:WOR.WSA";
+	};
+
+	Anim_Sandworm =
+	{
+		filename = "MENTAT:WORM.WSA";
+	};
+
+	Anim_Sardaukar =
+	{
+		filename = "MENTAT:SARDUKAR.WSA";
+	};
+
+	Anim_Frigate =
+	{
+		filename = "MENTAT:FRIGATE.WSA";
+	};
+
+};
+
+units:
+{
+    ground:
+    {
+        quad = {
+            filename = "DUNE:UNITS.SHP";
+            health = 450;
+            num_weapons = 2;
+            picture_array = 0;
+            primary_weapon_reload_time = 100;
+            radius = 6;
+            view_range = 4;
+            weapon_damage = 25;
+            weapon_range = 3;
+            size = [1,1];
+        };
+   };
+};
+
+
+buildings:
+{
+    silo = 
+    {
+        capacity = 1000;
+        health = 750;
+        offset = [0,0];
+        picture_array = 25;
+        power_req = 5;
+        view_range = 3;
+        size = [2,2];
+    };
+};
