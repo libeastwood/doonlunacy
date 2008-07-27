@@ -7,11 +7,28 @@
 
 #include "pakfile/sound/Vocfile.h"
 
+using namespace libconfig;
 
 DataCache::DataCache() {
 }
 
 void DataCache::Init(){
+    //TODO:Should use ResMan.
+    m_dataConfig = new Config();
+
+    try
+    {
+        m_dataConfig->readFile("data.dunetxt");
+    }
+    catch(ParseException& ex)
+    {
+        LOG_FATAL("DataCache", "Fatal error loading configuration file on line %d: %s", 
+            ex.getLine(), ex.getError());
+
+        exit(EXIT_FAILURE);
+    }
+
+
     for (uint8_t i=0; i< NUM_HOUSES; i++)
     {
         m_objImg.push_back(new images);
@@ -177,66 +194,6 @@ void DataCache::Init(){
 	addObjPic(ObjPic_RockDamage, icon->getPictureRow(1,6));
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
 	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
-
-	addAnimation(Anim_AtreidesEyes, menshpa->getAnimation(0,4,true), 0.5);
-	addAnimation(Anim_AtreidesMouth, menshpa->getAnimation(5,9,true), 5.0);
-	addAnimation(Anim_AtreidesShoulder, menshpa->getAnimation(10,10,true), 1.0);
-	addAnimation(Anim_AtreidesBook, menshpa->getAnimation(11,12,true), 0.1);
-	addAnimation(Anim_HarkonnenEyes, menshph->getAnimation(0,4,true), 0.3);
-	addAnimation(Anim_HarkonnenMouth, menshph->getAnimation(5,9,true), 0.5);
-	addAnimation(Anim_HarkonnenShoulder, menshph->getAnimation(10,10,true), 1.0);
-	addAnimation(Anim_OrdosEyes, menshpo->getAnimation(0,4,true), 0.5);
-	addAnimation(Anim_OrdosMouth, menshpo->getAnimation(5,9,true), 5.0);
-	addAnimation(Anim_OrdosShoulder, menshpo->getAnimation(10,10,true), 1.0);
-	addAnimation(Anim_OrdosRing, menshpo->getAnimation(11,14,true), 6.0);
-	addAnimation(Anim_BeneGesseritEyes, menshpm->getAnimation(0,4,true), 0.5);
-	addAnimation(Anim_BeneGesseritMouth, menshpm->getAnimation(5,9,true), 5.0);
-	addAnimation(Anim_AtreidesPlanet, "MENTAT:FARTR.WSA", 12);
-	addAnimation(Anim_HarkonnenPlanet, "MENTAT:FHARK.WSA", 12);
-	addAnimation(Anim_OrdosPlanet, "MENTAT:FORDOS.WSA", 12);
-	addAnimation(Anim_Win1, "DUNE:WIN1.WSA");
-	addAnimation(Anim_Win2, "DUNE:WIN2.WSA");
-	addAnimation(Anim_Lose1, "DUNE:LOSTBILD.WSA");
-	addAnimation(Anim_Lose2, "DUNE:LOSTVEHC.WSA");
-	addAnimation(Anim_Barracks, "MENTAT:BARRAC.WSA");
-	addAnimation(Anim_Carryall, "MENTAT:CARRYALL.WSA");
-	addAnimation(Anim_ConstructionYard, "MENTAT:CONSTRUC.WSA");
-	addAnimation(Anim_Fremen, "MENTAT:FREMEN.WSA");
-	addAnimation(Anim_DeathHand, "MENTAT:GOLD-BB.WSA");
-	addAnimation(Anim_Devastator, "MENTAT:HARKTANK.WSA");
-	addAnimation(Anim_Harvester, "MENTAT:HARVEST.WSA");
-	addAnimation(Anim_Radar, "MENTAT:HEADQRTS.WSA");
-	addAnimation(Anim_HighTechFactory, "MENTAT:HITCFTRY.WSA");
-	addAnimation(Anim_SiegeTank, "MENTAT:HTANK.WSA");
-	addAnimation(Anim_HeavyFactory, "MENTAT:HVYFTRY.WSA");
-	addAnimation(Anim_Trooper, "MENTAT:HYINFY.WSA");
-	addAnimation(Anim_Infantry, "MENTAT:INFANTRY.WSA");
-	addAnimation(Anim_IX, "MENTAT:IX.WSA");
-	addAnimation(Anim_LightFactory, "MENTAT:LITEFTRY.WSA");
-	addAnimation(Anim_Tank, "MENTAT:LTANK.WSA");
-	addAnimation(Anim_MCV, "MENTAT:MCV.WSA");
-	addAnimation(Anim_Deviator, "MENTAT:ORDRTANK.WSA");
-	addAnimation(Anim_Ornithopter, "MENTAT:ORNI.WSA");
-	addAnimation(Anim_Raider, "MENTAT:OTRIKE.WSA");
-	addAnimation(Anim_Palace, "MENTAT:PALACE.WSA");
-	addAnimation(Anim_Quad, "MENTAT:QUAD.WSA");
-	addAnimation(Anim_Refinery, "MENTAT:REFINERY.WSA");
-	addAnimation(Anim_RepairYard, "MENTAT:REPAIR.WSA");
-	addAnimation(Anim_Launcher, "MENTAT:RTANK.WSA");
-	addAnimation(Anim_RocketTurret, "MENTAT:RTURRET.WSA");
-	addAnimation(Anim_Saboteur, "MENTAT:SABOTURE.WSA");
-	addAnimation(Anim_Slab1, "MENTAT:SLAB.WSA");
-	addAnimation(Anim_SonicTank, "MENTAT:STANK.WSA");
-	addAnimation(Anim_StarPort, "MENTAT:STARPORT.WSA");
-	addAnimation(Anim_Silo, "MENTAT:STORAGE.WSA");
-	addAnimation(Anim_Trike, "MENTAT:TRIKE.WSA");
-	addAnimation(Anim_GunTurret, "MENTAT:TURRET.WSA");
-	addAnimation(Anim_Wall, "MENTAT:WALL.WSA");
-	addAnimation(Anim_WindTrap, "MENTAT:WINDTRAP.WSA");
-	addAnimation(Anim_WOR, "MENTAT:WOR.WSA");
-	addAnimation(Anim_Sandworm, "MENTAT:WORM.WSA");
-	addAnimation(Anim_Sardaukar, "MENTAT:SARDUKAR.WSA");
-	addAnimation(Anim_Frigate, "MENTAT:FRIGATE.WSA");
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
 	addGuiPic(UI_MouseCursor, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
@@ -710,32 +667,65 @@ std::string	DataCache::getCreditsString(uint16_t i){
 	return CreditsStrings->getString(i);
 }
 
-void DataCache::addAnimation(Animation_enum ID, std::string fileName, double frameRate) {
-	int len;
-    uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
-    WsafilePtr wsafile(new Wsafile(data, len));
-    SDL_Palette* palette = getPalette(IBM_PAL);
-	
-	Animation* animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
-	if(frameRate)
-		animation->setFrameRate(frameRate);
-	Anim[ID] = animation;
-	delete data;
-}
+Animation*  DataCache::getAnimation(std::string path)
+{
+    LOG_ERROR("DataCache", "path is %s", path.c_str());
 
-void DataCache::addAnimation(Animation_enum ID, Animation* animation, double frameRate) {
-	if(frameRate)
-		animation->setFrameRate(frameRate);
-	Anim[ID] = animation;
-}
+    std::string fullpath = "animations.";
+    fullpath+=path;
 
-Animation* DataCache::getAnimation(Animation_enum id) {
-	if(id >= NUM_ANIMATION) {
-		LOG_ERROR("DataCache", "getAnimation(): Animation with id %d is not available!",id);
-		exit(EXIT_FAILURE);
-	}
-	
-	return Anim[id];
+    Animation* animation = NULL;
+    
+    try
+    {
+        Setting& node = m_dataConfig->lookup(fullpath);
+
+        std::string fileName;
+        node.lookupValue("filename", fileName);
+
+        std::string type = fileName.substr(fileName.length()-3, 3);
+
+    	int len;
+        uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
+
+
+        if (type.compare("WSA") == 0)
+        {
+            WsafilePtr wsafile(new Wsafile(data, len));
+            SDL_Palette* palette = getPalette(IBM_PAL);
+        	
+        	animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
+            double frameRate = 1;
+            node.lookupValue("frame_rate", frameRate);
+        	animation->setFrameRate(frameRate);
+
+        }
+        
+        if (type.compare("SHP") == 0)
+        {
+            int startIndex, endIndex;
+            double frameRate;
+            node.lookupValue("start_index", startIndex);
+            node.lookupValue("end_index", endIndex);
+
+            Shpfile * shpfile = new Shpfile(data, len, getPalette(BENE_PAL));
+            animation = shpfile->getAnimation(startIndex,endIndex,true);
+
+            node.lookupValue("frame_rate", frameRate);
+       		animation->setFrameRate(frameRate);
+    
+        }
+
+    }
+    catch(ParseException& ex)
+    {
+        LOG_FATAL("DataCache", "Setting not found %d: %s", 
+            ex.getLine(), ex.getError());
+
+        exit(EXIT_FAILURE);
+    }
+    
+    return animation;   
 }
 
 Mix_Chunk* DataCache::concat2Chunks(Sound_enum ID1, Sound_enum ID2)

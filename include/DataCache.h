@@ -20,6 +20,7 @@
 
 #include <map>
 #include <vector>
+#include <libconfig.h++>
 
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
@@ -76,18 +77,11 @@ class DataCache : public Singleton<DataCache>
          *  @param house colour to which image is remapped. By default: HOUSE_HARKONNEN
          */
         void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
-        /*! Adds Animation to cache from file
-         *  @param ID identification number a given animation is assigned
-         *  @param filename file from which Animation is to be loaded
-         *  @param frameRate frame rate of animation. By default: 0
+        /*! 
+         *  Parses animation parameters from a file and loads animation
+         *  @return pointer to animation
          */
-		void addAnimation(Animation_enum ID, std::string filename, double frameRate = 0);
-        /*! Adds an already loaded Animation to cache
-         *  @param ID identification number a given animation is assigned
-         *  @param animation pointer to Animation which is to be cached
-         *  @param frameRate frame rate of animation. By default: 0
-         */
-		void addAnimation(Animation_enum ID, Animation* animation, double frameRate = 0);
+        Animation*		getAnimation(std::string path);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
 		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum);
         /*! Adds palette from a file 
@@ -137,7 +131,6 @@ class DataCache : public Singleton<DataCache>
          *        and thus already resized animations should be cached. This would allow
          *        to keep only necessary resized animations in RAM.
          */
-        Animation*		getAnimation(Animation_enum id);
         Mix_Chunk* getSoundChunk(Sound_enum ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);   
@@ -147,6 +140,8 @@ class DataCache : public Singleton<DataCache>
         //@}
 
     private:
+		libconfig::Config * m_dataConfig;
+		
         remapped_images m_objImg;
         remapped_images m_guiImg;
 
@@ -159,7 +154,6 @@ class DataCache : public Singleton<DataCache>
 		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
 		Mix_Chunk* createEmptyChunk();
 
-		Animation* Anim[NUM_ANIMATION];
 		Stringfile* BriefingStrings[3];
 		Stringfile* IntroStrings;
 		Stringfile* CreditsStrings;

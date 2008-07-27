@@ -10,13 +10,13 @@ Animation::Animation() {
 }
 
 Animation::~Animation() {
-	if(Frame != NULL) {
-		for(int i=0; i < NumFrames; i++) {
-			SDL_FreeSurface(Frame[i]->getSurface());
+//	if(Frame != NULL) {
+//		for(int i=0; i < NumFrames; i++) {
+//			SDL_FreeSurface(Frame[i]->getSurface());
 //			Frame[i] = NULL;
-		}
+//		}
 //		free(Frame);
-	}
+//	}
 }
 
 Image *  Animation::getFrame() {
