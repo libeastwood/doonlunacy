@@ -5,10 +5,10 @@
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
 typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
-			   MUSIC_INTRO,  /*!<Background music for intro. */
 			   MUSIC_LOSE,   /*!<Failure screen background music. */
 			   MUSIC_PEACE,  /*!<Played most of the time when the enemy is not attacking. */
 			   MUSIC_WIN,    /*!<Victory screen background music.. */
+			   MUSIC_INTRO,  /*!<Background music for intro. */
 			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
 			 } MUSICTYPE;
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+#include <boost/format.hpp>
 
 #include "DataCache.h" 
 #include "Log.h"
@@ -55,7 +56,6 @@ void DataCache::Init(){
     addPalette(IBM_PAL, "DUNE:IBM.PAL");
 
     ResMan::Instance()->addRes("SOUND");
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
 
     ResMan::Instance()->addRes("ATRE");
 	ResMan::Instance()->addRes("GERMAN");
@@ -203,7 +203,6 @@ void DataCache::Init(){
 																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
 //	addGuiPic(UI_GameBar, PicFactory->createGameBar();
 	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
-//	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);	
 
 //	SDL_SetColorKey(addGuiPic(UI_Indicator][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_InvalidPlace, PicFactory->createInvalidPlace();
@@ -485,45 +484,6 @@ void DataCache::Init(){
 	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
 	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
 	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
-
-	//addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
-	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
-
-	// These are actually all the same song, but three different versions..
-	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 3);
-	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 4);
-	addMusic(MUSIC_LOSE, "SOUND:DUNE1.ADL", 5);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE1.ADL", 2);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE2.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE3.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE4.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE5.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE6.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE1.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 2);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 3);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 4);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE7.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 4);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE9.ADL", 5);	
-	addMusic(MUSIC_PEACE, "SOUND:DUNE10.ADL", 2);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE10.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE11.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE12.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE13.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE14.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE15.ADL", 7);
-	addMusic(MUSIC_ATTACK, "SOUND:DUNE16.ADL", 7);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE16.ADL", 8);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE17.ADL", 4);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE18.ADL", 6);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 2);
-	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 3);	
-	addMusic(MUSIC_PEACE, "SOUND:DUNE19.ADL", 4);
-	addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 2);
-	addMusic(MUSIC_WIN, "SOUND:DUNE8.ADL", 3);
-	addMusic(MUSIC_WIN, "SOUND:DUNE20.ADL", 2);
-
 }
 
 void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
@@ -592,18 +552,19 @@ void DataCache::addSoundChunk(Sound_enum ID, Mix_Chunk* tmp){
 	soundChunk[ID] = tmp;
 }
 
-void DataCache::addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum)
-{
-    song newsong;
-    newsong.filename = filename;
-    newsong.track = trackNum;
-  
-    m_playlists[musicType].push_back(newsong);
-}
-
 song * DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
-    return &m_playlists[musicType][ID];
+  
+    Setting& node = m_dataConfig->lookup("music");
+    song * newSong = new song;
+
+    std::string filename = node[musicType][ID][0];
+    int track = (int)node[musicType][ID][1];
+
+    newSong->filename = filename;
+    newSong->track = track;
+
+    return newSong;
 }
 
 

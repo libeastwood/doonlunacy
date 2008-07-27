@@ -46,8 +46,6 @@ typedef struct {
     uint16_t track;
 } song;
 
-typedef std::vector<song> playlist;
-
 class DataCache : public Singleton<DataCache> 
 {
 	friend class Singleton<DataCache>;
@@ -83,7 +81,6 @@ class DataCache : public Singleton<DataCache>
          */
         Animation*		getAnimation(std::string path);
 		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
-		void addMusic(MUSICTYPE musicType, std::string filename, uint16_t trackNum);
         /*! Adds palette from a file 
          *  @param palette identification number Palette is assigned
          *  @param paletteFile file from which Palette is to be loaded
@@ -144,8 +141,6 @@ class DataCache : public Singleton<DataCache>
 		
         remapped_images m_objImg;
         remapped_images m_guiImg;
-
-        playlist m_playlists[MUSIC_RANDOM];
         
 		PalettefilePtr m_palette[NUM_PALETTES];
 
