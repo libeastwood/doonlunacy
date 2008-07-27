@@ -669,8 +669,6 @@ std::string	DataCache::getCreditsString(uint16_t i){
 
 Animation*  DataCache::getAnimation(std::string path)
 {
-    LOG_ERROR("DataCache", "path is %s", path.c_str());
-
     std::string fullpath = "animations.";
     fullpath+=path;
 
@@ -695,7 +693,7 @@ Animation*  DataCache::getAnimation(std::string path)
             SDL_Palette* palette = getPalette(IBM_PAL);
         	
         	animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
-            double frameRate = 1;
+            double frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
         	animation->setFrameRate(frameRate);
 
@@ -704,7 +702,7 @@ Animation*  DataCache::getAnimation(std::string path)
         if (type.compare("SHP") == 0)
         {
             int startIndex, endIndex;
-            double frameRate;
+            double frameRate = 1.0;
             node.lookupValue("start_index", startIndex);
             node.lookupValue("end_index", endIndex);
 
@@ -715,7 +713,7 @@ Animation*  DataCache::getAnimation(std::string path)
        		animation->setFrameRate(frameRate);
     
         }
-
+    
     }
     catch(ParseException& ex)
     {
@@ -724,7 +722,8 @@ Animation*  DataCache::getAnimation(std::string path)
 
         exit(EXIT_FAILURE);
     }
-    
+
+
     return animation;   
 }
 

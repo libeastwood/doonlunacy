@@ -4,12 +4,18 @@
 Animation::Animation() {
 	CurFrameStartTime = SDL_GetTicks();
 	FrameDurationTime = 1;
-	NumFrames = 0;
 	curFrame = 0;
-	Frame = NULL;
 }
 
 Animation::~Animation() {
+    if (!Frame.empty())
+    {
+        std::vector<Image*>::iterator iter;
+        for( iter = Frame.begin(); iter != Frame.end(); iter++ ) 
+        {
+            delete(*iter);
+        }
+    }
 //	if(Frame != NULL) {
 //		for(int i=0; i < NumFrames; i++) {
 //			SDL_FreeSurface(Frame[i]->getSurface());
@@ -20,30 +26,24 @@ Animation::~Animation() {
 }
 
 Image *  Animation::getFrame() {
-	if(Frame == NULL) {
+	if(Frame.empty()) {
 		return NULL;
 	}
 	
 	if((SDL_GetTicks() - CurFrameStartTime) > FrameDurationTime) {
 		CurFrameStartTime = SDL_GetTicks();
 		curFrame++;
-		if(curFrame >= NumFrames) {
+		if(curFrame >= Frame.size()) {
 			curFrame = 0;
 		}
 	}
-	return Frame[curFrame];
+	return Frame.at(curFrame);
 }
 
 void Animation::addFrame(Image * newFrame, bool SetColorKey) {
-	if((Frame = (Image **) realloc(Frame,sizeof(Image *) * (NumFrames+1))) == NULL) {
-		perror("Animation::addFrame()");
-		exit(EXIT_FAILURE);
-	}
-	
-		Frame[NumFrames] = newFrame;
-	
 	if(SetColorKey == true) {
-		SDL_SetColorKey((Frame[NumFrames])->getSurface(), SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+        newFrame->setColorKey();
 	}
-	NumFrames++;
+
+    Frame.push_back(newFrame);
 }

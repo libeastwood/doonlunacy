@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include "Gfx.h"
 
+#include <vector>
+
 class Animation
 {
 public:
@@ -24,9 +26,8 @@ public:
 private:
 	Uint32 CurFrameStartTime;
 	Uint32 FrameDurationTime;
-	int curFrame;
-	int NumFrames;
-	Image ** Frame;
+	Uint32 curFrame;
+	std::vector<Image*> Frame;
 };
 
 #endif // ANIMATION_H_INCLUDED
