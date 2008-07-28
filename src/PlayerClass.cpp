@@ -7,6 +7,7 @@
 
 //FIXME:When it's done these includes should be moved to Items.h
 #include "structures/BarracksClass.h"
+#include "structures/IXClass.h"
 #include "structures/LightFactoryClass.h"
 #include "structures/SiloClass.h"
 #include "structures/StructureClass.h"
@@ -202,6 +203,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
         case (Structure_LightFactory):
 		tempStructure = new LightFactoryClass(this);
+            break;
+
+        case (Structure_IX):
+		tempStructure = new IXClass(this);
             break;
 
         case (Structure_Silo):
