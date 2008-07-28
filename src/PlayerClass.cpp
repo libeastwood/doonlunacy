@@ -9,6 +9,7 @@
 #include "structures/BarracksClass.h"
 #include "structures/ConstructionYardClass.h"
 #include "structures/HighTechFactoryClass.h"
+#include "structures/GunTurretClass.h"
 #include "structures/IXClass.h"
 #include "structures/LightFactoryClass.h"
 #include "structures/PalaceClass.h"
@@ -209,8 +210,8 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 		tempStructure = new ConstructionYardClass(this);
             break;
 
-        case (Structure_LightFactory):
-		tempStructure = new LightFactoryClass(this);
+        case (Structure_GunTurret):
+		tempStructure = new GunTurretClass(this);
             break;
 
         case (Structure_HighTechFactory):
@@ -219,6 +220,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
         case (Structure_IX):
 		tempStructure = new IXClass(this);
+            break;
+
+        case (Structure_LightFactory):
+		tempStructure = new LightFactoryClass(this);
             break;
 
         case (Structure_Palace):
