@@ -17,6 +17,7 @@
 #include "structures/RadarClass.h"
 #include "structures/RefineryClass.h"
 #include "structures/RepairYardClass.h"
+#include "structures/RocketTurretClass.h"
 #include "structures/SiloClass.h"
 #include "structures/StarPortClass.h"
 #include "structures/StructureClass.h"
@@ -243,6 +244,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 		tempStructure = new RadarClass(this);
             break;
 
+        case (Structure_RocketTurret):
+		tempStructure = new RocketTurretClass(this);
+            break;
+	    
         case (Structure_Refinery):
 		tempStructure = new RefineryClass(this);
     	        addCapacity(2000);
