@@ -56,7 +56,7 @@ typedef enum {
 	ObjPic_IX,
 	ObjPic_Palace,
 	ObjPic_RepairYard,
-	ObjPic_Starport,
+	ObjPic_StarPort,
 	ObjPic_GunTurret,
 	ObjPic_RocketTurret,
 	ObjPic_Wall,
