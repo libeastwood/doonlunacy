@@ -146,7 +146,7 @@ void DataCache::Init(){
 	addObjPic(ObjPic_Saboteur, units->getPictureArray(4,3,INFANTRY_ROW(63),INFANTRY_ROW(64),INFANTRY_ROW(65)));
 	addObjPic(ObjPic_Sandworm, units1->getPictureArray(1,5,67|TILE_NORMAL,68|TILE_NORMAL,69|TILE_NORMAL,70|TILE_NORMAL,71|TILE_NORMAL));
 	addObjPic(ObjPic_ConstructionYard, icon->getPictureArray(17));
-	addObjPic(ObjPic_Windtrap, icon->getPictureArray(19));
+	addObjPic(ObjPic_WindTrap, icon->getPictureArray(19));
 	addObjPic(ObjPic_Refinery, icon->getPictureArray(21));
 	addObjPic(ObjPic_Barracks, icon->getPictureArray(18));
 	addObjPic(ObjPic_WOR, icon->getPictureArray(16));

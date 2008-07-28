@@ -44,7 +44,7 @@ typedef enum {
 	ObjPic_Saboteur,
 	ObjPic_Sandworm,
 	ObjPic_ConstructionYard,
-	ObjPic_Windtrap,
+	ObjPic_WindTrap,
 	ObjPic_Refinery,
 	ObjPic_Barracks,
 	ObjPic_WOR,
