@@ -158,7 +158,7 @@ void DataCache::Init(){
 	addObjPic(ObjPic_IX, icon->getPictureArray(15));
 	addObjPic(ObjPic_Palace, icon->getPictureArray(11));
 	addObjPic(ObjPic_RepairYard, icon->getPictureArray(22));
-	addObjPic(ObjPic_Starport, icon->getPictureArray(20));
+	addObjPic(ObjPic_StarPort, icon->getPictureArray(20));
 	addObjPic(ObjPic_GunTurret, icon->getPictureArray(23));
 	addObjPic(ObjPic_RocketTurret, icon->getPictureArray(24));
 	addObjPic(ObjPic_Wall, icon->getPictureArray(6,1,1,75));
