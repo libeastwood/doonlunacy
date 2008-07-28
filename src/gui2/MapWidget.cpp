@@ -78,6 +78,10 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
 
 bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 {
+    //FIXME: This is a bit lame way to get coordinates for selection on map
+    //       relative to the menu..
+    p.x -= getPosition().x;
+    p.y -= getPosition().y;
     UPoint pos(m_view.x + p.x / BLOCKSIZE, m_view.y + p.y / BLOCKSIZE);
 
     ObjectClass * tmp = NULL;
