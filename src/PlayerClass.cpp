@@ -21,6 +21,7 @@
 #include "structures/StarPortClass.h"
 #include "structures/StructureClass.h"
 #include "structures/WallClass.h"
+#include "structures/WindTrapClass.h"
 #include "structures/WORClass.h"
 #include "units/UnitClass.h"
 #include "units/QuadClass.h"
@@ -264,7 +265,11 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
                 tempStructure = new WallClass(this);
                  m_numWalls++;
 	    break;
-	    
+
+	case (Structure_WindTrap):
+                tempStructure = new WindTrapClass(this);
+	    break;
+
         case (Structure_WOR):
 		tempStructure = new WORClass(this);
             break;
