@@ -406,7 +406,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
             int itemID = 0;
 
             if (BuildingStr == "Barracks")
-                itemID = Structure_WOR;//Structure_Barracks;
+                itemID = Structure_Barracks;
             else if (BuildingStr == "Const Yard")
                 itemID = Structure_ConstructionYard;
             else if (BuildingStr == "R-Turret")

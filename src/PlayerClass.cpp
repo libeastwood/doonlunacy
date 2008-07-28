@@ -6,6 +6,7 @@
 #include "MapClass.h"
 
 //FIXME:When it's done these includes should be moved to Items.h
+#include "structures/BarracksClass.h"
 #include "structures/SiloClass.h"
 #include "structures/StructureClass.h"
 #include "structures/WallClass.h"
@@ -193,17 +194,21 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
     switch (itemID)
     {
+        case (Structure_Barracks):
+		tempStructure = new BarracksClass(this);
+            break;
+
         case (Structure_Silo):
-		    tempStructure = new SiloClass(this);
-    	    addCapacity(100);
-	    	break;
+		tempStructure = new SiloClass(this);
+    	        addCapacity(100);
+	    break;
 		
-		case (Structure_Wall):
-    		tempStructure = new WallClass(this);
-            m_numWalls++;
-	        break;
+	case (Structure_Wall):
+                tempStructure = new WallClass(this);
+                 m_numWalls++;
+	    break;
 	    
-	    default:
+	default:
 	        m_numStructures--;
     	    break;
     }
