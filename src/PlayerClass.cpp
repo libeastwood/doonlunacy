@@ -10,6 +10,7 @@
 #include "structures/SiloClass.h"
 #include "structures/StructureClass.h"
 #include "structures/WallClass.h"
+#include "structures/WORClass.h"
 #include "units/UnitClass.h"
 #include "units/QuadClass.h"
 
@@ -208,6 +209,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
                  m_numWalls++;
 	    break;
 	    
+        case (Structure_WOR):
+		tempStructure = new WORClass(this);
+            break;
+
 	default:
 	        m_numStructures--;
     	    break;
