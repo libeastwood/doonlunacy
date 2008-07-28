@@ -18,6 +18,7 @@
 #include "structures/RefineryClass.h"
 #include "structures/RepairYardClass.h"
 #include "structures/SiloClass.h"
+#include "structures/StarPortClass.h"
 #include "structures/StructureClass.h"
 #include "structures/WallClass.h"
 #include "structures/WORClass.h"
@@ -254,7 +255,11 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 		tempStructure = new SiloClass(this);
     	        addCapacity(100);
 	    break;
-		
+
+        case (Structure_StarPort):
+		tempStructure = new StarPortClass(this);
+	    break;
+
 	case (Structure_Wall):
                 tempStructure = new WallClass(this);
                  m_numWalls++;
