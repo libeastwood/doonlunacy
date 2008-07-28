@@ -16,7 +16,7 @@ IXClass::IXClass(PlayerClass* newOwner) : StructureClass(newOwner)
     m_offset = UPoint(0,0);
     m_firstAnimFrame = 2;
     m_lastAnimFrame = 3;
-    m_itemID = Structure_Barracks;
+    m_itemID = Structure_IX;
 }
 
 IXClass::~IXClass()
