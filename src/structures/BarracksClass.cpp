@@ -6,12 +6,12 @@ BarracksClass::BarracksClass(PlayerClass* newOwner) : StructureClass(newOwner)
     m_isAnimating = true;
     w = 32;
     h = 32;
-	m_maxHealth = 100;
-	m_powerRequirement = 20;
-	m_health = m_maxHealth;
-	m_viewRange = 3;
+    m_maxHealth = 800;
+    m_powerRequirement = 20;
+    m_health = m_maxHealth;
+    m_viewRange = 4;
 
-	m_pic = DataCache::Instance()->getObjPic(ObjPic_Barracks, HOUSETYPE(getOwner()->getColour()));
+    m_pic = DataCache::Instance()->getObjPic(ObjPic_Barracks, HOUSETYPE(getOwner()->getColour()));
     
     m_offset = UPoint(0,0);
     m_firstAnimFrame = 2;
