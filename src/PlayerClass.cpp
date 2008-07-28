@@ -14,6 +14,7 @@
 #include "structures/IXClass.h"
 #include "structures/LightFactoryClass.h"
 #include "structures/PalaceClass.h"
+#include "structures/RadarClass.h"
 #include "structures/RefineryClass.h"
 #include "structures/SiloClass.h"
 #include "structures/StructureClass.h"
@@ -233,6 +234,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
         case (Structure_Palace):
 		tempStructure = new PalaceClass(this);
+            break;
+
+        case (Structure_Radar):
+		tempStructure = new RadarClass(this);
             break;
 
         case (Structure_Refinery):
