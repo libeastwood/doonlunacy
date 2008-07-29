@@ -12,7 +12,7 @@ public:
 	Animation();
 	~Animation();
 	
-	Image * getFrame();
+	ImagePtr getFrame(double resizeRatio = 2.0);
 	void setFrameRate(double FrameRate) {
 		if(FrameRate == 0.0) {
 			FrameDurationTime = 1;
@@ -24,10 +24,15 @@ public:
 	void addFrame(Image * newFrame, bool SetColorKey = false);
 
 private:
+    typedef struct {
+        bool resized;
+        ImagePtr img;
+    } animFrame;
+
 	Uint32 CurFrameStartTime;
 	Uint32 FrameDurationTime;
 	Uint32 curFrame;
-	std::vector<Image*> Frame;
+	std::vector<animFrame*> m_frames;
 };
 
 #endif // ANIMATION_H_INCLUDED

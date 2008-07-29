@@ -590,7 +590,7 @@ Mix_Chunk* DataCache::getChunkFromFile(std::string fileName) {
 	}
 	
 	SDL_RWclose(rwop);
-	delete data;
+	free(data);
 	return returnChunk;
 }
 
@@ -650,13 +650,15 @@ Animation*  DataCache::getAnimation(std::string path)
 
         if (type.compare("WSA") == 0)
         {
-            WsafilePtr wsafile(new Wsafile(data, len));
+            Wsafile* wsafile(new Wsafile(data, len));
             SDL_Palette* palette = getPalette(IBM_PAL);
         	
         	animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
             double frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
         	animation->setFrameRate(frameRate);
+
+        	delete wsafile;
 
         }
         
@@ -672,6 +674,8 @@ Animation*  DataCache::getAnimation(std::string path)
 
             node.lookupValue("frame_rate", frameRate);
        		animation->setFrameRate(frameRate);
+
+       		delete shpfile;
     
         }
     

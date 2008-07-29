@@ -26,7 +26,7 @@ Stringfile::Stringfile(std::string stringFileName) {
 		stringArray[i] = decodeString(tmp);
 	}
 	
-	delete bufFiledata;
+	free(bufFiledata);
 
 }
 
