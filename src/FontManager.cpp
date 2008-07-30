@@ -1,9 +1,3 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-
-#include "Application.h"
 #include "FontManager.h"
 #include "Log.h"
 #include "ResMan.h"
