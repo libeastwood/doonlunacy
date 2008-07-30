@@ -10,7 +10,7 @@
 #include "SingleMenu.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
-#include "Font.h"
+#include "FontManager.h"
 
 #include "gui2/Frame.h"
 

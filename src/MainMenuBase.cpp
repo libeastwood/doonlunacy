@@ -6,7 +6,7 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
-#include "Font.h"
+#include "FontManager.h"
 
 #include "pakfile/Cpsfile.h"
 #include "gui2/Frame.h"
@@ -39,7 +39,7 @@ void MainMenuBaseState::draw()
     tmp.reset(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55)));
     Frame1 menuTopFrame(236, UPoint(bw + 20, 30));
     font->extents("Doon Lunacy", textw, texth);
-    font->render("Doon Lunacy", menuTopFrame.getPicture(), menuTopFrame.getPicture()->getSize().x/2 - textw/2,
+    font->render("Doon Lunacy", menuTopFrame.getPicture()->getSurface(), menuTopFrame.getPicture()->getSize().x/2 - textw/2,
             menuTopFrame.getPicture()->getSize().y/2 - texth/2, 32);
 
     tmp->blitFrom(menuTopFrame.getPicture().get(), UPoint(0, 0));
@@ -60,7 +60,7 @@ void MainMenuBaseState::draw()
     
     font->extents(VERSION, textw, texth);
     // And here I'd prefer actually black, but I seem to lack understanding of the palette stuff.. :/
-    font->render(VERSION, tmp, tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 57);
+    font->render(VERSION, tmp->getSurface(), tmp->getSize().x/2 - textw/2, tmp->getSize().y/2 - texth/2, 57);
 
     m_menuBackground->blitFrom(tmp.get(), UPoint(set->GetWidth() - 120, set->GetHeight() - 48));
 

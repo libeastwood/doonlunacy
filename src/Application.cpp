@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Colours.h"
 #include "DataCache.h"
-#include "Font.h"
+#include "FontManager.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "ResMan.h"

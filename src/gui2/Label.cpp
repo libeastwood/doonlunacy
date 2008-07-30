@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Colours.h"
-#include "Font.h"
+#include "FontManager.h"
 #include "Gfx.h"
 #include "Log.h"
 
@@ -51,7 +51,7 @@ void Label::redraw()
         
         for (int i=0; i < numLines; i++)
         {
-            font->render(textLines[i].c_str(), m_surface,
+            font->render(textLines[i].c_str(), m_surface->getSurface(),
                 0, 0 + texth * i, m_textColour);
         }
     } else
@@ -59,7 +59,7 @@ void Label::redraw()
         font->extents(m_caption.c_str(), textw, texth);
         m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth) ) );
         m_surface->fillRect(m_bgColour);
-        font->render(m_caption.c_str(), m_surface,
+        font->render(m_caption.c_str(), m_surface->getSurface(),
             m_surface->getSurface()->w/2 - textw/2, 
             m_surface->getSurface()->h/2 - texth/2, m_textColour);
     }

@@ -4,7 +4,7 @@
 
 #include "Application.h"
 #include "DataCache.h"
-#include "Font.h"
+#include "FontManager.h"
 #include "Gfx.h"
 #include "IntroState.h"
 #include "Log.h"

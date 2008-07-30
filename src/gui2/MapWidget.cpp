@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "Font.h"
+#include "FontManager.h"
 #include "Log.h"
 #include "Gfx.h"
 #include "MapGenerator.h"

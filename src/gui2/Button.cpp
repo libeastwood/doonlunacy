@@ -1,7 +1,7 @@
 #include "gui2/Button.h"
 #include <stdio.h>
 #include "Colours.h"
-#include "Font.h"
+#include "FontManager.h"
 #include "Application.h"
 #include "Gfx.h"
 
@@ -184,10 +184,10 @@ void BoringButton::redraw()
     Uint16 textw, texth;
     font->extents(m_caption.c_str(), textw, texth);
 
-    font->render(m_caption.c_str(), m_surfNormal,
+    font->render(m_caption.c_str(), m_surfNormal->getSurface(),
                     (w / 2) - (textw / 2), 
                     ((h / 2) - (texth / 2)), fontColour);
-    font->render(m_caption.c_str(), m_surfPressed,
+    font->render(m_caption.c_str(), m_surfPressed->getSurface(),
                     (w / 2) - (textw / 2), 
                     ((h / 2) - (texth / 2)), fontColour);
 
