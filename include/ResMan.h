@@ -2,7 +2,7 @@
 #define DUNE_RESMAN_H
 
 #include "singleton.h"
-#include "pakfile/Pakfile.h"
+#include "PakFile.h"
 
 #include "boost/filesystem/path.hpp"
 
@@ -137,7 +137,7 @@ class PAKResource : public Resource
 		unsigned char* readFile(std::string path, int *size);
 		bool exists(std::string path);
     private:
-        Pakfile *m_pakfile;
+        PakFile *m_pakfile;
 };
 
 /*!

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "gui2/Widget.h"
-#include "pakfile/Animation.h"
+#include "Animation.h"
 
 /* Label widget using dune's fonts
 */

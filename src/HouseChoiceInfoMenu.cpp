@@ -4,7 +4,7 @@
 #include "Settings.h"
 #include "DataCache.h"
 #include "boost/bind.hpp"
-#include "pakfile/Animation.h"
+#include "Animation.h"
 #include "gui2/Label.h"
 #include "gui2/Button.h"
 #include "pakfile/Stringfile.h"

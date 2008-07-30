@@ -25,7 +25,7 @@ env.Append(CPPPATH="#include")
 
 
 if sys.platform != "win32":
-    env.ParseConfig('pkg-config --cflags sdl samplerate adplug')
+    env.ParseConfig('pkg-config --cflags sdl adplug libeastwood')
     env.Append(CCFLAGS=["-Wall", "-pedantic", "-O0", "-Wno-long-long"]) #, "-Werror"])
     #env.Append(CCFLAGS=["-Wall", "-Werror", "-O2", "-ffast-math", "-funroll-loops"])
     #env.Append(LINKFLAGS = ["-ffast-math"])
@@ -65,8 +65,8 @@ env.Append(LIBS = [ "SDL",
                         "SDL_mixer",
                         "SDL_net",
                         "SDL_ttf",
-                        "samplerate",
-            			"adplug",
+       			"adplug",
+			"libeastwood",
                         ])
 
 

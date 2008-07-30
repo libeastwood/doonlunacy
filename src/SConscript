@@ -62,6 +62,7 @@ all_sources = [ "Application.cpp",
 				"structures/SiloClass.cpp",
 				"structures/StarPortClass.cpp",
 				"structures/StructureClass.cpp",
+#				"structures/TurretClass.cpp",
 				"structures/WallClass.cpp",
 				"structures/WindTrapClass.cpp",
 				"structures/WORClass.cpp",
@@ -83,14 +84,11 @@ gui_sources = [
               ]
 
 pak_sources = [ "pakfile/Cpsfile.cpp",
-                "pakfile/Decode.cpp",
                 "pakfile/Icnfile.cpp",
                 "pakfile/Inifile.cpp",
-                "pakfile/Pakfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
                 "pakfile/Palette.cpp",
-                "pakfile/Animation.cpp",
                 "pakfile/Stringfile.cpp",
                 "pakfile/Vocfile.cpp",
               ]
@@ -113,8 +111,8 @@ pakview_sources = [  "Application.cpp",
 
 
 dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
-pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
+#pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
 
 Default(dunelegacy)
-Default(pakview)
+#Default(pakview)
 

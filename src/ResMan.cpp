@@ -145,7 +145,7 @@ void WritableDIRResource::writeText(std::string path, std::string text)
 PAKResource::PAKResource(bfs::path path)
 {
     m_path = path;
-    m_pakfile = new Pakfile(path.string().c_str());
+    m_pakfile = new PakFile(path.string().c_str());
 }
 
 PAKResource::~PAKResource()
