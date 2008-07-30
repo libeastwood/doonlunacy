@@ -24,19 +24,4 @@ class FontManager : public Singleton<FontManager>
         Font* loadFont(std::string fn);
 };
 
-class TTFFontManager : public Singleton<TTFFontManager>
-{
-    friend class Singleton<TTFFontManager>;
-
-    protected:
-        TTFFontManager();
-        ~TTFFontManager();
-
-    public:
-        TTF_Font* GetFont(int size);
-
-    private:
-        TTF_Font* m_fonts[FONTS];
-};
-
 #endif // DUNE_FONTMANAGER_H

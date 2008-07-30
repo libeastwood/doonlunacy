@@ -9,8 +9,6 @@ opts.Add('SDLNET_INCLUDE_PATH', 'include path for sdl_net', '')
 opts.Add('SDLNET_LIB_PATH', 'lib path for sdl_net', '')
 opts.Add('SDLMIXER_INCLUDE_PATH', 'include path for sdl_mixer', '')
 opts.Add('SDLMIXER_LIB_PATH', 'lib path for sdl_mixer', '')
-opts.Add('SDLTTF_INCLUDE_PATH', 'include path for sdl_ttf', '')
-opts.Add('SDLTTF_LIB_PATH', 'include path for sdl_ttf', '')
 opts.Add('BOOST_INCLUDE_PATH', 'include path for boost', '')
 opts.Add('BOOST_LIB_PATH', 'lib path for boost', '')
 opts.Add('SAMPLERATE_LIB_PATH', 'include path for boost', '')
@@ -64,7 +62,6 @@ else:
 env.Append(LIBS = [ "SDL",
                         "SDL_mixer",
                         "SDL_net",
-                        "SDL_ttf",
        			"adplug",
 			"libeastwood",
                         ])
