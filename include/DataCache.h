@@ -18,7 +18,7 @@
 #define NUM_MAPCHOICEARROWS	9
 
 class Animation;
-class Stringfile;
+class StringFile;
 
 #define GROUNDUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+3)|TILE_FLIPV, (i+4)|TILE_NORMAL,(i+3)|TILE_NORMAL
 #define AIRUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+1)|TILE_ROTATE, i|TILE_FLIPH,(i+1)|TILE_FLIPH
@@ -154,9 +154,9 @@ class DataCache : public Singleton<DataCache>
 		Mix_Chunk* createEmptyChunk();
 
 		Animation* Anim[NUM_ANIMATION];
-		Stringfile* BriefingStrings[3];
-		Stringfile* IntroStrings;
-		Stringfile* CreditsStrings;
+		StringFile* BriefingStrings[3];
+		StringFile* IntroStrings;
+		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
 };
 

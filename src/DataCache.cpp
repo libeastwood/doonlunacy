@@ -5,13 +5,14 @@
 #include "DataCache.h" 
 #include "Log.h"
 
-#include "pakfile/Vocfile.h"
+#include <VocFile.h>
+#include <StringFile.h>
+
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
 #include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
-#include "pakfile/Stringfile.h"
 
 
 DataCache::DataCache() {
@@ -33,10 +34,11 @@ void DataCache::Init(){
 
     addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
 	// Not properly decoded yet..
-	// CreditsStrings = new Stringfile("ENGLISH:CREDITS.ENG");
+	// CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
-    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");	
-	IntroStrings = new Stringfile("ENGLISH:INTRO.ENG");
+    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
+    data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
+    IntroStrings = new StringFile(data);
 
     ResMan::Instance()->addRes("DUNE");
 
@@ -531,9 +533,12 @@ void DataCache::Init(){
 	addSoundChunk(Intro_Wind_2bp, getChunkFromFile("INTROVOC:WIND2BP.VOC"));
 	addSoundChunk(Intro_Your, getChunkFromFile("INTROVOC:YOUR.VOC"));
 
-	BriefingStrings[0] = new Stringfile("ENGLISH:TEXTA.ENG");
-	BriefingStrings[1] = new Stringfile("ENGLISH:TEXTO.ENG");
-	BriefingStrings[2] = new Stringfile("ENGLISH:TEXTH.ENG");
+	data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
+	BriefingStrings[0] = new StringFile(data);
+	data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
+	BriefingStrings[1] = new StringFile(data);
+	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
+	BriefingStrings[2] = new StringFile(data);
 
 	//addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 4);
 	addMusic(MUSIC_INTRO, "SOUND:DUNE0.ADL", 2);
