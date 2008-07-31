@@ -37,7 +37,6 @@ all_sources = [ "Application.cpp",
                 "ConfigFile.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
-                "AdlibPlayer.cpp",
 				"TerrainClass.cpp",
 				"MapClass.cpp",
 				"Editor.cpp",
@@ -105,7 +104,6 @@ pakview_sources = [  "Application.cpp",
                      "State.cpp",
                      "TopLevelState.cpp",
                      "SoundPlayer.cpp",
-                     "AdlibPlayer.cpp",
                   ]
 
 

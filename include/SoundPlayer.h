@@ -13,12 +13,11 @@
 #include "singleton.h"
 #include "Settings.h"
 
-#include "AdlibPlayer.h"
-
 /*!
 	Class that handles sounds and music.
 */
 
+class AdlFile;
 
 class SoundPlayer : public Singleton<SoundPlayer>
 {
@@ -81,7 +80,6 @@ class SoundPlayer : public Singleton<SoundPlayer>
 	//! type of currently played music
 	MUSICTYPE m_currentMusicType;
 
-	Copl *m_opl;
-	AdlibPlayer *m_player;
+	AdlFile *m_player;
 };
 #endif //SOUNDPLAYER_H_INCLUDED

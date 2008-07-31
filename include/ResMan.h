@@ -9,9 +9,6 @@
 #include <map>
 #include <string>
 //#include "Log.h"
-class binistream;
-#include <binstr.h>
-#include <fprovide.h>
 
 /*!
 	Class to emulate a file object using an unsigned char* buffer
@@ -44,14 +41,6 @@ class FileLike
         unsigned char* m_buf;
         int m_size;
         int m_pos;
-};
-
-class CProvider_Pakfile: public CFileProvider
-{
-public:
-	virtual binisstream *open(std::string filename) const;
-	virtual void close(binistream *f) const {}
-
 };
 
 /*!

@@ -13,9 +13,6 @@
 //#include "Log.h"
 
 //#include "boost/filesystem/fstream.hpp"    // ditto
-#include <binstr.h>
-#include <binio.h>
-#include <fprovide.h>
 
 
 namespace bfs = boost::filesystem;
@@ -41,18 +38,6 @@ void FileLike::read(void* buf, int size)
 void FileLike::seek(int offset)
 {
 	m_pos = offset;
-}
-
-binisstream *CProvider_Pakfile::open(std::string filename) const
-{
-	int file_size;
-	unsigned char * file_data = ResMan::Instance()->readFile(filename, &file_size);
-
-	binisstream *f = new binisstream(file_data, file_size);
-	
-	if(!f) return 0;
-	if(f->error()) { delete f; return 0; }
-	return f;
 }
 
 // ------------------------------------------------------------------

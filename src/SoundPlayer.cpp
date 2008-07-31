@@ -1,12 +1,6 @@
 #include <SDL_mixer.h>
 #include <stdlib.h>
 #include <math.h>
-#include <adl.h>
-#include <emuopl.h>
-#include <kemuopl.h>
-#include <temuopl.h>
-#include <realopl.h>
-#include <analopl.h>
 
 #include "mmath.h"
 #include "DataCache.h"
@@ -15,6 +9,7 @@
 #include "SoundPlayer.h"
 
 #include <VocFile.h>
+#include <AdlFile.h>
 
 SoundPlayer::SoundPlayer()
 {
@@ -25,7 +20,6 @@ SoundPlayer::SoundPlayer()
     m_musicChannel = Mix_ReserveChannels(1);
     Mix_Volume(m_musicChannel, set->m_musicVolume);
 
-    m_opl = NULL;
     m_player = NULL;
 }
 
@@ -33,28 +27,27 @@ SoundPlayer::~SoundPlayer()
 {
     Mix_HookMusic(NULL, NULL);
 
-    if (m_opl) delete m_opl;
-
     if (m_player) delete m_player;
 }
 
+// Functionality disabled for now, might add other opl emulators to library later..
 void SoundPlayer::changeEmuOpl(EMUOPL oplType)
 {
-    int freq, channels;
+/*    int freq, channels;
     Uint16 format;
-
+*/
     if (Mix_GetMusicHookData())
         Mix_HookMusic(NULL, NULL);
 
-    Mix_QuerySpec(&freq, &format, &channels);
+/*    Mix_QuerySpec(&freq, &format, &channels);
 
     if (m_opl)
         delete m_opl;
-
+*/
     if (m_player)
         delete m_player;
 
-    switch (oplType)
+/*    switch (oplType)
     {
 
         case C_EMUOPL:
@@ -80,6 +73,8 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType)
     }
 
     m_player = new AdlibPlayer(m_opl);
+    */
+    m_player = new AdlFile();
 }
 
 void SoundPlayer::VoiceChunkFinishedCallback(int channel)
@@ -118,7 +113,10 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
     if (Settings::Instance()->m_musicOn)
     {
         changeEmuOpl(Settings::Instance()->GetEmuOpl());
-        m_player->load(filename, CProvider_Pakfile());
+	int bufsize;
+	uint8_t *data;
+	data = ResMan::Instance()->readFile(filename, &bufsize);
+        m_player->load(data, bufsize);
         m_player->rewind(trackNum);
 
         Mix_HookMusic(m_player->callback, m_player);
