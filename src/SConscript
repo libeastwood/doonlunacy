@@ -86,7 +86,6 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Icnfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
-                "pakfile/Stringfile.cpp",
               ]
 
 pakview_sources = [  "Application.cpp", 

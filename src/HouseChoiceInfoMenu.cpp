@@ -7,7 +7,7 @@
 #include "Animation.h"
 #include "gui2/Label.h"
 #include "gui2/Button.h"
-#include "pakfile/Stringfile.h"
+#include <StringFile.h>
 #include <string>
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
