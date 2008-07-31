@@ -7,7 +7,7 @@
 #include "MapSeed.h"
 #include "ObjectClass.h"
 
-#include "pakfile/Inifile.h"
+#include <IniFile.h>
 
 #include "mmath.h"
 
@@ -28,14 +28,16 @@ MapGenerator::~MapGenerator()
 bool MapGenerator::loadOldMap(std::string mapName)
 {
     bool done = false; //this will be set to false if any errors, so level won't load
-
-    Inifile * myInifile = new Inifile(mapName);
+    int bufsize;
+    uint8_t *data;
+    data = ResMan::Instance()->readFile(mapName, &bufsize);
+    IniFile * myIniFile = new IniFile(data, bufsize);
 
     m_gs = new GameState();
     m_map = new MapClass(UPoint(64, 64));
     m_gs->m_map = m_map;
 
-    int SeedNum = myInifile->getIntValue("MAP", "Seed", -1);
+    int SeedNum = myIniFile->getIntValue("MAP", "Seed", -1);
 
     if (SeedNum == -1)
     {
@@ -109,7 +111,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
 
     //createSandRegions();
 
-    string BloomString = myInifile->getStringValue("MAP", "Bloom");
+    string BloomString = myIniFile->getStringValue("MAP", "Bloom");
 
     if (BloomString != "")
     {
@@ -138,7 +140,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
         }
     }
 
-    string FieldString = myInifile->getStringValue("MAP", "Field");
+    string FieldString = myIniFile->getStringValue("MAP", "Field");
 
     if (FieldString != "")
     {
@@ -202,14 +204,14 @@ bool MapGenerator::loadOldMap(std::string mapName)
     addPlayer(FREMEN, false, 2);
     addPlayer(MERCENERY, false, 2);
 
-    Inifile::KeyListHandle myListHandle;
+    IniFile::KeyListHandle myListHandle;
 
-    myListHandle = myInifile->KeyList_Open("UNITS");
+    myListHandle = myIniFile->KeyList_Open("UNITS");
 
-    while (!myInifile->KeyList_EOF(myListHandle))
+    while (!myIniFile->KeyList_EOF(myListHandle))
     {
-        string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
-        string tmp = myInifile->getStringValue("UNITS", tmpkey);
+        string tmpkey = myIniFile->KeyList_GetNextKey(&myListHandle);
+        string tmp = myIniFile->getStringValue("UNITS", tmpkey);
         string HouseStr, UnitStr, health, PosStr, rotation, mode;
         SplitString(tmp, 6, &HouseStr, &UnitStr, &health, &PosStr, &rotation, &mode);
 
@@ -312,15 +314,15 @@ bool MapGenerator::loadOldMap(std::string mapName)
         }
     }
 
-    myInifile->KeyList_Close(&myListHandle);
+    myIniFile->KeyList_Close(&myListHandle);
 
 
-    myListHandle = myInifile->KeyList_Open("STRUCTURES");
+    myListHandle = myIniFile->KeyList_Open("STRUCTURES");
 
-    while (!myInifile->KeyList_EOF(myListHandle))
+    while (!myIniFile->KeyList_EOF(myListHandle))
     {
-        string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
-        string tmp = myInifile->getStringValue("STRUCTURES", tmpkey);
+        string tmpkey = myIniFile->KeyList_GetNextKey(&myListHandle);
+        string tmp = myIniFile->getStringValue("STRUCTURES", tmpkey);
 
         if (tmpkey.find("GEN") == 0)
         {
@@ -456,7 +458,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
         }
     }
 
-    myInifile->KeyList_Close(&myListHandle);
+    myIniFile->KeyList_Close(&myListHandle);
 
     return true;
 }

@@ -84,7 +84,6 @@ gui_sources = [
 
 pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Icnfile.cpp",
-                "pakfile/Inifile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
                 "pakfile/Stringfile.cpp",
