@@ -10,10 +10,9 @@
 
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
-#include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
-
+#include <PalFile.h>
 
 DataCache::DataCache() {
 }
@@ -584,7 +583,7 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 {
     int len;
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
-    PalettefilePtr tmp (new Palettefile(data, len));
+    PalfilePtr tmp (new PalFile(data, len));
 
     m_palette[palette] = tmp; //pal;
 }

@@ -5,11 +5,9 @@
 #include "Gfx.h"
 #include "ResMan.h"
 #include "singleton.h"
-#include "SDL_mixer.h"
-
-#include "pakfile/Palette.h"
 
 #include "houses.h"
+
 
 #include <map>
 #include <vector>
@@ -19,6 +17,9 @@
 
 class Animation;
 class StringFile;
+class Mix_Chunk;
+class PalFile;
+typedef boost::shared_ptr<PalFile> PalfilePtr;
 
 #define GROUNDUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+3)|TILE_FLIPV, (i+4)|TILE_NORMAL,(i+3)|TILE_NORMAL
 #define AIRUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+1)|TILE_ROTATE, i|TILE_FLIPH,(i+1)|TILE_FLIPH
@@ -146,7 +147,7 @@ class DataCache : public Singleton<DataCache>
 
         playlist m_playlists[MUSIC_RANDOM];
         
-		PalettefilePtr m_palette[NUM_PALETTES];
+		PalfilePtr m_palette[NUM_PALETTES];
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);

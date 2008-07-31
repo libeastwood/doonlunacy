@@ -87,7 +87,6 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Inifile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
-                "pakfile/Palette.cpp",
                 "pakfile/Stringfile.cpp",
               ]
 

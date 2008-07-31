@@ -10,7 +10,6 @@
 #include "TopLevelState.h"
 
 #include "houses.h"
-#include "pakfile/Palette.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Cpsfile.h"
 

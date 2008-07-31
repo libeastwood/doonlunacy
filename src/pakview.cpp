@@ -5,7 +5,6 @@
 #include "State.h"
 #include "ResMan.h"
 #include "pakview.h"
-#include "pakfile/Palette.h"
 
 #include "gui2/Label.h"
 #include "houses.h"
