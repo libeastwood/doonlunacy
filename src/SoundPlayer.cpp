@@ -25,7 +25,7 @@ SoundPlayer::SoundPlayer()
 
 SoundPlayer::~SoundPlayer()
 {
-    Mix_HookMusic(NULL, NULL);
+    stopMusic();
 
     if (m_player) delete m_player;
 }
@@ -37,7 +37,7 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType)
     Uint16 format;
 */
     if (Mix_GetMusicHookData())
-        Mix_HookMusic(NULL, NULL);
+        stopMusic();
 
 /*    Mix_QuerySpec(&freq, &format, &channels);
 
