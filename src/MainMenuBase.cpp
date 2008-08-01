@@ -4,7 +4,6 @@
 #include "Gfx.h"
 #include "MainMenuBase.h"
 #include "ResMan.h"
-#include "Settings.h"
 #include "SoundPlayer.h"
 #include "FontManager.h"
 
@@ -19,7 +18,6 @@ MainMenuBaseState::MainMenuBaseState()
 void MainMenuBaseState::draw()
 {
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-    Settings* set = Settings::Instance();
     Uint16 textw, texth;
 
     m_vbox->fit(2);
@@ -72,14 +70,14 @@ void MainMenuBaseState::draw()
 void MainMenuBaseState::drawMainImage(){
     int len;
     uint8_t *data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
-    Uint16 x = (Settings::Instance()->GetWidth() / 2) - 
+    Uint16 x = (set->GetWidth() / 2) - 
                 (m_vbox->w / 2);
     CpsfilePtr m_cps (new Cpsfile(data, len));
 
     ImagePtr tmp;
     Frame1 planet(m_cps->getPicture(), UPoint(320, 200));
     tmp = planet.getPicture();
-    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 70, Settings::Instance()->GetHeight()/2 - 172));
+    m_menuBackground->blitFrom(tmp.get(), UPoint(x - 70, set->GetHeight()/2 - 172));
 
 }
 
@@ -90,12 +88,10 @@ MainMenuBaseState::~MainMenuBaseState()
 
 int MainMenuBaseState::Execute(float dt)
 {
-    Settings* set = Settings::Instance();
-    
 	if(set->GetMusic() && !Mix_GetMusicHookData()){
 		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
 	}
-    if((m_menuBackground->getSize() != UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()) || m_drawMenu)){
+    if((m_menuBackground->getSize() != UPoint(set->GetWidth(), set->GetHeight()) || m_drawMenu)){
         draw();
 	m_drawMenu = false;
     }

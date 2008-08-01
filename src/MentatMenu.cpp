@@ -4,7 +4,6 @@
 #include "Application.h"
 #include "DataCache.h"
 #include "MentatMenu.h"
-#include "Settings.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Label.h"
@@ -96,8 +95,8 @@ int MentatMenuState::Execute(float dt)
         SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 8);
     }
 
-    m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
-                        Settings::Instance()->GetHeight() / 16));
+    m_surf->blitToScreen(SPoint(set->GetWidth() / 2 - m_surf->getSurface()->w/2, 
+                        set->GetHeight() / 16));
 
     return 0;
 }
