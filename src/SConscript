@@ -102,9 +102,9 @@ pakview_sources = [  "Application.cpp",
                   ]
 
 
-dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
+doonlunacy = env.Program("../doonlunacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
 #pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
 
-Default(dunelegacy)
+Default(doonlunacy)
 #Default(pakview)
 
