@@ -12,13 +12,14 @@
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
 {
+
 	Animation* ret;
 	if (newHouse == HOUSE_ATREIDES)
-		ret = DataCache::Instance()->getAnimation(Anim_AtreidesPlanet);
+		ret = DataCache::Instance()->getAnimation("Anim_AtreidesPlanet");
 	else if (newHouse == HOUSE_ORDOS)
-		ret = DataCache::Instance()->getAnimation(Anim_OrdosPlanet);
+		ret = DataCache::Instance()->getAnimation("Anim_OrdosPlanet");
 	else if (newHouse == HOUSE_HARKONNEN)
-		ret = DataCache::Instance()->getAnimation(Anim_HarkonnenPlanet);
+		ret = DataCache::Instance()->getAnimation("Anim_HarkonnenPlanet");
 
 	
 	m_planetAnimation = new AnimationLabel(ret);

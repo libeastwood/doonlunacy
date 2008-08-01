@@ -19,6 +19,7 @@ MainMenuBaseState::MainMenuBaseState()
 void MainMenuBaseState::draw()
 {
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    Settings* set = Settings::Instance();
     Uint16 textw, texth;
 
     m_vbox->fit(2);
@@ -92,9 +93,11 @@ MainMenuBaseState::~MainMenuBaseState()
 
 int MainMenuBaseState::Execute(float dt)
 {
-    if(!Mix_GetMusicHookData()){
-        SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
-    }
+    Settings* set = Settings::Instance();
+    
+	if(set->GetMusic() && !Mix_GetMusicHookData()){
+		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
+	}
     if((m_menuBackground->getSize() != UPoint(Settings::Instance()->GetWidth(), Settings::Instance()->GetHeight()) || m_drawMenu)){
         draw();
 	m_drawMenu = false;

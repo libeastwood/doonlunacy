@@ -5,10 +5,10 @@
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
 typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */
-			   MUSIC_INTRO,  /*!<Background music for intro. */
 			   MUSIC_LOSE,   /*!<Failure screen background music. */
 			   MUSIC_PEACE,  /*!<Played most of the time when the enemy is not attacking. */
 			   MUSIC_WIN,    /*!<Victory screen background music.. */
+			   MUSIC_INTRO,  /*!<Background music for intro. */
 			   MUSIC_RANDOM  /*!<Player used key combination to change current music. */
 			 } MUSICTYPE;
 
@@ -211,71 +211,6 @@ typedef enum {
     UI_Mentat_HeraldOrdos,
 	NUM_UIGRAPHICS
 } GuiPic_enum;
-
-//Animation
-typedef enum {
-	Anim_AtreidesEyes,
-	Anim_AtreidesMouth,
-	Anim_AtreidesShoulder,
-	Anim_AtreidesBook,
-	Anim_HarkonnenEyes,
-	Anim_HarkonnenMouth,
-	Anim_HarkonnenShoulder,
-	Anim_OrdosEyes,
-	Anim_OrdosMouth,
-	Anim_OrdosShoulder,
-	Anim_OrdosRing,
-	Anim_BeneGesseritEyes,
-	Anim_BeneGesseritMouth,
-	Anim_AtreidesPlanet,
-	Anim_HarkonnenPlanet,
-	Anim_OrdosPlanet,
-	Anim_Win1,
-	Anim_Win2,
-	Anim_Lose1,
-	Anim_Lose2,
-	Anim_Barracks,
-	Anim_Carryall,
-	Anim_ConstructionYard,
-	Anim_Fremen,
-	Anim_DeathHand,
-	Anim_Devastator,
-	Anim_Harvester,
-	Anim_Radar,
-	Anim_HighTechFactory,
-	Anim_SiegeTank,
-	Anim_HeavyFactory,
-	Anim_Trooper,
-	Anim_Infantry,
-	Anim_IX,
-	Anim_LightFactory,
-	Anim_Tank,
-	Anim_MCV,
-	Anim_Deviator,
-	Anim_Ornithopter,
-	Anim_Raider,
-	Anim_Palace,
-	Anim_Quad,
-	Anim_Refinery,
-	Anim_RepairYard,
-	Anim_Launcher,
-	Anim_RocketTurret,
-	Anim_Saboteur,
-	Anim_Slab1,
-	Anim_SonicTank,
-	Anim_StarPort,
-	Anim_Silo,
-	Anim_Trike,
-	Anim_GunTurret,
-	Anim_Wall,
-	Anim_WindTrap,
-	Anim_WOR,
-	Anim_Sandworm,
-	Anim_Sardaukar,
-	Anim_Frigate,
-	Anim_Slab4,
-	NUM_ANIMATION
-} Animation_enum;
 
 // Voice
 typedef enum {

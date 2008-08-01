@@ -29,6 +29,7 @@ if sys.platform != "win32":
     #env.Append(LINKFLAGS = ["-ffast-math"])
     env.Append(LIBS = [ "boost_signals-mt",
                         "boost_filesystem-mt",
+                        "libconfig++",
                         ])
     
     env.Append(CCFLAGS=["-ggdb"])
@@ -63,6 +64,7 @@ env.Append(LIBS = [ "SDL",
                         "SDL_mixer",
                         "SDL_net",
 			"libeastwood",
+                        "libconfig",
                         ])
 
 

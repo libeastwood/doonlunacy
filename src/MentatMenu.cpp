@@ -17,62 +17,62 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 	switch(house) {
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesEyes));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesEyes"));
 			m_eyesAnim->setPosition(UPoint(80, 191));
 			m_container->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesMouth));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesMouth"));
 			m_mouthAnim->setPosition(UPoint(80, 223));
 			m_container->addChild(m_mouthAnim);
 
-			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesBook));
+			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesBook"));
 			m_specialAnim->setPosition(UPoint(145, 336));
 			m_container->addChild(m_specialAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_AtreidesShoulder));
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesShoulder"));
 			m_shoulderAnim->setPosition(UPoint(256,286));
 
 
 			break;
 		case HOUSE_ORDOS:
 		case HOUSE_MERCENARY:
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosEyes));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosEyes"));
 			m_eyesAnim->setPosition(UPoint(32, 191));
 			m_container->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosMouth));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosMouth"));
 			m_mouthAnim->setPosition(UPoint(32, 223));
 			m_container->addChild(m_mouthAnim);
 
-			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosRing));
+			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosRing"));
 			m_specialAnim->setPosition(UPoint(178, 320));
 			m_container->addChild(m_specialAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_OrdosShoulder));
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosShoulder"));
 			m_shoulderAnim->setPosition(UPoint(256,286));
 
 
 			break;
 		case HOUSE_HARKONNEN:
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenEyes));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenEyes"));
 			m_eyesAnim->setPosition(UPoint(64, 207));
 			m_container->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenMouth));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenMouth"));
 			m_mouthAnim->setPosition(UPoint(64, 239));
 			m_container->addChild(m_mouthAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_HarkonnenShoulder));
+			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenShoulder"));
 			m_shoulderAnim->setPosition(UPoint(256,238));
 
 			break;
 		case HOUSE_SARDAUKAR:
 		default:
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_BeneGesseritEyes));
+			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritEyes"));
 			m_eyesAnim->setPosition(UPoint(128, 190));
 			m_container->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation(Anim_BeneGesseritMouth));
+			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritMouth"));
 			m_mouthAnim->setPosition(UPoint(112, 222));
 			m_container->addChild(m_mouthAnim);
 

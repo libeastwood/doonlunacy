@@ -26,7 +26,7 @@ FileLike::FileLike(unsigned char* buf, int size)
 
 FileLike::~FileLike()
 {
-	delete m_buf;
+	free(m_buf);
 }
 
 void FileLike::read(void* buf, int size)

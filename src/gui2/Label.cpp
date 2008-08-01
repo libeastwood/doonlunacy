@@ -128,5 +128,5 @@ void AnimationLabel::draw(Image * screen, SPoint off)
 
 	Image *surface = new Image(m_anim->getFrame());
 
-	screen->blitFrom(surface->getResized(2).get(), UPoint(off.x + x, off.y + y));
+	screen->blitFrom(surface, UPoint(off.x + x, off.y + y));
 }

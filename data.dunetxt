@@ -1,0 +1,847 @@
+animations:
+{
+    
+    Anim_AtreidesPlanet = 
+    {
+        filename = "MENTAT:FARTR.WSA";
+        frame_rate = 12.0;
+    };
+    
+    Anim_HarkonnenPlanet = 
+    {
+        filename = "MENTAT:FHARK.WSA";
+        frame_rate = 12.0;
+    };
+    
+    Anim_OrdosPlanet = 
+    {
+        filename = "MENTAT:FORDOS.WSA";
+        frame_rate = 12.0;
+    };
+	
+	// Mentat animations go here
+	Anim_AtreidesEyes = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+    };
+    
+	Anim_AtreidesMouth = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 5.0;
+	    start_index = 5;
+	    end_index = 9;
+	};
+	
+	Anim_AtreidesShoulder = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 1.0;
+	    start_index = 10;
+	    end_index = 10;
+	};
+	
+	Anim_AtreidesBook = 
+	{
+        filename = "DUNE:MENSHPA.SHP";
+        frame_rate = 0.1;
+	    start_index = 11;
+	    end_index = 12;	
+	};
+
+	Anim_HarkonnenEyes = 
+	{
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 0.3;
+	    start_index = 0;
+	    end_index = 4;
+	};
+
+    Anim_HarkonnenMouth = 
+    {
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 0.5;
+	    start_index = 5;
+	    end_index = 9;
+	};
+
+    Anim_HarkonnenShoulder = 
+    {
+        filename = "DUNE:MENSHPH.SHP";
+        frame_rate = 1;
+	    start_index = 10;
+	    end_index = 10;
+	};
+
+	Anim_OrdosEyes =
+	{
+	    filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+	};
+	
+	Anim_OrdosMouth = 
+	{
+        filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 5;
+	    start_index = 5;
+	    end_index = 9;
+	};
+	
+	Anim_OrdosShoulder =
+	{	
+	    filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 1.0;
+	    start_index = 10;
+	    end_index = 10;
+	};
+	
+	Anim_OrdosRing = 
+	{
+		filename = "DUNE:MENSHPO.SHP";
+        frame_rate = 6.0;
+	    start_index = 11;
+	    end_index = 14;
+	};
+
+	Anim_BeneGesseritEyes = 
+	{
+	    filename = "DUNE:MENSHPM.SHP";
+	    frame_rate = 0.5;
+	    start_index = 0;
+	    end_index = 4;
+    };
+	
+	Anim_BeneGesseritMouth = 
+	{
+	    filename = "DUNE:MENSHPM.SHP";
+	    frame_rate = 5.0;
+	    start_index = 5;
+	    end_index = 9;
+	    
+	};
+	
+	Anim_Win1 =
+	{
+		filename = "DUNE:WIN1.WSA";
+	};
+
+	Anim_Win2 =
+	{
+		filename = "DUNE:WIN2.WSA";
+	};
+
+	Anim_Lose1 =
+	{
+		filename = "DUNE:LOSTBILD.WSA";
+	};
+
+	Anim_Lose2 =
+	{
+		filename = "DUNE:LOSTVEHC.WSA";
+	};
+
+	Anim_Barracks =
+	{
+		filename = "MENTAT:BARRAC.WSA";
+	};
+
+	Anim_Carryall =
+	{
+		filename = "MENTAT:CARRYALL.WSA";
+	};
+
+	Anim_ConstructionYard =
+	{
+		filename = "MENTAT:CONSTRUC.WSA";
+	};
+
+	Anim_Fremen =
+	{
+		filename = "MENTAT:FREMEN.WSA";
+	};
+
+	Anim_DeathHand =
+	{
+		filename = "MENTAT:GOLD-BB.WSA";
+	};
+
+	Anim_Devastator =
+	{
+		filename = "MENTAT:HARKTANK.WSA";
+	};
+
+	Anim_Harvester =
+	{
+		filename = "MENTAT:HARVEST.WSA";
+	};
+
+	Anim_Radar =
+	{
+		filename = "MENTAT:HEADQRTS.WSA";
+	};
+
+	Anim_HighTechFactory =
+	{
+		filename = "MENTAT:HITCFTRY.WSA";
+	};
+
+	Anim_SiegeTank =
+	{
+		filename = "MENTAT:HTANK.WSA";
+	};
+
+	Anim_HeavyFactory =
+	{
+		filename = "MENTAT:HVYFTRY.WSA";
+	};
+
+	Anim_Trooper =
+	{
+		filename = "MENTAT:HYINFY.WSA";
+	};
+
+	Anim_Infantry =
+	{
+		filename = "MENTAT:INFANTRY.WSA";
+	};
+
+	Anim_IX =
+	{
+		filename = "MENTAT:IX.WSA";
+	};
+
+	Anim_LightFactory =
+	{
+		filename = "MENTAT:LITEFTRY.WSA";
+	};
+
+	Anim_Tank =
+	{
+		filename = "MENTAT:LTANK.WSA";
+	};
+
+	Anim_MCV =
+	{
+		filename = "MENTAT:MCV.WSA";
+	};
+
+	Anim_Deviator =
+	{
+		filename = "MENTAT:ORDRTANK.WSA";
+	};
+
+	Anim_Ornithopter =
+	{
+		filename = "MENTAT:ORNI.WSA";
+	};
+
+	Anim_Raider =
+	{
+		filename = "MENTAT:OTRIKE.WSA";
+	};
+
+	Anim_Palace =
+	{
+		filename = "MENTAT:PALACE.WSA";
+	};
+
+	Anim_Quad =
+	{
+		filename = "MENTAT:QUAD.WSA";
+	};
+
+	Anim_Refinery =
+	{
+		filename = "MENTAT:REFINERY.WSA";
+	};
+
+	Anim_RepairYard =
+	{
+		filename = "MENTAT:REPAIR.WSA";
+	};
+
+	Anim_Launcher =
+	{
+		filename = "MENTAT:RTANK.WSA";
+	};
+
+	Anim_RocketTurret =
+	{
+		filename = "MENTAT:RTURRET.WSA";
+	};
+
+	Anim_Saboteur =
+	{
+		filename = "MENTAT:SABOTURE.WSA";
+	};
+
+	Anim_Slab1 =
+	{
+		filename = "MENTAT:SLAB.WSA";
+	};
+
+	Anim_SonicTank =
+	{
+		filename = "MENTAT:STANK.WSA";
+	};
+
+	Anim_StarPort =
+	{
+		filename = "MENTAT:STARPORT.WSA";
+	};
+
+	Anim_Silo =
+	{
+		filename = "MENTAT:STORAGE.WSA";
+	};
+
+	Anim_Trike =
+	{
+		filename = "MENTAT:TRIKE.WSA";
+	};
+
+	Anim_GunTurret =
+	{
+		filename = "MENTAT:TURRET.WSA";
+	};
+
+	Anim_Wall =
+	{
+		filename = "MENTAT:WALL.WSA";
+	};
+
+	Anim_WindTrap =
+	{
+		filename = "MENTAT:WINDTRAP.WSA";
+	};
+
+	Anim_WOR =
+	{
+		filename = "MENTAT:WOR.WSA";
+	};
+
+	Anim_Sandworm =
+	{
+		filename = "MENTAT:WORM.WSA";
+	};
+
+	Anim_Sardaukar =
+	{
+		filename = "MENTAT:SARDUKAR.WSA";
+	};
+
+	Anim_Frigate =
+	{
+		filename = "MENTAT:FRIGATE.WSA";
+	};
+
+};
+
+
+// Please don't change the order of music types
+// They correspond to the order of MUSIC_TYPE
+music:
+{
+	attack = 
+	(
+    	("SOUND:DUNE10.ADL", 7),
+    	("SOUND:DUNE11.ADL", 7),
+    	("SOUND:DUNE12.ADL", 7),
+    	("SOUND:DUNE13.ADL", 7),
+    	("SOUND:DUNE14.ADL", 7),
+    	("SOUND:DUNE15.ADL", 7),
+    	("SOUND:DUNE16.ADL", 7)
+	);
+
+	lose = 
+	(
+	    ("SOUND:DUNE1.ADL", 3),
+	    ("SOUND:DUNE1.ADL", 4),
+	    ("SOUND:DUNE1.ADL", 5)
+	);
+
+	peace =
+	(
+    	("SOUND:DUNE1.ADL", 2),
+    	("SOUND:DUNE2.ADL", 6),
+    	("SOUND:DUNE3.ADL", 6),
+    	("SOUND:DUNE4.ADL", 6),
+    	("SOUND:DUNE5.ADL", 6),
+    	("SOUND:DUNE6.ADL", 6),
+    	("SOUND:DUNE1.ADL", 6),
+    	("SOUND:DUNE7.ADL", 2),
+    	("SOUND:DUNE7.ADL", 3),
+    	("SOUND:DUNE7.ADL", 4),
+    	("SOUND:DUNE7.ADL", 6),
+    	("SOUND:DUNE9.ADL", 4),
+    	("SOUND:DUNE9.ADL", 5),	
+    	("SOUND:DUNE10.ADL", 2),
+    	("SOUND:DUNE16.ADL", 8),
+    	("SOUND:DUNE17.ADL", 4),
+    	("SOUND:DUNE18.ADL", 6),
+    	("SOUND:DUNE19.ADL", 2),
+    	("SOUND:DUNE19.ADL", 3),	
+    	("SOUND:DUNE19.ADL", 4)
+    );
+
+    win = 
+    (
+    	("SOUND:DUNE8.ADL", 2),
+    	("SOUND:DUNE8.ADL", 3),
+    	("SOUND:DUNE20.ADL", 2)
+	);
+	
+	intro =
+	(
+	    ("SOUND:DUNE0.ADL", 4),
+	    ("SOUND:DUNE0.ADL", 2)
+	);
+};
+
+
+//This needs to be completed and verified
+//Many settings in dunelegacy differ from those in the original game
+structures:
+{
+    barracks =
+    {
+        health = 800;
+        power_requirement = 20;
+        view_range = 4;
+    };
+
+    construction_yard = 
+    {
+        health = 1500;
+        power_requirement = 0;
+        size = [2,2];
+        view_range = 6;
+        upgrade_levels = 1;
+        upgrade_cost = 500;    
+    };
+
+    gun_turret = {
+        damage = 100;
+        health = 700;
+        power_requirement = 10;
+        primary_weapon_reload_time = 100;
+        view_range = 5;
+        weapon_range = 5;
+        size = [1,1];
+        turn_Speed = 0.01;
+        /*
+        attackSound = Sound_gunTurret;
+        bulletType = Bullet_Shell;
+        */
+    };
+    
+    heavy_factory = {
+        health = 1000;
+        power_requirement = 35;
+        size = [3,2];
+        upgrade_levels = 2;
+        upgrade_cost = 500;    
+        view_range = 5;        
+    };
+
+    high_tech_factory = {
+        health = 1000;
+        power_requirement = 35;
+        size = [3,2];
+        view_range = 5;
+    };
+
+    ix = {
+        size = [2,2];
+        health = 1000;
+        power_requirement = 40;
+        view_range = 3;
+    };
+    
+    light_factory = {
+        size = [2,2];
+        health = 1000;
+        power_requirement = 20;
+        upgrade_Levels = 1;
+        upgrade_cost = 500;
+        view_range = 5;
+    };
+    
+    palace = {
+        health = 2000;
+        power_requirement = 200;
+        view_range = 8;
+    };
+    
+    rocket_turret = {
+        damage = 100;
+        health = 700;
+        power_requirement = 15;
+        size = [1,1];
+        view_range = 7;
+        weapon_range = 9;
+        /*
+        attackSound = Sound_rocket;
+        bulletType = Bullet_Rocket;
+        */
+    };
+    
+    refinery = {
+        capacity = 2000;
+        health = 1500;
+        power_requirement = 30;
+        size = [3,2];
+        view_ange = 6;
+    };
+    
+    radar = {
+        health = 1000;
+        power_requirement = 20;
+        view_range = 8;
+        size = [2,2];
+    };
+
+    repair_yard = {
+        size = [3,2];
+        health = 1000;
+        power_requirement = 30;
+        view_range = 5;
+    };
+
+    silo = 
+    {
+        capacity = 1000;
+        health = 750;
+        picture_array = 25;
+        power_req = 5;
+        view_range = 3;
+        size = [2,2];
+    };
+    
+    starport = {
+        health = 3000;
+        power_requirement = 80;
+        size = [3,3];
+        view_range = 6;
+        /* Some starport specific variables
+        price_modifier = 1.0;
+        modifierTimer = STARPORT_CHANGE_PRICETIME;
+        #define STARPORT_ARRIVETIME			5000
+        #define STARPORT_CHANGE_PRICETIME	5000
+        #define STARPORT_MIN_MOD			65
+        #define STARPORT_MAX_MOD			125
+        */
+  
+    };
+    
+    wall = {
+        health = 500;
+        size = [1,1];
+        view_range = 2;
+    };
+    
+    windtrap = {
+        health = 1000;
+        power_requirement = 0;
+        size = [2,2];
+        view_range = 3;
+    };
+    
+    wor = {
+        health = 1500;
+        power_requirement = 20;
+        size = [2,2];
+        view_range = 5;
+
+    };
+};
+
+units:
+{
+    air:
+    {
+        carryall = {
+        	armour = 2;
+        	health = 100;
+        	offset = [8,8];
+        	radius = 8;
+	        speed = 1.8;
+        	turn_speed = 0.125;
+        	view_range = 5;
+        	weapon_range = 0;
+        };
+        
+        ornithopter = {
+            armour = 3;
+            damage = 30;
+            max_health = 250;
+            radius = 6;
+            speed = 1.6;
+            turn_speed = 0.125;
+            view_range = 8;
+            weapon_range = 5;
+        };
+        
+        frigate = {
+        	armour = 10;
+        	health = 10000;
+            radius = 16;
+        	speed = 1.0;
+        	view_range = 5;
+        	weapon_range = 0;
+        };
+        
+        
+    };
+    
+    ground:
+    {
+        deviator = {
+            armour = 5;
+            maxHealth = 200;
+            num_weapons = 1;
+            primary_weapon_reload_time = 285;
+            radius = 6;
+            speed = 0.5;
+            view_range = 8;
+            weapon_range = 6;
+            /*
+            bulletType[0] = Bullet_DRocket;
+            numAttackSounds = 1;
+            attackSound[0] = Sound_rocket;
+            */
+        };
+
+        launcher = {
+            armour = 7;
+            health = 300;
+            radius = 6;
+            primary_weapon_reload_time = 285;
+            speed = 0.2;
+            //FIXME:It's 1/2 of what?
+            //turn_speed /= 2;
+            view_range = 8;
+            weapon_range = 10;
+            /*
+            xOffset = (imageW - BLOCKSIZE)/2;	
+            yOffset = (imageH - BLOCKSIZE)/2;
+            
+            numWeapons = 2;
+            bulletType[0] = Bullet_Rocket;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_rocket;
+            */
+        };
+        
+        mcv = {
+            armour = 7;
+            health = 600;
+            radius = 9;
+            speed = 0.125;
+            view_range = 7;
+        };
+
+        quad = {
+            filename = "DUNE:UNITS.SHP";
+            health = 450;
+            num_weapons = 2;
+            picture_array = 0;
+            primary_weapon_reload_time = 100;
+            radius = 6;
+            view_range = 4;
+            weapon_damage = 25;
+            weapon_range = 3;
+            size = [1,1];
+        };
+
+        raider = {
+            armour = 3;
+            damage = 20;
+            health = 250;
+            num_weapons = 2;
+            speed = 1.3;
+            radius = 4;
+            view_range = 6;
+            weapon_range = 5;
+            /*
+            bulletType[0] = Bullet_Gun;
+            primaryWeaponReloadTime = 160;
+            xOffset = (imageW - BLOCKSIZE)/2;	
+            yOffset = (imageH - BLOCKSIZE)/2;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_machineGun;        
+            */
+        };        
+
+        sandworm = {
+            armour = 5;
+            damage = 1000;
+            health = 3000;
+            num_weapons = 0;
+            primary_weapon_reload_time = 200;
+            radius = 8;
+            speed = 0.3;
+            turn_speed = 0.625;
+            view_range = 8;
+            weapon_range = 0;
+            /*
+
+            xOffset = (imageW - BLOCKSIZE)/2;	
+
+            yOffset = (imageH - BLOCKSIZE)/2;
+            */
+        };
+        
+        siege_tank = {
+            armour = 12;
+            health = 600;
+            num_weapons = 2;
+            radius = 7;
+            speed = 0.3;
+            view_range = 8;
+            weapon_range = 6;
+            /*
+
+            bulletType[0] = Bullet_Shell;
+            primaryWeaponReloadTime = 150;
+
+            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+            yOffset = (imageH - BLOCKSIZE)/2;
+
+            deathFrame = Object_LargeUnitExplosion;
+            numDeathFrames = 5;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_smallExplosion;
+            destroySound[0] = Sound_largeExplosion;        
+            */
+        };
+        
+        sonic_tank = {
+            armour = 7;
+            damage = 70;
+            health = 350;
+            num_weapons = 1;
+            primary_weapon_reload_time = 150;
+            radius = 6;
+            speed = 0.5;
+            view_range = 8;
+            weapon_range = 7;
+            /*
+
+            bulletType[0] = Bullet_Sonic;
+
+            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+            yOffset = (imageH - BLOCKSIZE)/2;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_sonic;
+            */
+        };
+        
+        tank = {
+            armour = 10;
+            health = 400;
+            radius = 6;
+            speed = 0.5;
+            turret_turn_speed = 0.0625;
+            view_range = 6;
+            weapon_range = 5;
+            /*
+            numWeapons = 1;
+            bulletType[0] = Bullet_Shell;
+            primaryWeaponReloadTime = 150;
+            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+            yOffset = (imageH - BLOCKSIZE)/2;
+            numAttackSounds = 1;
+            attackSound[0] = Sound_smallExplosion;
+            */
+        };
+        
+        trike = {
+            armour = 4;
+            health = 250;
+            num_weapons = 2;
+            radius = 4;
+            speed = 1.0;
+            view_range = 4;
+            weapon_range = 3;
+            /*
+            bulletType[0] = Bullet_Gun;
+            primaryWeaponReloadTime = 160;
+
+            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+            yOffset = (imageH - BLOCKSIZE)/2;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_machineGun;        
+            */        
+        };
+   };
+   
+   //I know it's subgroup of ground units, but it's a draft config, right?
+   infantry:
+   {
+        fremen = {
+            speed = 0.25;
+        };
+        
+        saboteur = {
+            armour = 1;
+            health = 100;
+            num_weapons = 0;
+            radius = 2;
+            speed = 0.3;
+            view_range = 4;
+            weapon_range = 0;
+            /*
+            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+            yOffset = (imageH - BLOCKSIZE)/2;
+            deathFrame = Object_DeadInfantry;
+            numDeathFrames = 2;
+            */
+        };
+        
+        sardaukar = {
+            armour = 1;
+            health = 100;
+            speed = 0.18;        
+            //bulletType[0] = Bullet_SmallRocketHeavy;
+
+        };
+        
+        trooper = {
+            armour = 1;
+            damage = 50;
+            health = 100;
+            num_weapons = 1;
+            primary_weapon_reload_time = 300;
+            radius = 2;
+            speed = 0.2;
+            view_range = 4;
+            weapon_range = 7;
+            /*
+
+            bulletType[0] = Bullet_SmallRocket;
+
+
+            xOffset = (imageW - BLOCKSIZE)/2;	
+            yOffset = (imageH - BLOCKSIZE)/2;
+
+
+            deathFrame = Object_DeadInfantry;
+            numDeathFrames = 2;
+
+            numAttackSounds = 1;
+            attackSound[0] = Sound_smallRocket;        
+            */
+        };
+   };
+};
