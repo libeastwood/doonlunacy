@@ -5,6 +5,7 @@
 #include "DataCache.h"
 #include "MentatMenu.h"
 #include "Settings.h"
+#include "SoundPlayer.h"
 
 #include "gui2/Label.h"
 #include "pakfile/Cpsfile.h"
@@ -80,6 +81,10 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 	}
 	
+	// This will stop any song played before the wanted song will start to play
+	// from Execute()
+	Mix_HookMusic(NULL, NULL);
+
 }
 
 MentatMenuState::~MentatMenuState() {
@@ -87,6 +92,10 @@ MentatMenuState::~MentatMenuState() {
 
 int MentatMenuState::Execute(float dt)
 {
+    if(set->GetMusic() && !Mix_GetMusicHookData()){
+        SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 8);
+    }
+
     m_surf->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_surf->getSurface()->w/2, 
                         Settings::Instance()->GetHeight() / 16));
 
