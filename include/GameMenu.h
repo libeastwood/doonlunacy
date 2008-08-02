@@ -5,6 +5,7 @@
 
 #include "gui2/MapWidget.h"
 
+class VBox;
 class GameMenuState : public MenuBaseState {
     public:
         GameMenuState();
@@ -15,6 +16,8 @@ class GameMenuState : public MenuBaseState {
     protected:
         MapWidget *m_mapWidget, *m_mapWidget2;
 	void drawMenu();
+	VBox *mentatBox, *optionsBox;
+
 };
 
 #endif // GAMEMENU_H

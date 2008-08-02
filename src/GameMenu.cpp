@@ -5,6 +5,8 @@
 #include "ResMan.h"
 #include "pakfile/Cpsfile.h"
 #include "gui2/Frame.h"
+#include "gui2/VBox.h"
+#include "gui2/Button.h"
 #include "DataCache.h"
 
 GameMenuState::GameMenuState()
@@ -12,6 +14,9 @@ GameMenuState::GameMenuState()
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,56));
     m_mapWidget->setSize(UPoint(set->GetWidth() - 135, set->GetHeight() - 56));
+    mentatBox = new VBox();
+    optionsBox = new VBox();
+
     drawMenu();
 }
 
@@ -61,6 +66,48 @@ void GameMenuState::drawMenu()
     tmp.reset(screen->getPictureCrop(Rect(201, 0, 119, 16)));
     sidebar->blitFrom(tmp.get(), UPoint(set->GetWidth() - 135, 5));
     m_menuBackground->blitFrom(sidebar.get(), UPoint(0, 0));
+
+
+    // create Mentat button
+    ImagePtr mentat = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
+    ImagePtr mentatPressed = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
+    mentatPressed->recolor(115, 116);
+    mentatPressed->recolor(108, 226);
+    mentatPressed->recolor(109, 110);
+    mentatPressed->recolor(147, 146);
+    mentatPressed->putPixel(UPoint(0,15), 116);    
+
+    mentatPressed->drawHLine(UPoint(1,15), 79, 114);
+    mentatPressed->drawVLine(UPoint(79,1), 14, 114);
+
+    GraphicButton *mentatButton = new GraphicButton(mentat, mentatPressed);
+    mentatBox->addChild(mentatButton);
+    mentatBox->fit(2);
+
+    mentatBox->setPosition(UPoint(16,6));
+    mentatBox->reshape();
+    m_container->addChild(mentatBox);
+
+    // create Options button
+    ImagePtr options = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
+    ImagePtr optionsPressed = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
+    optionsPressed->recolor(115, 116);
+    optionsPressed->recolor(108, 226);
+    optionsPressed->recolor(109, 110);
+    optionsPressed->recolor(147, 146);
+    optionsPressed->putPixel(UPoint(0,15), 116);    
+
+    optionsPressed->drawHLine(UPoint(1,15), 79, 114);
+    optionsPressed->drawVLine(UPoint(79,1), 14, 114);
+
+    GraphicButton *optionsButton = new GraphicButton(options, optionsPressed);
+    optionsBox->addChild(optionsButton);
+    optionsBox->fit(2);
+
+    optionsBox->setPosition(UPoint(104,6));
+    optionsBox->reshape();
+    m_container->addChild(optionsBox);
+
 
     screen.reset();
     sidebar.reset();	    
