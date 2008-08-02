@@ -13,6 +13,9 @@
 MainMenuBaseState::MainMenuBaseState()
 {
     m_vbox = new VBox();
+    m_song = new song;
+    m_song->filename = "SOUND:DUNE7.ADL";
+    m_song->track = 6;
 }
 
 void MainMenuBaseState::draw()
@@ -63,8 +66,6 @@ void MainMenuBaseState::draw()
 
     m_menuBackground->blitFrom(tmp.get(), UPoint(set->GetWidth() - 120, set->GetHeight() - 48));
 
-
-
 }
 
 void MainMenuBaseState::drawMainImage(){
@@ -88,9 +89,6 @@ MainMenuBaseState::~MainMenuBaseState()
 
 int MainMenuBaseState::Execute(float dt)
 {
-	if(set->GetMusic() && !Mix_GetMusicHookData()){
-		SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 10);
-	}
     if((m_menuBackground->getSize() != UPoint(set->GetWidth(), set->GetHeight()) || m_drawMenu)){
         draw();
 	m_drawMenu = false;

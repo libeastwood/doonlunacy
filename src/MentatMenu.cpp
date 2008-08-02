@@ -11,6 +11,10 @@
 
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {
+	m_song = new song;
+	m_song->filename = "SOUND:DUNE7.ADL";
+	m_song->track = 3;
+
 	house = newHouse;
 	m_surf = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized(2);
 
@@ -80,10 +84,6 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 	}
 	
-	// This will stop any song played before the wanted song will start to play
-	// from Execute()
-	Mix_HookMusic(NULL, NULL);
-
 }
 
 MentatMenuState::~MentatMenuState() {
@@ -91,10 +91,6 @@ MentatMenuState::~MentatMenuState() {
 
 int MentatMenuState::Execute(float dt)
 {
-    if(set->GetMusic() && !Mix_GetMusicHookData()){
-        SoundPlayer::Instance()->playMusic(MUSIC_PEACE, 8);
-    }
-
     m_surf->blitToScreen(SPoint(set->GetWidth() / 2 - m_surf->getSurface()->w/2, 
                         set->GetHeight() / 16));
 

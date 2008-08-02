@@ -1,6 +1,8 @@
 #ifndef DUNE_STATE_H
 #define DUNE_STATE_H
 
+#include "DataCache.h"
+
 #include <list>
 
 // fwd dec
@@ -50,9 +52,13 @@ class State
 		*/
         virtual const char* GetName() { return "UnknownState"; }
     
+	void playMusic();
+
     protected:
         StateMachine* mp_parent;
 	Settings* set;
+	// Set this to force repeat playback of a specific song in this state
+	song* m_song;
 };
 
 /*

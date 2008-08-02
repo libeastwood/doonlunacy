@@ -21,11 +21,13 @@ SoundPlayer::SoundPlayer()
     Mix_Volume(m_musicChannel, set->m_musicVolume);
 
     m_player = NULL;
+    m_currentSong = new song;
 }
 
 SoundPlayer::~SoundPlayer()
 {
     stopMusic();
+    free(m_currentSong);
 
     if (m_player) delete m_player;
 }
@@ -112,6 +114,8 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 {
     if (Settings::Instance()->m_musicOn)
     {
+	m_currentSong->filename = filename;
+	m_currentSong->track = trackNum;
         changeEmuOpl(Settings::Instance()->GetEmuOpl());
 	int bufsize;
 	uint8_t *data;
@@ -121,6 +125,13 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 
         Mix_HookMusic(m_player->callback, m_player);
     }
+}
+
+song *SoundPlayer::getCurrentSong()
+{
+    if(!Mix_GetMusicHookData())
+	    return NULL;
+    return m_currentSong;
 }
 
 void SoundPlayer::stopMusic()

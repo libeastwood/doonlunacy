@@ -45,6 +45,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
      */
 
     void playMusic(MUSICTYPE musicType, uint16_t cacheTrackNum);
+    song *getCurrentSong();
     
     /*! change type of current music
      *
@@ -79,6 +80,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
 
 	//! type of currently played music
 	MUSICTYPE m_currentMusicType;
+	song *m_currentSong;
 
 	AdlFile *m_player;
 };

@@ -4,7 +4,7 @@
 #include "State.h"
 #include "gui2/Container.h"
 
-#include "SDL.h"
+#include <SDL.h>
 
 class MenuBaseState : public State 
 {

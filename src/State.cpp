@@ -1,6 +1,8 @@
 #include "Log.h"
 #include "State.h"
 #include "Settings.h"
+#include "DataCache.h"
+#include "SoundPlayer.h"
 
 #include <assert.h>
 
@@ -8,10 +10,13 @@ State::State()
 {
     mp_parent = NULL;
     set = Settings::Instance();
+    m_song = NULL;
 }
 
 State::~State()
 {
+    if(m_song != NULL)
+        free(m_song);
 }
 
 
@@ -30,7 +35,15 @@ void State::PopState()
     mp_parent->PopState(); 
 }
 
-
+void State::playMusic()
+{
+    if(m_song != NULL){
+	    if(set->GetMusic() && (SoundPlayer::Instance()->getCurrentSong() == NULL ||
+		    !(SoundPlayer::Instance()->getCurrentSong()->filename == m_song->filename
+	 	     && SoundPlayer::Instance()->getCurrentSong()->track == m_song->track)))
+		    SoundPlayer::Instance()->playMusic(m_song->filename, m_song->track);
+	    }
+}
 
 //-------------------------------------------------------------------
 
@@ -84,23 +97,13 @@ int StateMachine::Execute(float dt)
     // can probably do without this line as pop takes care of it 
     if (m_stateStack.empty()) return -1;
 
+    GetCurrentState()->playMusic();
+
     if ( GetCurrentState()->Execute(dt) == -1)
     {
         PopState();
     };
 
+
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
