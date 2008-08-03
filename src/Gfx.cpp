@@ -57,7 +57,8 @@ SDL_Surface *Image::getSurface()
 Image *Image::getPictureCrop(ConstRect dstRect)
 {
 	if(((int) (dstRect.x + dstRect.w) > surface->w) || ((int) (dstRect.y + dstRect.h) > surface->h)) {
-		LOG_ERROR("GFX", "getPictureCrop: Cannot create new Picture!");
+		LOG_ERROR("GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
+				dstRect.x, dstRect.y, dstRect.w, dstRect.y);
 		exit(EXIT_FAILURE);	
 	}
 	
@@ -65,7 +66,9 @@ Image *Image::getPictureCrop(ConstRect dstRect)
 	
 	// create new picture surface
 	if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,dstRect.w, dstRect.h,8,0,0,0,0))== NULL) {
-		LOG_ERROR("GFX", "getPictureCrop: Cannot create new Picture!");
+		LOG_ERROR("GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
+				dstRect.x, dstRect.y, dstRect.w, dstRect.y);
+
 		exit(EXIT_FAILURE);	
 	}
 			
