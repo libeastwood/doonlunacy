@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 
 #include <boost/format.hpp>
@@ -664,7 +663,6 @@ Animation*  DataCache::getAnimation(std::string path)
 	{
 		int kos;
 		uint8_t *mos;
-		std::cout << fileName << std::endl;
 		mos = ResMan::Instance()->readFile(fileName, &kos);
 		PalfilePtr tmp(new PalFile(mos, kos));
 		palette = getPalette(fileName);
