@@ -55,15 +55,6 @@ SDL_Surface *Image::getSurface()
     return surface;
 }
 
-ImagePtr Image::getResized()
-{
-	double wratio = (double)Settings::Instance()->GetWidth() / (double)surface->w;
-	double hratio = (double)Settings::Instance()->GetHeight() / (double)surface->h;
-	double w = wratio * surface->w;
-	double h = hratio * surface->h;
-	return getResized(UPoint(w, h));
-}
-
 Image *Image::getPictureCrop(ConstRect dstRect)
 {
 	if(((int) (dstRect.x + dstRect.w) > surface->w) || ((int) (dstRect.y + dstRect.h) > surface->h)) {
@@ -224,6 +215,11 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
     }
 }
 
+UPoint sizeRelativePoint(ConstUPoint point){
+	double wratio = (double)Settings::Instance()->GetWidth() / 320;
+	double hratio = (double)Settings::Instance()->GetHeight() / 200;
+	return UPoint(wratio * point.x, hratio * point.y);
+}
 //------------------------------------------------------------------------------
 // Drawing operations
 //------------------------------------------------------------------------------

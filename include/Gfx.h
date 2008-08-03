@@ -339,6 +339,7 @@ inline PointFloat operator-(const PointFloat &point)
 }
 //@}
 
+UPoint sizeRelativePoint(ConstUPoint point);
 
 //------------------------------------------------------------------------------
 // Rect struct
@@ -646,9 +647,17 @@ class Image
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
         };
 
-        ImagePtr getResized();
+	//! Make resized copy of the image relative to current resolution
+        ImagePtr getResized()
+	{
+            return getResized(sizeRelativePoint(UPoint(surface->w, surface->h)));
+	};
 
-	Image *getPictureCrop(ConstRect rect);
+	//! Cut out a rectangular region of the image
+	/*!
+	    @param dstRect geometry of rectangular region to cut out
+        */ 
+	Image *getPictureCrop(ConstRect dstRect);
         
         //! Set colorkey
         /*!
