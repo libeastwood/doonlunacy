@@ -12,8 +12,6 @@
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {
 	m_song = new song;
-	m_song->filename = "SOUND:DUNE7.ADL";
-	m_song->track = 3;
 
 	house = newHouse;
 	m_surf = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized(2);
@@ -21,6 +19,9 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 	switch(house) {
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
+			m_song->filename = "SOUND:DUNE7.ADL";
+			m_song->track = 6;
+
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesEyes"));
 			m_eyesAnim->setPosition(UPoint(80, 191));
 			m_container->addChild(m_eyesAnim);
@@ -40,6 +41,9 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			break;
 		case HOUSE_ORDOS:
 		case HOUSE_MERCENARY:
+			m_song->filename = "SOUND:DUNE7.ADL";
+			m_song->track = 4;
+
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosEyes"));
 			m_eyesAnim->setPosition(UPoint(32, 191));
 			m_container->addChild(m_eyesAnim);
@@ -58,6 +62,9 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 			break;
 		case HOUSE_HARKONNEN:
+			m_song->filename = "SOUND:DUNE7.ADL";
+			m_song->track = 2;
+
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenEyes"));
 			m_eyesAnim->setPosition(UPoint(64, 207));
 			m_container->addChild(m_eyesAnim);
@@ -72,6 +79,9 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			break;
 		case HOUSE_SARDAUKAR:
 		default:
+			m_song->filename = "SOUND:DUNE7.ADL";
+			m_song->track = 2;
+
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritEyes"));
 			m_eyesAnim->setPosition(UPoint(128, 190));
 			m_container->addChild(m_eyesAnim);
