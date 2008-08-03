@@ -632,7 +632,7 @@ class Image
         /*!
             @param ratio ratio of new image to original (2 = double size)
         */
-        ImagePtr getResized(const double ratio)// const
+        ImagePtr getResized(const double ratio) //const ?? what's the difference?
         {
             return ImagePtr(new Image(resizeSurface(surface, ratio)));
         };
@@ -645,6 +645,8 @@ class Image
         {
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
         };
+
+        ImagePtr getResized();
 
 	Image *getPictureCrop(ConstRect rect);
         

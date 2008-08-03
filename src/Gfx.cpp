@@ -3,6 +3,7 @@
 #include "Application.h"    // for Screen
 #include "houses.h"        // for house colors
 #include "Log.h"
+#include "Settings.h"
 
 #include <assert.h>
 
@@ -52,6 +53,15 @@ Image::operator SDL_Surface*()
 SDL_Surface *Image::getSurface()
 {
     return surface;
+}
+
+ImagePtr Image::getResized()
+{
+	double wratio = (double)Settings::Instance()->GetWidth() / (double)surface->w;
+	double hratio = (double)Settings::Instance()->GetHeight() / (double)surface->h;
+	double w = wratio * surface->w;
+	double h = hratio * surface->h;
+	return getResized(UPoint(w, h));
 }
 
 Image *Image::getPictureCrop(ConstRect dstRect)
