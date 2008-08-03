@@ -66,15 +66,15 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->track = 2;
 
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenEyes"));
-			m_eyesAnim->setPosition(UPoint(64, 207));
+			m_eyesAnim->setPosition(sizeRelativePoint(UPoint(32, 88)));
 			m_container->addChild(m_eyesAnim);
 
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenMouth"));
-			m_mouthAnim->setPosition(UPoint(64, 239));
+			m_mouthAnim->setPosition(sizeRelativePoint(UPoint(32, 104)));
 			m_container->addChild(m_mouthAnim);
 
 			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenShoulder"));
-			m_shoulderAnim->setPosition(UPoint(256,238));
+			m_shoulderAnim->setPosition(sizeRelativePoint(UPoint(128, 104)));
 
 			break;
 		case HOUSE_SARDAUKAR:
