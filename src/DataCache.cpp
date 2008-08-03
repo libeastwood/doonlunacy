@@ -385,7 +385,7 @@ void DataCache::Init(){
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
 
-    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 185, 150, 16)));
+    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 184, 150, 16)));
 
     // Ugly, needs to be improved..
     addGuiPic(UI_MenuBackground, fame->getPicture()->getPictureCrop(Rect(0, 0, 50, 50)));
