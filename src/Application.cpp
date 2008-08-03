@@ -24,17 +24,6 @@
 #include "SDL_mixer.h"
 #include "SDL_rwops.h"
 
-
-#ifdef THREADS
-#include "DataCache.h"
-void *dataCacheThread(void * arg)
-{
-	DataCache::Instance()->Init();
-	return NULL;
-}
-
-#endif
-
 Uint8 gpaloff;
 
 Application::Application()
@@ -322,11 +311,13 @@ void Application::Run()
 
         // dont steal all the processing time 
         // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
+#if 0
         if (now - then < min_frame_duration)
         {
             SDL_Delay(min_frame_duration -(now - then));
             now = SDL_GetTicks();
         };
+#endif   
         float dt = float(now - then) / 1000.0f;
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
