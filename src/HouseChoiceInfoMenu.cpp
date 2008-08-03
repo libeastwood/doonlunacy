@@ -25,15 +25,15 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 	
 	m_planetAnimation = new AnimationLabel(ret);
-	m_planetAnimation->setPosition(sizeRelativePoint(UPoint(128, 48)));
+	m_planetAnimation->setPosition(sizeRelativeUPoint(128, 48));
 	m_container->addChild(m_planetAnimation);
 
 	m_butYes = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatYes)->getResized(), DataCache::Instance()->getGuiPic(UI_MentatYes_Pressed)->getResized());
-	m_butYes->setPosition(sizeRelativePoint(UPoint(168, 168)));
+	m_butYes->setPosition(sizeRelativeUPoint(168, 168));
 	m_container->addChild(m_butYes);
 
 	m_butNo = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatNo)->getResized(), DataCache::Instance()->getGuiPic(UI_MentatNo_Pressed)->getResized());
-	m_butNo->setPosition(sizeRelativePoint(UPoint(240, 168)));
+	m_butNo->setPosition(sizeRelativeUPoint(240, 168));
 	m_butNo->onClick.connect(
         boost::bind(&HouseChoiceInfoMenuState::doNo, this) );    
 	    m_container->addChild(m_butNo);

@@ -13,42 +13,42 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
     m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
     m_vbox = new VBox();
 
-    m_butAtreides = new TranspButton(sizeRelativePoint(UPoint(84,92)));
+    m_butAtreides = new TranspButton(sizeRelativeUPoint(84,92));
     m_butAtreides->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doAtreides, this) );
 
     m_vbox->addChild(m_butAtreides);
 
     m_vbox->fit(2);
-    m_vbox->setPosition(sizeRelativePoint(UPoint(20,53)));
+    m_vbox->setPosition(sizeRelativeUPoint(20,53));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
 
     m_vbox = new VBox();
 
-    m_butOrdos = new TranspButton(sizeRelativePoint(UPoint(84, 92)));
+    m_butOrdos = new TranspButton(sizeRelativeUPoint(84, 92));
     m_butOrdos->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doOrdos, this) );
 
     m_vbox->addChild(m_butOrdos);
 
     m_vbox->fit(2);
-	m_vbox->setPosition(sizeRelativePoint(UPoint(116,53)));
+	m_vbox->setPosition(sizeRelativeUPoint(116,53));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
 
     m_vbox = new VBox();
 
-    m_butHarkonnen = new TranspButton(sizeRelativePoint(UPoint(84, 92)));
+    m_butHarkonnen = new TranspButton(sizeRelativeUPoint(84, 92));
     m_butHarkonnen->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doHarkonnen, this) );
 
     m_vbox->addChild(m_butHarkonnen);
 
     m_vbox->fit(2);
-    m_vbox->setPosition(sizeRelativePoint(UPoint(215, 53)));
+    m_vbox->setPosition(sizeRelativeUPoint(215, 53));
     m_vbox->reshape();
     
     
