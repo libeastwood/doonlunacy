@@ -632,7 +632,7 @@ class Image
         /*!
             @param ratio ratio of new image to original (2 = double size)
         */
-        ImagePtr getResized(double ratio) const
+        ImagePtr getResized(const double ratio)// const
         {
             return ImagePtr(new Image(resizeSurface(surface, ratio)));
         };
@@ -641,11 +641,11 @@ class Image
         /*!
             @param size size of the new image
         */
-/*        ImagePtr getResized(ConstUPoint size)
+        ImagePtr getResized(ConstUPoint size)
         {
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
         };
-*/
+
 	Image *getPictureCrop(ConstRect rect);
         
         //! Set colorkey
