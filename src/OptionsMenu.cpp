@@ -22,18 +22,21 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butWindowMode);
 
+    // Dune 2 graphics are actually 320x200, not 320x240. This makes it cumbersome
+    // to scale graphics when the ratio for width and height isn't the same. This
+    // is why we use rather non-standard resolutions. At least for now..
     switch (set->GetWidth())
     {
         case 640:
-            m_caption = "640x480";
+            m_caption = "640x400";
             break;
                 
         case 800:
-            m_caption = "800x600";
+            m_caption = "800x500";
             break;
                 
         case 1024:
-            m_caption = "1024x768";
+            m_caption = "1024x640";
             break;
     
     }
