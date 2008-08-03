@@ -6,7 +6,6 @@
 #include "ResMan.h"
 #include "pakfile/Cpsfile.h"
 #include "gui2/Frame.h"
-#include "gui2/VBox.h"
 #include "gui2/Button.h"
 #include "DataCache.h"
 #include "MentatInfoMenu.h"
@@ -16,8 +15,6 @@ GameMenuState::GameMenuState()
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,56));
     m_mapWidget->setSize(UPoint(set->GetWidth() - 135, set->GetHeight() - 56));
-    mentatBox = new VBox();
-    optionsBox = new VBox();
 
     drawMenu();
 }
@@ -82,15 +79,12 @@ void GameMenuState::drawMenu()
     mentatPressed->drawHLine(UPoint(1,15), 79, 114);
     mentatPressed->drawVLine(UPoint(79,1), 14, 114);
 
-    GraphicButton *mentatButton = new GraphicButton(mentat, mentatPressed);
-    mentatButton->onClick.connect(
+    m_mentatButton = new GraphicButton(mentat, mentatPressed);
+    m_mentatButton->onClick.connect(
              boost::bind(&GameMenuState::doMentat, this) );    
-    mentatBox->addChild(mentatButton);
-    mentatBox->fit(2);
 
-    mentatBox->setPosition(UPoint(16,6));
-    mentatBox->reshape();
-    m_container->addChild(mentatBox);
+    m_mentatButton->setPosition(UPoint(16,6));
+    m_container->addChild(m_mentatButton);
 
     // create Options button
     ImagePtr options = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
@@ -104,13 +98,10 @@ void GameMenuState::drawMenu()
     optionsPressed->drawHLine(UPoint(1,15), 79, 114);
     optionsPressed->drawVLine(UPoint(79,1), 14, 114);
 
-    GraphicButton *optionsButton = new GraphicButton(options, optionsPressed);
-    optionsBox->addChild(optionsButton);
-    optionsBox->fit(2);
+    m_optionsButton = new GraphicButton(options, optionsPressed);
 
-    optionsBox->setPosition(UPoint(104,6));
-    optionsBox->reshape();
-    m_container->addChild(optionsBox);
+    m_optionsButton->setPosition(UPoint(104,6));
+    m_container->addChild(m_optionsButton);
 
 
     screen.reset();
