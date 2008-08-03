@@ -651,8 +651,8 @@ IntroState::IntroState()
 	enque(frame);*/
 
     next();
-    m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),
-                                  Settings::Instance()->GetHeight());
+    m_butIntro = new TranspButton(SPoint(Settings::Instance()->GetWidth(),
+                                  Settings::Instance()->GetHeight()));
                                   
     m_butIntro->onClick.connect(
             boost::bind(&IntroState::SkipIntro, this) );
