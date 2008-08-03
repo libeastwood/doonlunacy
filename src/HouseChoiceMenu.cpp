@@ -19,7 +19,6 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
     m_butAtreides->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doAtreides, this) );
 
-    std::cout << sizeRelativePoint(UPoint(84,92)).x << "x" << sizeRelativePoint(UPoint(84,92)).y << std::endl;
     m_vbox->addChild(m_butAtreides);
 
     m_vbox->fit(2);
