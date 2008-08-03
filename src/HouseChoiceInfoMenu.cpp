@@ -10,7 +10,7 @@
 #include <StringFile.h>
 #include <string>
 
-HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_ATREIDES)
+HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
 {
 
 	free(m_song);
