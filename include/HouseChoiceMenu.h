@@ -1,10 +1,9 @@
-#ifndef HOUSECHOICEMENU_H_INCLUDED
-#define HOUSECHOICEMENU_H_INCLUDED
+#ifndef DUNE_HOUSECHOICEMENU_H
+#define DUNE_HOUSECHOICEMENU_H
 
 #include "MenuBase.h"
 
 #include "gui2/Button.h"
-#include "gui2/VBox.h"
 
 class HouseChoiceMenuState : public MenuBaseState {
 public:
@@ -20,7 +19,6 @@ private:
 	void doOrdos();
 	void doHarkonnen();
 	void doBack();
-	VBox* m_vbox;	
 
 	TranspButton* m_butAtreides;
 	TranspButton* m_butOrdos;
@@ -28,4 +26,4 @@ private:
     BoringButton* m_butBack;
 };
 
-#endif // HOUSECHOICEMENU_H_INCLUDED
+#endif // DUNE_HOUSECHOICEMENU_H
