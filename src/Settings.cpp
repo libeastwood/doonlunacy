@@ -40,7 +40,7 @@ void Settings::load()
         root.add("sound", Setting::TypeGroup);    
 
         Setting& node = configFile->lookup(".graphics");
-        node.add("height", Setting::TypeInt) = 400;
+        node.add("height", Setting::TypeInt) = 480;
         node.add("width", Setting::TypeInt) = 640;
         node.add("fullscreen", Setting::TypeBoolean) = false;
         node.add("double_buffer", Setting::TypeBoolean) = true;
