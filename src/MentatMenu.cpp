@@ -45,19 +45,19 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->track = 4;
 
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosEyes"));
-			m_eyesAnim->setPosition(UPoint(32, 191));
+			m_eyesAnim->setPosition(sizeRelativePoint(UPoint(16, 80)));
 			m_container->addChild(m_eyesAnim);
 
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosMouth"));
-			m_mouthAnim->setPosition(UPoint(32, 223));
+			m_mouthAnim->setPosition(sizeRelativePoint(UPoint(16, 96)));
 			m_container->addChild(m_mouthAnim);
 
 			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosRing"));
-			m_specialAnim->setPosition(UPoint(178, 320));
+			m_specialAnim->setPosition(sizeRelativePoint(UPoint(90, 144)));
 			m_container->addChild(m_specialAnim);
 
 			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosShoulder"));
-			m_shoulderAnim->setPosition(UPoint(256,286));
+			m_shoulderAnim->setPosition(sizeRelativePoint(UPoint(128,128)));
 
 
 			break;
