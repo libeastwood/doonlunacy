@@ -16,6 +16,7 @@ class GameMenuState : public MenuBaseState {
     protected:
         MapWidget *m_mapWidget, *m_mapWidget2;
 	void drawMenu();
+	void doMentat();
 	VBox *mentatBox, *optionsBox;
 
 };

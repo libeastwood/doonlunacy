@@ -1,3 +1,4 @@
+#include <boost/bind.hpp>
 #include "Settings.h"
 #include "Editor.h"
 #include "MapGenerator.h"
@@ -8,6 +9,7 @@
 #include "gui2/VBox.h"
 #include "gui2/Button.h"
 #include "DataCache.h"
+#include "MentatInfoMenu.h"
 
 GameMenuState::GameMenuState()
 {
@@ -81,6 +83,8 @@ void GameMenuState::drawMenu()
     mentatPressed->drawVLine(UPoint(79,1), 14, 114);
 
     GraphicButton *mentatButton = new GraphicButton(mentat, mentatPressed);
+    mentatButton->onClick.connect(
+             boost::bind(&GameMenuState::doMentat, this) );    
     mentatBox->addChild(mentatButton);
     mentatBox->fit(2);
 
@@ -113,6 +117,12 @@ void GameMenuState::drawMenu()
     sidebar.reset();	    
     tmp.reset();
 }
+
+void GameMenuState::doMentat()
+{
+    mp_parent->PushState( new MentatInfoMenuState(HOUSE_ATREIDES) );
+}
+
 int GameMenuState::Execute(float dt)
 {
    m_menuBackground->blitToScreen(SPoint(0, 0));
