@@ -503,11 +503,17 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
     PalfilePtr tmp (new PalFile(data, len));
 
     m_palette[palette] = tmp; //pal;
+    m_palStrings.insert(std::pair<std::string, PalfilePtr>(paletteFile, tmp));
 }
 
 SDL_Palette* DataCache::getPalette(Palette_enum palette)
 {
     return m_palette[palette]->getPalette();
+}
+
+SDL_Palette* DataCache::getPalette(std::string paletteFile)
+{
+    return m_palStrings[paletteFile]->getPalette();
 }
 
 void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
@@ -649,26 +655,39 @@ Animation*  DataCache::getAnimation(std::string path)
     {
         Setting& node = m_dataConfig->lookup(fullpath);
 
-        std::string fileName;
-        node.lookupValue("filename", fileName);
+	int len;
+	uint8_t *data;
 
+        std::string fileName;
+	SDL_Palette* palette;
+        if(node.lookupValue("palette", fileName))
+	{
+		int kos;
+		uint8_t *mos;
+		std::cout << fileName << std::endl;
+		mos = ResMan::Instance()->readFile(fileName, &kos);
+		PalfilePtr tmp(new PalFile(mos, kos));
+		palette = getPalette(fileName);
+	}
+	else
+		palette = getPalette(IBM_PAL);
+
+        node.lookupValue("filename", fileName);
         std::string type = fileName.substr(fileName.length()-3, 3);
 
-    	int len;
-        uint8_t * data = ResMan::Instance()->readFile(fileName, &len);
+        data = ResMan::Instance()->readFile(fileName, &len);
 
 
         if (type.compare("WSA") == 0)
         {
             Wsafile* wsafile(new Wsafile(data, len));
-            SDL_Palette* palette = getPalette(IBM_PAL);
         	
-        	animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
+            animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
             double frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
-        	animation->setFrameRate(frameRate);
+            animation->setFrameRate(frameRate);
 
-        	delete wsafile;
+            delete wsafile;
 
         }
         
@@ -679,7 +698,7 @@ Animation*  DataCache::getAnimation(std::string path)
             node.lookupValue("start_index", startIndex);
             node.lookupValue("end_index", endIndex);
 
-            Shpfile * shpfile = new Shpfile(data, len, getPalette(BENE_PAL));
+            Shpfile * shpfile = new Shpfile(data, len, palette);
             animation = shpfile->getAnimation(startIndex,endIndex,true);
 
             node.lookupValue("frame_rate", frameRate);

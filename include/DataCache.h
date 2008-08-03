@@ -32,6 +32,8 @@ typedef boost::shared_ptr<PalFile> PalfilePtr;
 
 typedef std::map <unsigned, ImagePtr> images;
 typedef std::vector <images*> remapped_images; //One for each house
+typedef	std::map<std::string, PalfilePtr> palStrings;
+
 
 typedef struct {
     //! ResMan filename to song file e.g. SOUND:DUNE0.ADL
@@ -99,6 +101,9 @@ class DataCache : public Singleton<DataCache>
          *         </ul>
          */
         SDL_Palette* getPalette(Palette_enum palette);
+
+        SDL_Palette* getPalette(std::string paletteFile);
+
         /*! Used to fetch shared_ptr to sprite picture
          *  @param ID identification number of a picture to be fetched
          *  @param house colour to which image is remapped. By default: HOUSE_HARKONNEN
@@ -138,6 +143,7 @@ class DataCache : public Singleton<DataCache>
         remapped_images m_guiImg;
         
 		PalfilePtr m_palette[NUM_PALETTES];
+		palStrings m_palStrings;
 
 		Mix_Chunk* getChunkFromFile(std::string fileName);
 		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
