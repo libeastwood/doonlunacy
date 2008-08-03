@@ -196,9 +196,9 @@ void BoringButton::redraw()
 
 // ------------------------------------------------------------------
 
-TranspButton::TranspButton(Uint16 w, Uint16 h)
+TranspButton::TranspButton(SPoint size)
 {
-	setSize(SPoint(w, h));
+	setSize(size);
 }
 
 TranspButton::~TranspButton()

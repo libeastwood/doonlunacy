@@ -53,7 +53,7 @@ class BoringButton : public GraphicButton
 class TranspButton : public Button
 {
     public:
-        TranspButton(Uint16 w, Uint16 h);
+        TranspButton(SPoint size);
         ~TranspButton();
 };
 
