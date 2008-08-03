@@ -162,7 +162,7 @@ void Application::InitAudio()
     }
     else
     {
-        LOG_INFO("Application", "Allocated %d channels. n", Mix_AllocateChannels(16)); 
+        LOG_INFO("Application", "Allocated %d channels.\n", Mix_AllocateChannels(16)); 
     };
 }
 
