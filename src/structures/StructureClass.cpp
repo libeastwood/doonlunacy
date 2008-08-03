@@ -28,7 +28,7 @@ void StructureClass::assignToMap(SPoint pos)
 			{
 				map->getCell(i,j)->assignNonInfantryGroundObject(this);
 				//if ((m_itemID != Structure_Wall) && (m_itemID != Structure_ConstructionYard) && !map->getCell(i,j)->isConcrete()) //&& currentGame->concreteRequired && (gameState != START))
-				//	health -= (int)(0.5*(double)maxHealth/((double)(structureSize.x*structureSize.y)));
+				//	health -= (int)(0.5*(float)maxHealth/((float)(structureSize.x*structureSize.y)));
 				map->getCell(i,j)->setType(Terrain_Rock);
 				//map->getCell(i,j)->setOwner(getOwner()->getPlayerNumber());
 				//map->viewMap(getOwner()->getTeam(), &temp, getViewRange());
@@ -128,7 +128,7 @@ void StructureClass::drawSelectRect(Image * dest)
 			SDL_UnlockSurface(surf);
 	}
 
-	dest->drawHLine(UPoint(m_drawnPos.x, m_drawnPos.y-2), m_drawnPos.x + ((int)(((double)m_health/(double)m_maxHealth)*(w - 1))), getHealthColour());
+	dest->drawHLine(UPoint(m_drawnPos.x, m_drawnPos.y-2), m_drawnPos.x + ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))), getHealthColour());
 }
 
 void StructureClass::setDrawnPos(SPoint off, SPoint view)

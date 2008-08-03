@@ -128,7 +128,7 @@ void UnitClass::drawSelectionBox(Image* dest)
 {
     ImagePtr selectionBox = DataCache::Instance()->getGuiPic(UI_SelectionBox);
     selectionBox->blitTo(dest, m_drawnPos);
-    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((double)m_health / (double)m_maxHealth)*(w - 3))), getHealthColour());
+    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
 /*virtual*/
@@ -312,7 +312,7 @@ void UnitClass::setPosition(SPoint pos)
 /*virtual*/
 void UnitClass::setSpeeds()
 {
-    double maxSpeed = m_speed;
+    float maxSpeed = m_speed;
 
     if (!isAFlyingUnit())
     {
@@ -443,7 +443,7 @@ void UnitClass::turn()
 
             else
             {
-                double angleLeft = 0,
+                float angleLeft = 0,
                                    angleRight = 0;
 
                 if (m_angle > wantedAngle)
@@ -553,7 +553,7 @@ if (!m_destroyed)
 void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
 {
     int dx1, dy1, dx2, dy2;
-    double cost,
+    float cost,
     cross,
     heuristic,
     f;
@@ -574,15 +574,15 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
             cost = parent_node->m_cost;
 
             if ((x != parent_node->x) && (tempLocation.y != parent_node->y))
-                cost += DIAGONALCOST * (isAFlyingUnit() ? 1.0 : (double)node->getDifficulty()); //add diagonal movement cost
+                cost += DIAGONALCOST * (isAFlyingUnit() ? 1.0 : (float)node->getDifficulty()); //add diagonal movement cost
             else
-                cost += (isAFlyingUnit() ? 1.0 : (double)node->getDifficulty());
+                cost += (isAFlyingUnit() ? 1.0 : (float)node->getDifficulty());
 
             /*if (parent_node->parent) //add cost of turning time
             {
              int posAngle = map->getPosAngle(parent_node->parent->getLocation(), parent_node->getLocation());
              if (posAngle != angle)
-              cost += (1.0/turnSpeed * (double)min(abs(angle - posAngle), NUM_ANGLES - max(angle, posAngle) + min(angle, posAngle)))/((double)BLOCKSIZE);
+              cost += (1.0/turnSpeed * (float)min(abs(angle - posAngle), NUM_ANGLES - max(angle, posAngle) + min(angle, posAngle)))/((float)BLOCKSIZE);
             }*/
 
             if (m_target)
@@ -596,7 +596,7 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
 
             dy2 = y - checkedPoint.y;
 
-            cross = (double)(dx1 * dy2 - dx2 * dy1);
+            cross = (float)(dx1 * dy2 - dx2 * dy1);
 
             if ( cross < 0 )
                 cross = -cross;
@@ -651,7 +651,7 @@ bool UnitClass::AStarSearch()
     //if the unit is not directly next to its dest, or it is and the dest is unblocked
     if ((node->m_heuristic > 1.5) || canPass(checkedPoint))
     {
-        double smallestHeuristic = node->m_heuristic;
+        float smallestHeuristic = node->m_heuristic;
         PriorityQ open(map->w*map->h);
         std::list<TerrainClass*> visitedList;
         TerrainClass *bestDest = NULL; //if we dont find path to destination, we will head here instead

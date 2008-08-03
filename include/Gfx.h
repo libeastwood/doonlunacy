@@ -111,7 +111,7 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h);
     @param surface original surface
     @param ratio ratio of new surface to original (2 = double size)
 */
-SDL_Surface* resizeSurface(SDL_Surface *surface, double ratio);
+SDL_Surface* resizeSurface(SDL_Surface *surface, float ratio);
 
 //@}
 
@@ -633,7 +633,7 @@ class Image
         /*!
             @param ratio ratio of new image to original (2 = double size)
         */
-        ImagePtr getResized(const double ratio) //const ?? what's the difference?
+        ImagePtr getResized(const float ratio) //const ?? what's the difference?
         {
             return ImagePtr(new Image(resizeSurface(surface, ratio)));
         };

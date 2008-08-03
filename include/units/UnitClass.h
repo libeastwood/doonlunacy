@@ -64,7 +64,7 @@ class UnitClass : public ObjectClass
          m_turreted,
          m_tracked;
 
-    double  m_speed,
+    float   m_speed,
             m_speedCap,
             m_targetDistance,
             m_turnSpeed,

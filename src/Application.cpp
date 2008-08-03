@@ -327,7 +327,6 @@ void Application::Run()
             SDL_Delay(min_frame_duration -(now - then));
             now = SDL_GetTicks();
         };
-        
         float dt = float(now - then) / 1000.0f;
 
         if (m_rootState->Execute(dt) == -1) m_running = false;

@@ -41,7 +41,7 @@ typedef struct
 			gamespeed,
 			campaignLevel;
 
-        double  unitScale;
+        float  unitScale;
 	
 
 	DIFFICULTYTYPE	playerDifficulty[MAX_PLAYERS];

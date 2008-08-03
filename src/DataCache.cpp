@@ -683,7 +683,7 @@ Animation*  DataCache::getAnimation(std::string path)
             Wsafile* wsafile(new Wsafile(data, len));
         	
             animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
-            double frameRate = 1.0;
+            float frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
             animation->setFrameRate(frameRate);
 
@@ -694,7 +694,7 @@ Animation*  DataCache::getAnimation(std::string path)
         if (type.compare("SHP") == 0)
         {
             int startIndex, endIndex;
-            double frameRate = 1.0;
+            float frameRate = 1.0;
             node.lookupValue("start_index", startIndex);
             node.lookupValue("end_index", endIndex);
 

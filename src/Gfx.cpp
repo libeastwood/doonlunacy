@@ -216,8 +216,8 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
 }
 
 UPoint sizeRelativePoint(ConstUPoint point){
-	double wratio = (double)Settings::Instance()->GetWidth() / 320;
-	double hratio = (double)Settings::Instance()->GetHeight() / 200;
+	float wratio = (float)Settings::Instance()->GetWidth() / 320;
+	float hratio = (float)Settings::Instance()->GetHeight() / 200;
 	return UPoint(wratio * point.x, hratio * point.y);
 }
 //------------------------------------------------------------------------------
@@ -338,7 +338,7 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
     return resized;
 }
 
-SDL_Surface* resizeSurface(SDL_Surface *surface, double ratio)
+SDL_Surface* resizeSurface(SDL_Surface *surface, float ratio)
 {
     assert(surface != NULL);
     return resizeSurface(surface, (Uint16)(surface->w*ratio), (Uint16)(surface->h*ratio));

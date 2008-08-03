@@ -373,7 +373,7 @@ void SoundPlayer::playSoundAt(int soundID, COORDTYPE* location)
         else if (location->y < dborder->minY / BLOCKSIZE)
             yOffset = dborder->minY / BLOCKSIZE - location->y;
 
-        volume -= (int)(10 * (sqrt((double)(xOffset * xOffset + yOffset * yOffset))));
+        volume -= (int)(10 * (sqrt((float)(xOffset * xOffset + yOffset * yOffset))));
 
         if (volume < 15) volume = 15;
 

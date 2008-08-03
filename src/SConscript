@@ -103,8 +103,9 @@ pakview_sources = [  "Application.cpp",
 
 
 doonlunacy = env.Program("../doonlunacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
-#pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
+pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
+pakbmp = env.Program("../pakbmp", ["pakbmp.cpp"] + pakview_sources + gui_sources + pak_sources )
 
 Default(doonlunacy)
-#Default(pakview)
-
+Default(pakview)
+Default(pakbmp)

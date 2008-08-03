@@ -101,7 +101,7 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 		temp = getNonInfantryGroundObject();
 	else if (hasInfantry())	
 	{
-/*		double closestDistance = NONE;
+/*		float closestDistance = NONE;
 		COORDTYPE atPos, centrePoint;
 		InfantryClass* infantry;
 		atPos.x = x;

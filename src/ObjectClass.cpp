@@ -63,7 +63,7 @@ UPoint ObjectClass::getClosestPoint(UPoint point)
 
 int ObjectClass::getHealthColour()
 {
-    double healthPercent = (double)m_health / (double)m_maxHealth;
+    float healthPercent = (float)m_health / (float)m_maxHealth;
 
     if (healthPercent >= 0.7)
         return COLOUR_LIGHTGREEN;

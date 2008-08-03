@@ -6,25 +6,25 @@
 #include "dMath.h"
 
 int power(int num1, int num2);
-bool testIfInt(double number);
-double fixDouble(double number);
-int roundUp(double number);
+bool testIfInt(float number);
+float fixDouble(float number);
+int roundUp(float number);
 
 #ifdef _WIN32
-inline int round(double number) { return ((int)(number + 0.5)); }
-inline int lround(double number) { return round(number); }
+inline int round(float number) { return ((int)(number + 0.5)); }
+inline int lround(float number) { return round(number); }
 #endif
 
-double dest_angle(UPoint p1, UPoint p2);
+float dest_angle(UPoint p1, UPoint p2);
 int getRandomInt(int min, int max);
-double normalize(double value, double max);
-double min_delta(double from, double to, double max);
-double trajectory_angle(double x1, double y1, double x2, double y2);
-double distance_from(UPoint p1, UPoint p2);
-double distance_from(double x, double y, double to_x, double to_y);
-double hypotinuse_of(double x, double y);
-double blockDistance(UPoint p1, UPoint p2);
-double closestBlockDistance(UPoint objectLocation, UPoint targetLocation, UPoint size);
+float normalize(float value, float max);
+float min_delta(float from, float to, float max);
+float trajectory_angle(float x1, float y1, float x2, float y2);
+float distance_from(UPoint p1, UPoint p2);
+float distance_from(float x, float y, float to_x, float to_y);
+float hypotinuse_of(float x, float y);
+float blockDistance(UPoint p1, UPoint p2);
+float closestBlockDistance(UPoint objectLocation, UPoint targetLocation, UPoint size);
 void split(char value[][MAX_LINE+1], char* line, char seperator);
 int toInt(char* line);
 

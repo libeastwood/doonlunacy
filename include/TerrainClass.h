@@ -152,7 +152,7 @@ class TerrainClass  : public UPoint
         m_type = newType;
     }
 
-    double getDifficulty()
+    float getDifficulty()
     {
         return m_difficulty;
     }
@@ -164,7 +164,7 @@ class TerrainClass  : public UPoint
     //! True if A* has already checked the node
     bool m_visited;
     
-    double //! cost to get here from original location
+    float //! cost to get here from original location
            m_cost,       
            //! cost + heuristic
            m_f,          
@@ -177,7 +177,7 @@ class TerrainClass  : public UPoint
 
   private:
     //! How difficult it is to move in this cell
-    double m_difficulty,
+    float m_difficulty,
 
     //! How much spice on this particular cell is left
     m_spice;

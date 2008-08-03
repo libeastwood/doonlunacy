@@ -72,7 +72,7 @@ const Sint16 TileTypes[] = {
 	\return An integer between -126 and +127
 */
 Sint8 getSinus(int i) {
-	double tmp = ((sin( (((double)i)-0.0047)/128.0 * M_PI) + 1.0) * 127.001707289) - 127.001708285;
+	float tmp = ((sin( (((float)i)-0.0047)/128.0 * M_PI) + 1.0) * 127.001707289) - 127.001708285;
 	int x = (int) tmp;
 	return (x <= -126) ? -126 : x;
 }
@@ -83,7 +83,7 @@ Sint8 getSinus(int i) {
 	\return An integer between -126 and +127
 */
 Sint8 getCosinus(int i) {
-	double tmp = ((cos( (((double)i)-0.0047)/128.0 * M_PI) + 1.0) * 127.001707289) - 127.001708285;
+	float tmp = ((cos( (((float)i)-0.0047)/128.0 * M_PI) + 1.0) * 127.001707289) - 127.001708285;
 	int x = (int) tmp;
 	return (x <= -126) ? -126 : x;
 }

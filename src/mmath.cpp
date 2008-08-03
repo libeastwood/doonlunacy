@@ -35,11 +35,11 @@ int power(int num1, int num2)
 	return result;
 }
 
-bool testIfInt(double number)
+bool testIfInt(float number)
 {
 	bool result;
 
-	double temp = number - (int)number;
+	float temp = number - (int)number;
 	if (temp <= 0.0001 && temp >= -0.9999)
 		result = true;
 	else
@@ -47,14 +47,14 @@ bool testIfInt(double number)
 
 	return result;
 }
-double fixDouble(double number)
+float fixDouble(float number)
 {
-	if (fabs(number - (double)((int)number)) < 0.00001)
-		number = (double)((int)number);
+	if (fabs(number - (float)((int)number)) < 0.00001)
+		number = (float)((int)number);
 
 	return number;
 }
-int roundUp(double number)
+int roundUp(float number)
 {
 	int result = (int)number;
 
@@ -63,11 +63,11 @@ int roundUp(double number)
 	return result;
 }
 
-double dest_angle(UPoint p1, UPoint p2)
+float dest_angle(UPoint p1, UPoint p2)
 {
-        double  destAngle;
+        float  destAngle;
 
-        double  diffX = p2.x - p1.x,
+        float  diffX = p2.x - p1.x,
                 diffY = p2.y - p1.y;
 
         if (diffX != 0)
@@ -105,7 +105,7 @@ int getRandomInt(int min, int max)
 	max++;
 	return ((rand() % (max-min)) + min);
 }
-double normalize(double value, double max)
+float normalize(float value, float max)
 {
 	while(value < 0.0)
 		value += max;
@@ -115,23 +115,23 @@ double normalize(double value, double max)
 	return(value);
 }
 
-double min_delta(double from, double to, double max)
+float min_delta(float from, float to, float max)
 {
-	double d1 = from - to;
-	double d2 = (from + max) - to;
-	double d3 = from - (to + max);
-	double val = d1;
+	float d1 = from - to;
+	float d2 = (from + max) - to;
+	float d3 = from - (to + max);
+	float val = d1;
 
 	if(fabs(val) > fabs(d2)) val = d2;
 	if(fabs(val) > fabs(d3)) val = d3;
 	return(val);
 }
 /*
-double trajectory_angle(double x1, double y1, double x2, double y2)
+float trajectory_angle(float x1, float y1, float x2, float y2)
 { 
-  double dx = min_delta(x1, x2, X_MAX);
-  double dy = min_delta(y1, y2, Y_MAX);
-  double alpha = atan(dy / dx);
+  float dx = min_delta(x1, x2, X_MAX);
+  float dy = min_delta(y1, y2, Y_MAX);
+  float alpha = atan(dy / dx);
 
   if(dx < 0.0)
     alpha += PI;
@@ -143,9 +143,9 @@ double trajectory_angle(double x1, double y1, double x2, double y2)
 }
 */
 /*
-double wcorner(double x, double w)
+float wcorner(float x, float w)
 {
-  double value = (x - (w / 2.0) - space_x);
+  float value = (x - (w / 2.0) - space_x);
 
   while(value < (-w))
     value += X_MAX;
@@ -156,9 +156,9 @@ double wcorner(double x, double w)
   return(value);
 }
 
-double hcorner(double y, double h)
+float hcorner(float y, float h)
 {
-  double value = (y - (h / 2.0) - space_y);
+  float value = (y - (h / 2.0) - space_y);
 
   while(value < (-h))
     value += Y_MAX;
@@ -169,40 +169,40 @@ double hcorner(double y, double h)
   return(value);
 }
 
-double nearest_coord(double from, double to, double max)
+float nearest_coord(float from, float to, float max)
 {
   return(from - min_delta(from, to, max));
 }
 */
-double distance_from(UPoint p1, UPoint p2)
+float distance_from(UPoint p1, UPoint p2)
 {
-	double	first = (p1.x - p2.x),
+	float	first = (p1.x - p2.x),
 			second = (p1.y - p2.y);
 
 	return(sqrt(first*first + second*second));
 }
-double distance_from(double x, double y, double to_x, double to_y)
+float distance_from(float x, float y, float to_x, float to_y)
 {
-	double	first = (x - to_x),
+	float	first = (x - to_x),
 			second = (y - to_y);
 
 	return(sqrt(first*first + second*second));
 }
-double hypotinuse_of(double x, double y)
+float hypotinuse_of(float x, float y)
 {
 	return(sqrt((x * x) + (y * y)));
 }
-double blockDistance(UPoint p1, UPoint p2)
+float blockDistance(UPoint p1, UPoint p2)
 {
 	int xDis = abs(p1.x - p2.x),
 		yDis = abs(p1.y - p2.y),
 		minDis = std::min(xDis, yDis);
 
-	return ((double)std::max(xDis, yDis) + (double)minDis*(DIAGONALCOST - 1.0));
-	//return (((double)minDis)*DIAGONALCOST + max(xDis, yDis) - minDis);
+	return ((float)std::max(xDis, yDis) + (float)minDis*(DIAGONALCOST - 1.0));
+	//return (((float)minDis)*DIAGONALCOST + max(xDis, yDis) - minDis);
 }
 
-double closestBlockDistance(UPoint objectLocation, UPoint targetLocation, UPoint size)
+float closestBlockDistance(UPoint objectLocation, UPoint targetLocation, UPoint size)
 {
 	UPoint closestPoint;
 

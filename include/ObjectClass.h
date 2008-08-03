@@ -167,7 +167,7 @@ class ObjectClass : public Rect
          m_targetFriendly;
 
 
-    double  m_angle,
+    float  m_angle,
             m_health;
 
     PointFloat m_realPos;
