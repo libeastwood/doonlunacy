@@ -10,8 +10,9 @@
 #include <StringFile.h>
 #include <string>
 
-HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
+HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_ATREIDES)
 {
+
 	free(m_song);
 	m_song = NULL;
 	Animation* ret;
@@ -24,7 +25,7 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 	
 	m_planetAnimation = new AnimationLabel(ret);
-	m_planetAnimation->setPosition(sizeRelativePoint(UPoint(128, 49)));
+	m_planetAnimation->setPosition(sizeRelativePoint(UPoint(128, 48)));
 	m_container->addChild(m_planetAnimation);
 
 	m_butYes = new GraphicButton(DataCache::Instance()->getGuiPic(UI_MentatYes)->getResized(), DataCache::Instance()->getGuiPic(UI_MentatYes_Pressed)->getResized());

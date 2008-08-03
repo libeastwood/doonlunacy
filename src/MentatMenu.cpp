@@ -8,14 +8,14 @@
 
 #include "gui2/Label.h"
 #include "pakfile/Cpsfile.h"
+#include <iostream>
 
 MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 {
 	m_song = new song;
 
 	house = newHouse;
-	m_surf = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized(2);
-
+	m_surf = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized();
 	switch(house) {
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
@@ -23,19 +23,19 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->track = 6;
 
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesEyes"));
-			m_eyesAnim->setPosition(UPoint(80, 191));
+			m_eyesAnim->setPosition(sizeRelativePoint(UPoint(40, 80)));
 			m_container->addChild(m_eyesAnim);
 
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesMouth"));
-			m_mouthAnim->setPosition(UPoint(80, 223));
+			m_mouthAnim->setPosition((sizeRelativePoint(UPoint(40, 95))));
 			m_container->addChild(m_mouthAnim);
 
 			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesBook"));
-			m_specialAnim->setPosition(UPoint(145, 336));
+			m_specialAnim->setPosition(sizeRelativePoint(UPoint(72, 151)));
 			m_container->addChild(m_specialAnim);
 
 			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesShoulder"));
-			m_shoulderAnim->setPosition(UPoint(256,286));
+			m_shoulderAnim->setPosition(sizeRelativePoint(UPoint(128, 128)));
 
 
 			break;
@@ -83,11 +83,11 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->track = 2;
 
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritEyes"));
-			m_eyesAnim->setPosition(UPoint(128, 190));
+			m_eyesAnim->setPosition(sizeRelativePoint(UPoint(64, 80)));
 			m_container->addChild(m_eyesAnim);
 
 			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritMouth"));
-			m_mouthAnim->setPosition(UPoint(112, 222));
+			m_mouthAnim->setPosition(sizeRelativePoint(UPoint(56, 96)));
 			m_container->addChild(m_mouthAnim);
 
 			break;
@@ -101,8 +101,7 @@ MentatMenuState::~MentatMenuState() {
 
 int MentatMenuState::Execute(float dt)
 {
-    m_surf->blitToScreen(SPoint(set->GetWidth() / 2 - m_surf->getSurface()->w/2, 
-                        set->GetHeight() / 16));
+    m_surf->blitToScreen();
 
     return 0;
 }
