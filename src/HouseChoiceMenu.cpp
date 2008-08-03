@@ -12,53 +12,54 @@
 #include "gui2/VBox.h"
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
-    m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized(2);;
+    m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
     m_vbox = new VBox();
 
-	m_butAtreides = new TranspButton(163,182);
+    m_butAtreides = new TranspButton(sizeRelativePoint(UPoint(84,92)));
     m_butAtreides->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doAtreides, this) );
 
+    std::cout << sizeRelativePoint(UPoint(84,92)).x << "x" << sizeRelativePoint(UPoint(84,92)).y << std::endl;
     m_vbox->addChild(m_butAtreides);
 
     m_vbox->fit(2);
-	m_vbox->setPosition(UPoint(40,135));
+    m_vbox->setPosition(sizeRelativePoint(UPoint(20,53)));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
 
     m_vbox = new VBox();
 
-	m_butOrdos = new TranspButton(163,182);
+    m_butOrdos = new TranspButton(sizeRelativePoint(UPoint(84, 92)));
     m_butOrdos->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doOrdos, this) );
 
     m_vbox->addChild(m_butOrdos);
 
     m_vbox->fit(2);
-	m_vbox->setPosition(UPoint(235,135));
+	m_vbox->setPosition(sizeRelativePoint(UPoint(116,53)));
     m_vbox->reshape();
     
     m_container->addChild(m_vbox);
 
     m_vbox = new VBox();
 
-	m_butHarkonnen = new TranspButton(163,182);
+    m_butHarkonnen = new TranspButton(sizeRelativePoint(UPoint(84, 92)));
     m_butHarkonnen->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doHarkonnen, this) );
 
     m_vbox->addChild(m_butHarkonnen);
 
     m_vbox->fit(2);
-	m_vbox->setPosition(UPoint(430,135));
+    m_vbox->setPosition(sizeRelativePoint(UPoint(215, 53)));
     m_vbox->reshape();
     
     
     m_butBack = new BoringButton("Back to menu", false);
     m_butBack->setPosition(SPoint(30, Settings::Instance()->GetHeight() - m_butBack->h - 50));
     m_butBack->setSize(UPoint(180, 35));
-   	m_butBack->onClick.connect(
-        boost::bind(&HouseChoiceMenuState::doBack, this) );
+    m_butBack->onClick.connect(
+             boost::bind(&HouseChoiceMenuState::doBack, this) );
     m_container->addChild(m_butBack);        
     
     m_container->addChild(m_vbox);
@@ -71,8 +72,7 @@ HouseChoiceMenuState::~HouseChoiceMenuState() {
 
 int HouseChoiceMenuState::Execute(float dt)
 {
-    m_menuBackground->blitToScreen(SPoint(Settings::Instance()->GetWidth() / 2 - m_menuBackground->getSurface()->w/2, 
-                        Settings::Instance()->GetHeight() / 16));
+    m_menuBackground->blitToScreen();
 
     return 0;
 }
