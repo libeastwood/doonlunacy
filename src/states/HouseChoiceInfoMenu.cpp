@@ -47,6 +47,8 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 HouseChoiceInfoMenuState::~HouseChoiceInfoMenuState()
 {
+    delete m_planetAnimation;
+    delete m_textLabel;
 }
 
 void HouseChoiceInfoMenuState::doNo()

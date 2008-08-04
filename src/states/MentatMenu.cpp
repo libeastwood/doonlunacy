@@ -83,6 +83,8 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 }
 
 MentatMenuState::~MentatMenuState() {
+    delete m_eyesAnim;
+    delete m_mouthAnim;
 }
 
 int MentatMenuState::Execute(float dt)

@@ -20,7 +20,7 @@ Palettefile::Palettefile(unsigned char* buf, uint16_t bufsize)
         c->b = (dunepal[2] << 2) + 3;
     };
 
-    delete [] buf;
+    free(buf);
 }
 
 Palettefile::~Palettefile()

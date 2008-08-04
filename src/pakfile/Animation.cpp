@@ -9,15 +9,13 @@ Animation::Animation() {
 }
 
 Animation::~Animation() {
-/*    if (!Frame.empty())
+    if (!m_frames.empty())
     {
-        std::vector<Image*>::iterator iter;
-        for( iter = Frame.begin(); iter != Frame.end(); iter++ ) 
+        for(unsigned int i = 0; i < m_frames.size(); i++)
         {
-            delete(*iter);
+            delete m_frames[i];
         }
     }
-*/
 //	if(Frame != NULL) {
 //		for(int i=0; i < NumFrames; i++) {
 //			SDL_FreeSurface(Frame[i]->getSurface());

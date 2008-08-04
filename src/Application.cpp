@@ -26,16 +26,6 @@
 #include "SDL_rwops.h"
 
 
-#ifdef THREADS
-#include "DataCache.h"
-void *dataCacheThread(void * arg)
-{
-	DataCache::Instance()->Init();
-	return NULL;
-}
-
-#endif
-
 Uint8 gpaloff;
 
 Application::Application()

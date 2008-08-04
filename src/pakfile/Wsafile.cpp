@@ -90,6 +90,7 @@ Wsafile::Wsafile() : Decode()
 Wsafile::~Wsafile()
 {
 	free(decodedFrames);
+//	free(Filedata);
 }
 
 Image * Wsafile::getPicture(Uint32 FrameNumber, SDL_Palette *palette)

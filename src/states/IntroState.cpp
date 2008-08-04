@@ -90,7 +90,9 @@ void IntroState::Frame::concatSound(uint16_t playAt, std::string sound)
 	
 	memcpy(newChunk->abuf, sound1->abuf, sound1->alen);
 	memcpy(newChunk->abuf + sound1->alen, sound2->abuf, sound2->alen);
-	m_soundChunks[i] = soundChunk(playAt, newChunk);
+	m_soundChunks[i].second = newChunk;
+	Mix_FreeChunk(sound1);
+	Mix_FreeChunk(sound2);
 }
 
 void IntroState::Frame::setPalette(Palette_enum palette)
@@ -392,7 +394,12 @@ void IntroState::Frame::doHolding(float dt)
 }
 
 IntroState::Frame::~Frame()
-{
+{			
+    m_loops.clear();
+	m_introStrings.clear();
+	m_introSounds.clear();
+	m_soundChunks.clear();
+
 }
 // ------------------------------------------------------------------
 // IntroState

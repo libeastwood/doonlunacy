@@ -120,7 +120,7 @@ AnimationLabel::AnimationLabel(Animation* pAnim)
 
 AnimationLabel::~AnimationLabel()
 {
-
+    delete m_anim;
 }
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
