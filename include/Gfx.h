@@ -10,9 +10,10 @@
 #ifndef DUNE_GFX_H
 #define DUNE_GFX_H
 
-#include "SDL.h"
-
 #include "Colours.h"
+#include "Settings.h"
+
+#include <SDL.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -296,7 +297,14 @@ struct Point
         {
             return Point(y, x);
         };
-    
+
+	//! Return point scaled to current resolution
+        Point getScaled() const
+        {
+            return Point((Settings::Instance()->GetWidth()  / 320.0f) * x,
+                         (Settings::Instance()->GetHeight() / 200.0f) * y);
+        }
+             
         //@}
 };
 
@@ -339,7 +347,7 @@ inline PointFloat operator-(const PointFloat &point)
 }
 //@}
 
-UPoint sizeRelativeUPoint(int x, int y);
+UPoint sizeRelativeUPoint(Uint16 x, Uint16 y);
 
 //------------------------------------------------------------------------------
 // Rect struct
@@ -650,7 +658,7 @@ class Image
 	//! Make resized copy of the image relative to current resolution
         ImagePtr getResized()
 	{
-            return getResized(sizeRelativeUPoint(surface->w, surface->h));
+            return getResized(UPoint(surface->w, surface->h).getScaled());
 	};
 
 	//! Cut out a rectangular region of the image

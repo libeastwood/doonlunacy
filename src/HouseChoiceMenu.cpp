@@ -11,26 +11,26 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
     m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
 
-    m_butAtreides = new TranspButton(sizeRelativeUPoint(84,92));
+    m_butAtreides = new TranspButton(UPoint(84,92).getScaled());
     m_butAtreides->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doAtreides, this) );
 
-    m_butAtreides->setPosition(sizeRelativeUPoint(20,53));
+    m_butAtreides->setPosition(UPoint(20,53).getScaled());
     
     m_container->addChild(m_butAtreides);
 
-    m_butOrdos = new TranspButton(sizeRelativeUPoint(84, 92));
+    m_butOrdos = new TranspButton(UPoint(84, 92).getScaled());
     m_butOrdos->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doOrdos, this) );
 
-    m_butOrdos->setPosition(sizeRelativeUPoint(116,53));
+    m_butOrdos->setPosition(UPoint(116,53).getScaled());
     m_container->addChild(m_butOrdos);
 
-    m_butHarkonnen = new TranspButton(sizeRelativeUPoint(84, 92));
+    m_butHarkonnen = new TranspButton(UPoint(84, 92).getScaled());
     m_butHarkonnen->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doHarkonnen, this) );
 
-    m_butHarkonnen->setPosition(sizeRelativeUPoint(215, 53));
+    m_butHarkonnen->setPosition(UPoint(215, 53).getScaled());
     m_container->addChild(m_butHarkonnen);
     
     m_butBack = new BoringButton("Back to menu", false);
