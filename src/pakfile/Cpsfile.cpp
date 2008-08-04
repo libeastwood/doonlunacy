@@ -36,7 +36,7 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize, SDL_Palette* palette)
 
 Cpsfile::~Cpsfile()
 {	
-	;
+	free(Filedata);
 }
 
 Image * Cpsfile::getPicture()
@@ -88,7 +88,8 @@ Image * Cpsfile::getPicture()
 
 Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int width, unsigned int height)
 {
-	SDL_Surface *Pic = getPicture()->getSurface();
+	Image* tmp = getPicture();
+	SDL_Surface *Pic = tmp->getSurface();
 	if(Pic == NULL) {
 		return NULL;
 	}
@@ -111,6 +112,8 @@ Image * Cpsfile::getSubPicture(unsigned int left, unsigned int top, unsigned int
 	SDL_BlitSurface(Pic,&srcRect,returnPic,NULL); 
 
 	Image * img = new Image(returnPic);
-
+    
+    delete(tmp);
+    
 	return img;
 }

@@ -6,9 +6,7 @@ from glob import glob
 #unit_sources = glob("units/*.cpp")
 base_sources = glob("*.cpp")
 
-#all_sources.remove('Menu.cpp')
-
-all_sources = [ "Application.cpp",
+base_sources = [ "Application.cpp",
                 "Settings.cpp",
                 "Font.cpp",
                 "DataCache.cpp",
@@ -18,11 +16,14 @@ all_sources = [ "Application.cpp",
                 "Log.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
+              ]
+
+battle_sources = [ 
 #				"TerrainClass.cpp",
 #				"MapClass.cpp",
 #				"gui2/MapWidget.cpp",
 #				"MapGenerator.cpp",
-				"mmath.cpp",
+#				"mmath.cpp",
 #				"MapSeed.cpp",
 #				"PlayerClass.cpp",
 #				"ObjectClass.cpp",
@@ -34,7 +35,7 @@ all_sources = [ "Application.cpp",
 #				"units/QuadClass.cpp",				
 #				"GameState.cpp",
 #				"PriorityQ.cpp",
-              ]
+                ]
 
 state_sources = [
 #    				"CampaignMenu.cpp",
@@ -76,25 +77,12 @@ pak_sources = [
                 "pakfile/sound/Vocfile.cpp",
               ]
 
-pakview_sources = [  
-                "Application.cpp", 
-                "DataCache.cpp",
-                "Font.cpp",
-                "Gfx.cpp", 
-                "houses.cpp",
-                "Log.cpp",
-                "ResMan.cpp",                     
-                "Settings.cpp",
-                "Strings.cpp",
-                "State.cpp",
-                "TopLevelState.cpp",
-                "SoundPlayer.cpp",
-                  ]
+all_sources = base_sources + gui_sources + state_sources + pak_sources
 
+dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources)
 
-dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources + state_sources)
-#pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
+pakview = env.Program("../pakview", ["tests/pakview.cpp"] + base_sources + pak_sources
+         + gui_sources + ["states/TopLevelState.cpp", "states/State.cpp"])
 
 Default(dunelegacy)
-#Default(pakview)
 
