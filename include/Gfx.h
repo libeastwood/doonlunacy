@@ -347,8 +347,6 @@ inline PointFloat operator-(const PointFloat &point)
 }
 //@}
 
-UPoint sizeRelativeUPoint(Uint16 x, Uint16 y);
-
 //------------------------------------------------------------------------------
 // Rect struct
 //------------------------------------------------------------------------------
