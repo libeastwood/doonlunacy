@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "DataCache.h"
-#include "MentatMenu.h"
+#include "states/MentatMenu.h"
 #include "Settings.h"
 
 #include "gui2/Label.h"

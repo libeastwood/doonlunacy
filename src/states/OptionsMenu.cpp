@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Gfx.h"
-#include "OptionsMenu.h"
+#include "states/OptionsMenu.h"
 #include "ResMan.h"
 #include "Settings.h"
 

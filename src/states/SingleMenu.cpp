@@ -1,10 +1,10 @@
-#include "SingleMenu.h"
+#include "states/SingleMenu.h"
 
 #include "Application.h"
 #include "houses.h"
 //#include "DataFile.h"
 #include "Settings.h"
-#include "HouseChoiceMenu.h"
+#include "states/HouseChoiceMenu.h"
 
 #include "boost/bind.hpp"
 

@@ -6,7 +6,7 @@
 #include "DataCache.h"
 #include "Font.h"
 #include "Gfx.h"
-#include "IntroState.h"
+#include "states/IntroState.h"
 #include "Log.h"
 #include "ResMan.h"
 #include "Settings.h"

@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Gfx.h"
-#include "MainMenuBase.h"
+#include "states/MainMenuBase.h"
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"

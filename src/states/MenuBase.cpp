@@ -1,14 +1,13 @@
-#include "MainMenu.h"
-
-#include "Application.h"
-//#include "DataFile.h"
-#include "Settings.h"
-
-#include "SingleMenu.h"
-
 #include "boost/bind.hpp"
 
 #include <assert.h>
+
+#include "Application.h"
+#include "Settings.h"
+
+#include "states/MainMenu.h"
+#include "states/SingleMenu.h"
+
 
 
 MenuBaseState::MenuBaseState()

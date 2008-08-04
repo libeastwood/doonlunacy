@@ -12,7 +12,7 @@
 #include "units/UnitClass.h"
 #include "units/QuadClass.h"
 
-PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, GameState* gs)
+PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team)
 {
     m_mapPlayerNum = newPlayerNumber;
 
@@ -52,8 +52,6 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
     m_numWalls = 0;
     m_numStructures = 0;
     
-    m_gs = gs;
-
 }
 
 PlayerClass::~PlayerClass()
@@ -150,8 +148,8 @@ void* PlayerClass::createUnit(int itemID)
 
 	if (newUnit)
 	{
-        newUnit->setObjectID(m_gs->getObjectID());
-		m_gs->m_units->push_back(newUnit);
+        newUnit->setObjectID(GameState::Instance()->getObjectID());
+		GameState::Instance()->GetUnits()->push_back(newUnit);
 		if (itemID != Unit_Sandworm)
 			m_numUnits++;
 	}
@@ -161,14 +159,14 @@ void* PlayerClass::createUnit(int itemID)
 
 MapClass* PlayerClass::getMap()
 {
-    return m_gs->m_map;
+    return GameState::Instance()->GetMap();
 }
 
 void* PlayerClass::placeUnit(int itemID, UPoint itemPos)
 {
 
 	UnitClass* newUnit = NULL;
-	if (m_gs->m_map->cellExists(itemPos))
+	if (GameState::Instance()->GetMap()->cellExists(itemPos))
 		newUnit = (UnitClass*)createUnit(itemID);
 
 	if (newUnit)
@@ -216,7 +214,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 			{
 			    //FIXME: No idea what it does
 
-				if (m_gs->m_map->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
+				if (GameState::Instance()->GetMap()->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
 				{
 					//m_map->getCell(UPoint(itemPos.x+i, itemPos.y+j))->clearDamage();
 
@@ -229,10 +227,10 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
         tempStructure->setPosition(itemPos);
 
         if (itemID == Structure_Wall)
-            m_gs->m_map->fixWalls(itemPos.x, itemPos.y);
+            GameState::Instance()->GetMap()->fixWalls(itemPos.x, itemPos.y);
 
-        tempStructure->setObjectID(m_gs->getObjectID());
-        m_gs->m_structures->push_back(tempStructure);
+        tempStructure->setObjectID(GameState::Instance()->getObjectID());
+        GameState::Instance()->GetStructures()->push_back(tempStructure);
     }
        
     return tempStructure;

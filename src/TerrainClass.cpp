@@ -1,5 +1,6 @@
 #include "DataCache.h"
 #include "Definitions.h"
+#include "GameState.h"
 #include "Log.h"
 #include "Gfx.h"
 #include "TerrainClass.h"
@@ -13,7 +14,15 @@ TerrainClass::TerrainClass() : UPoint(0,0)
     m_tile = Terrain_a1;
     m_type = Terrain_Sand;
     m_img = DataCache::Instance()->getObjPic(ObjPic_Terrain);
+    m_hiddenImg = DataCache::Instance()->getObjPic(ObjPic_Terrain_Hidden);
     m_visited = false;
+
+    m_explored = new bool[MAX_PLAYERS];
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+    	m_explored[i] = false;
+	}
+
 }
 
 TerrainClass::~TerrainClass()
@@ -24,7 +33,17 @@ TerrainClass::~TerrainClass()
 void TerrainClass::draw(Image * dest, SPoint pos)
 {
     Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-    m_img->blitTo(dest, source, pos);
+
+	if(isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()))
+	{
+        m_img->blitTo(dest, source, pos);
+    }
+    else
+    {
+        m_img->blitTo(dest, source, pos);
+        m_hiddenImg->blitTo(dest, source, pos);
+    }
+
 }
 
 ObjectClass* TerrainClass::getAirUnit()
@@ -186,3 +205,26 @@ void TerrainClass::unassignObject(Uint32 ObjectID) {
 	unassignAirUnit(ObjectID);
 }
 
+
+
+bool TerrainClass::isFogged(int player)
+{
+#if 0 
+
+#ifdef	_DEBUG
+		if(debug) 
+		return false;
+#endif
+
+/*	if(!fog_wanted)
+		return false;
+	else
+*/
+#define FOGTIMEOUT 10
+	if((int)((clock() - m_lastAccess[player])/CLOCKS_PER_SEC) >= FOGTIMEOUT)
+		return true;
+	else 
+	return false; 
+	
+#endif	
+}

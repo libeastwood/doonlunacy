@@ -9,6 +9,7 @@
 #include "TerrainClass.h"
 
 class MapGenerator;
+class GameState;
 
 typedef std::vector<TerrainClass*> Cells;
 
@@ -20,32 +21,18 @@ class MapClass : public Rect
     MapClass(UPoint size);
     ~MapClass();
 
-	inline bool cellExists(SPoint pos) 
-	{
-		return ((pos.x >= 0) && (pos.x < w) && (pos.y >= 0) && (pos.y < h));
-	};
+    inline bool cellExists(SPoint pos);
+    inline bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); }
 
-    inline bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); };
-
-        
-    inline TerrainClass * getCell(SPoint pos) 
-    {
-        if (cellExists(pos))
-        {
-            return m_cells[pos.x + pos.y * w];
-        }
-        else
-        {
-            LOG_ERROR("MapClass", "Cell[%d][%d] does not exist", pos.x,pos.y);
-            return NULL;
-        }   
-    };
-    
+    inline TerrainClass * getCell(SPoint pos);    
     inline TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
+
     UPoint getMapPos(int angle, UPoint source);
     int getPosAngle(UPoint source, UPoint pos);
 
     void fixWalls(int xPos, int yPos);
+
+    void viewMap(int playerTeam, UPoint position, int maxViewRange);
 
     //FIXME:Remove this later or sth.
     short *depthCheckCount,
@@ -55,6 +42,7 @@ class MapClass : public Rect
     void fixWall(int xPos, int yPos);
     
     Cells m_cells;
+    GameState* m_gs;
 };
 
 #endif // DUNE_MAPCLASS_H

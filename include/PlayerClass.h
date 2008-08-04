@@ -12,7 +12,7 @@ class GameState;
 class PlayerClass 
 {
   public:
-    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team, GameState* gs);
+    PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team);
 	virtual ~PlayerClass();
 	
 	void assignMapPlayerNum(int newMapPlayerNum);
@@ -105,10 +105,7 @@ class PlayerClass
     
     //! Name of player
     std::string m_name;
-    
-    GameState* m_gs;
+   
     //@}
 };
-
-typedef std::vector<PlayerClass*> Players;
 #endif // DUNE_PLAYERCLASS_H

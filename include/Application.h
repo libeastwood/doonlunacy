@@ -5,8 +5,8 @@
 #include "SDL.h"
 
 #include "singleton.h"
-#include "State.h"
-#include "TopLevelState.h"
+#include "states/State.h"
+#include "states/TopLevelState.h"
 
 #include "gui2/Container.h"
 #include "gui2/Label.h"

@@ -14,20 +14,7 @@ all_sources = gui_sources + structure_sources + unit_sources + base_sources
 all_sources = [ "Application.cpp",
                 "Settings.cpp",
                 "Font.cpp",
-                "State.cpp",            
                 "DataCache.cpp",
-#                "PictureFactory.cpp",
-                "TopLevelState.cpp",
-                "MenuBase.cpp", 
-                "MainMenu.cpp",
-                "MainMenuBase.cpp",
-                "IntroState.cpp", 
-                "SingleMenu.cpp",
-#				"CampaignMenu.cpp",
-                "OptionsMenu.cpp",
-				"MentatMenu.cpp",
-				"HouseChoiceMenu.cpp",
-				"HouseChoiceInfoMenu.cpp",
                 "Gfx.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
                 "Strings.cpp",
@@ -36,7 +23,6 @@ all_sources = [ "Application.cpp",
 				"SoundPlayer.cpp",
 				"TerrainClass.cpp",
 				"MapClass.cpp",
-				"Editor.cpp",
 				"gui2/MapWidget.cpp",
 				"MapGenerator.cpp",
 				"mmath.cpp",
@@ -52,6 +38,26 @@ all_sources = [ "Application.cpp",
 				"GameState.cpp",
 				"PriorityQ.cpp",
               ]
+
+state_sources = [
+#    				"CampaignMenu.cpp",
+				    "states/Editor.cpp",
+    				"states/HouseChoiceMenu.cpp",
+    				"states/HouseChoiceInfoMenu.cpp",
+                    "states/IntroState.cpp", 
+                    "states/MenuBase.cpp", 
+                    "states/MainMenu.cpp",
+                    "states/MainMenuBase.cpp",                    
+    				"states/MentatMenu.cpp",
+                    "states/OptionsMenu.cpp",
+                    "states/SingleMenu.cpp",
+                    "states/State.cpp",
+                    "states/TopLevelState.cpp",
+]
+
+
+
+
 
 gui_sources = [
                 "gui2/Widget.cpp",
@@ -88,13 +94,13 @@ pakview_sources = [  "Application.cpp",
                      "Strings.cpp",
                      "State.cpp",
                      "TopLevelState.cpp",
-		     "SoundPlayer.cpp",
+        	     "SoundPlayer.cpp",
                   ]
 
 
-dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
-pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
+dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + gui_sources + pak_sources + state_sources)
+#pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
 
 Default(dunelegacy)
-Default(pakview)
+#Default(pakview)
 

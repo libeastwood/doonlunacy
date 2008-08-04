@@ -1,7 +1,8 @@
 #include "Settings.h"
-#include "Editor.h"
 #include "MapGenerator.h"
 #include "MapClass.h"
+
+#include "states/Editor.h"
 
 EditorState::EditorState()
 {
@@ -31,8 +32,8 @@ EditorState::EditorState()
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
     m_mapWidget->setSize(UPoint(set->GetWidth(),set->GetHeight()));
-    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENH005.INI");
-    m_mapWidget->setGameState(MapGenerator::Instance()->getGameState());
+    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA005.INI");
+    m_mapWidget->getGameState();
     m_container->addChild(m_mapWidget);
 #endif 
 }

@@ -7,7 +7,7 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
-#include "TopLevelState.h"
+#include "states/TopLevelState.h"
 
 #include "houses.h"
 #include "pakfile/Palette.h"

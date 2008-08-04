@@ -3,6 +3,7 @@
 
 #include "gui2/Widget.h"
 #include "Gfx.h"
+#include "GameState.h"
 #include "MapClass.h"
 
 #include "ObjectClass.h"
@@ -37,11 +38,11 @@ class MapWidget : public Widget {
     bool handleKeyDown(SDL_keysym* key);
     bool handleButtonDown(Uint8 button, SPoint p);
     bool handleButtonUp(Uint8 button, SPoint p);    
+
+    void getGameState();
     //@}
-    void setGameState(GameState* gs);
 
   private:
-    GameState* m_gs;    
     MapClass * m_map;
     Structures* m_structures;
     Units* m_units;

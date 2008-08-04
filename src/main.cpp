@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Settings.h"
-#include "MainMenu.h"
-#include "IntroState.h"
+#include "states/MainMenu.h"
+#include "states/IntroState.h"
 
 namespace boost {
 

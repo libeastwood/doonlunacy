@@ -4,11 +4,13 @@
 
 #include "Application.h"
 #include "DataCache.h"
-#include "HouseChoiceMenu.h"
-#include "HouseChoiceInfoMenu.h"
 
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
+
+#include "states/HouseChoiceMenu.h"
+#include "states/HouseChoiceInfoMenu.h"
+
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
     m_menuBackground = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized(2);;
