@@ -13,7 +13,7 @@ Frame::Frame(Image *image, UPoint size, GuiPic_enum nw, GuiPic_enum ne,
         size = m_surface->getSize();
     } else {
         m_surface.reset(new Image(size));
-        m_surface->blitFrom(image, UPoint(0,0));
+        m_surface->blitFrom(image);
     }
     drawFrame(size, nw, ne, sw, se, edgeDistance);
 }
@@ -60,6 +60,10 @@ void Frame::drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
         m_surface->blitFrom(left.get(), UPoint(edgeDistance, i));
         m_surface->blitFrom(right.get(), UPoint(size.x - right->getSize().x - edgeDistance, i));
     }
+}
+
+void Frame::draw(Image *dest, SPoint off){
+    m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));
 }
 
 Frame::~Frame()

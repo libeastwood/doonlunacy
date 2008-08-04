@@ -25,6 +25,9 @@ public:
     void drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Uint16 edgeDistance);
 
+    virtual void draw(Image * dest, SPoint off);
+
+
     ~Frame();
     ImagePtr getPicture();
     //@}
