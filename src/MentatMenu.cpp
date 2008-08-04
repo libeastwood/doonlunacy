@@ -20,7 +20,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
 			m_song->filename = "SOUND:DUNE7.ADL";
-			m_song->track = 6;
+			m_song->track = 3;
 
 			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesEyes"));
 			m_eyesAnim->setPosition(sizeRelativeUPoint(40, 80));
