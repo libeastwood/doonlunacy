@@ -18,7 +18,7 @@ Image::Image(SDL_Surface *surface) : surface(surface)
 	{
 	    // TODO: throw better exception !!
         throw "Image::Image(SDL_Surface *) - got NULL !";
-	};
+	}
 }
 Image::Image(ConstUPoint size)
 {
@@ -37,7 +37,7 @@ Image::Image(ConstUPoint size)
 	{
 	    // TODO: throw better exception !!
         throw "Image::Image(ConstUPoint) - unable to create SDL_Surface !";
-	};
+	}
 	
 	// copy palette from the screen (otherwise you'll get only black image)
     SDL_SetColors(surface, Application::Instance()->Screen()->getSurface()->format->palette->colors, 0, 256);
@@ -305,7 +305,7 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
 	if (resized == NULL)
 	{
 	   return NULL;
-	};
+	}
 	
 	// copy palette (otherwise you'll get only black image)
     SDL_SetColors(resized, surface->format->palette->colors, 0, 256);
@@ -323,7 +323,7 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
         for(int x = 0; x < resized->w; x++)
         {
 	       putPixel(resized, x, y, getPixel(surface, surface->w*x/resized->w, surface->h*y/resized->h));
-	    };
+	    }
 	}
 
     if (SDL_MUSTLOCK(resized))

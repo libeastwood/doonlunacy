@@ -187,9 +187,9 @@ struct Point
         //@{
 
         //! Constructor
-        Point(T x = 0, T y = 0) : x(x), y(y) {  };
+        Point(T x = 0, T y = 0) : x(x), y(y) {  }
         //! Copy constructor
-        Point(const Point &point) { *this = point; };
+        Point(const Point &point) { *this = point; }
         
         //@}
 
@@ -202,28 +202,28 @@ struct Point
             x = point.x;
             y = point.y;
             return *this;
-        };
+        }
         //! operator +=
         Point &operator+=(const Point &point)
         {
             x += point.x;
             y += point.y;
             return *this;
-        };
+        }
         //! operator -=
         Point &operator-=(const Point &point)
         {
             x += point.x;
             y += point.y;
             return *this;
-        };
+        }
         //! operator *=
         Point &operator*=(T times)
         {
             x *= times;
             y *= times;
             return *this;
-        };
+        }
         //! operator /=
         /*
             @warning: Do not divide by zero !
@@ -234,23 +234,23 @@ struct Point
             x /= times;
             y /= times;
             return *this;
-        };
+        }
         
         //! operator +
         Point operator+(const Point &point) const
         {
             return Point(x + point.x, y + point.y);
-        };
+        }
         //! operator -
         Point operator-(const Point &point) const
         {
             return Point(x - point.x, y - point.y);
-        };
+        }
         //! operator *
         Point operator*(T times) const
         {
             return Point(x*times, y*times);
-        };
+        }
         //! operator /
         /*!
             @warning: Do not divide by zero !
@@ -259,7 +259,7 @@ struct Point
         {
             // TODO: assert ?
             return Point(x/times, y/times);
-        };
+        }
         
         friend bool operator==(const Point& a, const Point& b){
             return (a.x == b.x && a.y == b.y);
@@ -290,13 +290,13 @@ struct Point
             T t = x;
             x = y;
             y = t;
-        };
+        }
         
         //! Return point with swapped x<->y coordinates
         Point getSwapped() const
         {
             return Point(y, x);
-        };
+        }
 
 	//! Return point scaled to current resolution
         Point getScaled() const
@@ -376,13 +376,13 @@ struct Rect : public SDL_Rect
             this->y = y;
             this->w = w;
             this->h = h;
-        };
+        }
         //! Constructor
         Rect(const SPoint &position, const UPoint &size)
         {
             setPosition(position);
             setSize(size);
-        };
+        }
         //! Copy constructor
         Rect(const Rect &rect)
         {
@@ -390,7 +390,7 @@ struct Rect : public SDL_Rect
             y = rect.y;
             w = rect.w;
             h = rect.h;
-        };
+        }
         //! Copy constructor
         Rect(const SDL_Rect &rect)
         {
@@ -398,7 +398,7 @@ struct Rect : public SDL_Rect
             y = rect.y;
             w = rect.w;
             h = rect.h;
-        };
+        }
 
         //@}
 
@@ -409,7 +409,7 @@ struct Rect : public SDL_Rect
         operator SDL_Rect() const
         {
             return *this;
-        };
+        }
         //! operator = (from SDL_Rect)
         Rect &operator=(const SDL_Rect &rect)
         {
@@ -430,23 +430,23 @@ struct Rect : public SDL_Rect
         {
             x = position.x;
             y = position.y;
-        };
+        }
         //! Set w,h to given size
         void setSize(const UPoint &size)
         {
             w = size.x;
             h = size.y;
-        };
+        }
         //! Return current positon
         SPoint getPosition() const
         {
             return SPoint(x, y);                        
-        };
+        }
         //! Return current size
         UPoint getSize() const
         {
             return UPoint(x, y);
-        };
+        }
 
         //@}
        
@@ -475,7 +475,7 @@ struct Rect : public SDL_Rect
             return (
                     (x <= r.x && r.x+r.w <= x+w) &&
                     (y <= r.y && r.y+r.h <= y+h));                
-        };
+        }
         //! Is a rect inside this Rect ? (partial match is enough)
         /*!
             Rect in question must have at least a pixel common with this Rect.
@@ -486,7 +486,7 @@ struct Rect : public SDL_Rect
             return (
                     (x <= r.x+r.w && r.x <= x+w) &&
                     (y <= r.y+r.h && r.y <= y+h));                
-        };
+        }
 
         //@}
 };
@@ -555,7 +555,7 @@ class Image
         UPoint getSize() const
         {
             return UPoint(surface->w, surface->h);
-        };
+        }
 
         //@}
         
@@ -572,7 +572,7 @@ class Image
         void putPixel(ConstUPoint point, Uint32 color)
         {
             ::putPixel(surface, point.x, point.y, color);
-        };
+        }
 
         //! Get pixel from given surface
         /*!
@@ -584,7 +584,7 @@ class Image
         Uint32 getPixel(ConstUPoint point) const
         {
             return ::getPixel(surface, point.x, point.y);
-        };
+        }
 
         //@}
 
@@ -601,7 +601,7 @@ class Image
         void drawHLine(ConstUPoint start, int x2, Uint32 color, bool lock = true)
         {
             ::drawHLine(surface, start.x, start.y, x2, color, lock);
-        };
+        }
 
         //! Draw vertical line
         /*!
@@ -613,7 +613,7 @@ class Image
         void drawVLine(ConstUPoint start, int y2, Uint32 color, bool lock = true)
         {
             ::drawVLine(surface, start.x, start.y, y2, color, lock);
-        };
+        }
 
         //! Draw rectangle
         /*!
@@ -624,7 +624,7 @@ class Image
         void drawRect(ConstRect rect, Uint32 color, bool lock = true)
         {
             ::drawRect(surface, rect, color, lock);
-        };
+        }
 
         //@}
         
@@ -635,7 +635,7 @@ class Image
         ImagePtr getCopy() const
         {
             return ImagePtr(new Image(copySurface(surface)));
-        };
+        }
 
         //! Make resized copy of the image
         /*!
@@ -644,7 +644,7 @@ class Image
         ImagePtr getResized(const float ratio) //const ?? what's the difference?
         {
             return ImagePtr(new Image(resizeSurface(surface, ratio)));
-        };
+        }
 
         //! Make resized copy of the image
         /*!
@@ -653,13 +653,13 @@ class Image
         ImagePtr getResized(ConstUPoint size)
         {
             return ImagePtr(new Image(resizeSurface(surface, size.x, size.y)));
-        };
+        }
 
 	//! Make resized copy of the image relative to current resolution
         ImagePtr getResized()
 	{
             return getResized(UPoint(surface->w, surface->h).getScaled());
-	};
+	}
 
 	//! Cut out a rectangular region of the image
 	/*!
@@ -678,7 +678,7 @@ class Image
         void setColorKey(int color = 0, int flags = SDL_SRCCOLORKEY | SDL_RLEACCEL)
         {
             SDL_SetColorKey(surface, flags, color);
-        };
+        }
 
         //@}
 
@@ -696,7 +696,7 @@ class Image
             assert(source != NULL);
             Rect dstRect(Rect(dstPoint, source->getSize()));
             SDL_BlitSurface(source->surface, const_cast<SDL_Rect *>(static_cast<const SDL_Rect *>(&srcRect)), surface, &dstRect); 
-        };
+        }
         //! Blit whole source image to this image
         /*!
             @param source source image
@@ -707,7 +707,7 @@ class Image
             assert(source != NULL);
             Rect dstRect(Rect(dstPoint, source->getSize()));
             SDL_BlitSurface(source->surface, NULL, surface, &dstRect); 
-        };
+        }
         //! Blit whole source image to this image (to top-left corner)
         /*!
             @param source source image
@@ -716,7 +716,7 @@ class Image
         {
             assert(source != NULL);
             SDL_BlitSurface(source->surface, NULL, surface, NULL); 
-        };
+        }
         //! Blit whole source image to this image (to center)
         /*!
             @param source source image
@@ -726,7 +726,7 @@ class Image
             assert(source != NULL);
             Rect dstRect(Rect(getSize()/2 - source->getSize()/2, source->getSize()));
             SDL_BlitSurface(source->surface, NULL, surface, &dstRect); 
-        };
+        }
         //! Blit part of the image to destination image
         /*!
             @param destination destination image
@@ -737,7 +737,7 @@ class Image
         {
             assert(destination != NULL);
             destination->blitFrom(this, srcRect, dstPoint);
-        };
+        }
         //! Blit the whole image to destination image
         /*!
             @param destination destination image
@@ -792,11 +792,11 @@ class Image
         void fillRect(Uint32 color, Rect dstRect)
         {
             SDL_FillRect(surface, &dstRect, color);
-        };
+        }
         void fillRect(Uint32 color)
         {
             SDL_FillRect(surface, NULL, color);
-        };
+        }
         
         void fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect);
         void fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect);       
@@ -815,7 +815,7 @@ class Image
         void recolor(int colorSrc, int colorDst, int colorNum = DEFAULT_SURFACE_REMAP_LENGTH)
         {
             ::remapSurface(surface, colorSrc, colorDst, colorNum);
-        };
+        }
 
         //! Remap colors of surface
         /*!
@@ -837,7 +837,7 @@ class Image
         inline void recolorByColor(int color)
         {
             ::remapSurfaceByColor(surface, color);
-        };
+        }
 
         //! Return copy with remapped colors of surface
         /*!
@@ -850,7 +850,7 @@ class Image
             ImagePtr copy(getCopy());
             copy->recolor(colorSrc, colorDst, colorNum);
             return copy;
-        };
+        }
 
         //! Return copy with remapped colors of surface
         /*!
@@ -863,7 +863,7 @@ class Image
             ImagePtr copy(getCopy());
             copy->recolorByHouse(house);
             return copy;
-        };
+        }
 
         //! Return copy with remapped colors of surface
         /*!
@@ -876,7 +876,7 @@ class Image
             ImagePtr copy(getCopy());
             copy->recolorByColor(color);
             return copy;
-        };
+        }
 
 
         //@}
@@ -884,7 +884,7 @@ class Image
         
     private:
         SDL_Surface *surface;
-        Image() { };
+        Image() { }
 };
 
 //------------------------------------------------------------------------------
