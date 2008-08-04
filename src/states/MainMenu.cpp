@@ -2,17 +2,16 @@
 #include "boost/format.hpp"
 
 #include "Application.h"
-#include "states/Editor.h"
+#include "Font.h"
 #include "Gfx.h"
-#include "states/MainMenu.h"
-#include "states/OptionsMenu.h"
 #include "ResMan.h"
-#include "states/SingleMenu.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
-#include "Font.h"
 
 #include "gui2/Frame.h"
+#include "states/SingleMenu.h"
+#include "states/MainMenu.h"
+#include "states/OptionsMenu.h"
 
 
 
@@ -41,15 +40,6 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
             boost::bind(&MainMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butMulti);
-
-    m_butMapEd = new BoringButton("Map Editor");
-    m_butMapEd->setSize(SPoint(bw, bh));
-    //m_butMapEd = new GraphicButton((SDL_Surface*)(dataFile[UI_MapEdit].dat),
-    //                   (SDL_Surface*)(dataFile[UI_MapEdit_Pressed].dat));
-    m_butMapEd->onClick.connect(
-            boost::bind(&MainMenuState::doEditor, this) );
-   
-    m_vbox->addChild(m_butMapEd);
 
     m_butOptions = new BoringButton("Options");
     m_butOptions->setSize(SPoint(bw, bh));
@@ -84,15 +74,9 @@ MainMenuState::~MainMenuState()
 {
     delete m_butSingle;
     delete m_butMulti;
-    delete m_butMapEd;
     delete m_butOptions;
     delete m_butAbout;
     delete m_butQuit;
-}
-
-void MainMenuState::doEditor()
-{
-    mp_parent->PushState( new EditorState() );
 }
 
 void MainMenuState::doOptions()

@@ -49,12 +49,12 @@ void IntroState::Frame::addText(uint16_t playAt, std::string text)
 	m_introStrings.push_back(introText(playAt, text));
 }
 
-void IntroState::Frame::addSound(uint16_t playAt, Sound_enum sound)
+void IntroState::Frame::addSound(uint16_t playAt, std::string sound)
 {
 	m_introSounds.push_back(introSound(playAt, sound));
 }
 
-void IntroState::Frame::concatSound(uint16_t playAt, Sound_enum sound)
+void IntroState::Frame::concatSound(uint16_t playAt, std::string sound)
 {
 	Mix_Chunk* sound1;
 	Mix_Chunk* sound2 = DataCache::Instance()->getSoundChunk(sound);
@@ -443,9 +443,9 @@ IntroState::IntroState()
 	frame->setFps(0.07);
 	frame->addLoop(1,1,0,20);
 	frame->setSong(1);
-	frame->addSound(30, Intro_Dune);
-	frame->concatSound(70, Intro_TheBuilding);
-	frame->concatSound(70, Intro_OfADynasty);
+	frame->addSound(30, "Intro_Dune");
+	frame->concatSound(70, "Intro_TheBuilding");
+	frame->concatSound(70, "Intro_OfADynasty");
 	frame->addText(70, DataCache::Instance()->getIntroString(2));
 	frame->setTextLocation(SPoint(-13,-35));
 	frame->setTextSize(2.0);
@@ -456,8 +456,8 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 5);
-	frame->concatSound(10, Intro_ThePlanetArrakis);
-	frame->concatSound(10, Intro_KnownAsDune);
+	frame->concatSound(10, "Intro_ThePlanetArrakis");
+	frame->concatSound(10, "Intro_KnownAsDune");
 	frame->addText(10, DataCache::Instance()->getIntroString(3));
 	enque(frame);
 
@@ -465,11 +465,11 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      false, 25);
-	frame->concatSound(0, Intro_LandOfSand);
+	frame->concatSound(0, "Intro_LandOfSand");
 	frame->addText(0, DataCache::Instance()->getIntroString(4));
-	frame->concatSound(33, Intro_Home);
-	frame->concatSound(33, Intro_OfTheSpice);
-	frame->concatSound(33, Intro_Melange);
+	frame->concatSound(33, "Intro_Home");
+	frame->concatSound(33, "Intro_OfTheSpice");
+	frame->concatSound(33, "Intro_Melange");
 	frame->addText(33, DataCache::Instance()->getIntroString(5));
 	enque(frame);
 
@@ -479,16 +479,16 @@ IntroState::IntroState()
                      false, 2);
 	frame->setFps(0.16);
 	frame->addText(0, DataCache::Instance()->getIntroString(6));
-	frame->concatSound(0, Intro_TheSpice);
-	frame->concatSound(0, Intro_Controls);
-	frame->concatSound(0, Intro_TheEmpire);
-	frame->addSound(18, Intro_Clank);
+	frame->concatSound(0, "Intro_TheSpice");
+	frame->concatSound(0, "Intro_Controls");
+	frame->concatSound(0, "Intro_TheEmpire");
+	frame->addSound(18, "Intro_Clank");
 	frame->addText(32, DataCache::Instance()->getIntroString(7));
-	frame->concatSound(32, Intro_WhoEver);
-	frame->concatSound(32, Intro_ControlsDune);
-	frame->concatSound(32, Intro_ControlsTheSpice);
-	frame->addSound(53, Intro_Brakes_2p);
-	frame->addSound(61, Intro_Clank);
+	frame->concatSound(32, "Intro_WhoEver");
+	frame->concatSound(32, "Intro_ControlsDune");
+	frame->concatSound(32, "Intro_ControlsTheSpice");
+	frame->addSound(53, "Intro_Brakes_2p");
+	frame->addSound(61, "Intro_Clank");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO10.WSA",  
@@ -496,9 +496,9 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION,
                      false, 25);
 	frame->addText(0, DataCache::Instance()->getIntroString(8));
-	frame->concatSound(0, Intro_TheEmperor);
-	frame->concatSound(0, Intro_HasProposedAChallenge);
-	frame->concatSound(0, Intro_ToEachOfTheHouses);
+	frame->concatSound(0, "Intro_TheEmperor");
+	frame->concatSound(0, "Intro_HasProposedAChallenge");
+	frame->concatSound(0, "Intro_ToEachOfTheHouses");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO11.WSA",  
@@ -508,17 +508,17 @@ IntroState::IntroState()
 	frame->setFps(0.095);
 	frame->addText(0, DataCache::Instance()->getIntroString(9));
 	frame->setTextColor(208);
-	frame->concatSound(0, Intro_TheHouse);
-	frame->concatSound(0, Intro_ThatProduces);
-	frame->concatSound(0, Intro_TheMostSpice);
-	frame->concatSound(0, Intro_WillControlDune);
+	frame->concatSound(0, "Intro_TheHouse");
+	frame->concatSound(0, "Intro_ThatProduces");
+	frame->concatSound(0, "Intro_TheMostSpice");
+	frame->concatSound(0, "Intro_WillControlDune");
 	frame->addLoop(45, 0, 1, 14);
 	frame->addText(61, DataCache::Instance()->getIntroString(10));
-	frame->concatSound(61, Intro_ThereAreNoSet);
-	frame->concatSound(61, Intro_Territories);
+	frame->concatSound(61, "Intro_ThereAreNoSet");
+	frame->concatSound(61, "Intro_Territories");
 	frame->addText(83, DataCache::Instance()->getIntroString(11));
-	frame->concatSound(83, Intro_AndNo);
-	frame->concatSound(83, Intro_RulesOfEngagement);
+	frame->concatSound(83, "Intro_AndNo");
+	frame->concatSound(83, "Intro_RulesOfEngagement");
 
 	enque(frame);
 
@@ -527,8 +527,8 @@ IntroState::IntroState()
                      Frame::FADE_OUT,
                      false);
 	frame->addText(11, DataCache::Instance()->getIntroString(12));
-	frame->concatSound(11, Intro_VastArmies);
-	frame->concatSound(11, Intro_HasArrived);
+	frame->concatSound(11, "Intro_VastArmies");
+	frame->concatSound(11, "Intro_HasArrived");
 	enque(frame);
 
     frame = new Frame("", 
@@ -539,10 +539,10 @@ IntroState::IntroState()
 	frame->setTextLocation(SPoint(-25,0));
 	frame->setTextSize(2.0);
 	frame->setTextFade(false);	
-	frame->concatSound(0, Intro_AndNow);
-	frame->concatSound(0, Intro_3Houses);
-	frame->concatSound(0, Intro_ForControl);
-	frame->concatSound(0, Intro_OfDune);
+	frame->concatSound(0, "Intro_AndNow");
+	frame->concatSound(0, "Intro_3Houses");
+	frame->concatSound(0, "Intro_ForControl");
+	frame->concatSound(0, "Intro_OfDune");
 	enque(frame);
 
 
@@ -552,13 +552,13 @@ IntroState::IntroState()
                      false);
 	frame->setFps(0.08);
 	frame->addText(0, DataCache::Instance()->getIntroString(14));
-	frame->addSound(0, Intro_TheNobleAtreides);
-	frame->addSound(31, Intro_Glass);
-	frame->addSound(32, Intro_Glass);
-	frame->addSound(33, Intro_Glass);
-	frame->addSound(63, Intro_Glass);
-	frame->addSound(64, Intro_Glass);
-	frame->addSound(65, Intro_Glass);
+	frame->addSound(0, "Intro_TheNobleAtreides");
+	frame->addSound(31, "Intro_Glass");
+	frame->addSound(32, "Intro_Glass");
+	frame->addSound(33, "Intro_Glass");
+	frame->addSound(63, "Intro_Glass");
+	frame->addSound(64, "Intro_Glass");
+	frame->addSound(65, "Intro_Glass");
 	enque(frame);
 
     frame =  new Frame("INTRO:INTRO7A.WSA", 
@@ -566,18 +566,18 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION,
                      false);
 	frame->addText(0, DataCache::Instance()->getIntroString(15));
-	frame->concatSound(0, Intro_TheInsideous);
-	frame->concatSound(0, Intro_Ordos);
-	frame->addSound(2, Intro_Missile_8);
-	frame->addSound(7, Intro_Missile_8);
-	frame->addSound(26, Intro_Missile_8);
+	frame->concatSound(0, "Intro_TheInsideous");
+	frame->concatSound(0, "Intro_Ordos");
+	frame->addSound(2, "Intro_Missile_8");
+	frame->addSound(7, "Intro_Missile_8");
+	frame->addSound(26, "Intro_Missile_8");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO7B.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      true, 5);
-	frame->addSound(10, Intro_Missile_8);
+	frame->addSound(10, "Intro_Missile_8");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO8A.WSA", 
@@ -585,10 +585,10 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION,
                      false);
 	frame->addText(0, DataCache::Instance()->getIntroString(16));
-	frame->concatSound(0, Intro_AndThe);
-	frame->concatSound(0, Intro_EvilHarkonnen);
-	frame->addSound(5, Sound_Gun);
-	frame->addSound(8, Sound_Gun);
+	frame->concatSound(0, "Intro_AndThe");
+	frame->concatSound(0, "Intro_EvilHarkonnen");
+	frame->addSound(5, "Sound_Gun");
+	frame->addSound(8, "Sound_Gun");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO8B.WSA",  
@@ -596,15 +596,15 @@ IntroState::IntroState()
                      Frame::NO_TRANSITION,
                      true);
 	enque(frame);
-	frame->addSound(1, Sound_Gun);
+	frame->addSound(1, "Sound_Gun");
 	
 
     frame = new Frame("INTRO:INTRO8C.WSA", 
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
                      true);
-	frame->addSound(16, Sound_ExplosionSmall);
-	frame->addSound(25, Sound_ExplosionMedium);
+	frame->addSound(16, "Sound_ExplosionSmall");
+	frame->addSound(25, "Sound_ExplosionMedium");
 	enque(frame);
 
     frame = new Frame("INTRO:INTRO5.WSA", 
@@ -614,8 +614,8 @@ IntroState::IntroState()
 	frame->setFps(0.2);
 	frame->addLoop(3, 0, 10, 0);
 	frame->addText(0, DataCache::Instance()->getIntroString(17));
-	frame->concatSound(0, Intro_OnlyOneHouse);
-	frame->concatSound(0, Intro_WillPrevail);
+	frame->concatSound(0, "Intro_OnlyOneHouse");
+	frame->concatSound(0, "Intro_WillPrevail");
 	enque(frame);
 
 
@@ -627,9 +627,9 @@ IntroState::IntroState()
 	frame->setTextLocation(SPoint(-20,0));
 	frame->setTextSize(2.0);	
 	frame->setTextFade(false);	
-	frame->concatSound(0, Intro_Your);
-	frame->concatSound(0, Intro_BattleForDune);
-	frame->concatSound(0, Intro_Begins);
+	frame->concatSound(0, "Intro_Your");
+	frame->concatSound(0, "Intro_BattleForDune");
+	frame->concatSound(0, "Intro_Begins");
 	enque(frame);
 
 
@@ -641,7 +641,7 @@ IntroState::IntroState()
 	frame->setTextLocation(SPoint(-20,0));
 	frame->setTextSize(2.0);
 	frame->setTextFade(false);	
-	frame->addSound(0, Intro_Now);
+	frame->addSound(0, "Intro_Now");
 	enque(frame);
 
     // seems nice to play this again ;)

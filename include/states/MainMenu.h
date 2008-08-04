@@ -13,7 +13,6 @@ class MainMenuState : public MainMenuBaseState
         MainMenuState();
         ~MainMenuState();
 
-        void doEditor();
         void doOptions();
         void doSkirmish();
         void doSingle();
@@ -23,7 +22,6 @@ class MainMenuState : public MainMenuBaseState
     private:
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;
-        BoringButton* m_butMapEd;
         BoringButton* m_butOptions;
         BoringButton* m_butAbout;
         BoringButton* m_butQuit;

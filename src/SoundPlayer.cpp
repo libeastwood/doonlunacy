@@ -86,7 +86,7 @@ void SoundPlayer::VoiceChunkFinishedCallback(int channel)
 // }
 }
 
-void SoundPlayer::playSound(Sound_enum soundID, int volume)
+void SoundPlayer::playSound(std::string soundID, int volume)
 {
     if (Settings::Instance()->m_soundOn)
     {
@@ -127,7 +127,7 @@ void SoundPlayer::stopMusic()
     Mix_HookMusic(NULL, NULL);
 }
 
-void SoundPlayer::playSound(Sound_enum soundID)
+void SoundPlayer::playSound(std::string soundID)
 {
     if (Settings::Instance()->m_soundOn)
     {
@@ -135,7 +135,7 @@ void SoundPlayer::playSound(Sound_enum soundID)
 
         if ((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL)
         {
-            LOG_ERROR("SoundPlayer", "There is no sound with id %d!", soundID);
+            LOG_ERROR("SoundPlayer", "There is no sound with id %s!", soundID.c_str());
             exit(EXIT_FAILURE);
         }
 

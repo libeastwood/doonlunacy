@@ -2,12 +2,9 @@ Import('env')
 
 from glob import glob
 
-gui_sources = glob("gui/*.cpp")
-structure_sources = glob("structures/*.cpp")
-unit_sources = glob("units/*.cpp")
+#structure_sources = glob("structures/*.cpp")
+#unit_sources = glob("units/*.cpp")
 base_sources = glob("*.cpp")
-
-all_sources = gui_sources + structure_sources + unit_sources + base_sources
 
 #all_sources.remove('Menu.cpp')
 
@@ -21,27 +18,27 @@ all_sources = [ "Application.cpp",
                 "Log.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
-				"TerrainClass.cpp",
-				"MapClass.cpp",
-				"gui2/MapWidget.cpp",
-				"MapGenerator.cpp",
+#				"TerrainClass.cpp",
+#				"MapClass.cpp",
+#				"gui2/MapWidget.cpp",
+#				"MapGenerator.cpp",
 				"mmath.cpp",
-				"MapSeed.cpp",
-				"PlayerClass.cpp",
-				"ObjectClass.cpp",
-				"structures/StructureClass.cpp",
-				"structures/WallClass.cpp",				
-				"structures/SiloClass.cpp",
-				"units/UnitClass.cpp",
-				"units/GroundUnit.cpp",				
-				"units/QuadClass.cpp",				
-				"GameState.cpp",
-				"PriorityQ.cpp",
+#				"MapSeed.cpp",
+#				"PlayerClass.cpp",
+#				"ObjectClass.cpp",
+#				"structures/StructureClass.cpp",
+#				"structures/WallClass.cpp",				
+#				"structures/SiloClass.cpp",
+#				"units/UnitClass.cpp",
+#				"units/GroundUnit.cpp",				
+#				"units/QuadClass.cpp",				
+#				"GameState.cpp",
+#				"PriorityQ.cpp",
               ]
 
 state_sources = [
 #    				"CampaignMenu.cpp",
-				    "states/Editor.cpp",
+#				    "states/Editor.cpp",
     				"states/HouseChoiceMenu.cpp",
     				"states/HouseChoiceInfoMenu.cpp",
                     "states/IntroState.cpp", 
@@ -54,11 +51,6 @@ state_sources = [
                     "states/State.cpp",
                     "states/TopLevelState.cpp",
 ]
-
-
-
-
-
 gui_sources = [
                 "gui2/Widget.cpp",
                 "gui2/Container.cpp",
@@ -69,7 +61,8 @@ gui_sources = [
 
               ]
 
-pak_sources = [ "pakfile/Cpsfile.cpp",
+pak_sources = [ 
+                "pakfile/Cpsfile.cpp",
                 "pakfile/Decode.cpp",
                 "pakfile/Icnfile.cpp",
                 "pakfile/Inifile.cpp",
@@ -78,23 +71,24 @@ pak_sources = [ "pakfile/Cpsfile.cpp",
                 "pakfile/Wsafile.cpp",
                 "pakfile/Palette.cpp",
                 "pakfile/sound/adlwrap.cpp",
-		"pakfile/Animation.cpp",
-		"pakfile/Stringfile.cpp",
-		"pakfile/sound/Vocfile.cpp",
+                "pakfile/Animation.cpp",
+                "pakfile/Stringfile.cpp",
+                "pakfile/sound/Vocfile.cpp",
               ]
 
-pakview_sources = [  "Application.cpp", 
-                     "DataCache.cpp",
-                     "Font.cpp",
-                     "Gfx.cpp", 
-                     "houses.cpp",
-                     "Log.cpp",
-                     "ResMan.cpp",                     
-                     "Settings.cpp",
-                     "Strings.cpp",
-                     "State.cpp",
-                     "TopLevelState.cpp",
-        	     "SoundPlayer.cpp",
+pakview_sources = [  
+                "Application.cpp", 
+                "DataCache.cpp",
+                "Font.cpp",
+                "Gfx.cpp", 
+                "houses.cpp",
+                "Log.cpp",
+                "ResMan.cpp",                     
+                "Settings.cpp",
+                "Strings.cpp",
+                "State.cpp",
+                "TopLevelState.cpp",
+                "SoundPlayer.cpp",
                   ]
 
 

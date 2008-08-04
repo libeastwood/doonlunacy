@@ -14,7 +14,7 @@
 #include <string>
 
 typedef std::pair <uint16_t, std::string> introText;
-typedef std::pair <uint16_t, Sound_enum> introSound;
+typedef std::pair <uint16_t, std::string> introSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 typedef std::pair <uint8_t, uint8_t> videoLoop;
 
@@ -49,8 +49,8 @@ class IntroState : public State
             
             bool Execute(float ft);
             void Load(Frame* lastframe);
-			void addSound(uint16_t playAt, Sound_enum sound);
-			void concatSound(uint16_t playAt, Sound_enum sound);
+			void addSound(uint16_t playAt, std::string sound);
+			void concatSound(uint16_t playAt, std::string sound);
 			void setSong(uint16_t song);
 			void setPalette(Palette_enum palette);
 			void setFps(float fps);
