@@ -152,7 +152,14 @@ Icnfile::Icnfile(unsigned char * bufFiledata, int bufsize,
 
 Icnfile::~Icnfile()
 {	
-	;
+	free(Filedata);
+
+    for (int i = 0; i < NumTilesets; i++)
+    {
+            free(Tileset[i].TileIndex);
+    }
+
+    free(Tileset);
 }
 
 Image * Icnfile::getPicture(Uint32 IndexOfFile) {
