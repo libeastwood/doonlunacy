@@ -216,8 +216,8 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
 }
 
 UPoint sizeRelativeUPoint(int x, int y){
-	float wratio = (float)Settings::Instance()->GetWidth() / 320;
-	float hratio = (float)Settings::Instance()->GetHeight() / 200;
+	float wratio = Settings::Instance()->GetWidth() / 320.0f;
+	float hratio = Settings::Instance()->GetHeight() / 200.0f;
 	return UPoint(wratio * x, hratio * y);
 }
 //------------------------------------------------------------------------------
