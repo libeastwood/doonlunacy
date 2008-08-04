@@ -146,7 +146,7 @@ unsigned char *Pakfile::getFile(const char *fname, int *size)
 	
 	unsigned char * content;
 	
-	if( (content = (unsigned char*) malloc(filesize)) == NULL) {
+	if( ((content = (unsigned char*) malloc(filesize))) == NULL) {
 		return NULL;
 	}
 	

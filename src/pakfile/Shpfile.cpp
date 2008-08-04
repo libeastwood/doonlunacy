@@ -25,6 +25,8 @@ Shpfile::~Shpfile()
 	if(Index != NULL) {
 		free(Index);
 	}
+	
+	free(Filedata);
 }
 
 Image * Shpfile::getPicture(Uint32 IndexOfFile)
