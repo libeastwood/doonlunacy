@@ -2,6 +2,7 @@
 
 #include "Definitions.h"
 
+#include "gui2/Container.h"
 #include "gui2/Frame.h"
 #include "DataCache.h"
 
@@ -17,6 +18,12 @@ Frame::Frame(Image *image, UPoint size, GuiPic_enum nw, GuiPic_enum ne,
     }
     drawFrame(size, nw, ne, sw, se, edgeDistance);
 }
+
+Frame::Frame(Image *image)
+{
+    m_surface.reset(image);
+}
+
 Frame::Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Image *background, Uint16 edgeDistance)
 {
@@ -63,7 +70,17 @@ void Frame::drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
 }
 
 void Frame::draw(Image *dest, SPoint off){
+    if (!m_visible) return;
+
     m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));
+
+    WidgetList::iterator it;
+    for ( it  = m_children.begin();
+          it != m_children.end();
+          ++it )
+    {
+        (*it)->draw(dest, SPoint(off.x + x, off.y + y));
+    };
 }
 
 Frame::~Frame()

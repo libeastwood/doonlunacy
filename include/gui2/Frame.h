@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
-#include "gui2/Widget.h"
+#include "gui2/Container.h"
 
 /* Frame widget
 */
-class Frame : public Widget
+class Frame : public Container
 {
 public:
     //! @name Constructors & Destructor
@@ -21,19 +21,26 @@ public:
             GuiPic_enum sw, GuiPic_enum se, Uint16 edgeDistance = 0);
     Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Image *background = NULL, Uint16 edgeDistance = 0);
-    
+    Frame(Image *image);
+
     void drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Uint16 edgeDistance);
 
-    virtual void draw(Image * dest, SPoint off);
-
-
     ~Frame();
+
+    virtual void draw(Image *dest, SPoint off);
+
+    UPoint getSize() const
+    {
+        return m_surface->getSize();
+    }
+
     ImagePtr getPicture();
     //@}
 
 protected:
-    ImagePtr m_surface;    
+    ImagePtr m_surface;
+    Container *m_container;
 };
 
 class Frame1 : public Frame
