@@ -30,12 +30,13 @@ public:
 
     virtual void draw(Image *dest, SPoint off);
 
-    UPoint getSize() const
+    UPoint getPictureSize() const
     {
         return m_surface->getSize();
     }
 
     ImagePtr getPicture();
+    void changeBackground(Image *background);
     //@}
 
 protected:
