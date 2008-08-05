@@ -2,14 +2,13 @@
 #define DUNE_APPLICATION_H
 
 
-#include "SDL.h"
+#include <SDL.h>
 
 #include "singleton.h"
 #include "State.h"
 #include "TopLevelState.h"
 
 #include "gui2/Container.h"
-#include "gui2/Label.h"
 
 #define VERSION "0.95"
 
@@ -25,6 +24,7 @@ typedef enum
 	NUM_CURSORS
 } Cursor;
 
+class Label;
 class Application : public Singleton<Application>
 {
     friend class Singleton<Application>;
