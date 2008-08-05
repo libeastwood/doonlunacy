@@ -24,7 +24,6 @@ public:
     */
     Label(std::string caption="", int textColor = 49, int bgColor = 115, int maxLineLength = -1);
     void setLabel(std::string);
-    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
     void redraw();
 
     ~Label();
@@ -33,10 +32,11 @@ public:
     virtual void draw(Image * dest, SPoint off);
 
 protected:
-
+    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
     ImagePtr m_surface;
     ImagePtr m_background;
     std::string m_caption;
+
 private:
     std::vector<std::string> splitString(std::string ParseString, int maxLineLength);
     int m_textColor,
@@ -52,8 +52,22 @@ public:
     TransparentLabel(std::string caption="", int textColor = 49, int maxLineLength = -1);
     ~TransparentLabel();
 
+protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
 
+};
+
+class GraphicsLabel : public Label
+{
+public:
+    GraphicsLabel(Image *background, std::string caption="", int textColor = 49, int maxLineLength = -1);
+    ~GraphicsLabel();
+
+protected:
+    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
+
+private:
+    ImagePtr m_background;
 };
 
 class AnimationLabel : public Widget

@@ -129,6 +129,26 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
     m_surface->setColorKey();
 }
 
+GraphicsLabel::GraphicsLabel(Image *background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
+{
+    m_background = background->getCopy();
+}
+
+void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
+{
+//    TODO: implement proper operator for Point class
+//    if(m_background->getSize() < (UPoint(textw + 4-(textw%4), texth * numLines)))
+
+    if(m_background->getSize().x < textw + 4-(textw%4)
+		    ||  m_background->getSize().y < texth * numLines)
+        LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
+    m_surface.reset();
+    m_surface = m_background->getCopy();
+}
+
+GraphicsLabel::~GraphicsLabel()
+{
+}
 AnimationLabel::AnimationLabel(Animation* pAnim)
 {
 	m_anim = pAnim;
