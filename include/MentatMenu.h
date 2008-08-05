@@ -3,7 +3,7 @@
 
 #include "MenuBase.h"
 #include "houses.h"
-class Label;
+class TransparentLabel;
 class AnimationLabel;
 class MentatMenuState : public MenuBaseState
 {
@@ -18,7 +18,7 @@ class MentatMenuState : public MenuBaseState
 	protected:
 		HOUSETYPE house;
 		ImagePtr m_surf;
-		Label* m_textLabel;
+		TransparentLabel* m_textLabel;
 		AnimationLabel*	m_eyesAnim;
 		AnimationLabel*	m_mouthAnim;
 		AnimationLabel*	m_specialAnim;
