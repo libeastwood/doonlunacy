@@ -24,6 +24,12 @@ Frame::Frame(Image *image)
     m_surface.reset(image);
 }
 
+Frame::Frame()
+{
+    // Needs to be initialized with a proper surface..
+    m_surface.reset(new Image(UPoint(1,1)));
+}
+
 Frame::Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Image *background, Uint16 edgeDistance)
 {
@@ -86,6 +92,11 @@ void Frame::draw(Image *dest, SPoint off){
 Frame::~Frame()
 {
 
+}
+
+void Frame::changeBackground(Image *background)
+{
+    m_surface.reset(background);
 }
 
 ImagePtr Frame::getPicture(){

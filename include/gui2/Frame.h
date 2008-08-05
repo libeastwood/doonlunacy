@@ -22,6 +22,7 @@ public:
     Frame(Uint32 color, ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Image *background = NULL, Uint16 edgeDistance = 0);
     Frame(Image *image);
+    Frame();
 
     void drawFrame(ConstUPoint size, GuiPic_enum nw, GuiPic_enum ne,
             GuiPic_enum sw, GuiPic_enum se, Uint16 edgeDistance);
