@@ -8,6 +8,8 @@
 
 #include "gui2/Label.h"
 
+#include <Animation.h>
+
 Label::Label(std::string caption, int textColor, int bgColor, int maxLineLength)
 {
     m_textColor = textColor;

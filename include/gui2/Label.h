@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "gui2/Widget.h"
-#include "Animation.h"
+#include "Container.h"
 
 /* Label widget using dune's fonts
 */
@@ -70,6 +70,7 @@ private:
     ImagePtr m_background;
 };
 
+class Animation;
 class AnimationLabel : public Widget
 {
 	public:
