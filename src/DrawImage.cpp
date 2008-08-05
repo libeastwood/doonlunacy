@@ -48,3 +48,11 @@ void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 
 }
 
+void DrawImage::drawTiles(Image *tile)
+{
+     UPoint size = getSize();
+     UPoint bgSize = tile->getSize();
+        for(int x = 0; x < size.x; x += bgSize.x - 1)
+            for(int y = 0; y < size.y; y += bgSize.y - 1)
+                blitFrom(tile, UPoint(x,y));
+}

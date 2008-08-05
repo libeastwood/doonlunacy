@@ -31,5 +31,7 @@ class DrawImage : public Image
 				UI_Corner3SE, edgeDistance);
 	}
 
+	void drawTiles(Image *tile);
+
 };
 #endif // DUNE_DRAWIMAGE_H
