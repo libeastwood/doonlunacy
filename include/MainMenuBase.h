@@ -2,11 +2,9 @@
 #define DUNE_MAINMENUBASE_H
 
 #include "MenuBase.h"
-#include "gui2/Button.h"
-#include "gui2/VBox.h"
-#include "Gfx.h"
-#include "SDL.h"
+#include <SDL.h>
 
+class VBox;
 class MainMenuBaseState : public MenuBaseState 
 {
     public:
