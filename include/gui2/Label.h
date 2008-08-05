@@ -22,7 +22,7 @@ public:
         @param bgColour sets background colour of label. 115(dune yellow) by default
         @param maxLineLength maximum length of a line (in characters)
     */
-    Label(std::string caption="none", int textColour = 49, int bgColour = 115, int maxLineLength = -1);
+    Label(std::string caption="", int textColour = 49, int bgColour = 115, int maxLineLength = -1);
     void setLabel(std::string);
     void redraw();
 
