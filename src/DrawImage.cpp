@@ -82,6 +82,25 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
 
 void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
 {
+    int len;
+    uint8_t *data;
+    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
+    CpsfilePtr cps(new Cpsfile(data, len));
+    ImagePtr screen(cps->getPicture());
+    ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
+    ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
+    sideBar->blitFrom(tmp.get());
+    tmp.reset(screen->getPictureCrop(Rect(260, 127, 10, 6)));
+    for(int i = 5; i < x2 - 6; i += 10)
+        sideBar->blitFrom(tmp.get(), UPoint(i, 0));
+    tmp.reset(screen->getPictureCrop(Rect(313, 127, 6, 6)));
+    //FIXME: the line at end of bar and thingie needs to be adapted..
+    sideBar->blitFrom(tmp.get(), UPoint(x2 - start.x - 6, 0));
+    blitFrom(sideBar.get(), start);
+    tmp.reset();
+    sideBar.reset();
+    screen.reset();
+    cps.reset();
 }
 
 void DrawImage::drawTiles(Image *tile)
