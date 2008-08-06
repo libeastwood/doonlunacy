@@ -268,6 +268,10 @@ struct Point
         friend bool operator!=(const Point& a, const Point& b){
             return (a.x != b.x || a.y != b.y);
         }
+	
+	friend std::ostream& operator<<(std::ostream& os, const Point& c){
+            return os << '(' << c.x << 'x' << c.y << ')';
+	}
 
         //! Type-casting operator
         /*!
