@@ -68,7 +68,7 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
     sideBar->blitFrom(tmp.get());
     tmp.reset(screen->getPictureCrop(Rect(241, 58, 12, 13)));
-    for(int i = start.y; i < y2 - 6; i += 13)
+    for(int i = 6; i < y2 - 6; i += 13)
         sideBar->blitFrom(tmp.get(), UPoint(0, i));
     tmp.reset(screen->getPictureCrop(Rect(241, 117, 12, 6)));
     //FIXME: the line at end of bar and thingie needs to be adapted..
