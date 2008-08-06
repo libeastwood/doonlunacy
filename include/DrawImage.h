@@ -52,6 +52,7 @@ class DrawImage : public Image
         void drawVBar(ConstUPoint start, int y2);
 
 	void drawTiles(Image *tile);
+	void drawTiles(Image *tile, ConstRect area);
 
 };
 #endif // DUNE_DRAWIMAGE_H

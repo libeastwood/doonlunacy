@@ -71,7 +71,7 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
     for(int i = start.y; i < y2 - 6; i += 13)
         sideBar->blitFrom(tmp.get(), UPoint(0, i));
     tmp.reset(screen->getPictureCrop(Rect(241, 117, 12, 6)));
-    //FIXME: the line at end of bar and thingie needs to be adapted
+    //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
     blitFrom(sideBar.get(), start);
     tmp.reset();
@@ -85,9 +85,18 @@ void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
 
 void DrawImage::drawTiles(Image *tile)
 {
+	Rect area(0, 0, getSize().x, getSize().y);
+	drawTiles(tile, area);
+}
+
+void DrawImage::drawTiles(Image *tile, ConstRect area)
+{
+     ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
      UPoint size = getSize();
      UPoint bgSize = tile->getSize();
         for(int x = 0; x < size.x; x += bgSize.x - 1)
             for(int y = 0; y < size.y; y += bgSize.y - 1)
-                blitFrom(tile, UPoint(x,y));
+                tiledArea->blitFrom(tile, UPoint(x,y));
+     blitFrom(tiledArea.get(), UPoint(area.x, area.y));
+     tiledArea.reset();
 }
