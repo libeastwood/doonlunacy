@@ -342,6 +342,11 @@ animations:
 		filename = "MENTAT:FRIGATE.WSA";
 	};
 
+	Anim_Static =
+	{
+		filename = "DUNE:STATIC.WSA";
+	};
+
 };
 
 
