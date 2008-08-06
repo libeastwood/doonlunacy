@@ -21,28 +21,22 @@ MainMenuBaseState::MainMenuBaseState()
     m_song->track = 6;
     m_backgroundFrame = new Frame();
     m_container->addChild(m_backgroundFrame);
+    m_middleFrame = new Frame();
+    m_backgroundFrame->addChild(m_middleFrame);
+    m_menuFrame = new Frame();
+    m_backgroundFrame->addChild(m_menuFrame);
+    m_container->addChild(m_vbox);
 }
 
 void MainMenuBaseState::draw()
 {
     m_vbox->fit(2);
-    m_vbox->reshape();    
-    int len;
-    uint8_t *data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
-    CpsfilePtr m_cps (new Cpsfile(data, len));
-
-    DrawImage *planet = new DrawImage(m_cps->getPicture());
-    m_cps.reset();
-    planet->drawBorders1();
-    m_middleFrame = new Frame(planet);
-    
-    m_backgroundFrame->addChild(m_middleFrame);
-
+    m_vbox->reshape();
 
     Image *menu = new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55));
     menu->setColorKey();
 
-    m_menuFrame = new Frame(menu);
+    m_menuFrame->changeBackground(menu);
     DrawImage *menuTop = new DrawImage(UPoint(bw + 20, 30));
     menuTop->recolor(0, 236);
     menuTop->drawBorders1();
@@ -57,14 +51,9 @@ void MainMenuBaseState::draw()
     //FIXME: not able to click on anything added as child directly to m_container..?
     //    m_vbox->setPosition(UPoint(9,14));
     //    menuBottomFrame->addChild(m_vbox);
-//    m_vbox->setPosition(UPoint(m_menuFrame->getPosition().x + 9, m_menuFrame->getPosition().y + 14));    
-    m_container->addChild(m_vbox);
 
     menuBottomFrame->setPosition(UPoint(0,31));
     m_menuFrame->addChild(menuBottomFrame);
-
-    m_backgroundFrame->addChild(m_menuFrame);
-
 
     m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get());
     m_backgroundFrame->addChild(m_harkonnenHerald);
@@ -81,6 +70,18 @@ void MainMenuBaseState::draw()
     m_versionLabel = new GraphicsLabel(version, VERSION, 57);
     m_backgroundFrame->addChild(m_versionLabel);
 
+}
+
+void MainMenuBaseState::drawSpecifics()
+{
+    int len;
+    uint8_t *data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
+    CpsfilePtr m_cps (new Cpsfile(data, len));
+
+    DrawImage *planet = new DrawImage(m_cps->getPicture());
+    m_cps.reset();
+    planet->drawBorders1();
+    m_middleFrame->changeBackground(planet);
 }
 
 void MainMenuBaseState::resize()
@@ -116,6 +117,7 @@ int MainMenuBaseState::Execute(float dt)
     if(m_drawMenu)
     {
         draw();
+	drawSpecifics();
 	m_drawMenu = false;
     }
     if(m_backgroundFrame->getPictureSize() != UPoint(set->GetWidth(), set->GetHeight())){

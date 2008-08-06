@@ -2,7 +2,6 @@
 #define DUNE_MAINMENUBASE_H
 
 #include "MenuBase.h"
-#include <SDL.h>
 
 class VBox;
 class Frame;
@@ -25,8 +24,9 @@ class MainMenuBaseState : public MenuBaseState
 	      *m_ordosHerald;
         static const int bw = 180;
         static const int bh = 20;
-        virtual void draw();
-	virtual void resize();
+        void draw();
+	virtual void drawSpecifics();
+	void resize();
 };
 
 #endif // DUNE_MAINMENU_H
