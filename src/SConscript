@@ -42,7 +42,7 @@ state_sources = [
 #				    "states/Editor.cpp",
     				"states/HouseChoiceMenu.cpp",
     				"states/HouseChoiceInfoMenu.cpp",
-                    "states/IntroState.cpp", 
+                    "states/CutSceneState.cpp", 
                     "states/MenuBase.cpp", 
                     "states/MainMenu.cpp",
                     "states/MainMenuBase.cpp",                    

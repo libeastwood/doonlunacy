@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Settings.h"
 #include "states/MainMenu.h"
-#include "states/IntroState.h"
+#include "states/CutSceneState.h"
 
 namespace boost {
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     Application::Instance()->Init();
     Application::Instance()->RootState()->PushState( new MainMenuState() );
     if(Settings::Instance()->GetPlayIntro())
-	    Application::Instance()->RootState()->PushState( new IntroState() );
+	    Application::Instance()->RootState()->PushState( new CutSceneState("intro") );
     Application::Instance()->Run();
     Application::Destroy();
     Settings::Destroy();

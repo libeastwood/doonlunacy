@@ -1,4 +1,5 @@
 #include <iostream>
+#include <libconfig.h++>
 
 #include "boost/bind.hpp"
 
@@ -6,7 +7,7 @@
 #include "DataCache.h"
 #include "Font.h"
 #include "Gfx.h"
-#include "states/IntroState.h"
+#include "states/CutSceneState.h"
 #include "Log.h"
 #include "ResMan.h"
 #include "Settings.h"
@@ -15,10 +16,12 @@
 #include "pakfile/Palette.h"
 
 
-// ------------------------------------------------------------------
-// IntroState::Frame
+using namespace libconfig;
 
-IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
+// ------------------------------------------------------------------
+// CutSceneState::Frame
+
+CutSceneState::Frame::Frame(std::string filename, Transition in, Transition out,
                             bool continuation, uint8_t endWait)
 {
     m_filename = filename;
@@ -44,17 +47,17 @@ IntroState::Frame::Frame(std::string filename, Transition in, Transition out,
 
 }
 
-void IntroState::Frame::addText(uint16_t playAt, std::string text)
+void CutSceneState::Frame::addText(uint16_t playAt, std::string text)
 {
-	m_introStrings.push_back(introText(playAt, text));
+	m_cutSceneStrings.push_back(cutSceneText(playAt, text));
 }
 
-void IntroState::Frame::addSound(uint16_t playAt, std::string sound)
+void CutSceneState::Frame::addSound(uint16_t playAt, std::string sound)
 {
-	m_introSounds.push_back(introSound(playAt, sound));
+	m_cutSceneSounds.push_back(cutSceneSound(playAt, sound));
 }
 
-void IntroState::Frame::concatSound(uint16_t playAt, std::string sound)
+void CutSceneState::Frame::concatSound(uint16_t playAt, std::string sound)
 {
 	Mix_Chunk* sound1;
 	Mix_Chunk* sound2 = DataCache::Instance()->getSoundChunk(sound);
@@ -95,50 +98,50 @@ void IntroState::Frame::concatSound(uint16_t playAt, std::string sound)
 	Mix_FreeChunk(sound2);
 }
 
-void IntroState::Frame::setPalette(Palette_enum palette)
+void CutSceneState::Frame::setPalette(Palette_enum palette)
 {
 	m_palette = DataCache::Instance()->getPalette(palette);
 }
 
-void IntroState::Frame::setSong(uint16_t song)
+void CutSceneState::Frame::setSong(uint16_t song)
 {
 	m_song = song;
 }
 
-void IntroState::Frame::setFps(float fps)
+void CutSceneState::Frame::setFps(float fps)
 {
 	m_fps = fps;
 }
 
-void IntroState::Frame::addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
+void CutSceneState::Frame::addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
 {
 	m_loops.push_back(videoLoop(loopAt, rewindTo));
 	m_loops.push_back(videoLoop(numLoops, wait));
 }
 
-void IntroState::Frame::setTextColor(uint8_t textColor)
+void CutSceneState::Frame::setTextColor(uint8_t textColor)
 {
 	m_textColor = textColor;
 }
 
-void IntroState::Frame::setTextLocation(SPoint textLocation)
+void CutSceneState::Frame::setTextLocation(SPoint textLocation)
 {
 	m_textLocation = textLocation;
 }
 
-void IntroState::Frame::setTextSize(float textSize)
+void CutSceneState::Frame::setTextSize(float textSize)
 {
 	m_textSize = textSize;
 }
 
-void IntroState::Frame::setTextFade(bool textFade)
+void CutSceneState::Frame::setTextFade(bool textFade)
 {
 	m_textFade = textFade;
 }
 
-void IntroState::Frame::Load(Frame* lastframe)
+void CutSceneState::Frame::Load(Frame* lastframe)
 {
-    LOG_INFO("IntroState", "Intro loading %s", m_filename.c_str());
+    LOG_INFO("CutSceneState", "Loading %s", m_filename.c_str());
 
     std::string::size_type wsaSuffix = m_filename.rfind(".WSA", m_filename.size() - 1);
     std::string::size_type cpsSuffix = m_filename.rfind(".CPS", m_filename.size() - 1);
@@ -194,7 +197,7 @@ void IntroState::Frame::Load(Frame* lastframe)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
 }
 
-bool IntroState::Frame::Execute(float dt)
+bool CutSceneState::Frame::Execute(float dt)
 {
 
     switch (m_state)
@@ -224,15 +227,15 @@ bool IntroState::Frame::Execute(float dt)
 }
 
 
-void IntroState::Frame::doPlaying(float dt)
+void CutSceneState::Frame::doPlaying(float dt)
 {
 	if(m_textFade && !m_textTransition && !Mix_Playing(10)){
 		m_textTransition = m_framesPlayed + 2;
 	}
-	if(m_introStrings.size() > 0){
-		if(m_framesPlayed ==  m_introStrings[0].first){
+	if(m_cutSceneStrings.size() > 0){
+		if(m_framesPlayed ==  m_cutSceneStrings[0].first){
 			ImagePtr tmp(new Image(UPoint(360,50)));
-			std::string text = m_introStrings[0].second;
+			std::string text = m_cutSceneStrings[0].second;
 			uint8_t numLines = 0;
 			int linebreak = text.find("\n",0)+ 1;
 			std::string thisLine;
@@ -253,7 +256,7 @@ void IntroState::Frame::doPlaying(float dt)
 				linebreak = text.find("\n",0);
 			}
 			m_textSurface = tmp->getResized(m_textSize);
-			m_introStrings.erase(m_introStrings.begin());
+			m_cutSceneStrings.erase(m_cutSceneStrings.begin());
 			m_textTransition = 0;
 		}
 	}
@@ -262,11 +265,11 @@ void IntroState::Frame::doPlaying(float dt)
 		doTransitionOut(m_textSurface, false, true, 6);
 	}
 
-	if(m_introSounds.size() > 0){
-		if(m_framesPlayed ==  m_introSounds[0].first){
-			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_introSounds[0].second);
+	if(m_cutSceneSounds.size() > 0){
+		if(m_framesPlayed ==  m_cutSceneSounds[0].first){
+			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_cutSceneSounds[0].second);
 			SoundPlayer::Instance()->playSound(sound);
-			m_introSounds.erase(m_introSounds.begin());
+			m_cutSceneSounds.erase(m_cutSceneSounds.begin());
 		}
 	}
 
@@ -316,15 +319,15 @@ void IntroState::Frame::doPlaying(float dt)
     };
 }
 
-void IntroState::Frame::setupTransitionIn()
+void CutSceneState::Frame::setupTransitionIn()
 {
 }
 
-void IntroState::Frame::cleanupTransitionIn()
+void CutSceneState::Frame::cleanupTransitionIn()
 {
 }
 
-void IntroState::Frame::doTransitionIn(float dt) 
+void CutSceneState::Frame::doTransitionIn(float dt) 
 {
 	if(m_song != -1){
 		SoundPlayer::Instance()->playMusic(MUSIC_INTRO, m_song);
@@ -333,7 +336,7 @@ void IntroState::Frame::doTransitionIn(float dt)
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
 }
 
-void IntroState::Frame::setupTransitionOut(ImagePtr img)
+void CutSceneState::Frame::setupTransitionOut(ImagePtr img)
 {
     m_transitionPalette = new SDL_Color[256];
     memcpy((unsigned char*)m_transitionPalette,
@@ -341,18 +344,18 @@ void IntroState::Frame::setupTransitionOut(ImagePtr img)
             sizeof(SDL_Color) * 256);
 }
 
-void IntroState::Frame::cleanupTransitionOut()
+void CutSceneState::Frame::cleanupTransitionOut()
 {
     delete m_transitionPalette;
 }
 
-void IntroState::Frame::doTransitionOut(float dt)
+void CutSceneState::Frame::doTransitionOut(float dt)
 {
 	doTransitionOut(m_scaledSurface, true);
 	doTransitionOut(m_textSurface, true, true);
 }
 
-void IntroState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
+void CutSceneState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
 {
     if (m_transition_out == NO_TRANSITION && !forceTransition) 
     {
@@ -388,28 +391,82 @@ void IntroState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTrans
     };
 }
 
-void IntroState::Frame::doHolding(float dt)
+void CutSceneState::Frame::doHolding(float dt)
 {
     m_state = TRANSITION_OUT;
 }
 
-IntroState::Frame::~Frame()
+CutSceneState::Frame::~Frame()
 {			
     m_loops.clear();
-	m_introStrings.clear();
-	m_introSounds.clear();
+	m_cutSceneStrings.clear();
+	m_cutSceneSounds.clear();
 	m_soundChunks.clear();
 
 }
 // ------------------------------------------------------------------
-// IntroState
+// CutSceneState
 
-IntroState::IntroState()
-{
+CutSceneState::CutSceneState(std::string scene)
+{	
+    Config * dataConfig = new Config();
+
+    try
+    {
+        dataConfig->readFile("data.dunetxt");
+    }
+    catch(ParseException& ex)
+    {
+        LOG_FATAL("CutSceneState", "Fatal error loading configuration file on line %d: %s", 
+            ex.getLine(), ex.getError());
+
+        exit(EXIT_FAILURE);
+    }
+
 	m_currentFrame = NULL;
 
-//	m_introStrings.push_back(introText(0, "")); // credits.eng isn't properly decoded yet..
+//	m_cutSceneStrings.push_back(cutSceneText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
+    std::string filename;
+    bool continutation = false;
+    int hold = 0, song;
+    float fps;
+    std::string path = ".cutscenes.";
+    path += scene;
+    
+    Setting &node = dataConfig->lookup(path);
+
+    try
+    {
+        for (int i = 0; i < node.getLength(); i++)
+        {
+
+            node[i].lookupValue("filename", filename);
+            node[i].lookupValue("hold", hold);
+            node[i].lookupValue("continuation", continutation);
+        	frame = new Frame(filename,
+                             Frame::NO_TRANSITION, 
+                             Frame::NO_TRANSITION,
+                             continutation);
+            
+            if (node[i].lookupValue("fps", fps))
+                frame->setFps(fps);
+            if (node[i].lookupValue("song", song))                
+                frame->setSong(song);
+            enque(frame);
+        }
+    }  
+    catch(ParseException& ex)
+    {
+        LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
+            ex.getLine(), ex.getError());
+
+        exit(EXIT_FAILURE);
+    }
+    
+    delete (dataConfig);
+
+#if 0
 	frame = new Frame("INTRO:WESTWOOD.WSA",
                      Frame::NO_TRANSITION, 
                      Frame::FADE_OUT,
@@ -658,44 +715,46 @@ IntroState::IntroState()
                      false);
 	enque(frame);*/
 
+#endif
+
     next();
-    m_butIntro = new TranspButton(Settings::Instance()->GetWidth(),
+    m_butCutScene = new TranspButton(Settings::Instance()->GetWidth(),
                                   Settings::Instance()->GetHeight());
                                   
-    m_butIntro->onClick.connect(
-            boost::bind(&IntroState::SkipIntro, this) );
+    m_butCutScene->onClick.connect(
+            boost::bind(&CutSceneState::SkipCutScene, this) );
 }
 
-IntroState::~IntroState()
+CutSceneState::~CutSceneState()
 {
 }
 
-void IntroState::SkipIntro()
+void CutSceneState::SkipCutScene()
 {
 	delete m_currentFrame;
     mp_parent->PopState();
     
 }
 
-void IntroState::JustMadeActive()
+void CutSceneState::JustMadeActive()
 {
     Application::Instance()->SetClearColor(0);
-    Application::Instance()->RootWidget()->addChild(m_butIntro);
+    Application::Instance()->RootWidget()->addChild(m_butCutScene);
     State::JustMadeActive();
 }
 
-void IntroState::JustMadeInactive()
+void CutSceneState::JustMadeInactive()
 {
-    Application::Instance()->RootWidget()->deleteChild(m_butIntro);
+    Application::Instance()->RootWidget()->deleteChild(m_butCutScene);
     SoundPlayer::Instance()->stopMusic();
     State::JustMadeInactive();
 }
 
-bool IntroState::next()
+bool CutSceneState::next()
 {
 
-    LOG_INFO("IntroState", "Loading next..");
-    IntroList::iterator it = m_wsaNames.begin();
+    LOG_INFO("CutSceneState", "Loading next..");
+    CutSceneList::iterator it = m_wsaNames.begin();
     if (it == m_wsaNames.end() )
     {
         return false;
@@ -712,7 +771,7 @@ bool IntroState::next()
     return true;
 }
 
-int IntroState::Execute(float dt)
+int CutSceneState::Execute(float dt)
 {
     if (m_currentFrame->Execute(dt))
     {

@@ -1,5 +1,5 @@
-#ifndef DUNE_INTROSTATE_H
-#define DUNE_INTROSTATE_H
+#ifndef DUNE_CUTSCENESTATE_H
+#define DUNE_CUTSCENESTATE_H
 
 #include "Gfx.h"
 #include "State.h"
@@ -13,8 +13,8 @@
 #include <list>
 #include <string>
 
-typedef std::pair <uint16_t, std::string> introText;
-typedef std::pair <uint16_t, std::string> introSound;
+typedef std::pair <uint16_t, std::string> cutSceneText;
+typedef std::pair <uint16_t, std::string> cutSceneSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 typedef std::pair <uint8_t, uint8_t> videoLoop;
 
@@ -23,7 +23,7 @@ class StringFile;
 class Button;
 class Label;
 class Container;
-class IntroState : public State 
+class CutSceneState : public State 
 {
    
     class Frame
@@ -88,8 +88,8 @@ class IntroState : public State
             SDL_Color* m_transitionPalette;
 			Font* font;
 			std::vector<videoLoop> m_loops;
-			std::vector<introText> m_introStrings;
-			std::vector<introSound> m_introSounds;
+			std::vector<cutSceneText> m_cutSceneStrings;
+			std::vector<cutSceneSound> m_cutSceneSounds;
 			std::vector<soundChunk> m_soundChunks;
 
 			SDL_Palette* m_palette;
@@ -108,39 +108,39 @@ class IntroState : public State
     };
     
     
-    typedef std::list<Frame*> IntroList;
+    typedef std::list<Frame*> CutSceneList;
 
     
     
     public:
-        IntroState();
-        ~IntroState();
+        CutSceneState(std::string path);
+        ~CutSceneState();
 
         void JustMadeActive();
         void JustMadeInactive();
 
         int Execute(float dt);
-        void SkipIntro();
+        void SkipCutScene();
         void enque(Frame* frame) { m_wsaNames.push_back(frame); }
         bool next();
         void load(Frame frame);
-        virtual const char* GetName() { return "IntroState"; }
+        virtual const char* GetName() { return "CutSceneState"; }
 		StringFile* m_introStringFile;
 
     private:
 		void handleInput();
-        IntroList m_wsaNames;
+        CutSceneList m_wsaNames;
 
-        TranspButton *m_butIntro;
+        TranspButton *m_butCutScene;
 
         Frame* m_currentFrame;
 		Frame* frame;
-		std::vector<introText> m_introStrings;
-		std::vector<introSound> m_introSounds;
+		std::vector<cutSceneText> m_cutSceneStrings;
+		std::vector<cutSceneSound> m_cutSceneSounds;
 		
 //		Font* font;
 };
 
 
 
-#endif // DUNE_INTROSTATE_H
+#endif // DUNE_CUTSCENESTATE_H

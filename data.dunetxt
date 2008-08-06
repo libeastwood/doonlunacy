@@ -342,6 +342,72 @@ animations:
 
 };
 
+cutscenes:
+{
+    intro = 
+    (
+        {
+            hold = 20;
+            filename = "INTRO:WESTWOOD.WSA";
+            fade_out = true;
+            fps = 0.15;
+            palette = "WESTWOOD_PAL";
+            song = 0;
+        },
+
+        {
+            filename = "INTRO:INTRO2.WSA";
+        },
+        
+        {
+            filename = "INTRO:INTRO3.WSA";
+        },
+        
+        {
+            filename = "INTRO:INTRO9.WSA";
+        }
+    );
+
+//The should of course be a bit adjusted.
+
+    atreides =
+    (
+        {
+            filename = "FINALE:AFINALA.WSA";        
+        },
+        
+        {
+            filename = "FINALE:AFINALB.WSA";
+        }
+    );
+
+    ordos =
+    (
+        {
+            filename = "FINALE:OFINALA.WSA";        
+        },
+
+        {
+            filename = "FINALE:OFINALD.WSA";
+        }
+    );
+    
+    harkonnen =
+    (
+        {
+            filename = "FINALE:HFINALA.WSA";        
+        },
+        
+        {
+            filename = "FINALE:HFINALB.WSA";
+        },
+        
+        {
+            continuation = true;
+            filename = "FINALE:HFINALC.WSA";
+        }
+    );
+};
 
 // Please don't change the order of music types
 // They correspond to the order of MUSIC_TYPE
