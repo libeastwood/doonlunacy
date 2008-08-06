@@ -13,6 +13,12 @@ class DrawImage : public Image
 
         void drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 			GuiPic_enum se, Uint16 edgeDistance = 0);
+
+	void drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
+		ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
+		ImagePtr bottom, ImagePtr left, ImagePtr right,
+		Uint16 edgeDistance = 0);
+
         void drawBorders1(Uint16 edgeDistance = 0)
 	{
 		drawBorders(UI_Corner1NW, UI_Corner1NE, UI_Corner1SW,
