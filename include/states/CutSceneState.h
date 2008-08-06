@@ -50,7 +50,6 @@ class CutSceneState : public State
             bool Execute(float ft);
             void Load(Frame* lastframe);
 			void addSound(uint16_t playAt, std::string sound);
-			void concatSound(uint16_t playAt, std::string sound);
 			void setSong(uint16_t song);
 			void setPalette(Palette_enum palette);
 			void setFps(float fps);

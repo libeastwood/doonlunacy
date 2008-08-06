@@ -54,11 +54,6 @@ void CutSceneState::Frame::addText(uint16_t playAt, std::string text)
 
 void CutSceneState::Frame::addSound(uint16_t playAt, std::string sound)
 {
-	m_cutSceneSounds.push_back(cutSceneSound(playAt, sound));
-}
-
-void CutSceneState::Frame::concatSound(uint16_t playAt, std::string sound)
-{
 	Mix_Chunk* sound1;
 	Mix_Chunk* sound2 = DataCache::Instance()->getSoundChunk(sound);
 	bool exists = false;
@@ -72,11 +67,13 @@ void CutSceneState::Frame::concatSound(uint16_t playAt, std::string sound)
 			break;
 		}
 	}
+    //Sound is not loaded, so let's just add it.
 	if(!exists){
 		m_soundChunks.push_back(soundChunk(playAt, sound2));
 		return;
 	}
-
+	
+    //Sound is loaded, so let's concat 2 sounds.
 	Mix_Chunk* newChunk;
 	if((newChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
 		return;
@@ -428,8 +425,9 @@ CutSceneState::CutSceneState(std::string scene)
 //	m_cutSceneStrings.push_back(cutSceneText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
     std::string filename;
-    bool continutation = false;
-    int hold = 0, song;
+    bool continuation;
+    int hold, song;
+    int textColour;
     float fps;
     std::string path = ".cutscenes.";
     path += scene;
@@ -440,19 +438,91 @@ CutSceneState::CutSceneState(std::string scene)
     {
         for (int i = 0; i < node.getLength(); i++)
         {
+            filename = "";
+            song = -1;
+            hold = 0;
+            fps = 1;
+            continuation = false;
 
+            
+            bool fadeOut = false;
+            Frame::Transition aa = Frame::NO_TRANSITION;
+            node[i].lookupValue("fade_out", fadeOut);
+            if (fadeOut) aa = Frame::FADE_OUT;
+            aa = Frame::FADE_OUT;
+            
             node[i].lookupValue("filename", filename);
             node[i].lookupValue("hold", hold);
-            node[i].lookupValue("continuation", continutation);
+            node[i].lookupValue("continuation", continuation);
         	frame = new Frame(filename,
                              Frame::NO_TRANSITION, 
-                             Frame::NO_TRANSITION,
-                             continutation);
+                             aa,
+                             continuation, hold);
+
+            if (node[i].lookupValue("text_colour", textColour))
+            {
+            	frame->setTextColor(textColour);
+            }
+
+            
+            if (node[i].exists("loop"))
+            {
+                frame->addLoop((int)node[i]["loop"][0],
+                               (int)node[i]["loop"][1], 
+                               (int)node[i]["loop"][2], 
+                               (int)node[i]["loop"][3]);
+            }
+            
+            int textSize;
+            
+            if (node[i].lookupValue("text_size", textSize))
+            {
+                frame->setTextSize(textSize);
+            }
+
+            if (node[i].exists("text_location"))
+            {
+                frame->setTextLocation(UPoint((int)node[i]["text_location"][0], (int)node[i]["text_location"][1]));
+            }
             
             if (node[i].lookupValue("fps", fps))
                 frame->setFps(fps);
             if (node[i].lookupValue("song", song))                
                 frame->setSong(song);
+
+           //TODO: It does look interesting. Need to make it more readable, I think
+             if (node[i].exists("text"))
+            {
+                for (int j = 0; j < node[i]["text"].getLength(); j++)
+                {
+                    int time = node[i]["text"][j][0];
+                    std::string text = node[i]["text"][j][1];
+
+                    frame->addText(time, text);
+                }
+            }
+
+            if (node[i].exists("text_string"))
+            {
+                for (int j = 0; j < node[i]["text_string"].getLength(); j++)
+                {
+                    int time = node[i]["text_string"][j][0];
+                    int string_id = node[i]["text_string"][j][1];
+
+                    frame->addText(time, DataCache::Instance()->getIntroString(string_id));
+                }
+            }
+            
+            if (node[i].exists("sounds"))
+            {
+                for (int j = 0; j < node[i]["sounds"].getLength(); j++)
+                {
+                    int time = node[i]["sounds"][j][0];
+                    std::string sound_id = node[i]["sounds"][j][1];
+                    
+                    frame->addSound(time, sound_id);
+                }
+            }            
             enque(frame);
         }
     }  
@@ -460,10 +530,8 @@ CutSceneState::CutSceneState(std::string scene)
     {
         LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
             ex.getLine(), ex.getError());
-
-        exit(EXIT_FAILURE);
     }
-    
+   
     delete (dataConfig);
 
 #if 0

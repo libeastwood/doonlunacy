@@ -511,8 +511,6 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
     {
         LOG_FATAL("DataCache", "Setting not found %d: %s", 
             ex.getLine(), ex.getError());
-
-        exit(EXIT_FAILURE);
     }
 
 	return returnChunk;
