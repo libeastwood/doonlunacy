@@ -28,6 +28,7 @@ void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->recolor(0, m_bgColor);
+    setSize(m_surface->getSize());
 }
 
 void Label::redraw()
@@ -53,7 +54,7 @@ void Label::redraw()
         LOG_INFO("Label", "Width is %d", width);
 
         // If surface width was not %4 == 0 then you'd get a text in italics 
-        drawBackground(width, texth, numLines); //ace.reset(new Image(UPoint(width + 4-(width%4), texth * numLines) ) );
+        drawBackground(width, texth, numLines);
         
         for (int i=0; i < numLines; i++)
         {
@@ -129,11 +130,13 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->setColorKey();
+    setSize(m_surface->getSize());
 }
 
 GraphicsLabel::GraphicsLabel(Image *background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
 {
     m_background = background->getCopy();
+    setSize(m_background->getSize());    
 }
 
 void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
@@ -146,6 +149,7 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
         LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
     m_surface.reset();
     m_surface = m_background->getCopy();
+    setSize(m_surface->getSize());    
 }
 
 GraphicsLabel::~GraphicsLabel()
