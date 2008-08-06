@@ -34,7 +34,6 @@ public:
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
     ImagePtr m_surface;
-    ImagePtr m_background;
     std::string m_caption;
 
 private:
