@@ -77,6 +77,7 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
     tmp.reset();
     sideBar.reset();
     screen.reset();
+    cps.reset();
 }
 
 void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
