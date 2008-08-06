@@ -7,14 +7,16 @@
 #include "pakfile/Cpsfile.h"
 #include "gui2/Frame.h"
 #include "gui2/Button.h"
+#include "gui2/Label.h"
 #include "DataCache.h"
 #include "MentatInfoMenu.h"
+#include "DrawImage.h"
 
 GameMenuState::GameMenuState()
 {
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,56));
-    m_mapWidget->setSize(UPoint(set->GetWidth() - 135, set->GetHeight() - 56));
+    m_mapWidget->setSize(UPoint(set->GetWidth() - 144, set->GetHeight() - m_mapWidget->getPosition().y));
 
     drawMenu();
 }
@@ -27,45 +29,23 @@ GameMenuState::~GameMenuState()
 
 void GameMenuState::drawMenu()
 {
+    DrawImage *top = new DrawImage(UPoint(set->GetWidth(), m_mapWidget->getPosition().y));
+    top->drawTiles(DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+    Frame *topFrame = new Frame(top);
+    m_container->addChild(topFrame);
+
+    DrawImage *messageBox = new DrawImage(UPoint(set->GetWidth(), 28));
+    messageBox->recolor(0, 116);
+    messageBox->drawBorders2();
+    GraphicsLabel *messageLabel = new GraphicsLabel(messageBox);
+    messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
+    m_container->addChild(messageLabel);
+
     int len;
     uint8_t *data;
     data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
     CpsfilePtr cps(new Cpsfile(data, len));
-
     ImagePtr screen(cps->getPicture());
-    ImagePtr tmp(screen->getPictureCrop(Rect(241, 40, 13, 32)));
-    ImagePtr sidebar(new Image(UPoint(135, set->GetHeight() - 56)));
-    sidebar->blitFrom(tmp.get(), UPoint(0, 0));
-    tmp.reset(screen->getPictureCrop(Rect(241, 72, 13, 13))); // bar
-    for(int i = 32; i <= 140 - 13; i += 13)
-	    sidebar->blitFrom(tmp.get(), UPoint(0, i));
-    for(int i = 157; i <= set->GetHeight(); i += 13)
-	    sidebar->blitFrom(tmp.get(), UPoint(0, i));
-
-    tmp.reset(screen->getPictureCrop(Rect(241, 118, 13, 32))); // bar-mid
-    sidebar->blitFrom(tmp.get(), UPoint(0, 125));
-    tmp.reset(screen->getPictureCrop(Rect(254, 127, 9, 5)));
-    sidebar->blitFrom(tmp.get(), UPoint(0 + 13, 133));
-    tmp.reset(screen->getPictureCrop(Rect(264, 127, 10, 5)));
-    for(int i = 22; i <= set->GetWidth(); i += 9)
-	    sidebar->blitFrom(tmp.get(), UPoint(i, 133));
-    tmp.reset(screen->getPictureCrop(Rect(315, 127, 5, 5)));
-    sidebar->blitFrom(tmp.get(), UPoint(139, 133));
-    m_menuBackground->blitFrom(sidebar.get(), UPoint(set->GetWidth() - 135, 56));
-
-    sidebar.reset(new Image(UPoint(set->GetWidth(), 56)));
-    for(int i = 0; i <= set->GetWidth(); i += 150){
-	    sidebar->blitFrom(DataCache::Instance()->getGuiPic(UI_BlankFiller).get(), UPoint(i, 0));
-	    sidebar->blitFrom(DataCache::Instance()->getGuiPic(UI_BlankFiller).get(), UPoint(i, 15));
-    }
-    tmp.reset(screen->getPictureCrop(Rect(0, 0, 183, 16)));
-    sidebar->blitFrom(tmp.get(), UPoint(0, 5));
-    Frame2 versionBox(116, UPoint(set->GetWidth(), 28));
-    sidebar->blitFrom(versionBox.getPicture().get(), UPoint(0, 26));
-    tmp.reset(screen->getPictureCrop(Rect(201, 0, 119, 16)));
-    sidebar->blitFrom(tmp.get(), UPoint(set->GetWidth() - 135, 5));
-    m_menuBackground->blitFrom(sidebar.get(), UPoint(0, 0));
-
 
     // create Mentat button
     ImagePtr mentat = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
@@ -84,6 +64,7 @@ void GameMenuState::drawMenu()
              boost::bind(&GameMenuState::doMentat, this) );    
 
     m_mentatButton->setPosition(UPoint(16,6));
+    // Should rather be a child of topFrame..
     m_container->addChild(m_mentatButton);
 
     // create Options button
@@ -101,12 +82,40 @@ void GameMenuState::drawMenu()
     m_optionsButton = new GraphicButton(options, optionsPressed);
 
     m_optionsButton->setPosition(UPoint(104,6));
+    // Should rather be a child of topFrame..
     m_container->addChild(m_optionsButton);
 
+    ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
+    GraphicsLabel *creditsLabel = new GraphicsLabel(credits.get());
+    creditsLabel->setPosition(UPoint(set->GetWidth() - 135, 7));
+    m_container->addChild(creditsLabel);
 
+    ImagePtr creditsCounter(new Image(UPoint(65, 15)));
+    creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)));
+    Uint32 color = creditsCounter->getPixel(UPoint(0,0));
+    creditsCounter->drawVLine(UPoint(64, 0), 14, color);
+    GraphicsLabel *creditsCounterLabel = new GraphicsLabel(creditsCounter.get());
+    creditsCounterLabel->setPosition(creditsLabel->getPosition() + SPoint(creditsLabel->getSize().x + 2, -1));
+    m_container->addChild(creditsCounterLabel);
+
+    DrawImage *sideBar = new DrawImage(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y));
+    ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
+    sideBar->blitFrom(roundThingie.get(), UPoint(0, 0));
+    sideBar->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
+    sideBar->blitFrom(roundThingie.get(), UPoint(0, 118));
+    sideBar->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), sideBar->getSize().x - 1);
+    sideBar->drawVBar(UPoint(1, 118 + roundThingie->getSize().y), sideBar->getSize().y - 1 - roundThingie->getSize().y);
+    sideBar->blitFrom(roundThingie.get(), UPoint(0, sideBar->getSize().y - 1 - roundThingie->getSize().y));
+
+    Frame *sideBarFrame = new Frame(sideBar);
+    sideBarFrame->setPosition(UPoint(m_mapWidget->getSize().x, m_mapWidget->getPosition().y));
+    m_container->addChild(sideBarFrame);
+
+
+    roundThingie.reset();
+    cps.reset();
     screen.reset();
-    sidebar.reset();	    
-    tmp.reset();
+
 }
 
 void GameMenuState::doMentat()
@@ -116,8 +125,6 @@ void GameMenuState::doMentat()
 
 int GameMenuState::Execute(float dt)
 {
-   m_menuBackground->blitToScreen(SPoint(0, 0));
-
    SDL_Event event;
    SDL_PollEvent(&event);
    if (event.type == SDL_KEYDOWN) {
