@@ -5,6 +5,8 @@
 #include <SDL.h>
 
 class VBox;
+class Frame;
+class GraphicsLabel;
 class MainMenuBaseState : public MenuBaseState 
 {
     public:
@@ -14,10 +16,17 @@ class MainMenuBaseState : public MenuBaseState
 
     protected:
         VBox* m_vbox;
+	Frame *m_backgroundFrame,
+	      *m_middleFrame,
+	      *m_menuFrame;
+	GraphicsLabel *m_versionLabel,
+	      *m_harkonnenHerald,
+	      *m_atreidesHerald,
+	      *m_ordosHerald;
         static const int bw = 180;
         static const int bh = 20;
         virtual void draw();
-        virtual void drawMainImage();
+	virtual void resize();
 };
 
 #endif // DUNE_MAINMENU_H
