@@ -34,7 +34,7 @@ void MainMenuBaseState::draw()
     DrawImage *planet = new DrawImage(m_cps->getPicture());
     m_cps.reset();
     planet->drawBorders1();
-    m_middleFrame = new Frame1(planet);
+    m_middleFrame = new Frame(planet);
     
     m_backgroundFrame->addChild(m_middleFrame);
 
