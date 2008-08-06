@@ -348,8 +348,10 @@ void CutSceneState::Frame::cleanupTransitionOut()
 
 void CutSceneState::Frame::doTransitionOut(float dt)
 {
-	doTransitionOut(m_scaledSurface, true);
-	doTransitionOut(m_textSurface, true, true);
+	doTransitionOut(m_scaledSurface, true, true);
+
+//  FIXME: Why to do it? Text fading works anyway. Anyone knows how that's possible?
+//	doTransitionOut(m_textSurface, true, true);
 }
 
 void CutSceneState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
@@ -359,7 +361,6 @@ void CutSceneState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTr
         mb_finished = true;
         return;
     }
-
     //if (m_transitionPalette == NULL) // We want new one created to handle several transitions per cutscene
 	setupTransitionOut(img);
     
@@ -410,7 +411,7 @@ CutSceneState::CutSceneState(std::string scene)
 
     try
     {
-        dataConfig->readFile("data.dunetxt");
+        dataConfig->readFile("cutscenes.dunetxt");
     }
     catch(ParseException& ex)
     {
@@ -429,10 +430,8 @@ CutSceneState::CutSceneState(std::string scene)
     int hold, song;
     int textColour;
     float fps;
-    std::string path = ".cutscenes.";
-    path += scene;
     
-    Setting &node = dataConfig->lookup(path);
+    Setting &node = dataConfig->lookup(scene);
 
     try
     {
@@ -449,14 +448,13 @@ CutSceneState::CutSceneState(std::string scene)
             Frame::Transition aa = Frame::NO_TRANSITION;
             node[i].lookupValue("fade_out", fadeOut);
             if (fadeOut) aa = Frame::FADE_OUT;
-            aa = Frame::FADE_OUT;
             
             node[i].lookupValue("filename", filename);
             node[i].lookupValue("hold", hold);
             node[i].lookupValue("continuation", continuation);
         	frame = new Frame(filename,
                              Frame::NO_TRANSITION, 
-                             aa,
+                             Frame::FADE_OUT,
                              continuation, hold);
 
             if (node[i].lookupValue("text_colour", textColour))
@@ -533,257 +531,6 @@ CutSceneState::CutSceneState(std::string scene)
     }
    
     delete (dataConfig);
-
-#if 0
-	frame = new Frame("INTRO:WESTWOOD.WSA",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 20);
-	frame->setSong(0);
-	frame->setFps(0.15);
-	frame->setPalette(WESTWOOD_PAL);
-	enque(frame);
-
-	frame = new Frame("",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 10);
-	frame->addText(0, "and");
-	frame->setTextSize(2.0);
-	frame->setTextLocation(SPoint(-25,0));
-	enque(frame);
-
-	frame = new Frame("INTRO:VIRGIN.CPS",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 12);
-	enque(frame);
-
-	frame = new Frame("",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 10);
-	frame->addText(0,DataCache::Instance()->getIntroString(1));
-	frame->setTextLocation(SPoint(-25,0));
-	frame->setTextSize(2.0);
-	enque(frame);
-
-	frame =  new Frame("INTRO:INTRO1.WSA",
-                     Frame::NO_TRANSITION,
-                     Frame::FADE_OUT,
-                     false, 65);
-	frame->setFps(0.07);
-	frame->addLoop(1,1,0,20);
-	frame->setSong(1);
-	frame->addSound(30, "Intro_Dune");
-	frame->concatSound(70, "Intro_TheBuilding");
-	frame->concatSound(70, "Intro_OfADynasty");
-	frame->addText(70, DataCache::Instance()->getIntroString(2));
-	frame->setTextLocation(SPoint(-13,-35));
-	frame->setTextSize(2.0);
-	frame->setTextFade(false);
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO2.WSA",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 5);
-	frame->concatSound(10, "Intro_ThePlanetArrakis");
-	frame->concatSound(10, "Intro_KnownAsDune");
-	frame->addText(10, DataCache::Instance()->getIntroString(3));
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO3.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 25);
-	frame->concatSound(0, "Intro_LandOfSand");
-	frame->addText(0, DataCache::Instance()->getIntroString(4));
-	frame->concatSound(33, "Intro_Home");
-	frame->concatSound(33, "Intro_OfTheSpice");
-	frame->concatSound(33, "Intro_Melange");
-	frame->addText(33, DataCache::Instance()->getIntroString(5));
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO9.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 2);
-	frame->setFps(0.16);
-	frame->addText(0, DataCache::Instance()->getIntroString(6));
-	frame->concatSound(0, "Intro_TheSpice");
-	frame->concatSound(0, "Intro_Controls");
-	frame->concatSound(0, "Intro_TheEmpire");
-	frame->addSound(18, "Intro_Clank");
-	frame->addText(32, DataCache::Instance()->getIntroString(7));
-	frame->concatSound(32, "Intro_WhoEver");
-	frame->concatSound(32, "Intro_ControlsDune");
-	frame->concatSound(32, "Intro_ControlsTheSpice");
-	frame->addSound(53, "Intro_Brakes_2p");
-	frame->addSound(61, "Intro_Clank");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO10.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     false, 25);
-	frame->addText(0, DataCache::Instance()->getIntroString(8));
-	frame->concatSound(0, "Intro_TheEmperor");
-	frame->concatSound(0, "Intro_HasProposedAChallenge");
-	frame->concatSound(0, "Intro_ToEachOfTheHouses");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO11.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false);
-	frame->setFps(0.095);
-	frame->addText(0, DataCache::Instance()->getIntroString(9));
-	frame->setTextColor(208);
-	frame->concatSound(0, "Intro_TheHouse");
-	frame->concatSound(0, "Intro_ThatProduces");
-	frame->concatSound(0, "Intro_TheMostSpice");
-	frame->concatSound(0, "Intro_WillControlDune");
-	frame->addLoop(45, 0, 1, 14);
-	frame->addText(61, DataCache::Instance()->getIntroString(10));
-	frame->concatSound(61, "Intro_ThereAreNoSet");
-	frame->concatSound(61, "Intro_Territories");
-	frame->addText(83, DataCache::Instance()->getIntroString(11));
-	frame->concatSound(83, "Intro_AndNo");
-	frame->concatSound(83, "Intro_RulesOfEngagement");
-
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO4.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false);
-	frame->addText(11, DataCache::Instance()->getIntroString(12));
-	frame->concatSound(11, "Intro_VastArmies");
-	frame->concatSound(11, "Intro_HasArrived");
-	enque(frame);
-
-    frame = new Frame("", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 38);
-	frame->addText(0,DataCache::Instance()->getIntroString(13));
-	frame->setTextLocation(SPoint(-25,0));
-	frame->setTextSize(2.0);
-	frame->setTextFade(false);	
-	frame->concatSound(0, "Intro_AndNow");
-	frame->concatSound(0, "Intro_3Houses");
-	frame->concatSound(0, "Intro_ForControl");
-	frame->concatSound(0, "Intro_OfDune");
-	enque(frame);
-
-
-    frame = new Frame("INTRO:INTRO6.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false);
-	frame->setFps(0.08);
-	frame->addText(0, DataCache::Instance()->getIntroString(14));
-	frame->addSound(0, "Intro_TheNobleAtreides");
-	frame->addSound(31, "Intro_Glass");
-	frame->addSound(32, "Intro_Glass");
-	frame->addSound(33, "Intro_Glass");
-	frame->addSound(63, "Intro_Glass");
-	frame->addSound(64, "Intro_Glass");
-	frame->addSound(65, "Intro_Glass");
-	enque(frame);
-
-    frame =  new Frame("INTRO:INTRO7A.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     false);
-	frame->addText(0, DataCache::Instance()->getIntroString(15));
-	frame->concatSound(0, "Intro_TheInsideous");
-	frame->concatSound(0, "Intro_Ordos");
-	frame->addSound(2, "Intro_Missile_8");
-	frame->addSound(7, "Intro_Missile_8");
-	frame->addSound(26, "Intro_Missile_8");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO7B.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     true, 5);
-	frame->addSound(10, "Intro_Missile_8");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO8A.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     false);
-	frame->addText(0, DataCache::Instance()->getIntroString(16));
-	frame->concatSound(0, "Intro_AndThe");
-	frame->concatSound(0, "Intro_EvilHarkonnen");
-	frame->addSound(5, "Sound_Gun");
-	frame->addSound(8, "Sound_Gun");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO8B.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::NO_TRANSITION,
-                     true);
-	enque(frame);
-	frame->addSound(1, "Sound_Gun");
-	
-
-    frame = new Frame("INTRO:INTRO8C.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     true);
-	frame->addSound(16, "Sound_ExplosionSmall");
-	frame->addSound(25, "Sound_ExplosionMedium");
-	enque(frame);
-
-    frame = new Frame("INTRO:INTRO5.WSA", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false);
-	frame->setFps(0.2);
-	frame->addLoop(3, 0, 10, 0);
-	frame->addText(0, DataCache::Instance()->getIntroString(17));
-	frame->concatSound(0, "Intro_OnlyOneHouse");
-	frame->concatSound(0, "Intro_WillPrevail");
-	enque(frame);
-
-
-    frame = new Frame("",
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 22);
-	frame->addText(0, DataCache::Instance()->getIntroString(18));
-	frame->setTextLocation(SPoint(-20,0));
-	frame->setTextSize(2.0);	
-	frame->setTextFade(false);	
-	frame->concatSound(0, "Intro_Your");
-	frame->concatSound(0, "Intro_BattleForDune");
-	frame->concatSound(0, "Intro_Begins");
-	enque(frame);
-
-
-    frame = new Frame("", 
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false, 20);
-	frame->addText(0, DataCache::Instance()->getIntroString(19));
-	frame->setTextLocation(SPoint(-20,0));
-	frame->setTextSize(2.0);
-	frame->setTextFade(false);	
-	frame->addSound(0, "Intro_Now");
-	enque(frame);
-
-    // seems nice to play this again ;)
-  /*  frame = new Frame("INTRO:INTRO1.WSA",  
-                     Frame::NO_TRANSITION, 
-                     Frame::FADE_OUT,
-                     false);
-	enque(frame);*/
-
-#endif
 
     next();
     m_butCutScene = new TranspButton(Settings::Instance()->GetWidth(),
