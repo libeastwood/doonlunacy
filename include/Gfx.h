@@ -447,7 +447,7 @@ struct Rect : public SDL_Rect
         //! Return current size
         UPoint getSize() const
         {
-            return UPoint(x, y);
+            return UPoint(w, h);
         }
 
         //@}
