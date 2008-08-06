@@ -1,5 +1,6 @@
 #include "DataCache.h"
 #include "DrawImage.h"
+#include "pakfile/Cpsfile.h"
 
 DrawImage::DrawImage(ConstUPoint size, Uint32 color) : Image(size)
 {
@@ -56,6 +57,31 @@ void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 		bottom, left, right, edgeDistance);
 }
 
+void DrawImage::drawVBar(ConstUPoint start, int y2)
+{
+    int len;
+    uint8_t *data;
+    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
+    CpsfilePtr cps(new Cpsfile(data, len));
+    ImagePtr screen(cps->getPicture());
+    ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
+    ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
+    sideBar->blitFrom(tmp.get());
+    tmp.reset(screen->getPictureCrop(Rect(241, 58, 12, 13)));
+    for(int i = start.y; i < y2 - 6; i += 13)
+        sideBar->blitFrom(tmp.get(), UPoint(0, i));
+    tmp.reset(screen->getPictureCrop(Rect(241, 117, 12, 6)));
+    //FIXME: the line at end of bar and thingie needs to be adapted
+    sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
+    blitFrom(sideBar.get(), start);
+    tmp.reset();
+    sideBar.reset();
+    screen.reset();
+}
+
+void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
+{
+}
 
 void DrawImage::drawTiles(Image *tile)
 {

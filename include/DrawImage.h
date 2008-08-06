@@ -37,6 +37,20 @@ class DrawImage : public Image
 				UI_Corner3SE, edgeDistance);
 	}
 
+        //! Draw small horizontal bar
+        /*!
+            @param start coordinates of start
+            @param x2 x-coord of finish
+        */
+        void drawHBarSmall(ConstUPoint start, int x2);
+
+        //! Draw vertical bar
+        /*!
+            @param start coordinates of start
+            @param y2 y-coord of finish
+        */
+        void drawVBar(ConstUPoint start, int y2);
+
 	void drawTiles(Image *tile);
 
 };
