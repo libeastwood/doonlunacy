@@ -6,10 +6,11 @@
 #include "MapGenerator.h"
 #include "MapSeed.h"
 #include "ObjectClass.h"
-
-#include <IniFile.h>
+#include "ResMan.h"
 
 #include "mmath.h"
+
+#include <IniFile.h>
 
 MapGenerator::MapGenerator ()
 {

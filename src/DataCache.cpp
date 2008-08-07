@@ -1,18 +1,21 @@
-#include <string>
-
-#include <boost/format.hpp>
-
 #include "DataCache.h" 
+#include "ResMan.h"
 #include "Log.h"
 
-#include <VocFile.h>
-#include <StringFile.h>
 
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
 #include "pakfile/Shpfile.h"
 #include "pakfile/Wsafile.h"
+
 #include <PalFile.h>
+#include <StringFile.h>
+#include <VocFile.h>
+
+#include <string>
+
+#include <boost/format.hpp>
+
 using namespace libconfig;
 
 DataCache::DataCache() {

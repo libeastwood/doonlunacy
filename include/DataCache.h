@@ -3,11 +3,8 @@
 
 #include "Definitions.h"
 #include "Gfx.h"
-#include "ResMan.h"
 #include "singleton.h"
-
 #include "houses.h"
-
 
 #include <map>
 #include <vector>

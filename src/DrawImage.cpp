@@ -1,5 +1,6 @@
 #include "DataCache.h"
 #include "DrawImage.h"
+#include "ResMan.h"
 #include "pakfile/Cpsfile.h"
 
 DrawImage::DrawImage(ConstUPoint size, Uint32 color) : Image(size)
