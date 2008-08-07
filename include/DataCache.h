@@ -17,6 +17,7 @@
 
 class SDL_Palette;
 class Animation;
+class GCObject;
 class StringFile;
 class Mix_Chunk;
 class PalFile;
@@ -72,6 +73,11 @@ class DataCache : public Singleton<DataCache>
          *  @param house colour to which image is remapped. By default: HOUSE_HARKONNEN
          */
         void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+
+		GCObject *getGCObject(std::string path);
+
+		void freeGCObjects();
+
         /*! 
          *  Parses animation parameters from a file and loads animation
          *  @return pointer to animation
@@ -154,6 +160,8 @@ class DataCache : public Singleton<DataCache>
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
+
+		std::vector<GCObject*> m_gcObjs;
 };
 
 #endif // DUNE_DATACACHE_H

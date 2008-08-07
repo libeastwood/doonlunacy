@@ -2,6 +2,7 @@
 #include "ResMan.h"
 #include "Log.h"
 
+#include "GCObject.h"
 
 #include "pakfile/Cpsfile.h"
 #include "pakfile/Icnfile.h"
@@ -644,6 +645,29 @@ std::string	DataCache::getIntroString(uint16_t i){
 
 std::string	DataCache::getCreditsString(uint16_t i){
 	return CreditsStrings->getString(i);
+}
+
+GCObject *DataCache::getGCObject(std::string path)
+{
+	GCObject *gcObj = NULL;
+	if(!m_gcObjs.empty())
+		for(uint32_t i = 0; i < m_gcObjs.size(); i++)
+			if(m_gcObjs[i]->getPath() == path)
+			{
+				gcObj = m_gcObjs[i];
+			}
+	if(gcObj == NULL){
+		gcObj = new GCObject(path);
+		m_gcObjs.push_back(gcObj);
+	}
+	return gcObj;
+
+}
+
+void DataCache::freeGCObjects()
+{
+	for(uint32_t i = 0; i < m_gcObjs.size(); i++)
+			m_gcObjs[i]->freeIfUnique();
 }
 
 Animation *DataCache::getAnimation(std::string path)

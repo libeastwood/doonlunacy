@@ -93,6 +93,7 @@ void StateMachine::PopState()
 
 int StateMachine::Execute(float dt)
 {
+	DataCache::Instance()->freeGCObjects();
     // can probably do without this line as pop takes care of it 
     if (m_stateStack.empty()) return -1;
 
