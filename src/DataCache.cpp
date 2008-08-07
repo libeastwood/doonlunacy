@@ -646,7 +646,7 @@ std::string	DataCache::getCreditsString(uint16_t i){
 	return CreditsStrings->getString(i);
 }
 
-Animation*  DataCache::getAnimation(std::string path)
+Animation *DataCache::getAnimation(std::string path)
 {
     std::string fullpath = "animations.";
     fullpath+=path;
@@ -656,22 +656,21 @@ Animation*  DataCache::getAnimation(std::string path)
     try
     {
         Setting& node = m_dataConfig->lookup(fullpath);
-
-	int len;
-	uint8_t *data;
+		
+		int len;
+		uint8_t *data;
 
         std::string fileName;
-	SDL_Palette* palette;
+		
+		SDL_Palette* palette;
         if(node.lookupValue("palette", fileName))
-	{
-		int kos;
-		uint8_t *mos;
-		mos = ResMan::Instance()->readFile(fileName, &kos);
-		PalfilePtr tmp(new PalFile(mos, kos));
-		palette = getPalette(fileName);
-	}
-	else
-		palette = getPalette(IBM_PAL);
+		{
+			data = ResMan::Instance()->readFile(fileName, &len);
+			PalfilePtr tmp(new PalFile(data, len));
+			palette = getPalette(fileName);
+		}
+		else
+			palette = getPalette(IBM_PAL);
 
         node.lookupValue("filename", fileName);
         std::string type = fileName.substr(fileName.length()-3, 3);
