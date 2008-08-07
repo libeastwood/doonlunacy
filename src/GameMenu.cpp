@@ -39,7 +39,7 @@ void GameMenuState::drawMenu()
     messageBox->drawBorders2();
     GraphicsLabel *messageLabel = new GraphicsLabel(messageBox);
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
-    m_container->addChild(messageLabel);
+    topFrame->addChild(messageLabel);
 
     int len;
     uint8_t *data;
@@ -65,7 +65,7 @@ void GameMenuState::drawMenu()
 
     m_mentatButton->setPosition(UPoint(16,6));
     // Should rather be a child of topFrame..
-    m_container->addChild(m_mentatButton);
+    topFrame->addChild(m_mentatButton);
 
     // create Options button
     ImagePtr options = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
@@ -83,12 +83,12 @@ void GameMenuState::drawMenu()
 
     m_optionsButton->setPosition(UPoint(104,6));
     // Should rather be a child of topFrame..
-    m_container->addChild(m_optionsButton);
+    topFrame->addChild(m_optionsButton);
 
     ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
     GraphicsLabel *creditsLabel = new GraphicsLabel(credits.get());
     creditsLabel->setPosition(UPoint(set->GetWidth() - 135, 7));
-    m_container->addChild(creditsLabel);
+    topFrame->addChild(creditsLabel);
 
     ImagePtr creditsCounter(new Image(UPoint(65, 15)));
     creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)));
@@ -96,7 +96,7 @@ void GameMenuState::drawMenu()
     creditsCounter->drawVLine(UPoint(64, 0), 14, color);
     GraphicsLabel *creditsCounterLabel = new GraphicsLabel(creditsCounter.get());
     creditsCounterLabel->setPosition(creditsLabel->getPosition() + SPoint(creditsLabel->getSize().x + 2, -1));
-    m_container->addChild(creditsCounterLabel);
+    topFrame->addChild(creditsCounterLabel);
 
     DrawImage *sideBar = new DrawImage(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y));
     ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
