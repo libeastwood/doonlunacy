@@ -27,7 +27,7 @@ void Frame::draw(Image *dest, SPoint off){
 
 Frame::~Frame()
 {
-	m_surface.reset();
+    m_surface.reset();
 }
 
 void Frame::changeBackground(Image *background)

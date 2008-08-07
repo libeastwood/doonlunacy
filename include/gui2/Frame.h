@@ -35,7 +35,6 @@ public:
 
 protected:
     ImagePtr m_surface;
-    Container *m_container;
 };
 
 #endif //DUNE_GUI2_FRAME_H
