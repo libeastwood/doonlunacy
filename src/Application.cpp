@@ -286,7 +286,7 @@ void Application::Run()
     Uint32 now = SDL_GetTicks();
     Uint32 then;
     // keep the frame rate down to around 30 fps
-    const Uint32 min_frame_duration = 30; 
+    //const Uint32 min_frame_duration = 30; 
 
     Uint32 fps_start = now;
     int fps_frames = 0;
