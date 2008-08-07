@@ -1,12 +1,8 @@
 #include "MainMenu.h"
 
 #include "Application.h"
-//#include "DataFile.h"
-#include "Settings.h"
 
-#include "SingleMenu.h"
-
-#include "boost/bind.hpp"
+#include <boost/bind.hpp>
 
 #include <assert.h>
 
