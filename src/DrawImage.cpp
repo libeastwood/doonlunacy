@@ -1,6 +1,7 @@
 #include "DataCache.h"
 #include "DrawImage.h"
 #include "ResMan.h"
+#include "GCObject.h"
 #include "pakfile/Cpsfile.h"
 
 DrawImage::DrawImage(ConstUPoint size, Uint32 color) : Image(size)
@@ -60,11 +61,8 @@ void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 
 void DrawImage::drawVBar(ConstUPoint start, int y2)
 {
-    int len;
-    uint8_t *data;
-    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
-    CpsfilePtr cps(new Cpsfile(data, len));
-    ImagePtr screen(cps->getPicture());
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
+
     ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
     sideBar->blitFrom(tmp.get());
@@ -75,19 +73,12 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
     blitFrom(sideBar.get(), start);
-    tmp.reset();
-    sideBar.reset();
-    screen.reset();
-    cps.reset();
 }
 
 void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
 {
-    int len;
-    uint8_t *data;
-    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
-    CpsfilePtr cps(new Cpsfile(data, len));
-    ImagePtr screen(cps->getPicture());
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
+
     ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
     sideBar->blitFrom(tmp.get());
@@ -98,10 +89,6 @@ void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(x2 - start.x - 6, 0));
     blitFrom(sideBar.get(), start);
-    tmp.reset();
-    sideBar.reset();
-    screen.reset();
-    cps.reset();
 }
 
 void DrawImage::drawTiles(Image *tile)
@@ -119,5 +106,4 @@ void DrawImage::drawTiles(Image *tile, ConstRect area)
             for(int y = 0; y < size.y; y += bgSize.y - 1)
                 tiledArea->blitFrom(tile, UPoint(x,y));
      blitFrom(tiledArea.get(), UPoint(area.x, area.y));
-     tiledArea.reset();
 }

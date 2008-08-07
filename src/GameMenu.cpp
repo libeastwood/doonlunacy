@@ -12,6 +12,8 @@
 #include "MentatInfoMenu.h"
 #include "DrawImage.h"
 
+#include "GCObject.h"
+
 GameMenuState::GameMenuState()
 {
     m_mapWidget = new MapWidget();
@@ -45,7 +47,7 @@ void GameMenuState::drawMenu()
     uint8_t *data;
     data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
     CpsfilePtr cps(new Cpsfile(data, len));
-    ImagePtr screen(cps->getPicture());
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
 
     // create Mentat button
     ImagePtr mentat = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
@@ -108,11 +110,6 @@ void GameMenuState::drawMenu()
     Frame *sideBarFrame = new Frame(sideBar);
     sideBarFrame->setPosition(UPoint(m_mapWidget->getSize().x, m_mapWidget->getPosition().y));
     m_container->addChild(sideBarFrame);
-
-
-    roundThingie.reset();
-    cps.reset();
-    screen.reset();
 
 }
 
