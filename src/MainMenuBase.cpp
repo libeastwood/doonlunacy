@@ -28,11 +28,6 @@ MainMenuBaseState::MainMenuBaseState()
     m_container->addChild(m_vbox);
 }
 
-MainMenuBaseState::~MainMenuBaseState()
-{
-    m_container->deleteChildrenRecursive();
-}
-
 void MainMenuBaseState::draw()
 {
     m_vbox->fit(2);

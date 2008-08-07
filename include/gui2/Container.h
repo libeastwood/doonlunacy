@@ -8,6 +8,7 @@ class Container: public Widget
 {
     public:
 	Container();
+	~Container();
         typedef std::list<Widget*> WidgetList;
 
         virtual void draw(Image * dest, SPoint offset);
@@ -21,7 +22,6 @@ class Container: public Widget
 
         virtual void addChild(Widget* child);
         virtual void deleteChild(Widget* child);
-	virtual void deleteChildrenRecursive();
         virtual void clear() { m_children.clear(); }
         virtual int getSize();
     

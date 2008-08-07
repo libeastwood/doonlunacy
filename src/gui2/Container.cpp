@@ -7,6 +7,16 @@ Container::Container() : Widget()
     m_parent = true;
 }
 
+Container::~Container()
+{
+    while(!m_children.empty())
+    {
+        Widget *child = m_children.back();
+        deleteChild(child);
+        delete child;
+    }
+}
+
 void Container::draw(Image * dest, SPoint off)
 {
     if (!m_visible) return;
@@ -110,18 +120,6 @@ void Container::addChild(Widget* child)
 void Container::deleteChild(Widget* child)
 {
     m_children.remove(child);
-}
-
-void Container::deleteChildrenRecursive()
-{
-    while(!m_children.empty())
-    {
-        Widget *child = m_children.back();
-        if(child->parent())
-            ((Container*)child)->deleteChildrenRecursive();
-        deleteChild(child);
-        delete child;
-    }
 }
 
 int Container::getSize()

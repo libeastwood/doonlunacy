@@ -10,7 +10,6 @@ class MainMenuBaseState : public MenuBaseState
 {
     public:
         MainMenuBaseState();
-        ~MainMenuBaseState();
         int Execute(float dt);
         virtual const char* GetName() { return "MainMenuBaseState"; }
 
