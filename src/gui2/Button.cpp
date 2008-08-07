@@ -163,12 +163,13 @@ void BoringButton::redraw()
         
     } else
     {
-        Rect rect(0,0, w, h);
+//        Rect rect(0,0, w, h);
         m_surfNormal->fillRect(133);
         m_surfPressed->fillRect(134);
-        
-        m_surfNormal->drawRect(rect, 0);
-        m_surfPressed->drawRect(rect, 0);
+
+	//FIXME: This causes a crash when calling destructor
+	/*m_surfNormal->drawRect(rect, 0, false);
+        m_surfPressed->drawRect(rect, 0, false);*/
         
         m_surfNormal->drawHLine(UPoint(1, 1), w-2, 132, false);
         m_surfNormal->drawVLine(UPoint(1, 2), h-2, 132, false);
