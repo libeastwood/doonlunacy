@@ -15,8 +15,7 @@ class MainMenuBaseState : public MenuBaseState
 
     protected:
         VBox* m_vbox;
-	Frame *m_backgroundFrame,
-	      *m_middleFrame,
+	Frame *m_middleFrame,
 	      *m_menuFrame;
 	GraphicsLabel *m_versionLabel,
 	      *m_harkonnenHerald,

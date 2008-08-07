@@ -1,6 +1,8 @@
 #include "MainMenu.h"
 
 #include "Application.h"
+#include "gui2/Container.h"
+#include "gui2/Frame.h"
 
 #include <boost/bind.hpp>
 
@@ -8,14 +10,14 @@
 MenuBaseState::MenuBaseState()
 {
     m_drawMenu = true;
-    m_menuBackground.reset(new Image(UPoint(set->GetWidth(), set->GetHeight())));
-
 
     m_container = new Container();
     m_container->setPosition(UPoint(0, 0));
     m_container->setSize(UPoint(set->GetWidth(),
 			    set->GetHeight()));
     
+    m_backgroundFrame = new Frame();
+    m_container->addChild(m_backgroundFrame);
     Application::Instance()->RootWidget()->addChild(m_container);
 }
 

@@ -4,6 +4,7 @@
 #include "State.h"
 
 class Container;
+class Frame;
 class MenuBaseState : public State 
 {
     public:
@@ -16,8 +17,8 @@ class MenuBaseState : public State
         int Execute(float dt);
 
     protected:
-        ImagePtr m_menuBackground;
-        Container* m_container;
+        Container *m_container;
+	Frame *m_backgroundFrame;
 	bool m_drawMenu;
 };
 

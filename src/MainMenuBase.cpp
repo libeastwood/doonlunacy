@@ -18,8 +18,6 @@ MainMenuBaseState::MainMenuBaseState()
     m_song = new song;
     m_song->filename = "SOUND:DUNE7.ADL";
     m_song->track = 6;
-    m_backgroundFrame = new Frame();
-    m_container->addChild(m_backgroundFrame);
     m_middleFrame = new Frame();
     m_backgroundFrame->addChild(m_middleFrame);
     m_menuFrame = new Frame();

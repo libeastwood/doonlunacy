@@ -7,7 +7,6 @@ class AnimationLabel;
 class MentatInfoMenuState : public MentatMenuState {
 public:
 	MentatInfoMenuState(HOUSETYPE newHouse);
-	~MentatInfoMenuState();
 	
 	virtual const char* GetName() { return "MentatInfoMenuState"; }
 		

@@ -16,7 +16,7 @@ class HouseChoiceInfoMenuState : public MentatMenuState {
 	private:
         GraphicButton* m_butYes;
         GraphicButton* m_butNo;
-		AnimationLabel* m_planetAnimation;
+	AnimationLabel* m_planetAnimation;
 };
 
 #endif // HOUSECHOICEINFOMENU_H_INCLUDED
