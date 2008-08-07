@@ -1,11 +1,10 @@
 #ifndef DUNE_GUI2_LABEL_H
 #define DUNE_GUI2_LABEL_H
 
+#include "gui2/Widget.h"
+
 #include <string>
 #include <vector>
-
-#include "gui2/Widget.h"
-#include "Container.h"
 
 /* Label widget using dune's fonts
 */

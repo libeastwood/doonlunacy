@@ -1,7 +1,3 @@
-#include <stdio.h>
-
-#include "Application.h"
-#include "Colours.h"
 #include "FontManager.h"
 #include "Gfx.h"
 #include "Log.h"
