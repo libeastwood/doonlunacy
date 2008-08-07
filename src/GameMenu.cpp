@@ -64,7 +64,6 @@ void GameMenuState::drawMenu()
              boost::bind(&GameMenuState::doMentat, this) );    
 
     m_mentatButton->setPosition(UPoint(16,6));
-    // Should rather be a child of topFrame..
     topFrame->addChild(m_mentatButton);
 
     // create Options button
@@ -82,7 +81,6 @@ void GameMenuState::drawMenu()
     m_optionsButton = new GraphicButton(options, optionsPressed);
 
     m_optionsButton->setPosition(UPoint(104,6));
-    // Should rather be a child of topFrame..
     topFrame->addChild(m_optionsButton);
 
     ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
