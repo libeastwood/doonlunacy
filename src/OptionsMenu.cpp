@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "OptionsMenu.h"
-#include "Settings.h"
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 
@@ -10,7 +9,6 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 {
     std::string m_caption;
     
-    Settings* set = Settings::Instance();
 
     set->GetFullScreen() ? m_caption = "Fullscreen" : m_caption = "Window mode";
         
@@ -70,7 +68,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 
     m_caption = "OPL Emulator ";
     char num[2];
-    snprintf(num, 2, "%d", Settings::Instance()->GetEmuOpl());
+    snprintf(num, 2, "%d", set->GetEmuOpl());
     m_caption += num;
     m_butEmuOpl = new BoringButton(m_caption);
     m_butEmuOpl->setSize(UPoint(bw, bh));
@@ -92,7 +90,6 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 //handled using one function e.g. toggleSetting(variable_name);
 void OptionsMenuState::doSound()
 {
-    Settings * set = Settings::Instance();
     set->ToggleSound();
     std::string caption;
     set->GetSound() ? caption = "Sound On" : caption = "Sound Off";
@@ -101,7 +98,6 @@ void OptionsMenuState::doSound()
 
 void OptionsMenuState::doMusic()
 {
-    Settings * set = Settings::Instance();
     set->ToggleMusic();
     std::string caption;
     set->GetMusic() ? caption = "Music On" : caption = "Music Off";
@@ -110,7 +106,6 @@ void OptionsMenuState::doMusic()
 
 void OptionsMenuState::doIntro()
 {
-    Settings * set = Settings::Instance();
     set->ToggleIntro();
     std::string caption;
     set->GetPlayIntro() ? caption = "Intro On" : caption = "Intro Off";
@@ -140,7 +135,6 @@ void OptionsMenuState::doOk()
 void OptionsMenuState::doResolution()
 {
     Application* app = Application::Instance();
-    Settings* set = Settings::Instance();
 
     switch (set->GetWidth())
     {
@@ -163,7 +157,6 @@ void OptionsMenuState::doResolution()
 
 void OptionsMenuState::doScreenMode()
 {
-    Settings * set = Settings::Instance();
     bool newSetting = !set->GetFullScreen();
     
     Application::Instance()->UpdateVideoMode(newSetting);
