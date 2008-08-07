@@ -17,7 +17,7 @@ Label::Label(std::string caption, int textColor, int bgColor, int maxLineLength)
 
 Label::~Label()
 {
-
+    m_surface.reset();
 }
 
 void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
@@ -118,10 +118,6 @@ TransparentLabel::TransparentLabel(std::string caption, int textColor, int maxLi
 {
 }
 
-TransparentLabel::~TransparentLabel()
-{
-}
-
 void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
@@ -150,16 +146,20 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 
 GraphicsLabel::~GraphicsLabel()
 {
+    m_background.reset();
+    m_surface.reset();
 }
+
 AnimationLabel::AnimationLabel(Animation* pAnim)
 {
-	m_anim = pAnim;
+    m_anim = pAnim;
 }
 
 AnimationLabel::~AnimationLabel()
 {
-
+    delete m_anim;
 }
+
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;

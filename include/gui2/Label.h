@@ -48,7 +48,6 @@ class TransparentLabel : public Label
 {
 public:
     TransparentLabel(std::string caption="", int textColor = 49, int maxLineLength = -1);
-    ~TransparentLabel();
 
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
