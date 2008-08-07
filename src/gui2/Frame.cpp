@@ -1,8 +1,14 @@
 #include "gui2/Frame.h"
+#include "Gfx.h"
 
 Frame::Frame(Image *image)
 {
     changeBackground(image);
+}
+
+Frame::Frame(ImagePtr image)
+{
+	changeBackground(image);
 }
 
 Frame::Frame()
@@ -33,5 +39,11 @@ Frame::~Frame()
 void Frame::changeBackground(Image *background)
 {
     m_surface.reset(background);
+    setSize(m_surface->getSize());
+}
+
+void Frame::changeBackground(ImagePtr background)
+{
+    m_surface = background;
     setSize(m_surface->getSize());
 }

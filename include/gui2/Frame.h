@@ -18,6 +18,7 @@ public:
         @param image image..
     */
     Frame(Image *image);
+	Frame(ImagePtr image);
     Frame();
 
     ~Frame();
@@ -30,6 +31,7 @@ public:
     }
 
     void changeBackground(Image *background);
+	void changeBackground(ImagePtr background);
 
     //@}
 
