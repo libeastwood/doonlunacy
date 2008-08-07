@@ -2,6 +2,24 @@
 #define DUNE_DEFINITIONS_H
 //TODO: Sort it somehow.
 
+#include <boost/shared_ptr.hpp>
+
+class Image;
+
+//! Smart pointer around Image class instance
+typedef boost::shared_ptr<Image> ImagePtr;
+
+//! Smart pointer around Image class const instance
+typedef boost::shared_ptr<const Image> ConstImagePtr;
+
+//! The Image class is a wrapper around SDL_Surface
+/*!
+    It allows using SDL_Surfaces with smart pointers.
+    Use ConstImagePtr and ImagePtr where possible (former is more
+    favorable), it avoids memory leaks...
+        
+*/
+
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
 typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was hit. */

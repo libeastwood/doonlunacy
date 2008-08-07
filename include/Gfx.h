@@ -15,8 +15,6 @@
 
 #include <SDL.h>
 
-#include <boost/shared_ptr.hpp>
-
 //------------------------------------------------------------------------------
 // Single pixel operations
 //------------------------------------------------------------------------------
@@ -500,21 +498,6 @@ typedef const Rect &ConstRect;
 // Image class
 //------------------------------------------------------------------------------
 
-class Image;
-
-//! Smart pointer around Image class instance
-typedef boost::shared_ptr<Image> ImagePtr;
-
-//! Smart pointer around Image class const instance
-typedef boost::shared_ptr<const Image> ConstImagePtr;
-
-//! The Image class is a wrapper around SDL_Surface
-/*!
-    It allows using SDL_Surfaces with smart pointers.
-    Use ConstImagePtr and ImagePtr where possible (former is more
-    favorable), it avoids memory leaks...
-        
-*/
 class Image
 {
     public:
