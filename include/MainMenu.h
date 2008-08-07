@@ -8,7 +8,6 @@ class MainMenuState : public MainMenuBaseState
 {
     public:
         MainMenuState();
-        ~MainMenuState();
 
         void doEditor();
         void doOptions();

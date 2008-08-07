@@ -1,9 +1,9 @@
 #include "SkirmishMenu.h"
-
 #include "DataCache.h"
-
 #include "DrawImage.h"
+#include "gui2/Button.h"
 #include "gui2/Frame.h"
+#include "gui2/VBox.h"
 
 #include <boost/bind.hpp>
 
@@ -22,10 +22,6 @@ SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
             boost::bind(&SkirmishMenuState::doCancel, this) );
     m_vbox->addChild(m_butCancel);
 
-}
-
-SkirmishMenuState::~SkirmishMenuState()
-{
 }
 
 void SkirmishMenuState::drawSpecifics()

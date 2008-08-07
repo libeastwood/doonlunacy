@@ -57,16 +57,6 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
 
 }
 
-MainMenuState::~MainMenuState()
-{
-    delete m_butSingle;
-    delete m_butMulti;
-    delete m_butMapEd;
-    delete m_butOptions;
-    delete m_butAbout;
-    delete m_butQuit;
-}
-
 void MainMenuState::doEditor()
 {
     mp_parent->PushState( new EditorState() );

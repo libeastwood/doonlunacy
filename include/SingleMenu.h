@@ -9,7 +9,6 @@ class SingleMenuState : public MainMenuBaseState
 {
     public:
         SingleMenuState();
-        ~SingleMenuState();
 
 	void doCampaign();
         void doSkirmish();

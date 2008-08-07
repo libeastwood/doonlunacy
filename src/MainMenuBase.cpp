@@ -28,6 +28,11 @@ MainMenuBaseState::MainMenuBaseState()
     m_container->addChild(m_vbox);
 }
 
+MainMenuBaseState::~MainMenuBaseState()
+{
+    m_container->deleteChildrenRecursive();
+}
+
 void MainMenuBaseState::draw()
 {
     m_vbox->fit(2);
@@ -105,11 +110,6 @@ void MainMenuBaseState::resize()
 
     m_versionLabel->setPosition(UPoint(set->GetWidth() - 120, set->GetHeight() - 48));
 
-}
-
-MainMenuBaseState::~MainMenuBaseState()
-{
-    delete m_vbox;
 }
 
 int MainMenuBaseState::Execute(float dt)

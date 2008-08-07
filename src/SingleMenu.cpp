@@ -1,7 +1,8 @@
 #include "SingleMenu.h"
-
 #include "HouseChoiceMenu.h"
 #include "SkirmishMenu.h"
+#include "gui2/Button.h"
+#include "gui2/VBox.h"
 
 #include <boost/bind.hpp>
 
@@ -43,15 +44,6 @@ SingleMenuState::SingleMenuState()
    
     m_vbox->addChild(m_butCancel);
 
-}
-
-SingleMenuState::~SingleMenuState()
-{
-    delete m_butCampaign;
-    delete m_butCustom;
-    delete m_butSkirmish;
-    delete m_butLoad;
-    delete m_butCancel;
 }
 
 void SingleMenuState::doCampaign()
