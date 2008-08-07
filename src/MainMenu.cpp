@@ -1,19 +1,14 @@
-#include "boost/bind.hpp"
-#include "boost/format.hpp"
-
-#include "Application.h"
 #include "Editor.h"
-#include "Gfx.h"
 #include "MainMenu.h"
 #include "OptionsMenu.h"
-#include "ResMan.h"
 #include "SingleMenu.h"
-#include "Settings.h"
 #include "SoundPlayer.h"
-#include "FontManager.h"
-
+#include "gui2/Button.h"
 #include "gui2/Frame.h"
+#include "gui2/VBox.h"
 
+#include <boost/bind.hpp>
+#include <boost/format.hpp>
 
 
 MainMenuState::MainMenuState() : MainMenuBaseState()

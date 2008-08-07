@@ -2,10 +2,8 @@
 #define DUNE_MENUBASE_H
 
 #include "State.h"
-#include "gui2/Container.h"
 
-#include <SDL.h>
-
+class Container;
 class MenuBaseState : public State 
 {
     public:

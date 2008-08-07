@@ -2,19 +2,16 @@
 #define DUNE_SINGLEMENU_H
 
 #include "MainMenuBase.h"
-#include "gui2/Button.h"
-#include "gui2/VBox.h"
-
-#include "SDL.h"
 
 
+class BoringButton;
 class SingleMenuState : public MainMenuBaseState 
 {
     public:
         SingleMenuState();
         ~SingleMenuState();
 
-		void doCampaign();
+	void doCampaign();
         void doSkirmish();
         void doCancel();
 

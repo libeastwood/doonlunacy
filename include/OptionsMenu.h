@@ -3,11 +3,7 @@
 
 #include "MainMenuBase.h"
 
-#include "gui2/Button.h"
-#include "gui2/VBox.h"
-#include "Definitions.h"
-#include "SoundPlayer.h"
-
+class BoringButton;
 class OptionsMenuState  : public MainMenuBaseState 
 {
     public:

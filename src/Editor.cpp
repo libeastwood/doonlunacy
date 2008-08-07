@@ -1,5 +1,6 @@
 #include "Editor.h"
 #include "MapGenerator.h"
+#include "gui2/Container.h"
 
 EditorState::EditorState()
 {

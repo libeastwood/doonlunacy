@@ -1,7 +1,6 @@
 #include "Log.h"
 #include "State.h"
 #include "Settings.h"
-#include "DataCache.h"
 #include "SoundPlayer.h"
 
 #include <assert.h>

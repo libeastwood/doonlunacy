@@ -1,8 +1,4 @@
-#include "Definitions.h"
-
-#include "gui2/Container.h"
 #include "gui2/Frame.h"
-#include "DataCache.h"
 
 Frame::Frame(Image *image)
 {

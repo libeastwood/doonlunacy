@@ -2,11 +2,8 @@
 #define DUNE_MAINMENU_H
 
 #include "MainMenuBase.h"
-#include "gui2/Button.h"
-#include "gui2/VBox.h"
-#include "Gfx.h"
-#include "SDL.h"
 
+class BoringButton;
 class MainMenuState : public MainMenuBaseState 
 {
     public:
