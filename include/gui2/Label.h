@@ -80,6 +80,10 @@ class AnimationLabel : public Widget
 
 	private:
 		Animation* m_anim;
-	
+		uint32_t m_curFrame,
+				 m_curFrameStartTime,
+				 m_numFrames,
+				 m_frameDurationTime;
+		std::vector<ImagePtr> m_animCache;
 };
 #endif //DUNE_GUI2_LABEL_H

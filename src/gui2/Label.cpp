@@ -153,18 +153,37 @@ GraphicsLabel::~GraphicsLabel()
 AnimationLabel::AnimationLabel(Animation* pAnim)
 {
     m_anim = pAnim;
+	m_curFrame = 0;
+	m_numFrames = m_anim->getNumFrames();
+	m_frameDurationTime = m_anim->getFrameDurationTime();
+	
+	m_curFrameStartTime = SDL_GetTicks();
 }
 
 AnimationLabel::~AnimationLabel()
 {
-    delete m_anim;
+	delete m_anim;
 }
 
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;
 
-	Image *surface = new Image(m_anim->getFrame());
+	if(m_animCache.empty() || m_animCache.size() < m_curFrame + 1)
+	{
+		Image *surface = new Image(m_anim->getFrame());
+		m_animCache.push_back(surface->getResized());
+	}
 
-	screen->blitFrom(surface->getResized().get(), UPoint(off.x + x, off.y + y));
+	screen->blitFrom(m_animCache[m_curFrame].get(), UPoint(off.x + x, off.y + y));
+
+	if((SDL_GetTicks() - m_curFrameStartTime) > m_frameDurationTime) {
+		m_curFrameStartTime = SDL_GetTicks();
+		m_curFrame++;
+		if(m_curFrame >= m_numFrames)
+		{
+			m_curFrame = 0;
+		}
+	}
+
 }
