@@ -8,7 +8,6 @@ class OptionsMenuState  : public MainMenuBaseState
 {
     public:
         OptionsMenuState();
-        ~OptionsMenuState();
 
         void doMusic();
         void doOptions();

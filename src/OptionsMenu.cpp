@@ -86,23 +86,6 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butOk);
 
-	m_vbox->fit(2);
-    Uint16 x = (set->GetWidth() / 2) - 
-                (m_vbox->w / 2);
-    m_vbox->setPosition(UPoint(x - 5, 312));
-    m_vbox->reshape();
-    m_container->addChild(m_vbox);
-}
-
-OptionsMenuState::~OptionsMenuState()
-{
-    delete m_butWindowMode;
-    delete m_butResolution;
-    delete m_butOk;
-    delete m_butSound;
-    delete m_butMusic;
-    delete m_butIntro;
-    delete m_butEmuOpl;
 }
 
 //FIXME: doSound, doMusic,doScreenMode and future functions with bool value could be
