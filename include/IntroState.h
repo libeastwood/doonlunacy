@@ -1,14 +1,11 @@
 #ifndef DUNE_INTROSTATE_H
 #define DUNE_INTROSTATE_H
 
-#include "Gfx.h"
 #include "State.h"
 
-#include "gui2/Button.h"
 #include "pakfile/Wsafile.h"
-#include "DataCache.h"
 
-#include "SDL.h"
+#include <SDL.h>
 
 #include <list>
 #include <string>
@@ -23,6 +20,7 @@ class StringFile;
 class Button;
 class Label;
 class Container;
+class TranspButton;
 class IntroState : public State 
 {
    

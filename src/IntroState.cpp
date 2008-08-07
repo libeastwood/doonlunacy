@@ -1,7 +1,3 @@
-#include <iostream>
-
-#include "boost/bind.hpp"
-
 #include "Application.h"
 #include "DataCache.h"
 #include "FontManager.h"
@@ -11,8 +7,12 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+#include "gui2/Button.h"
+#include "gui2/Container.h"
 
 #include "pakfile/Cpsfile.h"
+
+#include <boost/bind.hpp>
 
 // ------------------------------------------------------------------
 // IntroState::Frame
