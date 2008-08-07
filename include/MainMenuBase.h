@@ -12,9 +12,11 @@ class MainMenuBaseState : public MenuBaseState
         MainMenuBaseState();
         ~MainMenuBaseState();
         int Execute(float dt);
+        virtual const char* GetName() { return "MainMenuState"; }
 
     protected:
         VBox* m_vbox;
+	VBox* test;
 	Frame *m_backgroundFrame,
 	      *m_middleFrame,
 	      *m_menuFrame;
