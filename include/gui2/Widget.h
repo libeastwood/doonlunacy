@@ -91,16 +91,19 @@ class Widget : public Rect
 			@return true if the widget is visible
 		*/
         inline bool visible() { return m_visible; }
+
+	inline bool parent() { return m_parent; }
 		//@}
 
     protected:
         virtual void gotFocus() {};
         virtual void lostFocus() {};
         
-		Rect m_rect;
+	Rect m_rect;
 
         bool m_enabled;
         bool m_visible;
+	bool m_parent;
 
         static Widget* m_focusedWidget;
 };

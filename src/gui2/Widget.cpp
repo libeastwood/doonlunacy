@@ -2,9 +2,8 @@
 
 Widget* Widget::m_focusedWidget = NULL;
 
-Widget::Widget() : Rect(0, 0, 0, 0), m_enabled(true), m_visible(true)
+Widget::Widget() : Rect(0, 0, 0, 0), m_enabled(true), m_visible(true), m_parent(false)
 {
-   
 }
 
 Widget::~Widget()
