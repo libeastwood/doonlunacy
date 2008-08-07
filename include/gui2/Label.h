@@ -58,6 +58,7 @@ class GraphicsLabel : public Label
 {
 public:
     GraphicsLabel(Image *background, std::string caption="", int textColor = 49, int maxLineLength = -1);
+    GraphicsLabel(ImagePtr background, std::string caption="", int textColor = 49, int maxLineLength = -1);
     ~GraphicsLabel();
 
 protected:

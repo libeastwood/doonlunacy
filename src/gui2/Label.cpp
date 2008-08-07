@@ -131,6 +131,13 @@ GraphicsLabel::GraphicsLabel(Image *background, std::string caption, int textCol
     setSize(m_background->getSize());    
 }
 
+GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
+{
+    m_background = background;
+    setSize(m_background->getSize());    
+}
+
+
 void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 {
 //    TODO: implement proper operator for Point class
@@ -171,7 +178,7 @@ void AnimationLabel::draw(Image * screen, SPoint off)
 
 	if(m_animCache.empty() || m_animCache.size() < m_curFrame + 1)
 	{
-		Image *surface = new Image(m_anim->getFrame());
+		ImagePtr surface(new Image(m_anim->getFrame()));
 		m_animCache.push_back(surface->getResized());
 	}
 
