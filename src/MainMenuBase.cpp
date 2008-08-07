@@ -1,17 +1,16 @@
-#include "boost/bind.hpp"
+#include "MainMenuBase.h"
 
 #include "Application.h"
 #include "Gfx.h"
 #include "DrawImage.h"
-#include "MainMenuBase.h"
-#include "ResMan.h"
 #include "SoundPlayer.h"
-#include "FontManager.h"
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
 #include "gui2/VBox.h"
 
 #include "pakfile/Cpsfile.h"
+
+#include <boost/bind.hpp>
 
 MainMenuBaseState::MainMenuBaseState()
 {
@@ -25,7 +24,6 @@ MainMenuBaseState::MainMenuBaseState()
     m_backgroundFrame->addChild(m_middleFrame);
     m_menuFrame = new Frame();
     m_backgroundFrame->addChild(m_menuFrame);
-    m_container->addChild(m_vbox);
 }
 
 void MainMenuBaseState::draw()
@@ -48,9 +46,8 @@ void MainMenuBaseState::draw()
     menuBottom->drawBorders2();
     menuBottom->setColorKey();
     Frame *menuBottomFrame = new Frame(menuBottom);
-    //FIXME: not able to click on anything added as child directly to m_container..?
-    //    m_vbox->setPosition(UPoint(9,14));
-    //    menuBottomFrame->addChild(m_vbox);
+    m_vbox->setPosition(UPoint(9,14));
+    menuBottomFrame->addChild(m_vbox);
 
     menuBottomFrame->setPosition(UPoint(0,31));
     m_menuFrame->addChild(menuBottomFrame);
@@ -96,7 +93,6 @@ void MainMenuBaseState::resize()
     m_middleFrame->setPosition(UPoint(x - 70, set->GetHeight()/2 - 172));
 
     m_menuFrame->setPosition(UPoint(x - 15, set->GetHeight()/2 + 36));
-    m_vbox->setPosition(UPoint(m_menuFrame->getPosition().x + 9, m_menuFrame->getPosition().y + 31 + 14));    
 
 
     m_harkonnenHerald->setPosition(UPoint(11, 11));
