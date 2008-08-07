@@ -2,7 +2,7 @@
 
 Frame::Frame(Image *image)
 {
-    m_surface.reset(image);
+    changeBackground(image);
 }
 
 Frame::Frame()
@@ -27,10 +27,11 @@ void Frame::draw(Image *dest, SPoint off){
 
 Frame::~Frame()
 {
-
+	m_surface.reset();
 }
 
 void Frame::changeBackground(Image *background)
 {
     m_surface.reset(background);
+    setSize(m_surface->getSize());
 }
