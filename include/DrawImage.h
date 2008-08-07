@@ -9,7 +9,7 @@ class DrawImage : public Image
     public:
         DrawImage(ConstUPoint size, Uint32 color = -1);
         DrawImage(Image *image);
-	~DrawImage();
+		~DrawImage();
 
         void drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 			GuiPic_enum se, Uint16 edgeDistance = 0);

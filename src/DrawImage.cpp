@@ -61,7 +61,7 @@ void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
 
 void DrawImage::drawVBar(ConstUPoint start, int y2)
 {
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
@@ -77,7 +77,7 @@ void DrawImage::drawVBar(ConstUPoint start, int y2)
 
 void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
 {
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));

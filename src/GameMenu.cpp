@@ -43,7 +43,7 @@ void GameMenuState::drawMenu()
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
 
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
 
     // create Mentat button
     ImagePtr mentat = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));

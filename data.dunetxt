@@ -1,8 +1,18 @@
 gcobjects:
 {
-    Screen_cps =
+    BigPlanet =
+	{
+	    filename = "FINALE:BIGPLAN.CPS";
+	};
+
+    Screen =
 	{
 	    filename = "DUNE:SCREEN.CPS";
+	};
+
+	UI_HouseChoiceBackground =
+	{
+	    filename = "ENGLISH:HERALD.ENG";
 	};
 };
 

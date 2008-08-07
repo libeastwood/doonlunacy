@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Gfx.h"
 #include "DrawImage.h"
+#include "GCObject.h"
 #include "SoundPlayer.h"
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
@@ -69,13 +70,8 @@ void MainMenuBaseState::draw()
 
 void MainMenuBaseState::drawSpecifics()
 {
-    int len;
-    uint8_t *data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
-    CpsfilePtr m_cps (new Cpsfile(data, len));
-
-    DrawImage *planet = new DrawImage(m_cps->getPicture());
-    m_cps.reset();
-    planet->drawBorders1();
+    ImagePtr planet = DataCache::Instance()->getGCObject("BigPlanet")->getImage();
+    ((DrawImage*)(planet.get()))->drawBorders1();
     m_middleFrame->changeBackground(planet);
 }
 
@@ -106,8 +102,8 @@ int MainMenuBaseState::Execute(float dt)
     if(m_drawMenu)
     {
         draw();
-	drawSpecifics();
-	m_drawMenu = false;
+		drawSpecifics();
+		m_drawMenu = false;
     }
     if(m_backgroundFrame->getPictureSize() != UPoint(set->GetWidth(), set->GetHeight())){
         resize();
