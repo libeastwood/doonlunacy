@@ -43,10 +43,6 @@ void GameMenuState::drawMenu()
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
 
-    int len;
-    uint8_t *data;
-    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
-    CpsfilePtr cps(new Cpsfile(data, len));
 	ImagePtr screen = DataCache::Instance()->getGCObject("Screen_cps")->getImage();
 
     // create Mentat button
