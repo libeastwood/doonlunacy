@@ -4,8 +4,6 @@
 
 #include <boost/bind.hpp>
 
-#include <assert.h>
-
 
 MenuBaseState::MenuBaseState()
 {
@@ -40,7 +38,5 @@ void MenuBaseState::JustMadeInactive()
 
 int MenuBaseState::Execute(float dt)
 {
-    //Application::Instance()->BlitCentered(m_menuBackground);
-
     return 0;
 }
