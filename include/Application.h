@@ -8,8 +8,6 @@
 #include "State.h"
 #include "TopLevelState.h"
 
-#include "gui2/Container.h"
-
 #define VERSION "0.95"
 
 typedef enum
@@ -24,6 +22,7 @@ typedef enum
 	NUM_CURSORS
 } Cursor;
 
+class Container;
 class Label;
 class Application : public Singleton<Application>
 {

@@ -8,6 +8,7 @@
 #include "Settings.h"
 #include "SoundPlayer.h"
 #include "TopLevelState.h"
+#include "gui2/Container.h"
 #include "gui2/Label.h"
 
 #include "houses.h"
