@@ -62,7 +62,7 @@ void GCObject::drawImage()
         data = ResMan::Instance()->readFile(fileName, &len);
 
 
-        if (type.compare("CPS") == 0)
+        if (type.compare("CPS") == 0 || type.compare("ENG") == 0)
         {
             CpsFile *cpsfile(new CpsFile(data, len, palette));
         	
