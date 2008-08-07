@@ -2,25 +2,26 @@
 #define DUNE_INTROSTATE_H
 
 #include "State.h"
-
 #include "pakfile/Wsafile.h"
+#include "Gfx.h"
 
-#include <SDL.h>
-
+#include <vector>
 #include <list>
 #include <string>
+
+class Button;
+class Container;
+class Font;
+class Label;
+class Mix_Chunk;
+class StringFile;
+class TranspButton;
 
 typedef std::pair <uint16_t, std::string> introText;
 typedef std::pair <uint16_t, Sound_enum> introSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 typedef std::pair <uint8_t, uint8_t> videoLoop;
 
-class Font;
-class StringFile;
-class Button;
-class Label;
-class Container;
-class TranspButton;
 class IntroState : public State 
 {
    
@@ -83,7 +84,7 @@ class IntroState : public State
 			videoLoop m_loop, m_loopTime;
 
             ImagePtr m_animSurface, m_scaledSurface, m_textSurface;
-            SDL_Color* m_transitionPalette;
+            SDL_Color *m_transitionPalette;
 			Font* font;
 			std::vector<videoLoop> m_loops;
 			std::vector<introText> m_introStrings;

@@ -3,16 +3,19 @@
 
 #include "Definitions.h"
 #include "Gfx.h"
-#include "singleton.h"
 #include "houses.h"
+#include "singleton.h"
+
+#include <boost/shared_ptr.hpp>
+#include <libconfig.h++>
 
 #include <map>
 #include <vector>
-#include <libconfig.h++>
 
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
 
+class SDL_Palette;
 class Animation;
 class StringFile;
 class Mix_Chunk;

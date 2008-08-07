@@ -1,10 +1,12 @@
 #include "DataCache.h"
+#include "Gfx.h"
 #include "HouseChoiceMenu.h"
 #include "HouseChoiceInfoMenu.h"
 #include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
+
 #include <boost/bind.hpp>
 
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
@@ -51,8 +53,6 @@ HouseChoiceMenuState::~HouseChoiceMenuState() {
 
 int HouseChoiceMenuState::Execute(float dt)
 {
-//    m_menuBackground->blitToScreen();
-
     return 0;
 }
 

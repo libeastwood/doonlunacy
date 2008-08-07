@@ -1,12 +1,10 @@
 #ifndef DUNE_APPLICATION_H
 #define DUNE_APPLICATION_H
 
-
-#include <SDL.h>
-
 #include "singleton.h"
 #include "State.h"
 #include "TopLevelState.h"
+#include "Gfx.h"
 
 #define VERSION "0.95"
 
@@ -70,12 +68,12 @@ class Application : public Singleton<Application>
         void HandleEvents();
         void BlitCursor();
 
-        Image * m_screen;
-        SDL_Palette* m_currentPalette;
+        Image *m_screen;
+        SDL_Palette *m_currentPalette;
         
-        StateMachine* m_rootState;
+        StateMachine *m_rootState;
 
-        Container* m_rootWidget;
+        Container *m_rootWidget;
                 
         bool m_running;
 
