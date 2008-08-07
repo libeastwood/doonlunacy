@@ -16,7 +16,6 @@ class MainMenuBaseState : public MenuBaseState
 
     protected:
         VBox* m_vbox;
-	VBox* test;
 	Frame *m_backgroundFrame,
 	      *m_middleFrame,
 	      *m_menuFrame;
