@@ -266,10 +266,10 @@ struct Point
         friend bool operator!=(const Point& a, const Point& b){
             return (a.x != b.x || a.y != b.y);
         }
-	
-	friend std::ostream& operator<<(std::ostream& os, const Point& c){
-            return os << '(' << c.x << 'x' << c.y << ')';
-	}
+
+		friend std::ostream& operator<<(std::ostream& os, const Point& c){
+			return os << '(' << c.x << 'x' << c.y << ')';
+		}
 
         //! Type-casting operator
         /*!
@@ -419,6 +419,26 @@ struct Rect : public SDL_Rect
             h = rect.h;
             return *this;
         }
+
+		friend std::ostream& operator<<(std::ostream& os, const Rect& c){
+			return os << "Rect(" << c.x << ',' << c.y << ',' << c.w << ',' << c.h << ')';
+		}
+
+		friend std::istream& operator>>(std::istream& is, Rect& c){
+			Sint16 x, y;
+			Uint16 w, h;
+			char ch;
+			is >> ch;
+			if(ch == 'R') is >> ch; if(ch == 'e') is >> ch;
+			if(ch == 'c') is >> ch; if(ch == 't') is >> ch;
+			if(ch == '(') is >> x >> ch;if(ch == ',') is >> y >> ch;
+			if(ch == ',') is >> w >> ch;if(ch == ',') is >> h >> ch;
+			if(ch == ')'){ c = Rect(x, y, w, h); goto ok; }
+			is.setstate(std::ios_base::failbit);
+			
+		ok:
+			return is;
+		}
 
         //@}
 
