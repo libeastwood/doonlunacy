@@ -22,6 +22,7 @@ gcobjects:
 
 	UI_HouseChoiceBackground =
 	{
+		type = "CPS";
 	    filename = "ENGLISH:HERALD.ENG";
 	};
 
@@ -77,6 +78,62 @@ gcobjects:
 	{
 		gcobject = "Fame";
 		crop = "Rect(1,83,4,1)";
+	};
+
+	UI_ButtonUp =
+	{
+		type = "SHP";
+		filename = "ENGLISH:CHOAM.ENG";
+		index = 0;
+	};
+
+	UI_ButtonUp_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:CHOAM.ENG";
+		index = 1;
+	};
+
+	UI_ButtonDown =
+	{
+		type = "SHP";
+		filename = "ENGLISH:CHOAM.ENG";
+		index = 2;
+	};
+	
+	UI_ButtonDown_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:CHOAM.ENG";
+		index = 3;
+	};
+
+	UI_Mentat =
+	{
+		type = "SHP";
+		filename = "ENGLISH:BTTN.ENG";
+		index = 0;
+	};
+	
+	UI_Mentat_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:BTTN.ENG";
+		index = 1;
+	};
+
+	UI_Options =
+	{
+		type = "SHP";
+		filename = "ENGLISH:BTTN.ENG";
+		index = 2;
+	};
+
+	UI_Options_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:BTTN.ENG";
+		index = 3;
 	};
 
 };
