@@ -17,7 +17,6 @@ public:
     /*! 
         @param image image..
     */
-    Frame(Image *image);
 	Frame(ImagePtr image);
     Frame();
 

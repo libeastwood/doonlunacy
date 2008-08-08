@@ -1,11 +1,6 @@
 #include "gui2/Frame.h"
 #include "Gfx.h"
 
-Frame::Frame(Image *image)
-{
-    changeBackground(image);
-}
-
 Frame::Frame(ImagePtr image)
 {
 	changeBackground(image);
