@@ -45,38 +45,17 @@ void GameMenuState::drawMenu()
 
 	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
 
-    // create Mentat button
-    ImagePtr mentat = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
-    ImagePtr mentatPressed = ImagePtr(screen->getPictureCrop(Rect(16, 1, 80, 16)));
-    mentatPressed->recolor(115, 116);
-    mentatPressed->recolor(108, 226);
-    mentatPressed->recolor(109, 110);
-    mentatPressed->recolor(147, 146);
-    mentatPressed->putPixel(UPoint(0,15), 116);    
 
-    mentatPressed->drawHLine(UPoint(1,15), 79, 114);
-    mentatPressed->drawVLine(UPoint(79,1), 14, 114);
-
-    m_mentatButton = new GraphicButton(mentat, mentatPressed);
+    m_mentatButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Mentat")->getImage(),
+										DataCache::Instance()->getGCObject("UI_Mentat_Pressed")->getImage());
     m_mentatButton->onClick.connect(
              boost::bind(&GameMenuState::doMentat, this) );    
 
     m_mentatButton->setPosition(UPoint(16,6));
     topFrame->addChild(m_mentatButton);
 
-    // create Options button
-    ImagePtr options = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
-    ImagePtr optionsPressed = ImagePtr(screen->getPictureCrop(Rect(104, 1, 80, 16)));
-    optionsPressed->recolor(115, 116);
-    optionsPressed->recolor(108, 226);
-    optionsPressed->recolor(109, 110);
-    optionsPressed->recolor(147, 146);
-    optionsPressed->putPixel(UPoint(0,15), 116);    
-
-    optionsPressed->drawHLine(UPoint(1,15), 79, 114);
-    optionsPressed->drawVLine(UPoint(79,1), 14, 114);
-
-    m_optionsButton = new GraphicButton(options, optionsPressed);
+    m_optionsButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Options")->getImage(),
+										DataCache::Instance()->getGCObject("UI_Options_Pressed")->getImage());
 
     m_optionsButton->setPosition(UPoint(104,6));
     topFrame->addChild(m_optionsButton);
