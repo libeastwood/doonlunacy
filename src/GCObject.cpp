@@ -2,9 +2,8 @@
 #include "ResMan.h"
 #include "PalFile.h"
 #include "DataCache.h"
-#include "CpsFile.h"
-
-#include <iostream>
+#include <CpsFile.h>
+#include <ShpFile.h>
 
 using namespace libconfig;
 
@@ -59,18 +58,38 @@ void GCObject::drawImage()
 			palette = DataCache::Instance()->getPalette(IBM_PAL);
 
         if(node.lookupValue("filename", variable)){
-			std::string type = variable.substr(variable.length()-3, 3);
-			
+			// TODO: autodetection would be nice..
+			std::string type;
+			if(!node.lookupValue("type", type))
+				type = variable.substr(variable.length()-3, 3);
+
 			data = ResMan::Instance()->readFile(variable, &len);
 			
-			
-			if (type.compare("CPS") == 0 || type.compare("ENG") == 0)
+			if (type.compare("CPS") == 0)
 			{
 				CpsFile *cpsfile(new CpsFile(data, len, palette));
 				
 				m_surface.reset(new Image(cpsfile->getSurface()));
 				
 				delete cpsfile;
+			}
+
+			if (type.compare("SHP") == 0)
+			{
+				Uint32 index;
+				if(node.lookupValue("index", index))
+				{
+					ShpFile *shpfile(new ShpFile(data, len, palette));
+					
+					m_surface.reset(new Image(shpfile->getSurface(index)));
+					
+					delete shpfile;
+				}
+				else
+				{
+					LOG_FATAL("DataCache", "No index specified for %s!", variable.c_str());
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 		else if(node.lookupValue("gcobject", variable))
