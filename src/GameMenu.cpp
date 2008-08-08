@@ -31,14 +31,14 @@ GameMenuState::~GameMenuState()
 
 void GameMenuState::drawMenu()
 {
-    DrawImage *top = new DrawImage(UPoint(set->GetWidth(), m_mapWidget->getPosition().y));
-    top->drawTiles(DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+    ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
+    ((DrawImage*)(top.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage().get());
     Frame *topFrame = new Frame(top);
     m_container->addChild(topFrame);
 
-    DrawImage *messageBox = new DrawImage(UPoint(set->GetWidth(), 28));
+    ImagePtr messageBox(new Image(UPoint(set->GetWidth(), 28)));
     messageBox->recolor(0, 116);
-    messageBox->drawBorders2();
+    ((DrawImage*)(messageBox).get())->drawBorders2();
     GraphicsLabel *messageLabel = new GraphicsLabel(messageBox);
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
@@ -82,7 +82,7 @@ void GameMenuState::drawMenu()
     topFrame->addChild(m_optionsButton);
 
     ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
-    GraphicsLabel *creditsLabel = new GraphicsLabel(credits.get());
+    GraphicsLabel *creditsLabel = new GraphicsLabel(credits);
     creditsLabel->setPosition(UPoint(set->GetWidth() - 135, 7));
     topFrame->addChild(creditsLabel);
 
@@ -90,17 +90,17 @@ void GameMenuState::drawMenu()
     creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)));
     Uint32 color = creditsCounter->getPixel(UPoint(0,0));
     creditsCounter->drawVLine(UPoint(64, 0), 14, color);
-    GraphicsLabel *creditsCounterLabel = new GraphicsLabel(creditsCounter.get());
+    GraphicsLabel *creditsCounterLabel = new GraphicsLabel(creditsCounter);
     creditsCounterLabel->setPosition(creditsLabel->getPosition() + SPoint(creditsLabel->getSize().x + 2, -1));
     topFrame->addChild(creditsCounterLabel);
 
-    DrawImage *sideBar = new DrawImage(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y));
+    ImagePtr sideBar(new Image(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y)));
     ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
     sideBar->blitFrom(roundThingie.get(), UPoint(0, 0));
-    sideBar->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
+    ((DrawImage*)(sideBar).get())->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
     sideBar->blitFrom(roundThingie.get(), UPoint(0, 118));
-    sideBar->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), sideBar->getSize().x - 1);
-    sideBar->drawVBar(UPoint(1, 118 + roundThingie->getSize().y), sideBar->getSize().y - 1 - roundThingie->getSize().y);
+    ((DrawImage*)(sideBar).get())->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), sideBar->getSize().x - 1);
+    ((DrawImage*)(sideBar).get())->drawVBar(UPoint(1, 118 + roundThingie->getSize().y), sideBar->getSize().y - 1 - roundThingie->getSize().y);
     sideBar->blitFrom(roundThingie.get(), UPoint(0, sideBar->getSize().y - 1 - roundThingie->getSize().y));
 
     Frame *sideBarFrame = new Frame(sideBar);

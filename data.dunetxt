@@ -5,6 +5,11 @@ gcobjects:
 	    filename = "FINALE:BIGPLAN.CPS";
 	};
 
+    Fame =
+	{
+	    filename = "DUNE:FAME.CPS";
+	};
+
     Screen =
 	{
 	    filename = "DUNE:SCREEN.CPS";
@@ -14,6 +19,31 @@ gcobjects:
 	{
 	    filename = "ENGLISH:HERALD.ENG";
 	};
+
+    UI_Mentat_HeraldHarkonnen =
+	{
+		gcobject = "Fame";
+		crop = "Rect(9,136,56,56)";
+	};
+
+    UI_Mentat_HeraldAtreides =
+	{
+		gcobject = "Fame";
+		crop = "Rect(65,136,56,56)";
+	};
+
+    UI_Mentat_HeraldOrdos =
+	{
+		gcobject = "Fame";
+		crop = "Rect(121,136,56,56)";
+	};
+
+	UI_MenuBackground =
+	{
+		gcobject = "Fame";
+		crop = "Rect(0,0,50,50)";
+	};
+
 };
 
 animations:

@@ -4,6 +4,8 @@
 #include "DataCache.h"
 #include "CpsFile.h"
 
+#include <iostream>
+
 using namespace libconfig;
 
 GCObject::GCObject(std::string path)
@@ -44,32 +46,43 @@ void GCObject::drawImage()
 		int len;
 		uint8_t *data;
 
-        std::string fileName;
+        std::string variable;
 		
 		SDL_Palette* palette;
-        if(node.lookupValue("palette", fileName))
+        if(node.lookupValue("palette", variable))
 		{
-			data = ResMan::Instance()->readFile(fileName, &len);
+			data = ResMan::Instance()->readFile(variable, &len);
 			PalfilePtr tmp(new PalFile(data, len));
-			palette = DataCache::Instance()->getPalette(fileName);
+			palette = DataCache::Instance()->getPalette(variable);
 		}
 		else
 			palette = DataCache::Instance()->getPalette(IBM_PAL);
 
-        node.lookupValue("filename", fileName);
-        std::string type = fileName.substr(fileName.length()-3, 3);
-
-        data = ResMan::Instance()->readFile(fileName, &len);
-
-
-        if (type.compare("CPS") == 0 || type.compare("ENG") == 0)
-        {
-            CpsFile *cpsfile(new CpsFile(data, len, palette));
-        	
-			m_surface.reset(new Image(cpsfile->getSurface()));
-
-            delete cpsfile;
-        }
+        if(node.lookupValue("filename", variable)){
+			std::string type = variable.substr(variable.length()-3, 3);
+			
+			data = ResMan::Instance()->readFile(variable, &len);
+			
+			
+			if (type.compare("CPS") == 0 || type.compare("ENG") == 0)
+			{
+				CpsFile *cpsfile(new CpsFile(data, len, palette));
+				
+				m_surface.reset(new Image(cpsfile->getSurface()));
+				
+				delete cpsfile;
+			}
+		}
+		else if(node.lookupValue("gcobject", variable))
+		{
+			ImagePtr gcObj = DataCache::Instance()->getGCObject(variable)->getImage();
+			if(node.lookupValue("crop", variable))
+			{
+				Rect rect;
+				variable >> rect;
+				m_surface.reset(gcObj->getPictureCrop(rect));
+			}
+		}
     
     }
 

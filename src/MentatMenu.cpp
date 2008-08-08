@@ -15,11 +15,8 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 	house = newHouse;
 	ImagePtr background = DataCache::Instance()->getGuiPic(UI_MentatBackground, newHouse)->getResized();
-	Image *resized = new Image(UPoint(set->GetWidth(), set->GetHeight()));
 
-	resized->blitFrom(background.get());
-
-	m_backgroundFrame->changeBackground(resized);
+	m_backgroundFrame->changeBackground(background);
 
 	switch(house) {
 		case HOUSE_ATREIDES:

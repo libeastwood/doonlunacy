@@ -13,10 +13,8 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
     // hmm, does it get deleted or something here?
     ImagePtr background = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
-    Image *resized = new Image(UPoint(set->GetWidth(), set->GetHeight()));
-
-    resized->blitFrom(background.get());
-    m_backgroundFrame->changeBackground(resized);
+    
+	m_backgroundFrame->changeBackground(background);
 
     m_butAtreides = new TranspButton(UPoint(84,92).getScaled());
     m_butAtreides->onClick.connect(

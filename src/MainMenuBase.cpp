@@ -30,19 +30,20 @@ void MainMenuBaseState::draw()
     m_vbox->fit(2);
     m_vbox->reshape();
 
-    Image *menu = new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55));
+    ImagePtr menu(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55)));
     menu->setColorKey();
 
     m_menuFrame->changeBackground(menu);
-    DrawImage *menuTop = new DrawImage(UPoint(bw + 20, 30));
+    ImagePtr menuTop(new Image(UPoint(bw + 20, 30)));
     menuTop->recolor(0, 236);
-    menuTop->drawBorders1();
+    ((DrawImage*)(menuTop.get()))->drawBorders1();
 
     GraphicsLabel *menuTopLabel = new GraphicsLabel(menuTop, "Doon Lunacy", 32);
     m_menuFrame->addChild(menuTopLabel);
 
-    DrawImage *menuBottom = new DrawImage(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25));
-    menuBottom->drawBorders2();
+
+	ImagePtr menuBottom(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25)));
+    ((DrawImage*)(menuBottom.get()))->drawBorders2();
     menuBottom->setColorKey();
     Frame *menuBottomFrame = new Frame(menuBottom);
     m_vbox->setPosition(UPoint(9,14));
@@ -51,18 +52,18 @@ void MainMenuBaseState::draw()
     menuBottomFrame->setPosition(UPoint(0,31));
     m_menuFrame->addChild(menuBottomFrame);
 
-    m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldHarkonnen).get());
+    m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldHarkonnen")->getImage());
     m_backgroundFrame->addChild(m_harkonnenHerald);
 
-    m_atreidesHerald = new GraphicsLabel(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldAtreides).get());
+    m_atreidesHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldAtreides")->getImage());
     m_backgroundFrame->addChild(m_atreidesHerald);
 
-    m_ordosHerald = new GraphicsLabel(DataCache::Instance()->getGuiPic(UI_Mentat_HeraldOrdos).get());
+    m_ordosHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldOrdos")->getImage());
     m_backgroundFrame->addChild(m_ordosHerald);
 
-    DrawImage *version = new DrawImage(UPoint(100, 30));
+    ImagePtr version(new Image(UPoint(100, 30)));
     version->recolor(0, 116);
-    version->drawBorders2();
+    ((DrawImage*)(version.get()))->drawBorders2();
     m_versionLabel = new GraphicsLabel(version, VERSION, 57);
     m_backgroundFrame->addChild(m_versionLabel);
 
@@ -79,9 +80,9 @@ void MainMenuBaseState::resize()
 {
     Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
 
-    DrawImage *background = new DrawImage(UPoint(set->GetWidth(), set->GetHeight()));
-    background->drawTiles(DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
-    background->drawBorders3(3);
+    ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
+    ((DrawImage*)(background.get()))->drawTiles(DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+    ((DrawImage*)(background.get()))->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 
     m_middleFrame->setPosition(UPoint(x - 70, set->GetHeight()/2 - 172));
