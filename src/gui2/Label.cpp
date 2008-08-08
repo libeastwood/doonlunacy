@@ -17,7 +17,6 @@ Label::Label(std::string caption, int textColor, int bgColor, int maxLineLength)
 
 Label::~Label()
 {
-    m_surface.reset();
 }
 
 void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
@@ -125,12 +124,6 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
     setSize(m_surface->getSize());
 }
 
-GraphicsLabel::GraphicsLabel(Image *background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
-{
-    m_background = background->getCopy();
-    setSize(m_background->getSize());    
-}
-
 GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
 {
     m_background = background;
@@ -146,15 +139,12 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
     if(m_background->getSize().x < textw + 4-(textw%4)
 		    ||  m_background->getSize().y < texth * numLines)
         LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
-    m_surface.reset();
     m_surface = m_background->getCopy();
     setSize(m_surface->getSize());    
 }
 
 GraphicsLabel::~GraphicsLabel()
 {
-    m_background.reset();
-    m_surface.reset();
 }
 
 AnimationLabel::AnimationLabel(Animation* pAnim)
@@ -176,9 +166,10 @@ void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;
 
-	if(m_animCache.empty() || m_animCache.size() < m_curFrame + 1)
+	if(m_animCache.empty() || m_animCache.size() <= m_curFrame)
 	{
-		ImagePtr surface(new Image(m_anim->getFrame()));
+		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
+		Image *surface(new Image(m_anim->getFrame()));
 		m_animCache.push_back(surface->getResized());
 	}
 
