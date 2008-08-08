@@ -31,12 +31,6 @@ Frame::~Frame()
     m_surface.reset();
 }
 
-void Frame::changeBackground(Image *background)
-{
-    m_surface.reset(background);
-    setSize(m_surface->getSize());
-}
-
 void Frame::changeBackground(ImagePtr background)
 {
     m_surface = background;

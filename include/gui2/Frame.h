@@ -29,7 +29,6 @@ public:
         return m_surface->getSize();
     }
 
-    void changeBackground(Image *background);
 	void changeBackground(ImagePtr background);
 
     //@}
