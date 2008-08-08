@@ -51,10 +51,10 @@ void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
     corner_ne = DataCache::Instance()->getGuiPic(ne);
     corner_sw = DataCache::Instance()->getGuiPic(sw);
     corner_se = DataCache::Instance()->getGuiPic(se);
-    top = DataCache::Instance()->getGuiPic(UI_TopBorder);
-    bottom = DataCache::Instance()->getGuiPic(UI_BottomBorder);
-    left = DataCache::Instance()->getGuiPic(UI_LeftBorder);
-    right = DataCache::Instance()->getGuiPic(UI_RightBorder);
+    top = DataCache::Instance()->getGCObject("UI_TopBorder")->getImage();
+    bottom = DataCache::Instance()->getGCObject("UI_BottomBorder")->getImage();
+    left = DataCache::Instance()->getGCObject("UI_LeftBorder")->getImage();
+    right = DataCache::Instance()->getGCObject("UI_RightBorder")->getImage();
     drawBorders(corner_nw, corner_ne, corner_sw, corner_se, top,
 		bottom, left, right, edgeDistance);
 }
@@ -91,19 +91,19 @@ void DrawImage::drawHBarSmall(ConstUPoint start, int x2)
     blitFrom(sideBar.get(), start);
 }
 
-void DrawImage::drawTiles(Image *tile)
+void DrawImage::drawTiles(ImagePtr tile)
 {
 	Rect area(0, 0, getSize().x, getSize().y);
 	drawTiles(tile, area);
 }
 
-void DrawImage::drawTiles(Image *tile, ConstRect area)
+void DrawImage::drawTiles(ImagePtr tile, ConstRect area)
 {
      ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
      UPoint size = getSize();
      UPoint bgSize = tile->getSize();
         for(int x = 0; x < size.x; x += bgSize.x - 1)
             for(int y = 0; y < size.y; y += bgSize.y - 1)
-                tiledArea->blitFrom(tile, UPoint(x,y));
+                tiledArea->blitFrom(tile.get(), UPoint(x,y));
      blitFrom(tiledArea.get(), UPoint(area.x, area.y));
 }
