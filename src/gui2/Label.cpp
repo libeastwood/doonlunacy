@@ -139,7 +139,10 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
     if(m_background->getSize().x < textw + 4-(textw%4)
 		    ||  m_background->getSize().y < texth * numLines)
         LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
-    m_surface = m_background->getCopy();
+	if(!m_surface)
+		m_surface = m_background->getCopy();
+	else
+		m_surface->blitFrom(m_background.get());
     setSize(m_surface->getSize());    
 }
 
