@@ -32,7 +32,7 @@ GameMenuState::~GameMenuState()
 void GameMenuState::drawMenu()
 {
     ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
-    ((DrawImage*)(top.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage().get());
+    ((DrawImage*)(top.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
     Frame *topFrame = new Frame(top);
     m_container->addChild(topFrame);
 

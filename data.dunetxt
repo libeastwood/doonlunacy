@@ -10,6 +10,11 @@ gcobjects:
 	    filename = "DUNE:FAME.CPS";
 	};
 
+	MapMach =
+	{
+		filename = "DUNE:MAPMACH.CPS";
+	};
+
     Screen =
 	{
 	    filename = "DUNE:SCREEN.CPS";
@@ -42,6 +47,36 @@ gcobjects:
 	{
 		gcobject = "Fame";
 		crop = "Rect(0,0,50,50)";
+	};
+
+	UI_BlankFiller =
+	{
+		gcobject = "MapMach";
+		crop = "Rect(60,184,150, 6)";
+	};
+
+    UI_TopBorder =
+	{
+		gcobject = "Fame";
+		crop = "Rect(12,73,1,4)";
+	};
+
+	UI_BottomBorder =
+	{
+		gcobject = "Fame";
+		crop = "Rect(12,72,1,4)";
+	};
+
+	UI_LeftBorder =
+	{
+		gcobject = "Fame";
+		crop = "Rect(1,83,4,1)";
+	};
+
+	UI_RightBorder =
+	{
+		gcobject = "Fame";
+		crop = "Rect(1,83,4,1)";
 	};
 
 };

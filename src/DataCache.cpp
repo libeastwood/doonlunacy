@@ -97,8 +97,8 @@ void DataCache::Init(){
 	IcnfilePtr icon(new Icnfile(data, len, mapdata, maplen));
 	//delete mapdata;
 
-	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
-	WsafilePtr radar(new Wsafile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
+//	WsafilePtr radar(new Wsafile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPA.SHP", &len);
 	ShpfilePtr menshpa(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPH.SHP", &len);
@@ -111,12 +111,12 @@ void DataCache::Init(){
 	ShpfilePtr choam(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
 	ShpfilePtr bttn(new Shpfile(data, len));
-	data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
-	CpsfilePtr bigplan(new Cpsfile(data, len));
+//	data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
+//	CpsfilePtr bigplan(new Cpsfile(data, len));
 
 
-	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
-	CpsfilePtr herald(new Cpsfile(data, len));
+//	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
+//	CpsfilePtr herald(new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATA.CPS", &len);
 	CpsfilePtr mentata (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATO.CPS", &len);
@@ -128,16 +128,16 @@ void DataCache::Init(){
 	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 	ShpfilePtr mentat (new Shpfile(data, len));
 
-	data = ResMan::Instance()->readFile("DUNE:DUNEMAP.CPS", &len);
-	CpsfilePtr dunemap(new Cpsfile(data, len));
-	data = ResMan::Instance()->readFile("DUNE:DUNERGN.CPS", &len);
-	CpsfilePtr dunergn(new Cpsfile(data, len));
-	data = ResMan::Instance()->readFile("DUNE:RGNCLK.CPS", &len);
-	CpsfilePtr rgnclk(new Cpsfile(data, len));
-	data = ResMan::Instance()->readFile("DUNE:PIECES.SHP", &len);
-	ShpfilePtr pieces(new Shpfile(data, len));
-	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
-	ShpfilePtr arrows(new Shpfile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:DUNEMAP.CPS", &len);
+//	CpsfilePtr dunemap(new Cpsfile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:DUNERGN.CPS", &len);
+//	CpsfilePtr dunergn(new Cpsfile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:RGNCLK.CPS", &len);
+//	CpsfilePtr rgnclk(new Cpsfile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:PIECES.SHP", &len);
+//	ShpfilePtr pieces(new Shpfile(data, len));
+//	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
+//	ShpfilePtr arrows(new Shpfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
     CpsfilePtr fame(new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
@@ -209,10 +209,10 @@ void DataCache::Init(){
 	addGuiPic(UI_MouseCursor, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
 //	addGuiPic(UI_MouseCursor, mouse->getPicture(0));
 //	SDL_SetColorKey(addGuiPic(UI_CursorShape][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
-																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
+//	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
+//																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
 //	addGuiPic(UI_GameBar, PicFactory->createGameBar();
-	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
+//	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
 
 //	SDL_SetColorKey(addGuiPic(UI_Indicator][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_InvalidPlace, PicFactory->createInvalidPlace();
@@ -220,21 +220,21 @@ void DataCache::Init(){
 //	addGuiPic(UI_MenuBackground, PicFactory->createMainBackground();
 //	addGuiPic(UI_Background, PicFactory->createBackground();
     
-	addGuiPic(UI_SelectionBox, mouse->getPicture(6));
+//	addGuiPic(UI_SelectionBox, mouse->getPicture(6));
 //	SDL_SetColorKey(addGuiPic(UI_SelectionBox][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_TopBar, PicFactory->createTopBar();
-	addGuiPic(UI_ButtonUp, choam->getPicture(0));
-	addGuiPic(UI_ButtonUp_Pressed, choam->getPicture(1));
-	addGuiPic(UI_ButtonDown, choam->getPicture(2));
-	addGuiPic(UI_ButtonDown_Pressed, choam->getPicture(3));
+//	addGuiPic(UI_ButtonUp, choam->getPicture(0));
+//	addGuiPic(UI_ButtonUp_Pressed, choam->getPicture(1));
+//	addGuiPic(UI_ButtonDown, choam->getPicture(2));
+//	addGuiPic(UI_ButtonDown_Pressed, choam->getPicture(3));
 //	addGuiPic(UI_MessageBox, PicFactory->createMessageBoxBorder();
-	addGuiPic(UI_Mentat, bttn->getPicture(0));
-	addGuiPic(UI_Mentat_Pressed, bttn->getPicture(1));
-	addGuiPic(UI_Options, bttn->getPicture(2));
-	addGuiPic(UI_Options_Pressed, bttn->getPicture(3));
-	addGuiPic(UI_Upgrade, choam->getPicture(4));
+//	addGuiPic(UI_Mentat, bttn->getPicture(0));
+//	addGuiPic(UI_Mentat_Pressed, bttn->getPicture(1));
+//	addGuiPic(UI_Options, bttn->getPicture(2));
+//	addGuiPic(UI_Options_Pressed, bttn->getPicture(3));
+//	addGuiPic(UI_Upgrade, choam->getPicture(4));
 //	SDL_SetColorKey(addGuiPic(UI_Upgrade][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-	addGuiPic(UI_Upgrade_Pressed, choam->getPicture(5));
+//	addGuiPic(UI_Upgrade_Pressed, choam->getPicture(5));
 //	SDL_SetColorKey(addGuiPic(UI_Upgrade_Pressed][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_Repair, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_Repair.bmp"),true);
 //	addGuiPic(UI_Repair_Pressed, SDL_LoadBMP_RW(pFileManager->OpenFile("Button_RepairPushed.bmp"),true);
@@ -266,7 +266,7 @@ void DataCache::Init(){
 //	addGuiPic(UI_GameMenu, PicFactory->createMenu(addGuiPic(UI_DuneLegacy][HOUSE_HARKONNEN],158);
 //	PicFactory->drawFrame(addGuiPic(UI_DuneLegacy][HOUSE_HARKONNEN],PictureFactory::SimpleFrame);
 
-	addGuiPic(UI_PlanetBackground, bigplan->getPicture());
+//	addGuiPic(UI_PlanetBackground, bigplan->getPicture());
 //	PicFactory->drawFrame(addGuiPic(UI_PlanetBackground, PictureFactory::SimpleFrame);
 //	addGuiPic(UI_MenuButtonBorder, PicFactory->createFrame(PictureFactory::DecorationFrame1,190,123,false);
 
@@ -288,7 +288,7 @@ void DataCache::Init(){
 	addGuiPic(UI_MentatProcced_Pressed, mentat->getPicture(7));
 	addGuiPic(UI_MentatRepeat, mentat->getPicture(8));
 	addGuiPic(UI_MentatRepeat_Pressed, mentat->getPicture(9));
-	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
+//	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 //	addGuiPic(UI_HouseSelect, PicFactory->createHouseSelect(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN]);
 //	addGuiPic(UI_HeraldAtre_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],20,54,83,91);
 //	addGuiPic(UI_HeraldOrd_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],117,54,83,91);
@@ -297,16 +297,16 @@ void DataCache::Init(){
 //	addGuiPic(UI_MapChoiceScreen,[HOUSE_ATREIDES] = PicFactory->createMapChoiceScreen(HOUSE_ATREIDES);
 //	addGuiPic(UI_MapChoiceScreen,[HOUSE_ORDOS] = PicFactory->createMapChoiceScreen(HOUSE_ORDOS);
 //	addGuiPic(UI_MapChoiceScreen,[HOUSE_HARKONNEN] = PicFactory->createMapChoiceScreen(HOUSE_HARKONNEN);
-	addGuiPic(UI_MapChoiceMapOnly,dunemap->getPicture());
+//	addGuiPic(UI_MapChoiceMapOnly,dunemap->getPicture());
 //	SDL_SetColorKey(m_guiImgUIGraphic,UI_MapChoiceMapOnly][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-	addGuiPic(UI_MapChoiceMap, dunergn->getPicture());
+//	addGuiPic(UI_MapChoiceMap, dunergn->getPicture());
 //	SDL_SetColorKey(UIGraphic,UI_MapChoiceMap][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-	addGuiPic(UI_MapChoiceClickMap, rgnclk->getPicture());
+//	addGuiPic(UI_MapChoiceClickMap, rgnclk->getPicture());
 
-    addGuiPic(UI_TopBorder, fame->getPicture()->getPictureCrop(Rect(12, 73, 1, 4)));
+/*    addGuiPic(UI_TopBorder, fame->getPicture()->getPictureCrop(Rect(12, 73, 1, 4)));
     addGuiPic(UI_BottomBorder, fame->getPicture()->getPictureCrop(Rect(12, 72, 1, 4)));
     addGuiPic(UI_LeftBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));
-    addGuiPic(UI_RightBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));
+    addGuiPic(UI_RightBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));*/
 
     tmp = fame->getPicture()->getPictureCrop(Rect(64, 9, 8, 8));
     tmp->setColorKey();
@@ -388,14 +388,14 @@ void DataCache::Init(){
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
 
-    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 184, 150, 16)));
+//    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 184, 150, 16)));
 
     // Ugly, needs to be improved..
-    addGuiPic(UI_MenuBackground, fame->getPicture()->getPictureCrop(Rect(0, 0, 50, 50)));
+//    addGuiPic(UI_MenuBackground, fame->getPicture()->getPictureCrop(Rect(0, 0, 50, 50)));
 
-    addGuiPic(UI_Mentat_HeraldHarkonnen, fame->getPicture()->getPictureCrop(Rect(9, 136, 56, 56)));
-    addGuiPic(UI_Mentat_HeraldAtreides, fame->getPicture()->getPictureCrop(Rect(65, 136, 56, 56)));
-    addGuiPic(UI_Mentat_HeraldOrdos, fame->getPicture()->getPictureCrop(Rect(121, 136, 56, 56)));
+//    addGuiPic(UI_Mentat_HeraldHarkonnen, fame->getPicture()->getPictureCrop(Rect(9, 136, 56, 56)));
+//    addGuiPic(UI_Mentat_HeraldAtreides, fame->getPicture()->getPictureCrop(Rect(65, 136, 56, 56)));
+//    addGuiPic(UI_Mentat_HeraldOrdos, fame->getPicture()->getPictureCrop(Rect(121, 136, 56, 56)));
 
 	addSoundChunk(YesSir, getChunkFromFile("VOC:ZREPORT1.VOC"));
 	addSoundChunk(Reporting, getChunkFromFile("VOC:ZREPORT2.VOC"));

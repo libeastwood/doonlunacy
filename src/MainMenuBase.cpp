@@ -81,7 +81,7 @@ void MainMenuBaseState::resize()
     Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
 
     ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
-    ((DrawImage*)(background.get()))->drawTiles(DataCache::Instance()->getGuiPic(UI_MenuBackground).get());
+    ((DrawImage*)(background.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
     ((DrawImage*)(background.get()))->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 
