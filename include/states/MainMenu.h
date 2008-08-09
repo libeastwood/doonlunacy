@@ -13,6 +13,7 @@ class MainMenuState : public MainMenuBaseState
         MainMenuState();
         ~MainMenuState();
 
+        void doEditor();
         void doOptions();
         void doSkirmish();
         void doSingle();
@@ -20,6 +21,7 @@ class MainMenuState : public MainMenuBaseState
         virtual const char* GetName() { return "MainMenuState"; }
 
     private:
+        BoringButton* m_butEditor;
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;
         BoringButton* m_butOptions;

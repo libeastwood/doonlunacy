@@ -3,6 +3,7 @@
 
 #include "MapGenerator.h"
 #include "MapClass.h"
+#include "ObjectTree.h"
 #include "PlayerClass.h"
 #include "structures/StructureClass.h"
 #include "units/UnitClass.h"
@@ -26,20 +27,19 @@ class GameState : public Singleton<GameState>
     Structures* GetStructures() { return m_structures; }
     Units* GetUnits()  { return m_units; }
     
-    //TODO:This needs to be done in a smarter way
-    Uint32 getObjectID() { return ++m_objectID; fprintf(stderr, "ObjectID %d", m_objectID); }
-
     PlayerClass* LocalPlayer() { return m_localPlayer; }; 
+    ObjectTree* GetObjectTree() { return m_objectTree; };
+
+	//FIXME: This shouldn't be here
+	bool placingMode;
   protected:
 
     MapClass* m_map;
+    ObjectTree* m_objectTree;
     PlayerClass * m_localPlayer;
     Players* m_players;
     Structures* m_structures;
     Units* m_units;
-    Uint32 m_objectID;
-
-  
 };
 
 #endif // DUNE_GAMESTATE_H

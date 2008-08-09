@@ -459,8 +459,6 @@ bool MapGenerator::loadOldMap(std::string mapName)
     myInifile->KeyList_Close(&myListHandle);
 
     return true;
-    
-    m_map->m_gs = m_gs;
 }
 
 /*

@@ -17,7 +17,7 @@ class AdlibPlayer : public CadlPlayer
 		Uint16 m_format;
 		bool playing;
 		unsigned char getsampsize() { 
-			return m_channels * (m_format == AUDIO_U8 ? 1 : 2); }
+			return m_channels * (m_format == AUDIO_S8 ? 1 : 2); }
 };
 
 #endif

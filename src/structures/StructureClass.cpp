@@ -26,7 +26,7 @@ void StructureClass::assignToMap(SPoint pos)
 			temp.x = i; temp.y = j;
 			if (map->cellExists(i, j))
 			{
-				map->getCell(i,j)->assignNonInfantryGroundObject(this);
+				map->getCell(i,j)->assignNonInfantryGroundObject(getObjectID());
 				//if ((m_itemID != Structure_Wall) && (m_itemID != Structure_ConstructionYard) && !map->getCell(i,j)->isConcrete()) //&& currentGame->concreteRequired && (gameState != START))
 				//	health -= (int)(0.5*(double)maxHealth/((double)(structureSize.x*structureSize.y)));
 				map->getCell(i,j)->setType(Terrain_Rock);

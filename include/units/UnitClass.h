@@ -53,7 +53,10 @@ class UnitClass : public ObjectClass
     virtual void turn();
    	void turnLeft();
 	void turnRight();
-    
+
+	void targeting();
+	void setGuardPoint(UPoint newGuardPoint);
+	void setGuardPoint(int newX, int newY);
     bool m_attacking,
          m_goingToRepairYard,
          m_justStoppedMoving,

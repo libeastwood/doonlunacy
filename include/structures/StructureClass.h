@@ -29,6 +29,8 @@ class StructureClass : public ObjectClass
     
     virtual void update();
 
+	inline int getPowerRequirement() { return m_powerRequirement; }
+	
     void setJustPlaced();
 
   protected:

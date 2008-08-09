@@ -9,6 +9,7 @@
 #include "SoundPlayer.h"
 
 #include "gui2/Frame.h"
+#include "states/Editor.h"
 #include "states/SingleMenu.h"
 #include "states/MainMenu.h"
 #include "states/OptionsMenu.h"
@@ -40,6 +41,16 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
             boost::bind(&MainMenuState::doSkirmish, this) );
    
     m_vbox->addChild(m_butMulti);
+
+
+    m_butEditor = new BoringButton("Editor");
+    m_butEditor->setSize(SPoint(bw, bh));
+    //m_butSingle = new GraphicButton((SDL_Surface*)(dataFile[UI_Single].dat),
+    //                   (SDL_Surface*)(dataFile[UI_Single_Pressed].dat));
+    m_butEditor->onClick.connect(
+            boost::bind(&MainMenuState::doEditor, this) );
+   
+    m_vbox->addChild(m_butEditor);
 
     m_butOptions = new BoringButton("Options");
     m_butOptions->setSize(SPoint(bw, bh));
@@ -77,6 +88,11 @@ MainMenuState::~MainMenuState()
     delete m_butOptions;
     delete m_butAbout;
     delete m_butQuit;
+}
+
+void MainMenuState::doEditor()
+{
+    mp_parent->PushState( new EditorState() );
 }
 
 void MainMenuState::doOptions()

@@ -1,3 +1,4 @@
+#include "ConcatIterator.h"
 #include "DataCache.h"
 #include "Definitions.h"
 #include "GameState.h"
@@ -48,12 +49,14 @@ void TerrainClass::draw(Image * dest, SPoint pos)
 
 ObjectClass* TerrainClass::getAirUnit()
 {
-    return (ObjectClass*)(*m_assignedAirUnits.begin()).second;
+	GameState* gs = GameState::Instance();
+    return gs->GetObjectTree()->getObject(m_assignedAirUnits.front());
 }
 
 ObjectClass* TerrainClass::getDeadObject()
 {
-    return (ObjectClass*)(*m_assignedDeadObjects.begin()).second;
+	GameState* gs = GameState::Instance();
+    return gs->GetObjectTree()->getObject(m_assignedDeadObjects.front());
 }
 
 ObjectClass* TerrainClass::getGroundObject()
@@ -68,33 +71,40 @@ ObjectClass* TerrainClass::getGroundObject()
 
 ObjectClass* TerrainClass::getInfantry()
 {
-    return (ObjectClass*)(*m_assignedInfantry.begin()).second;
+	GameState* gs = GameState::Instance();
+    return gs->GetObjectTree()->getObject(m_assignedInfantry.front());
 }
 
 ObjectClass* TerrainClass::getNonInfantryGroundObject()
 {
-    return (ObjectClass*)(*m_assignedNonInfantryGroundObjects.begin()).second;
+	GameState* gs = GameState::Instance();
+    return gs->GetObjectTree()->getObject(m_assignedNonInfantryGroundObjects.front());
 }
 
 ObjectClass* TerrainClass::getUndergroundUnit()
 {
-    return (ObjectClass*)(*m_assignedUndergroundUnits.begin()).second;
+	GameState* gs = GameState::Instance();
+    return gs->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
 }
 
-void TerrainClass::assignAirUnit(ObjectClass* object) {
-	m_assignedAirUnits.insert(make_pair(object->getObjectID(), object));
+void TerrainClass::assignAirUnit(Uint32 newObjectID) 
+{
+	m_assignedAirUnits.push_back(newObjectID);
 }
 
-void TerrainClass::assignDeadObject(ObjectClass* object) {
-	m_assignedDeadObjects.insert(make_pair(object->getObjectID(), object));
+void TerrainClass::assignDeadObject(Uint32 newObjectID) 
+{
+	m_assignedDeadObjects.push_back(newObjectID);
 }
 
-void TerrainClass::assignNonInfantryGroundObject(ObjectClass* object) {
-	m_assignedNonInfantryGroundObjects.insert(make_pair(object->getObjectID(), object));
+void TerrainClass::assignNonInfantryGroundObject(Uint32 newObjectID) 
+{
+	m_assignedNonInfantryGroundObjects.push_back(newObjectID);
 }
 
-void TerrainClass::assignUndergroundUnit(ObjectClass* object) {
-	m_assignedUndergroundUnits.insert(make_pair(object->getObjectID(), object));
+void TerrainClass::assignUndergroundUnit(Uint32 newObjectID) 
+{
+	m_assignedUndergroundUnits.push_back(newObjectID);
 }
 
 ObjectClass* TerrainClass::getObject() {
@@ -146,65 +156,245 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 	return temp;
 }
 
+bool TerrainClass::hasAnObject() {
+	return (hasAGroundObject() || hasAnAirUnit() || hasInfantry() || hasAnUndergroundUnit());
+}
+
 void TerrainClass::unassignAirUnit(Uint32 ObjectID) 
 {
-    List::iterator iter = m_assignedAirUnits.find(ObjectID);
-    if( iter != m_assignedAirUnits.end() ) 
-    {
-	    m_assignedAirUnits.erase(iter);
-        LOG_INFO("TerrainClass", "Unassigned air unit.");
-	}
+	m_assignedAirUnits.remove(ObjectID);
+	LOG_INFO("TerrainClass", "Unassigned air unit.");
 }
 
 void TerrainClass::unassignDeadObject(Uint32 ObjectID) 
 {
-    List::iterator iter = m_assignedDeadObjects.find(ObjectID);
-    if( iter != m_assignedDeadObjects.end() ) 
-    {
-	    LOG_INFO("TerrainClass", "Unassigned dead object.");
-	    m_assignedDeadObjects.erase(iter);
-	}
-    
+	m_assignedDeadObjects.remove(ObjectID); 
+    LOG_INFO("TerrainClass", "Unassigned dead object.");
 }
 
 void TerrainClass::unassignNonInfantryGroundObject(Uint32 ObjectID) 
 {
-    List::iterator iter = m_assignedNonInfantryGroundObjects.find(ObjectID);
-    if( iter != m_assignedNonInfantryGroundObjects.end() ) 
-    {
-        LOG_INFO("TerrainClass", "Unassigned non-infantry ground object.");
-	    m_assignedNonInfantryGroundObjects.erase(iter);
-	}
+	m_assignedNonInfantryGroundObjects.remove(ObjectID);
+    LOG_INFO("TerrainClass", "Unassigned non-infantry ground object.");
 }
 
 void TerrainClass::unassignUndergroundUnit(Uint32 ObjectID) 
 {
-    List::iterator iter = m_assignedUndergroundUnits.find(ObjectID);
-    if( iter != m_assignedUndergroundUnits.end() ) 
-    {
-        LOG_INFO("TerrainClass", "Unassigned underground object.");
-    	m_assignedUndergroundUnits.erase(iter);
-	}
+	m_assignedUndergroundUnits.remove(ObjectID);
+    LOG_INFO("TerrainClass", "Unassigned underground object.");
 }
 
 void TerrainClass::unassignInfantry(Uint32 ObjectID, int currentPosition) 
 {
-    List::iterator iter = m_assignedInfantry.find(ObjectID);
-    if( iter != m_assignedInfantry.end() ) 
-    {
-        LOG_INFO("TerrainClass", "Unassigned infantry.");
-    	m_assignedInfantry.erase(iter);
-	}
+	m_assignedInfantry.remove(ObjectID);
+	LOG_INFO("TerrainClass", "Unassigned infantry.");
 }
 
 void TerrainClass::unassignObject(Uint32 ObjectID) {
-    LOG_INFO("TerrainClass", "Unassigning object with ID: %d", ObjectID);
 	unassignInfantry(ObjectID,-1);
 	unassignUndergroundUnit(ObjectID);
 	unassignNonInfantryGroundObject(ObjectID);
 	unassignAirUnit(ObjectID);
+    LOG_INFO("TerrainClass", "Unassigning object with ID: %d", ObjectID);
 }
 
+ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID) 
+{
+	ConcatIterator<Uint32> iterator;
+	iterator.addList(m_assignedInfantry);
+	iterator.addList(m_assignedNonInfantryGroundObjects);
+	iterator.addList(m_assignedUndergroundUnits);
+	iterator.addList(m_assignedAirUnits);
+	iterator.addList(m_assignedDeadObjects);
+
+	while(!iterator.IterationFinished()) 
+	{
+		if(*iterator == objectID) 
+		{
+			return GameState::Instance()->GetObjectTree()->getObject(*iterator);
+		}
+	
+		++iterator;
+	}
+
+	return NULL;
+}
+
+
+void TerrainClass::clearDamage() {
+#if 0
+	m_damagePos = 0;
+	for(int i=0; i<DAMAGEPERCELL; i++)
+		m_damage[i].damageType = NONE;
+#endif
+}
+
+
+void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air) {
+#if 0
+	TerrainClass* cell;
+	
+	if (bulletType == Unit_Sandworm) {
+		ConcatIterator<Uint32> iterator;
+		iterator.addList(assignedDeadObjectsList);
+		iterator.addList(assignedInfantryList);
+		iterator.addList(assignedNonInfantryGroundObjectList);
+		
+		ObjectClass* object;
+		while(!iterator.IterationFinished()) {
+
+			object = currentGame->getObjectTree().getObject(*iterator);
+			if ((object->getX() == location.x) && (object->getY() == location.y)) {
+				object->setVisible(VIS_ALL, false);	
+				object->handleDamage(bulletDamage, damager);
+			}
+			++iterator;
+		}
+	} else {
+		int			distance;
+		double		damageProp;
+		COORDTYPE	centrePoint;
+
+		if (air == true) {
+			// air damage
+			if (hasAnAirUnit() && ((bulletType == Bullet_DRocket) || (bulletType == Bullet_Rocket) || (bulletType == Bullet_SmallRocket)))
+			{
+				AirUnit*	airUnit;
+			
+				std::list<Uint32>::const_iterator iter;
+				for(iter = assignedAirUnitList.begin(); iter != assignedAirUnitList.end() ;iter++) {
+					airUnit = (AirUnit*) currentGame->getObjectTree().getObject(*iter);
+			
+					if(airUnit == NULL)
+						continue;
+					
+					airUnit->getCentrePoint(&centrePoint);
+					distance = lround(distance_from(&centrePoint, realPos));
+					if (distance <= 0) {
+						distance = 1;
+					}
+					
+					if ((distance - airUnit->getRadius()) <= damageRadius) {
+						if ((bulletType == Bullet_DRocket) && (getRandomInt(0, 100) <= 30)) {
+							((UnitClass*)airUnit)->netDeviate(damagerOwner);
+						}
+
+						damageProp = ((double)(damageRadius + airUnit->getRadius() - distance))/((double)distance);
+						if (damageProp > 0)	{
+							if (damageProp > 1.0) {
+								damageProp = 1.0;
+							}
+							airUnit->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - airUnit->getArmour(), damager);
+						}
+					}
+				}
+			}
+		} else {
+			// non air damage
+			ConcatIterator<Uint32> iterator;
+			iterator.addList(assignedNonInfantryGroundObjectList);
+			iterator.addList(assignedInfantryList);
+			iterator.addList(assignedUndergroundUnitList);
+		
+			ObjectClass* object;
+			while(!iterator.IterationFinished()) {
+
+				object = currentGame->getObjectTree().getObject(*iterator);
+				
+				object->getClosestCentrePoint(&centrePoint, &location);
+				distance = lround(distance_from(&centrePoint, realPos));
+				if (distance <= 0) {
+					distance = 1;
+				}
+				
+				if (distance - object->getRadius() <= damageRadius)	{
+					if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
+						((UnitClass*)object)->netDeviate(damagerOwner);
+					}
+					
+					damageProp = ((double)(damageRadius + object->getRadius() - distance))/((double)distance);
+					if (damageProp > 0)	{
+						if (damageProp > 1.0) {
+							damageProp = 1.0;
+						}
+
+						object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmour(), damager);
+					}
+				}
+				
+				++iterator;
+			}
+
+			if ((getType() == Terrain_Sand)
+				&& ((getTile() == Terrain_a2) || (getTile() == Terrain_a3))) {
+				//a spice bloom
+				int i, j;
+				setType(Terrain_Spice);
+				soundPlayer->playSoundAt(Sound_Bloom, getLocation());
+				for (i = -6; i <= 6; i++) {
+					for (j = -6; j <= 6; j++) {
+						if (map->cellExists(location.x + i, location.y + j)
+							&& (distance_from(location.x, location.y, location.x + i, location.y + j) <= 6))
+						{
+							cell = map->getCell(location.x + i, location.y + j);
+							if (cell->isSand())
+								cell->setType(Terrain_Spice);
+						}
+					}
+				}
+				
+				for(i = location.x-8; i <= location.x+8; i++)
+					for(j = location.y-8; j <= location.y+8; j++)
+						if (map->cellExists(i, j))
+							smooth_spot(i, j);
+			}
+			
+			if (map->cellExists(realPos->x/BLOCKSIZE, realPos->y/BLOCKSIZE))
+			{
+				cell = map->getCell(realPos->x/BLOCKSIZE, realPos->y/BLOCKSIZE);
+				if (((bulletType == Bullet_Rocket) || (bulletType == Bullet_SmallRocket) || (bulletType == Bullet_LargeRocket) || (bulletType == Unit_Devastator))
+					&& (!hasAGroundObject() || !getGroundObject()->isAStructure())
+					&& ((realPos->x <= (location.x*BLOCKSIZE + BLOCKSIZE/2))//if hasn't been assigned an object or the assigned object isnt a structure
+						&& (realPos->y <= (location.y*BLOCKSIZE + BLOCKSIZE/2))))
+				{
+					if (!cell->hasAGroundObject() || !cell->getGroundObject()->isAStructure())
+					{
+						if (((cell->getType() == Terrain_Rock) && (cell->getTile() == Terrain_t1))
+							|| (cell->getType() == Structure_Slab1))
+						{
+							if (cell->getType() == Structure_Slab1)
+							{
+								cell->setType(Terrain_Rock);
+								cell->setOwner(NONE);
+							}
+
+							if (bulletType == Bullet_SmallRocket)
+								damage[damagePos%DAMAGEPERCELL].tile = Terrain_td1;
+							else
+								damage[damagePos%DAMAGEPERCELL].tile = Terrain_td2;
+							damage[damagePos%DAMAGEPERCELL].damageType = Terrain_RockDamage;
+							damage[damagePos%DAMAGEPERCELL].realPos.x = realPos->x;
+							damage[damagePos%DAMAGEPERCELL].realPos.y = realPos->y;
+							damagePos++;
+						}
+						else if ((cell->getType() == Terrain_Sand) || (cell->getType() == Terrain_Spice))
+						{
+							if (bulletType == Bullet_SmallRocket)
+								damage[damagePos%DAMAGEPERCELL].tile = getRandomInt(Terrain_sd1, Terrain_sd2);
+							else
+								damage[damagePos%DAMAGEPERCELL].tile = Terrain_sd3;
+							damage[damagePos%DAMAGEPERCELL].damageType = Terrain_SandDamage;
+							damage[damagePos%DAMAGEPERCELL].realPos.x = realPos->x;
+							damage[damagePos%DAMAGEPERCELL].realPos.y = realPos->y;
+							damagePos++;
+						}
+					}
+				}
+			}
+		}
+	}
+#endif
+}
 
 
 bool TerrainClass::isFogged(int player)

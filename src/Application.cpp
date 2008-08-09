@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Colours.h"
 #include "DataCache.h"
+#include "DuneConstants.h"
 #include "Font.h"
 #include "Gfx.h"
 #include "Log.h"
@@ -57,19 +58,6 @@ Application::~Application()
 
 void Application::Init()
 {
-	int lookDist[11];
-    lookDist[0] = 10; 
-    lookDist[1] = 10;
-    lookDist[2] = 9;
-    lookDist[3] = 9;
-    lookDist[4] = 9;
-    lookDist[5] = 8;
-    lookDist[6] = 8;
-    lookDist[7] = 7;
-    lookDist[8] = 6;
-    lookDist[9] = 4;
-    lookDist[10] = 1;
-    
 
     InitSettings();
 

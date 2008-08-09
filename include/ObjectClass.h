@@ -1,6 +1,8 @@
 #ifndef OBJECTCLASS_H
 #define OBJECTCLASS_H
 
+#define VIS_ALL -1
+
 #include <vector>
 
 #include "Gfx.h"
@@ -15,6 +17,8 @@
  *        - normal - coordinates of a cell an object is in
  */
 
+extern int lookDist[11];
+
 class ObjectClass : public Rect
 {
 
@@ -25,120 +29,79 @@ class ObjectClass : public Rect
     virtual ~ObjectClass();
     //@}
 
+	//
+	// Common object functions
+	//
+	
     virtual void assignToMap(SPoint pos);
-    
     virtual void unassignFromMap(SPoint pos);
 
+	static ObjectClass* createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID = NONE);
+	void setHealth(int newHealth);
     virtual void draw(Image * dest, SPoint off, SPoint view);
-
+	void drawSmoke(UPoint pos);
     virtual void destroy() = 0;
-
     virtual void update() = 0;
-
-    bool isOnScreen(Rect rect);
 
     virtual UPoint getClosestPoint(UPoint objectLocation);
 
     virtual void setDestination(SPoint destination);
-    
-    inline UPoint getRealPos()
-    {
-        return m_realPos;
-    }
-
-    inline int getItemID()
-    {
-        return m_itemID;
-    }
-
-    inline bool isActive()
-    {
-        return m_active;
-    }
-
-    inline bool isAFlyingUnit()
-    {
-        return m_flyingUnit;
-    }
-
-    inline bool isAGroundUnit()
-    {
-        return m_groundUnit;
-    }
-
-    inline bool isAStructure()
-    {
-        return m_structure;
-    }
-
-    inline bool isABuilder()
-    {
-        return m_builder;
-    }
-
-    inline bool isInfantry()
-    {
-        return m_infantry;
-    }
-
-    inline bool isAUnit()
-    {
-        return m_unit;
-    }
-
-    inline bool isRespondable()
-    {
-        return m_respondable;
-    }
-
-    inline bool isSelected()
-    {
-        return m_selected;
-    }
-
-
-    inline void setActive(bool status)
-    {
-        m_active = status;
-    }
-
-    inline void setForced(bool status)
-    {
-        m_forced = status;
-    }
-
-    inline void setRespondable(bool status)
-    {
-        m_respondable = status;
-    }
-
     virtual void setPosition(SPoint pos);
-    inline void setSelected(bool value)
-    {
-        m_selected = value;
-    }
+        
+    inline UPoint getRealPos() { return m_realPos; }
+    inline UPoint getPosition() { return UPoint(x,y); }
+    inline int getItemID() { return m_itemID; }
 
-    inline PlayerClass* getOwner()
-    {
-        return m_owner;
-    }
+	int getViewRange();
 
-    inline void setOwner(PlayerClass* newOwner)
-    {
-        m_owner = newOwner;
-    }
+	//
+	// Setters and getters
+	//
+	
+    inline bool isABuilder()    { return m_builder; }
+    inline bool isAFlyingUnit() { return m_flyingUnit; }
+    inline bool isAGroundUnit() { return m_groundUnit; }
+    inline bool isInfantry()    { return m_infantry; }
+    inline bool isAStructure()  { return m_structure; }
+    inline bool isAUnit()       { return m_unit; }
+    inline bool isActive()     { return m_active; }
+    inline void setActive(bool status) { m_active = status; }
 
-    inline Uint32 getObjectID()
-    {
-        return m_objectID;
-    }
-
-    inline void setObjectID(int newObjectID)
-    {
-        if (newObjectID >= 0) m_objectID = newObjectID;
-    }
+    inline void setForced(bool status) { m_forced = status; }
 
     int getHealthColour();
+
+
+    bool isOnScreen(Rect rect);
+
+    inline bool isRespondable() 			{ return m_respondable; }
+    inline void setRespondable(bool status) { m_respondable = status; }
+
+    inline bool isSelected()    		{ return m_selected; }
+    inline void setSelected(bool value) { m_selected = value; }
+
+	inline bool isVisible(int team);
+	void setVisible(int team, bool status);
+
+    inline PlayerClass* getOwner() { return m_owner; }
+    inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
+
+    inline Uint32 getObjectID() { return m_objectID; }
+    inline void setObjectID(int newObjectID) {
+    	if (newObjectID >= 0) m_objectID = newObjectID;
+    }
+
+	inline bool wasDestroyed() { return m_destroyed; }
+	inline bool wasForced() { return m_forced; }
+
+
+	//
+	// Attack related functions
+	//
+	
+	bool canAttack(ObjectClass* object);
+	void handleDamage(int damage, ObjectClass* damager);
+	ObjectClass* findTarget();
 
   protected:
     ATTACKTYPE m_attackMode;
@@ -153,7 +116,9 @@ class ObjectClass : public Rect
          m_respondable,
          m_selected,
          m_structure,
-         m_unit;
+         m_unit,
+	//! Specifies which players can see a given object
+         m_visible[MAX_PLAYERS+1];
 
     /*!
      *  If set to true, animation frame will change in certain intervals.
@@ -204,7 +169,8 @@ class ObjectClass : public Rect
 
     int m_deathFrame,
 
-        m_numDeathFrames;
+        m_numDeathFrames,
+		m_guardRange;
 
 
     //! SharedPtr to image for current object
@@ -227,7 +193,6 @@ class ObjectClass : public Rect
     UPoint m_offset;
 
     ObjectClass * m_target;
-
 };
 
 #endif //OBJECTCLASS_H
