@@ -18,8 +18,8 @@ class MenuBaseState : public State
 
     protected:
         Container *m_container;
-	Frame *m_backgroundFrame;
-	bool m_drawMenu;
+		Frame *m_backgroundFrame;
+		bool m_drawMenu;
 };
 
 #endif // DUNE_MENUBASE_H

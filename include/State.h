@@ -6,8 +6,8 @@
 #include <list>
 
 // fwd dec
-class StateMachine;
 class Settings;
+class StateMachine;
 /*!
 	Base State class used with StateMachine. 
 */
@@ -51,14 +51,14 @@ class State
 		@return the state name
 		*/
         virtual const char* GetName() { return "UnknownState"; }
-    
-	void playMusic();
+		
+		void playMusic();
 
     protected:
+		Settings* set;
         StateMachine* mp_parent;
-	Settings* set;
-	// Set this to force repeat playback of a specific song in this state
-	song* m_song;
+		// Set this to force repeat playback of a specific song in this state
+		song* m_song;
 };
 
 /*
