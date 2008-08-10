@@ -1,7 +1,7 @@
-#ifndef HOUSECHOICEMENU_H_INCLUDED
-#define HOUSECHOICEMENU_H_INCLUDED
+#ifndef DUNE_STATES_EDITOR_H
+#define DUNE_STATES_EDITOR_H
 
-#include "MenuBase.h"
+#include "GameMenu.h"
 
 #include "gui2/MapWidget.h"
 
@@ -18,4 +18,4 @@ private:
     MapWidget *m_mapWidget, *m_mapWidget2;
 };
 
-#endif // HOUSECHOICEMENU_H_INCLUDED
+#endif // DUNE_STATES_EDITOR_H
