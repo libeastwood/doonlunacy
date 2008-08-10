@@ -98,10 +98,11 @@ void GCObject::drawImage()
 			if(node.exists("crop"))
 			{
 				Setting& s = dataConfig->lookup(fullpath + ".crop");
-				m_surface.reset(gcObj->getPictureCrop(Rect((int)s[0], (int)s[1], (int)s[2], (int)s[3])));
+				m_surface.reset(gcObj->getPictureCrop(Rect(
+								(int)s["point"][0], (int)s["point"][1],
+								(int)s["size"][0], (int)s["size"][1])));
 			} else
 				m_surface = gcObj->getCopy();
-
 		}
 		if(node.lookupValue("colorkey", value))
 			m_surface->setColorKey(value);
