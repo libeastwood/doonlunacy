@@ -127,7 +127,7 @@ void GCObject::drawImage()
 			{
 				Setting& s = dataConfig->lookup(fullpath + ".drawhline");
 				for(int i = 0; i < s.getLength(); i++)
-					m_surface->drawVLine(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]),
+					m_surface->drawHLine(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]),
 								(int)s[i]["length"], (int)s[i]["color"]);
 			}
 
