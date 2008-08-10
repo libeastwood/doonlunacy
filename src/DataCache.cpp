@@ -99,14 +99,14 @@ void DataCache::Init(){
 
 //	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
 //	WsafilePtr radar(new Wsafile(data, len));
-	data = ResMan::Instance()->readFile("DUNE:MENSHPA.SHP", &len);
+/*	data = ResMan::Instance()->readFile("DUNE:MENSHPA.SHP", &len);
 	ShpfilePtr menshpa(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPH.SHP", &len);
 	ShpfilePtr menshph(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPO.SHP", &len);
 	ShpfilePtr menshpo(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
-	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));
+	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));*/
 //	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
 //	ShpfilePtr choam(new Shpfile(data, len));
 //	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
@@ -117,14 +117,14 @@ void DataCache::Init(){
 
 //	data = ResMan::Instance()->readFile("ENGLISH:HERALD.ENG", &len);
 //	CpsfilePtr herald(new Cpsfile(data, len));
-    data = ResMan::Instance()->readFile("DUNE:MENTATA.CPS", &len);
+    /*data = ResMan::Instance()->readFile("DUNE:MENTATA.CPS", &len);
 	CpsfilePtr mentata (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATO.CPS", &len);
 	CpsfilePtr mentato (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATH.CPS", &len);
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
-	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));
+	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));*/
 //	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
 //	ShpfilePtr mentat (new Shpfile(data, len));
 
@@ -272,12 +272,12 @@ void DataCache::Init(){
 
 //	PicFactory->drawFrame(addGuiPic(UI_DuneLegacy, PictureFactory::SimpleFrame);
 
-	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ATREIDES);
+/*	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_ATREIDES);
 	addGuiPic(UI_MentatBackground, mentata->getPicture(), HOUSE_FREMEN);
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_ORDOS);
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
 	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
-	addGuiPic(UI_MentatBackground, mentatm->getPicture(), HOUSE_SARDAUKAR);
+	addGuiPic(UI_MentatBackground, mentatm->getPicture(), HOUSE_SARDAUKAR);*/
 	/*addGuiPic(UI_MentatYes, mentat->getPicture(0));
 	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
 	addGuiPic(UI_MentatNo, mentat->getPicture(2));

@@ -20,6 +20,27 @@ gcobjects:
 	    filename = "DUNE:SCREEN.CPS";
 	};
 
+	Mentat_Atreides =
+	{
+		filename = "DUNE:MENTATA.CPS";
+	};
+
+	Mentat_Ordos =
+	{
+		filename = "DUNE:MENTATO.CPS";
+	};
+
+	Mentat_Harkonnen =
+	{
+		filename = "DUNE:MENTATH.CPS";
+	};
+
+	Mentat_BeneGesserit =
+	{
+		filename = "DUNE:MENTATM.CPS";
+        palette = "DUNE:BENE.PAL";		
+	};
+
 	UI_HouseChoiceBackground =
 	{
 		type = "CPS";
@@ -508,7 +529,7 @@ animations:
 	Anim_BeneGesseritEyes = 
 	{
 	    filename = "DUNE:MENSHPM.SHP";
-            palette = "DUNE:BENE.PAL";
+        palette = "DUNE:BENE.PAL";
 	    frame_rate = 0.5;
 	    start_index = 0;
 	    end_index = 4;
@@ -517,7 +538,7 @@ animations:
 	Anim_BeneGesseritMouth = 
 	{
 	    filename = "DUNE:MENSHPM.SHP";
-            palette = "DUNE:BENE.PAL";
+        palette = "DUNE:BENE.PAL";
 	    frame_rate = 5.0;
 	    start_index = 5;
 	    end_index = 9;
