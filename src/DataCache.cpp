@@ -516,27 +516,6 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
 	return returnChunk;
 }
 
-Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
-{
-	Mix_Chunk* returnChunk;
-	if((returnChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
-		return NULL;
-	}
-	
-	returnChunk->allocated = 1;
-	returnChunk->volume = sound1->volume;
-	returnChunk->alen = sound1->alen + sound2->alen;
-	
-	if((returnChunk->abuf = (Uint8 *)malloc(returnChunk->alen)) == NULL) {
-		free(returnChunk);
-		return NULL;
-	}
-	
-	memcpy(returnChunk->abuf, sound1->abuf, sound1->alen);
-	memcpy(returnChunk->abuf + sound1->alen, sound2->abuf, sound2->alen);
-
-	return returnChunk;
-}
 
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
 	return BriefingStrings[house]->getString(mission,textType);
@@ -612,12 +591,6 @@ Animation*  DataCache::getAnimation(std::string path)
 
 
     return animation;   
-}
-
-Mix_Chunk* DataCache::concat2Chunks(std::string ID1, std::string ID2)
-{
-//	return concat2Chunks(soundChunk[ID1], soundChunk[ID2]);
-    return 0;
 }
 
 DataCache::~DataCache() {
