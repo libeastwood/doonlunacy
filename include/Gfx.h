@@ -425,49 +425,6 @@ struct Rect : public SDL_Rect
 			return os << "Rect(" << c.x << ',' << c.y << ',' << c.w << ',' << c.h << ')';
 		}
 
-		friend std::istream& operator>>(std::istream& is, Rect& c){
-			Sint16 x, y;
-			Uint16 w, h;
-			char ch;
-			is >> ch;
-			if(ch == 'R') is >> ch; if(ch == 'e') is >> ch;
-			if(ch == 'c') is >> ch; if(ch == 't') is >> ch;
-			if(ch == '(') is >> x >> ch; if(ch == ',') is >> y >> ch;
-			if(ch == ',') is >> w >> ch; if(ch == ',') is >> h >> ch;
-			if(ch == ')'){ c = Rect(x, y, w, h); goto ok; }
-			is.setstate(std::ios_base::failbit);
-			
-		ok:
-			return is;
-		}
-
-		friend std::string operator>>(std::string str, Rect& c)
-		{
-			// incredibly ugly, but I don't care for now
-			Sint16 x, y;
-			Uint16 w, h;
-			int loc = str.find("(",0);
-			int loc2 = str.find(",",0);
-			std::string stringPart = str.substr(loc +1, loc2 -loc -1);
-			x = atol(stringPart.c_str());
-
-			loc = str.find(",", loc2 +1);
-			stringPart = str.substr(loc2 + 1, loc - loc2 - 1);
-			y = atol(stringPart.c_str());
-
-			loc2 = str.find(",", loc +1);
-			stringPart = str.substr(loc + 1, loc2 - loc - 1);
-			w = atol(stringPart.c_str());
-
-			loc = str.find(",", loc2 +1);
-			stringPart = str.substr(loc2 + 1, loc - loc2 - 1);
-			h = atol(stringPart.c_str());
-
-			c = Rect(x,y,w,h);
-
-			return str;
-		}
-
         //@}
 
         //! @name Placement & Size
