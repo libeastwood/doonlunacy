@@ -5,7 +5,7 @@
 #include "Font.h"
 #include "Gfx.h"
 #include "Log.h"
-
+#include "Strings.h"
 #include "gui2/Label.h"
 
 Label::Label(std::string caption, int textColour, int bgColour, int maxLineLength)
@@ -24,12 +24,31 @@ void Label::redraw()
     if (m_maxLineLength > 0)
     {    
         Uint16 width = 0;
-        std::vector<std::string> textLines  = splitString(m_caption, m_maxLineLength);
-        int numLines = textLines.size();
+
+        std::vector<String> lines;
+        StringInputCache str(m_caption);
+        String out = "";
+
+        while (!str.isEos())
+        {
+            if ((out.length() + str.peekWord().length()) < m_maxLineLength)
+            {
+                out+= str.getWord();
+                out+= " ";
+                str.advance();
+            }
+            else
+            {
+                lines.push_back(out);
+                out = "";
+            }
+        }
+
+        int numLines = lines.size();
         
         for (int i=0; i < numLines; i++)
         {
-            font->extents(textLines[i].c_str(), textw, texth);
+            font->extents(lines[i].c_str(), textw, texth);
             width = (Uint16)std::max(width, textw);
         }
 
@@ -51,7 +70,7 @@ void Label::redraw()
         
         for (int i=0; i < numLines; i++)
         {
-            font->render(textLines[i].c_str(), m_surface,
+            font->render(lines[i].c_str(), m_surface,
                 0, 0 + texth * i, m_textColour);
         }
     } else
@@ -84,34 +103,6 @@ void Label::draw(Image * dest, SPoint off)
     m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));
 
 }
-
-std::vector<std::string> Label::splitString(std::string ParseString, int maxLineLength)
-{
-	std::vector<std::string> retVector;
-	unsigned int startpos = 0;
-	int linelength;
-	std::string str;
-
-    while (startpos < ParseString.size())
-    {
-        linelength = maxLineLength;
-        if (startpos+linelength < ParseString.size())
-        {
-            while (ParseString.compare(startpos + linelength, 1, " ") != 0)
-            {
-            linelength--;
-            }
-        }
-        
-        str = ParseString.substr(startpos, linelength);
-        retVector.push_back(str);
-        startpos += linelength;
-    }
-
-    return retVector;
-}
-
-
 
 AnimationLabel::AnimationLabel(Animation* pAnim)
 {

@@ -36,7 +36,6 @@ protected:
     ImagePtr m_surface;    
     std::string m_caption;
 private:
-    std::vector<std::string> splitString(std::string ParseString, int maxLineLength);
     int m_textColour,
     m_bgColour,
     m_maxLineLength;
