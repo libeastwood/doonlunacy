@@ -111,9 +111,34 @@ void GCObject::drawImage()
 			{
 				Setting& s = dataConfig->lookup(fullpath + ".putpixel");
 				for(int i = 0; i < s.getLength(); i++)
-					m_surface->putPixel(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]), (int)s[i]["color"]);
+					m_surface->putPixel(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]),
+							(int)s[i]["color"]);
 			}
 
+			if(node.exists("drawvline"))
+			{
+				Setting& s = dataConfig->lookup(fullpath + ".drawvline");
+				for(int i = 0; i < s.getLength(); i++)
+					m_surface->drawVLine(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]),
+								(int)s[i]["length"], (int)s[i]["color"]);
+			}
+
+			if(node.exists("drawhline"))
+			{
+				Setting& s = dataConfig->lookup(fullpath + ".drawhline");
+				for(int i = 0; i < s.getLength(); i++)
+					m_surface->drawVLine(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]),
+								(int)s[i]["length"], (int)s[i]["color"]);
+			}
+
+			if(node.exists("fillrect"))
+			{
+				Setting& s = dataConfig->lookup(fullpath + ".fillrect");
+				for(int i = 0; i < s.getLength(); i++)
+					m_surface->fillRect((int)s[i]["color"], Rect(
+								(int)s[i]["point"][0], (int)s[i]["point"][1],
+								(int)s[i]["size"][0], (int)s[i]["size"][1]));
+			}
 		}
 		node.lookupValue("persistent", m_persistent);
     
