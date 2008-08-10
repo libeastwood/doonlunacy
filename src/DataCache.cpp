@@ -48,7 +48,7 @@ void DataCache::Init(){
 	soundChunk.resize(NUM_SOUNDCHUNK);
     int len, maplen;
     uint8_t *data, *mapdata;
-    Image *tmp;
+//    Image *tmp;
 
     ResMan::Instance()->addRes("ENGLISH");
 
@@ -138,8 +138,8 @@ void DataCache::Init(){
 //	ShpfilePtr pieces(new Shpfile(data, len));
 //	data = ResMan::Instance()->readFile("DUNE:ARROWS.SHP", &len);
 //	ShpfilePtr arrows(new Shpfile(data, len));
-    data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
-    CpsfilePtr fame(new Cpsfile(data, len));
+//    data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
+//    CpsfilePtr fame(new Cpsfile(data, len));
 //    data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
 //    CpsfilePtr mapmach(new Cpsfile(data, len));
 //    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
@@ -307,7 +307,7 @@ void DataCache::Init(){
     addGuiPic(UI_BottomBorder, fame->getPicture()->getPictureCrop(Rect(12, 72, 1, 4)));
     addGuiPic(UI_LeftBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));
     addGuiPic(UI_RightBorder, fame->getPicture()->getPictureCrop(Rect(1, 83, 4, 1)));*/
-
+/*
     tmp = fame->getPicture()->getPictureCrop(Rect(64, 9, 8, 8));
     tmp->setColorKey();
     tmp->putPixel(UPoint(6,7), 0); // Edge smoothing..
@@ -387,7 +387,7 @@ void DataCache::Init(){
     tmp->fillRect(0, Rect(0, 0, 5, 5));
     tmp->setColorKey();
     addGuiPic(UI_Corner3SE, tmp);
-
+*/
 //    addGuiPic(UI_BlankFiller, mapmach->getPicture()->getPictureCrop(Rect(60, 184, 150, 16)));
 
     // Ugly, needs to be improved..

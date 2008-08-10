@@ -215,6 +215,184 @@ gcobjects:
 		index = 3;
 	};
 
+	UI_Corner1NW =
+	{
+		gcobject = "Fame";
+		crop = { point = [64, 9];
+				 size = [8, 8]; };
+		colorkey = 0;
+		putpixel = ({ point = [6, 7];
+					  color = 0; },
+					{ point = [7, 6];
+					  color = 0; },
+					{ point = [7, 7];
+					  color = 0; });
+	};
+
+	UI_Corner1NE =
+	{
+		gcobject = "Fame";
+		crop = { point = [248, 9];
+				 size = [8, 8]; };
+		colorkey = 0;
+		fillrect = ({ point = [0, 5];
+					  size = [1, 2];
+					  color = 0; },
+					{ point = [0, 6];
+					  size = [2, 2];
+					  color = 0; });
+	};
+
+	UI_Corner1SW =
+	{
+		gcobject = "Fame";
+		crop = { point = [64, 23];
+				 size = [8, 8]; };
+		colorkey = 0;
+		putpixel = ({ point = [6, 0];
+					  color = 0; },
+					{ point = [7, 0];
+					  color = 0; },
+					{ point = [7, 1];
+					  color = 0; });
+	};
+
+	UI_Corner1SE =
+	{
+		gcobject = "Fame";
+		crop = { point = [248, 23];
+				 size = [8, 8]; };
+		colorkey = 0;
+		putpixel = ({ point = [0, 0];
+					  color = 0; },
+					{ point = [0, 1];
+					  color = 0; },
+					{ point = [1, 0];
+					  color = 0; });
+	};
+
+	UI_Corner2NW =
+	{
+		gcobject = "Fame";
+		crop = { point = [10, 137];
+				 size = [12, 12]; };
+		colorkey = 0;
+		drawhline = ({ point = [8, 11];
+					   length = 11;
+					   color = 0; },
+					 { point = [10, 9];
+					   length = 11;
+					   color = 0; });
+		drawvline = ({ point = [11, 11];
+					   length = 4;
+					   color = 0; });
+	};
+
+	UI_Corner2NE =
+	{
+		gcobject = "Fame";
+		crop = { point = [51, 137];
+				 size = [12, 12]; };
+		colorkey = 0;
+		drawhline = ({ point = [2, 10];
+					   length = 6;
+					   color = 0; },
+					 { point = [2, 11];
+					   length = 6;
+					   color = 0; });
+
+		drawvline = ({ point = [0, 4];
+					   length = 11;
+					   color = 0; },
+					 { point = [1, 9];
+					   length = 11;
+					   color = 0; },
+					 { point = [2, 10];
+					   length = 11;
+					   color = 0; });
+	};
+
+	UI_Corner2SW =
+	{
+		gcobject = "Fame";
+		crop = { point = [10, 180];
+				 size = [11, 11]; };
+		colorkey = 0;
+		drawhline = ({ point = [2, 0];
+					   length = 9;
+					   color = 0; },
+					 { point = [6, 1];
+					   length = 9;
+					   color = 0; });
+	};
+
+	UI_Corner2SE =
+	{
+		gcobject = "Fame";
+		crop = { point = [52, 180];
+				 size = [11, 11]; };
+		colorkey = 0;
+		drawhline = ({ point = [0, 0];
+					   length = 7;
+					   color = 0; });
+		drawvline = ({ point = [0, 0];
+					   length = 7;
+					   color = 0; },
+					 { point = [1, 0];
+					   length = 3;
+					   color = 0; },
+					 { point = [2, 0];
+					   length = 2;
+					   color = 0; },
+					 { point = [3, 0];
+					   length = 1;
+					   color = 0; });
+	};
+
+	UI_Corner3NW =
+	{
+		gcobject = "Fame";
+		crop = { point = [1, 73];
+				 size = [12, 12]; };
+		colorkey = 0;
+		fillrect = ({ point = [6, 6];
+					  size = [5, 5];
+					  color = 0; });
+	};
+
+	UI_Corner3NE =
+	{
+		gcobject = "Fame";
+		crop = { point = [308, 72];
+				 size = [12, 12]; };
+		colorkey = 0;
+		fillrect = ({ point = [0, 7];
+					  size = [5, 5];
+					  color = 0; });
+	};
+
+	UI_Corner3SW =
+	{
+		gcobject = "Fame";
+		crop = { point = [0, 188];
+				 size = [12, 12]; };
+		colorkey = 0;
+		fillrect = ({ point = [7, 0];
+					  size = [5, 5];
+					  color = 0; });
+	};
+
+	UI_Corner3SE =
+	{
+		gcobject = "Fame";
+		crop = { point = [308, 188];
+				 size = [12, 12]; };
+		colorkey = 0;
+		fillrect = ({ point = [0, 0];
+					  size = [5, 5];
+					  color = 0; });
+	};
+
 };
 
 animations:

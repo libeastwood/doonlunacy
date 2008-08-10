@@ -11,8 +11,8 @@ class DrawImage : public Image
         DrawImage(Image *image);
 		~DrawImage();
 
-        void drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
-			GuiPic_enum se, Uint16 edgeDistance = 0);
+        void drawBorders(std::string nw, std::string ne, std::string sw,
+			std::string se, Uint16 edgeDistance = 0);
 
 	void drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
 		ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
@@ -21,20 +21,20 @@ class DrawImage : public Image
 
         void drawBorders1(Uint16 edgeDistance = 0)
 	{
-		drawBorders(UI_Corner1NW, UI_Corner1NE, UI_Corner1SW,
-				UI_Corner1SE, edgeDistance);
+		drawBorders("UI_Corner1NW", "UI_Corner1NE", "UI_Corner1SW",
+				"UI_Corner1SE", edgeDistance);
 	}
 
         void drawBorders2(Uint16 edgeDistance = 0)
 	{
-		drawBorders(UI_Corner2NW, UI_Corner2NE, UI_Corner2SW,
-				UI_Corner2SE, edgeDistance);
+		drawBorders("UI_Corner2NW", "UI_Corner2NE", "UI_Corner2SW",
+				"UI_Corner2SE", edgeDistance);
 	}
 
         void drawBorders3(Uint16 edgeDistance = 0)
 	{
-		drawBorders(UI_Corner3NW, UI_Corner3NE, UI_Corner3SW,
-				UI_Corner3SE, edgeDistance);
+		drawBorders("UI_Corner3NW", "UI_Corner3NE", "UI_Corner3SW",
+				"UI_Corner3SE", edgeDistance);
 	}
 
         //! Draw small horizontal bar

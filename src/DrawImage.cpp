@@ -43,14 +43,14 @@ void DrawImage::drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
 
 }
 
-void DrawImage::drawBorders(GuiPic_enum nw, GuiPic_enum ne, GuiPic_enum sw,
-			GuiPic_enum se, Uint16 edgeDistance)
+void DrawImage::drawBorders(std::string nw, std::string ne, std::string sw,
+			std::string se, Uint16 edgeDistance)
 {
     ImagePtr corner_nw, corner_ne, corner_sw, corner_se, top, bottom, left, right;
-    corner_nw = DataCache::Instance()->getGuiPic(nw);
-    corner_ne = DataCache::Instance()->getGuiPic(ne);
-    corner_sw = DataCache::Instance()->getGuiPic(sw);
-    corner_se = DataCache::Instance()->getGuiPic(se);
+    corner_nw = DataCache::Instance()->getGCObject(nw)->getImage();
+    corner_ne = DataCache::Instance()->getGCObject(ne)->getImage();
+    corner_sw = DataCache::Instance()->getGCObject(sw)->getImage();
+    corner_se = DataCache::Instance()->getGCObject(se)->getImage();
     top = DataCache::Instance()->getGCObject("UI_TopBorder")->getImage();
     bottom = DataCache::Instance()->getGCObject("UI_BottomBorder")->getImage();
     left = DataCache::Instance()->getGCObject("UI_LeftBorder")->getImage();
