@@ -88,6 +88,8 @@ class UnitClass : public ObjectClass
             m_guardPoint;        
 
     Path m_pathList;
+
+	ImagePtr m_selectionBox;
 };
 
 #endif // DUNE_UNITCLASS_H

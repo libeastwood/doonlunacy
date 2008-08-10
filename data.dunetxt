@@ -54,6 +54,12 @@ gcobjects:
 				 size = [56,56]; };
 	};
 
+	UI_SelectionBox =
+	{
+		filename = "DUNE:MOUSE.SHP";
+		index = 6;
+	};
+
     UI_Mentat_HeraldAtreides =
 	{
 		gcobject = "Fame";
