@@ -4,7 +4,7 @@
 #include "DataCache.h"
 #include <CpsFile.h>
 #include <ShpFile.h>
-
+ 
 using namespace libconfig;
 
 GCObject::GCObject(std::string path)
@@ -46,6 +46,7 @@ void GCObject::drawImage()
 		uint8_t *data;
 
         std::string variable;
+		int value;
 		
 		SDL_Palette* palette;
         if(node.lookupValue("palette", variable))
@@ -76,12 +77,11 @@ void GCObject::drawImage()
 
 			if (type.compare("SHP") == 0)
 			{
-				Uint32 index;
-				if(node.lookupValue("index", index))
+				if(node.lookupValue("index", value))
 				{
 					ShpFile *shpfile(new ShpFile(data, len, palette));
 					
-					m_surface.reset(new Image(shpfile->getSurface(index)));
+					m_surface.reset(new Image(shpfile->getSurface(value)));
 					
 					delete shpfile;
 				}
@@ -101,7 +101,12 @@ void GCObject::drawImage()
 				variable >> rect;
 				m_surface.reset(gcObj->getPictureCrop(rect));
 			}
+			else
+				m_surface = gcObj->getCopy();
 		}
+		if(node.lookupValue("colorkey", value))
+			m_surface->setColorKey(value);
+
 		node.lookupValue("persistent", m_persistent);
     
     }
