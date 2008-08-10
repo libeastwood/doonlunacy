@@ -125,8 +125,8 @@ void DataCache::Init(){
 	CpsfilePtr mentath (new Cpsfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:MENTATM.CPS", &len);
 	CpsfilePtr mentatm (new Cpsfile(data, len, getPalette(BENE_PAL)));
-	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
-	ShpfilePtr mentat (new Shpfile(data, len));
+//	data = ResMan::Instance()->readFile("ENGLISH:MENTAT.ENG", &len);
+//	ShpfilePtr mentat (new Shpfile(data, len));
 
 //	data = ResMan::Instance()->readFile("DUNE:DUNEMAP.CPS", &len);
 //	CpsfilePtr dunemap(new Cpsfile(data, len));
