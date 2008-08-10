@@ -4,7 +4,7 @@
 #include "DataCache.h"
 #include <CpsFile.h>
 #include <ShpFile.h>
- 
+
 using namespace libconfig;
 
 GCObject::GCObject(std::string path)
@@ -95,14 +95,13 @@ void GCObject::drawImage()
 		else if(node.lookupValue("gcobject", variable))
 		{
 			ImagePtr gcObj = DataCache::Instance()->getGCObject(variable)->getImage();
-			if(node.lookupValue("crop", variable))
+			if(node.exists("crop"))
 			{
-				Rect rect;
-				variable >> rect;
-				m_surface.reset(gcObj->getPictureCrop(rect));
-			}
-			else
+				Setting& s = dataConfig->lookup(fullpath + ".crop");
+				m_surface.reset(gcObj->getPictureCrop(Rect((int)s[0], (int)s[1], (int)s[2], (int)s[3])));
+			} else
 				m_surface = gcObj->getCopy();
+
 		}
 		if(node.lookupValue("colorkey", value))
 			m_surface->setColorKey(value);

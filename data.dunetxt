@@ -3,6 +3,7 @@ gcobjects:
     BigPlanet =
 	{
 	    filename = "FINALE:BIGPLAN.CPS";
+		putpixel = ("heihei!", "hoihoi!");
 	};
 
     Fame =
@@ -29,55 +30,55 @@ gcobjects:
     UI_Mentat_HeraldHarkonnen =
 	{
 		gcobject = "Fame";
-		crop = "Rect(9,136,56,56)";
+		crop = [9,136,56,56];
 	};
 
     UI_Mentat_HeraldAtreides =
 	{
 		gcobject = "Fame";
-		crop = "Rect(65,136,56,56)";
+		crop = [65, 136, 56, 56];
 	};
 
     UI_Mentat_HeraldOrdos =
 	{
 		gcobject = "Fame";
-		crop = "Rect(121,136,56,56)";
+		crop = [121,136,56,56];
 	};
 
 	UI_MenuBackground =
 	{
 		gcobject = "Fame";
-		crop = "Rect(0,0,50,50)";
+		crop = [0,0,50,50];
 	};
 
 	UI_BlankFiller =
 	{
 		gcobject = "MapMach";
-		crop = "Rect(60,184,150, 6)";
+		crop = [60,184,150, 6];
 	};
 
     UI_TopBorder =
 	{
 		gcobject = "Fame";
-		crop = "Rect(12,73,1,4)";
+		crop = [12,73,1,4];
 	};
 
 	UI_BottomBorder =
 	{
 		gcobject = "Fame";
-		crop = "Rect(12,72,1,4)";
+		crop = [12,72,1,4];
 	};
 
 	UI_LeftBorder =
 	{
 		gcobject = "Fame";
-		crop = "Rect(1,83,4,1)";
+		crop = [1,83,4,1];
 	};
 
 	UI_RightBorder =
 	{
 		gcobject = "Fame";
-		crop = "Rect(1,83,4,1)";
+		crop = [1,83,4,1];
 	};
 
 	UI_ButtonUp =
