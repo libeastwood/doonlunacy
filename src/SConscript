@@ -90,9 +90,9 @@ pak_sources = [
 
 all_sources = base_sources + gui_sources + state_sources + pak_sources
 
-dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + battle_sources)
+doonlunacy = env.Program("../doonlunacy", ["main.cpp"] + all_sources + battle_sources)
 
 pakview = env.Program("../pakview", ["tests/pakview.cpp"] + base_sources + pak_sources
          + gui_sources + ["states/TopLevelState.cpp", "states/State.cpp"])
 
-Default(dunelegacy)
+Default(doonlunacy)
