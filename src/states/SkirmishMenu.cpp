@@ -1,7 +1,9 @@
-#include "SkirmishMenu.h"
+#include "states/SkirmishMenu.h"
+
 #include "DataCache.h"
 #include "DrawImage.h"
 #include "GCObject.h"
+
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 #include "gui2/VBox.h"

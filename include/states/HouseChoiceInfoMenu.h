@@ -1,9 +1,10 @@
-#ifndef HOUSECHOICEINFOMENU_H_INCLUDED
-#define HOUSECHOICEINFOMENU_H_INCLUDED
+#ifndef DUNE_STATES_HOUSECHOICEINFOMENU_H
+#define DUNE_STATES_HOUSECHOICEINFOMENU_H
 
 #include "MentatMenu.h"
-class GraphicButton;
+
 class AnimationLabel;
+class GraphicButton;
 class HouseChoiceInfoMenuState : public MentatMenuState {
 	public:
 		HouseChoiceInfoMenuState(HOUSETYPE newHouse);
@@ -16,8 +17,8 @@ class HouseChoiceInfoMenuState : public MentatMenuState {
 	private:
         GraphicButton* m_butYes;
         GraphicButton* m_butNo;
-	AnimationLabel* m_planetAnimation;
+		AnimationLabel* m_planetAnimation;
 };
 
-#endif // HOUSECHOICEINFOMENU_H_INCLUDED
+#endif // DUNE_STATES_HOUSECHOICEINFOMENU_H
 

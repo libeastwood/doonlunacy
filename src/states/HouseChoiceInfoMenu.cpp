@@ -1,4 +1,4 @@
-#include "HouseChoiceInfoMenu.h"
+#include "states/HouseChoiceInfoMenu.h"
 
 #include "DataCache.h"
 #include "gui2/Frame.h"
@@ -7,8 +7,8 @@
 
 #include <Animation.h>
 #include <StringFile.h>
-#include <string>
 
+#include <string>
 #include <boost/bind.hpp>
 
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)

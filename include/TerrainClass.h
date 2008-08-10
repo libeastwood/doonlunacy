@@ -157,7 +157,17 @@ class TerrainClass  : public UPoint
         return m_difficulty;
     }
 
+	inline bool isExplored(int player) 	{return m_explored[player];}
+	
+	bool isFogged(int player);
+	inline void setExplored(int player, bool truth) { //if(truth)
+														//m_lastAccess[player] = clock();
+													  m_explored[player] = truth; 
+													  }
 
+	inline void setHideTile(int newTile) { m_hideTile = newTile; }
+	
+	inline void setFogTile(int newTile) { m_fogTile = newTile; }
 
     //! @name Path searching variables
     //@{ 
@@ -176,11 +186,20 @@ class TerrainClass  : public UPoint
     //@}
 
   private:
+  
+  	bool	*m_explored;
+			
+	clock_t	*m_lastAccess;
+	
     //! How difficult it is to move in this cell
     float m_difficulty,
 
     //! How much spice on this particular cell is left
     m_spice;
+
+	int	m_hideTile,
+		m_fogTile,
+		m_fogColour;/*remember last colour(radar)*/
 
     /*!
      * tile assigned to current cell
@@ -191,6 +210,7 @@ class TerrainClass  : public UPoint
     int m_type;
 
     ImagePtr m_img;
+    ImagePtr m_hiddenImg;
 
     List  m_assignedAirUnits,
           m_assignedDeadObjects,

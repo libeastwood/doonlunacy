@@ -1,8 +1,10 @@
-#include "SingleMenu.h"
-#include "HouseChoiceMenu.h"
-#include "SkirmishMenu.h"
+#include "states/SingleMenu.h"
+
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
+
+#include "states/HouseChoiceMenu.h"
+#include "states/SkirmishMenu.h"
 
 #include <boost/bind.hpp>
 

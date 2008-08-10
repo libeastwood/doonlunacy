@@ -31,9 +31,9 @@ class SoundPlayer : public Singleton<SoundPlayer>
     //@}
 	void changeEmuOpl(EMUOPL oplType);
   
-	void playVoice(Sound_enum soundID, HOUSETYPE house);
+	void playVoice(std::string soundID, HOUSETYPE house);
 
-	void playSound(Sound_enum soundID);
+	void playSound(std::string soundID);
 
 	void playSound(Mix_Chunk* sound, int channel = 0);
     
@@ -73,7 +73,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
 		@param soundID id of a sound to be played
 		@param volume sound will be played with this volume
 	*/
-	void playSound(Sound_enum soundID, int volume);
+	void playSound(std::string soundID, int volume);
 	
 	
 	int m_musicChannel;

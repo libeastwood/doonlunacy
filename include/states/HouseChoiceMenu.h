@@ -1,5 +1,5 @@
-#ifndef DUNE_HOUSECHOICEMENU_H
-#define DUNE_HOUSECHOICEMENU_H
+#ifndef DUNE_STATES_HOUSECHOICEMENU_H
+#define DUNE_STATES_HOUSECHOICEMENU_H
 
 #include "MenuBase.h"
 
@@ -20,10 +20,10 @@ private:
 	void doHarkonnen();
 	void doBack();
 
-	TranspButton* m_butAtreides;
-	TranspButton* m_butOrdos;
-	TranspButton* m_butHarkonnen;
+	TransparentButton* m_butAtreides;
+	TransparentButton* m_butOrdos;
+	TransparentButton* m_butHarkonnen;
     BoringButton* m_butBack;
 };
 
-#endif // DUNE_HOUSECHOICEMENU_H
+#endif // DUNE_STATES_HOUSECHOICEMENU_H

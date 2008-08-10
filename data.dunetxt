@@ -489,7 +489,6 @@ animations:
 
 };
 
-
 // Please don't change the order of music types
 // They correspond to the order of MUSIC_TYPE
 music:
@@ -550,6 +549,456 @@ music:
 	);
 };
 
+sounds:
+{
+	YesSir = 
+	{
+		filename = "VOC:ZREPORT1.VOC";
+	};
+
+	Reporting = 
+	{
+		filename = "VOC:ZREPORT2.VOC";
+	};
+
+	Acknowledged = 
+	{
+		filename = "VOC:ZREPORT3.VOC";
+	};
+
+	Affirmative = 
+	{
+		filename = "VOC:ZAFFIRM.VOC";
+	};
+
+	MovingOut = 
+	{
+		filename = "VOC:ZMOVEOUT.VOC";
+	};
+
+	InfantryOut = 
+	{
+		filename = "VOC:ZOVEROUT.VOC";
+	};
+
+	SomethingUnderTheSand = 
+	{
+		filename = "VOC:SANDBUG.VOC";
+	};
+
+	HouseAtreides = 
+	{
+		filename = "GERMAN:GATRE.VOC";
+	};
+
+	HouseOrdos = 
+	{
+		filename = "GERMAN:GORDOS.VOC";
+	};
+
+	HouseHarkonnen = 
+	{
+		filename = "GERMAN:GHARK.VOC";
+	};
+
+
+	PlaceStructure = 
+	{
+		filename = "VOC:EXDUD.VOC";
+	};
+
+	ButtonClick = 
+	{
+		filename = "VOC:BUTTON.VOC";
+	};
+
+    //	InvalidAction, Mix_LoadWAV_RW(pFileManager->OpenFile("CANNOT.WAV"),1);
+	// probably incorrect?
+
+	CreditsTick = 
+	{
+		filename = "INTROVOC:CLICK.VOC";
+	};
+
+	RadarNoise = 
+	{
+		filename = "VOC:STATICP.VOC";
+	};
+
+	Sound_ExplosionGas = 
+	{
+		filename = "VOC:EXGAS.VOC";
+	};
+
+	Sound_ExplosionTiny = 
+	{
+		filename = "VOC:EXTINY.VOC";
+	};
+
+	Sound_ExplosionSmall = 
+	{
+		filename = "VOC:EXSMALL.VOC";
+	};
+
+	Sound_ExplosionMedium = 
+	{
+		filename = "VOC:EXMED.VOC";
+	};
+
+	Sound_ExplosionLarge = 
+	{
+		filename = "VOC:EXLARGE.VOC";
+	};
+
+	Sound_ExplosionStructure = 
+	{
+		filename = "VOC:CRUMBLE.VOC";
+	};
+
+	Sound_WormAttack = 
+	{
+		filename = "VOC:WORMET3P.VOC";
+	};
+
+	Sound_Gun = 
+	{
+		filename = "VOC:GUN.VOC";
+	};
+
+	Sound_Rocket = 
+	{
+		filename = "VOC:ROCKET.VOC";
+	};
+
+	Sound_Bloom = 
+	{
+		filename = "VOC:EXSAND.VOC";
+	};
+
+	Sound_Scream1 = 
+	{
+		filename = "VOC:VSCREAM1.VOC";
+	};
+
+	Sound_Scream2 = 
+	{
+		filename = "VOC:VSCREAM1.VOC";
+	};
+
+	Sound_Scream3 = 
+	{
+		filename = "VOC:VSCREAM1.VOC";
+	};
+
+	Sound_Scream4 = 
+	{
+		filename = "VOC:VSCREAM1.VOC";
+	};
+
+	Sound_Scream5 = 
+	{
+		filename = "VOC:VSCREAM1.VOC";
+	};
+
+	Sound_MachineGun = 
+	{
+		filename = "VOC:GUNMULTI.VOC";
+	};
+
+    //	Sound_Sonic, Mix_LoadWAV_RW(pFileManager->OpenFile("SONIC.WAV"),1);
+
+	Sound_RocketSmall = 
+	{
+		filename = "VOC:MISLTINP.VOC";
+	};
+
+
+	Intro_3Houses = 
+	{
+		filename = "INTROVOC:3HOUSES.VOC";
+	};
+
+	Intro_AndNow = 
+	{
+		filename = "INTROVOC:ANDNOW.VOC";
+	};
+
+	Intro_HasArrived = 
+	{
+		filename = "INTROVOC:ARRIVED.VOC";
+	};
+
+	Intro_BattleForDune = 
+	{
+		filename = "INTROVOC:BATTLE.VOC";
+	};
+	
+	Intro_Begins = 
+	{
+		filename = "INTROVOC:BEGINS.VOC";
+	};
+
+	Intro_Blaster = 
+	{
+		filename = "INTROVOC:BLASTER.VOC";
+	};
+
+	Intro_TheBuilding = 
+	{
+		filename = "INTROVOC:BLDING.VOC";
+	};
+
+	Intro_Blowup_1 = 
+	{
+		filename = "INTROVOC:BLOWUP1.VOC";
+	};
+
+	Intro_Blowup_2 = 
+	{
+		filename = "INTROVOC:BLOWUP2.VOC";
+	};
+
+	Intro_Brakes_2p = 
+	{
+		filename = "INTROVOC:BRAKES2P.VOC";
+	};
+
+	Intro_Clank = 
+	{
+		filename = "INTROVOC:CLANK.VOC";
+	};
+
+	Intro_Click = 
+	{
+		filename = "INTROVOC:CLICK.VOC";
+	};
+
+	Intro_ControlsDune = 
+	{
+		filename = "INTROVOC:CONTROL2.VOC";
+	};
+
+	Intro_ControlsTheSpice = 
+	{
+		filename = "INTROVOC:CONTROL3.VOC";
+	};
+
+	Intro_ForControl = 
+	{
+		filename = "INTROVOC:CONTROL4.VOC";
+	};
+
+	Intro_Controls = 
+	{
+		filename = "INTROVOC:CONTROLS.VOC";
+	};
+
+	Intro_Dune = 
+	{
+		filename = "INTROVOC:DUNE.VOC";
+	};
+
+	Intro_OfADynasty = 
+	{
+		filename = "INTROVOC:DYNASTY.VOC";
+	};
+
+	Intro_ToEachOfTheHouses = 
+	{
+		filename = "INTROVOC:EACHHOME.VOC";
+	};
+
+	Intro_AndNo = 
+	{
+		filename = "INTROVOC:EANDNO.VOC";
+	};
+
+	Intro_WillControlDune = 
+	{
+		filename = "INTROVOC:ECONTROL.VOC";
+	};
+
+	Intro_TheHouse = 
+	{
+		filename = "INTROVOC:EHOUSE.VOC";
+	};
+
+	Intro_TheMostSpice = 
+	{
+		filename = "INTROVOC:EMOST.VOC";
+	};
+
+	Intro_TheEmpire = 
+	{
+		filename = "INTROVOC:EMPIRE.VOC";
+	};
+
+	Intro_ThereAreNoSet = 
+	{
+		filename = "INTROVOC:ENOSET.VOC";
+	};
+
+	Intro_ThatProduces = 
+	{
+		filename = "INTROVOC:EPRODUCE.VOC";
+	};
+
+	Intro_RulesOfEngagement = 
+	{
+		filename = "INTROVOC:ERULES.VOC";
+	};
+
+	Intro_Territories = 
+	{
+		filename = "INTROVOC:ETERRIT.VOC";
+	};
+
+	Intro_AndThe = 
+	{
+		filename = "INTROVOC:EVIL.VOC";
+	};
+
+/*  Intro_Filler = 
+	{
+		filename = "INTROVOC:FILLER.VOC";
+	};
+*/
+	Intro_Flesh = 
+	{
+		filename = "INTROVOC:FLESH.VOC";
+	};
+
+	Intro_Glass_6 = 
+	{
+		filename = "INTROVOC:GLASS6.VOC";
+	};
+
+	Intro_Glass = 
+	{
+		filename = "INTROVOC:GLASS.VOC";
+	};
+
+	Intro_GunShot = 
+	{
+		filename = "INTROVOC:GUNSHOT.VOC";
+	};
+
+	Intro_EvilHarkonnen = 
+	{
+		filename = "INTROVOC:HARK.VOC";
+	};
+
+	Intro_Home = 
+	{
+		filename = "INTROVOC:HOME.VOC";
+	};
+
+	Intro_OnlyOneHouse = 
+	{
+		filename = "INTROVOC:HOUSE2.VOC";
+	};
+
+	Intro_TheInsideous = 
+	{
+		filename = "INTROVOC:INSID.VOC";
+	};
+
+	Intro_TheEmperor = 
+	{
+		filename = "INTROVOC:KING.VOC";
+	};
+
+	Intro_KnownAsDune = 
+	{
+		filename = "INTROVOC:KNOWN.VOC";
+	};
+
+	Intro_Worm = 
+	{
+		filename = "INTROVOC:LIZARD1.VOC";
+	};
+
+	Intro_Melange = 
+	{
+		filename = "INTROVOC:MELANGE.VOC";
+	};
+
+	Intro_Missile_8 = 
+	{
+		filename = "INTROVOC:MISSLE8.VOC";
+	};
+
+	Intro_TheNobleAtreides = 
+	{
+		filename = "INTROVOC:NOBLE.VOC";
+	};
+
+	Intro_Now = 
+	{
+		filename = "INTROVOC:NOW.VOC";
+	};
+
+	Intro_OfDune = 
+	{
+		filename = "INTROVOC:OFDUNE.VOC";
+	};
+
+	Intro_Ordos = 
+	{
+		filename = "INTROVOC:ORD.VOC";
+	};
+
+	Intro_ThePlanetArrakis = 
+	{
+		filename = "INTROVOC:PLANET.VOC";
+	};
+
+	Intro_WillPrevail = 
+	{
+		filename = "INTROVOC:PREVAIL.VOC";
+	};
+
+	Intro_HasProposedAChallenge = 
+	{
+		filename = "INTROVOC:PROPOSED.VOC";
+	};
+
+	Intro_LandOfSand = 
+	{
+		filename = "INTROVOC:SANDLAND.VOC";
+	};
+
+	Intro_OfTheSpice = 
+	{
+		filename = "INTROVOC:SPICE.VOC";
+	};
+
+	Intro_TheSpice = 
+	{
+		filename = "INTROVOC:SPICE2.VOC";
+	};
+
+	Intro_VastArmies = 
+	{
+		filename = "INTROVOC:VAST.VOC";
+	};
+
+	Intro_WhoEver = 
+	{
+		filename = "INTROVOC:WHOEVER.VOC";
+	};
+
+	Intro_Wind_2bp = 
+	{
+		filename = "INTROVOC:WIND2BP.VOC";
+	};
+
+	Intro_Your = 
+	{
+		filename = "INTROVOC:YOUR.VOC";
+	};
+
+};
 
 //This needs to be completed and verified
 //Many settings in dunelegacy differ from those in the original game

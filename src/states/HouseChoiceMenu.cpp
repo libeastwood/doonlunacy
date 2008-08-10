@@ -1,36 +1,36 @@
 #include "DataCache.h"
 #include "Gfx.h"
-#include "HouseChoiceMenu.h"
-#include "HouseChoiceInfoMenu.h"
 #include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 
+#include "states/HouseChoiceMenu.h"
+#include "states/HouseChoiceInfoMenu.h"
+
 #include <boost/bind.hpp>
 
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
-    // hmm, does it get deleted or something here?
     ImagePtr background = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
     
 	m_backgroundFrame->changeBackground(background);
 
-    m_butAtreides = new TranspButton(UPoint(84,92).getScaled());
+    m_butAtreides = new TransparentButton(UPoint(84,92).getScaled());
     m_butAtreides->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doAtreides, this) );
 
     m_butAtreides->setPosition(UPoint(20,53).getScaled());
     m_backgroundFrame->addChild(m_butAtreides);
 
-    m_butOrdos = new TranspButton(UPoint(84, 92).getScaled());
+    m_butOrdos = new TransparentButton(UPoint(84, 92).getScaled());
     m_butOrdos->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doOrdos, this) );
 
     m_butOrdos->setPosition(UPoint(116,53).getScaled());
     m_backgroundFrame->addChild(m_butOrdos);
 
-    m_butHarkonnen = new TranspButton(UPoint(84, 92).getScaled());
+    m_butHarkonnen = new TransparentButton(UPoint(84, 92).getScaled());
     m_butHarkonnen->onClick.connect(
             boost::bind(&HouseChoiceMenuState::doHarkonnen, this) );
 

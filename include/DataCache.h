@@ -83,7 +83,7 @@ class DataCache : public Singleton<DataCache>
          *  @return pointer to animation
          */
         Animation*		getAnimation(std::string path);
-		void addSoundChunk(Sound_enum ID, Mix_Chunk* tmp); 
+
         /*! Adds palette from a file 
          *  @param palette identification number Palette is assigned
          *  @param paletteFile file from which Palette is to be loaded
@@ -134,9 +134,9 @@ class DataCache : public Singleton<DataCache>
          *        and thus already resized animations should be cached. This would allow
          *        to keep only necessary resized animations in RAM.
          */
-        Mix_Chunk* getSoundChunk(Sound_enum ID);
+        Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
-        Mix_Chunk* concat2Chunks(Sound_enum ID1, Sound_enum ID2);   
+        Mix_Chunk* concat2Chunks(std::string ID1, std::string ID2);   
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
         std::string	getIntroString(uint16_t i);
         std::string	getCreditsString(uint16_t i);

@@ -55,11 +55,12 @@ bool MapWidget::handleMotion(SPoint p)
     return false;
 }
 
-void MapWidget::setGameState(GameState* gs)
+void MapWidget::getGameState()
 {
-    m_map = gs->m_map;
-    m_structures = gs->m_structures;
-    m_units = gs->m_units;
+    GameState* gs = GameState::Instance();
+    m_map = gs->GetMap();
+    m_structures = gs->GetStructures();
+    m_units = gs->GetUnits();
 }
 
 bool MapWidget::handleKeyDown(SDL_keysym* key)

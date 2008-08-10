@@ -1,6 +1,7 @@
+#include "states/MentatMenu.h"
+
 #include "Application.h"
 #include "DataCache.h"
-#include "MentatMenu.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Label.h"

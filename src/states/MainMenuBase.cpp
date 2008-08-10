@@ -1,10 +1,11 @@
-#include "MainMenuBase.h"
+#include "states/MainMenuBase.h"
 
 #include "Application.h"
 #include "Gfx.h"
 #include "DrawImage.h"
 #include "GCObject.h"
 #include "SoundPlayer.h"
+
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
 #include "gui2/VBox.h"

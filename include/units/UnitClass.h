@@ -90,7 +90,5 @@ class UnitClass : public ObjectClass
     Path m_pathList;
 };
 
-typedef std::vector<UnitClass*> Units;
-
 #endif // DUNE_UNITCLASS_H
 

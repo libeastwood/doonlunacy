@@ -1,7 +1,7 @@
-#ifndef DUNE_SKIRMISHMENU_H
-#define DUNE_SKIRMISHMENU_H
+#ifndef DUNE_STATES_SKIRMISHMENU_H
+#define DUNE_STATES_SKIRMISHMENU_H
 
-#include "MainMenuBase.h"
+#include "states/MainMenuBase.h"
 
 class BoringButton;
 class SkirmishMenuState : public MainMenuBaseState 
@@ -15,11 +15,11 @@ class SkirmishMenuState : public MainMenuBaseState
         virtual const char* GetName() { return "SkirmishMenuState"; }
 
     protected:
-	virtual void drawSpecifics();
+		virtual void drawSpecifics();
 
     private:
         BoringButton *m_butStart;
         BoringButton *m_butCancel;
 };
 
-#endif // DUNE_SINGLEMENU_H
+#endif // DUNE_STATES_SINGLEMENU_H

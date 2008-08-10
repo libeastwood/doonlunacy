@@ -2,46 +2,27 @@ Import('env')
 
 from glob import glob
 
-gui_sources = glob("gui/*.cpp")
-structure_sources = glob("structures/*.cpp")
-unit_sources = glob("units/*.cpp")
+#structure_sources = glob("structures/*.cpp")
+#unit_sources = glob("units/*.cpp")
 base_sources = glob("*.cpp")
 
-all_sources = gui_sources + structure_sources + unit_sources + base_sources
-
-#all_sources.remove('Menu.cpp')
-
-all_sources = [ "Application.cpp",
+base_sources = [ "Application.cpp",
                 "Settings.cpp",
                 "FontManager.cpp",
-                "State.cpp",            
                 "DataCache.cpp",
-#                "PictureFactory.cpp",
-                "TopLevelState.cpp",
-		"GameMenu.cpp",
-                "MenuBase.cpp", 
-                "MainMenu.cpp",
-                "MainMenuBase.cpp",
-                "IntroState.cpp", 
-                "SingleMenu.cpp",
-                "SkirmishMenu.cpp",
-#				"CampaignMenu.cpp",
-                "OptionsMenu.cpp",
-		"MentatMenu.cpp",
-		"MentatInfoMenu.cpp",
-		"HouseChoiceMenu.cpp",
-		"HouseChoiceInfoMenu.cpp",
                 "Gfx.cpp",
-		"DrawImage.cpp",
-		"GCObject.cpp",
+				"DrawImage.cpp",
+				"GCObject.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
                 "Strings.cpp",
                 "Log.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
+              ]
+
+battle_sources = [ 
 				"TerrainClass.cpp",
 				"MapClass.cpp",
-				"Editor.cpp",
 				"gui2/MapWidget.cpp",
 				"MapGenerator.cpp",
 				"mmath.cpp",
@@ -63,7 +44,7 @@ all_sources = [ "Application.cpp",
 				"structures/SiloClass.cpp",
 				"structures/StarPortClass.cpp",
 				"structures/StructureClass.cpp",
-#				"structures/TurretClass.cpp",
+				#"structures/TurretClass.cpp",
 				"structures/WallClass.cpp",
 				"structures/WindTrapClass.cpp",
 				"structures/WORClass.cpp",
@@ -72,8 +53,24 @@ all_sources = [ "Application.cpp",
 				"units/QuadClass.cpp",				
 				"GameState.cpp",
 				"PriorityQ.cpp",
-              ]
+                ]
 
+state_sources = [
+#    				"CampaignMenu.cpp",
+				    "states/Editor.cpp",
+    				"states/HouseChoiceMenu.cpp",
+    				"states/HouseChoiceInfoMenu.cpp",
+                    "states/CutSceneState.cpp", 
+                    "states/MenuBase.cpp", 
+                    "states/MainMenu.cpp",
+                    "states/MainMenuBase.cpp",                    
+    				"states/MentatMenu.cpp",
+                    "states/OptionsMenu.cpp",
+                    "states/SingleMenu.cpp",
+					"states/SkirmishMenu.cpp",
+                    "states/State.cpp",
+                    "states/TopLevelState.cpp",
+]
 gui_sources = [
                 "gui2/Widget.cpp",
                 "gui2/Container.cpp",
@@ -84,32 +81,18 @@ gui_sources = [
 
               ]
 
-pak_sources = [ "pakfile/Cpsfile.cpp",
+pak_sources = [ 
+                "pakfile/Cpsfile.cpp",
                 "pakfile/Icnfile.cpp",
                 "pakfile/Shpfile.cpp",
                 "pakfile/Wsafile.cpp",
               ]
 
-pakview_sources = [  "Application.cpp", 
-                     "DataCache.cpp",
-                     "FontManager.cpp",
-                     "Gfx.cpp", 
-                     "houses.cpp",
-                     "Log.cpp",
-                     "ResMan.cpp",                     
-                     "Settings.cpp",
-                     "Strings.cpp",
-                     "State.cpp",
-                     "TopLevelState.cpp",
-                     "SoundPlayer.cpp",
-					 "GCObject.cpp",
-                  ]
+all_sources = base_sources + gui_sources + state_sources + pak_sources
 
+dunelegacy = env.Program("../dunelegacy", ["main.cpp"] + all_sources + battle_sources)
 
-doonlunacy = env.Program("../doonlunacy", ["main.cpp"] + all_sources + gui_sources + pak_sources )
-pakview = env.Program("../pakview", ["pakview.cpp"] + pakview_sources + gui_sources + pak_sources )
-pakbmp = env.Program("../pakbmp", ["pakbmp.cpp"] + pakview_sources + gui_sources + pak_sources )
+pakview = env.Program("../pakview", ["tests/pakview.cpp"] + base_sources + pak_sources
+         + gui_sources + ["states/TopLevelState.cpp", "states/State.cpp"])
 
-Default(doonlunacy)
-Default(pakview)
-Default(pakbmp)
+Default(dunelegacy)

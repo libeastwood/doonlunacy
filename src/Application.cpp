@@ -7,9 +7,8 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
-#include "TopLevelState.h"
+#include "states/TopLevelState.h"
 #include "gui2/Container.h"
-#include "gui2/Label.h"
 
 #include "houses.h"
 #include "pakfile/Shpfile.h"
@@ -21,10 +20,7 @@
 #include <stdlib.h>
 
 #include <SDL.h>
-//#include "SDL_ttf.h"
-//#include "SDL_net.h"
 #include <SDL_mixer.h>
-#include <SDL_rwops.h>
 
 Uint8 gpaloff;
 

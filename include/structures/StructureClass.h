@@ -54,6 +54,4 @@ class StructureClass : public ObjectClass
     void setDrawnPos(SPoint off, SPoint view);
 };
 
-typedef std::vector<StructureClass*> Structures;
-
 #endif // DUNE_STRUCTURECLASS_H

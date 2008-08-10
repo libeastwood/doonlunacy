@@ -50,11 +50,11 @@ class BoringButton : public GraphicButton
         bool m_menuButton;
 };
 
-class TranspButton : public Button
+class TransparentButton : public Button
 {
     public:
-        TranspButton(SPoint size);
-        ~TranspButton();
+        TransparentButton(SPoint size);
+        ~TransparentButton();
 };
 
 

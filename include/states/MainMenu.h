@@ -1,5 +1,5 @@
-#ifndef DUNE_MAINMENU_H
-#define DUNE_MAINMENU_H
+#ifndef DUNE_STATES_MAINMENU_H
+#define DUNE_STATES_MAINMENU_H
 
 #include "MainMenuBase.h"
 
@@ -26,4 +26,4 @@ class MainMenuState : public MainMenuBaseState
         
 };
 
-#endif // DUNE_MAINMENU_H
+#endif // DUNE_STATES_MAINMENU_H

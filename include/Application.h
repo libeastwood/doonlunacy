@@ -2,9 +2,11 @@
 #define DUNE_APPLICATION_H
 
 #include "singleton.h"
-#include "State.h"
-#include "TopLevelState.h"
-#include "Gfx.h"
+#include "states/State.h"
+#include "states/TopLevelState.h"
+
+#include "gui2/Container.h"
+#include "gui2/Label.h"
 
 #define VERSION "0.95"
 

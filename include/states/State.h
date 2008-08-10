@@ -1,6 +1,7 @@
-#ifndef DUNE_STATE_H
-#define DUNE_STATE_H
+#ifndef DUNE_STATES_STATE_H
+#define DUNE_STATES_STATE_H
 
+#include "Definitions.h"
 #include "DataCache.h"
 
 #include <list>

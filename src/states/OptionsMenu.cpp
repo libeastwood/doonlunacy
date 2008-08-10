@@ -1,5 +1,7 @@
+#include "states/OptionsMenu.h"
+
 #include "Application.h"
-#include "OptionsMenu.h"
+
 #include "gui2/Button.h"
 #include "gui2/VBox.h"
 

@@ -34,7 +34,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
     data = ResMan::Instance()->readFile(mapName, &bufsize);
     IniFile * myIniFile = new IniFile(data, bufsize);
 
-    m_gs = new GameState();
+    m_gs = GameState::Instance();
     m_map = new MapClass(UPoint(64, 64));
     m_gs->m_map = m_map;
 
@@ -199,8 +199,8 @@ bool MapGenerator::loadOldMap(std::string mapName)
     // now set up all the players
 
     addPlayer(ATREIDES, false, 1);
-    addPlayer(ORDOS, false, 1);
-    addPlayer(HARKONNEN, false, 1);
+    addPlayer(ORDOS, false, 2);
+    addPlayer(HARKONNEN, false, 2);
     addPlayer(SARDAUKAR, false, 2);
     addPlayer(FREMEN, false, 2);
     addPlayer(MERCENERY, false, 2);
@@ -355,8 +355,8 @@ bool MapGenerator::loadOldMap(std::string mapName)
             }
 
             /*
-                        //FIXME: Fix this here and in addPlayer
-                  if(m_players->size() > house) {
+                //FIXME: Fix this here and in addPlayer
+                if(m_players->size() > house) {
                 LOG_ERROR("MapGenerator","player[%d]== NULL",(int) house);
                 exit(EXIT_FAILURE);
                }
@@ -462,6 +462,8 @@ bool MapGenerator::loadOldMap(std::string mapName)
     myIniFile->KeyList_Close(&myListHandle);
 
     return true;
+    
+    m_map->m_gs = m_gs;
 }
 
 /*
@@ -597,7 +599,9 @@ void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai, int team)
 
     else
     {
-        m_gs->m_players->push_back(new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team, m_gs));
+        PlayerClass * localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
+        m_gs->m_players->push_back(localPlayer);
+        m_gs->m_localPlayer = m_gs->m_players->at(0);//localPlayer;
     }
 
     m_gs->m_players->at(House)->assignMapPlayerNum(House);

@@ -7,5 +7,6 @@ Cpsfile::Cpsfile(unsigned char * bufFiledata, int bufsize, SDL_Palette* palette)
 Image *Cpsfile::getPicture()
 {
 	Image *img = new Image(getSurface());
+	
 	return img;
 }
