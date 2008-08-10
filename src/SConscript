@@ -11,7 +11,6 @@ base_sources = [ "Application.cpp",
                 "FontManager.cpp",
                 "DataCache.cpp",
                 "Gfx.cpp",
-				"DrawImage.cpp",
 				"GCObject.cpp",
                 "houses.cpp",		# just for colors, hope there will be a better place for these (otpetrik)
                 "Strings.cpp",

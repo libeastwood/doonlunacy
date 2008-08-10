@@ -1,7 +1,7 @@
 #ifndef DUNE_GCOBJECT_H
 #define DUNE_GCOBJECT_H
 
-#include "DrawImage.h"
+#include "Gfx.h"
 #include <string>
 
 class GCObject

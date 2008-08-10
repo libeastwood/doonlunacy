@@ -2,7 +2,6 @@
 
 #include "Application.h"
 #include "Gfx.h"
-#include "DrawImage.h"
 #include "GCObject.h"
 #include "SoundPlayer.h"
 
@@ -37,14 +36,14 @@ void MainMenuBaseState::draw()
     m_menuFrame->changeBackground(menu);
     ImagePtr menuTop(new Image(UPoint(bw + 20, 30)));
     menuTop->recolor(0, 236);
-    ((DrawImage*)(menuTop.get()))->drawBorders1();
+    menuTop->drawBorders1();
 
     GraphicsLabel *menuTopLabel = new GraphicsLabel(menuTop, "Doon Lunacy", 32);
     m_menuFrame->addChild(menuTopLabel);
 
 
 	ImagePtr menuBottom(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25)));
-    ((DrawImage*)(menuBottom.get()))->drawBorders2();
+    menuBottom->drawBorders2();
     menuBottom->setColorKey();
     Frame *menuBottomFrame = new Frame(menuBottom);
     m_vbox->setPosition(UPoint(9,14));
@@ -64,7 +63,7 @@ void MainMenuBaseState::draw()
 
     ImagePtr version(new Image(UPoint(100, 30)));
     version->recolor(0, 116);
-    ((DrawImage*)(version.get()))->drawBorders2();
+    version->drawBorders2();
     m_versionLabel = new GraphicsLabel(version, VERSION, 57);
     m_backgroundFrame->addChild(m_versionLabel);
 
@@ -73,7 +72,7 @@ void MainMenuBaseState::draw()
 void MainMenuBaseState::drawSpecifics()
 {
     ImagePtr planet = DataCache::Instance()->getGCObject("BigPlanet")->getImage();
-    ((DrawImage*)(planet.get()))->drawBorders1();
+    planet->drawBorders1();
     m_middleFrame->changeBackground(planet);
 }
 
@@ -82,8 +81,8 @@ void MainMenuBaseState::resize()
     Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
 
     ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
-    ((DrawImage*)(background.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
-    ((DrawImage*)(background.get()))->drawBorders3(3);
+    background->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
+    background->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 
     m_middleFrame->setPosition(UPoint(x - 70, set->GetHeight()/2 - 172));

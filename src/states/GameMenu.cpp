@@ -1,7 +1,6 @@
 #include "states/GameMenu.h"
 
 #include "DataCache.h"
-#include "DrawImage.h"
 #include "GCObject.h"
 
 #include "gui2/Button.h"
@@ -25,13 +24,13 @@ GameMenuState::~GameMenuState()
 void GameMenuState::drawMenu()
 {
     ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
-    ((DrawImage*)(top.get()))->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
+    top->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
     Frame *topFrame = new Frame(top);
     m_container->addChild(topFrame);
 
     ImagePtr messageBox(new Image(UPoint(set->GetWidth(), 28)));
     messageBox->recolor(0, 116);
-    ((DrawImage*)(messageBox).get())->drawBorders2();
+    messageBox->drawBorders2();
     GraphicsLabel *messageLabel = new GraphicsLabel(messageBox);
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
@@ -69,10 +68,10 @@ void GameMenuState::drawMenu()
     ImagePtr sideBar(new Image(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y)));
     ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
     sideBar->blitFrom(roundThingie.get(), UPoint(0, 0));
-    ((DrawImage*)(sideBar).get())->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
+    sideBar->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
     sideBar->blitFrom(roundThingie.get(), UPoint(0, 118));
-    ((DrawImage*)(sideBar).get())->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), sideBar->getSize().x - 1);
-    ((DrawImage*)(sideBar).get())->drawVBar(UPoint(1, 118 + roundThingie->getSize().y), sideBar->getSize().y - 1 - roundThingie->getSize().y);
+    sideBar->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), sideBar->getSize().x - 1);
+    sideBar->drawVBar(UPoint(1, 118 + roundThingie->getSize().y), sideBar->getSize().y - 1 - roundThingie->getSize().y);
     sideBar->blitFrom(roundThingie.get(), UPoint(0, sideBar->getSize().y - 1 - roundThingie->getSize().y));
 
     Frame *sideBarFrame = new Frame(sideBar);

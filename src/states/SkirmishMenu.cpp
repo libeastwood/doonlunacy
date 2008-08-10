@@ -1,7 +1,6 @@
 #include "states/SkirmishMenu.h"
 
 #include "DataCache.h"
-#include "DrawImage.h"
 #include "GCObject.h"
 
 #include "gui2/Button.h"
@@ -32,7 +31,7 @@ void SkirmishMenuState::drawSpecifics()
 	DataCache::Instance()->getGCObject("BigPlanet")->getImage();
 
     ImagePtr houseChoice = DataCache::Instance()->getGCObject("UI_HouseChoiceBackground")->getImage();
-    ((DrawImage*)(houseChoice.get()))->drawBorders1();
+    houseChoice->drawBorders1();
     m_middleFrame->changeBackground(houseChoice);
 }
 
