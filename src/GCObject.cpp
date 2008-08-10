@@ -25,7 +25,7 @@ bool GCObject::freeIfUnique()
 		m_surface.reset();
 		m_freeCounter++;
 		if(m_freeCounter > 50)
-			LOG_WARNING("GCObject:", "%s has been freed over 50 times!", m_path.c_str());
+			LOG_WARNING("GCObject", "%s has been freed over 50 times!", m_path.c_str());
 		return true;
 	}
 	return false;
@@ -33,20 +33,7 @@ bool GCObject::freeIfUnique()
 
 void GCObject::drawImage()
 {
-	libconfig::Config * dataConfig = new Config();
-
-    try
-    {
-        dataConfig->readFile("data.dunetxt");
-    }
-    catch(ParseException& ex)
-    {
-        LOG_FATAL("GCObject", "Fatal error loading configuration file on line %d: %s", 
-            ex.getLine(), ex.getError());
-
-        exit(EXIT_FAILURE);
-    }
-
+	libconfig::Config *dataConfig = DataCache::Instance()->getConfig();
 
 	std::string fullpath = "gcobjects.";
     fullpath += m_path;
@@ -100,7 +87,7 @@ void GCObject::drawImage()
 				}
 				else
 				{
-					LOG_FATAL("DataCache", "No index specified for %s!", variable.c_str());
+					LOG_FATAL("GCObject", "No index specified for %s!", variable.c_str());
 					exit(EXIT_FAILURE);
 				}
 			}
@@ -121,13 +108,11 @@ void GCObject::drawImage()
 
     catch(ParseException& ex)
     {
-        LOG_FATAL("DataCache", "Setting not found %d: %s", 
+        LOG_FATAL("GCObject", "Setting not found %d: %s", 
             ex.getLine(), ex.getError());
 
         exit(EXIT_FAILURE);
     }
-
-	delete dataConfig;
 }
 
 ImagePtr GCObject::getImage()

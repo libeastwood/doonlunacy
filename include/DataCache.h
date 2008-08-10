@@ -140,10 +140,11 @@ class DataCache : public Singleton<DataCache>
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
         std::string	getIntroString(uint16_t i);
         std::string	getCreditsString(uint16_t i);
+		libconfig::Config *getConfig();
         //@}
 
     private:
-		libconfig::Config * m_dataConfig;
+		libconfig::Config *m_dataConfig;
 		
         remapped_images m_objImg;
         remapped_images m_guiImg;

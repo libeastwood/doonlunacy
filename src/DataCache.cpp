@@ -569,6 +569,11 @@ std::string	DataCache::getCreditsString(uint16_t i){
 	return CreditsStrings->getString(i);
 }
 
+libconfig::Config *DataCache::getConfig()
+{
+	return m_dataConfig;
+}
+
 GCObject *DataCache::getGCObject(std::string path)
 {
 	GCObject *gcObj = NULL;
@@ -589,7 +594,7 @@ GCObject *DataCache::getGCObject(std::string path)
 void DataCache::freeGCObjects()
 {
 	for(uint32_t i = 0; i < m_gcObjs.size(); i++)
-			m_gcObjs[i]->freeIfUnique();
+		m_gcObjs[i]->freeIfUnique();
 }
 
 Animation *DataCache::getAnimation(std::string path)
