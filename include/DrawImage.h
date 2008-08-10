@@ -2,7 +2,6 @@
 #define DUNE_DRAWIMAGE_H
 
 #include "Gfx.h"
-#include "Definitions.h"
 
 class DrawImage : public Image
 {
