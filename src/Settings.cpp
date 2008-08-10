@@ -72,8 +72,23 @@ void Settings::load()
     configFile->lookupValue(".sound.music_volume", m_musicVolume);
     configFile->lookupValue(".sound.opl_emulator", m_emuOpl);
 
-    
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
+    if (configFile->exists("log_verbosity"))
+    {
+        Setting& node = configFile->lookup(".log_verbosity");
+        
+        for (int j = 0; j < node.getLength(); j++)
+        {
+            std::string logSystem = node[j][0];
+            int logVerbosity = node[j][1];
+
+            Log::Instance()->setVerbosity(logSystem, (LogVerbosity)logVerbosity);
+        }
+    }
+
+
+
+
 //    Log::Instance()->setVerbosity("UnitClass", LV_MAX);
 //    Log::Instance()->setVerbosity("ObjectClass", LV_MAX);    
 //    Log::Instance()->setVerbosity("TerrainClass", LV_MAX);    
