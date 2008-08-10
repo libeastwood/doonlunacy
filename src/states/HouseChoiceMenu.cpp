@@ -1,18 +1,20 @@
+#include "states/HouseChoiceMenu.h"
+
 #include "DataCache.h"
+#include "GCObject.h"
 #include "Gfx.h"
 #include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 
-#include "states/HouseChoiceMenu.h"
 #include "states/HouseChoiceInfoMenu.h"
 
 #include <boost/bind.hpp>
 
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
-    ImagePtr background = DataCache::Instance()->getGuiPic(UI_HouseChoiceBackground)->getResized();
+    ImagePtr background = DataCache::Instance()->getGCObject("UI_HouseChoiceBackground")->getImage()->getResized();
     
 	m_backgroundFrame->changeBackground(background);
 
@@ -43,7 +45,6 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
     m_butBack->onClick.connect(
              boost::bind(&HouseChoiceMenuState::doBack, this) );
     m_backgroundFrame->addChild(m_butBack);        
-
 }
 
 HouseChoiceMenuState::~HouseChoiceMenuState() {
