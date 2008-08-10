@@ -107,10 +107,10 @@ void DataCache::Init(){
 	ShpfilePtr menshpo(new Shpfile(data, len));
 	data = ResMan::Instance()->readFile("DUNE:MENSHPM.SHP", &len);
 	ShpfilePtr menshpm(new Shpfile(data, len, getPalette(BENE_PAL)));
-	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
-	ShpfilePtr choam(new Shpfile(data, len));
-	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
-	ShpfilePtr bttn(new Shpfile(data, len));
+//	data = ResMan::Instance()->readFile("ENGLISH:CHOAM.ENG", &len);
+//	ShpfilePtr choam(new Shpfile(data, len));
+//	data = ResMan::Instance()->readFile("ENGLISH:BTTN.ENG", &len);
+//	ShpfilePtr bttn(new Shpfile(data, len));
 //	data = ResMan::Instance()->readFile("FINALE:BIGPLAN.CPS", &len);
 //	CpsfilePtr bigplan(new Cpsfile(data, len));
 
@@ -140,8 +140,8 @@ void DataCache::Init(){
 //	ShpfilePtr arrows(new Shpfile(data, len));
     data = ResMan::Instance()->readFile("DUNE:FAME.CPS", &len);
     CpsfilePtr fame(new Cpsfile(data, len));
-    data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
-    CpsfilePtr mapmach(new Cpsfile(data, len));
+//    data = ResMan::Instance()->readFile("DUNE:MAPMACH.CPS", &len);
+//    CpsfilePtr mapmach(new Cpsfile(data, len));
 //    data = ResMan::Instance()->readFile("DUNE:SCREEN.CPS", &len);
 //    CpsfilePtr screen(new Cpsfile(data, len));
 
