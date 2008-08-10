@@ -1,26 +1,19 @@
-#include <boost/bind.hpp>
-#include "Settings.h"
-#include "Editor.h"
-#include "MapGenerator.h"
-#include "MapClass.h"
-#include "ResMan.h"
-#include "pakfile/Cpsfile.h"
-#include "gui2/Frame.h"
-#include "gui2/Button.h"
-#include "gui2/Label.h"
-#include "DataCache.h"
-#include "MentatInfoMenu.h"
-#include "DrawImage.h"
+#include "states/GameMenu.h"
 
+#include "DataCache.h"
+#include "DrawImage.h"
 #include "GCObject.h"
+
+#include "gui2/Button.h"
+#include "gui2/Frame.h"
+#include "gui2/Label.h"
+
+#include "states/MentatInfoMenu.h"
+
+#include <boost/bind.hpp>
 
 GameMenuState::GameMenuState()
 {
-    m_mapWidget = new MapWidget();
-    m_mapWidget->setPosition(UPoint(0,56));
-    m_mapWidget->setSize(UPoint(set->GetWidth() - 144, set->GetHeight() - m_mapWidget->getPosition().y));
-
-    drawMenu();
 }
 
 
@@ -95,14 +88,12 @@ void GameMenuState::doMentat()
 
 int GameMenuState::Execute(float dt)
 {
-   SDL_Event event;
-   SDL_PollEvent(&event);
-   if (event.type == SDL_KEYDOWN) {
-	   switch (event.key.keysym.sym) {
-		case SDLK_ESCAPE : PopState(); break;
-		default : break;
-	   }
-   }
+    if(m_drawMenu)
+    {
+        drawMenu();
+		m_drawMenu = false;
+    }
+
     return 0;
 }
 

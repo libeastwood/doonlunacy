@@ -1,7 +1,7 @@
-#ifndef GAMEMENU_H
-#define GAMEMENU_H
+#ifndef DUNE_STATES_GAMEMENU_H
+#define DUNE_STATES_GAMEMENU_H
 
-#include "MenuBase.h"
+#include "states/MenuBase.h"
 
 #include "gui2/MapWidget.h"
 
@@ -15,11 +15,10 @@ class GameMenuState : public MenuBaseState {
 
     protected:
         MapWidget *m_mapWidget, *m_mapWidget2;
-	GraphicButton *m_mentatButton, *m_optionsButton;
-	void drawMenu();
-	void doMentat();
-
+		GraphicButton *m_mentatButton, *m_optionsButton;
+		void drawMenu();
+		void doMentat();
 };
 
-#endif // GAMEMENU_H
+#endif // DUNE_STATES_GAMEMENU_H
 

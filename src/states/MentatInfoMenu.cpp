@@ -1,11 +1,10 @@
-#include "MentatInfoMenu.h"
+#include "states/MentatInfoMenu.h"
 
 #include "DataCache.h"
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 
 #include <StringFile.h>
-#include <string>
 #include <boost/bind.hpp>
 
 
