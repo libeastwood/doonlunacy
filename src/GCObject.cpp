@@ -10,12 +10,25 @@ using namespace libconfig;
 GCObject::GCObject(std::string path)
 {
 	m_path = path;
+	// set this to true to avoid it being freed
+	m_persistent = false;
+	m_freeCounter = 0;
 }
 
-void GCObject::freeIfUnique()
+GCObject::~GCObject()
 {
-	if(m_surface.unique())
+}
+
+bool GCObject::freeIfUnique()
+{
+	if(!m_persistent && m_surface.unique()){
 		m_surface.reset();
+		m_freeCounter++;
+		if(m_freeCounter > 50)
+			LOG_WARNING("GCObject:", "%s has been freed over 50 times!", m_path.c_str());
+		return true;
+	}
+	return false;
 }
 
 void GCObject::drawImage()
@@ -102,6 +115,7 @@ void GCObject::drawImage()
 				m_surface.reset(gcObj->getPictureCrop(rect));
 			}
 		}
+		node.lookupValue("persistent", m_persistent);
     
     }
 
