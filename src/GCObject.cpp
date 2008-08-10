@@ -103,10 +103,18 @@ void GCObject::drawImage()
 								(int)s["size"][0], (int)s["size"][1])));
 			} else
 				m_surface = gcObj->getCopy();
-		}
-		if(node.lookupValue("colorkey", value))
-			m_surface->setColorKey(value);
 
+			if(node.lookupValue("colorkey", value))
+				m_surface->setColorKey(value);
+
+			if(node.exists("putpixel"))
+			{
+				Setting& s = dataConfig->lookup(fullpath + ".putpixel");
+				for(int i = 0; i < s.getLength(); i++)
+					m_surface->putPixel(UPoint((int)s[i]["point"][0], (int)s[i]["point"][1]), (int)s[i]["color"]);
+			}
+
+		}
 		node.lookupValue("persistent", m_persistent);
     
     }
