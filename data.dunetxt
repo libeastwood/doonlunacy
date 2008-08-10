@@ -122,6 +122,76 @@ gcobjects:
 		index = 1;
 	};
 
+	UI_MentatYes =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 0;
+	}
+
+	UI_MentatYes_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 1;
+	}
+
+	UI_MentatNo =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 2;
+	}
+
+	UI_MentatNo_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 3;
+	}
+
+	UI_MentatExit =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 4;
+	}
+
+	UI_MentatExit_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 5;
+	}
+
+	UI_MentatProceed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 6;
+	}
+
+	UI_MentatProceed_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 7;
+	}
+
+	UI_MentatRepeat =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 8;
+	}
+
+	UI_MentatYes_Pressed =
+	{
+		type = "SHP";
+		filename = "ENGLISH:MENTAT.ENG";
+		index = 9;
+	}
+
 	UI_Options =
 	{
 		type = "SHP";
