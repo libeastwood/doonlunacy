@@ -278,7 +278,7 @@ void DataCache::Init(){
 	addGuiPic(UI_MentatBackground, mentato->getPicture(), HOUSE_MERCENARY);
 	addGuiPic(UI_MentatBackground, mentath->getPicture(), HOUSE_HARKONNEN);
 	addGuiPic(UI_MentatBackground, mentatm->getPicture(), HOUSE_SARDAUKAR);
-	addGuiPic(UI_MentatYes, mentat->getPicture(0));
+	/*addGuiPic(UI_MentatYes, mentat->getPicture(0));
 	addGuiPic(UI_MentatYes_Pressed, mentat->getPicture(1));
 	addGuiPic(UI_MentatNo, mentat->getPicture(2));
 	addGuiPic(UI_MentatNo_Pressed, mentat->getPicture(3));
@@ -287,7 +287,7 @@ void DataCache::Init(){
 	addGuiPic(UI_MentatProcced, mentat->getPicture(6));
 	addGuiPic(UI_MentatProcced_Pressed, mentat->getPicture(7));
 	addGuiPic(UI_MentatRepeat, mentat->getPicture(8));
-	addGuiPic(UI_MentatRepeat_Pressed, mentat->getPicture(9));
+	addGuiPic(UI_MentatRepeat_Pressed, mentat->getPicture(9));*/
 //	addGuiPic(UI_HouseChoiceBackground, herald->getPicture());
 //	addGuiPic(UI_HouseSelect, PicFactory->createHouseSelect(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN]);
 //	addGuiPic(UI_HeraldAtre_Coloured, GetSubPicture(addGuiPic(UI_HouseChoiceBackground][HOUSE_HARKONNEN],20,54,83,91);
