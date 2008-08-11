@@ -11,13 +11,8 @@
 #include "gui2/Container.h"
 
 #include "houses.h"
-#include "pakfile/Shpfile.h"
-#include "pakfile/Cpsfile.h"
 
 #include <assert.h>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
