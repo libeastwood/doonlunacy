@@ -2,7 +2,7 @@
 #define DUNE_CUTSCENESTATE_H
 
 #include "Gfx.h"
-#include "State.h"
+#include "states/MenuBase.h"
 
 #include "DataCache.h"
 
@@ -26,10 +26,10 @@ class WsaFile;
 
 typedef boost::shared_ptr<WsaFile> WsafilePtr;
 
-class CutSceneState : public State 
+class CutSceneState : public MenuBaseState 
 {
    
-    class Scene
+    class Scene : public MenuBaseState
     {
         public:
             enum Transition
@@ -50,7 +50,7 @@ class CutSceneState : public State
 					bool cont, uint8_t endWait = 0);
 			~Scene();
             
-            bool Execute(float ft);
+            int Execute(float ft);
             void Load(Scene* lastscene);
 			void addSound(uint16_t playAt, std::string sound);
 			void setSong(uint16_t song);
@@ -67,7 +67,6 @@ class CutSceneState : public State
             std::string m_filename;
             
             bool m_continuation, m_textFade;
-            float m_hold;
             
             TransitionState m_state;
             Transition m_transition_in;
@@ -80,7 +79,8 @@ class CutSceneState : public State
             float m_frametime, m_textSize;
 			int16_t m_song;
 			uint8_t m_endWait, m_textColor, m_textTransition;
-			uint16_t m_totalAnimFrames;
+			uint16_t m_animFrames,
+					 m_totalAnimFrames;
 			SPoint m_textLocation;
 
 			float m_fps;

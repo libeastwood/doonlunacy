@@ -7,7 +7,9 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+
 #include "gui2/Button.h"
+#include "gui2/Frame.h"
 
 #include <eastwood/CpsFile.h>
 #include <eastwood/PalFile.h>
@@ -35,7 +37,6 @@ CutSceneState::Scene::Scene(std::string filename, std::string palettefile,
     m_continuation = continuation;
     
     m_state = TRANSITION_IN;
-    m_hold = 0.0f;
     m_transitionPalette = NULL;
 	m_palette = DataCache::Instance()->getPalette(palettefile);
 
@@ -141,7 +142,7 @@ void CutSceneState::Scene::setTextFade(bool textFade)
 	m_textFade = textFade;
 }
 
-void CutSceneState::Scene::Load(Scene* lastframe)
+void CutSceneState::Scene::Load(Scene* lastscene)
 {
     LOG_INFO("CutSceneState", "Loading %s", m_filename.c_str());
 
@@ -160,7 +161,7 @@ void CutSceneState::Scene::Load(Scene* lastframe)
 		if(isWsa){
 			if (m_continuation)
 			{
-				m_wsa.reset(new WsaFile(data, len, m_palette, lastframe->m_animSurface->getSurface(), m_fps));
+				m_wsa.reset(new WsaFile(data, len, m_palette, lastscene->m_animSurface->getSurface(), m_fps));
 			}
 			else
 			{
@@ -180,24 +181,31 @@ void CutSceneState::Scene::Load(Scene* lastframe)
 		 loopAnimFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
 	}
 	if(m_wsa)
-		m_totalAnimFrames = m_wsa->getNumFrames();
+		m_animFrames = m_wsa->getNumFrames();
 	else
-		m_totalAnimFrames = 1;
-	m_totalAnimFrames += m_endWait + loopAnimFrames;
+		m_animFrames = 1;
+	m_totalAnimFrames = m_animFrames + m_endWait + loopAnimFrames;
 
 	if(isCps){
 		// A bit retarded, needs to be cleaned up later..
 		m_animSurface.reset(new Image(cps->getSurface()));
 		m_textSurface = m_animSurface->getResized();
 		setTextLocation(SPoint(0,-200));
-	}
-	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
-    m_scaledSurface = m_animSurface->getResized();
+	} else if(isWsa)
+		m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
+	else
+		m_animSurface.reset(new Image(UPoint(304, 120)));
+	m_scaledSurface = m_animSurface->getResized();
+    m_backgroundFrame->changeBackground(m_scaledSurface);
+	UPoint centered = UPoint(set->GetWidth(), set->GetHeight())/2 - m_backgroundFrame->getPictureSize()/2;
+	centered.y /= 4;
+	m_backgroundFrame->setPosition(centered);
+	std::cout << m_backgroundFrame->getPictureSize() << " " << centered << std::endl;	
 	if(m_endWait)
-		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
+		addLoop(m_animFrames, m_animFrames, 1, m_endWait);
 }
 
-bool CutSceneState::Scene::Execute(float dt)
+int CutSceneState::Scene::Execute(float dt)
 {
 
     switch (m_state)
@@ -220,7 +228,8 @@ bool CutSceneState::Scene::Execute(float dt)
     };
 
 //    m_scaledSurface->blitToScreen(SPoint(0, Application::Instance()->Screen()->getSurface()->h/2 - m_scaledSurface->getSurface()->h/2 - 55));
-	m_scaledSurface->blitToScreen();
+	//m_scaledSurface->blitToScreen();
+    m_backgroundFrame->changeBackground(m_scaledSurface);	
 	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + m_textLocation.y));
 
     return mb_finished;
@@ -311,17 +320,17 @@ void CutSceneState::Scene::doPlaying(float dt)
 		m_animFramesPlayed++;		
 
         m_frametime = 0.0f;
-        if (m_currentAnimFrame >= m_wsa->getNumFrames())
+        if (m_currentAnimFrame >= m_animFrames)
         {
             m_state = HOLDING;
         }
-        else
-        {
-            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
-            m_scaledSurface = m_animSurface->getResized();
-        };
+        else if(m_wsa)
+		{
+			m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
+			m_scaledSurface = m_animSurface->getResized();
+		}
 
-    };
+    }
 }
 
 void CutSceneState::Scene::setupTransitionIn()
