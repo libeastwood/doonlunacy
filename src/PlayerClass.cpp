@@ -1,9 +1,11 @@
 #include "DataCache.h"
+#include "Definitions.h"
 #include "GameState.h"
 #include "houses.h"
 #include "Log.h"
-#include "PlayerClass.h"
 #include "MapClass.h"
+#include "PlayerClass.h"
+#include "SoundPlayer.h"
 
 //FIXME:When it's done these includes should be moved to Items.h
 #include "structures/BarracksClass.h"
@@ -26,6 +28,7 @@
 #include "structures/WORClass.h"
 #include "units/UnitClass.h"
 #include "units/QuadClass.h"
+#include "ObjectClass.h"
 
 PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team)
 {
@@ -82,91 +85,35 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 		m_mapPlayerNum = 0;
 }
 
-void* PlayerClass::createUnit(int itemID)
-
+UnitClass* PlayerClass::createUnit(int itemID)
 {
-
 	UnitClass* newUnit = NULL;
-	switch (itemID)
-	{
-/*
-	case (Unit_Carryall):
-		newUnit = new Carryall(this);
-		numCarryalls++;
-		break;
 
-	case (Unit_Devastator):
-		newUnit = new DevastatorClass(this);
-		break;
-	case (Unit_Deviator):
-		newUnit = new DeviatorClass(this);
-		break;
-	case (Unit_Frigate):
-		newUnit = new Frigate(this);
-		break;
-	case (Unit_Harvester):
-		newUnit = new HarvesterClass(this);
-		numHarvesters++;
-		break;
-	case (Unit_Infantry):
-		newUnit = new InfantryClass(this);
-		break;
-	case (Unit_Launcher):
-		newUnit = new LauncherClass(this);
-		break;
-	case (Unit_MCV):
-		newUnit = new MCVClass(this);
-		break;
-	case (Unit_Ornithopter):
-		newUnit = new Ornithopter(this);
-		break;
-*/
-	case (Unit_Quad):
-		newUnit = new QuadClass(this);
-		break;
-/*
-	case (Unit_Saboteur):
-		newUnit = new Saboteur(this);
-		break;
-	case (Unit_Sandworm):
-		newUnit = new Sandworm(this);
-		break;
-	case (Unit_SiegeTank):
-		newUnit = new SiegeTankClass(this);
-		break;
-	case (Unit_SonicTank):
-		newUnit = new SonicTankClass(this);
-		break;
-	case (Unit_Tank):
-		newUnit = new TankClass(this);
-		break;
-	case (Unit_Trike):
-		newUnit = new TrikeClass(this);
-		break;
-	case (Unit_Raider):
-		newUnit = new RaiderClass(this);
-		break;
-	case (Unit_Trooper):
-		newUnit = new TrooperClass(this);
-		break;
-	case (Unit_Sardaukar):
-		newUnit = new SardaukarClass(this);
-		break;
-	case (Unit_Fremen):
-		newUnit = new FremenClass(this);
-		break;
-	
-*/  
-    default:
-        break;
-    }
+	newUnit = (UnitClass*) ObjectClass::createObject(itemID,this);
 
-	if (newUnit)
+	if(newUnit == NULL) 
 	{
-        newUnit->setObjectID(GameState::Instance()->getObjectID());
-		GameState::Instance()->GetUnits()->push_back(newUnit);
-		if (itemID != Unit_Sandworm)
-			m_numUnits++;
+		LOG_ERROR("PlayerClass", "Cannot create Object with itemID %d",itemID);
+		exit(EXIT_FAILURE);
+	}
+
+	if (itemID != Unit_Sandworm) 
+	{
+		m_numUnits++;
+	}
+
+	switch (itemID)	{
+		case (Unit_Frigate): 
+			m_numFrigates++;
+			break;
+
+		case (Unit_Carryall): 
+			m_numCarryalls++;
+			break;
+
+		case (Unit_Harvester):
+			m_numHarvesters++;
+			break;
 	}
 
 	return newUnit;
@@ -177,9 +124,8 @@ MapClass* PlayerClass::getMap()
     return GameState::Instance()->GetMap();
 }
 
-void* PlayerClass::placeUnit(int itemID, UPoint itemPos)
+UnitClass* PlayerClass::placeUnit(int itemID, UPoint itemPos)
 {
-
 	UnitClass* newUnit = NULL;
 	if (GameState::Instance()->GetMap()->cellExists(itemPos))
 		newUnit = (UnitClass*)createUnit(itemID);
@@ -190,124 +136,162 @@ void* PlayerClass::placeUnit(int itemID, UPoint itemPos)
 			newUnit->deploy(itemPos);
 		else
 		{
-//			newUnit->setVisible(VIS_ALL, false);
-//			newUnit->destroy();
+			newUnit->setVisible(VIS_ALL, false);
+			newUnit->destroy();
 			newUnit = NULL;
 		}
 	}
+
 	return newUnit;
 }
 
 void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos)
 {
-    m_numStructures++;
+	GameState* currentGame = GameState::Instance();
+	MapClass* map = currentGame->GetMap();
+	PlayerClass* thisPlayer = currentGame->LocalPlayer();
 
-    StructureClass* tempStructure = NULL;
-
-    switch (itemID)
-    {
-        case (Structure_Barracks):
-		tempStructure = new BarracksClass(this);
-            break;
-
-        case (Structure_ConstructionYard):
-		tempStructure = new ConstructionYardClass(this);
-            break;
-
-        case (Structure_GunTurret):
-		tempStructure = new GunTurretClass(this);
-            break;
-
-        case (Structure_HeavyFactory):
-		tempStructure = new HeavyFactoryClass(this);
-            break;
-
-        case (Structure_HighTechFactory):
-		tempStructure = new HighTechFactoryClass(this);
-            break;
-
-        case (Structure_IX):
-		tempStructure = new IXClass(this);
-            break;
-
-        case (Structure_LightFactory):
-		tempStructure = new LightFactoryClass(this);
-            break;
-
-        case (Structure_Palace):
-		tempStructure = new PalaceClass(this);
-            break;
-
-        case (Structure_Radar):
-		tempStructure = new RadarClass(this);
-            break;
-
-        case (Structure_RocketTurret):
-		tempStructure = new RocketTurretClass(this);
-            break;
-	    
-        case (Structure_Refinery):
-		tempStructure = new RefineryClass(this);
-    	        addCapacity(2000);
-            break;
-
-        case (Structure_RepairYard):
-		tempStructure = new RepairYardClass(this);
-            break;
-
-        case (Structure_Silo):
-		tempStructure = new SiloClass(this);
-    	        addCapacity(100);
-	    break;
-
-        case (Structure_StarPort):
-		tempStructure = new StarPortClass(this);
-	    break;
-
-	case (Structure_Wall):
-                tempStructure = new WallClass(this);
-                 m_numWalls++;
-	    break;
-
-	case (Structure_WindTrap):
-                tempStructure = new WindTrapClass(this);
-	    break;
-
-        case (Structure_WOR):
-		tempStructure = new WORClass(this);
-            break;
-
-	default:
-	        m_numStructures--;
-    	    break;
-    }
-    
-    if (tempStructure)
-	{
-		for(int i=0;i<tempStructure->w;i++)
+	if(!map->cellExists(itemPos)) {
+		return NULL;
+	}
+	
+	StructureClass* tempStructure = NULL;
+	
+	if((itemID != Structure_Slab1) && (itemID != Structure_Slab4)) {
+		tempStructure = (StructureClass*) ObjectClass::createObject(itemID,this);
+		if(tempStructure == NULL) {
+			LOG_ERROR("PlayerClass", "Cannot create Object with itemID %d",itemID);
+			exit(EXIT_FAILURE);
+		}
+		
+		//numStructures++;
+	}
+	
+	switch (itemID)
+	{	
+		case (Structure_Slab1):
 		{
-			for(int j=0;j<tempStructure->h;j++)
-			{
-			    //FIXME: No idea what it does
+			// Slabs are no normal buildings
+			map->getCell(itemPos)->setType(Structure_Slab1);
+			map->getCell(itemPos)->setOwner(getPlayerNumber());
+			map->viewMap(getTeam(), itemPos, TILE_VIEWRANGE);
+	//		map->getCell(xPos, yPos)->clearDamage();
 
-				if (GameState::Instance()->GetMap()->cellExists(UPoint(itemPos.x+i, itemPos.y+j)))
-				{
-					//m_map->getCell(UPoint(itemPos.x+i, itemPos.y+j))->clearDamage();
+/*
+			if (builderID != NONE) {
+				ObjectClass*	object = map->findObjectWithID(builderID, builderPos);
+				if (object->isAStructure() && ((StructureClass*)object)->isABuilder()) {
+					((BuilderClass*)object)->unSetWaitingToPlace();
+					if (this == thisPlayer) {
+						currentGame->placingMode = false;
+					}
+				}
+			} else if (this == thisPlayer) {
+				currentGame->placingMode = false;
+			}
+*/			
+		} break;
+	
+		case (Structure_Slab4):
+		{
+			// Slabs are no normal buildings
+			int i,j;
+			for(i = itemPos.x; i < itemPos.x + 2; i++) {
+				for(j = itemPos.y; j < itemPos.y + 2; j++) {
+					if (map->cellExists(i, j)) {
+						TerrainClass* cell = map->getCell(i, j);
+			
+						if (!cell->hasAGroundObject() && cell->isRock() && !cell->isMountain()) {
+							cell->setType(Structure_Slab1);
+							cell->setOwner(getPlayerNumber());
+							map->viewMap(getTeam(), i, j, TILE_VIEWRANGE);
+							//cell->clearDamage();
+						}
+					}
+				}
+			}
+/*	
+			if (builderID != NONE) {
+				ObjectClass*	object = map->findObjectWithID(builderID, builderPos);
+	
+				if (object->isAStructure() && ((StructureClass*)object)->isABuilder()) {
+					((BuilderClass*)object)->unSetWaitingToPlace();
+	
+					if (this == thisPlayer) {
+						currentGame->placingMode = false;
+					}
+				}
+			} else if (this == thisPlayer) {
+				currentGame->placingMode = false;
+			}
+*/			
+		} break;	
+	}
 
+	if (tempStructure) {
+		for(int i=0;i<tempStructure->w;i++) {
+			for(int j=0;j<tempStructure->h;j++) {
+				//sprintf(temp, "clear x: %d, y: %d", xPos + i, yPos + j);
+				//currentGame->AddToNewsTicker(temp);
+
+				if(map->cellExists(itemPos.x+i, itemPos.y+j)) {
+					map->getCell(itemPos.x+i, itemPos.y+j)->clearDamage();
 				}
 			}
 		}
 
+		tempStructure->setPosition(itemPos);
 
+		if (itemID == Structure_Wall)
+			map->fixWalls(itemPos.x, itemPos.y);
 
-        tempStructure->setPosition(itemPos);
+		// at the beginning of the game every refinery gets one harvester for free (brought by a carryall)
+//		if ((gameState == BEGUN) && (itemID == Structure_Refinery))
+//			freeHarvester(itemPos);
+/*
+		// if this structure was built by a construction yard this construction yard must be informed
+		if (builderID != NONE) {
+			ObjectClass*	object = map->findObjectWithID(builderID, builderPos);
+			if (object->isAStructure() && ((StructureClass*)object)->isABuilder()) {	
+				((BuilderClass*)object)->unSetWaitingToPlace();
+				if (this == thisPlayer) {
+					currentGame->placingMode = false;
+				}
+			}
+		} else if (this == thisPlayer) {
+			currentGame->placingMode = false;
+		}
 
-        if (itemID == Structure_Wall)
-            GameState::Instance()->GetMap()->fixWalls(itemPos.x, itemPos.y);
+		sapPower(tempStructure->getPowerRequirement());
 
-        tempStructure->setObjectID(GameState::Instance()->getObjectID());
-        GameState::Instance()->GetStructures()->push_back(tempStructure);
-    }
-       
-    return tempStructure;
+		if(itemID == Structure_Radar && hasPower()) {
+			changeRadar(true);
+		}
+
+		if(!loading)
+			checkSelectionLists();
+*/			
+	}
+
+	return tempStructure;
+}
+
+void PlayerClass::update()
+{
+	if (m_oldCredits != m_credits)
+	{
+//		if ((this == GameState::Instance()->LocalPlayer()) && (getAmountOfCredits() > 0))
+//			SoundPlayer::Instance()->playSound(CreditsTick);
+		m_oldCredits = m_credits;
+	}
+
+	if (m_credits > m_capacity)
+	{
+		m_credits--;// = capacity;
+		if (this == GameState::Instance()->LocalPlayer())
+		{
+			//TODO: Add news ticker, etc.:)
+			//currentGame->AddToNewsTicker("spice lost, build more silos.");
+		}
+	}
 }

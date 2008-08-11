@@ -2,6 +2,7 @@
 #include "Colours.h"
 #include "DataCache.h"
 #include "FontManager.h"
+#include "DuneConstants.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "ResMan.h"
@@ -48,19 +49,6 @@ Application::~Application()
 
 void Application::Init()
 {
-	int lookDist[11];
-    lookDist[0] = 10; 
-    lookDist[1] = 10;
-    lookDist[2] = 9;
-    lookDist[3] = 9;
-    lookDist[4] = 9;
-    lookDist[5] = 8;
-    lookDist[6] = 8;
-    lookDist[7] = 7;
-    lookDist[8] = 6;
-    lookDist[9] = 4;
-    lookDist[10] = 1;
-    
 
     InitSettings();
 
@@ -298,19 +286,19 @@ void Application::Run()
         SDL_FillRect(m_screen->getSurface(), NULL, m_clearColor);
 
         HandleEvents();
-
+        
         then = now;
         now = SDL_GetTicks();
 
+        #if 0
         // dont steal all the processing time 
         // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
-#if 0
         if (now - then < min_frame_duration)
         {
             SDL_Delay(min_frame_duration -(now - then));
             now = SDL_GetTicks();
         };
-#endif   
+        #endif
         float dt = float(now - then) / 1000.0f;
 
         if (m_rootState->Execute(dt) == -1) m_running = false;

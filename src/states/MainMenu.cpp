@@ -1,11 +1,13 @@
 #include "states/Editor.h"
-#include "states/MainMenu.h"
-#include "states/OptionsMenu.h"
-#include "states/SingleMenu.h"
+
 #include "SoundPlayer.h"
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 #include "gui2/VBox.h"
+
+#include "states/SingleMenu.h"
+#include "states/MainMenu.h"
+#include "states/OptionsMenu.h"
 
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
@@ -27,12 +29,12 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butMulti);
 
-    m_butMapEd = new BoringButton("Map Editor");
-    m_butMapEd->setSize(SPoint(bw, bh));
-    m_butMapEd->onClick.connect(
+    m_butEditor = new BoringButton("Editor");
+    m_butEditor->setSize(SPoint(bw, bh));
+    m_butEditor->onClick.connect(
             boost::bind(&MainMenuState::doEditor, this) );
    
-    m_vbox->addChild(m_butMapEd);
+    m_vbox->addChild(m_butEditor);
 
     m_butOptions = new BoringButton("Options");
     m_butOptions->setSize(SPoint(bw, bh));

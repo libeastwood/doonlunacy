@@ -111,6 +111,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                     m_selectedList.clear();
                     m_selectedList.push_back(tmp);
                     tmp->setSelected(true);
+                    LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
                 }
 
 
@@ -155,7 +156,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 void MapWidget::draw(Image * dest, SPoint off)
 {
     // We have to be sure we're not trying to draw cell with coordinates below zero or above mapsize
-
+    TerrainClass* cell;
 
     assert (m_map != NULL);
 
@@ -186,43 +187,26 @@ void MapWidget::draw(Image * dest, SPoint off)
         m_speed.y = 0;
     }
 
+    m_groundUnits.clear();
     //FIXME:This needs to be optimised. Why to redraw the whole map all the time? It takes a lot of CPU
 
     for (int i = 0; i < w / BLOCKSIZE; i++)
     {
         for (int j = 0; j < h / BLOCKSIZE; j++)
         {
-            m_map->getCell(UPoint(i + m_view.x, j + m_view.y))->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
+            cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
+            cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
+            if (cell->isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
+            {
+                m_groundUnits.push_back(cell->getNonInfantryGroundObject());
+            }
         }
     }
-
-    assert (m_structures != NULL);
-
-    StructureClass* tmp;
-
-    for (unsigned int i = 0; i < m_structures->size(); i++)
+    
+    while (!m_groundUnits.empty())
     {
-        tmp = (StructureClass*)m_structures->at(i);
-        tmp->update();
-
-        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-            tmp->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-        }
-    }
-
-    UnitClass* tmp2;
-
-    for (unsigned int j = 0; j < m_units->size(); j++)
-    {
-        tmp2 = (UnitClass*)m_units->at(j);
-        tmp2->update();
-
-        if (tmp2->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-            tmp2->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-
-        }
+        m_groundUnits.front()->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+        m_groundUnits.pop_front();
     }
 
     ObjectClass* tmp3;

@@ -2,6 +2,7 @@
 
 #include "Definitions.h"
 #include "GCObject.h"
+#include "GameState.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
@@ -37,6 +38,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     setAngle(LEFT);
 
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
+    
+    GameState::Instance()->GetUnits()->push_back(this);
 }
 
 /*virtual*/
@@ -139,7 +142,7 @@ void UnitClass::move()
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
     //map->viewMap(w_owner->getTeam(), UPoint(x,y), getViewRange() );
-    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), 4 );
+    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
     if (m_moving)
     {
         m_oldPosition = UPoint(x, y);
@@ -178,7 +181,7 @@ void UnitClass::move()
 
                 m_justStoppedMoving = true;
 
-                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), 4 );
+                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
             }
         }
     }
@@ -378,28 +381,67 @@ void UnitClass::setDrawnPos(SPoint off, SPoint view)
 }
 
 /*virtual*/
+
 void UnitClass::setTarget(ObjectClass* newTarget)
 {
 #if 0
+	if (goingToRepairYard && target && (target.getObjPointer()->getItemID() == Structure_RepairYard))
+	{
+		((RepairYardClass*)target.getObjPointer())->unBook();
+		goingToRepairYard = false;
+	}
 
-    if (goingToRepairYard && target && (target.getObjPointer()->getItemID() == Structure_RepairYard))
-    {
-        ((RepairYardClass*)target.getObjPointer())->unBook();
-        goingToRepairYard = false;
-    }
+	ObjectClass::setTarget(newTarget);
 
-    ObjectClass::setTarget(newTarget);
+	if(target
+		&& (target.getObjPointer()->getOwner() == getOwner())
+		&& (target.getObjPointer()->getItemID() == Structure_RepairYard)
+		&& (itemID != Unit_Carryall) && (itemID != Unit_Frigate)
+		&& (itemID != Unit_Ornithopter))
+	{
+		((RepairYardClass*)target.getObjPointer())->book();
+		goingToRepairYard = true;
+	}
+#endif
+}
 
-    if (target
-            && (target.getObjPointer()->getOwner() == getOwner())
-            && (target.getObjPointer()->getItemID() == Structure_RepairYard)
-            && (itemID != Unit_Carryall) && (itemID != Unit_Frigate)
-            && (itemID != Unit_Ornithopter))
-    {
-        ((RepairYardClass*)target.getObjPointer())->book();
-        goingToRepairYard = true;
-    }
+void UnitClass::targeting()
+{
+#if 0
+	if (!target && !moving && !forced && (attackMode != SCOUT) && (findTargetTimer == 0) && (currentGame->playerType != CLIENT))
+	{
+		target.PointTo(findTarget());
 
+		if (target && isInAttackModeRange(target.getObjPointer()))
+		{
+			netDoAttack(target.getObjPointer());
+			pathList.clearList();
+			nextSpotFound = false;
+			speedCap = NONE;
+		}
+		else
+		{
+			target.PointTo(NONE);
+
+			if (attacking && (currentGame->playerType != CLIENT))
+			{
+				StructureClass* closestStructure = (StructureClass*)findClosestTargetStructure(this);
+				if (closestStructure) {
+					COORDTYPE closestPoint = closestStructure->getClosestPoint(&location);
+					netDoCommand(NULL, &closestPoint, false);
+				} else {
+					UnitClass* closestUnit = (UnitClass*)findClosestTargetUnit(this);
+					if (closestUnit)
+						netDoCommand(NULL, closestUnit->getLocation(), false);
+				}
+			}
+		}
+
+		findTargetTimer = 100;
+	}
+
+	if (target)
+		engageTarget();
 #endif
 }
 
@@ -469,6 +511,22 @@ void UnitClass::turn()
     }
 }
 
+
+void UnitClass::setGuardPoint(UPoint newGuardPoint)
+{
+	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
+}
+
+void UnitClass::setGuardPoint(int newX, int newY)
+{
+	MapClass* map = GameState::Instance()->GetMap();
+	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
+	{
+		m_guardPoint.x = newX;
+		m_guardPoint.y = newY;
+	}
+}
+
 /*virtual*/
 void UnitClass::update()
 {
@@ -476,7 +534,7 @@ void UnitClass::update()
     {
         if (m_active)
         {
-            //targeting();
+            targeting();
             navigate();
             move();
 
@@ -485,22 +543,23 @@ void UnitClass::update()
         }
     }
 
-#if 0
-
+#if 0 
     if (m_badlyDamaged)
     {
         if (m_health <= 0)
         {
-            netDestroy();
+            //FIXME: Network game
+            //netDestroy();
             return;
         }
 
-        else if (!goingToRepairYard
-                 && owner->isAI()
-                 && owner->hasRepairYard()
-                 && !forced
-                 && !target
-                 && (currentGame->playerType != CLIENT))
+        else if (!m_goingToRepairYard
+                 && m_owner->isAI()
+                 && m_owner->hasRepairYard()
+                 && !m_forced
+                 && !m_target)
+                 //FIXME: What's this supposed to do?
+                 && (GamecurrentGame->playerType != CLIENT))
             repair();
     }
 }
@@ -519,13 +578,13 @@ if (m_frameTimer > 0)  //death frame has started
     m_frameTimer--;
 }
 
-#endif
+
 
 if (!m_destroyed)
 {
     if (m_checkTimer > 0) m_checkTimer--;
 
-#if 0
+
     if (m_findTargetTimer > 0) findTargetTimer--;
 
     if (m_primaryWeaponTimer > 0) primaryWeaponTimer--;
@@ -545,9 +604,8 @@ if (!m_destroyed)
         }
     }
 
-#endif
 }
-
+#endif 
 
 }
 
@@ -559,6 +617,8 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
     cross,
     heuristic,
     f;
+    
+    MapClass* map = GameState::Instance()->GetMap();
 
     UPoint  checkedPoint = m_destination,
                            tempLocation;
@@ -568,11 +628,11 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
 
     for (int angle = 0; angle <= 7; angle++) //going from angle 0 to 7 inc
     {
-        tempLocation  = m_owner->getMap()->getMapPos(angle, UPoint(parent_node->x, parent_node->y));
+        tempLocation  = map->getMapPos(angle, UPoint(parent_node->x, parent_node->y));
 
         if (canPass(tempLocation))
         {
-            node = m_owner->getMap()->getCell(tempLocation);
+            node = map->getCell(tempLocation);
             cost = parent_node->m_cost;
 
             if ((x != parent_node->x) && (tempLocation.y != parent_node->y))

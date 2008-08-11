@@ -52,6 +52,7 @@ battle_sources = [
 				"units/QuadClass.cpp",				
 				"GameState.cpp",
 				"PriorityQ.cpp",
+				"ObjectTree.cpp",
                 ]
 
 state_sources = [

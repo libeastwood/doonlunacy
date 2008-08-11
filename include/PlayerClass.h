@@ -7,7 +7,9 @@
 #include "Gfx.h"
 
 class MapClass;
-class GameState;
+
+class UnitClass;
+class StructureClass;
 
 class PlayerClass 
 {
@@ -18,11 +20,12 @@ class PlayerClass
 	void assignMapPlayerNum(int newMapPlayerNum);
 	
 	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
+	virtual void update();
 	
 	MapClass* getMap();
 	
-	void* createUnit(int itemID);
-	void* placeUnit(int itemID, UPoint itemPos);
+	UnitClass* createUnit(int itemID);
+	UnitClass* placeUnit(int itemID, UPoint itemPos);
 	
 	//! @name Functions used to fetch information from non-public attributes
 	//@{
@@ -47,6 +50,8 @@ class PlayerClass
 	inline bool hasRepairYard() { return (m_numRepairYards > 0); }
 	inline bool hasStarPort() { return (m_numStarPorts > 0); }
 	inline bool hasWindTrap() { return (m_numWindTraps > 0); }
+	int getMapPlayerNum() { return	m_mapPlayerNum; }
+	inline bool isAI() { return m_ai; }
 	
 	//@}
   protected:
@@ -60,8 +65,13 @@ class PlayerClass
     //! @name Protected attributes
     //@{
 
+	//! True if given player is computer
+	bool m_ai;
+
     //! Capacity of player's refineries and silos
     int m_capacity,
+    	m_credits,
+    	m_oldCredits,
     
     //! Colour assigned to current player see HOUSETYPE
         m_colour,

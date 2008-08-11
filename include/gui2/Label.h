@@ -36,7 +36,6 @@ protected:
     std::string m_caption;
 
 private:
-    std::vector<std::string> splitString(std::string ParseString, int maxLineLength);
     int m_textColor,
     m_bgColor,
     m_maxLineLength;

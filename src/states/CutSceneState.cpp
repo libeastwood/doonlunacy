@@ -431,8 +431,6 @@ CutSceneState::CutSceneState(std::string scene)
 
 	m_currentFrame = NULL;
 
-//	m_cutSceneStrings.push_back(cutSceneText(0, "")); // credits.eng isn't properly decoded yet..
-												// DataCache::Instance()->getCreditsString(20)));
     std::string filename, palettefile;
     bool continuation;
     int hold, song;
@@ -455,6 +453,8 @@ CutSceneState::CutSceneState(std::string scene)
             
             bool fadeOut = false;
             Frame::Transition aa = Frame::NO_TRANSITION;
+            
+           
             node[i].lookupValue("fade_out", fadeOut);
             if (fadeOut) aa = Frame::FADE_OUT;
             
@@ -465,7 +465,7 @@ CutSceneState::CutSceneState(std::string scene)
 
         	frame = new Frame(filename, palettefile,
                              Frame::NO_TRANSITION, 
-                             Frame::FADE_OUT,
+                             aa,
                              continuation, hold);
 
             if (node[i].lookupValue("text_colour", textColour))
@@ -492,6 +492,13 @@ CutSceneState::CutSceneState(std::string scene)
             if (node[i].exists("text_location"))
             {
                 frame->setTextLocation(UPoint((int)node[i]["text_location"][0], (int)node[i]["text_location"][1]));
+            }
+
+            int palette;
+            
+            if (node[i].lookupValue("palette", palette))
+            {
+                frame->setPalette((Palette_enum)palette);
             }
             
             if (node[i].lookupValue("fps", fps))

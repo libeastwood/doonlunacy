@@ -205,7 +205,10 @@ void DataCache::Init(){
 	addObjPic(ObjPic_Terrain, icon->getSurfaceRow(124,209));
 	addObjPic(ObjPic_RockDamage, icon->getSurfaceRow(1,6));
 	addObjPic(ObjPic_SandDamage, units1->getSurfaceArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
-	addObjPic(ObjPic_Terrain_Hidden, icon->getSurfaceRow(108,123));
+    //FIXME: Don't want to add setColorKey to Icnfile. It might break sth somewhere else.	
+    ImagePtr hideTile(new Image(icon->getSurfaceRow(108,123)));
+    hideTile->setColorKey();
+	addObjPic(ObjPic_Terrain_Hidden, hideTile->getSurface());
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
 	addGuiPic(UI_MouseCursor, mouse->getSurfaceArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
@@ -537,27 +540,6 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
 	return returnChunk;
 }
 
-Mix_Chunk* DataCache::concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2)
-{
-	Mix_Chunk* returnChunk;
-	if((returnChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
-		return NULL;
-	}
-	
-	returnChunk->allocated = 1;
-	returnChunk->volume = sound1->volume;
-	returnChunk->alen = sound1->alen + sound2->alen;
-	
-	if((returnChunk->abuf = (Uint8 *)malloc(returnChunk->alen)) == NULL) {
-		free(returnChunk);
-		return NULL;
-	}
-	
-	memcpy(returnChunk->abuf, sound1->abuf, sound1->alen);
-	memcpy(returnChunk->abuf + sound1->alen, sound2->abuf, sound2->alen);
-
-	return returnChunk;
-}
 
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
 	return BriefingStrings[house]->getString(mission,textType);
@@ -670,12 +652,6 @@ Animation *DataCache::getAnimation(std::string path)
 
 
     return animation;   
-}
-
-Mix_Chunk* DataCache::concat2Chunks(std::string ID1, std::string ID2)
-{
-//	return concat2Chunks(soundChunk[ID1], soundChunk[ID2]);
-    return 0;
 }
 
 DataCache::~DataCache() {

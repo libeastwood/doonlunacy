@@ -136,7 +136,6 @@ class DataCache : public Singleton<DataCache>
          */
         Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
-        Mix_Chunk* concat2Chunks(std::string ID1, std::string ID2);   
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
         std::string	getIntroString(uint16_t i);
         std::string	getCreditsString(uint16_t i);
@@ -151,11 +150,6 @@ class DataCache : public Singleton<DataCache>
         
 		PalfilePtr m_palette[NUM_PALETTES];
 		palStrings m_palStrings;
-
-		Mix_Chunk* getChunkFromFile(std::string fileName);
-		Mix_Chunk* concat2Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2);
-		Mix_Chunk* concat3Chunks(Mix_Chunk* sound1, Mix_Chunk* sound2, Mix_Chunk* sound3);
-		Mix_Chunk* createEmptyChunk();
 
 		StringFile* BriefingStrings[3];
 		StringFile* IntroStrings;

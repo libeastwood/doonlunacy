@@ -17,9 +17,9 @@ class MainMenuState : public MainMenuBaseState
         virtual const char* GetName() { return "MainMenuState"; }
 
     private:
+        BoringButton* m_butEditor;
         BoringButton* m_butSingle;
         BoringButton* m_butMulti;
-        BoringButton* m_butMapEd;
         BoringButton* m_butOptions;
         BoringButton* m_butAbout;
         BoringButton* m_butQuit;

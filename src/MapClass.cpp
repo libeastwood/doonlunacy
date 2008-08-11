@@ -3,8 +3,24 @@
 #include "Log.h"
 #include "MapClass.h"
 #include "structures/WallClass.h"
+
+using namespace std;
+
 MapClass::MapClass(UPoint size)
 {
+	int lookDist[11];
+    lookDist[0] = 10; 
+    lookDist[1] = 10;
+    lookDist[2] = 9;
+    lookDist[3] = 9;
+    lookDist[4] = 9;
+    lookDist[5] = 8;
+    lookDist[6] = 8;
+    lookDist[7] = 7;
+    lookDist[8] = 6;
+    lookDist[9] = 4;
+    lookDist[10] = 1;
+
     TerrainClass* cell;
 
     w = size.x;
@@ -114,7 +130,7 @@ MapClass::MapClass(UPoint size)
 
 				depthCheckMax[i][j][k] += y - end + 1;
 			}
-			LOG_INFO("MapClass", "depthCheckMax[%d][%d][%d] is %d.", i, j, k, depthCheckMax[i][j][k]);
+			//LOG_INFO("MapClass", "depthCheckMax[%d][%d][%d] is %d.", i, j, k, depthCheckMax[i][j][k]);
 		}
 	}
 }
@@ -331,27 +347,164 @@ int MapClass::getPosAngle(UPoint source, UPoint pos)
     return angle;
 }
 
-void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
+void MapClass::createSandRegions()
 {
+#if 0
+	int	angle,
+		i, j,
+		region = 0;
 
-	int lookDist[11];
-    lookDist[0] = 10; 
-    lookDist[1] = 10;
-    lookDist[2] = 9;
-    lookDist[3] = 9;
-    lookDist[4] = 9;
-    lookDist[5] = 8;
-    lookDist[6] = 8;
-    lookDist[7] = 7;
-    lookDist[8] = 6;
-    lookDist[9] = 4;
-    lookDist[10] = 1;
-    
+	UPoint pos;
+	ListIterator queue;
+	TerrainClass* terr;
+
+	for (i = 0; i < w; i++)
+	{
+		for (j = 0; j < h; j++)
+		{
+			getCell(i,j)->setSandRegion(NONE);
+			getCell(i,j)->m_visited = false;
+		}
+	}
+
+	for (i = 0; i < w; i++)
+	{
+		for (j = 0; j < h; j++)
+		{
+			if (!getCell(i,j)->isRock() && !getCell(i,j)->m_visited)
+			{
+				queue.insertFirst(getCell(i,j));
+				while(!queue.isEmpty())
+				{
+					terr = (TerrainClass*)queue.removeFirstElement();
+					terr->setSandRegion(region);
+					for (angle = 0; angle < NUM_ANGLES; angle++)
+					{
+						pos = getMapPos(angle, terr->location);
+						if (cellExists(&pos) && !getCell(&pos)->isRock() && !getCell(&pos)->visited)
+						{
+							queue.insertFirst(getCell(&pos));
+							getCell(&pos)->visited = true;
+						}
+					}
+				}
+				region++;
+			}
+		}
+	}
+	
+	for (i = 0; i < w; i++)
+	{
+		for (j = 0; j < h; j++)
+		{
+			getCell(i,j)->m_visited = false;
+		}
+	}
+#endif
+}
+
+BLOCKEDTYPE MapClass::cellBlocked(UPoint pos)
+{
+        BLOCKEDTYPE blocked = COMBLOCKED;
+        if (cellExists(pos))
+		{
+			if (getCell(pos)->getType() == Terrain_Mountain)
+			{
+				blocked = MOUNTAIN;
+			}
+			else if (getCell(pos)->hasAnObject())
+			{
+				if (getCell(pos)->getObject()->isInfantry())
+					blocked = INFANTRY;
+				else
+					blocked = COMBLOCKED;
+			}
+			else
+				blocked = NOTBLOCKED;
+		}
+
+        return blocked;
+}
+
+void MapClass::selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode)
+{
+#if 0
+	ObjectClass	*lastCheckedObject = NULL,
+				*lastSelectedObject = NULL;
+
+	//if selection rectangle is checking only one cell and has shift selected we want to add/ remove that unit from the selected group of units
+	if (!objectARGMode)
+	{
+		unselectAll(selectedList);
+		selectedList->clearList();
+	}
+
+	if ((x1 == x2) && (y1 == y2) && cellExists(x1, y1)) 
+	{
+		lastCheckedObject = cell[x1][y1].getObjectAt(realX, realY);
+		if ((lastCheckedObject != NULL) && (lastCheckedObject->getOwner()->getPlayerNumber() == playerNum))
+		{
+			if ((lastCheckedObject == lastSinglySelectedObject) && ( !lastCheckedObject->isAStructure()))
+			{
+				for (int i = dborder->minX/BLOCKSIZE; i <= dborder->maxX/BLOCKSIZE; i++)
+				for (int j = dborder->minY/BLOCKSIZE; j <= dborder->maxY/BLOCKSIZE; j++)
+					if (cellExists(i, j) && cell[i][j].hasAnObject())
+						cell[i][j].selectAllPlayersUnitsOfType(playerNum, lastSinglySelectedObject->getItemID(), &lastCheckedObject, &lastSelectedObject);
+				lastSinglySelectedObject = NULL;
+			}
+			else if (!lastCheckedObject->isSelected())
+			{
+				lastCheckedObject->setSelected(true);
+				selectedList->insertFirst(lastCheckedObject);
+				lastSelectedObject = lastCheckedObject;
+				lastSinglySelectedObject = lastSelectedObject;
+			}
+			else if (objectARGMode)	//holding down shift, unselect this unit
+			{
+				lastCheckedObject->setSelected(false);
+				selectedList->removeElement(lastCheckedObject);
+			}
+		}
+		else
+			lastSinglySelectedObject = NULL;
+	}
+	else
+	{
+		lastSinglySelectedObject = NULL;
+		for (int i = min(x1, x2); i <= max(x1, x2); i++)
+		for (int j = min(y1, y2); j <= max(y1, y2); j++)
+			if (cellExists(i, j) && getCell(i,j)->hasAnObject() 
+				&& getCell(i,j)->isExplored(playerNum) 
+				&& !getCell(i,j)->.isFogged(playerNum) )
+					getCell(i,j)->selectAllPlayersUnits(playerNum, &lastCheckedObject, &lastSelectedObject);
+	}
+
+	//select an enemy unit if none of your units found
+	if (selectedList->isEmpty() && (lastCheckedObject != NULL) && !lastCheckedObject->isSelected())
+	{
+		lastCheckedObject->setSelected(true);
+		lastSelectedObject = lastCheckedObject;
+		selectedList->insertFirst(lastCheckedObject);
+	}
+	else if (lastSelectedObject != NULL)
+		lastSelectedObject->playSelectSound();	//we only want one unit responding
+
+/*
+	if ((selectedList->getNumElements() == 1) && lastSelectedObject && lastSelectedObject->isAStructure() && ((StructureClass*)lastSelectedObject)->isABuilder())
+		((BuilderClass*)lastSelectedObject)->checkSelectionList();*/
+#endif
+}
+
+void MapClass::viewMap(int playerTeam, UPoint location, int maxViewRange)
+{
 	int			i;
-	UPoint  pos,
-			check;
-	pos.x = position.x,
-	pos.y = position.y;
+	UPoint	pos,
+				check;
+	pos.x = location.x,
+	pos.y = location.y;
+
+	PlayerClass* thisPlayer = GameState::Instance()->LocalPlayer();
+	GameState* gs = GameState::Instance();
 
 //makes map viewable in an area like as shown below 
 
@@ -360,10 +513,6 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 //                  *****T*****
 //                   *********
 //                     *****
-
-
-    Players* players = GameState::Instance()->GetPlayers();
-    PlayerClass* thisPlayer = GameState::Instance()->LocalPlayer();
 
 	check.x = pos.x - maxViewRange;
 	if (check.x < 0)
@@ -376,19 +525,12 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 
 		while ((check.y < h) && ((check.y - pos.y) <= lookDist[abs(check.x - pos.x)]))
 		{
-			if (distance_from(position, check) <= maxViewRange)
-			{
-    			for (i = 0; i < MAX_PLAYERS; i++)
-    			{
-    				if (players->at(i) && (players->at(i)->getTeam() == playerTeam))
-                    {
-    					getCell(check)->setExplored(i, true);
-                    }
-                
-    			}
-			}
-    
-    	    check.y++;
+			if (distance_from(location, check) <= maxViewRange)
+			for (i = 0; i < MAX_PLAYERS; i++)
+				if ((*gs->GetPlayers()).at(i) && ((*gs->GetPlayers()).at(i)->getTeam() == playerTeam))
+					getCell(check.x, check.y)->setExplored(i, true);
+
+			check.y++;
 		}
 
 		check.x++;
@@ -396,8 +538,7 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 	}
 
 ///////////////smooth the hidden shade/hide/fogged area
-//    PlayerClass * thisPlayer = m_gs->m_players->at(0);
-	if (1)
+	if (playerTeam == thisPlayer->getTeam())
 	{
 		bool	up = false, upEdge = false,
 				down = false, downEdge = false,
@@ -409,8 +550,8 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 				leftFog = false,
 				rightFog = false;
 
-		int		hideTile = 0;
-		int		fogTile = 0;
+		int		hideTile = Terrain_HiddenFull;
+		int		fogTile = Terrain_HiddenFull;
 		maxViewRange = 10;
 		
 		check.x = pos.x - maxViewRange;
@@ -423,9 +564,9 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 
 			while ((check.y < h) && ((check.y - pos.y) <=  lookDist[abs(check.x - pos.x)]))
 			{
-				if (distance_from(position, check) <= maxViewRange)
+				if (distance_from(location, check) <= maxViewRange)
 				{
-					hideTile = 0;
+					hideTile = Terrain_HiddenFull;
 
 					upEdge = !cellExists(check.x, check.y-1);
 					downEdge = !cellExists(check.x, check.y+1);
@@ -437,10 +578,10 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 					left = !leftEdge && (!getCell(check.x-1,check.y)->isExplored(thisPlayer->getPlayerNumber()));
 					right = !rightEdge && (!getCell(check.x+1,check.y)->isExplored(thisPlayer->getPlayerNumber()));
 					
-					upFog = !upEdge && (getCell(check.x,check.y-1)->isFogged(0));
-					downFog = !downEdge && (getCell(check.x,check.y+1)->isFogged(0));
-					leftFog = !leftEdge && (getCell(check.x-1,check.y)->isFogged(0));
-					rightFog = !rightEdge && (getCell(check.x+1,check.y)->isFogged(0));
+					upFog = !upEdge && (getCell(check.x,check.y-1)->isFogged(thisPlayer->getPlayerNumber()));
+					downFog = !downEdge && (getCell(check.x,check.y+1)->isFogged(thisPlayer->getPlayerNumber()));
+					leftFog = !leftEdge && (getCell(check.x-1,check.y)->isFogged(thisPlayer->getPlayerNumber()));
+					rightFog = !rightEdge && (getCell(check.x+1,check.y)->isFogged(thisPlayer->getPlayerNumber()));
 
 						// Now perform the test
 					if (left && right && up && down)
@@ -488,15 +629,15 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 					else if (!left && !right && up && down)
 							hideTile = Terrain_HiddenUpDown; //missing left and right
 
-					else if (!getCell(check)->isExplored(0) && !left && !right && !up && !down)
+					else if (!getCell(check)->isExplored(thisPlayer->getPlayerNumber()) && !left && !right && !up && !down)
 							hideTile = Terrain_HiddenIsland; //missing left and right
 				///////
-					getCell(check)->setHideTile(hideTile);
+					getCell(check.x,check.y)->setHideTile(hideTile);
 					
-					if(!getCell(check)->isFogged(0))
+					if(!getCell(check.x,check.y)->isFogged(thisPlayer->getPlayerNumber()))
 					{
 					// do it again with fog
-					fogTile = 0;
+					fogTile = Terrain_HiddenFull;
 					if (leftFog && rightFog && upFog && downFog)
 							fogTile = Terrain_HiddenFull;
 
@@ -542,14 +683,14 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 					else if (!leftFog && !rightFog && upFog && downFog)
 							fogTile = Terrain_HiddenUpDown; //missing left and right
 
-					/*else if (getCell(check)->isFogged(0) && leftFog && rightFog 
+					/*else if (cell[check.x][check.y].isFogged(thisPlayer->getPlayerNumber()) && leftFog && rightFog 
 					       && upFog && downFog)
 							fogTile = Terrain_HiddenIsland; //missing left and right*/
 				///////
 					getCell(check)->setFogTile(fogTile);
 					}
 					else
-					getCell(check)->setFogTile(0);
+					getCell(check)->setFogTile(Terrain_HiddenFull);
 				}
 
 				check.y++;
@@ -560,3 +701,79 @@ void MapClass::viewMap(int playerTeam, UPoint position, int maxViewRange)
 		}
 	}
 }
+
+void MapClass::viewMap(int playerTeam, int x, int y, int maxViewRange)
+{
+	UPoint pos;
+
+	pos.x = x;
+	pos.y = y;
+
+	viewMap(playerTeam, pos, maxViewRange);
+}
+
+ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
+{
+	int			x,y;
+	ObjectClass	*object = NULL;
+
+	Units* unitList = GameState::Instance()->GetUnits();
+
+	if (cellExists(lx, ly))
+		object = getCell(lx, ly)->getObjectWithID(objectID);
+
+
+	if (object == NULL)	//object wasn't found in expected cell
+	{	//search surrounding cells
+
+		for(x=lx-5; x<lx+5 && !object; x++) {
+			for(y=ly-5; y<ly+5 && !object; y++) {
+				if (cellExists(x, y)) {
+					object = getCell(x, y)->getObjectWithID(objectID);
+				}
+			}
+		}
+#if 0
+		if (object == NULL)	//object wasn't found in surrounding cells
+		{	//search lists
+			if (!unitList->empty())
+			{
+				unitList->saveCurrent();
+				unitList->reset();
+
+				while(unitList->currentNotNull() && !object)
+				{
+					if (((UnitClass*)unitList->getCurrent())->hasObjectID(objectID))
+						object = (UnitClass*)unitList->getCurrent();
+
+					unitList->nextLink();
+				}
+
+				unitList->restoreCurrent();
+			}
+
+			if (object == NULL)	//object wasn't found in units
+			{
+				if (!structureList->isEmpty())
+				{
+					structureList->saveCurrent();
+
+					structureList->reset();
+					while(structureList->currentNotNull() && !object)
+					{
+						if (((StructureClass*)structureList->getCurrent())->hasObjectID(objectID))
+							object = (StructureClass*)structureList->getCurrent();
+
+						structureList->nextLink();
+					}
+
+					structureList->restoreCurrent();
+				}
+			}
+		}
+#endif
+	}
+
+	return object;
+}
+

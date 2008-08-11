@@ -21,28 +21,35 @@ class MapClass : public Rect
     MapClass(UPoint size);
     ~MapClass();
 
-    inline bool cellExists(SPoint pos);
-    inline bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); }
+    bool cellExists(SPoint pos);
+    bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); }
 
-    inline TerrainClass * getCell(SPoint pos);    
-    inline TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
+    TerrainClass * getCell(SPoint pos);    
+    TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
 
     UPoint getMapPos(int angle, UPoint source);
     int getPosAngle(UPoint source, UPoint pos);
 
     void fixWalls(int xPos, int yPos);
 
-    void viewMap(int playerTeam, UPoint position, int maxViewRange);
-
+	ObjectClass* findObjectWithID(int objectID, int lx, int ly);
     //FIXME:Remove this later or sth.
     short *depthCheckCount,
     ***depthCheckMax;
-
-  protected:
-    void fixWall(int xPos, int yPos);
     
+    void createSandRegions();
+    void selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode);
+
+	BLOCKEDTYPE cellBlocked(UPoint pos);
+	void viewMap(int playerTeam, UPoint location, int maxViewRange);
+	void viewMap(int playerTeam, int x, int y, int maxViewRange);
+    void fixWall(int xPos, int yPos);	
+  protected:
+
     Cells m_cells;
-    GameState* m_gs;
+    
+  private: 
+	ObjectClass* lastSinglySelectedObject;
 };
 
 #endif // DUNE_MAPCLASS_H

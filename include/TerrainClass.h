@@ -6,7 +6,17 @@
 #include "mmath.h"
 #include "ObjectClass.h"
 
-typedef std::map <Uint32, ObjectClass*> List;
+#include <list>
+
+typedef std::list <Uint32> List;
+
+typedef struct
+{
+	Uint32 damageType;
+	int	tile;
+	UPoint realPos;
+} DAMAGETYPE;
+
 
 class TerrainClass  : public UPoint
 {
@@ -16,10 +26,10 @@ class TerrainClass  : public UPoint
 
     void draw(Image * dest, SPoint pos);
 
-    void assignAirUnit(ObjectClass* newObjectID);
-    void assignDeadObject(ObjectClass* newObjectID);
-    void assignNonInfantryGroundObject(ObjectClass* newObjectID);
-    void assignUndergroundUnit(ObjectClass* newObjectID);
+    void assignAirUnit(Uint32 newObjectID);
+    void assignDeadObject(Uint32 newObjectID);
+    void assignNonInfantryGroundObject(Uint32 newObjectID);
+    void assignUndergroundUnit(Uint32 newObjectID);
 
     void unassignAirUnit(Uint32 ObjectID);
     void unassignDeadObject(Uint32 ObjectID);
@@ -66,105 +76,59 @@ class TerrainClass  : public UPoint
     //ObjectClass* getInfantry(int i);
     ObjectClass* getObject();
     ObjectClass* getObjectAt(UPoint pos);
+	ObjectClass* getObjectWithID(Uint32 objectID);
+	
+	bool hasAnObject();
+    inline bool hasADeadObject() { return !m_assignedDeadObjects.empty(); }
+    inline bool hasAGroundObject() { return (hasInfantry() || hasANonInfantryGroundObject()); }
+    inline bool hasAnAirUnit() { return !m_assignedAirUnits.empty(); }
+    inline bool hasAnUndergroundUnit() { return !m_assignedUndergroundUnits.empty(); }
+    inline bool hasANonInfantryGroundObject() { return !m_assignedNonInfantryGroundObjects.empty(); }
+    inline bool hasInfantry() { return !m_assignedInfantry.empty(); }
+    inline bool hasSpice() { return (fixDouble(m_spice) > 0.0); }
 
-    inline bool hasADeadObject()
-    {
-        return !m_assignedDeadObjects.empty();
-    }
+    inline int getTile() { return m_tile; }
+    inline void setTile(int newTile) { m_tile = newTile; }
 
-    inline bool hasAGroundObject()
-    {
-        return (hasInfantry() || hasANonInfantryGroundObject());
-    }
+    inline int getType() { return m_type; }
+    inline void setType(int newType) { m_type = newType; }
 
-    inline bool hasAnAirUnit()
-    {
-        return !m_assignedAirUnits.empty();
-    }
+    bool isMountain() { return  (m_type == Terrain_Mountain); }
 
-    inline bool hasAnUndergroundUnit()
-    {
-        return !m_assignedUndergroundUnits.empty();
-    }
-
-    inline bool hasANonInfantryGroundObject()
-    {
-        return !m_assignedNonInfantryGroundObjects.empty();
-    }
-
-    inline bool hasInfantry()
-    {
-        return !m_assignedInfantry.empty();
-    }
-
-    inline bool hasSpice()
-    {
-        return (fixDouble(m_spice) > 0.0);
-    }
-
-    inline int getType()
-    {
-        return m_type;
-    }
-
-    inline int getTile()
-    {
-        return m_tile;
-    }
-
-    inline bool isMountain()
-    {
-        return (m_type == Terrain_Mountain);
-    }
-
-    inline bool isRock()
-    {
+    inline bool isRock() {
         return ((m_type == Terrain_Rock) || (m_type == Structure_Slab1) || (m_type == Terrain_Mountain));
     }
 
-    inline bool isSand()
-    {
+    inline bool isSand() {
         return ((m_type == Terrain_Dunes) || (m_type == Terrain_Sand));
     }
 
-    inline bool isBloom()
-    {
+    inline bool isBloom() {
         return ((m_type == Terrain_Sand) && ((m_tile == Terrain_a2) || (m_tile == Terrain_a3)));
     }
 
-    inline bool isSpice()
-    {
-        return ((m_type == Terrain_Spice) || (m_type == Terrain_ThickSpice));
-    }
+    inline bool isSpice() { return ((m_type == Terrain_Spice) || (m_type == Terrain_ThickSpice)); }
+    inline bool isThickSpice() { return (m_type == Terrain_ThickSpice); }
 
-    inline bool isThickSpice()
-    {
-        return (m_type == Terrain_ThickSpice);
-    }
+	inline bool isNextToHidden() { return (m_hideTile != Terrain_HiddenFull); }
+	inline bool isNextToFogged() { return (m_fogTile != Terrain_HiddenFull); }
 
-    inline void setTile(int newTile)
-    {
-        m_tile = newTile;
-    }
+	inline int getSandRegion() { return m_sandRegion; }
+	inline int getDamageType() { return m_damageType; }
+	inline void setSandRegion(int newSandRegion) { m_sandRegion = newSandRegion; }
 
-    inline void setType(int newType)
-    {
-        m_type = newType;
-    }
-
-    float getDifficulty()
-    {
-        return m_difficulty;
-    }
+    double getDifficulty() { return m_difficulty; }
 
 	inline bool isExplored(int player) 	{return m_explored[player];}
-	
-	bool isFogged(int player);
 	inline void setExplored(int player, bool truth) { //if(truth)
-														//m_lastAccess[player] = clock();
-													  m_explored[player] = truth; 
-													  }
+		//m_lastAccess[player] = clock();
+		m_explored[player] = truth; 
+	}
 
+	bool isFogged(int player);
+	inline void setOwner(int newOwner) { m_owner = newOwner; }
+	inline int getOwner() { return m_owner; }
+	
 	inline void setHideTile(int newTile) { m_hideTile = newTile; }
 	
 	inline void setFogTile(int newTile) { m_fogTile = newTile; }
@@ -185,6 +149,9 @@ class TerrainClass  : public UPoint
     TerrainClass*  m_parent;
     //@}
 
+	void clearDamage();
+	void damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air);
+
   private:
   
   	bool	*m_explored;
@@ -199,7 +166,11 @@ class TerrainClass  : public UPoint
 
 	int	m_hideTile,
 		m_fogTile,
-		m_fogColour;/*remember last colour(radar)*/
+		m_fogColour,/*remember last colour(radar)*/
+		m_sandRegion,
+		m_owner;
+		
+	Uint32 m_damageType;
 
     /*!
      * tile assigned to current cell
@@ -218,7 +189,10 @@ class TerrainClass  : public UPoint
           m_assignedUndergroundUnits,
           m_assignedInfantry;
 
-
+	DAMAGETYPE	damage[2];	//damage positions		
+//	DAMAGETYPE	damage[DAMAGEPERCELL];	//damage positions
+	Uint32 damageType;
+	int	damagePos;
 };
 
 #endif // DUNE_TERRAINCLASS_H
