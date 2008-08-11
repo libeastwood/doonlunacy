@@ -4,20 +4,22 @@
 
 #include "GCObject.h"
 
-#include "pakfile/Cpsfile.h"
-#include "pakfile/Icnfile.h"
-#include "pakfile/Shpfile.h"
-#include "pakfile/Wsafile.h"
+#include <eastwood/IcnFile.h>
+#include <eastwood/ShpFile.h>
+#include <eastwood/WsaFile.h>
 
-#include <PalFile.h>
-#include <StringFile.h>
-#include <VocFile.h>
+#include <eastwood/PalFile.h>
+#include <eastwood/StringFile.h>
+#include <eastwood/VocFile.h>
 
 #include <string>
 
 #include <boost/format.hpp>
 
 using namespace libconfig;
+
+typedef boost::shared_ptr<IcnFile> IcnfilePtr;
+typedef boost::shared_ptr<ShpFile> ShpfilePtr;
 
 DataCache::DataCache() {
 }
@@ -83,18 +85,18 @@ void DataCache::Init(){
 
     //LOADING FILES    
     data = ResMan::Instance()->readFile("DUNE:UNITS.SHP", &len);
-    ShpfilePtr units(new Shpfile(data, len));
+    ShpfilePtr units(new ShpFile(data, len, getPalette(IBM_PAL)));
     data = ResMan::Instance()->readFile("DUNE:UNITS1.SHP", &len);
-    ShpfilePtr units1(new Shpfile(data, len));
+    ShpfilePtr units1(new ShpFile(data, len, getPalette(IBM_PAL)));
     data = ResMan::Instance()->readFile("DUNE:UNITS2.SHP", &len);
-    ShpfilePtr units2(new Shpfile(data, len));
+    ShpfilePtr units2(new ShpFile(data, len, getPalette(IBM_PAL)));
 	data = ResMan::Instance()->readFile("DUNE:MOUSE.SHP", &len);
-	ShpfilePtr mouse(new Shpfile(data, len));
+	ShpfilePtr mouse(new ShpFile(data, len, getPalette(IBM_PAL)));
 	data = ResMan::Instance()->readFile("DUNE:SHAPES.SHP", &len);
-	ShpfilePtr shapes(new Shpfile(data, len));
+	ShpfilePtr shapes(new ShpFile(data, len, getPalette(IBM_PAL)));
 	data = ResMan::Instance()->readFile("DUNE:ICON.ICN", &len);
 	mapdata = ResMan::Instance()->readFile("DUNE:ICON.MAP", &maplen);
-	IcnfilePtr  icon(new Icnfile(data, len, mapdata, maplen));
+	IcnfilePtr  icon(new IcnFile(data, len, mapdata, maplen, getPalette(IBM_PAL)));
 	//delete mapdata;
 
 //	data = ResMan::Instance()->readFile("DUNE:STATIC.WSA", &len);
@@ -146,73 +148,73 @@ void DataCache::Init(){
 //    CpsfilePtr screen(new Cpsfile(data, len));
 
     //UNITS, BUILDINGS, EXPLOSIONS, and everything that's on the map
-	addObjPic(ObjPic_Tank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(0)));
-	addObjPic(ObjPic_Tank_Gun, units2->getPictureArray(8,1,GROUNDUNIT_ROW(5)));	
-	addObjPic(ObjPic_Siegetank_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(10)));
-	addObjPic(ObjPic_Siegetank_Gun, units2->getPictureArray(8,1,GROUNDUNIT_ROW(15)));
-	addObjPic(ObjPic_Devastator_Base, units2->getPictureArray(8,1,GROUNDUNIT_ROW(20)));
-	addObjPic(ObjPic_Devastator_Gun, units2->getPictureArray(8,1,GROUNDUNIT_ROW(25)));	
-	addObjPic(ObjPic_Sonictank_Gun, units2->getPictureArray(8,1,GROUNDUNIT_ROW(30)));
-	addObjPic(ObjPic_Launcher_Gun, units2->getPictureArray(8,1,GROUNDUNIT_ROW(35)));	
-	addObjPic(ObjPic_Quad, units->getPictureArray(8,1,GROUNDUNIT_ROW(0)));	
-	addObjPic(ObjPic_Trike, units->getPictureArray(8,1,GROUNDUNIT_ROW(5)));		
-	addObjPic(ObjPic_Harvester, units->getPictureArray(8,1,GROUNDUNIT_ROW(10)));
-	addObjPic(ObjPic_Harvester_Sand, units1->getPictureArray(8,3,HARVESTERSAND_ROW(72),HARVESTERSAND_ROW(73),HARVESTERSAND_ROW(74)));
-	addObjPic(ObjPic_MCV, units->getPictureArray(8,1,GROUNDUNIT_ROW(15)));
-	addObjPic(ObjPic_Carryall, units->getPictureArray(8,2,AIRUNIT_ROW(45),AIRUNIT_ROW(48)));
-	addObjPic(ObjPic_Frigate, units->getPictureArray(8,1,AIRUNIT_ROW(60)));
-	addObjPic(ObjPic_Ornithopter, units->getPictureArray(8,3,ORNITHOPTER_ROW(51),ORNITHOPTER_ROW(52),ORNITHOPTER_ROW(53)));
-	addObjPic(ObjPic_Trooper, units->getPictureArray(4,3,INFANTRY_ROW(82),INFANTRY_ROW(83),INFANTRY_ROW(84)));
-	addObjPic(ObjPic_Infantry, units->getPictureArray(4,3,INFANTRY_ROW(73),INFANTRY_ROW(74),INFANTRY_ROW(75)));
-	addObjPic(ObjPic_Saboteur, units->getPictureArray(4,3,INFANTRY_ROW(63),INFANTRY_ROW(64),INFANTRY_ROW(65)));
-	addObjPic(ObjPic_Sandworm, units1->getPictureArray(1,5,67|TILE_NORMAL,68|TILE_NORMAL,69|TILE_NORMAL,70|TILE_NORMAL,71|TILE_NORMAL));
-	addObjPic(ObjPic_ConstructionYard, icon->getPictureArray(17));
-	addObjPic(ObjPic_WindTrap, icon->getPictureArray(19));
-	addObjPic(ObjPic_Refinery, icon->getPictureArray(21));
-	addObjPic(ObjPic_Barracks, icon->getPictureArray(18));
-	addObjPic(ObjPic_WOR, icon->getPictureArray(16));
-	addObjPic(ObjPic_Radar, icon->getPictureArray(26));
-	addObjPic(ObjPic_LightFactory, icon->getPictureArray(12));
-	addObjPic(ObjPic_Silo, icon->getPictureArray(25));
-	addObjPic(ObjPic_HeavyFactory, icon->getPictureArray(13));
-	addObjPic(ObjPic_HighTechFactory, icon->getPictureArray(14));
-	addObjPic(ObjPic_IX, icon->getPictureArray(15));
-	addObjPic(ObjPic_Palace, icon->getPictureArray(11));
-	addObjPic(ObjPic_RepairYard, icon->getPictureArray(22));
-	addObjPic(ObjPic_StarPort, icon->getPictureArray(20));
-	addObjPic(ObjPic_GunTurret, icon->getPictureArray(23));
-	addObjPic(ObjPic_RocketTurret, icon->getPictureArray(24));
-	addObjPic(ObjPic_Wall, icon->getPictureArray(6,1,1,75));
-	addObjPic(ObjPic_Bullet_SmallRocket, units->getPictureArray(16,1,ROCKET_ROW(35)));
-	addObjPic(ObjPic_Bullet_MediumRocket, units->getPictureArray(16,1,ROCKET_ROW(20)));
-	addObjPic(ObjPic_Bullet_LargeRocket, units->getPictureArray(16,1,ROCKET_ROW(40)));
-	addObjPic(ObjPic_Bullet_Small, units1->getPicture(23));
-	addObjPic(ObjPic_Bullet_Medium, units1->getPicture(24));
-	addObjPic(ObjPic_Bullet_Sonic, units1->getPicture(9));
-	addObjPic(ObjPic_Hit_Gas, units1->getPictureArray(5,1,57|TILE_NORMAL,58|TILE_NORMAL,59|TILE_NORMAL,60|TILE_NORMAL,61|TILE_NORMAL));
-	addObjPic(ObjPic_Hit_Shell, units1->getPictureArray(3,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionSmall, units1->getPictureArray(5,1,32|TILE_NORMAL,33|TILE_NORMAL,34|TILE_NORMAL,35|TILE_NORMAL,36|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionMedium1, units1->getPictureArray(5,1,47|TILE_NORMAL,48|TILE_NORMAL,49|TILE_NORMAL,50|TILE_NORMAL,51|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionMedium2, units1->getPictureArray(5,1,52|TILE_NORMAL,53|TILE_NORMAL,54|TILE_NORMAL,55|TILE_NORMAL,56|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionLarge1, units1->getPictureArray(5,1,37|TILE_NORMAL,38|TILE_NORMAL,39|TILE_NORMAL,40|TILE_NORMAL,41|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionLarge2, units1->getPictureArray(5,1,42|TILE_NORMAL,43|TILE_NORMAL,44|TILE_NORMAL,45|TILE_NORMAL,46|TILE_NORMAL));
-	addObjPic(ObjPic_ExplosionSmallUnit, units1->getPictureArray(2,1,0|TILE_NORMAL,1|TILE_NORMAL));
-	addObjPic(ObjPic_DeadInfantry, icon->getPictureArray(4,1,1,6));
-	addObjPic(ObjPic_Smoke, units1->getPictureArray(3,1,29|TILE_NORMAL,30|TILE_NORMAL,31|TILE_NORMAL));
-	addObjPic(ObjPic_SandwormShimmerMask, units1->getPicture(10));
-	addObjPic(ObjPic_Terrain, icon->getPictureRow(124,209));
-	addObjPic(ObjPic_RockDamage, icon->getPictureRow(1,6));
-	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
-	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
+	addObjPic(ObjPic_Tank_Base, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(0)));
+	addObjPic(ObjPic_Tank_Gun, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(5)));	
+	addObjPic(ObjPic_Siegetank_Base, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(10)));
+	addObjPic(ObjPic_Siegetank_Gun, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(15)));
+	addObjPic(ObjPic_Devastator_Base, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(20)));
+	addObjPic(ObjPic_Devastator_Gun, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(25)));	
+	addObjPic(ObjPic_Sonictank_Gun, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(30)));
+	addObjPic(ObjPic_Launcher_Gun, units2->getSurfaceArray(8,1,GROUNDUNIT_ROW(35)));	
+	addObjPic(ObjPic_Quad, units->getSurfaceArray(8,1,GROUNDUNIT_ROW(0)));	
+	addObjPic(ObjPic_Trike, units->getSurfaceArray(8,1,GROUNDUNIT_ROW(5)));		
+	addObjPic(ObjPic_Harvester, units->getSurfaceArray(8,1,GROUNDUNIT_ROW(10)));
+	addObjPic(ObjPic_Harvester_Sand, units1->getSurfaceArray(8,3,HARVESTERSAND_ROW(72),HARVESTERSAND_ROW(73),HARVESTERSAND_ROW(74)));
+	addObjPic(ObjPic_MCV, units->getSurfaceArray(8,1,GROUNDUNIT_ROW(15)));
+	addObjPic(ObjPic_Carryall, units->getSurfaceArray(8,2,AIRUNIT_ROW(45),AIRUNIT_ROW(48)));
+	addObjPic(ObjPic_Frigate, units->getSurfaceArray(8,1,AIRUNIT_ROW(60)));
+	addObjPic(ObjPic_Ornithopter, units->getSurfaceArray(8,3,ORNITHOPTER_ROW(51),ORNITHOPTER_ROW(52),ORNITHOPTER_ROW(53)));
+	addObjPic(ObjPic_Trooper, units->getSurfaceArray(4,3,INFANTRY_ROW(82),INFANTRY_ROW(83),INFANTRY_ROW(84)));
+	addObjPic(ObjPic_Infantry, units->getSurfaceArray(4,3,INFANTRY_ROW(73),INFANTRY_ROW(74),INFANTRY_ROW(75)));
+	addObjPic(ObjPic_Saboteur, units->getSurfaceArray(4,3,INFANTRY_ROW(63),INFANTRY_ROW(64),INFANTRY_ROW(65)));
+	addObjPic(ObjPic_Sandworm, units1->getSurfaceArray(1,5,67|TILE_NORMAL,68|TILE_NORMAL,69|TILE_NORMAL,70|TILE_NORMAL,71|TILE_NORMAL));
+	addObjPic(ObjPic_ConstructionYard, icon->getSurfaceArray(17));
+	addObjPic(ObjPic_WindTrap, icon->getSurfaceArray(19));
+	addObjPic(ObjPic_Refinery, icon->getSurfaceArray(21));
+	addObjPic(ObjPic_Barracks, icon->getSurfaceArray(18));
+	addObjPic(ObjPic_WOR, icon->getSurfaceArray(16));
+	addObjPic(ObjPic_Radar, icon->getSurfaceArray(26));
+	addObjPic(ObjPic_LightFactory, icon->getSurfaceArray(12));
+	addObjPic(ObjPic_Silo, icon->getSurfaceArray(25));
+	addObjPic(ObjPic_HeavyFactory, icon->getSurfaceArray(13));
+	addObjPic(ObjPic_HighTechFactory, icon->getSurfaceArray(14));
+	addObjPic(ObjPic_IX, icon->getSurfaceArray(15));
+	addObjPic(ObjPic_Palace, icon->getSurfaceArray(11));
+	addObjPic(ObjPic_RepairYard, icon->getSurfaceArray(22));
+	addObjPic(ObjPic_StarPort, icon->getSurfaceArray(20));
+	addObjPic(ObjPic_GunTurret, icon->getSurfaceArray(23));
+	addObjPic(ObjPic_RocketTurret, icon->getSurfaceArray(24));
+	addObjPic(ObjPic_Wall, icon->getSurfaceArray(6,1,1,75));
+	addObjPic(ObjPic_Bullet_SmallRocket, units->getSurfaceArray(16,1,ROCKET_ROW(35)));
+	addObjPic(ObjPic_Bullet_MediumRocket, units->getSurfaceArray(16,1,ROCKET_ROW(20)));
+	addObjPic(ObjPic_Bullet_LargeRocket, units->getSurfaceArray(16,1,ROCKET_ROW(40)));
+	addObjPic(ObjPic_Bullet_Small, units1->getSurface(23));
+	addObjPic(ObjPic_Bullet_Medium, units1->getSurface(24));
+	addObjPic(ObjPic_Bullet_Sonic, units1->getSurface(9));
+	addObjPic(ObjPic_Hit_Gas, units1->getSurfaceArray(5,1,57|TILE_NORMAL,58|TILE_NORMAL,59|TILE_NORMAL,60|TILE_NORMAL,61|TILE_NORMAL));
+	addObjPic(ObjPic_Hit_Shell, units1->getSurfaceArray(3,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionSmall, units1->getSurfaceArray(5,1,32|TILE_NORMAL,33|TILE_NORMAL,34|TILE_NORMAL,35|TILE_NORMAL,36|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionMedium1, units1->getSurfaceArray(5,1,47|TILE_NORMAL,48|TILE_NORMAL,49|TILE_NORMAL,50|TILE_NORMAL,51|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionMedium2, units1->getSurfaceArray(5,1,52|TILE_NORMAL,53|TILE_NORMAL,54|TILE_NORMAL,55|TILE_NORMAL,56|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionLarge1, units1->getSurfaceArray(5,1,37|TILE_NORMAL,38|TILE_NORMAL,39|TILE_NORMAL,40|TILE_NORMAL,41|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionLarge2, units1->getSurfaceArray(5,1,42|TILE_NORMAL,43|TILE_NORMAL,44|TILE_NORMAL,45|TILE_NORMAL,46|TILE_NORMAL));
+	addObjPic(ObjPic_ExplosionSmallUnit, units1->getSurfaceArray(2,1,0|TILE_NORMAL,1|TILE_NORMAL));
+	addObjPic(ObjPic_DeadInfantry, icon->getSurfaceArray(4,1,1,6));
+	addObjPic(ObjPic_Smoke, units1->getSurfaceArray(3,1,29|TILE_NORMAL,30|TILE_NORMAL,31|TILE_NORMAL));
+	addObjPic(ObjPic_SandwormShimmerMask, units1->getSurface(10));
+	addObjPic(ObjPic_Terrain, icon->getSurfaceRow(124,209));
+	addObjPic(ObjPic_RockDamage, icon->getSurfaceRow(1,6));
+	addObjPic(ObjPic_SandDamage, units1->getSurfaceArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
+	addObjPic(ObjPic_Terrain_Hidden, icon->getSurfaceRow(108,123));
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
-	addGuiPic(UI_MouseCursor, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
+	addGuiPic(UI_MouseCursor, mouse->getSurfaceArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));
 //	addGuiPic(UI_MouseCursor, mouse->getPicture(0));
 //	SDL_SetColorKey(addGuiPic(UI_CursorShape][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
-//	addGuiPic(UI_CreditsDigits, shapes->getPictureArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
+//	addGuiPic(UI_CreditsDigits, shapes->getSurfaceArray(10,1,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL,
 //																				7|TILE_NORMAL,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL,11|TILE_NORMAL));
 //	addGuiPic(UI_GameBar, PicFactory->createGameBar();
-//	addGuiPic(UI_Indicator, units1->getPictureArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
+//	addGuiPic(UI_Indicator, units1->getSurfaceArray(3,1,8|TILE_NORMAL,9|TILE_NORMAL,10|TILE_NORMAL));
 
 //	SDL_SetColorKey(addGuiPic(UI_Indicator][HOUSE_HARKONNEN], SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 //	addGuiPic(UI_InvalidPlace, PicFactory->createInvalidPlace();
@@ -427,16 +429,16 @@ SDL_Palette* DataCache::getPalette(std::string paletteFile)
     return m_palStrings[paletteFile]->getPalette();
 }
 
-void DataCache::addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house) {
+void DataCache::addObjPic(ObjPic_enum ID, SDL_Surface *surface, HOUSETYPE house) {
 
     m_objImg[house]->insert(std::pair<ObjPic_enum, ImagePtr>(ID, 
-                                      ImagePtr(tmp)));
+                                      ImagePtr(new Image(surface))));
 }
 
-void DataCache::addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house) {
+void DataCache::addGuiPic(GuiPic_enum ID, SDL_Surface *surface, HOUSETYPE house) {
 
     m_guiImg[house]->insert(std::pair<GuiPic_enum, ImagePtr>(ID, 
-                                      ImagePtr(tmp)));
+                                      ImagePtr(new Image(surface))));
 }
 
 ImagePtr DataCache::getObjPic(ObjPic_enum ID, HOUSETYPE house) {
@@ -631,7 +633,7 @@ Animation *DataCache::getAnimation(std::string path)
 
         if (type.compare("WSA") == 0)
         {
-            Wsafile* wsafile(new Wsafile(data, len));
+            WsaFile *wsafile(new WsaFile(data, len));
         	
             animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
             float frameRate = 1.0;
@@ -649,7 +651,7 @@ Animation *DataCache::getAnimation(std::string path)
             node.lookupValue("start_index", startIndex);
             node.lookupValue("end_index", endIndex);
 
-            Shpfile * shpfile = new Shpfile(data, len, palette);
+            ShpFile *shpfile = new ShpFile(data, len, palette);
             animation = shpfile->getAnimation(startIndex,endIndex,true);
 
             node.lookupValue("frame_rate", frameRate);

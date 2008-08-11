@@ -647,15 +647,15 @@ class Image
 
 	//! Make resized copy of the image relative to current resolution
         ImagePtr getResized()
-	{
-            return getResized(UPoint(surface->w, surface->h).getScaled());
-	}
+		{
+			return getResized(UPoint(surface->w, surface->h).getScaled());
+		}
 
 	//! Cut out a rectangular region of the image
 	/*!
 	    @param dstRect geometry of rectangular region to cut out
         */ 
-	Image *getPictureCrop(ConstRect dstRect);
+		Image *getPictureCrop(ConstRect dstRect);
         
         //! Set colorkey
         /*!

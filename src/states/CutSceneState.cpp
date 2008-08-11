@@ -9,8 +9,9 @@
 #include "SoundPlayer.h"
 #include "gui2/Button.h"
 
-#include "pakfile/Cpsfile.h"
-#include <PalFile.h>
+#include <eastwood/CpsFile.h>
+#include <eastwood/PalFile.h>
+#include <eastwood/WsaFile.h>
 
 #include <iostream>
 #include <libconfig.h++>
@@ -19,6 +20,8 @@
 
 
 using namespace libconfig;
+
+typedef boost::shared_ptr<CpsFile> CpsfilePtr;
 
 // ------------------------------------------------------------------
 // CutSceneState::Frame
@@ -157,20 +160,20 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 		if(isWsa){
 			if (m_continuation)
 			{
-				m_wsa.reset(new Wsafile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
+				m_wsa.reset(new WsaFile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
 			}
 			else
 			{
-				m_wsa.reset(new Wsafile(data, len, NULL, m_fps));
+				m_wsa.reset(new WsaFile(data, len, NULL, m_fps));
 			}
 		}else{
 			if(isCps){
-				tmp.reset(new Cpsfile(data, len));
-				m_wsa.reset(new Wsafile());
+				tmp.reset(new CpsFile(data, len));
+				m_wsa.reset(new WsaFile());
 			}
 		}
 	}else
-		m_wsa.reset(new Wsafile());
+		m_wsa.reset(new WsaFile());
 
     
     m_frametime = 0;
@@ -185,12 +188,12 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 	m_totalFrames = m_wsa->getNumFrames() + m_endWait + loopFrames;
 	if(isCps){
 		// A bit retarded, needs to be cleaned up later..
-		m_animSurface.reset(tmp->getPicture());
+		m_animSurface.reset(new Image(tmp->getSurface()));
 		m_palette = m_animSurface->getSurface()->format->palette;
 		m_textSurface = m_animSurface->getResized(2);
 		setTextLocation(SPoint(0,-200));
 	}
-	m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
+	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame, m_palette)));
     m_scaledSurface = m_animSurface->getResized(2.0);
 	if(m_endWait)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
@@ -311,7 +314,7 @@ void CutSceneState::Frame::doPlaying(float dt)
         }
         else
         {
-            m_animSurface.reset(m_wsa->getPicture(m_currentFrame, m_palette));
+            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame, m_palette)));
             m_scaledSurface = m_animSurface->getResized(2.0);
         };
 

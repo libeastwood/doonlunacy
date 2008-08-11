@@ -66,13 +66,13 @@ class DataCache : public Singleton<DataCache>
          *  @param tmp Image to be cached
          *  @param house colour to which image is remapped. By default: HOUSE_HARKONNEN
          */
-        void addObjPic(ObjPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+        void addObjPic(ObjPic_enum ID, SDL_Surface *surface, HOUSETYPE house = HOUSE_HARKONNEN);
         /*! Adds GUI pictures to cache
          *  @param ID identification number a given picture is assigned
          *  @param tmp Image to be cached
          *  @param house colour to which image is remapped. By default: HOUSE_HARKONNEN
          */
-        void addGuiPic(GuiPic_enum ID, Image * tmp, HOUSETYPE house = HOUSE_HARKONNEN);
+        void addGuiPic(GuiPic_enum ID, SDL_Surface *surface, HOUSETYPE house = HOUSE_HARKONNEN);
 
 		GCObject *getGCObject(std::string path);
 

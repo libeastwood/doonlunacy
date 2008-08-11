@@ -7,7 +7,6 @@
 
 #include "gui2/Label.h"
 #include "gui2/Frame.h"
-#include "pakfile/Cpsfile.h"
 
 #include <boost/bind.hpp>
 

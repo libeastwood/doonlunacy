@@ -4,7 +4,6 @@
 #include "Gfx.h"
 #include "State.h"
 
-#include "pakfile/Wsafile.h"
 #include "DataCache.h"
 
 #include <SDL.h>
@@ -17,11 +16,16 @@ typedef std::pair <uint16_t, std::string> cutSceneSound;
 typedef std::pair <uint16_t, Mix_Chunk*> soundChunk;
 typedef std::pair <uint8_t, uint8_t> videoLoop;
 
+
 class Font;
 class StringFile;
 class TransparentButton;
 class Label;
 class Container;
+class WsaFile;
+
+typedef boost::shared_ptr<WsaFile> WsafilePtr;
+
 class CutSceneState : public State 
 {
    
