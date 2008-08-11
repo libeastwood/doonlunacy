@@ -295,10 +295,11 @@ void Application::Run()
         SDL_FillRect(m_screen->getSurface(), NULL, m_clearColor);
 
         HandleEvents();
-
+        
         then = now;
         now = SDL_GetTicks();
 
+        #if 0
         // dont steal all the processing time 
         // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
         if (now - then < min_frame_duration)
@@ -306,6 +307,8 @@ void Application::Run()
             SDL_Delay(min_frame_duration -(now - then));
             now = SDL_GetTicks();
         };
+        
+        #endif
         
         float dt = float(now - then) / 1000.0f;
 

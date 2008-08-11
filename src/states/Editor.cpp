@@ -46,6 +46,7 @@ EditorState::~EditorState()
 
 int EditorState::Execute(float dt)
 {
+   GameState::Instance()->Update();
    SDL_Event event;
    SDL_PollEvent(&event);
    if (event.type == SDL_KEYDOWN) {

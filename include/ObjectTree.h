@@ -137,7 +137,7 @@ private:
 		for(int i=0; i < indend; i++) {
 			printf(" ");
 		}
-		printf("%d\n",node->getObjectID());
+		LOG_INFO("ObjectTree", "%d",node->getObjectID());
 		PrintSubTree(node->rightChild,indend+2);		
 	}
 	

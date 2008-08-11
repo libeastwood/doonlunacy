@@ -41,7 +41,7 @@ class ObjectClass : public Rect
     virtual void draw(Image * dest, SPoint off, SPoint view);
 	void drawSmoke(UPoint pos);
     virtual void destroy() = 0;
-    virtual void update() = 0;
+    virtual void update() {};
 
     virtual UPoint getClosestPoint(UPoint objectLocation);
 

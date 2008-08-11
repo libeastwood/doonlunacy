@@ -35,6 +35,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
+    
+    GameState::Instance()->GetUnits()->push_back(this);
 }
 
 /*virtual*/

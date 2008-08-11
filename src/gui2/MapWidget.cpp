@@ -107,6 +107,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                     m_selectedList.clear();
                     m_selectedList.push_back(tmp);
                     tmp->setSelected(true);
+                    LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
                 }
 
 
@@ -204,6 +205,25 @@ void MapWidget::draw(Image * dest, SPoint off)
         m_groundUnits.pop_front();
     }
 
+    ObjectClass* tmp3;
+
+    for (unsigned int i = 0; i < m_selectedList.size(); i++)
+    {
+        tmp3 = m_selectedList.at(i);
+
+        if (tmp3->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
+        {
+            if (tmp3->isAStructure())
+            {
+                ((StructureClass*)tmp3)->drawSelectRect(dest);
+            }
+
+            else
+            {
+                ((UnitClass*)tmp3)->drawSelectionBox(dest);
+            }
+        }
+    }
 
 }
 
