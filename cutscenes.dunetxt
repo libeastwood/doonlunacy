@@ -8,7 +8,7 @@ intro =
     	hold = 20;
     	song = 0;
     	fps = 0.15;
-    	palette = "WESTWOOD_PAL";
+    	palette = "INTRO:WESTWOOD.PAL";
 	},
 
 	{

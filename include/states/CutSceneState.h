@@ -46,7 +46,7 @@ class CutSceneState : public State
                 HOLDING
             };
         
-            Frame(std::string filename, Transition in, Transition out,
+            Frame(std::string filename, std::string palettefile, Transition in, Transition out,
 					bool cont, uint8_t endWait = 0);
 			~Frame();
             

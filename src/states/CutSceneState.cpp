@@ -26,8 +26,8 @@ typedef boost::shared_ptr<CpsFile> CpsfilePtr;
 // ------------------------------------------------------------------
 // CutSceneState::Frame
 
-CutSceneState::Frame::Frame(std::string filename, Transition in, Transition out,
-                            bool continuation, uint8_t endWait)
+CutSceneState::Frame::Frame(std::string filename, std::string palettefile,
+		Transition in, Transition out, bool continuation, uint8_t endWait)
 {
     m_filename = filename;
     m_transition_in = in;
@@ -37,7 +37,7 @@ CutSceneState::Frame::Frame(std::string filename, Transition in, Transition out,
     m_state = TRANSITION_IN;
     m_hold = 0.0f;
     m_transitionPalette = NULL;
-	m_palette = DataCache::Instance()->getPalette(INTRO_PAL);
+	m_palette = DataCache::Instance()->getPalette(palettefile);
 
 	m_song = -1;
 	m_fps = 0;
@@ -160,11 +160,11 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 		if(isWsa){
 			if (m_continuation)
 			{
-				m_wsa.reset(new WsaFile(data, len, lastframe->m_animSurface->getSurface(), m_fps));
+				m_wsa.reset(new WsaFile(data, len, m_palette, lastframe->m_animSurface->getSurface(), m_fps));
 			}
 			else
 			{
-				m_wsa.reset(new WsaFile(data, len, NULL, m_fps));
+				m_wsa.reset(new WsaFile(data, len, m_palette, NULL, m_fps));
 			}
 		}else{
 			if(isCps){
@@ -189,11 +189,10 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 	if(isCps){
 		// A bit retarded, needs to be cleaned up later..
 		m_animSurface.reset(new Image(tmp->getSurface()));
-		m_palette = m_animSurface->getSurface()->format->palette;
 		m_textSurface = m_animSurface->getResized(2);
 		setTextLocation(SPoint(0,-200));
 	}
-	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame, m_palette)));
+	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
     m_scaledSurface = m_animSurface->getResized(2.0);
 	if(m_endWait)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
@@ -314,7 +313,7 @@ void CutSceneState::Frame::doPlaying(float dt)
         }
         else
         {
-            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame, m_palette)));
+            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
             m_scaledSurface = m_animSurface->getResized(2.0);
         };
 
@@ -430,7 +429,7 @@ CutSceneState::CutSceneState(std::string scene)
 
 //	m_cutSceneStrings.push_back(cutSceneText(0, "")); // credits.eng isn't properly decoded yet..
 												// DataCache::Instance()->getCreditsString(20)));
-    std::string filename;
+    std::string filename, palettefile;
     bool continuation;
     int hold, song;
     int textColour;
@@ -447,6 +446,7 @@ CutSceneState::CutSceneState(std::string scene)
             hold = 0;
             fps = 1;
             continuation = false;
+			palettefile = "INTRO:INTRO.PAL";
 
             
             bool fadeOut = false;
@@ -457,7 +457,9 @@ CutSceneState::CutSceneState(std::string scene)
             node[i].lookupValue("filename", filename);
             node[i].lookupValue("hold", hold);
             node[i].lookupValue("continuation", continuation);
-        	frame = new Frame(filename,
+			node[i].lookupValue("palette", palettefile);
+
+        	frame = new Frame(filename, palettefile,
                              Frame::NO_TRANSITION, 
                              Frame::FADE_OUT,
                              continuation, hold);
@@ -600,6 +602,3 @@ int CutSceneState::Execute(float dt)
 
     return 0;
 }
-
-
-
