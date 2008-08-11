@@ -150,7 +150,7 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 	bool isWsa = m_filename.size() > 3 && wsaSuffix == m_filename.size() - 4;
 	bool isCps = m_filename.size() > 3 && cpsSuffix == m_filename.size() - 4;
 
-	CpsfilePtr tmp;
+	CpsfilePtr cps;
 	if(isWsa || isCps){
 		int len;
 		uint8_t * data = ResMan::Instance()->readFile(m_filename, &len);
@@ -166,15 +166,9 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 			{
 				m_wsa.reset(new WsaFile(data, len, m_palette, NULL, m_fps));
 			}
-		}else{
-			if(isCps){
-				tmp.reset(new CpsFile(data, len));
-				m_wsa.reset(new WsaFile());
-			}
-		}
-	}else
-		m_wsa.reset(new WsaFile());
-
+		}else if(isCps)
+			cps.reset(new CpsFile(data, len));
+	}
     
     m_frametime = 0;
     m_currentFrame = 0;
@@ -185,15 +179,20 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 	{
 		 loopFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
 	}
-	m_totalFrames = m_wsa->getNumFrames() + m_endWait + loopFrames;
+	if(m_wsa)
+		m_totalFrames = m_wsa->getNumFrames();
+	else
+		m_totalFrames = 1;
+	m_totalFrames += m_endWait + loopFrames;
+
 	if(isCps){
 		// A bit retarded, needs to be cleaned up later..
-		m_animSurface.reset(new Image(tmp->getSurface()));
-		m_textSurface = m_animSurface->getResized(2);
+		m_animSurface.reset(new Image(cps->getSurface()));
+		m_textSurface = m_animSurface->getResized();
 		setTextLocation(SPoint(0,-200));
 	}
 	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
-    m_scaledSurface = m_animSurface->getResized(2.0);
+    m_scaledSurface = m_animSurface->getResized();
 	if(m_endWait)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
 }
@@ -221,7 +220,7 @@ bool CutSceneState::Frame::Execute(float dt)
     };
 
 //    m_scaledSurface->blitToScreen(SPoint(0, Application::Instance()->Screen()->getSurface()->h/2 - m_scaledSurface->getSurface()->h/2 - 55));
-	m_scaledSurface->blitToScreenCentered();
+	m_scaledSurface->blitToScreen();
 	m_textSurface->blitToScreen(SPoint(0 + m_textLocation.x,Application::Instance()->Screen()->getSurface()->h/2 + m_scaledSurface->getSurface()->h/2 + m_textLocation.y));
 
     return mb_finished;
@@ -285,7 +284,12 @@ void CutSceneState::Frame::doPlaying(float dt)
 
     m_frametime += dt;
 
-    if (m_frametime > m_wsa->getFPS())
+	float fps;
+	if(m_wsa)
+		fps = m_wsa->getFPS();
+	else
+		fps = 0.1;
+    if (m_frametime > fps)
     {
 		if(m_loops.size() > 0)
 		{
@@ -314,7 +318,7 @@ void CutSceneState::Frame::doPlaying(float dt)
         else
         {
             m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
-            m_scaledSurface = m_animSurface->getResized(2.0);
+            m_scaledSurface = m_animSurface->getResized();
         };
 
     };
