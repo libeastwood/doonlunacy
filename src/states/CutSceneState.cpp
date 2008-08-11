@@ -24,9 +24,9 @@ using namespace libconfig;
 typedef boost::shared_ptr<CpsFile> CpsfilePtr;
 
 // ------------------------------------------------------------------
-// CutSceneState::Frame
+// CutSceneState::Scene
 
-CutSceneState::Frame::Frame(std::string filename, std::string palettefile,
+CutSceneState::Scene::Scene(std::string filename, std::string palettefile,
 		Transition in, Transition out, bool continuation, uint8_t endWait)
 {
     m_filename = filename;
@@ -52,12 +52,12 @@ CutSceneState::Frame::Frame(std::string filename, std::string palettefile,
 
 }
 
-void CutSceneState::Frame::addText(uint16_t playAt, std::string text)
+void CutSceneState::Scene::addText(uint16_t playAt, std::string text)
 {
 	m_cutSceneStrings.push_back(cutSceneText(playAt, text));
 }
 
-void CutSceneState::Frame::addSound(uint16_t playAt, std::string sound)
+void CutSceneState::Scene::addSound(uint16_t playAt, std::string sound)
 {
 	Mix_Chunk* sound1;
 	Mix_Chunk* sound2 = DataCache::Instance()->getSoundChunk(sound);
@@ -100,48 +100,48 @@ void CutSceneState::Frame::addSound(uint16_t playAt, std::string sound)
 	Mix_FreeChunk(sound2);
 }
 
-void CutSceneState::Frame::setPalette(Palette_enum palette)
+void CutSceneState::Scene::setPalette(Palette_enum palette)
 {
 	m_palette = DataCache::Instance()->getPalette(palette);
 }
 
-void CutSceneState::Frame::setSong(uint16_t song)
+void CutSceneState::Scene::setSong(uint16_t song)
 {
 	m_song = song;
 }
 
-void CutSceneState::Frame::setFps(float fps)
+void CutSceneState::Scene::setFps(float fps)
 {
 	m_fps = fps;
 }
 
-void CutSceneState::Frame::addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
+void CutSceneState::Scene::addLoop(uint8_t loopAt, uint8_t rewindTo, uint8_t numLoops, uint8_t wait)
 {
 	m_loops.push_back(videoLoop(loopAt, rewindTo));
 	m_loops.push_back(videoLoop(numLoops, wait));
 }
 
-void CutSceneState::Frame::setTextColor(uint8_t textColor)
+void CutSceneState::Scene::setTextColor(uint8_t textColor)
 {
 	m_textColor = textColor;
 }
 
-void CutSceneState::Frame::setTextLocation(SPoint textLocation)
+void CutSceneState::Scene::setTextLocation(SPoint textLocation)
 {
 	m_textLocation = textLocation;
 }
 
-void CutSceneState::Frame::setTextSize(float textSize)
+void CutSceneState::Scene::setTextSize(float textSize)
 {
 	m_textSize = textSize;
 }
 
-void CutSceneState::Frame::setTextFade(bool textFade)
+void CutSceneState::Scene::setTextFade(bool textFade)
 {
 	m_textFade = textFade;
 }
 
-void CutSceneState::Frame::Load(Frame* lastframe)
+void CutSceneState::Scene::Load(Scene* lastframe)
 {
     LOG_INFO("CutSceneState", "Loading %s", m_filename.c_str());
 
@@ -171,19 +171,19 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 	}
     
     m_frametime = 0;
-    m_currentFrame = 0;
-	m_framesPlayed = 0;
+    m_currentAnimFrame = 0;
+	m_animFramesPlayed = 0;
     mb_finished = false;
-	uint8_t loopFrames = 0;
+	uint8_t loopAnimFrames = 0;
 	for(uint8_t i = 0; i < m_loops.size(); i = i+2)
 	{
-		 loopFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
+		 loopAnimFrames += (m_loops[i].first - m_loops[i].second) * m_loops[i+1].first + m_loops[i+1].second;
 	}
 	if(m_wsa)
-		m_totalFrames = m_wsa->getNumFrames();
+		m_totalAnimFrames = m_wsa->getNumFrames();
 	else
-		m_totalFrames = 1;
-	m_totalFrames += m_endWait + loopFrames;
+		m_totalAnimFrames = 1;
+	m_totalAnimFrames += m_endWait + loopAnimFrames;
 
 	if(isCps){
 		// A bit retarded, needs to be cleaned up later..
@@ -191,13 +191,13 @@ void CutSceneState::Frame::Load(Frame* lastframe)
 		m_textSurface = m_animSurface->getResized();
 		setTextLocation(SPoint(0,-200));
 	}
-	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
+	m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
     m_scaledSurface = m_animSurface->getResized();
 	if(m_endWait)
 		addLoop(m_wsa->getNumFrames(), m_wsa->getNumFrames(), 1, m_endWait);
 }
 
-bool CutSceneState::Frame::Execute(float dt)
+bool CutSceneState::Scene::Execute(float dt)
 {
 
     switch (m_state)
@@ -227,13 +227,13 @@ bool CutSceneState::Frame::Execute(float dt)
 }
 
 
-void CutSceneState::Frame::doPlaying(float dt)
+void CutSceneState::Scene::doPlaying(float dt)
 {
 	if(m_textFade && !m_textTransition && !Mix_Playing(10)){
-		m_textTransition = m_framesPlayed + 2;
+		m_textTransition = m_animFramesPlayed + 2;
 	}
 	if(m_cutSceneStrings.size() > 0){
-		if(m_framesPlayed ==  m_cutSceneStrings[0].first){
+		if(m_animFramesPlayed ==  m_cutSceneStrings[0].first){
 			ImagePtr tmp(new Image(UPoint(360,50)));
 			std::string text = m_cutSceneStrings[0].second;
 			uint8_t numLines = 0;
@@ -261,12 +261,12 @@ void CutSceneState::Frame::doPlaying(float dt)
 		}
 	}
 
-	if(m_textTransition && m_framesPlayed >= m_textTransition){
+	if(m_textTransition && m_animFramesPlayed >= m_textTransition){
 		doTransitionOut(m_textSurface, false, true, 6);
 	}
 
 	if(m_cutSceneSounds.size() > 0){
-		if(m_framesPlayed ==  m_cutSceneSounds[0].first){
+		if(m_animFramesPlayed ==  m_cutSceneSounds[0].first){
 			Mix_Chunk* sound = DataCache::Instance()->getSoundChunk(m_cutSceneSounds[0].second);
 			SoundPlayer::Instance()->playSound(sound);
 			m_cutSceneSounds.erase(m_cutSceneSounds.begin());
@@ -274,7 +274,7 @@ void CutSceneState::Frame::doPlaying(float dt)
 	}
 
 	if(m_soundChunks.size() > 0){
-		if(m_framesPlayed ==  m_soundChunks[0].first){
+		if(m_animFramesPlayed ==  m_soundChunks[0].first){
 			Mix_Chunk* sound = m_soundChunks[0].second;
 			SoundPlayer::Instance()->playSound(sound, 10);
 //			delete(m_soundChunks[0].second);
@@ -293,11 +293,11 @@ void CutSceneState::Frame::doPlaying(float dt)
     {
 		if(m_loops.size() > 0)
 		{
-			if(!(m_currentFrame == m_loops[0].first - 1 && m_framesPlayed < m_loops[0].first + m_loops[1].second))
-				m_currentFrame++;
-			if(m_loops[1].first != 0 && m_currentFrame == m_loops[0].first)
+			if(!(m_currentAnimFrame == m_loops[0].first - 1 && m_animFramesPlayed < m_loops[0].first + m_loops[1].second))
+				m_currentAnimFrame++;
+			if(m_loops[1].first != 0 && m_currentAnimFrame == m_loops[0].first)
 			{
-				m_currentFrame = m_loops[0].second;
+				m_currentAnimFrame = m_loops[0].second;
 				m_loops[1].first--;
 			}
 			if(m_loops[1].first == 0){
@@ -305,34 +305,34 @@ void CutSceneState::Frame::doPlaying(float dt)
 				m_loops.erase(m_loops.begin());
 			}
 		}else
-			m_currentFrame++;
+			m_currentAnimFrame++;
 
 
-		m_framesPlayed++;		
+		m_animFramesPlayed++;		
 
         m_frametime = 0.0f;
-        if (m_currentFrame >= m_wsa->getNumFrames())
+        if (m_currentAnimFrame >= m_wsa->getNumFrames())
         {
             m_state = HOLDING;
         }
         else
         {
-            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentFrame)));
+            m_animSurface.reset(new Image(m_wsa->getSurface(m_currentAnimFrame)));
             m_scaledSurface = m_animSurface->getResized();
         };
 
     };
 }
 
-void CutSceneState::Frame::setupTransitionIn()
+void CutSceneState::Scene::setupTransitionIn()
 {
 }
 
-void CutSceneState::Frame::cleanupTransitionIn()
+void CutSceneState::Scene::cleanupTransitionIn()
 {
 }
 
-void CutSceneState::Frame::doTransitionIn(float dt) 
+void CutSceneState::Scene::doTransitionIn(float dt) 
 {
 	if(m_song != -1){
 		SoundPlayer::Instance()->playMusic(MUSIC_INTRO, m_song);
@@ -341,7 +341,7 @@ void CutSceneState::Frame::doTransitionIn(float dt)
     if (m_transition_in == NO_TRANSITION) m_state = PLAYING;
 }
 
-void CutSceneState::Frame::setupTransitionOut(ImagePtr img)
+void CutSceneState::Scene::setupTransitionOut(ImagePtr img)
 {
     m_transitionPalette = new SDL_Color[256];
     memcpy((unsigned char*)m_transitionPalette,
@@ -349,12 +349,12 @@ void CutSceneState::Frame::setupTransitionOut(ImagePtr img)
             sizeof(SDL_Color) * 256);
 }
 
-void CutSceneState::Frame::cleanupTransitionOut()
+void CutSceneState::Scene::cleanupTransitionOut()
 {
     delete m_transitionPalette;
 }
 
-void CutSceneState::Frame::doTransitionOut(float dt)
+void CutSceneState::Scene::doTransitionOut(float dt)
 {
 	doTransitionOut(m_scaledSurface, true, true);
 
@@ -362,7 +362,7 @@ void CutSceneState::Frame::doTransitionOut(float dt)
 //	doTransitionOut(m_textSurface, true, true);
 }
 
-void CutSceneState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
+void CutSceneState::Scene::doTransitionOut(ImagePtr img, bool done, bool forceTransition, const int fadeAmt) 
 {
     if (m_transition_out == NO_TRANSITION && !forceTransition) 
     {
@@ -397,12 +397,12 @@ void CutSceneState::Frame::doTransitionOut(ImagePtr img, bool done, bool forceTr
     };
 }
 
-void CutSceneState::Frame::doHolding(float dt)
+void CutSceneState::Scene::doHolding(float dt)
 {
     m_state = TRANSITION_OUT;
 }
 
-CutSceneState::Frame::~Frame()
+CutSceneState::Scene::~Scene()
 {			
     m_loops.clear();
 	m_cutSceneStrings.clear();
@@ -429,7 +429,7 @@ CutSceneState::CutSceneState(std::string scene)
         exit(EXIT_FAILURE);
     }
 
-	m_currentFrame = NULL;
+	m_currentScene = NULL;
 
     std::string filename, palettefile;
     bool continuation;
@@ -452,19 +452,19 @@ CutSceneState::CutSceneState(std::string scene)
 
             
             bool fadeOut = false;
-            Frame::Transition aa = Frame::NO_TRANSITION;
+            Scene::Transition aa = Scene::NO_TRANSITION;
             
            
             node[i].lookupValue("fade_out", fadeOut);
-            if (fadeOut) aa = Frame::FADE_OUT;
+            if (fadeOut) aa = Scene::FADE_OUT;
             
             node[i].lookupValue("filename", filename);
             node[i].lookupValue("hold", hold);
             node[i].lookupValue("continuation", continuation);
 			node[i].lookupValue("palette", palettefile);
 
-        	frame = new Frame(filename, palettefile,
-                             Frame::NO_TRANSITION, 
+        	frame = new Scene(filename, palettefile,
+                             Scene::NO_TRANSITION, 
                              aa,
                              continuation, hold);
 
@@ -564,7 +564,7 @@ CutSceneState::~CutSceneState()
 
 void CutSceneState::SkipCutScene()
 {
-	delete m_currentFrame;
+	delete m_currentScene;
     mp_parent->PopState();
     
 }
@@ -593,20 +593,20 @@ bool CutSceneState::next()
         return false;
     }
 
-    Frame* nextFrame = *it;
-    nextFrame->Load(m_currentFrame);
+    Scene* nextScene = *it;
+    nextScene->Load(m_currentScene);
     m_wsaNames.pop_front();
 
 
-    if (m_currentFrame != NULL) delete m_currentFrame;
-    m_currentFrame = nextFrame;
+    if (m_currentScene != NULL) delete m_currentScene;
+    m_currentScene = nextScene;
 
     return true;
 }
 
 int CutSceneState::Execute(float dt)
 {
-    if (m_currentFrame->Execute(dt))
+    if (m_currentScene->Execute(dt))
     {
         if (!next()) return -1;
     };

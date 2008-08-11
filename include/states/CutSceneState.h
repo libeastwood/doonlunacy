@@ -29,7 +29,7 @@ typedef boost::shared_ptr<WsaFile> WsafilePtr;
 class CutSceneState : public State 
 {
    
-    class Frame
+    class Scene
     {
         public:
             enum Transition
@@ -46,12 +46,12 @@ class CutSceneState : public State
                 HOLDING
             };
         
-            Frame(std::string filename, std::string palettefile, Transition in, Transition out,
+            Scene(std::string filename, std::string palettefile, Transition in, Transition out,
 					bool cont, uint8_t endWait = 0);
-			~Frame();
+			~Scene();
             
             bool Execute(float ft);
-            void Load(Frame* lastframe);
+            void Load(Scene* lastscene);
 			void addSound(uint16_t playAt, std::string sound);
 			void setSong(uint16_t song);
 			void setPalette(Palette_enum palette);
@@ -75,12 +75,12 @@ class CutSceneState : public State
             bool mb_finished;
             
             WsafilePtr m_wsa; 
-            uint8_t m_currentFrame, m_framesPlayed;
+            uint8_t m_currentAnimFrame, m_animFramesPlayed;
 
             float m_frametime, m_textSize;
 			int16_t m_song;
 			uint8_t m_endWait, m_textColor, m_textTransition;
-			uint16_t m_totalFrames;
+			uint16_t m_totalAnimFrames;
 			SPoint m_textLocation;
 
 			float m_fps;
@@ -110,7 +110,7 @@ class CutSceneState : public State
     };
     
     
-    typedef std::list<Frame*> CutSceneList;
+    typedef std::list<Scene*> CutSceneList;
 
     
     
@@ -123,9 +123,9 @@ class CutSceneState : public State
 
         int Execute(float dt);
         void SkipCutScene();
-        void enque(Frame* frame) { m_wsaNames.push_back(frame); }
+        void enque(Scene* frame) { m_wsaNames.push_back(frame); }
         bool next();
-        void load(Frame frame);
+        void load(Scene frame);
         virtual const char* GetName() { return "CutSceneState"; }
 		StringFile* m_introStringFile;
 
@@ -135,8 +135,8 @@ class CutSceneState : public State
 
         TransparentButton *m_butCutScene;
 
-        Frame* m_currentFrame;
-		Frame* frame;
+        Scene* m_currentScene;
+		Scene* frame;
 		std::vector<cutSceneText> m_cutSceneStrings;
 		std::vector<cutSceneSound> m_cutSceneSounds;
 		
