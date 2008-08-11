@@ -21,7 +21,7 @@ public:
         @param bgColor sets background color of label. 115(dune yellow) by default
         @param maxLineLength maximum length of a line (in characters)
     */
-    Label(std::string caption="", int textColor = 49, int bgColor = 115, int maxLineLength = -1);
+    Label(std::string caption="", int textColor = 49, int bgColor = 115, int maxLineLength = 0);
     void setLabel(std::string);
     void redraw();
 
@@ -46,7 +46,7 @@ private:
 class TransparentLabel : public Label
 {
 public:
-    TransparentLabel(std::string caption="", int textColor = 49, int maxLineLength = -1);
+    TransparentLabel(std::string caption="", int textColor = 49, int maxLineLength = 0);
 
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
@@ -56,7 +56,7 @@ protected:
 class GraphicsLabel : public Label
 {
 public:
-    GraphicsLabel(ImagePtr background, std::string caption="", int textColor = 49, int maxLineLength = -1);
+    GraphicsLabel(ImagePtr background, std::string caption="", int textColor = 49, int maxLineLength = 0);
     ~GraphicsLabel();
 
 protected:

@@ -78,7 +78,7 @@ void Label::redraw()
     {
         font->extents(m_caption.c_str(), textw, texth);
         drawBackground(textw, texth);
-	font->render(m_caption.c_str(), m_surface->getSurface(),
+		font->render(m_caption.c_str(), m_surface->getSurface(),
         m_surface->getSurface()->w/2 - textw/2, 
         m_surface->getSurface()->h/2 - texth/2, m_textColor);
     }
