@@ -14,7 +14,7 @@ QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
     m_maxHealth = 350;
     m_health = m_maxHealth;
     //radius = 6;
-    //m_viewRange = QUAD_VIEWRANGE;
+    m_viewRange = 4;
     //m_weaponRange = QUAD_WEAPONRANGE;
 
     //m_numWeapons = 2;

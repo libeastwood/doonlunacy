@@ -191,7 +191,7 @@ void MapWidget::draw(Image * dest, SPoint off)
         {
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-            if (cell->hasANonInfantryGroundObject())
+            if (cell->isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
             {
                 m_groundUnits.push_back(cell->getNonInfantryGroundObject());
             }

@@ -378,7 +378,6 @@ Image * Icnfile::getPictureRow(Uint32 StartIndex, Uint32 EndIndex) {
 		
 	SDL_UnlockSurface(pic);
 	Image * img = new Image(pic);
-	
 	return img;
 }
 

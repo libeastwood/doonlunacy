@@ -138,7 +138,7 @@ void UnitClass::move()
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
     //map->viewMap(w_owner->getTeam(), UPoint(x,y), getViewRange() );
-    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), 4 );
+    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
     if (m_moving)
     {
         m_oldPosition = UPoint(x, y);
@@ -177,7 +177,7 @@ void UnitClass::move()
 
                 m_justStoppedMoving = true;
 
-                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), 4 );
+                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
             }
         }
     }

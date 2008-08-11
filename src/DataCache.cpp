@@ -193,7 +193,10 @@ void DataCache::Init(){
 	addObjPic(ObjPic_Terrain, icon->getPictureRow(124,209));
 	addObjPic(ObjPic_RockDamage, icon->getPictureRow(1,6));
 	addObjPic(ObjPic_SandDamage, units1->getPictureArray(3,1,5|TILE_NORMAL,6|TILE_NORMAL,7|TILE_NORMAL));
-	addObjPic(ObjPic_Terrain_Hidden, icon->getPictureRow(108,123));
+    //FIXME: Don't want to add setColorKey to Icnfile. It might break sth somewhere else.
+    Image* hideTile = icon->getPictureRow(108,123);
+    hideTile->setColorKey();
+	addObjPic(ObjPic_Terrain_Hidden, hideTile);
 
 //	addGuiPic(UI_RadarAnimation, radar->getAnimationAsPictureRow());
 	addGuiPic(UI_MouseCursor, mouse->getPictureArray(7,1,0|TILE_NORMAL,1|TILE_NORMAL,2|TILE_NORMAL,3|TILE_NORMAL,4|TILE_NORMAL,5|TILE_NORMAL,6|TILE_NORMAL));

@@ -14,6 +14,7 @@ TerrainClass::TerrainClass() : UPoint(0,0)
     m_spice = 0;
     m_tile = Terrain_a1;
     m_type = Terrain_Sand;
+    m_hideTile = Terrain_HiddenFull;
     m_img = DataCache::Instance()->getObjPic(ObjPic_Terrain);
     m_hiddenImg = DataCache::Instance()->getObjPic(ObjPic_Terrain_Hidden);
     m_visited = false;
@@ -33,16 +34,20 @@ TerrainClass::~TerrainClass()
 
 void TerrainClass::draw(Image * dest, SPoint pos)
 {
-    Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-
 	if(isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()))
 	{
+        Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
         m_img->blitTo(dest, source, pos);
     }
     else
     {
-        m_img->blitTo(dest, source, pos);
-        m_hiddenImg->blitTo(dest, source, pos);
+        if (m_hideTile != Terrain_HiddenFull)
+        {
+            Rect sourcea(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
+            m_img->blitTo(dest, sourcea, pos);
+            Rect source(m_hideTile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
+            m_hiddenImg->blitTo(dest, source, pos);
+        }
     }
 
 }
