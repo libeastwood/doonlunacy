@@ -36,7 +36,7 @@ protected:
     std::string m_caption;
 
 private:
-    int m_textColor,
+    uint32_t m_textColor,
     m_bgColor,
     m_maxLineLength;
     bool m_redraw;

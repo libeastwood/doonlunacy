@@ -81,7 +81,7 @@ void ObjectTree::RemoveObject(Uint32 ObjectID) {
 //	fprintf(stderr,"Removing object %d from map!\n",ObjectID);
 //	PrintTree();
 
-	if(ObjectID == NONE) {
+	if(ObjectID == (Uint32)NONE) {
 		return;
 	}
 		

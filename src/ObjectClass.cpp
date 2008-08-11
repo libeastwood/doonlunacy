@@ -373,7 +373,7 @@ ObjectClass* ObjectClass::createObject(int ItemID,PlayerClass* Owner, Uint32 Obj
 	if(newObject == NULL)
 		return NULL;
 	
-	if(ObjectID == NONE) {
+	if(ObjectID == (Uint32)NONE) {
 		ObjectID = GameState::Instance()->GetObjectTree()->AddObject(newObject);
 		newObject->setObjectID(ObjectID);
 	} else {

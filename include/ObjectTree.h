@@ -70,7 +70,7 @@ public:
 	*/
 	inline ObjectClass* getObject(Uint32 ObjectID)
 	{
-		if(ObjectID == NONE) {
+		if(ObjectID == (Uint32)NONE) {
 			return NULL;
 		}
 		
