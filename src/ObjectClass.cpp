@@ -68,7 +68,7 @@ void ObjectClass::assignToMap(SPoint pos)
 
     if (map->cellExists(pos))
     {
-        map->getCell(pos)->assignNonInfantryGroundObject(getItemID());
+        map->getCell(pos)->assignNonInfantryGroundObject(getObjectID());
         map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
     }
 }
@@ -320,6 +320,8 @@ void ObjectClass::unassignFromMap(SPoint pos)
 ObjectClass* ObjectClass::createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID)
 {
 	ObjectClass* newObject = NULL;
+    //FIXME: Temporarily create quads only
+	ItemID = 48; //QUAD
 	switch (ItemID)
 	{
 	#if 0

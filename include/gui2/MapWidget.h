@@ -11,6 +11,10 @@
 #include "units/UnitClass.h"
 
 #include <vector>
+#include <list>
+
+typedef std::list<ObjectClass*> BlitList;
+
 /*!
  *  Widget used to display battle scene
  *  Since we're not using global variables anymore, it's got to have pointers
@@ -66,6 +70,10 @@ class MapWidget : public Widget {
      */
     SPoint m_view;
     std::vector<ObjectClass*> m_selectedList;    
+    BlitList m_airUnits,
+             m_groundUnits,
+             m_infantryUnits,
+             m_undergroundUnits;
 };
 
 #endif // DUNE_MAPWIDGET_H

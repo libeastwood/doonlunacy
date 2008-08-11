@@ -151,7 +151,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 void MapWidget::draw(Image * dest, SPoint off)
 {
     // We have to be sure we're not trying to draw cell with coordinates below zero or above mapsize
-
+    TerrainClass* cell;
 
     assert (m_map != NULL);
 
@@ -182,64 +182,28 @@ void MapWidget::draw(Image * dest, SPoint off)
         m_speed.y = 0;
     }
 
+    m_groundUnits.clear();
     //FIXME:This needs to be optimised. Why to redraw the whole map all the time? It takes a lot of CPU
 
     for (int i = 0; i < w / BLOCKSIZE; i++)
     {
         for (int j = 0; j < h / BLOCKSIZE; j++)
         {
-            m_map->getCell(UPoint(i + m_view.x, j + m_view.y))->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-        }
-    }
-
-    assert (m_structures != NULL);
-
-    StructureClass* tmp;
-
-    for (unsigned int i = 0; i < m_structures->size(); i++)
-    {
-        tmp = (StructureClass*)m_structures->at(i);
-        tmp->update();
-
-        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-            tmp->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-        }
-    }
-
-    UnitClass* tmp2;
-
-    for (unsigned int j = 0; j < m_units->size(); j++)
-    {
-        tmp2 = (UnitClass*)m_units->at(j);
-        tmp2->update();
-
-        if (tmp2->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-            tmp2->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-
-        }
-    }
-
-    ObjectClass* tmp3;
-
-    for (unsigned int i = 0; i < m_selectedList.size(); i++)
-    {
-        tmp3 = m_selectedList.at(i);
-
-        if (tmp3->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-            if (tmp3->isAStructure())
+            cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
+            cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
+            if (cell->hasANonInfantryGroundObject())
             {
-                ((StructureClass*)tmp3)->drawSelectRect(dest);
-            }
-
-            else
-            {
-                ((UnitClass*)tmp3)->drawSelectionBox(dest);
+                m_groundUnits.push_back(cell->getNonInfantryGroundObject());
             }
         }
     }
+    
+    while (!m_groundUnits.empty())
+    {
+        m_groundUnits.front()->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+        m_groundUnits.pop_front();
+    }
+
 
 }
 
