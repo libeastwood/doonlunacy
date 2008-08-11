@@ -8,8 +8,6 @@
 
 EditorState::EditorState()
 {
-    Settings * set = Settings::Instance();
-
 #if 0
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
