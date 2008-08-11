@@ -618,8 +618,6 @@ Animation *DataCache::getAnimation(std::string path)
 		SDL_Palette* palette;
         if(node.lookupValue("palette", fileName))
 		{
-			data = ResMan::Instance()->readFile(fileName, &len);
-			PalfilePtr tmp(new PalFile(data, len));
 			palette = getPalette(fileName);
 		}
 		else
@@ -633,9 +631,9 @@ Animation *DataCache::getAnimation(std::string path)
 
         if (type.compare("WSA") == 0)
         {
-            WsaFile *wsafile(new WsaFile(data, len));
+            WsaFile *wsafile(new WsaFile(data, len, palette));
         	
-            animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, palette, false);
+            animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, false);
             float frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
             animation->setFrameRate(frameRate);
