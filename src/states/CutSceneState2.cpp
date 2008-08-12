@@ -76,7 +76,11 @@ void CutSceneState::loadScene(uint32_t scene)
 			for (int i = node[scene]["text"].getLength()-1; i >= 0; i--)
 			{
 				int time = node[scene]["text"][i][0];
-				std::string text = node[scene]["text"][i][1];
+				std::string text;
+				if(node[scene]["text"][i][1].getType() == Setting::TypeInt)
+					text = DataCache::Instance()->getIntroString((int)node[scene]["text"][i][1]);
+				else
+					text = (const char*)node[scene]["text"][i][1];
 				m_textStrings.push_back(textString(time, text));
 			}
 		}
