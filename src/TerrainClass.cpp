@@ -43,10 +43,11 @@ void TerrainClass::draw(Image * dest, SPoint pos)
     {
         if (m_hideTile != Terrain_HiddenFull)
         {
-            Rect sourcea(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-            m_img->blitTo(dest, sourcea, pos);
-            Rect source(m_hideTile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-            m_hiddenImg->blitTo(dest, source, pos);
+            Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
+            m_img->blitTo(dest, source, pos);
+            Rect sourceHidden(m_hideTile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
+            m_hiddenImg->blitTo(dest, sourceHidden, pos);
+
         }
     }
 

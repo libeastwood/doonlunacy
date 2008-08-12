@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Gfx.h"
+#include "ObjectPointer.h"
 #include "PlayerClass.h"
 /*!
  *  @brief Base class for all objects (buildins, units, bullets)
@@ -101,15 +102,20 @@ class ObjectClass : public Rect
     ATTACKTYPE m_attackMode;
 
     bool m_active,
-    //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_builder,
+    //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_destroyed,
+    //! True if this object is an air unit
          m_flyingUnit,
+    //! True if this object is a ground unit
          m_groundUnit,
+    //! True if this object is infantry
          m_infantry,
          m_respondable,
          m_selected,
+    //! True if this object is a structure
          m_structure,
+    //! True if this object is a unit
          m_unit,
 	//! Specifies which players can see a given object
          m_visible[MAX_PLAYERS+1];
@@ -186,7 +192,7 @@ class ObjectClass : public Rect
 
     UPoint m_offset;
 
-    ObjectClass * m_target;
+    ObjectPointer m_target;
 };
 
 #endif //OBJECTCLASS_H

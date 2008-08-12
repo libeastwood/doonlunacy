@@ -73,7 +73,7 @@ void UnitClass::deploy(SPoint newPosition)
 
         setActive(true);
 
-        //  setVisible(VIS_ALL, true);
+        setVisible(VIS_ALL, true);
 
         //FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
         //       Need to think of sth more effective.
@@ -215,8 +215,8 @@ void UnitClass::navigate()
                                 && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
                         { //try searching for a path a number of times then give up
                             if (m_target && m_targetFriendly
-                                    && (m_target->getItemID() != Structure_RepairYard)
-                                    && ((m_target->getItemID() != Structure_Refinery)
+                                    && (m_target.getObjPointer()->getItemID() != Structure_RepairYard)
+                                    && ((m_target.getObjPointer()->getItemID() != Structure_Refinery)
                                         || (getItemID() != Unit_Harvester)))
                             {
 
@@ -650,7 +650,7 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
             }*/
 
             if (m_target)
-                checkedPoint = m_target->getClosestPoint(tempLocation);
+                checkedPoint = m_target.getObjPointer()->getClosestPoint(tempLocation);
 
             dx1 = tempLocation.x - checkedPoint.x;
 
@@ -702,7 +702,7 @@ bool UnitClass::AStarSearch()
     TerrainClass *node = map->getCell(UPoint(x, y));//initialise the current node the object is on
 
     if (m_target)
-        checkedPoint = m_target->getClosestPoint(UPoint(x, y));
+        checkedPoint = m_target.getObjPointer()->getClosestPoint(UPoint(x, y));
     else
         checkedPoint = m_destination;
 
