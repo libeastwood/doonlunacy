@@ -2,6 +2,7 @@
 
 #include "DataCache.h"
 #include "ResMan.h"
+#include "SoundPlayer.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
@@ -86,6 +87,15 @@ void CutSceneState::loadScene(uint32_t scene)
 				m_textStrings.push_back(textString(time, text));
 			}
 		}
+		if (node[scene].exists("sound"))
+		{
+			for (int i = node[scene]["sound"].getLength()-1; i >= 0; i--)
+			{
+				int time = node[scene]["sound"][i][0];
+				std::string sound = node[scene]["sound"][i][1];
+				m_soundStrings.push_back(textString(time, sound));
+			}
+		}
 
 		if (node[scene].exists("text_position"))
 		{
@@ -153,6 +163,42 @@ int CutSceneState::Execute(float ft)
 		m_sceneFrame->addChild(text);
 		m_textStrings.pop_back();
 	}
+	if(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_curAnimFrameTotal)
+	{
+		Mix_Chunk *sound = NULL;
+		while(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_curAnimFrameTotal)
+		{
+			if(sound == NULL)
+				sound = DataCache::Instance()->getSoundChunk(m_soundStrings.back().second);
+			else
+			{
+				Mix_Chunk *sound1 = sound;
+				Mix_Chunk *sound2 = DataCache::Instance()->getSoundChunk(m_soundStrings.back().second);
+				Mix_Chunk *newChunk;
+				if((newChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
+					return -1;
+				}
+				
+				newChunk->allocated = 1;
+				newChunk->volume = sound1->volume;
+				newChunk->alen = sound1->alen + sound2->alen;
+				
+				if((newChunk->abuf = (Uint8 *)malloc(newChunk->alen)) == NULL) {
+					free(newChunk);
+					return -1;
+				}
+				
+				memcpy(newChunk->abuf, sound1->abuf, sound1->alen);
+				memcpy(newChunk->abuf + sound1->alen, sound2->abuf, sound2->alen);
+				sound = newChunk;
+				Mix_FreeChunk(sound1);
+				Mix_FreeChunk(sound2);
+			}
+			m_soundStrings.pop_back();
+		}
+		SoundPlayer::Instance()->playSound(sound);
+	}
+
 	if((SDL_GetTicks() - m_curAnimFrameStartTime) > m_animFrameDurationTime) {
 		if(m_curAnimFrame < m_numAnimFrames - 1){
 			m_sceneFrame->changeBackground(m_animCache[m_curAnimFrame]);
