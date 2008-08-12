@@ -9,6 +9,7 @@
 #include "gui2/Label.h"
 
 #include <eastwood/Animation.h>
+#include <eastwood/CpsFile.h>
 #include <eastwood/WsaFile.h>
 
 #include <iostream>
@@ -106,9 +107,18 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_textPosition = SPoint(0,70);
 		}
 
-		if(filename == "")
+		if(filename == "" || filename.substr(filename.length()-3, 3) == "CPS")
 		{
-			ImagePtr surface(new Image(UPoint(1,1)));
+			ImagePtr surface;
+			if(filename == "")
+				surface.reset(new Image(UPoint(1,1)));
+			else
+			{
+				int len;
+				uint8_t *data = ResMan::Instance()->readFile(filename, &len);
+				CpsFile *cpsfile(new CpsFile(data, len));
+				surface = ImagePtr(new Image(cpsfile->getSurface()))->getResized();
+			}
 			m_animCache.push_back(surface);
 			m_numAnimFrames = 1;
 			m_animFrameDurationTime = 1;
