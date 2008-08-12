@@ -61,6 +61,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_curAnimFrame = 0;
 	m_curAnimFrameTotal = 0;
 	m_hold = 0;
+	m_textColor = 49;
 
 	float fps;
     
@@ -71,6 +72,7 @@ void CutSceneState::loadScene(uint32_t scene)
 		node[scene].lookupValue("filename", filename);
 		node[scene].lookupValue("palette", palettefile);
 		node[scene].lookupValue("hold", m_hold);
+		node[scene].lookupValue("text_color", m_textColor);
 		if (node[scene].exists("text"))
 		{
 			for (int i = node[scene]["text"].getLength()-1; i >= 0; i--)
@@ -144,10 +146,9 @@ int CutSceneState::Execute(float ft)
 
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_curAnimFrameTotal)
 	{
-		TransparentLabel *text = new TransparentLabel(m_textStrings.back().second);
+		TransparentLabel *text = new TransparentLabel(m_textStrings.back().second, m_textColor);
 		text->setResize(true);
 		text->redraw();
-		std::cout << (m_backgroundFrame->getPictureSize() /2) - text->getSize()/2 + m_textPosition.getScaled() << std::endl;
 		text->setPosition((m_backgroundFrame->getPictureSize() /2) - text->getSize()/2 + m_textPosition.getScaled());
 		m_sceneFrame->addChild(text);
 		m_textStrings.pop_back();
