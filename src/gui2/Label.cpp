@@ -106,6 +106,7 @@ void Label::draw(Image * dest, SPoint off)
 			m_surface = m_surface->getResized(m_resizeRatio);
 		if(m_resize)
 			m_surface = m_surface->getResized();
+		setSize(m_surface->getSize());
 
     }
 
