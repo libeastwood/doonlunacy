@@ -64,6 +64,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_curAnimFrameTotal = 0;
 	m_hold = 0;
 	m_textColor = 49;
+	int song;
 	bool continuation = false;
 
 	float fps;
@@ -77,6 +78,8 @@ void CutSceneState::loadScene(uint32_t scene)
 		node[scene].lookupValue("hold", m_hold);
 		node[scene].lookupValue("text_color", m_textColor);
         node[scene].lookupValue("continuation", continuation);
+		if(node[scene].lookupValue("song", song))
+			SoundPlayer::Instance()->playMusic(MUSIC_INTRO, song);
 
 		if (node[scene].exists("text"))
 		{
@@ -164,17 +167,6 @@ int CutSceneState::Execute(float ft)
 		m_drawMenu = false;
 	}
 
-	if(m_animCache.empty() || m_animCache.size() <= m_curAnimFrame)
-	{
-		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
-		Image *surface(new Image(m_anim->getFrame()));
-		if(m_curAnimFrame == m_numAnimFrames-1)
-		{
-			m_lastFrame = ImagePtr(surface);
-		}
-		m_animCache.push_back(surface->getResized());
-	}
-
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_curAnimFrameTotal)
 	{
 		TransparentLabel *text = new TransparentLabel(m_textStrings.back().second, m_textColor);
@@ -218,6 +210,17 @@ int CutSceneState::Execute(float ft)
 			m_soundStrings.pop_back();
 		}
 		SoundPlayer::Instance()->playSound(sound);
+	}
+
+	if(m_animCache.empty() || m_animCache.size() <= m_curAnimFrame)
+	{
+		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
+		Image *surface(new Image(m_anim->getFrame()));
+		if(m_curAnimFrame == m_numAnimFrames-1)
+		{
+			m_lastFrame = ImagePtr(surface);
+		}
+		m_animCache.push_back(surface->getResized());
 	}
 
 	if((SDL_GetTicks() - m_curAnimFrameStartTime) > m_animFrameDurationTime) {
