@@ -56,7 +56,9 @@ bool UnitClass::canPass(UPoint pos)
 /*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
-    if (m_owner->getMap()->cellExists(newPosition))
+    MapClass* map = GameState::Instance()->GetMap();
+    
+    if (map->cellExists(newPosition))
     {
         setPosition(newPosition);
 
@@ -73,6 +75,9 @@ void UnitClass::deploy(SPoint newPosition)
 
         //  setVisible(VIS_ALL, true);
 
+        //FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
+        //       Need to think of sth more effective.
+        map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
 
     }
 
@@ -137,10 +142,9 @@ void UnitClass::drawSelectionBox(Image* dest)
 /*virtual*/
 void UnitClass::move()
 {
+    MapClass* map = GameState::Instance()->GetMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
-    //map->viewMap(w_owner->getTeam(), UPoint(x,y), getViewRange() );
-    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
     if (m_moving)
     {
         m_oldPosition = UPoint(x, y);
@@ -172,14 +176,14 @@ void UnitClass::move()
                 x = m_nextSpot.x;
                 y = m_nextSpot.y;
 
-                if (x == m_destination.x && y == m_destination.y)
+                if (getPosition() == m_destination)
                     setForced(false);
 
                 m_moving = false;
 
                 m_justStoppedMoving = true;
 
-                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
+                map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
             }
         }
     }
