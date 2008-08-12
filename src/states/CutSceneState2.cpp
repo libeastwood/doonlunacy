@@ -64,6 +64,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_curAnimFrameTotal = 0;
 	m_hold = 0;
 	m_textColor = 49;
+	bool continuation = false;
 
 	float fps;
     
@@ -75,6 +76,8 @@ void CutSceneState::loadScene(uint32_t scene)
 		node[scene].lookupValue("palette", palettefile);
 		node[scene].lookupValue("hold", m_hold);
 		node[scene].lookupValue("text_color", m_textColor);
+        node[scene].lookupValue("continuation", continuation);
+
 		if (node[scene].exists("text"))
 		{
 			for (int i = node[scene]["text"].getLength()-1; i >= 0; i--)
@@ -130,7 +133,11 @@ void CutSceneState::loadScene(uint32_t scene)
 			int len;
 			uint8_t *data = ResMan::Instance()->readFile(filename, &len);
 			
-			WsaFile *wsafile(new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile)));
+			WsaFile *wsafile;
+			if(continuation)
+				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile),m_lastFrame->getSurface());
+			else
+				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
 			m_anim = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, false);
 			if(node[scene].lookupValue("fps", fps))
 				m_anim->setFrameRate(fps);
@@ -161,6 +168,10 @@ int CutSceneState::Execute(float ft)
 	{
 		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
 		Image *surface(new Image(m_anim->getFrame()));
+		if(m_curAnimFrame == m_numAnimFrames-1)
+		{
+			m_lastFrame = ImagePtr(surface);
+		}
 		m_animCache.push_back(surface->getResized());
 	}
 
@@ -210,7 +221,7 @@ int CutSceneState::Execute(float ft)
 	}
 
 	if((SDL_GetTicks() - m_curAnimFrameStartTime) > m_animFrameDurationTime) {
-		if(m_curAnimFrame < m_numAnimFrames - 1){
+		if(m_curAnimFrame < m_numAnimFrames){
 			m_sceneFrame->changeBackground(m_animCache[m_curAnimFrame]);
 			m_curAnimFrame++;
 		}
