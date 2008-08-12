@@ -30,10 +30,15 @@ public:
 
     virtual void draw(Image * dest, SPoint off);
 
+	void setResizeRatio(int resizeRatio) { m_resizeRatio = resizeRatio; }
+	void setResize(bool resize) { m_resize = resize; }
+
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
     ImagePtr m_surface;
     std::string m_caption;
+	int m_resizeRatio;
+	bool m_resize;
 
 private:
     uint32_t m_textColor,
@@ -71,9 +76,7 @@ class AnimationLabel : public Widget
 {
 	public:
 		AnimationLabel(Animation* pAnim);
-		
 		~AnimationLabel();
-
 
 		virtual void draw(Image * dest, SPoint off);
 

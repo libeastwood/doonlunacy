@@ -13,6 +13,8 @@ Label::Label(std::string caption, int textColor, int bgColor, int maxLineLength)
     m_maxLineLength = maxLineLength;
     m_caption = caption;
     m_redraw = true;
+	m_resizeRatio = 0;
+	m_resize = false;
 }
 
 Label::~Label()
@@ -98,7 +100,13 @@ void Label::draw(Image * dest, SPoint off)
     if(m_redraw)
     {
         redraw();
-	m_redraw = false;
+		m_redraw = false;
+		// This is quite lame, but will do for now..
+		if(m_resizeRatio)
+			m_surface = m_surface->getResized(m_resizeRatio);
+		if(m_resize)
+			m_surface = m_surface->getResized();
+
     }
 
     m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));
