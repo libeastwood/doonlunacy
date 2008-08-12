@@ -3,6 +3,8 @@
 
 #include "states/MenuBase.h"
 
+#include "Gfx.h"
+
 #include <string>
 
 #include <libconfig.h++>
@@ -10,7 +12,9 @@
 
 using namespace libconfig;
 
+typedef std::pair<int, std::string> textString;
 class Animation;
+class Frame;
 class vector;
 class CutSceneState : public MenuBaseState 
 {
@@ -26,6 +30,9 @@ class CutSceneState : public MenuBaseState
 		void loadScene(uint32_t scene);
 		Animation *m_anim;
 		Config *m_dataConfig;
+		Frame *m_sceneFrame,
+			  *m_animFrame;
+		SPoint m_textPosition;
 		uint32_t m_curAnimFrame,
 				 m_curAnimFrameTotal,
 				 m_curAnimFrameStartTime,
@@ -35,6 +42,7 @@ class CutSceneState : public MenuBaseState
 				 m_curScene,
 				 m_hold;
 		std::vector<ImagePtr> m_animCache;
+		std::vector<textString> m_textStrings;
 		std::string m_scene;
 
 };
