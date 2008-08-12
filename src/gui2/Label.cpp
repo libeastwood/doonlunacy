@@ -25,7 +25,6 @@ void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->recolor(0, m_bgColor);
-    setSize(m_surface->getSize());
 }
 
 void Label::redraw()
@@ -85,6 +84,12 @@ void Label::redraw()
         m_surface->getSurface()->h/2 - texth/2, m_textColor);
     }
 
+	// This is quite lame, but will do for now..
+	if(m_resizeRatio)
+		m_surface = m_surface->getResized(m_resizeRatio);
+	if(m_resize)
+		m_surface = m_surface->getResized();
+	setSize(m_surface->getSize());
 }
 
 void Label::setLabel(std::string caption)
@@ -101,12 +106,6 @@ void Label::draw(Image * dest, SPoint off)
     {
         redraw();
 		m_redraw = false;
-		// This is quite lame, but will do for now..
-		if(m_resizeRatio)
-			m_surface = m_surface->getResized(m_resizeRatio);
-		if(m_resize)
-			m_surface = m_surface->getResized();
-		setSize(m_surface->getSize());
 
     }
 
@@ -122,13 +121,11 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->setColorKey();
-    setSize(m_surface->getSize());
 }
 
 GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
 {
     m_background = background;
-    setSize(m_background->getSize());    
 }
 
 
@@ -144,7 +141,6 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 		m_surface = m_background->getCopy();
 	else
 		m_surface->blitFrom(m_background.get());
-    setSize(m_surface->getSize());    
 }
 
 GraphicsLabel::~GraphicsLabel()
