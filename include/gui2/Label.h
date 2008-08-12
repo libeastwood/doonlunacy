@@ -80,6 +80,8 @@ class AnimationLabel : public Widget
 
 		virtual void draw(Image * dest, SPoint off);
 
+		uint32_t getCurFrame() { return m_curFrame; }
+
 	private:
 		Animation* m_anim;
 		uint32_t m_curFrame,

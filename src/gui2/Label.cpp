@@ -156,8 +156,8 @@ AnimationLabel::AnimationLabel(Animation* pAnim)
 	m_curFrame = 0;
 	m_numFrames = m_anim->getNumFrames();
 	m_frameDurationTime = m_anim->getFrameDurationTime();
-	
 	m_curFrameStartTime = SDL_GetTicks();
+	setSize(UPoint(0,0));
 }
 
 AnimationLabel::~AnimationLabel()
@@ -168,12 +168,13 @@ AnimationLabel::~AnimationLabel()
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;
-
 	if(m_animCache.empty() || m_animCache.size() <= m_curFrame)
 	{
-		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
 		Image *surface(new Image(m_anim->getFrame()));
 		m_animCache.push_back(surface->getResized());
+		if(getSize() == UPoint(0,0))
+			setSize(m_animCache[m_curFrame]->getSize());
+
 	}
 
 	screen->blitFrom(m_animCache[m_curFrame].get(), UPoint(off.x + x, off.y + y));
