@@ -33,6 +33,7 @@ CutSceneState::CutSceneState(std::string scene)
     try
     {
 		m_dataConfig->readFile("cutscenes.cfg");
+		m_dataConfig->setAutoConvert(true);
     }
     catch(ParseException& ex)
     {
@@ -59,6 +60,8 @@ void CutSceneState::loadScene(uint32_t scene)
 	}
 	m_sceneFrame = new Frame(ImagePtr(new Image(UPoint(set->GetWidth(), set->GetHeight()))));
 	m_backgroundFrame->addChild(m_sceneFrame);
+	m_animFrame = new Frame();
+	m_sceneFrame->addChild(m_animFrame);
     std::string filename = "", palettefile = "INTRO:INTRO.PAL";
 	m_curAnimFrame = 0;
 	m_curAnimFrameTotal = 0;
@@ -67,9 +70,8 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_loop = NULL;
 	int song,
 		loopAnimFrames = 0;
+	float fps = 12.0;
 	bool continuation = false;
-
-	float fps;
     
     Setting &node = m_dataConfig->lookup(m_scene);
 
@@ -79,7 +81,9 @@ void CutSceneState::loadScene(uint32_t scene)
 		node[scene].lookupValue("palette", palettefile);
 		node[scene].lookupValue("hold", m_hold);
 		node[scene].lookupValue("text_color", m_textColor);
-        node[scene].lookupValue("continuation", continuation);
+		node[scene].lookupValue("continuation", continuation);
+		node[scene].lookupValue("fps", fps);
+
 		if(node[scene].lookupValue("song", song))
 			SoundPlayer::Instance()->playMusic(MUSIC_INTRO, song);
 
@@ -116,31 +120,29 @@ void CutSceneState::loadScene(uint32_t scene)
 		}
 
 		if (node[scene].exists("text_position"))
-		{
 			m_textPosition = SPoint((int)node[scene]["text_position"][0], (int)node[scene]["text_position"][1]);
-		}
 		else
-		{
 			m_textPosition = SPoint(0,70);
-		}
+
+		if(node[scene].exists("anim_position"))
+			m_animPosition = SPoint((int)node[scene]["anim_position"][0], (int)node[scene]["anim_position"][1]);
+		else
+			m_animPosition = SPoint(0,-20);
 
 		if(filename == "" || filename.substr(filename.length()-3, 3) == "CPS")
 		{
-			ImagePtr surface;
+			Image *image;
 			if(filename == "")
-				surface.reset(new Image(UPoint(1,1)));
+				image = new Image(UPoint(1,1));
 			else
 			{
 				int len;
 				uint8_t *data = ResMan::Instance()->readFile(filename, &len);
 				CpsFile *cpsfile(new CpsFile(data, len));
-				surface = ImagePtr(new Image(cpsfile->getSurface()))->getResized();
+				image = new Image(cpsfile->getSurface());
 			}
-			m_animCache.push_back(surface);
-			m_numAnimFrames = 1;
-			m_animFrameDurationTime = 1;
-			m_sceneFrame->changeBackground(surface);
-
+			m_anim = new Animation();
+			m_anim->addFrame(image->getSurface(), false);
 		}
 		else
 		{
@@ -153,12 +155,12 @@ void CutSceneState::loadScene(uint32_t scene)
 			else
 				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
 			m_anim = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, false);
-			if(node[scene].lookupValue("fps", fps))
-				m_anim->setFrameRate(fps);
-			m_numAnimFrames = m_anim->getNumFrames();
-			m_animFrameDurationTime = m_anim->getFrameDurationTime();
 		}
-		
+
+		m_anim->setFrameRate(fps);
+		m_numAnimFrames = m_anim->getNumFrames();
+		m_animFrameDurationTime = m_anim->getFrameDurationTime();
+
 		m_totalAnimFrames = m_numAnimFrames + m_hold + loopAnimFrames;
 
 		m_curAnimFrameStartTime = SDL_GetTicks();
@@ -183,7 +185,13 @@ int CutSceneState::Execute(float ft)
 		TransparentLabel *text = new TransparentLabel(m_textStrings.back().second, m_textColor);
 		text->setResize(true);
 		text->redraw();
-		text->setPosition((m_backgroundFrame->getPictureSize() /2) - text->getSize()/2 + m_textPosition.getScaled());
+
+		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - text->getSize()/2 + m_textPosition.getScaled();
+		// Don't allow picture picture to be placed outside of screen
+		if(pos.x < 0) pos.x = 0;
+		if(pos.y < 0) pos.y = 0;
+		text->setPosition(pos);
+
 		m_sceneFrame->addChild(text);
 		m_textStrings.pop_back();
 	}
@@ -236,7 +244,13 @@ int CutSceneState::Execute(float ft)
 
 	if((SDL_GetTicks() - m_curAnimFrameStartTime) > m_animFrameDurationTime) {
 		if(m_curAnimFrame < m_numAnimFrames){
-			m_sceneFrame->changeBackground(m_animCache[m_curAnimFrame]);
+			m_animFrame->changeBackground(m_animCache[m_curAnimFrame]);
+			SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animFrame->getPictureSize()/2 + m_animPosition.getScaled();
+			// Don't allow picture picture to be placed outside of screen
+			if(pos.x < 0) pos.x = 0;
+			if(pos.y < 0) pos.y = 0;
+			m_animFrame->setPosition(pos);
+
 			m_curAnimFrame++;
 		}
 		m_curAnimFrameStartTime = SDL_GetTicks();

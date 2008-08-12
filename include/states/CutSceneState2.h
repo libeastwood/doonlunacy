@@ -40,7 +40,8 @@ class CutSceneState : public MenuBaseState
 		Frame *m_sceneFrame,
 			  *m_animFrame;
 		ImagePtr m_lastFrame;
-		SPoint m_textPosition;
+		SPoint m_textPosition,
+			   m_animPosition;
 		loop *m_loop;
 		uint32_t m_curAnimFrame,
 				 m_curAnimFrameTotal,
