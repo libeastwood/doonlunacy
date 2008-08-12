@@ -64,7 +64,9 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_curAnimFrameTotal = 0;
 	m_hold = 0;
 	m_textColor = 49;
-	int song;
+	m_loop = NULL;
+	int song,
+		loopAnimFrames = 0;
 	bool continuation = false;
 
 	float fps;
@@ -81,6 +83,15 @@ void CutSceneState::loadScene(uint32_t scene)
 		if(node[scene].lookupValue("song", song))
 			SoundPlayer::Instance()->playMusic(MUSIC_INTRO, song);
 
+		if(node[scene].exists("loop"))
+		{
+			m_loop = new loop;
+			m_loop->loopAt = node[scene]["loop"]["loopat"];
+			m_loop->rewindTo = node[scene]["loop"]["rewindto"];
+			m_loop->loops = node[scene]["loop"]["loops"];
+			m_loop->wait = node[scene]["loop"]["wait"];
+			loopAnimFrames = (m_loop->loopAt - m_loop->rewindTo) * m_loop->loops + m_loop->wait;
+		}
 		if (node[scene].exists("text"))
 		{
 			for (int i = node[scene]["text"].getLength()-1; i >= 0; i--)
@@ -148,7 +159,7 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_animFrameDurationTime = m_anim->getFrameDurationTime();
 		}
 		
-		m_totalAnimFrames = m_numAnimFrames + m_hold; //endWait + loopAnimFrames;
+		m_totalAnimFrames = m_numAnimFrames + m_hold + loopAnimFrames;
 
 		m_curAnimFrameStartTime = SDL_GetTicks();
     }  
@@ -233,6 +244,8 @@ int CutSceneState::Execute(float ft)
 
 		if(m_curAnimFrameTotal >= m_totalAnimFrames)
 		{
+			if(m_loop != NULL)
+				free(m_loop);
 			m_animCache.clear();
 			m_curScene++;
 			m_drawMenu = true;

@@ -13,6 +13,13 @@
 using namespace libconfig;
 
 typedef std::pair<int, std::string> textString;
+typedef struct {
+    int loopAt,
+		rewindTo,
+		loops,
+		wait;
+} loop;
+
 class Animation;
 class Frame;
 class vector;
@@ -32,7 +39,9 @@ class CutSceneState : public MenuBaseState
 		Config *m_dataConfig;
 		Frame *m_sceneFrame,
 			  *m_animFrame;
+		ImagePtr m_lastFrame;
 		SPoint m_textPosition;
+		loop *m_loop;
 		uint32_t m_curAnimFrame,
 				 m_curAnimFrameTotal,
 				 m_curAnimFrameStartTime,
@@ -40,9 +49,11 @@ class CutSceneState : public MenuBaseState
 				 m_totalAnimFrames,
 				 m_animFrameDurationTime,
 				 m_curScene,
-				 m_hold;
+				 m_hold,
+				 m_textColor;
 		std::vector<ImagePtr> m_animCache;
-		std::vector<textString> m_textStrings;
+		std::vector<textString> m_textStrings,
+								m_soundStrings;
 		std::string m_scene;
 
 };
