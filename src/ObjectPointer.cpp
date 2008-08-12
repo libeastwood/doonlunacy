@@ -4,14 +4,14 @@
 
 ObjectClass* ObjectPointer::getObjPointer()
 {
-	if(ObjectID == NONE) 
+	if(m_objectID == NONE) 
 	{
 		return NULL;
 	}
 
-	ObjectClass* objPointer = GameState::Instance()->GetObjectTree().getObject(ObjectID);
+	ObjectClass* objPointer = GameState::Instance()->GetObjectTree()->getObject(m_objectID);
 
-	if(ObjPointer == NULL) 
+	if(objPointer == NULL) 
 	{
 		m_objectID = NONE;
 	}

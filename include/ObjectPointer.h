@@ -6,16 +6,17 @@ class UnitClass;
 class StructureClass;
 
 #include "Definitions.h"
+#include "DuneConstants.h"
 
-class ObjectPointer()
+class ObjectPointer
 {
   public:
-	ObjectPointer() { ObjectID = NONE; };
+	ObjectPointer() { m_objectID = NONE; };
 	ObjectPointer(Uint32 newItemID) { PointTo(newItemID); };
 	ObjectPointer(ObjectClass* newObject) { PointTo(newObject); };
 	~ObjectPointer() { ; };
 
-	inline void PointTo(Uint32 newItemID) { ObjectID = newItemID; };
+	inline void PointTo(Uint32 newItemID) { m_objectID = newItemID; };
 	void PointTo(ObjectClass* newObject);
 
 	inline Uint32 getObjectID() { return m_objectID; };
@@ -25,7 +26,7 @@ class ObjectPointer()
 
 	operator bool()
 	{
-		return (ObjectID != NONE);
+		return (m_objectID != NONE);
 	};
 	
   private:
