@@ -91,6 +91,9 @@ class AnimationLabel : public Widget
 		}
 	
 		void addFrame(ImagePtr animFrame, bool setColorKey = false);
+		void addPause(uint32_t numFrames)
+			{ for(uint32_t i = 0; i < numFrames; i++)
+				m_animFrames.push_back(m_animFrames.back()); }
 		uint32_t getNumFrames() { return m_animFrames.size(); }
 		uint32_t getCurFrame() { return m_curFrame; }
 
