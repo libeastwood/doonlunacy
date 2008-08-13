@@ -1,15 +1,16 @@
-#include <SDL_mixer.h>
-#include <stdlib.h>
-#include <math.h>
+#include "SoundPlayer.h"
 
-#include "mmath.h"
 #include "DataCache.h"
 #include "DuneConstants.h"
 #include "Log.h"
-#include "SoundPlayer.h"
+#include "mmath.h"
 
-#include <VocFile.h>
-#include <AdlFile.h>
+#include <eastwood/VocFile.h>
+#include <eastwood/AdlFile.h>
+
+#include <SDL_mixer.h>
+#include <stdlib.h>
+#include <math.h>
 
 SoundPlayer::SoundPlayer()
 {

@@ -6,7 +6,8 @@
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 
-#include <StringFile.h>
+#include <eastwood/StringFile.h>
+
 #include <boost/bind.hpp>
 
 

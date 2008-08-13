@@ -1,19 +1,21 @@
-#include <assert.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
-#include "boost/filesystem/path.hpp"
-#include "boost/filesystem/operations.hpp" 
-#include "boost/format.hpp"
+#include "ResMan.h"
 
 #include "Log.h"
-#include "ResMan.h"
 #include "Settings.h"
 //#include "Log.h"
 
 //#include "boost/filesystem/fstream.hpp"    // ditto
 
+#include <eastwood/PakFile.h>
+
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/format.hpp>
+
+#include <assert.h>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 namespace bfs = boost::filesystem;
 

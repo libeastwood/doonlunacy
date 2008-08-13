@@ -2,14 +2,14 @@
 #define DUNE_RESMAN_H
 
 #include "singleton.h"
-#include "PakFile.h"
 
-#include "boost/filesystem/path.hpp"
+#include <boost/filesystem/path.hpp>
 
 #include <map>
 #include <string>
 //#include "Log.h"
 
+class PakFile;
 /*!
 	Class to emulate a file object using an unsigned char* buffer
 */

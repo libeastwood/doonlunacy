@@ -1,16 +1,16 @@
-#include "DataCache.h" //It should not be included here, but all enums are here
+#include "MapGenerator.h"
+
 #include "DuneConstants.h"
 #include "GameState.h"
 #include "Log.h"
 #include "MapClass.h"
-#include "MapGenerator.h"
 #include "MapSeed.h"
 #include "ObjectClass.h"
 #include "ResMan.h"
 
 #include "mmath.h"
 
-#include <IniFile.h>
+#include <eastwood/IniFile.h>
 
 MapGenerator::MapGenerator ()
 {

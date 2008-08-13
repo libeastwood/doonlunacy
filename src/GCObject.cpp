@@ -1,9 +1,11 @@
 #include "GCObject.h"
-#include "ResMan.h"
-#include "PalFile.h"
+
 #include "DataCache.h"
-#include <CpsFile.h>
-#include <ShpFile.h>
+#include "ResMan.h"
+
+#include <eastwood/CpsFile.h>
+#include <eastwood/PalFile.h>
+#include <eastwood/ShpFile.h>
 
 using namespace libconfig;
 

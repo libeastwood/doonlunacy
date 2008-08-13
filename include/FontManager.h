@@ -2,8 +2,10 @@
 #define DUNE_FONTMANAGER_H
 
 #include "singleton.h"
+
+#include <eastwood/Font.h>
+
 #include <SDL_ttf.h>
-#include <Font.h>
 
 class FontManager : public Singleton<FontManager>
 {
