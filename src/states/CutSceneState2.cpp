@@ -101,7 +101,6 @@ void CutSceneState::loadScene(uint32_t scene)
 			loopAnimFrames = (m_loop->loopAt - m_loop->rewindTo) * m_loop->loops + m_loop->wait;
 		}
 		if (node[scene].exists("text"))
-		{
 			for (int i = node[scene]["text"].getLength()-1; i >= 0; i--)
 			{
 				int time = node[scene]["text"][i][0];
@@ -112,16 +111,13 @@ void CutSceneState::loadScene(uint32_t scene)
 					text = (const char*)node[scene]["text"][i][1];
 				m_textStrings.push_back(textString(time, text));
 			}
-		}
 		if (node[scene].exists("sound"))
-		{
 			for (int i = node[scene]["sound"].getLength()-1; i >= 0; i--)
 			{
 				int time = node[scene]["sound"][i][0];
 				std::string sound = node[scene]["sound"][i][1];
 				m_soundStrings.push_back(textString(time, sound));
 			}
-		}
 
 		if (node[scene].exists("text_position"))
 			m_textPosition = SPoint((int)node[scene]["text_position"][0], (int)node[scene]["text_position"][1]);
@@ -135,59 +131,45 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_animPosition = SPoint(0,-20);
 
 		m_anim = new Animation();
-		if(filename == "" || filename.substr(filename.length()-3, 3) == "CPS")
-		{
-			ImagePtr image;
-			if(filename == "")
-				image.reset(new Image(UPoint(1,1)));
-			else
-			{
-				int len;
-				uint8_t *data = ResMan::Instance()->readFile(filename, &len);
-				CpsFile *cpsfile(new CpsFile(data, len));
-				image.reset(new Image(cpsfile->getSurface()));
-			}
-			m_totalAnimFrames = 1 + m_hold;
-			for(Uint32 i = 0; i < m_totalAnimFrames; i++)
-				m_anim->addFrame(copySurface(image->getSurface()));
-
-		}
+		SDL_Surface *animFrame;
+		if(filename == "")
+			animFrame = (new Image(UPoint(1,1)))->getSurface();
 		else
 		{
 			int len;
 			uint8_t *data = ResMan::Instance()->readFile(filename, &len);
-			
-			WsaFile *wsafile;
-			if(continuation)
-				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile),m_lastFrame->getSurface());
+			if(filename.substr(filename.length()-3, 3) == "CPS")
+				animFrame = (new CpsFile(data, len))->getSurface();
 			else
-				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
-			m_numAnimFrames = wsafile->getNumFrames();
-			m_totalAnimFrames = m_numAnimFrames + m_hold + loopAnimFrames;
-
-			SDL_Surface *animFrame;
-			for(Uint32 i = 0, j = 0; i < m_totalAnimFrames; i++, j++)
 			{
-				if(j < m_numAnimFrames)
-				{
-					if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
-					{
-						if(m_loop->wait-- > 0)
-							j--, m_anim->addFrame(copySurface(animFrame));
-						else
-							j = m_loop->rewindTo, m_loop->loops--;
-					}
-					animFrame = wsafile->getSurface(j);
-					m_anim->addFrame(animFrame);
-				}
+				WsaFile *wsafile;
+				if(continuation)
+					wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile),m_lastFrame->getSurface());
 				else
-					m_anim->addFrame(copySurface(animFrame));
+					wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
+				
+				for(Uint32 i = 0, j = 0; i < wsafile->getNumFrames() + loopAnimFrames; i++, j++)
+					if(j < wsafile->getNumFrames())
+					{
+						if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
+						{
+							if(m_loop->wait-- > 0)
+								j--, m_anim->addFrame(copySurface(animFrame));
+							else
+								j = m_loop->rewindTo, m_loop->loops--;
+						}
+						animFrame = wsafile->getSurface(j);
+						m_anim->addFrame(animFrame);
+					}
+				m_lastFrame = ImagePtr(new Image(copySurface(animFrame)));
+				delete wsafile;
 			}
-			m_lastFrame = ImagePtr(new Image(copySurface(animFrame)));
 		}
+		for(Uint32 i = 0; i < m_hold; i++)
+			m_anim->addFrame(copySurface(animFrame));
+
 
 		m_anim->setFrameRate(fps);
-		m_numAnimFrames = m_anim->getNumFrames();
 
 		m_animLabel = new AnimationLabel(m_anim);
 		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
@@ -213,7 +195,7 @@ int CutSceneState::Execute(float ft)
 		loadScene(m_curScene);
 		m_drawMenu = false;
 	}
-	if(m_animLabel->getCurFrame() == m_totalAnimFrames - 1)
+	if(m_animLabel->getCurFrame() == m_anim->getNumFrames() - 1)
 	{
 		m_curScene++;
 		if(m_loop != NULL)
