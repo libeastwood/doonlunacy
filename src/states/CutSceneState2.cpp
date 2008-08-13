@@ -132,7 +132,7 @@ void CutSceneState::loadScene(uint32_t scene)
 		m_animLabel = new AnimationLabel();		
 		ImagePtr animFrame;
 		if(filename == "")
-			animFrame.reset(new Image(UPoint(1,1)));
+			m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))));
 		else
 		{
 			int len;
@@ -140,7 +140,7 @@ void CutSceneState::loadScene(uint32_t scene)
 			if(filename.substr(filename.length()-3, 3) == "CPS")
 			{
 				CpsFile *cpsfile(new CpsFile(data, len));
-				animFrame.reset(new Image(cpsfile->getSurface()));
+				m_animLabel->addFrame(ImagePtr(new Image(cpsfile->getSurface())));
 				delete cpsfile;
 			}
 			else
@@ -150,26 +150,27 @@ void CutSceneState::loadScene(uint32_t scene)
 					wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile),m_lastFrame->getSurface());
 				else
 					wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
-				
-				for(uint32_t i = 0, j = 0; i < wsafile->getNumFrames() + loopAnimFrames; i++, j++)
-					if(j < wsafile->getNumFrames())
-					{
-						if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
-						{
-							if(m_loop->wait-- > 0)
-								j--, m_animLabel->addFrame(animFrame);
-							else
-								j = m_loop->rewindTo, m_loop->loops--;
-						}
-						animFrame = ImagePtr(new Image(wsafile->getSurface(j)));
-						m_animLabel->addFrame(animFrame);
-					}
-				m_lastFrame = animFrame;
+				std::vector<ImagePtr> wsaFrames;
+				for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
+					wsaFrames.push_back(ImagePtr(new Image(wsafile->getSurface(i))));
 				delete wsafile;
+				
+				for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
+					if(i < wsaFrames.size())
+					{
+						if(m_loop && (int)i == m_loop->loopAt && m_loop->loops > -1)
+						{
+							if(m_loop->wait > 0)
+								m_animLabel->addPause(m_loop->wait), m_loop->wait=0;
+							else
+								i = m_loop->rewindTo, m_loop->loops--;
+						}
+						m_animLabel->addFrame(wsaFrames[i]);
+					}
+				m_lastFrame = wsaFrames.back();
 			}
 		}
-		for(Uint32 i = 0; i < m_hold; i++)
-			m_animLabel->addFrame(animFrame);
+		m_animLabel->addPause(m_hold);
 
 
 		m_animLabel->setFrameRate(fps);
