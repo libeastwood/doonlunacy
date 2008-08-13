@@ -173,20 +173,12 @@ void CutSceneState::loadScene(uint32_t scene)
 					if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
 					{
 						if(m_loop->wait-- > 0)
-						{
-							j--;
-							m_anim->addFrame(copySurface(animFrame));
-						}
+							j--, m_anim->addFrame(copySurface(animFrame));
 						else
-						{
-							j = m_loop->rewindTo;
-							m_loop->loops--;
-						}
+							j = m_loop->rewindTo, m_loop->loops--;
 					}
-					{
-						animFrame = wsafile->getSurface(j);
-						m_anim->addFrame(animFrame);
-					}
+					animFrame = wsafile->getSurface(j);
+					m_anim->addFrame(animFrame);
 				}
 				else
 					m_anim->addFrame(copySurface(animFrame));
