@@ -67,8 +67,6 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_textFrame = new Frame(ImagePtr(new Image(UPoint(300,50).getScaled())));
 	m_sceneFrame->addChild(m_textFrame);
     std::string filename = "", palettefile = "INTRO:INTRO.PAL";
-	m_curAnimFrame = 0;
-	m_curAnimFrameTotal = 0;
 	m_hold = 0;
 	m_textColor = 49;
 	m_loop = NULL;
@@ -165,24 +163,39 @@ void CutSceneState::loadScene(uint32_t scene)
 			else
 				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
 			m_numAnimFrames = wsafile->getNumFrames();
-			m_totalAnimFrames = m_numAnimFrames + m_hold;// + loopAnimFrames;
+			m_totalAnimFrames = m_numAnimFrames + m_hold + loopAnimFrames;
 
-			for(Uint32 i = 0; i < m_totalAnimFrames; i++)
+			SDL_Surface *animFrame;
+			for(Uint32 i = 0, j = 0; i < m_totalAnimFrames; i++, j++)
 			{
-				SDL_Surface *animFrame;
-				if(i < m_numAnimFrames)
+				if(j < m_numAnimFrames)
 				{
-					animFrame = wsafile->getSurface(i);
-					m_anim->addFrame(animFrame);
+					if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
+					{
+						if(m_loop->wait-- > 0)
+						{
+							j--;
+							m_anim->addFrame(copySurface(animFrame));
+						}
+						else
+						{
+							j = m_loop->rewindTo;
+							m_loop->loops--;
+						}
+					}
+					{
+						animFrame = wsafile->getSurface(j);
+						m_anim->addFrame(animFrame);
+					}
 				}
 				else
 					m_anim->addFrame(copySurface(animFrame));
 			}
+			m_lastFrame = ImagePtr(new Image(copySurface(animFrame)));
 		}
 
 		m_anim->setFrameRate(fps);
 		m_numAnimFrames = m_anim->getNumFrames();
-		m_animFrameDurationTime = m_anim->getFrameDurationTime();
 
 		m_animLabel = new AnimationLabel(m_anim);
 		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
@@ -192,9 +205,7 @@ void CutSceneState::loadScene(uint32_t scene)
 		m_animLabel->setPosition(pos);
 
 		m_sceneFrame->addChild(m_animLabel);
-//		m_totalAnimFrames = m_numAnimFrames;// + m_hold + loopAnimFrames;
 
-		m_curAnimFrameStartTime = SDL_GetTicks();
     }  
     catch(ParseException& ex)
     {
