@@ -145,6 +145,16 @@ class DataCache : public Singleton<DataCache>
         void cacheSprites();
         sprite* getSpriteInfo(std::string spriteName);
         
+        template<typename T>
+        T getSpriteParameter(std::string path, const T defaultResult) 
+        { 
+            T result = defaultResult; 
+            if (!m_dataConfig->lookupValue(path, result))
+            {
+                LOG_WARNING("DataCache", "Sprite parameter %s not found. Using default value.", path.c_str(), defaultResult);
+            }
+            return result;
+        }
         Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);

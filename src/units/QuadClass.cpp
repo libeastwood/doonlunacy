@@ -10,7 +10,7 @@ QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
     sprite* tmp = DataCache::Instance()->getSpriteInfo("quad");
 
     w = h = 16;
-    m_speed = tmp->speed;
+    m_speed = DataCache::Instance()->getSpriteParameter("units.quad.speed", 0.63);
 
     //m_armour = 6;
     m_maxHealth = tmp->health;

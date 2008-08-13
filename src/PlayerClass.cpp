@@ -32,7 +32,7 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
 	m_capacity = 0;
 	m_power = 0;
 	m_powerRequirement = 0;
-	m_team = newPlayerNumber;
+	m_team = team;
 	
 	m_numBarracks = 0;
 	m_numCarryalls = 0;
