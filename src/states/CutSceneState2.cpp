@@ -1,6 +1,7 @@
 #include "states/CutSceneState2.h"
 
 #include "DataCache.h"
+#include "FontManager.h"
 #include "ResMan.h"
 #include "SoundPlayer.h"
 
@@ -45,6 +46,7 @@ CutSceneState::CutSceneState(std::string scene)
 	m_scene = scene;
 	m_curScene = 0;
 	m_drawMenu = true;
+	m_font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 }
 
 CutSceneState::~CutSceneState()
@@ -62,6 +64,8 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_backgroundFrame->addChild(m_sceneFrame);
 	m_animFrame = new Frame();
 	m_sceneFrame->addChild(m_animFrame);
+	m_textFrame = new Frame(ImagePtr(new Image(UPoint(300,50).getScaled())));
+	m_sceneFrame->addChild(m_textFrame);
     std::string filename = "", palettefile = "INTRO:INTRO.PAL";
 	m_curAnimFrame = 0;
 	m_curAnimFrameTotal = 0;
@@ -78,6 +82,8 @@ void CutSceneState::loadScene(uint32_t scene)
     try
     {
 		node[scene].lookupValue("filename", filename);
+		std::cout << "loading: " << filename << std::endl;
+		
 		node[scene].lookupValue("palette", palettefile);
 		node[scene].lookupValue("hold", m_hold);
 		node[scene].lookupValue("text_color", m_textColor);
@@ -123,26 +129,30 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_textPosition = SPoint((int)node[scene]["text_position"][0], (int)node[scene]["text_position"][1]);
 		else
 			m_textPosition = SPoint(0,70);
+		m_textFrame->setPosition(m_textPosition.getScaled() + SPoint(0, m_backgroundFrame->getPictureSize().y /2 - m_textFrame->getPictureSize().y/2));
 
 		if(node[scene].exists("anim_position"))
 			m_animPosition = SPoint((int)node[scene]["anim_position"][0], (int)node[scene]["anim_position"][1]);
 		else
 			m_animPosition = SPoint(0,-20);
 
+		m_anim = new Animation();
 		if(filename == "" || filename.substr(filename.length()-3, 3) == "CPS")
 		{
-			Image *image;
+			ImagePtr image;
 			if(filename == "")
-				image = new Image(UPoint(1,1));
+				image.reset(new Image(UPoint(1,1)));
 			else
 			{
 				int len;
 				uint8_t *data = ResMan::Instance()->readFile(filename, &len);
 				CpsFile *cpsfile(new CpsFile(data, len));
-				image = new Image(cpsfile->getSurface());
+				image.reset(new Image(cpsfile->getSurface()));
 			}
-			m_anim = new Animation();
-			m_anim->addFrame(image->getSurface(), false);
+			m_totalAnimFrames = 1 + m_hold;
+			for(Uint32 i = 0; i < m_totalAnimFrames; i++)
+				m_anim->addFrame(copySurface(image->getSurface()));
+
 		}
 		else
 		{
@@ -154,14 +164,35 @@ void CutSceneState::loadScene(uint32_t scene)
 				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile),m_lastFrame->getSurface());
 			else
 				wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
-			m_anim = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, false);
+			m_numAnimFrames = wsafile->getNumFrames();
+			m_totalAnimFrames = m_numAnimFrames + m_hold;// + loopAnimFrames;
+
+			for(Uint32 i = 0; i < m_totalAnimFrames; i++)
+			{
+				SDL_Surface *animFrame;
+				if(i < m_numAnimFrames)
+				{
+					animFrame = wsafile->getSurface(i);
+					m_anim->addFrame(animFrame);
+				}
+				else
+					m_anim->addFrame(copySurface(animFrame));
+			}
 		}
 
 		m_anim->setFrameRate(fps);
 		m_numAnimFrames = m_anim->getNumFrames();
 		m_animFrameDurationTime = m_anim->getFrameDurationTime();
 
-		m_totalAnimFrames = m_numAnimFrames + m_hold + loopAnimFrames;
+		m_animLabel = new AnimationLabel(m_anim);
+		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
+		// Don't allow picture picture to be placed outside of screen
+		if(pos.x < 0) pos.x = 0;
+		if(pos.y < 0) pos.y = 0;
+		m_animLabel->setPosition(pos);
+
+		m_sceneFrame->addChild(m_animLabel);
+//		m_totalAnimFrames = m_numAnimFrames;// + m_hold + loopAnimFrames;
 
 		m_curAnimFrameStartTime = SDL_GetTicks();
     }  
@@ -179,26 +210,47 @@ int CutSceneState::Execute(float ft)
 		loadScene(m_curScene);
 		m_drawMenu = false;
 	}
-
-	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_curAnimFrameTotal)
+	if(m_animLabel->getCurFrame() == m_totalAnimFrames - 1)
 	{
-		TransparentLabel *text = new TransparentLabel(m_textStrings.back().second, m_textColor);
-		text->setResize(true);
-		text->redraw();
+		m_curScene++;
+		if(m_loop != NULL)
+			free(m_loop);
+		m_drawMenu = true;
+	}
 
-		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - text->getSize()/2 + m_textPosition.getScaled();
-		// Don't allow picture picture to be placed outside of screen
-		if(pos.x < 0) pos.x = 0;
-		if(pos.y < 0) pos.y = 0;
-		text->setPosition(pos);
+	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())
+	{
+			ImagePtr tmp(new Image(UPoint(320, 50)));
+			tmp->setColorKey();
+			std::string text = m_textStrings.back().second;
+			uint8_t numLines = 0;
+			int linebreak = text.find("\n",0)+ 1;
+			std::string thisLine;
+			// This is a bit hairy and needs to be cleaned up a bit..
+			Uint16 textw, texth;
 
-		m_sceneFrame->addChild(text);
+			while(text.substr(0, linebreak-1).length() > 0){
+				thisLine = text.substr(0, linebreak-1);
+				if(linebreak != -1)
+					thisLine += " ";
+				
+				m_font->extents(thisLine, textw, texth);
+				
+				m_font->render(thisLine, tmp->getSurface(), tmp->getSurface()->w/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+				if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
+					break;
+				text = text.substr(linebreak, text.length()-linebreak);
+				linebreak = text.find("\n",0);
+			}
+			m_textFrame->changeBackground(tmp->getResized());
+
 		m_textStrings.pop_back();
 	}
-	if(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_curAnimFrameTotal)
+
+	if(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_animLabel->getCurFrame())
 	{
 		Mix_Chunk *sound = NULL;
-		while(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_curAnimFrameTotal)
+		while(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_animLabel->getCurFrame())
 		{
 			if(sound == NULL)
 				sound = DataCache::Instance()->getSoundChunk(m_soundStrings.back().second);
@@ -231,39 +283,5 @@ int CutSceneState::Execute(float ft)
 		SoundPlayer::Instance()->playSound(sound);
 	}
 
-	if(m_animCache.empty() || m_animCache.size() <= m_curAnimFrame)
-	{
-		//FIXME: if using ImagePtr here and resizing it, it'll crash, why?
-		Image *surface(new Image(m_anim->getFrame()));
-		if(m_curAnimFrame == m_numAnimFrames-1)
-		{
-			m_lastFrame = ImagePtr(surface);
-		}
-		m_animCache.push_back(surface->getResized());
-	}
-
-	if((SDL_GetTicks() - m_curAnimFrameStartTime) > m_animFrameDurationTime) {
-		if(m_curAnimFrame < m_numAnimFrames){
-			m_animFrame->changeBackground(m_animCache[m_curAnimFrame]);
-			SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animFrame->getPictureSize()/2 + m_animPosition.getScaled();
-			// Don't allow picture picture to be placed outside of screen
-			if(pos.x < 0) pos.x = 0;
-			if(pos.y < 0) pos.y = 0;
-			m_animFrame->setPosition(pos);
-
-			m_curAnimFrame++;
-		}
-		m_curAnimFrameStartTime = SDL_GetTicks();
-		m_curAnimFrameTotal++;
-
-		if(m_curAnimFrameTotal >= m_totalAnimFrames)
-		{
-			if(m_loop != NULL)
-				free(m_loop);
-			m_animCache.clear();
-			m_curScene++;
-			m_drawMenu = true;
-		}
-	}
 	return 0;
 }

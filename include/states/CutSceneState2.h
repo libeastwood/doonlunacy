@@ -21,7 +21,10 @@ typedef struct {
 } loop;
 
 class Animation;
+class AnimationLabel;
 class Frame;
+class Font;
+class TransparentLabel;
 class vector;
 class CutSceneState : public MenuBaseState 
 {
@@ -36,9 +39,12 @@ class CutSceneState : public MenuBaseState
 	private:
 		void loadScene(uint32_t scene);
 		Animation *m_anim;
+		AnimationLabel *m_animLabel;
 		Config *m_dataConfig;
 		Frame *m_sceneFrame,
-			  *m_animFrame;
+			  *m_animFrame,
+			  *m_textFrame;
+		Font *m_font;
 		ImagePtr m_lastFrame;
 		SPoint m_textPosition,
 			   m_animPosition;
