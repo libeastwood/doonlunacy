@@ -208,7 +208,7 @@ int CutSceneState::Execute(float ft)
 
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())
 	{
-			ImagePtr tmp(new Image(UPoint(320, 50)));
+			ImagePtr tmp(new Image(UPoint(420, 45)));
 			tmp->setColorKey();
 			std::string text = m_textStrings.back().second;
 			uint8_t numLines = 0;
@@ -224,13 +224,16 @@ int CutSceneState::Execute(float ft)
 				
 				m_font->extents(thisLine, textw, texth);
 				
-				m_font->render(thisLine, tmp->getSurface(), tmp->getSurface()->w/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+				m_font->render(thisLine, tmp->getSurface(), tmp->getSize().x/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+				
 				if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
 					break;
 				text = text.substr(linebreak, text.length()-linebreak);
 				linebreak = text.find("\n",0);
 			}
-			m_textFrame->changeBackground(tmp->getResized());
+			//FIXME: Really lame, need to figure out how to change font size in a sane way..
+			tmp = tmp->getResized(UPoint(320, 50).getScaled());
+			m_textFrame->changeBackground(tmp);
 
 		m_textStrings.pop_back();
 	}
