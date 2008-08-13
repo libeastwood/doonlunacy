@@ -2,9 +2,8 @@
 #include "Gfx.h"
 #include "Log.h"
 #include "Strings.h"
-#include "gui2/Label.h"
 
-#include <Animation.h>
+#include "gui2/Label.h"
 
 Label::Label(std::string caption, int textColor, int bgColor, int maxLineLength)
 {
@@ -147,41 +146,60 @@ GraphicsLabel::~GraphicsLabel()
 {
 }
 
-AnimationLabel::AnimationLabel(Animation* pAnim)
+AnimationLabel::AnimationLabel(ConstUPoint origSize)
 {
-    m_anim = pAnim;
-	m_curFrame = 0;
-	m_numFrames = m_anim->getNumFrames();
-	m_frameDurationTime = m_anim->getFrameDurationTime();
 	m_curFrameStartTime = SDL_GetTicks();
-	Image *surface(new Image(m_anim->getFrame()));
-	m_animCache.push_back(surface->getResized());
-	setSize(m_animCache[m_curFrame]->getSize());
+	m_frameDurationTime = 1;
+	m_curFrame = 0;
+	m_origSize = origSize;
+	setSize(m_origSize.getScaled());
+}
+
+AnimationLabel::AnimationLabel()
+{
+	m_curFrameStartTime = SDL_GetTicks();
+	m_frameDurationTime = 1;
+	m_curFrame = 0;
+	m_origSize = UPoint(0,0);
 }
 
 AnimationLabel::~AnimationLabel()
 {
-	delete m_anim;
 }
+
+void AnimationLabel::addFrame(ImagePtr animFrame, bool setColorKey) {
+	if(m_origSize == UPoint(0,0))
+		m_origSize = animFrame->getSize(), setSize(m_origSize.getScaled());
+	else if(animFrame->getSize() != m_origSize)
+        LOG_ERROR("AnimationLabel:", "Frame size %dx%d doesn't match %dx%d!",
+				animFrame->getSize().x, animFrame->getSize().y, m_origSize.x, m_origSize.y);
+	assert(animFrame->getSize() == m_origSize);
+
+	if(setColorKey)
+		animFrame->setColorKey();
+	
+	m_animFrames.push_back(animFrame);
+}
+
 
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;
-	if(m_animCache.size() <= m_curFrame)
+
+	ImagePtr thisFrame = m_animFrames[m_curFrame];
+	if(thisFrame->getSize() != getSize())
 	{
-		Image *surface(new Image(m_anim->getFrame()));
-		m_animCache.push_back(surface->getResized());
+		thisFrame = thisFrame->getResized();
+		m_animFrames[m_curFrame] = thisFrame;
 	}
 
-	screen->blitFrom(m_animCache[m_curFrame].get(), UPoint(off.x + x, off.y + y));
+	screen->blitFrom(thisFrame.get(), UPoint(off.x + x, off.y + y));
 
 	if((SDL_GetTicks() - m_curFrameStartTime) > m_frameDurationTime) {
+		if(m_curFrame >= m_animFrames.size()) {
+			m_curFrame = 0;
+		}		
 		m_curFrameStartTime = SDL_GetTicks();
 		m_curFrame++;
-		if(m_curFrame >= m_numFrames)
-		{
-			m_curFrame = 0;
-		}
 	}
-
 }

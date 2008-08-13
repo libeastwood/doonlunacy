@@ -16,7 +16,7 @@
 #define NUM_MAPCHOICEARROWS	9
 
 class SDL_Palette;
-class Animation;
+class AnimationLabel;
 class GCObject;
 class StringFile;
 class Mix_Chunk;
@@ -82,7 +82,7 @@ class DataCache : public Singleton<DataCache>
          *  Parses animation parameters from a file and loads animation
          *  @return pointer to animation
          */
-        Animation*		getAnimation(std::string path);
+        AnimationLabel *getAnimationLabel(std::string path);
 
         /*! Adds palette from a file 
          *  @param palette identification number Palette is assigned
@@ -126,14 +126,6 @@ class DataCache : public Singleton<DataCache>
          *        will be remapped, cached and a pointer to it returned
          */
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
-        /*! Used to fetch pointer to Animation
-         *  @param id identification number of an animation to be fetched
-         *  @return pointer to Animation
-         *  @note Currently animations are resized on the fly, which is quite CPU consuming,
-         *        but on the other hand it cuts down RAM consumption. TODO: Already seen 
-         *        and thus already resized animations should be cached. This would allow
-         *        to keep only necessary resized animations in RAM.
-         */
         Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);

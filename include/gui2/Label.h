@@ -75,19 +75,30 @@ class Animation;
 class AnimationLabel : public Widget
 {
 	public:
-		AnimationLabel(Animation* pAnim);
+		AnimationLabel(ConstUPoint origSize);
+		AnimationLabel();
 		~AnimationLabel();
 
 		virtual void draw(Image * dest, SPoint off);
 
+		ImagePtr getFrame();
+		void setFrameRate(float frameRate) {
+			if(frameRate == 0.0) {
+				m_frameDurationTime = 1;
+			} else {
+				m_frameDurationTime = (int) (1000.0/frameRate);
+			}
+		}
+	
+		void addFrame(ImagePtr animFrame, bool setColorKey = false);
+		uint32_t getNumFrames() { return m_animFrames.size(); }
 		uint32_t getCurFrame() { return m_curFrame; }
 
 	private:
-		Animation* m_anim;
 		uint32_t m_curFrame,
 				 m_curFrameStartTime,
-				 m_numFrames,
 				 m_frameDurationTime;
-		std::vector<ImagePtr> m_animCache;
+		UPoint m_origSize;
+		std::vector<ImagePtr> m_animFrames;
 };
 #endif //DUNE_GUI2_LABEL_H

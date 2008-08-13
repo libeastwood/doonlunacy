@@ -4,6 +4,8 @@
 
 #include "GCObject.h"
 
+#include "gui2/Label.h"
+
 #include <eastwood/IcnFile.h>
 #include <eastwood/ShpFile.h>
 #include <eastwood/WsaFile.h>
@@ -581,12 +583,12 @@ void DataCache::freeGCObjects()
 		m_gcObjs[i]->freeIfUnique();
 }
 
-Animation *DataCache::getAnimation(std::string path)
+AnimationLabel *DataCache::getAnimationLabel(std::string path)
 {
     std::string fullpath = "animations.";
     fullpath+=path;
 
-    Animation* animation = NULL;
+    AnimationLabel* animationLabel = new AnimationLabel();
     
     try
     {
@@ -615,10 +617,12 @@ Animation *DataCache::getAnimation(std::string path)
         {
             WsaFile *wsafile(new WsaFile(data, len, palette));
         	
-            animation = wsafile->getAnimation(0,wsafile->getNumFrames() - 1, false);
-            float frameRate = 1.0;
+			for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
+				animationLabel->addFrame(ImagePtr(new Image(wsafile->getSurface(i))));
+            
+			float frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
-            animation->setFrameRate(frameRate);
+            animationLabel->setFrameRate(frameRate);
 
             delete wsafile;
 
@@ -626,16 +630,17 @@ Animation *DataCache::getAnimation(std::string path)
         
         if (type.compare("SHP") == 0)
         {
-            int startIndex, endIndex;
+            uint32_t startIndex, endIndex;
             float frameRate = 1.0;
             node.lookupValue("start_index", startIndex);
             node.lookupValue("end_index", endIndex);
 
             ShpFile *shpfile = new ShpFile(data, len, palette);
-            animation = shpfile->getAnimation(startIndex,endIndex,true);
+			for(uint32_t i = startIndex; i < endIndex; i++)
+				animationLabel->addFrame(ImagePtr(new Image(shpfile->getSurface(i))));
 
             node.lookupValue("frame_rate", frameRate);
-       		animation->setFrameRate(frameRate);
+       		animationLabel->setFrameRate(frameRate);
 
        		delete shpfile;
     
@@ -651,7 +656,7 @@ Animation *DataCache::getAnimation(std::string path)
     }
 
 
-    return animation;   
+    return animationLabel;
 }
 
 DataCache::~DataCache() {

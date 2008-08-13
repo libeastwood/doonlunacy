@@ -7,8 +7,7 @@
 #include "gui2/Label.h"
 #include "gui2/Button.h"
 
-#include <Animation.h>
-#include <StringFile.h>
+#include <eastwood/StringFile.h>
 
 #include <string>
 #include <boost/bind.hpp>
@@ -18,16 +17,14 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 
 	free(m_song);
 	m_song = NULL;
-	Animation* ret;
 	if (newHouse == HOUSE_ATREIDES)
-		ret = DataCache::Instance()->getAnimation("Anim_AtreidesPlanet");
+		m_planetAnimation = DataCache::Instance()->getAnimationLabel("Anim_AtreidesPlanet");
 	else if (newHouse == HOUSE_ORDOS)
-		ret = DataCache::Instance()->getAnimation("Anim_OrdosPlanet");
+		m_planetAnimation = DataCache::Instance()->getAnimationLabel("Anim_OrdosPlanet");
 	else if (newHouse == HOUSE_HARKONNEN)
-		ret = DataCache::Instance()->getAnimation("Anim_HarkonnenPlanet");
+		m_planetAnimation = DataCache::Instance()->getAnimationLabel("Anim_HarkonnenPlanet");
 
 	
-	m_planetAnimation = new AnimationLabel(ret);
 	m_planetAnimation->setPosition(UPoint(128, 48).getScaled());
 	m_backgroundFrame->addChild(m_planetAnimation);
 

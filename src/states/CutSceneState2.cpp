@@ -9,7 +9,6 @@
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
 
-#include <eastwood/Animation.h>
 #include <eastwood/CpsFile.h>
 #include <eastwood/WsaFile.h>
 
@@ -130,16 +129,20 @@ void CutSceneState::loadScene(uint32_t scene)
 		else
 			m_animPosition = SPoint(0,-20);
 
-		m_anim = new Animation();
-		SDL_Surface *animFrame;
+		m_animLabel = new AnimationLabel();		
+		ImagePtr animFrame;
 		if(filename == "")
-			animFrame = (new Image(UPoint(1,1)))->getSurface();
+			animFrame.reset(new Image(UPoint(1,1)));
 		else
 		{
 			int len;
 			uint8_t *data = ResMan::Instance()->readFile(filename, &len);
 			if(filename.substr(filename.length()-3, 3) == "CPS")
-				animFrame = (new CpsFile(data, len))->getSurface();
+			{
+				CpsFile *cpsfile(new CpsFile(data, len));
+				animFrame.reset(new Image(cpsfile->getSurface()));
+				delete cpsfile;
+			}
 			else
 			{
 				WsaFile *wsafile;
@@ -148,30 +151,29 @@ void CutSceneState::loadScene(uint32_t scene)
 				else
 					wsafile = new WsaFile(data, len, DataCache::Instance()->getPalette(palettefile));
 				
-				for(Uint32 i = 0, j = 0; i < wsafile->getNumFrames() + loopAnimFrames; i++, j++)
+				for(uint32_t i = 0, j = 0; i < wsafile->getNumFrames() + loopAnimFrames; i++, j++)
 					if(j < wsafile->getNumFrames())
 					{
 						if(m_loop && (int)j == m_loop->loopAt && m_loop->loops > -1)
 						{
 							if(m_loop->wait-- > 0)
-								j--, m_anim->addFrame(copySurface(animFrame));
+								j--, m_animLabel->addFrame(animFrame);
 							else
 								j = m_loop->rewindTo, m_loop->loops--;
 						}
-						animFrame = wsafile->getSurface(j);
-						m_anim->addFrame(animFrame);
+						animFrame = ImagePtr(new Image(wsafile->getSurface(j)));
+						m_animLabel->addFrame(animFrame);
 					}
-				m_lastFrame = ImagePtr(new Image(copySurface(animFrame)));
+				m_lastFrame = animFrame;
 				delete wsafile;
 			}
 		}
 		for(Uint32 i = 0; i < m_hold; i++)
-			m_anim->addFrame(copySurface(animFrame));
+			m_animLabel->addFrame(animFrame);
 
 
-		m_anim->setFrameRate(fps);
+		m_animLabel->setFrameRate(fps);
 
-		m_animLabel = new AnimationLabel(m_anim);
 		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
 		// Don't allow picture picture to be placed outside of screen
 		if(pos.x < 0) pos.x = 0;
@@ -195,7 +197,7 @@ int CutSceneState::Execute(float ft)
 		loadScene(m_curScene);
 		m_drawMenu = false;
 	}
-	if(m_animLabel->getCurFrame() == m_anim->getNumFrames() - 1)
+	if(m_animLabel->getCurFrame() == m_animLabel->getNumFrames() - 1)
 	{
 		m_curScene++;
 		if(m_loop != NULL)

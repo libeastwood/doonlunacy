@@ -23,19 +23,19 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 3;
 
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesEyes"));
+			m_eyesAnim = DataCache::Instance()->getAnimationLabel("Anim_AtreidesEyes");
 			m_eyesAnim->setPosition(UPoint(40, 80).getScaled());
 			m_backgroundFrame->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesMouth"));
+			m_mouthAnim = DataCache::Instance()->getAnimationLabel("Anim_AtreidesMouth");
 			m_mouthAnim->setPosition(UPoint(40, 95).getScaled());
 			m_backgroundFrame->addChild(m_mouthAnim);
 
-			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesBook"));
+			m_specialAnim = DataCache::Instance()->getAnimationLabel("Anim_AtreidesBook");
 			m_specialAnim->setPosition(UPoint(72, 151).getScaled());
 			m_backgroundFrame->addChild(m_specialAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_AtreidesShoulder"));
+			m_shoulderAnim = DataCache::Instance()->getAnimationLabel("Anim_AtreidesShoulder");
 			m_shoulderAnim->setPosition(UPoint(128, 128).getScaled());
 
 
@@ -46,19 +46,19 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 4;
 
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosEyes"));
+			m_eyesAnim = DataCache::Instance()->getAnimationLabel("Anim_OrdosEyes");
 			m_eyesAnim->setPosition(UPoint(16, 80).getScaled());
 			m_backgroundFrame->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosMouth"));
+			m_mouthAnim = DataCache::Instance()->getAnimationLabel("Anim_OrdosMouth");
 			m_mouthAnim->setPosition(UPoint(16, 96).getScaled());
 			m_backgroundFrame->addChild(m_mouthAnim);
 
-			m_specialAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosRing"));
+			m_specialAnim = DataCache::Instance()->getAnimationLabel("Anim_OrdosRing");
 			m_specialAnim->setPosition(UPoint(90, 144).getScaled());
 			m_backgroundFrame->addChild(m_specialAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_OrdosShoulder"));
+			m_shoulderAnim = DataCache::Instance()->getAnimationLabel("Anim_OrdosShoulder");
 			m_shoulderAnim->setPosition(UPoint(128,128).getScaled());
 
 
@@ -68,15 +68,15 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 2;
 
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenEyes"));
+			m_eyesAnim = DataCache::Instance()->getAnimationLabel("Anim_HarkonnenEyes");
 			m_eyesAnim->setPosition(UPoint(32, 88).getScaled());
 			m_backgroundFrame->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenMouth"));
+			m_mouthAnim = DataCache::Instance()->getAnimationLabel("Anim_HarkonnenMouth");
 			m_mouthAnim->setPosition(UPoint(32, 104));
 			m_backgroundFrame->addChild(m_mouthAnim);
 
-			m_shoulderAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_HarkonnenShoulder"));
+			m_shoulderAnim = DataCache::Instance()->getAnimationLabel("Anim_HarkonnenShoulder");
 			m_shoulderAnim->setPosition(UPoint(128, 104).getScaled());
 
 			break;
@@ -86,11 +86,11 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 2;
 
-			m_eyesAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritEyes"));
+			m_eyesAnim = DataCache::Instance()->getAnimationLabel("Anim_BeneGesseritEyes");
 			m_eyesAnim->setPosition(UPoint(64, 80).getScaled());
 			m_backgroundFrame->addChild(m_eyesAnim);
 
-			m_mouthAnim = new AnimationLabel(DataCache::Instance()->getAnimation("Anim_BeneGesseritMouth"));
+			m_mouthAnim = DataCache::Instance()->getAnimationLabel("Anim_BeneGesseritMouth");
 			m_mouthAnim->setPosition(UPoint(56, 96).getScaled());
 			m_backgroundFrame->addChild(m_mouthAnim);
 

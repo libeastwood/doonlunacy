@@ -20,7 +20,6 @@ typedef struct {
 		wait;
 } loop;
 
-class Animation;
 class AnimationLabel;
 class Frame;
 class Font;
@@ -38,7 +37,6 @@ class CutSceneState : public MenuBaseState
 	
 	private:
 		void loadScene(uint32_t scene);
-		Animation *m_anim;
 		AnimationLabel *m_animLabel;
 		Config *m_dataConfig;
 		Frame *m_sceneFrame,
