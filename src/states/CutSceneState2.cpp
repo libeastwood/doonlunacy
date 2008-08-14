@@ -162,13 +162,13 @@ void CutSceneState::loadScene(uint32_t scene)
 				for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
 					if(i < wsaFrames.size())
 					{
+						m_animLabel->addFrame(wsaFrames[i]);
 						if(m_loop && (int)i == m_loop->loopAt && m_loop->loops > -1)
 						{
 							if(m_loop->wait > 0)
 								m_animLabel->addPause(m_loop->wait), m_loop->wait=0;
 							i = m_loop->rewindTo, m_loop->loops--;
 						}
-						m_animLabel->addFrame(wsaFrames[i]);
 					}
 				m_lastFrame = wsaFrames.back();
 			}
