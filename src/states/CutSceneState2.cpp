@@ -202,12 +202,12 @@ int CutSceneState::Execute(float ft)
 		m_drawMenu = false;
 	}
 	if(m_animLabel->getCurFrame() == 0 && m_fadeIn)
-		m_fadeIn = m_animLabel->fadeIn();
+		m_fadeIn = m_backgroundFrame->fadeInChildren();
 
 	if(m_animLabel->getCurFrame() == m_animLabel->getNumFrames() - 1)
 	{
 		if(m_fadeOut)
-			m_fadeOut = m_animLabel->fadeOut();
+			m_fadeOut = m_backgroundFrame->fadeOutChildren();
 		else
 		{
 			m_curScene++;
