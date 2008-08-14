@@ -184,7 +184,7 @@ void AnimationLabel::addFrame(ImagePtr animFrame, bool setColorKey) {
 
 void AnimationLabel::draw(Image * screen, SPoint off)
 {
-    if (!m_visible) return;
+    if (!m_visible || m_animFrames.empty()) return;
 
 	m_surface = m_animFrames[m_curFrame];
 	if(m_surface->getSize() != getSize())
