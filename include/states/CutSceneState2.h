@@ -48,8 +48,7 @@ class CutSceneState : public MenuBaseState
 			   m_animPosition;
 		bool m_fadeIn,
 			 m_fadeOut,
-			 m_textFadeIn,
-			 m_numScenes;
+			 m_textFadeIn;
 		loop *m_loop;
 		uint32_t m_numAnimFrames,
 				 m_totalAnimFrames,
