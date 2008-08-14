@@ -53,6 +53,7 @@ class CutSceneState : public MenuBaseState
 		uint32_t m_numAnimFrames,
 				 m_totalAnimFrames,
 				 m_curScene,
+				 m_sceneStart,
 				 m_hold,
 				 m_textColor;
 		std::vector<textString> m_textStrings,
