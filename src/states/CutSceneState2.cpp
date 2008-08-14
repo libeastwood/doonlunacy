@@ -138,7 +138,7 @@ void CutSceneState::loadScene(uint32_t scene)
 		m_animLabel = new AnimationLabel();		
 		ImagePtr animFrame;
 		if(filename == "")
-			m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))));
+			m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))), true);
 		else
 		{
 			int len;
@@ -146,7 +146,7 @@ void CutSceneState::loadScene(uint32_t scene)
 			if(filename.substr(filename.length()-3, 3) == "CPS")
 			{
 				CpsFile *cpsfile(new CpsFile(data, len));
-				m_animLabel->addFrame(ImagePtr(new Image(cpsfile->getSurface())));
+				m_animLabel->addFrame(ImagePtr(new Image(cpsfile->getSurface())), true);
 				delete cpsfile;
 			}
 			else
@@ -164,7 +164,7 @@ void CutSceneState::loadScene(uint32_t scene)
 				for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
 					if(i < wsaFrames.size())
 					{
-						m_animLabel->addFrame(wsaFrames[i]);
+						m_animLabel->addFrame(wsaFrames[i], true);
 						if(m_loop && (int)i == m_loop->loopAt && m_loop->loops > -1)
 						{
 							if(m_loop->wait > 0)
