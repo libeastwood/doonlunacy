@@ -20,7 +20,10 @@ Image::Image(SDL_Surface *surface) : surface(surface)
 	    // TODO: throw better exception !!
         throw "Image::Image(SDL_Surface *) - got NULL !";
 	}
+    
+	m_tmpPal = NULL;
 }
+
 Image::Image(ConstUPoint size)
 {
     assert(size.x != 0);
@@ -39,14 +42,20 @@ Image::Image(ConstUPoint size)
 	    // TODO: throw better exception !!
         throw "Image::Image(ConstUPoint) - unable to create SDL_Surface !";
 	}
-	
 	// copy palette from the screen (otherwise you'll get only black image)
     SDL_SetColors(surface, Application::Instance()->Screen()->getSurface()->format->palette->colors, 0, 256);
+
+	m_tmpPal = NULL;
+
 }
+
 Image::~Image()
 {
     SDL_FreeSurface(surface);
+	if(m_tmpPal != NULL)
+		delete m_tmpPal;
 }
+
 Image::operator SDL_Surface*()
 {
     return surface;
@@ -238,6 +247,72 @@ void Image::drawTiles(ImagePtr tile, ConstRect area)
             for(int y = 0; y < size.y; y += bgSize.y - 1)
                 tiledArea->blitFrom(tile.get(), UPoint(x,y));
      blitFrom(tiledArea.get(), UPoint(area.x, area.y));
+}
+
+bool Image::fadeIn(const int fadeAmt)
+{
+	SDL_Color *src = surface->format->palette->colors;
+	SDL_Color *dest = m_tmpPal;
+	if(m_tmpPal == NULL)
+	{
+		m_tmpPal = new SDL_Color[256];
+		memcpy((unsigned char*)m_tmpPal,
+			surface->format->palette->colors,
+            sizeof(SDL_Color) * 256);
+		dest = m_tmpPal;
+
+		for (int i=0; i!=256; i++, src++)
+		{
+			src->r = 0;
+			src->g = 0;
+			src->b = 0;
+		}
+		SDL_SetColors(surface, surface->format->palette->colors, 0, 256);
+		return true;
+	}
+	bool fade = false;
+
+    for (int i=0; i!=256; i++, src++, dest++)
+    {
+        if (src->r < dest->r || src->g < dest->g || src->b < dest->b)
+        {
+			if (!fade) fade = true;
+			if (src->r < dest->r)
+				// Make sure that we don't go beyond destination value
+				(src->r < dest->r - fadeAmt) ? src->r += fadeAmt : 	src->r = dest->r;
+			if (src->g < dest->g)
+				(src->g < dest->g - fadeAmt) ? src->g += fadeAmt : 	src->g = dest->g;
+			if (src->b < dest->b)
+				(src->b < dest->b - fadeAmt) ? src->b += fadeAmt : 	src->b = dest->b;
+        }
+    }
+	if(fade)
+		SDL_SetColors(surface, surface->format->palette->colors, 0, 256);
+	return fade;
+}
+
+bool Image::fadeOut(const int fadeAmt)
+{
+	bool fade = false;
+	SDL_Color *src = surface->format->palette->colors;
+
+    for (int i=0; i!=256; i++, src++)
+    {
+        if (src->r > 0 || src->g > 0 || src->b > 0)
+        {
+			if (!fade) fade = true;
+			if (src->r > 0)
+				// Make sure that we don't go beyond 0
+				(src->r > 0 + fadeAmt) ? src->r -= fadeAmt : src->r = 0;
+			if (src->g > 0)
+				(src->g > 0 + fadeAmt) ? src->g -= fadeAmt : src->g = 0;
+			if (src->b > 0)
+				(src->b > 0 + fadeAmt) ? src->b -= fadeAmt : src->b = 0;
+        }
+    }
+	if(fade)
+		SDL_SetColors(surface, surface->format->palette->colors, 0, 256);
+	return fade;
 }
 
 //------------------------------------------------------------------------------

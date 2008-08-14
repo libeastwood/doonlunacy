@@ -911,12 +911,16 @@ class Image
 		void drawTiles(ImagePtr tile);
 		void drawTiles(ImagePtr tile, ConstRect area);
 
+		bool fadeIn(const int fadeAmt = 4);
+		bool fadeOut(const int fadeAmt = 4);
+
         //@}
         
         
     private:
         SDL_Surface *surface;
         Image() { }
+		SDL_Color *m_origPal, *m_tmpPal;
 };
 
 //------------------------------------------------------------------------------
