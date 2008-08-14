@@ -126,3 +126,35 @@ int Container::getChildrenSize()
 {
     return m_children.size();
 }
+
+bool Container::fadeInChildren(const int fadeAmt)
+{
+    if (!m_visible) return false;
+	bool fade = false;
+    WidgetList::iterator it;
+    for ( it  = m_children.begin();
+          it != m_children.end();
+          ++it )
+    {
+        if ((*it)->parent() && ((Container*)(*it))->fadeInChildren(fadeAmt)) fade = true;
+		if((*it)->fadeIn(fadeAmt)) fade = true;
+    };
+
+    return fade;
+}
+
+bool Container::fadeOutChildren(const int fadeAmt)
+{
+    if (!m_visible) return false;
+	bool fade = false;
+    WidgetList::iterator it;
+    for ( it  = m_children.begin();
+          it != m_children.end();
+          ++it )
+    {
+        if ((*it)->parent() && ((Container*)(*it))->fadeOutChildren(fadeAmt)) fade = true;
+		if((*it)->fadeOut(fadeAmt)) fade = true;
+    };
+
+    return fade;
+}

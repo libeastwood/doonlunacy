@@ -24,6 +24,8 @@ class Container: public Widget
         virtual void deleteChild(Widget* child);
         virtual void clear() { m_children.clear(); }
         virtual int getChildrenSize();
+		virtual bool fadeInChildren(const int fadeAmt = 4);
+		virtual bool fadeOutChildren(const int fadeAmt = 4);
     
     protected:
         WidgetList m_children;    
