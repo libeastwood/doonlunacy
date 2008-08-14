@@ -176,7 +176,6 @@ void CutSceneState::loadScene(uint32_t scene)
 		}
 		m_animLabel->addPause(m_hold);
 
-
 		m_animLabel->setFrameRate(fps);
 
 		SPoint pos = (m_backgroundFrame->getSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
@@ -218,7 +217,7 @@ int CutSceneState::Execute(float ft)
 		}
 	}
 
-	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame() + 2
+	if((!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame() + 2)
 			|| (!m_fadeOut && m_animLabel->getNumFrames() - 2))
 		m_textFrame->fadeOut(10);
 
