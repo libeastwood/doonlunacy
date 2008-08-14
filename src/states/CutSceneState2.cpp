@@ -73,19 +73,23 @@ void CutSceneState::loadScene(uint32_t scene)
 		loopAnimFrames = 0;
 	float fps = 12.0;
 	bool continuation = false;
+	m_fadeIn = false;
+	m_fadeOut = false;
+			 
     
     Setting &node = m_dataConfig->lookup(m_scene);
 
     try
     {
 		node[scene].lookupValue("filename", filename);
-		std::cout << "loading: " << filename << std::endl;
 		
 		node[scene].lookupValue("palette", palettefile);
 		node[scene].lookupValue("hold", m_hold);
 		node[scene].lookupValue("text_color", m_textColor);
 		node[scene].lookupValue("continuation", continuation);
 		node[scene].lookupValue("fps", fps);
+		node[scene].lookupValue("fade_in", m_fadeIn);
+		node[scene].lookupValue("fade_out", m_fadeOut);
 
 		if(node[scene].lookupValue("song", song))
 			SoundPlayer::Instance()->playMusic(MUSIC_INTRO, song);
@@ -162,8 +166,7 @@ void CutSceneState::loadScene(uint32_t scene)
 						{
 							if(m_loop->wait > 0)
 								m_animLabel->addPause(m_loop->wait), m_loop->wait=0;
-							else
-								i = m_loop->rewindTo, m_loop->loops--;
+							i = m_loop->rewindTo, m_loop->loops--;
 						}
 						m_animLabel->addFrame(wsaFrames[i]);
 					}
@@ -198,13 +201,20 @@ int CutSceneState::Execute(float ft)
 		loadScene(m_curScene);
 		m_drawMenu = false;
 	}
-	if(m_animLabel->getCurFrame() == 0)//m_animLabel->getNumFrames() - 1)
+	if(m_animLabel->getCurFrame() == 0 && m_fadeIn)
+		m_fadeIn = m_animLabel->fadeIn();
+
+	if(m_animLabel->getCurFrame() == m_animLabel->getNumFrames() - 1)
 	{
-		m_animLabel->fade = true;
-/*		m_curScene++;
-		if(m_loop != NULL)
-			free(m_loop);
-		m_drawMenu = true;*/
+		if(m_fadeOut)
+			m_fadeOut = m_animLabel->fadeOut();
+		else
+		{
+			m_curScene++;
+			if(m_loop != NULL)
+				free(m_loop);
+			m_drawMenu = true;
+		}
 	}
 
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())
