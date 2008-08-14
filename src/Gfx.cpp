@@ -30,7 +30,7 @@ Image::Image(ConstUPoint size)
     assert(size.y != 0);
     
     surface = SDL_CreateRGBSurface(
-                                   SDL_SWSURFACE, // TODO: which one to use, HW or SW ? (otpetrik)
+                                   SDL_HWSURFACE, // TODO: which one to use, HW or SW ? (otpetrik)
                                    size.x,  // width
                                    size.y,  // height
                                    8,       // bits per pixel
@@ -460,7 +460,7 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
     
     SDL_Surface *resized = 
     SDL_CreateRGBSurface(
-			SDL_SWSURFACE,
+			SDL_HWSURFACE,
 			w,              // width
 			h,              // height 
 			8,              // bits per pixel
