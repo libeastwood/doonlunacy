@@ -125,6 +125,7 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
 GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
 {
     m_background = background;
+	redraw();
 }
 
 
@@ -136,6 +137,7 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
     if(m_background->getSize().x < textw + 4-(textw%4)
 		    ||  m_background->getSize().y < texth * numLines)
         LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
+
 	if(!m_surface)
 		m_surface = m_background->getCopy();
 	else
