@@ -35,8 +35,7 @@ void GraphicButton::setGraphics(ImagePtr normal, ImagePtr pressed)
     m_surfPressed = pressed;
 
     setSize(normal->getSize());
-    //w = normal->getSurfacew;
-    //h = normal->h;
+	m_surface = m_surfNormal;
 }
 
 void GraphicButton::draw(Image * dest, SPoint off)
@@ -59,10 +58,12 @@ bool GraphicButton::handleButtonDown(Uint8 button, SPoint p)
     if (!contains(p)) 
     {
         m_pressed = false;
+		m_surface = m_surfNormal;
         return false;
     }
 
     m_pressed = true;
+	m_surface = m_surfPressed;
     
     return true;
 }
@@ -71,6 +72,7 @@ bool GraphicButton::handleButtonUp(Uint8 button, SPoint p)
 {
     if (!m_visible) return false;   
     m_pressed = false;
+	m_surface = m_surfNormal;
     return Button::handleButtonUp(button, p);
 }
 
@@ -80,6 +82,7 @@ BoringButton::BoringButton(std::string caption, bool isMenuButton)
 {
     m_caption = caption;
     m_menuButton = isMenuButton;
+	m_surface = m_surfNormal;	
 }
 
 BoringButton::~BoringButton()
@@ -104,8 +107,8 @@ void BoringButton::setCaption(std::string newcaption)
 void BoringButton::redraw()
 {
     m_surfNormal.reset(new Image(UPoint(w,h)));
-    m_surfPressed.reset(new Image(UPoint(w,h)));                               
-
+    m_surfPressed.reset(new Image(UPoint(w,h)));
+	m_surface = m_surfNormal;
     if (m_menuButton)
     {
 
