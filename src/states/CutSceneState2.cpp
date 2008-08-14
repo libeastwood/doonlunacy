@@ -211,7 +211,7 @@ int CutSceneState::Execute(float ft)
 			m_fadeOut = m_backgroundFrame->fadeOutChildren();
 		else
 		{
-			LOG_INFO("CutSceneState", "Scene %d playtime: %d ms", m_curScene, SDL_GetTicks()- m_sceneStart);
+			LOG_INFO("CutSceneState", "Scene %d playtime: %f s", m_curScene, (SDL_GetTicks()- m_sceneStart)/1000.f);
 			m_curScene++;
 			if(m_loop != NULL)
 				free(m_loop);
