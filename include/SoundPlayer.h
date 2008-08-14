@@ -35,7 +35,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
 
 	void playSound(std::string soundID);
 
-	void playSound(Mix_Chunk* sound, int channel = 0);
+	void playSound(Mix_Chunk* sound, int channel = -1);
     
 
     /*! play music of certain type
