@@ -122,7 +122,7 @@ void Container::deleteChild(Widget* child)
     m_children.remove(child);
 }
 
-int Container::getSize()
+int Container::getChildrenSize()
 {
     return m_children.size();
 }

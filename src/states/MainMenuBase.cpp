@@ -28,7 +28,7 @@ void MainMenuBaseState::draw()
     m_vbox->fit(2);
     m_vbox->reshape();
 
-    ImagePtr menu(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 55)));
+    ImagePtr menu(new Image(UPoint(bw + 20, (m_vbox->getChildrenSize() * 2) + (m_vbox->getChildrenSize() * bh) + 55)));
     menu->setColorKey();
 
     m_menuFrame->changeBackground(menu);
@@ -40,7 +40,7 @@ void MainMenuBaseState::draw()
     m_menuFrame->addChild(menuTopLabel);
 
 
-	ImagePtr menuBottom(new Image(UPoint(bw + 20, (m_vbox->getSize() * 2) + (m_vbox->getSize() * bh) + 25)));
+	ImagePtr menuBottom(new Image(UPoint(bw + 20, (m_vbox->getChildrenSize() * 2) + (m_vbox->getChildrenSize() * bh) + 25)));
     menuBottom->drawBorders2();
     menuBottom->setColorKey();
     Frame *menuBottomFrame = new Frame(menuBottom);
@@ -104,7 +104,7 @@ int MainMenuBaseState::Execute(float dt)
 		drawSpecifics();
 		m_drawMenu = false;
     }
-    if(m_backgroundFrame->getPictureSize() != UPoint(set->GetWidth(), set->GetHeight())){
+    if(m_backgroundFrame->getSize() != UPoint(set->GetWidth(), set->GetHeight())){
         resize();
     }
 

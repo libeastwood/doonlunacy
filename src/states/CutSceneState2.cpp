@@ -122,7 +122,7 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_textPosition = SPoint((int)node[scene]["text_position"][0], (int)node[scene]["text_position"][1]);
 		else
 			m_textPosition = SPoint(0,70);
-		m_textFrame->setPosition(m_textPosition.getScaled() + SPoint(0, m_backgroundFrame->getPictureSize().y /2 - m_textFrame->getPictureSize().y/2));
+		m_textFrame->setPosition(m_textPosition.getScaled() + SPoint(0, m_backgroundFrame->getSize().y /2 - m_textFrame->getSize().y/2));
 
 		if(node[scene].exists("anim_position"))
 			m_animPosition = SPoint((int)node[scene]["anim_position"][0], (int)node[scene]["anim_position"][1]);
@@ -175,7 +175,7 @@ void CutSceneState::loadScene(uint32_t scene)
 
 		m_animLabel->setFrameRate(fps);
 
-		SPoint pos = (m_backgroundFrame->getPictureSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
+		SPoint pos = (m_backgroundFrame->getSize() /2) - m_animLabel->getSize()/2 + m_animPosition.getScaled();
 		// Don't allow picture picture to be placed outside of screen
 		if(pos.x < 0) pos.x = 0;
 		if(pos.y < 0) pos.y = 0;
@@ -198,12 +198,13 @@ int CutSceneState::Execute(float ft)
 		loadScene(m_curScene);
 		m_drawMenu = false;
 	}
-	if(m_animLabel->getCurFrame() == m_animLabel->getNumFrames() - 1)
+	if(m_animLabel->getCurFrame() == 0)//m_animLabel->getNumFrames() - 1)
 	{
-		m_curScene++;
+		m_animLabel->fade = true;
+/*		m_curScene++;
 		if(m_loop != NULL)
 			free(m_loop);
-		m_drawMenu = true;
+		m_drawMenu = true;*/
 	}
 
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())

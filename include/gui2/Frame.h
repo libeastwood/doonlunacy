@@ -24,11 +24,6 @@ public:
 
     virtual void draw(Image *dest, SPoint off);
 
-    UPoint getPictureSize() const
-    {
-        return m_surface->getSize();
-    }
-
 	void changeBackground(ImagePtr background);
 
     //@}
