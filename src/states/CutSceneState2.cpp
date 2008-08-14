@@ -44,12 +44,16 @@ CutSceneState::CutSceneState(std::string scene)
     }
 	m_scene = scene;
 	m_curScene = 0;
+	m_numScenes = m_dataConfig->lookup(m_scene).getLength();
 	m_drawMenu = true;
 	m_font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 }
 
 CutSceneState::~CutSceneState()
 {
+	delete m_dataConfig;
+	if(m_loop)
+		delete m_loop;
 }
 
 void CutSceneState::loadScene(uint32_t scene)
@@ -76,7 +80,6 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_fadeIn = false;
 	m_fadeOut = false;
 	m_textFadeIn = false;
-			 
     
     Setting &node = m_dataConfig->lookup(m_scene);
 
@@ -213,6 +216,8 @@ int CutSceneState::Execute(float ft)
 			m_curScene++;
 			if(m_loop != NULL)
 				free(m_loop);
+			if(m_numScenes == m_curScene)
+				return -1;
 			m_drawMenu = true;
 		}
 	}

@@ -48,14 +48,14 @@ class CutSceneState : public MenuBaseState
 			   m_animPosition;
 		bool m_fadeIn,
 			 m_fadeOut,
-			 m_textFadeIn;
+			 m_textFadeIn,
+			 m_numScenes;
 		loop *m_loop;
 		uint32_t m_numAnimFrames,
 				 m_totalAnimFrames,
 				 m_curScene,
 				 m_hold,
 				 m_textColor;
-		std::vector<ImagePtr> m_animCache;
 		std::vector<textString> m_textStrings,
 								m_soundStrings;
 		std::string m_scene;
