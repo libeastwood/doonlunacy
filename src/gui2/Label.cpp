@@ -186,20 +186,20 @@ void AnimationLabel::draw(Image * screen, SPoint off)
 {
     if (!m_visible) return;
 
-	ImagePtr thisFrame = m_animFrames[m_curFrame];
-	if(thisFrame->getSize() != getSize())
+	m_surface = m_animFrames[m_curFrame];
+	if(m_surface->getSize() != getSize())
 	{
-		thisFrame = thisFrame->getResized();
-		m_animFrames[m_curFrame] = thisFrame;
+		m_surface = m_surface->getResized();
+		m_animFrames[m_curFrame] = m_surface;
 	}
 
-	screen->blitFrom(thisFrame.get(), UPoint(off.x + x, off.y + y));
+	screen->blitFrom(m_surface.get(), UPoint(off.x + x, off.y + y));
 
-	if((SDL_GetTicks() - m_curFrameStartTime) > m_frameDurationTime) {
+	if((SDL_GetTicks() - m_curFrameStartTime) > m_frameDurationTime && m_enabled) {
+		m_curFrameStartTime = SDL_GetTicks();
+		m_curFrame++;
 		if(m_curFrame >= m_animFrames.size()) {
 			m_curFrame = 0;
 		}		
-		m_curFrameStartTime = SDL_GetTicks();
-		m_curFrame++;
 	}
 }

@@ -35,7 +35,6 @@ public:
 
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
-    ImagePtr m_surface;
     std::string m_caption;
 	int m_resizeRatio;
 	bool m_resize;

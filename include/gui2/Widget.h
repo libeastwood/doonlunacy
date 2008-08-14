@@ -92,18 +92,22 @@ class Widget : public Rect
 		*/
         inline bool visible() { return m_visible; }
 
-	inline bool parent() { return m_parent; }
+		inline bool parent() { return m_parent; }
+
+		bool fadeIn(const int fadeAmt = 4);
+		bool fadeOut(const int fadeAmt = 4);
 		//@}
 
     protected:
         virtual void gotFocus() {};
         virtual void lostFocus() {};
         
-	Rect m_rect;
+		Rect m_rect;
+		ImagePtr m_surface;
 
-        bool m_enabled;
-        bool m_visible;
-	bool m_parent;
+        bool m_enabled,
+			 m_visible,
+			 m_parent;
 
         static Widget* m_focusedWidget;
 };

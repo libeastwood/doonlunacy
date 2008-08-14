@@ -28,8 +28,6 @@ public:
 
     //@}
 
-protected:
-    ImagePtr m_surface;
 };
 
 #endif //DUNE_GUI2_FRAME_H
