@@ -71,7 +71,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	m_loop = NULL;
 	int song,
 		loopAnimFrames = 0;
-	float fps = 12.0;
+	float fps = 8.0;
 	bool continuation = false;
 	m_fadeIn = false;
 	m_fadeOut = false;
