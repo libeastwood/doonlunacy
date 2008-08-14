@@ -24,6 +24,7 @@ class GameState : public Singleton<GameState>
     
     MapClass* GetMap() { return m_map; }
     Players* GetPlayers() { return m_players; }
+    PlayerClass* GetPlayer(int i) { return m_players->at(i); }
     Structures* GetStructures() { return m_structures; }
     Units* GetUnits()  { return m_units; }
     

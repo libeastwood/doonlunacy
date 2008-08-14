@@ -75,7 +75,8 @@
 #define conv2char 2.0 * PI / 256
 #define BLOCKSIZE 16		//size of tile pieces 16x16
 #define GAMEBARWIDTH 144
-#define NONE -1
+//#define NONE -1
+#define NONE ((Uint32) -1) // unsigned -1
 #define INVALID_POS	(-1)
 #define RANDOM -2
 

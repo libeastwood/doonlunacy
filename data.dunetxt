@@ -1443,285 +1443,277 @@ structures:
 
 units:
 {
-    air:
-    {
-        carryall = {
-        	armour = 2;
-        	health = 100;
-        	offset = [8,8];
-        	radius = 8;
-	        speed = 1.8;
-        	turn_speed = 0.125;
-        	view_range = 5;
-        	weapon_range = 0;
-        };
-        
-        ornithopter = {
-            armour = 3;
-            damage = 30;
-            max_health = 250;
-            radius = 6;
-            speed = 1.6;
-            turn_speed = 0.125;
-            view_range = 8;
-            weapon_range = 5;
-        };
-        
-        frigate = {
-        	armour = 10;
-        	health = 10000;
-            radius = 16;
-        	speed = 1.0;
-        	view_range = 5;
-        	weapon_range = 0;
-        };
-        
-        
+    carryall = {
+    	armour = 2;
+    	health = 100;
+    	offset = [8,8];
+    	radius = 8;
+        speed = 1.8;
+    	turn_speed = 0.125;
+    	view_range = 5;
+    	weapon_range = 0;
     };
     
-    ground:
-    {
-        deviator = {
-            armour = 5;
-            maxHealth = 200;
-            num_weapons = 1;
-            primary_weapon_reload_time = 285;
-            radius = 6;
-            speed = 0.5;
-            view_range = 8;
-            weapon_range = 6;
-            /*
-            bulletType[0] = Bullet_DRocket;
-            numAttackSounds = 1;
-            attackSound[0] = Sound_rocket;
-            */
-        };
+    ornithopter = {
+        armour = 3;
+        damage = 30;
+        max_health = 250;
+        radius = 6;
+        speed = 1.6;
+        turn_speed = 0.125;
+        view_range = 8;
+        weapon_range = 5;
+    };
+    
+    frigate = {
+    	armour = 10;
+    	health = 10000;
+        radius = 16;
+    	speed = 1.0;
+    	view_range = 5;
+    	weapon_range = 0;
+    };
+    
+    deviator = {
+        armour = 5;
+        maxHealth = 200;
+        num_weapons = 1;
+        primary_weapon_reload_time = 285;
+        radius = 6;
+        speed = 0.5;
+        view_range = 8;
+        weapon_range = 6;
+        /*
+        bulletType[0] = Bullet_DRocket;
+        numAttackSounds = 1;
+        attackSound[0] = Sound_rocket;
+        */
+    };
 
-        launcher = {
-            armour = 7;
-            health = 300;
-            radius = 6;
-            primary_weapon_reload_time = 285;
-            speed = 0.2;
-            //FIXME:It's 1/2 of what?
-            //turn_speed /= 2;
-            view_range = 8;
-            weapon_range = 10;
-            /*
-            xOffset = (imageW - BLOCKSIZE)/2;	
-            yOffset = (imageH - BLOCKSIZE)/2;
-            
-            numWeapons = 2;
-            bulletType[0] = Bullet_Rocket;
-
-            numAttackSounds = 1;
-            attackSound[0] = Sound_rocket;
-            */
-        };
+    launcher = {
+        armour = 7;
+        health = 300;
+        radius = 6;
+        primary_weapon_reload_time = 285;
+        speed = 0.2;
+        //FIXME:It's 1/2 of what?
+        //turn_speed /= 2;
+        view_range = 8;
+        weapon_range = 10;
+        /*
+        xOffset = (imageW - BLOCKSIZE)/2;	
+        yOffset = (imageH - BLOCKSIZE)/2;
         
-        mcv = {
-            armour = 7;
-            health = 600;
-            radius = 9;
-            speed = 0.125;
-            view_range = 7;
-        };
+        numWeapons = 2;
+        bulletType[0] = Bullet_Rocket;
 
-        quad = {
-            filename = "DUNE:UNITS.SHP";
-            health = 450;
-            num_weapons = 2;
-            picture_array = 0;
-            primary_weapon_reload_time = 100;
-            radius = 6;
-            view_range = 4;
-            weapon_damage = 25;
-            weapon_range = 3;
-            size = [1,1];
-        };
+        numAttackSounds = 1;
+        attackSound[0] = Sound_rocket;
+        */
+    };
+    
+    mcv = {
+        armour = 7;
+        health = 600;
+        radius = 9;
+        speed = 0.125;
+        view_range = 7;
+    };
 
-        raider = {
-            armour = 3;
-            damage = 20;
-            health = 250;
-            num_weapons = 2;
-            speed = 1.3;
-            radius = 4;
-            view_range = 6;
-            weapon_range = 5;
-            /*
-            bulletType[0] = Bullet_Gun;
-            primaryWeaponReloadTime = 160;
-            xOffset = (imageW - BLOCKSIZE)/2;	
-            yOffset = (imageH - BLOCKSIZE)/2;
+    quad = {
+        filename = "DUNE:UNITS.SHP";
+        health = 450;
+        num_weapons = 2;
+        picture_array = 0;
+        primary_weapon_reload_time = 100;
+        radius = 6;
+        speed = 0.64;
+        view_range = 4;
+        weapon_damage = 25;
+        weapon_range = 3;
+        size = [1,1];
+    };
 
-            numAttackSounds = 1;
-            attackSound[0] = Sound_machineGun;        
-            */
-        };        
+    raider = {
+        armour = 3;
+        damage = 20;
+        health = 250;
+        num_weapons = 2;
+        speed = 1.3;
+        radius = 4;
+        view_range = 6;
+        weapon_range = 5;
+        /*
+        bulletType[0] = Bullet_Gun;
+        primaryWeaponReloadTime = 160;
+        xOffset = (imageW - BLOCKSIZE)/2;	
+        yOffset = (imageH - BLOCKSIZE)/2;
 
-        sandworm = {
-            armour = 5;
-            damage = 1000;
-            health = 3000;
-            num_weapons = 0;
-            primary_weapon_reload_time = 200;
-            radius = 8;
-            speed = 0.3;
-            turn_speed = 0.625;
-            view_range = 8;
-            weapon_range = 0;
-            /*
+        numAttackSounds = 1;
+        attackSound[0] = Sound_machineGun;        
+        */
+    };        
 
-            xOffset = (imageW - BLOCKSIZE)/2;	
+    sandworm = {
+        armour = 5;
+        damage = 1000;
+        health = 3000;
+        num_weapons = 0;
+        primary_weapon_reload_time = 200;
+        radius = 8;
+        speed = 0.3;
+        turn_speed = 0.625;
+        view_range = 8;
+        weapon_range = 0;
+        /*
 
-            yOffset = (imageH - BLOCKSIZE)/2;
-            */
-        };
-        
-        siege_tank = {
-            armour = 12;
-            health = 600;
-            num_weapons = 2;
-            radius = 7;
-            speed = 0.3;
-            view_range = 8;
-            weapon_range = 6;
-            /*
+        xOffset = (imageW - BLOCKSIZE)/2;	
 
-            bulletType[0] = Bullet_Shell;
-            primaryWeaponReloadTime = 150;
+        yOffset = (imageH - BLOCKSIZE)/2;
+        */
+    };
+    
+    siege_tank = {
+        armour = 12;
+        health = 600;
+        num_weapons = 2;
+        radius = 7;
+        speed = 0.3;
+        view_range = 8;
+        weapon_range = 6;
+        /*
 
-            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-            yOffset = (imageH - BLOCKSIZE)/2;
+        bulletType[0] = Bullet_Shell;
+        primaryWeaponReloadTime = 150;
 
-            deathFrame = Object_LargeUnitExplosion;
-            numDeathFrames = 5;
+        xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+        yOffset = (imageH - BLOCKSIZE)/2;
 
-            numAttackSounds = 1;
-            attackSound[0] = Sound_smallExplosion;
-            destroySound[0] = Sound_largeExplosion;        
-            */
-        };
-        
-        sonic_tank = {
-            armour = 7;
-            damage = 70;
-            health = 350;
-            num_weapons = 1;
-            primary_weapon_reload_time = 150;
-            radius = 6;
-            speed = 0.5;
-            view_range = 8;
-            weapon_range = 7;
-            /*
+        deathFrame = Object_LargeUnitExplosion;
+        numDeathFrames = 5;
 
-            bulletType[0] = Bullet_Sonic;
+        numAttackSounds = 1;
+        attackSound[0] = Sound_smallExplosion;
+        destroySound[0] = Sound_largeExplosion;        
+        */
+    };
+    
+    sonic_tank = {
+        armour = 7;
+        damage = 70;
+        health = 350;
+        num_weapons = 1;
+        primary_weapon_reload_time = 150;
+        radius = 6;
+        speed = 0.5;
+        view_range = 8;
+        weapon_range = 7;
+        /*
 
-            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-            yOffset = (imageH - BLOCKSIZE)/2;
+        bulletType[0] = Bullet_Sonic;
 
-            numAttackSounds = 1;
-            attackSound[0] = Sound_sonic;
-            */
-        };
-        
-        tank = {
-            armour = 10;
-            health = 400;
-            radius = 6;
-            speed = 0.5;
-            turret_turn_speed = 0.0625;
-            view_range = 6;
-            weapon_range = 5;
-            /*
-            numWeapons = 1;
-            bulletType[0] = Bullet_Shell;
-            primaryWeaponReloadTime = 150;
-            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-            yOffset = (imageH - BLOCKSIZE)/2;
-            numAttackSounds = 1;
-            attackSound[0] = Sound_smallExplosion;
-            */
-        };
-        
-        trike = {
-            armour = 4;
-            health = 250;
-            num_weapons = 2;
-            radius = 4;
-            speed = 1.0;
-            view_range = 4;
-            weapon_range = 3;
-            /*
-            bulletType[0] = Bullet_Gun;
-            primaryWeaponReloadTime = 160;
+        xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+        yOffset = (imageH - BLOCKSIZE)/2;
 
-            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-            yOffset = (imageH - BLOCKSIZE)/2;
+        numAttackSounds = 1;
+        attackSound[0] = Sound_sonic;
+        */
+    };
+    
+    tank = {
+        armour = 10;
+        health = 400;
+        radius = 6;
+        speed = 0.5;
+        turret_turn_speed = 0.0625;
+        view_range = 6;
+        weapon_range = 5;
+        /*
+        numWeapons = 1;
+        bulletType[0] = Bullet_Shell;
+        primaryWeaponReloadTime = 150;
+        xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+        yOffset = (imageH - BLOCKSIZE)/2;
+        numAttackSounds = 1;
+        attackSound[0] = Sound_smallExplosion;
+        */
+    };
+    
+    trike = {
+        armour = 4;
+        health = 250;
+        num_weapons = 2;
+        radius = 4;
+        speed = 1.0;
+        view_range = 4;
+        weapon_range = 3;
+        /*
+        bulletType[0] = Bullet_Gun;
+        primaryWeaponReloadTime = 160;
 
-            numAttackSounds = 1;
-            attackSound[0] = Sound_machineGun;        
-            */        
-        };
-   };
-   
-   //I know it's subgroup of ground units, but it's a draft config, right?
-   infantry:
-   {
-        fremen = {
-            speed = 0.25;
-        };
-        
-        saboteur = {
-            armour = 1;
-            health = 100;
-            num_weapons = 0;
-            radius = 2;
-            speed = 0.3;
-            view_range = 4;
-            weapon_range = 0;
-            /*
-            xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
-            yOffset = (imageH - BLOCKSIZE)/2;
-            deathFrame = Object_DeadInfantry;
-            numDeathFrames = 2;
-            */
-        };
-        
-        sardaukar = {
-            armour = 1;
-            health = 100;
-            speed = 0.18;        
-            //bulletType[0] = Bullet_SmallRocketHeavy;
+        xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+        yOffset = (imageH - BLOCKSIZE)/2;
 
-        };
-        
-        trooper = {
-            armour = 1;
-            damage = 50;
-            health = 100;
-            num_weapons = 1;
-            primary_weapon_reload_time = 300;
-            radius = 2;
-            speed = 0.2;
-            view_range = 4;
-            weapon_range = 7;
-            /*
-
-            bulletType[0] = Bullet_SmallRocket;
+        numAttackSounds = 1;
+        attackSound[0] = Sound_machineGun;        
+        */        
+    };
 
 
-            xOffset = (imageW - BLOCKSIZE)/2;	
-            yOffset = (imageH - BLOCKSIZE)/2;
+
+    fremen = {
+        speed = 0.25;
+    };
+    
+    saboteur = {
+        armour = 1;
+        health = 100;
+        num_weapons = 0;
+        radius = 2;
+        speed = 0.3;
+        view_range = 4;
+        weapon_range = 0;
+        /*
+        xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
+        yOffset = (imageH - BLOCKSIZE)/2;
+        deathFrame = Object_DeadInfantry;
+        numDeathFrames = 2;
+        */
+    };
+    
+    sardaukar = {
+        armour = 1;
+        health = 100;
+        speed = 0.18;        
+        //bulletType[0] = Bullet_SmallRocketHeavy;
+
+    };
+    
+    trooper = {
+        armour = 1;
+        damage = 50;
+        health = 100;
+        num_weapons = 1;
+        primary_weapon_reload_time = 300;
+        radius = 2;
+        speed = 0.2;
+        view_range = 4;
+        weapon_range = 7;
+        /*
+
+        bulletType[0] = Bullet_SmallRocket;
 
 
-            deathFrame = Object_DeadInfantry;
-            numDeathFrames = 2;
+        xOffset = (imageW - BLOCKSIZE)/2;	
+        yOffset = (imageH - BLOCKSIZE)/2;
 
-            numAttackSounds = 1;
-            attackSound[0] = Sound_smallRocket;        
-            */
-        };
-   };
+
+        deathFrame = Object_DeadInfantry;
+        numDeathFrames = 2;
+
+        numAttackSounds = 1;
+        attackSound[0] = Sound_smallRocket;        
+        */
+    };
+
 };

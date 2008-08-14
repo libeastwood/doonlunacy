@@ -362,14 +362,17 @@ bool MapGenerator::loadOldMap(std::string mapName)
                }
             */
 
+
+            //Using INVALID_POS instead of NONE to avoid warnings.
+            //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
             if (BuildingStr == "Concrete")
             {
-                m_players->at(house)->placeStructure(NONE, NONE, Structure_Slab1, UPoint(pos % 64, pos / 64));
+                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Slab1, UPoint(pos % 64, pos / 64));
             }
 
             else if (BuildingStr == "Wall")
             {
-                m_players->at(house)->placeStructure(NONE, NONE, Structure_Wall, UPoint(pos % 64, pos / 64));
+                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Wall, UPoint(pos % 64, pos / 64));
             }
 
             else
@@ -448,7 +451,9 @@ bool MapGenerator::loadOldMap(std::string mapName)
 
             if ((m_players->at(house) != NULL) && (itemID != 0))
             {
-                ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(NONE, NONE, itemID, UPoint(pos % 64, pos / 64));
+                //Using INVALID_POS instead of NONE to avoid warnings.
+                //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
+                ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, itemID, UPoint(pos % 64, pos / 64));
 
                 if (newStructure == NULL)
                 {

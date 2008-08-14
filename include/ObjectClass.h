@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Gfx.h"
+#include "ObjectPointer.h"
 #include "PlayerClass.h"
 /*!
  *  @brief Base class for all objects (buildins, units, bullets)
@@ -37,64 +38,58 @@ class ObjectClass : public Rect
     virtual void unassignFromMap(SPoint pos);
 
 	static ObjectClass* createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID = NONE);
-	void setHealth(int newHealth);
+
     virtual void draw(Image * dest, SPoint off, SPoint view);
 	void drawSmoke(UPoint pos);
     virtual void destroy() = 0;
     virtual void update() {};
 
-    virtual UPoint getClosestPoint(UPoint objectLocation);
+    //! @name Setters and getters
+	//@{
+	
+    inline void setActive(bool status) { m_active = status; }
+    inline void setForced(bool status) { m_forced = status; }
+	void setHealth(int newHealth);
+    inline void setSelected(bool value) { m_selected = value; }
+    inline void setRespondable(bool status) { m_respondable = status; }
+	void setVisible(int team, bool status);
 
     virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
-        
-    inline UPoint getRealPos() { return m_realPos; }
-    inline UPoint getPosition() { return UPoint(x,y); }
-    inline int getItemID() { return m_itemID; }
-
-	int getViewRange();
-
-	//
-	// Setters and getters
-	//
 	
     inline bool isABuilder()    { return m_builder; }
     inline bool isAFlyingUnit() { return m_flyingUnit; }
     inline bool isAGroundUnit() { return m_groundUnit; }
-    inline bool isInfantry()    { return m_infantry; }
     inline bool isAStructure()  { return m_structure; }
     inline bool isAUnit()       { return m_unit; }
+    inline bool isInfantry()    { return m_infantry; }
+
     inline bool isActive()     { return m_active; }
-    inline void setActive(bool status) { m_active = status; }
-
-    inline void setForced(bool status) { m_forced = status; }
-
-    int getHealthColour();
-
-
-    bool isOnScreen(Rect rect);
-
-    inline bool isRespondable() 			{ return m_respondable; }
-    inline void setRespondable(bool status) { m_respondable = status; }
-
-    inline bool isSelected()    		{ return m_selected; }
-    inline void setSelected(bool value) { m_selected = value; }
-
+    inline bool isRespondable() { return m_respondable; }
+    inline bool isSelected() { return m_selected; }
 	inline bool isVisible(int team);
-	void setVisible(int team, bool status);
-
-    inline PlayerClass* getOwner() { return m_owner; }
-    inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
-
-    inline Uint32 getObjectID() { return m_objectID; }
-    inline void setObjectID(int newObjectID) {
-    	if (newObjectID >= 0) m_objectID = newObjectID;
-    }
+    int getHealthColour();
 
 	inline bool wasDestroyed() { return m_destroyed; }
 	inline bool wasForced() { return m_forced; }
 
+    inline int getItemID() { return m_itemID; }
+	int getViewRange();
 
+    inline Uint32 getObjectID() { return m_objectID; }
+    inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
+    
+    inline UPoint getRealPos() { return m_realPos; }
+    inline UPoint getPosition() { return UPoint(x,y); }
+
+
+    bool isOnScreen(Rect rect);
+
+    virtual UPoint getClosestPoint(UPoint objectLocation);
+
+    inline PlayerClass* getOwner() { return m_owner; }
+    inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
+    //@}
 	//
 	// Attack related functions
 	//
@@ -107,15 +102,20 @@ class ObjectClass : public Rect
     ATTACKTYPE m_attackMode;
 
     bool m_active,
-    //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_builder,
+    //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_destroyed,
+    //! True if this object is an air unit
          m_flyingUnit,
+    //! True if this object is a ground unit
          m_groundUnit,
+    //! True if this object is infantry
          m_infantry,
          m_respondable,
          m_selected,
+    //! True if this object is a structure
          m_structure,
+    //! True if this object is a unit
          m_unit,
 	//! Specifies which players can see a given object
          m_visible[MAX_PLAYERS+1];
@@ -192,7 +192,7 @@ class ObjectClass : public Rect
 
     UPoint m_offset;
 
-    ObjectClass * m_target;
+    ObjectPointer m_target;
 };
 
 #endif //OBJECTCLASS_H

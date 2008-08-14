@@ -498,8 +498,8 @@ void MapClass::selectObjects(int playerNum, int x1, int y1, int x2, int y2, int 
 void MapClass::viewMap(int playerTeam, UPoint location, int maxViewRange)
 {
 	int			i;
-	UPoint	pos,
-				check;
+	SPoint	pos,
+            check;
 	pos.x = location.x,
 	pos.y = location.y;
 
@@ -518,18 +518,24 @@ void MapClass::viewMap(int playerTeam, UPoint location, int maxViewRange)
 	if (check.x < 0)
 		check.x = 0;
 
+    check.y = location.y;
+
 	while ((check.x < w) && ((check.x - pos.x) <=  maxViewRange))
 	{
 		check.y = (pos.y - lookDist[abs(check.x - pos.x)]);
-		if (check.y < 0) check.y = 0;
+		if (check.y < 0) 
+		    check.y = 0;
 
 		while ((check.y < h) && ((check.y - pos.y) <= lookDist[abs(check.x - pos.x)]))
 		{
 			if (distance_from(location, check) <= maxViewRange)
-			for (i = 0; i < MAX_PLAYERS; i++)
-				if ((*gs->GetPlayers()).at(i) && ((*gs->GetPlayers()).at(i)->getTeam() == playerTeam))
-					getCell(check.x, check.y)->setExplored(i, true);
-
+			{
+    			for (i = 0; i < MAX_PLAYERS; i++)
+    			{
+    				if (gs->GetPlayer(i) && gs->GetPlayer(i)->getTeam() == playerTeam)
+    					getCell(check.x, check.y)->setExplored(i, true);
+    		    }
+            }
 			check.y++;
 		}
 

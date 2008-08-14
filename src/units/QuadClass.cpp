@@ -7,14 +7,16 @@ QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
 {
     m_baseID = m_itemID = Unit_Quad;
 
+    sprite* tmp = DataCache::Instance()->getSpriteInfo("quad");
+
     w = h = 16;
-    m_speed = 0.64;
+    m_speed = DataCache::Instance()->getSpriteParameter("units.quad.speed", 0.63);
 
     //m_armour = 6;
-    m_maxHealth = 350;
+    m_maxHealth = tmp->health;
     m_health = m_maxHealth;
     //radius = 6;
-    m_viewRange = 4;
+    m_viewRange = tmp->viewRange;
     //m_weaponRange = QUAD_WEAPONRANGE;
 
     //m_numWeapons = 2;

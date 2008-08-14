@@ -36,8 +36,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
-
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
+    setActive(false);
     
     GameState::Instance()->GetUnits()->push_back(this);
 }
@@ -59,7 +59,9 @@ bool UnitClass::canPass(UPoint pos)
 /*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
-    if (m_owner->getMap()->cellExists(newPosition))
+    MapClass* map = GameState::Instance()->GetMap();
+    
+    if (map->cellExists(newPosition))
     {
         setPosition(newPosition);
 
@@ -74,8 +76,11 @@ void UnitClass::deploy(SPoint newPosition)
 
         setActive(true);
 
-        //  setVisible(VIS_ALL, true);
+        setVisible(VIS_ALL, true);
 
+        //FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
+        //       Need to think of sth more effective.
+        map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
 
     }
 
@@ -139,10 +144,9 @@ void UnitClass::drawSelectionBox(Image* dest)
 /*virtual*/
 void UnitClass::move()
 {
+    MapClass* map = GameState::Instance()->GetMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
-    //map->viewMap(w_owner->getTeam(), UPoint(x,y), getViewRange() );
-    m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
     if (m_moving)
     {
         m_oldPosition = UPoint(x, y);
@@ -174,14 +178,14 @@ void UnitClass::move()
                 x = m_nextSpot.x;
                 y = m_nextSpot.y;
 
-                if (x == m_destination.x && y == m_destination.y)
+                if (getPosition() == m_destination)
                     setForced(false);
 
                 m_moving = false;
 
                 m_justStoppedMoving = true;
 
-                m_owner->getMap()->viewMap(m_owner->getTeam(), UPoint(x,y), getViewRange() );
+                map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
             }
         }
     }
@@ -213,8 +217,8 @@ void UnitClass::navigate()
                                 && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
                         { //try searching for a path a number of times then give up
                             if (m_target && m_targetFriendly
-                                    && (m_target->getItemID() != Structure_RepairYard)
-                                    && ((m_target->getItemID() != Structure_Refinery)
+                                    && (m_target.getObjPointer()->getItemID() != Structure_RepairYard)
+                                    && ((m_target.getObjPointer()->getItemID() != Structure_Refinery)
                                         || (getItemID() != Unit_Harvester)))
                             {
 
@@ -648,7 +652,7 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
             }*/
 
             if (m_target)
-                checkedPoint = m_target->getClosestPoint(tempLocation);
+                checkedPoint = m_target.getObjPointer()->getClosestPoint(tempLocation);
 
             dx1 = tempLocation.x - checkedPoint.x;
 
@@ -700,7 +704,7 @@ bool UnitClass::AStarSearch()
     TerrainClass *node = map->getCell(UPoint(x, y));//initialise the current node the object is on
 
     if (m_target)
-        checkedPoint = m_target->getClosestPoint(UPoint(x, y));
+        checkedPoint = m_target.getObjPointer()->getClosestPoint(UPoint(x, y));
     else
         checkedPoint = m_destination;
 

@@ -37,6 +37,19 @@ typedef	std::map<std::string, PalfilePtr> palStrings;
 
 
 typedef struct {
+    int health,
+        numWeapons,
+        primaryWeaponReloadTime,
+        radius,
+        viewRange,
+        weaponDamage,
+        weaponRange;
+    double  speed;
+    UPoint size;
+    
+} sprite;
+
+typedef struct {
     //! ResMan filename to song file e.g. SOUND:DUNE0.ADL
     std::string filename;
     //! It's track number in adl file. they usually have several tracks.
@@ -126,6 +139,21 @@ class DataCache : public Singleton<DataCache>
          *        will be remapped, cached and a pointer to it returned
          */
         ImagePtr	getGuiPic(GuiPic_enum ID, HOUSETYPE house = HOUSE_HARKONNEN);
+         
+        void cacheSprites();
+        sprite* getSpriteInfo(std::string spriteName);
+        
+        template<typename T>
+        T getSpriteParameter(std::string path, const T defaultResult) 
+        { 
+            T result = defaultResult; 
+            if (!m_dataConfig->lookupValue(path, result))
+            {
+                LOG_WARNING("DataCache", "Sprite parameter %s not found. Using default value.", path.c_str(), defaultResult);
+            }
+            return result;
+        }
+
         Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
@@ -147,8 +175,8 @@ class DataCache : public Singleton<DataCache>
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
-
 		std::vector<GCObject*> m_gcObjs;
+		std::map<std::string, sprite> m_sprites;
 };
 
 #endif // DUNE_DATACACHE_H

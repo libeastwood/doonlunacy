@@ -42,6 +42,8 @@ void DataCache::Init(){
         exit(EXIT_FAILURE);
     }
 
+    cacheSprites();
+
 
     for (uint8_t i=0; i< NUM_HOUSES; i++)
     {
@@ -412,6 +414,67 @@ void DataCache::Init(){
 	BriefingStrings[1] = new StringFile(data);
 	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
 	BriefingStrings[2] = new StringFile(data);
+}
+
+void DataCache::cacheSprites()
+{
+    Setting &node = m_dataConfig->lookup("units");
+
+    try
+    {
+        for (int i = 0; i < node.getLength(); i++)
+        {
+            sprite tmp;
+
+            tmp.health = -1;
+            node[i].lookupValue("health", tmp.health);
+
+            tmp.numWeapons = -1;
+            node[i].lookupValue("num_weapons", tmp.numWeapons);
+
+            tmp.primaryWeaponReloadTime = -1;
+            node[i].lookupValue("primary_weapon_reload_time", tmp.primaryWeaponReloadTime);
+                        
+            tmp.radius = -1;
+            node[i].lookupValue("radius", tmp.radius);
+
+            tmp.radius = -1;
+            node[i].lookupValue("speed", tmp.speed);
+
+            tmp.viewRange = -1;
+            node[i].lookupValue("view_range", tmp.viewRange);
+
+            tmp.weaponDamage = -1;
+            tmp.weaponRange = -1;
+
+            
+            m_sprites[node[i].getName()] = tmp;
+            LOG_INFO("DataCache", "Cached info for %s", node[i].getName());
+        }
+    }  
+    catch(ParseException& ex)
+    {
+        LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
+            ex.getLine(), ex.getError());
+    }
+}
+
+sprite* DataCache::getSpriteInfo(std::string spriteName)
+{
+    std::map<std::string, sprite>::iterator iter;
+    
+    iter = m_sprites.find(spriteName);
+    
+    if (iter != m_sprites.end())
+    { 
+        return &m_sprites.find(spriteName)->second;
+    }
+    else
+    {
+        LOG_ERROR("DataCache", "Info for sprite \"%s\" was not cached", spriteName.c_str());
+        exit(1);
+    }
+
 }
 
 void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
