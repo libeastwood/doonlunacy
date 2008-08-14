@@ -47,13 +47,9 @@ void Widget::setFocus()
 
 bool Widget::fadeIn(const int fadeAmt)
 {
-	if(m_surface)
-	{
-		if(m_enabled) m_enabled = false;
-		return m_surface->fadeIn(fadeAmt);
-	}
-	m_enabled = true;
-	return false;
+	if(!m_surface) return false;
+	m_enabled = !m_surface->fadeIn(fadeAmt);
+	return !m_enabled;
 }
 
 bool Widget::fadeOut(const int fadeAmt)
