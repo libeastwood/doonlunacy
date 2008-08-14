@@ -75,6 +75,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	bool continuation = false;
 	m_fadeIn = false;
 	m_fadeOut = false;
+	m_textFadeIn = false;
 			 
     
     Setting &node = m_dataConfig->lookup(m_scene);
@@ -217,6 +218,10 @@ int CutSceneState::Execute(float ft)
 		}
 	}
 
+	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame() + 2
+			|| (!m_fadeOut && m_animLabel->getNumFrames() - 2))
+		m_textFrame->fadeOut(10);
+
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())
 	{
 			ImagePtr tmp(new Image(UPoint(420, 45)));
@@ -247,7 +252,10 @@ int CutSceneState::Execute(float ft)
 			m_textFrame->changeBackground(tmp);
 
 		m_textStrings.pop_back();
+		m_textFadeIn = true;
 	}
+	if(m_textFadeIn)
+		m_textFadeIn = m_textFrame->fadeIn(10);
 
 	if(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_animLabel->getCurFrame())
 	{
