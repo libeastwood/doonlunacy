@@ -193,7 +193,7 @@ void CutSceneState::loadScene(uint32_t scene)
         LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
             ex.getLine(), ex.getError());
     }
-
+	m_sceneStart = SDL_GetTicks();
 }
 int CutSceneState::Execute(float ft)
 {
@@ -211,6 +211,7 @@ int CutSceneState::Execute(float ft)
 			m_fadeOut = m_backgroundFrame->fadeOutChildren();
 		else
 		{
+			LOG_INFO("CutSceneState", "Scene %d playtime: %d ms", m_curScene, SDL_GetTicks());
 			m_curScene++;
 			if(m_loop != NULL)
 				free(m_loop);
@@ -221,7 +222,7 @@ int CutSceneState::Execute(float ft)
 	}
 
 	if((!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame() + 2)
-			|| (!m_fadeOut && m_animLabel->getNumFrames() - 2))
+			|| (!m_fadeOut && m_animLabel->getCurFrame() == m_animLabel->getNumFrames() - 2))
 		m_textFrame->fadeOut(10);
 
 	if(!m_textStrings.empty() && (uint32_t)m_textStrings.back().first == m_animLabel->getCurFrame())
