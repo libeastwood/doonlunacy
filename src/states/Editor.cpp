@@ -5,6 +5,7 @@
 #include "MapClass.h"
 
 #include "gui2/Container.h"
+#include "gui2/Frame.h"
 
 EditorState::EditorState()
 {
@@ -34,7 +35,7 @@ EditorState::EditorState()
     m_mapWidget->setSize(UPoint(set->GetWidth() - 144, set->GetHeight() - m_mapWidget->getPosition().y));
     MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA005.INI");
     m_mapWidget->getGameState();
-    m_container->addChild(m_mapWidget);
+    m_backgroundFrame->addChild(m_mapWidget);
 #endif 
 }
 
