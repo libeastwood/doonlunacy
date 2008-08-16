@@ -315,6 +315,30 @@ bool Image::fadeOut(const int fadeAmt)
 	return fade;
 }
 
+bool Image::morph(ImagePtr morphImage, const int morphAmt)
+{
+	bool morph = false;
+	for(int x = 0; x < getSize().x; x++)
+		for(int y = 0; y < getSize().y; y++)
+		{
+			int mepix = getPixel(UPoint(x, y));
+			int othpix = morphImage->getPixel(UPoint(x,y));
+			if(mepix > othpix){
+				(mepix - morphAmt > othpix) ? mepix -= morphAmt : mepix = othpix;
+				morph = true;
+				putPixel(UPoint(x,y), mepix);
+			}
+			else if(mepix < othpix)
+			{
+				(mepix + morphAmt < othpix) ? mepix += morphAmt : mepix = othpix;
+				morph = true;
+				putPixel(UPoint(x,y), mepix);
+			}
+		}
+	return morph;
+}
+
+
 //------------------------------------------------------------------------------
 // Single pixel operations
 //------------------------------------------------------------------------------

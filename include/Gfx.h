@@ -913,6 +913,7 @@ class Image
 
 		bool fadeIn(const int fadeAmt = 4);
 		bool fadeOut(const int fadeAmt = 4);
+		bool morph(ImagePtr morphImg, const int morphAmt = 4);
 
         //@}
         
