@@ -323,17 +323,12 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt)
 		{
 			int mepix = getPixel(UPoint(x, y));
 			int othpix = morphImage->getPixel(UPoint(x,y));
-			if(mepix > othpix){
+			if(mepix > othpix)
 				(mepix - morphAmt > othpix) ? mepix -= morphAmt : mepix = othpix;
-				morph = true;
-				putPixel(UPoint(x,y), mepix);
-			}
-			else if(mepix < othpix)
-			{
+			else
 				(mepix + morphAmt < othpix) ? mepix += morphAmt : mepix = othpix;
-				morph = true;
-				putPixel(UPoint(x,y), mepix);
-			}
+			morph = true;
+			putPixel(UPoint(x,y), mepix);
 		}
 	return morph;
 }
