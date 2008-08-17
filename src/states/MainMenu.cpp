@@ -1,5 +1,4 @@
 #include "boost/bind.hpp"
-#include "boost/format.hpp"
 
 #include "Application.h"
 #include "Font.h"
@@ -7,8 +6,10 @@
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+#include "Strings.h"
 
 #include "gui2/Frame.h"
+#include "gui2/HScale.h"
 #include "states/Editor.h"
 #include "states/SingleMenu.h"
 #include "states/MainMenu.h"
@@ -76,7 +77,7 @@ MainMenuState::MainMenuState() : MainMenuBaseState()
     //                   (SDL_Surface*)(dataFile[UI_Quit_Pressed].dat));
     m_butQuit->onClick.connect(
             boost::bind(&MainMenuState::doQuit, this) );
-   
+    
     m_vbox->addChild(m_butQuit);
 
 }
@@ -114,15 +115,37 @@ void MainMenuState::doSkirmish()
     Uint16 textw, texth;
     for (Uint32 j=0; j< 200; j++)
     {
-        boost::format index("%1%"); index % j;
-        font->extents(index.str(), textw, texth);
-        font->render(index.str(), img->getSurface(), 20, j * 10, j);
+        String index = toString(j);
+        font->extents(index, textw, texth);
+        font->render(index, img->getSurface(), 20, j * 10, j);
         rect.y = j * 10;
         img->fillRect(j, rect);
     }
     SDL_SaveBMP(img->getSurface(), "palette.bmp");
 
 #endif 
+
+#if 0
+    Font* font = FontManager::Instance()->getFont("DUNE:NEW10P.FNT");
+    
+    Rect rect(0,0,10, 10);
+    
+    Image * img = new Image(UPoint(100, 2000));
+    Uint16 textw, texth;
+    // For intro font only use range 0..125
+    for (Uint32 j=0; j< 125; j++)
+    {
+        String tmp; tmp+= j;
+        String index = toString(j);
+        font->render(tmp, img->getSurface(), 20, j * 10, j);
+        font->render(index, img->getSurface(), 40, j * 10, j);
+        rect.y = j * 10;
+        img->fillRect(j, rect);
+    }
+    SDL_SaveBMP(img->getSurface(), "palette.bmp");
+
+#endif 
+
 }
 
 void MainMenuState::doSingle()

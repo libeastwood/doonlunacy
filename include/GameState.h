@@ -30,7 +30,7 @@ class GameState : public Singleton<GameState>
     
     PlayerClass* LocalPlayer() { return m_localPlayer; }; 
     ObjectTree* GetObjectTree() { return m_objectTree; };
-    void Update();
+    void Update(float dt);
 	//FIXME: This shouldn't be here
 	bool placingMode;
   protected:

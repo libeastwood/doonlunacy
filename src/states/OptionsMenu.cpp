@@ -87,6 +87,11 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butOk);
 
+
+    m_hscaleGameSpeed = new HScale(1, 10, 4);
+    m_hscaleGameSpeed->setSize(SPoint(bw, bh));
+    m_vbox->addChild(m_hscaleGameSpeed);
+
 	m_vbox->fit(2);
     Uint16 x = (set->GetWidth() / 2) - 
                 (m_vbox->w / 2);

@@ -13,11 +13,11 @@ GameState::~GameState()
 
 }
 
-void GameState::Update()
+void GameState::Update(float dt)
 {
     Units::iterator iter;
     for (iter = m_units->begin(); iter != m_units->end(); iter++)
     {
-        (*iter)->update();
+        (*iter)->update(dt);
     }
 }

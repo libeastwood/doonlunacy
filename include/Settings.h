@@ -8,6 +8,8 @@
 #include "DuneConstants.h"
 #include "Definitions.h"
 
+#include "gui2/HScale.h"
+
 typedef struct
 {
 	GAMETYPE gameType;
@@ -63,7 +65,7 @@ class Settings: public Singleton<Settings>
     friend class Singleton<Settings>;
     friend class SoundPlayer;
     friend class Application;
-    
+    friend class HScale;
   protected:
 	Settings();
 
@@ -73,6 +75,9 @@ class Settings: public Singleton<Settings>
 	int m_debug;
 	bool m_doubleBuffered;
 	bool m_playIntro;
+
+    //! Used for frame independent movement.
+    int m_gameSpeed;
 
 	//! @name SFX
 	//@{
@@ -115,6 +120,8 @@ class Settings: public Singleton<Settings>
 	void ParseFile(const char* fn);
 	void ParseOptions(int argc, char* argv[]);
 
+    inline int GetGameSpeed() { return m_gameSpeed; }
+    
     inline int GetMaxSearchPath() { return m_maxPathSearch; }
 
 	inline int GetWidth() { return m_width; }

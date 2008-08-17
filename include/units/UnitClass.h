@@ -35,7 +35,7 @@ class UnitClass : public ObjectClass
 
 	void setAngle(int newAngle);
 
-    virtual void update();
+    virtual void update(float dt);
     virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
     virtual void setTarget(ObjectClass* newTarget);
@@ -86,6 +86,9 @@ class UnitClass : public ObjectClass
         m_secondaryWeaponReloadTime,
         m_secondaryWeaponTimer,
         m_targetAngle;
+    
+    float m_adjust;
+    int m_gameSpeed;
 
     SPoint  m_nextSpot,
             m_guardPoint;        

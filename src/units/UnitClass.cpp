@@ -36,7 +36,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
     setActive(false);
-    
+    m_adjust = 0.0;
+    m_gameSpeed = Settings::Instance()->GetGameSpeed();
     GameState::Instance()->GetUnits()->push_back(this);
 }
 
@@ -63,7 +64,7 @@ void UnitClass::deploy(SPoint newPosition)
     {
         setPosition(newPosition);
 
-        if ((m_guardPoint.x == NONE) || (m_guardPoint.y == NONE))
+        if ((m_guardPoint.x == INVALID_POS) || (m_guardPoint.y == INVALID_POS))
             m_guardPoint = UPoint(x, y);
 
         setDestination(m_guardPoint);
@@ -152,14 +153,14 @@ void UnitClass::move()
 
         if (!m_badlyDamaged || isAFlyingUnit())
         {
-            m_realPos.x += m_xSpeed;
-            m_realPos.y += m_ySpeed;
+            m_realPos.x += m_xSpeed * m_adjust;
+            m_realPos.y += m_ySpeed * m_adjust;
         }
 
         else
         {
-            m_realPos.x += m_xSpeed / 2;
-            m_realPos.y += m_ySpeed / 2;
+            m_realPos.x += (m_xSpeed / 2) * m_adjust;
+            m_realPos.y += (m_ySpeed / 2) * m_adjust;
         }
 
         // if vehicle is half way out of old cell
@@ -450,7 +451,7 @@ void UnitClass::targeting()
 
 void UnitClass::turnLeft()
 {
-    m_angle += m_turnSpeed;
+    m_angle += m_turnSpeed * m_adjust;
 
     if (m_angle >= 7.5)
         m_angle -= 8.0;
@@ -460,7 +461,7 @@ void UnitClass::turnLeft()
 
 void UnitClass::turnRight()
 {
-    m_angle -= m_turnSpeed;
+    m_angle -= m_turnSpeed * m_adjust;
 
     if (m_angle < -0.5)
         m_angle += 8;
@@ -531,8 +532,10 @@ void UnitClass::setGuardPoint(int newX, int newY)
 }
 
 /*virtual*/
-void UnitClass::update()
+void UnitClass::update(float dt)
 {
+    m_adjust = dt * (m_gameSpeed * 10);
+    
     if (!m_destroyed)
     {
         if (m_active)

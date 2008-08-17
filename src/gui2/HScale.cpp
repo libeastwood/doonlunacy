@@ -9,7 +9,7 @@ HScale::HScale(int min, int max, int value)
     m_value = value;
 
     setSize(SPoint(180, 20));
-        
+
     m_butPlus = new BoringButton("+");
     m_butPlus->setSize(SPoint(20, 20));
     m_butPlus->onClick.connect(
