@@ -7,7 +7,8 @@
 #include "Settings.h"
 
 #include <assert.h>
-#include <map>
+#include <cmath>
+#include <vector>
 
 //------------------------------------------------------------------------------
 // Image class
@@ -316,29 +317,54 @@ bool Image::fadeOut(const int fadeAmt)
 	return fade;
 }
 
+inline uint16_t colDiff(SDL_Color srcCol, SDL_Color dstCol)
+{
+	return abs(srcCol.r - dstCol.r) + abs(srcCol.g - dstCol.g) + abs(srcCol.b - dstCol.b);
+}
+
 bool Image::morph(ImagePtr morphImage, const int morphAmt)
 {
 	bool morph = false;
-	int w = getSize().x, h = getSize().y;
-	uint16_t newCol[256];
-	for(int i = 0; i != 256; i++)
-		newCol[i] = -1;
+	uint16_t w = getSize().x, h = getSize().y;
+	std::vector<uint16_t> newCol;
+	newCol.assign(256, -1);
+	SDL_Color *colors = surface->format->palette->colors;
 
-	for(int x = 0; x < w; x++)
-		for(int y = 0; y < h; y++)
+	for(uint16_t x = 0; x != w; x++)
+		for(uint16_t y = 0; y != h; y++)
 		{
 			uint8_t curPix = getPixel(UPoint(x, y));
 			uint8_t dstPix = morphImage->getPixel(UPoint(x,y));
 			if(curPix != dstPix){
 				uint8_t newPix;
 				if(newCol[curPix] != (uint16_t)-1)
-					newPix =(uint8_t) newCol[curPix];
+					newPix = (uint8_t)newCol[curPix];
 				else
 				{
-					if(curPix > dstPix)
-						(curPix - morphAmt > dstPix) ? newPix = curPix - morphAmt : newPix = dstPix;
-					else
-						(curPix + morphAmt < dstPix) ? newPix = curPix - morphAmt : newPix = dstPix;
+					SDL_Color srcCol = colors[curPix];
+					SDL_Color dstCol = colors[dstPix];
+					uint16_t minDiff = -1;
+					std::vector<uint8_t> newCols;
+					for(uint16_t i = 0; i != 256; i++)
+					{
+						if(i == curPix) continue;
+						SDL_Color col = colors[i];
+						uint16_t diff = colDiff(srcCol, col);
+						uint16_t dstDiff = colDiff(srcCol, dstCol);
+						if(diff == dstDiff)
+						{
+							newCols.insert(newCols.begin(), dstPix);
+							break;
+						}
+						if(diff < minDiff && colDiff(col, dstCol) < dstDiff)
+							minDiff = diff, newCols.insert(newCols.begin(), i);
+					}
+					int i = 0;
+					while(!newCols.empty() && i++ < morphAmt)
+					{
+						newPix = newCols.back();
+						newCols.pop_back();
+					}
 					newCol[curPix] = newPix;
 				}
 				if(curPix != dstPix)
