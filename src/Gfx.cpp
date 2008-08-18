@@ -7,6 +7,7 @@
 #include "Settings.h"
 
 #include <assert.h>
+#include <map>
 
 //------------------------------------------------------------------------------
 // Image class
@@ -318,18 +319,31 @@ bool Image::fadeOut(const int fadeAmt)
 bool Image::morph(ImagePtr morphImage, const int morphAmt)
 {
 	bool morph = false;
-	for(int x = 0; x < getSize().x; x++)
-		for(int y = 0; y < getSize().y; y++)
+	int w = getSize().x, h = getSize().y;
+	uint16_t newCol[256];
+	for(int i = 0; i != 256; i++)
+		newCol[i] = -1;
+
+	for(int x = 0; x < w; x++)
+		for(int y = 0; y < h; y++)
 		{
-			int mepix = getPixel(UPoint(x, y));
-			int othpix = morphImage->getPixel(UPoint(x,y));
-			if(mepix != othpix){
-				if(mepix > othpix)
-					(mepix - morphAmt > othpix) ? mepix -= morphAmt : mepix = othpix;
+			uint8_t curPix = getPixel(UPoint(x, y));
+			uint8_t dstPix = morphImage->getPixel(UPoint(x,y));
+			if(curPix != dstPix){
+				uint8_t newPix;
+				if(newCol[curPix] != (uint16_t)-1)
+					newPix =(uint8_t) newCol[curPix];
 				else
-					(mepix + morphAmt < othpix) ? mepix += morphAmt : mepix = othpix;
-				morph = true;
-				putPixel(UPoint(x,y), mepix);
+				{
+					if(curPix > dstPix)
+						(curPix - morphAmt > dstPix) ? newPix = curPix - morphAmt : newPix = dstPix;
+					else
+						(curPix + morphAmt < dstPix) ? newPix = curPix - morphAmt : newPix = dstPix;
+					newCol[curPix] = newPix;
+				}
+				if(curPix != dstPix)
+					morph = true;
+				putPixel(UPoint(x,y), newPix);
 			}
 		}
 	return morph;
