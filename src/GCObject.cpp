@@ -33,6 +33,49 @@ bool GCObject::freeIfUnique()
 	return false;
 }
 
+inline std::vector<Uint32> airunit_row(Uint32 i){
+	std::vector<Uint32> row(8);
+	row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
+	row[4] = (i+2)|TILE_FLIPV,  row[5] = (i+1)|TILE_ROTATE, row[6] = i|TILE_FLIPH,  row[7] = (i+1)|TILE_FLIPH;
+	return row;
+}
+
+inline std::vector<Uint32> infantry_row(Uint32 i){
+	std::vector<Uint32> row(4);
+	row[0] = (i+3)|TILE_NORMAL, row[1] = i|TILE_NORMAL, row[2] = (i+3)|TILE_FLIPV, row[3] = (i+6)|TILE_NORMAL;
+	return row;
+}
+
+inline std::vector<Uint32> groundunit_row(Uint32 i){
+	std::vector<Uint32> row(8);
+	row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL,     row[3] = (i+1)|TILE_FLIPV,
+	row[4] = (i+2)|TILE_FLIPV,  row[5] = (i+3)|TILE_FLIPV,  row[6] = (i+4)|TILE_NORMAL, row[7] = (i+3)|TILE_NORMAL;
+	return row;
+}
+
+inline std::vector<Uint32> ornithopter_row(Uint32 i){
+	std::vector<Uint32> row(8);
+	row[0] = (i+6)|TILE_NORMAL, row[1] = (i+3)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+3)|TILE_FLIPV,
+	row[4] = (i+6)|TILE_FLIPV,  row[5] = (i+3)|TILE_ROTATE, row[6] = i|TILE_FLIPH,  row[7] = (i+3)|TILE_FLIPH;
+	return row;
+}
+
+inline std::vector<Uint32> harvestersand_row(Uint32 i){
+	std::vector<Uint32> row(8);
+	row[0] = (i+6)|TILE_NORMAL, row[1] = (i+3)|TILE_NORMAL, row[2] = i|TILE_NORMAL,      row[3] = (i+3)|TILE_FLIPV,
+	row[4] = (i+6)|TILE_FLIPV,  row[5] = (i+9)|TILE_FLIPV,  row[6] = (i+12)|TILE_NORMAL, row[7] = (i+9)|TILE_NORMAL;
+	return row;
+}
+
+inline std::vector<Uint32> rocket_row(Uint32 i){
+	std::vector<Uint32> row(16);
+	row[0] = (i+4)|TILE_NORMAL, row[1] = (i+3)|TILE_NORMAL, row[2] = (i+2)|TILE_NORMAL,  row[3] =(i+1)|TILE_NORMAL,
+	row[4] = i|TILE_NORMAL,     row[5] = (i+1)|TILE_FLIPV,  row[6] = (i+2)|TILE_FLIPV,   row[7] =(i+3)|TILE_FLIPV,
+	row[8] = (i+4)|TILE_FLIPV,  row[9] = (i+3)|TILE_ROTATE, row[10]= (i+2)|TILE_ROTATE,  row[11]= (i+1)|TILE_ROTATE,
+	row[12]= i|TILE_FLIPH,      row[13]= (i+1)|TILE_FLIPH,  row[14]= (i+2)|TILE_FLIPH,   row[15]= (i+3)|TILE_FLIPH;
+	return row;
+}
+
 void GCObject::drawImage()
 {
 	libconfig::Config *dataConfig = DataCache::Instance()->getConfig();
@@ -79,19 +122,50 @@ void GCObject::drawImage()
 
 			if (type.compare("SHP") == 0)
 			{
+				ShpFile *shpfile(new ShpFile(data, len, palette));
 				if(node.lookupValue("index", value))
 				{
-					ShpFile *shpfile(new ShpFile(data, len, palette));
-					
 					m_surface.reset(new Image(shpfile->getSurface(value)));
-					
-					delete shpfile;
+				}
+				else if(node.exists("array"))
+				{
+					Setting& s = dataConfig->lookup(fullpath + ".array");
+					Uint32 tilesX = 0, tilesY = 0;
+					std::vector<Uint32> tiles;
+					for(int i = 0; i < s.getLength(); i++)
+					{
+						std::vector<Uint32> tmp;
+						if(s[i].isGroup()){
+							if(s[i].exists("groundunit_row"))
+									tmp = groundunit_row((int)s[i]["groundunit_row"]);
+							else if(s[i].exists("airunit_row"))
+									tmp = airunit_row((int)s[i]["airunit_row"]);
+							else if(s[i].exists("infantry_row"))
+									tmp = infantry_row((int)s[i]["infantry_row"]);
+							else if(s[i].exists("ornithopter_row"))
+									tmp = ornithopter_row((int)s[i]["ornithopter_row"]);
+							else if(s[i].exists("harvestersand_row"))
+									tmp = harvestersand_row((int)s[i]["harvestersand_row"]);
+							else if(s[i].exists("rocket_row"))
+									tmp = rocket_row((int)s[i]["rocket_row"]);
+
+							tilesX = tmp.size();
+							tilesY++;
+							for(Uint32 j = 0; j < tmp.size(); j++)
+								tiles.push_back(tmp[j]);
+						}
+					}
+					Uint32 *tilesArray = new Uint32[tiles.size()];
+					for(Uint32 i = 0; i < tiles.size(); i++)
+						tilesArray[i] = tiles[i];
+					m_surface.reset(new Image(shpfile->getSurfaceArray(tilesX, tilesY, tilesArray)));
 				}
 				else
 				{
-					LOG_FATAL("GCObject", "No index specified for %s!", variable.c_str());
+					LOG_FATAL("GCObject", "No index or array specified for %s!", variable.c_str());
 					exit(EXIT_FAILURE);
 				}
+				delete shpfile;
 			}
 		}
 		else if(node.lookupValue("gcobject", variable))

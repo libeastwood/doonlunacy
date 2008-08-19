@@ -420,6 +420,34 @@ gcobjects:
 					  color = 0; });
 	};
 
+	// Something is wrong here, the graphics seems to actually be troopers?
+	ObjPic_Carryall =
+	{
+		filename = "DUNE:UNITS.SHP";
+
+		array = ({ airunit_row = 45; },
+				 { airunit_row = 48; });
+	};
+
+	ObjPic_Bullet_SmallRocket =
+	{
+		filename = "DUNE:UNITS.SHP";
+		array = ({ rocket_row = 35; });
+	};
+
+	ObjPic_Trooper = 
+	{
+		filename = "DUNE:UNITS.SHP";
+		array = ({ infantryunit_row = 82; },
+				 { infantryunit_row = 83; },
+				 { infantryunit_row = 84; });
+	};
+
+	ObjPic_Quad =
+	{
+		filename = "DUNE:UNITS.SHP";
+		array = ({ groundunit_row = 0; });
+	};
 };
 
 animations:
