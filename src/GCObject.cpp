@@ -136,7 +136,8 @@ void GCObject::drawImage()
 					for(int i = 0; i < s.getLength(); i++)
 					{
 						std::vector<Uint32> tmp;
-						if(s[i].isGroup()){
+						if(s[i].isGroup())
+						{
 							if(s[i].exists("groundunit_row"))
 									tmp = groundunit_row((int)s[i]["groundunit_row"]);
 							else if(s[i].exists("airunit_row"))
@@ -149,12 +150,16 @@ void GCObject::drawImage()
 									tmp = harvestersand_row((int)s[i]["harvestersand_row"]);
 							else if(s[i].exists("rocket_row"))
 									tmp = rocket_row((int)s[i]["rocket_row"]);
-
-							tilesX = tmp.size();
-							tilesY++;
-							for(Uint32 j = 0; j < tmp.size(); j++)
-								tiles.push_back(tmp[j]);
 						}
+						else if(s[i].isArray())
+						{
+							for(int j = 0; j < s[i].getLength(); j++)
+								tmp.push_back((int)s[i][j]|TILE_NORMAL);
+						}
+						tilesX = tmp.size();
+						tilesY++;
+						for(Uint32 j = 0; j < tmp.size(); j++)
+							tiles.push_back(tmp[j]);
 					}
 					Uint32 *tilesArray = new Uint32[tiles.size()];
 					for(Uint32 i = 0; i < tiles.size(); i++)

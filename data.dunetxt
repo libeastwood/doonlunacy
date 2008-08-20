@@ -452,6 +452,13 @@ gcobjects:
 		num = 6;
 	};
 
+	ObjPic_Hit_Gas =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		array = ([57, 58, 59, 60, 61]);
+	};
+
+
 	// Seems to actually rather be a demolished 4x4 building..?
 	ObjPic_RepairYard =
 	{
