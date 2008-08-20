@@ -171,8 +171,13 @@ void GCObject::drawImage()
 						}
 						else if(s[i].isArray())
 						{
-							for(int j = 0; j < s[i].getLength(); j++)
+							for(int j = 0; j < s[i].getLength(); j++){
 								tmp.push_back((int)s[i][j]|TILE_NORMAL);
+								if(TILE_GETINDEX(tmp[j]) >= shpfile->getNumFiles()) {
+									LOG_ERROR("GCObject","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile->getNumFiles());
+									exit(EXIT_FAILURE);
+								}								
+							}
 						}
 						if(!tilesX)
 							tilesX = tmp.size();
