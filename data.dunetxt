@@ -420,6 +420,54 @@ gcobjects:
 					  color = 0; });
 	};
 
+	ObjPic_Tank_Base =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 0; });
+	};
+
+	ObjPic_Tank_Gun =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 5; });
+	};
+
+	ObjPic_Siegetank_Base =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 10; });
+	};
+	
+	ObjPic_Siegetank_Gun =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 15; });
+	};
+	
+	ObjPic_Devastator_Base =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 20; });
+	};
+
+	ObjPic_Devastator_Gun =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 25; });
+	};
+
+	ObjPic_Sonictank_Gun =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 30; });
+	};
+
+	ObjPic_Launcher_Gun =
+	{
+		filename = "DUNE:UNITS2.SHP";
+		tiles = ({ groundunit_row = 35; });
+	};
+
 	// Something is wrong here, the graphics seems to actually be troopers?
 	ObjPic_Carryall =
 	{
