@@ -128,9 +128,9 @@ void GCObject::drawImage()
 				{
 					m_surface.reset(new Image(shpfile->getSurface(value)));
 				}
-				else if(node.exists("array"))
+				else if(node.exists("tiles"))
 				{
-					Setting& s = dataConfig->lookup(fullpath + ".array");
+					Setting& s = dataConfig->lookup(fullpath + ".tiles");
 					Uint32 tilesX = 0, tilesY = 0;
 					std::vector<Uint32> tiles;
 					for(int i = 0; i < s.getLength(); i++)
@@ -168,7 +168,7 @@ void GCObject::drawImage()
 				}
 				else
 				{
-					LOG_FATAL("GCObject", "No index or array specified for %s!", variable.c_str());
+					LOG_FATAL("GCObject", "No index or tiles specified for %s!", variable.c_str());
 					exit(EXIT_FAILURE);
 				}
 				delete shpfile;
@@ -202,7 +202,7 @@ void GCObject::drawImage()
 					}
 					else
 					{
-						LOG_FATAL("GCObject", "No array, index or row specified for %s!", variable.c_str());
+						LOG_FATAL("GCObject", "index, mapindex or row specified for %s!", variable.c_str());
 						exit(EXIT_FAILURE);
 					}
 					delete icnfile;
