@@ -468,6 +468,38 @@ gcobjects:
 		tiles = ({ groundunit_row = 35; });
 	};
 
+	ObjPic_Quad =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ groundunit_row = 0; });
+	};
+
+	ObjPic_Trike =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ groundunit_row = 5; });
+	};
+	
+	ObjPic_Harvester =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ groundunit_row = 10; });
+	};
+	
+	ObjPic_Harvester_Sand =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ({ harvestersand_row = 72; },
+				 { harvestersand_row = 73; },
+				 { harvestersand_row = 74; });
+	};
+
+	ObjPic_MCV =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ groundunit_row = 15; });
+	};
+	
 	// Something is wrong here, the graphics seems to actually be troopers?
 	ObjPic_Carryall =
 	{
@@ -476,18 +508,255 @@ gcobjects:
 				 { airunit_row = 48; });
 	};
 
+	ObjPic_Frigate =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ airunit_row = 60; });
+	};
+
+	ObjPic_Ornithopter =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ ornithopter_row = 51; },
+				 { ornithopter_row = 52; },
+				 { ornithopter_row = 53; });
+	};
+
+	ObjPic_Trooper =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ infantry_row = 82; },
+				 { infantry_row = 83; },
+				 { infantry_row = 84; });
+	};
+	
+	ObjPic_Infantry =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ infantry_row = 73; },
+				 { infantry_row = 74; },
+				 { infantry_row = 75; });
+	};
+
+	ObjPic_Saboteur =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ infantry_row = 63; },
+				 { infantry_row = 64; },
+				 { infantry_Row = 65; });
+	};
+	
+	ObjPic_Sandworm =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([67, 68, 69, 70, 71]);
+	};
+
+	ObjPic_ConstructionYard =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 17;
+	};
+	
+	ObjPic_WindTrap =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 19;
+	};
+	
+	ObjPic_Refinery =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 21;
+	};
+	
+	ObjPic_Barracks =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 18;
+	};
+	
+	ObjPic_WOR =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 16;
+	};
+	
+	ObjPic_Radar =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 26;
+	};
+	
+	ObjPic_LightFactory =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 12;
+	};
+	
+	ObjPic_Silo =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 25;
+	};
+	
+	ObjPic_HeavyFactory =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 13;
+	};
+	
+	ObjPic_HighTechFactory =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 14;
+	};
+	
+	ObjPic_IX =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 15;
+	};
+	
+	ObjPic_Palace =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 11;
+	};
+	
+	// Seems to actually rather be a demolished 4x4 building..?
+	ObjPic_RepairYard =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 22;
+	};
+	
+	ObjPic_StarPort =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 20;
+	};
+	
+	ObjPic_GunTurret =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 23;
+	};
+	
+	ObjPic_RocketTurret =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 24;
+	};
+	
+	ObjPic_Wall =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 6;
+		x = 1;
+		y = 1;
+		num = 75;
+	};
+	
 	ObjPic_Bullet_SmallRocket =
 	{
 		filename = "DUNE:UNITS.SHP";
 		tiles = ({ rocket_row = 35; });
 	};
 
-	ObjPic_Trooper = 
+	ObjPic_Bullet_MediumRocket =
 	{
 		filename = "DUNE:UNITS.SHP";
-		tiles = ({ infantryunit_row = 82; },
-				 { infantryunit_row = 83; },
-				 { infantryunit_row = 84; });
+		tiles = ({ rocket_row = 20; });
+	};
+
+	ObjPic_Bullet_LargeRocket =
+	{
+		filename = "DUNE:UNITS.SHP";
+		tiles = ({ rocket_row = 40; });
+	};
+
+	ObjPic_Bullet_Small =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		index = 23;
+	};
+
+	ObjPic_Bullet_Medium =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		index = 24;
+	};
+
+	ObjPic_Bullet_Sonic =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		index = 9;
+	};
+
+	ObjPic_Hit_Gas =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([57, 58, 59, 60, 61]);
+	};
+
+	ObjPic_Hit_Shell =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([2, 3, 4]);
+	};
+
+	ObjPic_Hit_ExplosionSmall =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([57, 58, 59, 60, 61]);
+	};
+
+	ObjPic_Hit_ExplosionMedium1 =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([47, 48, 49, 50, 51]);
+	};
+
+	ObjPic_Hit_ExplosionMedium2 =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([52, 53, 54, 55, 56]);
+	};
+
+	ObjPic_Hit_ExplosionLarge1 =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([47, 48, 49, 50, 51]);
+	};
+
+	ObjPic_Hit_ExplosionLarge2 =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([42, 43, 44, 45, 46]);
+	};
+
+	ObjPic_Hit_ExplosionSmallUnit =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([29, 30, 31]);
 	};
 
 	ObjPic_DeadInfantry =
@@ -500,19 +769,10 @@ gcobjects:
 		num = 6;
 	};
 
-	ObjPic_Hit_Gas =
+	ObjPic_SandWormShimmerMask =
 	{
 		filename = "DUNE:UNITS1.SHP";
-		tiles = ([57, 58, 59, 60, 61]);
-	};
-
-
-	// Seems to actually rather be a demolished 4x4 building..?
-	ObjPic_RepairYard =
-	{
-		filename = "DUNE:ICON.ICN";
-		map = "DUNE:ICON.MAP";
-		mapindex = 22;
+		index = 10;
 	};
 
 	ObjPic_Terrain =
@@ -522,10 +782,36 @@ gcobjects:
 		row = [124, 209];
 	};
 
-	ObjPic_Quad =
+	ObjPic_RockDamage =
 	{
-		filename = "DUNE:UNITS.SHP";
-		tiles = ({ groundunit_row = 0; });
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		row = [1, 6];
+	};
+
+	ObjPic_SandDamage =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([5, 6, 7]);
+	};
+
+	HideTile =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		row = [108, 123];
+	};
+
+	ObjPic_Terrain_Hidden =
+	{
+		gcobject = "HideTile";
+		colorkey = 0;
+	};
+
+	UI_MouseCursor =
+	{
+		filename = "DUNE:MOUSE.SHP";
+		tiles = ([0, 1, 2, 3, 4, 5, 6]);
 	};
 };
 
