@@ -424,7 +424,6 @@ gcobjects:
 	ObjPic_Carryall =
 	{
 		filename = "DUNE:UNITS.SHP";
-
 		array = ({ airunit_row = 45; },
 				 { airunit_row = 48; });
 	};
@@ -441,6 +440,31 @@ gcobjects:
 		array = ({ infantryunit_row = 82; },
 				 { infantryunit_row = 83; },
 				 { infantryunit_row = 84; });
+	};
+
+	ObjPic_DeadInfantry =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 4;
+		x = 1;
+		y = 1;
+		num = 6;
+	};
+
+	// Seems to actually rather be a demolished 4x4 building..?
+	ObjPic_RepairYard =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		mapindex = 22;
+	};
+
+	ObjPic_Terrain =
+	{
+		filename = "DUNE:ICON.ICN";
+		map = "DUNE:ICON.MAP";
+		row = [124, 209];
 	};
 
 	ObjPic_Quad =

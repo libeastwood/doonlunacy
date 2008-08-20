@@ -4,6 +4,7 @@
 #include "ResMan.h"
 
 #include <eastwood/CpsFile.h>
+#include <eastwood/IcnFile.h>
 #include <eastwood/PalFile.h>
 #include <eastwood/ShpFile.h>
 
@@ -166,6 +167,46 @@ void GCObject::drawImage()
 					exit(EXIT_FAILURE);
 				}
 				delete shpfile;
+			}
+			if (type.compare("ICN") == 0)
+			{
+				std::string mapName;
+				if(node.lookupValue("map", mapName))
+				{
+					int mapLen;
+					uint8_t *mapData = ResMan::Instance()->readFile(mapName, &mapLen);
+					
+					IcnFile *icnfile(new IcnFile(data, len, mapData, mapLen, palette));
+					if(node.lookupValue("index", value))
+					{
+						m_surface.reset(new Image(icnfile->getSurface(value)));
+					}
+					else if(node.exists("row"))
+					{
+						Setting& s = dataConfig->lookup(fullpath + ".row");
+						Uint32 start = s[0], end = s[1];
+						m_surface.reset(new Image(icnfile->getSurfaceRow(start, end)));
+					}
+					else if(node.lookupValue("mapindex", value))
+					{
+						int tilesX = 0, tilesY = 0, tilesN = 0;
+						node.lookupValue("x", tilesX);
+						node.lookupValue("y", tilesY);
+						node.lookupValue("num", tilesN);
+						m_surface.reset(new Image(icnfile->getSurfaceArray(value, tilesX, tilesY, tilesN)));
+					}
+					else
+					{
+						LOG_FATAL("GCObject", "No array, index or row specified for %s!", variable.c_str());
+						exit(EXIT_FAILURE);
+					}
+					delete icnfile;
+				}
+				else
+				{
+					LOG_FATAL("GCObject", "No map specified for %s!", variable.c_str());
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 		else if(node.lookupValue("gcobject", variable))
