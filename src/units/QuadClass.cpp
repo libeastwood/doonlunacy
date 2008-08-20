@@ -1,6 +1,8 @@
 #include "DataCache.h"
 #include "Definitions.h"
+#include "GCObject.h"
 #include "PlayerClass.h"
+
 #include "units/QuadClass.h"
 
 QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
@@ -23,7 +25,7 @@ QuadClass::QuadClass(PlayerClass* newOwner) : GroundUnit(newOwner)
     //m_bulletType[0] = Bullet_Gun;
     //m_primaryWeaponReloadTime = 100;
 
-    m_pic = DataCache::Instance()->getObjPic(ObjPic_Quad, HOUSETYPE(getOwner()->getColour()));
+    m_pic = DataCache::Instance()->getGCObject("ObjPic_Quad")->getImage(HOUSETYPE(getOwner()->getColour()));
 
     //FIXME:What is the standard offset for units?
     //m_offset = UPoint((w - BLOCKSIZE)/2, (h - BLOCKSIZE)/2);
