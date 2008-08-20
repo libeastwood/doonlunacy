@@ -26,6 +26,7 @@ class Container: public Widget
         virtual int getChildrenSize();
 		virtual bool fadeInChildren(const int fadeAmt = 4);
 		virtual bool fadeOutChildren(const int fadeAmt = 4);
+		virtual void recolorChildrenByHouse(HOUSETYPE house);
     
     protected:
         WidgetList m_children;    

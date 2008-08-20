@@ -11,8 +11,9 @@
 
 #include <boost/bind.hpp>
 
-GameMenuState::GameMenuState()
+GameMenuState::GameMenuState(HOUSETYPE house)
 {
+	m_house = house;
 }
 
 
@@ -35,19 +36,19 @@ void GameMenuState::drawMenu()
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
 
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage(m_house);
 
 
-    m_mentatButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Mentat")->getImage(),
-										DataCache::Instance()->getGCObject("UI_Mentat_Pressed")->getImage());
+    m_mentatButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Mentat")->getImage(m_house),
+										DataCache::Instance()->getGCObject("UI_Mentat_Pressed")->getImage(m_house));
     m_mentatButton->onClick.connect(
              boost::bind(&GameMenuState::doMentat, this) );    
 
     m_mentatButton->setPosition(UPoint(16,6));
     topFrame->addChild(m_mentatButton);
 
-    m_optionsButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Options")->getImage(),
-										DataCache::Instance()->getGCObject("UI_Options_Pressed")->getImage());
+    m_optionsButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Options")->getImage(m_house),
+										DataCache::Instance()->getGCObject("UI_Options_Pressed")->getImage(m_house));
 
     m_optionsButton->setPosition(UPoint(104,6));
     topFrame->addChild(m_optionsButton);
@@ -77,6 +78,7 @@ void GameMenuState::drawMenu()
     Frame *sideBarFrame = new Frame(sideBar);
     sideBarFrame->setPosition(UPoint(m_mapWidget->getSize().x, m_mapWidget->getPosition().y));
     m_container->addChild(sideBarFrame);
+	m_container->recolorChildrenByHouse(m_house);
 
 }
 

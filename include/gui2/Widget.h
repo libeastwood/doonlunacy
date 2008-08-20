@@ -2,6 +2,7 @@
 #define DUNE_GUI2_WIDGET
 
 #include "Gfx.h"
+#include "houses.h"
 
 /*!
 	Base class for all widgets
@@ -96,6 +97,8 @@ class Widget : public Rect
 
 		bool fadeIn(const int fadeAmt = 4);
 		bool fadeOut(const int fadeAmt = 4);
+
+		inline void recolorByHouse(HOUSETYPE house) { if(m_surface) m_surface->recolorByHouse(house); } 
 		//@}
 
     protected:

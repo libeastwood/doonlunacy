@@ -158,3 +158,14 @@ bool Container::fadeOutChildren(const int fadeAmt)
 
     return fade;
 }
+
+void Container::recolorChildrenByHouse(HOUSETYPE house)
+{
+    WidgetList::iterator it;
+    for ( it  = m_children.begin();
+          it != m_children.end();
+          ++it )
+    {
+        (*it)->recolorByHouse(house);
+    };
+}

@@ -7,7 +7,7 @@
 #include "gui2/Container.h"
 #include "gui2/Frame.h"
 
-EditorState::EditorState()
+EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
 {
 #if 0
     m_mapWidget = new MapWidget();
