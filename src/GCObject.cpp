@@ -156,7 +156,11 @@ void GCObject::drawImage()
 							for(int j = 0; j < s[i].getLength(); j++)
 								tmp.push_back((int)s[i][j]|TILE_NORMAL);
 						}
-						tilesX = tmp.size();
+						if(!tilesX)
+							tilesX = tmp.size();
+						else if(tilesX != tmp.size())
+							LOG_FATAL("GCObject:", "Tile row size %d is of different size than %d for %s!",
+									tmp.size(), tilesX, variable.c_str());
 						tilesY++;
 						for(Uint32 j = 0; j < tmp.size(); j++)
 							tiles.push_back(tmp[j]);
