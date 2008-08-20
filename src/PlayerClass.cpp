@@ -8,26 +8,6 @@
 #include "SoundPlayer.h"
 
 //FIXME:When it's done these includes should be moved to Items.h
-#include "structures/BarracksClass.h"
-#include "structures/ConstructionYardClass.h"
-#include "structures/HeavyFactoryClass.h"
-#include "structures/HighTechFactoryClass.h"
-#include "structures/GunTurretClass.h"
-#include "structures/IXClass.h"
-#include "structures/LightFactoryClass.h"
-#include "structures/PalaceClass.h"
-#include "structures/RadarClass.h"
-#include "structures/RefineryClass.h"
-#include "structures/RepairYardClass.h"
-#include "structures/RocketTurretClass.h"
-#include "structures/SiloClass.h"
-#include "structures/StarPortClass.h"
-#include "structures/StructureClass.h"
-#include "structures/WallClass.h"
-#include "structures/WindTrapClass.h"
-#include "structures/WORClass.h"
-#include "units/UnitClass.h"
-#include "units/QuadClass.h"
 #include "ObjectClass.h"
 
 PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team)
