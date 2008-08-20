@@ -1,6 +1,7 @@
 #include "GCObject.h"
 
 #include "DataCache.h"
+#include "Gfx.h"
 #include "ResMan.h"
 
 #include <eastwood/CpsFile.h>
@@ -24,9 +25,26 @@ GCObject::~GCObject()
 
 bool GCObject::freeIfUnique()
 {
-	if(!m_persistent && m_surface.unique()){
-		m_surface.reset();
-		m_freeCounter++;
+	if(!m_persistent){
+		if(m_surface.unique())
+		{
+			m_surface.reset();
+			m_freeCounter++;
+		}
+		if(!m_remappedImg.empty())
+		{
+			std::map<HOUSETYPE, ImagePtr>::iterator iter;
+			for ( iter  = m_remappedImg.begin();
+					iter != m_remappedImg.end();
+					++iter )
+			{
+				if((*iter).second.unique()){
+					(*iter).second.reset();
+					m_freeCounter++;
+				}
+			}
+		}
+		
 		if(m_freeCounter > 50)
 			LOG_WARNING("GCObject", "%s has been freed over 50 times!", m_path.c_str());
 		return true;
@@ -286,4 +304,19 @@ ImagePtr GCObject::getImage()
 		drawImage();
 	}
 	return m_surface;
+}
+
+ImagePtr GCObject::getImage(HOUSETYPE house)
+{
+	std::map<HOUSETYPE, ImagePtr>::iterator iter = m_remappedImg.find(house);
+    if (iter != m_remappedImg.end())
+    { 
+        return m_remappedImg.find(house)->second;
+    }
+    else
+    {
+        ImagePtr copy = getImage()->getRecoloredByHouse(house);
+        m_remappedImg.insert(std::pair<HOUSETYPE, ImagePtr>(house, copy));
+        return copy;
+    }
 }

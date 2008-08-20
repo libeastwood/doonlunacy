@@ -1,7 +1,10 @@
 #ifndef DUNE_GCOBJECT_H
 #define DUNE_GCOBJECT_H
 
-#include "Gfx.h"
+#include "houses.h"
+#include "Definitions.h"
+
+#include <map>
 #include <string>
 
 class GCObject
@@ -14,11 +17,13 @@ class GCObject
 		// In the meantim freeIfUnique() will free m_surface if reference count is 1.
 		bool freeIfUnique();
 		ImagePtr getImage();
+		ImagePtr getImage(HOUSETYPE house);
 		std::string getPath() { return m_path; }
 
 	private:
 		void drawImage();
 		ImagePtr m_surface;
+		std::map<HOUSETYPE, ImagePtr> m_remappedImg;
 		std::string m_path;
 		uint32_t m_freeCounter;
 		bool m_persistent;
