@@ -1,7 +1,8 @@
 #include "Application.h"
 #include "Font.h"
-#include "Log.h"
+#include "GameMan.h"
 #include "Gfx.h"
+#include "Log.h"
 #include "MapGenerator.h"
 #include "TerrainClass.h"
 
@@ -20,6 +21,8 @@ MapWidget::~MapWidget()
 
 bool MapWidget::handleMotion(SPoint p)
 {
+    MapClass* m_map = GameMan::Instance()->GetMap();
+    
     if (contains(p) && p.x > x + w - 10 && m_view.x < m_map->w - w / BLOCKSIZE)
     {
         Application::Instance()->SetCursor(CURSOR_RIGHT);
@@ -55,14 +58,6 @@ bool MapWidget::handleMotion(SPoint p)
     return false;
 }
 
-void MapWidget::getGameState()
-{
-    GameState* gs = GameState::Instance();
-    m_map = gs->GetMap();
-    m_structures = gs->GetStructures();
-    m_units = gs->GetUnits();
-}
-
 bool MapWidget::handleKeyDown(SDL_keysym* key)
 {
     switch (key->sym)
@@ -71,7 +66,9 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
         case SDLK_PRINT:
             MapGenerator::Instance()->takeMapScreenshot();
             return true;
-
+        case SDLK_ESCAPE:
+            Application::Instance()->RootState()->PopState();
+            return true;
         default:
             return false;
     }
@@ -80,6 +77,8 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
 bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 {
     UPoint pos(m_view.x + p.x / BLOCKSIZE, m_view.y + p.y / BLOCKSIZE);
+    GameMan* gman = GameMan::Instance();
+    MapClass* m_map = gman->GetMap();
 
     ObjectClass * tmp = NULL;
 
@@ -151,6 +150,8 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 
 void MapWidget::draw(Image * dest, SPoint off)
 {
+    GameMan* gman = GameMan::Instance();
+    MapClass* m_map = gman->GetMap();
     // We have to be sure we're not trying to draw cell with coordinates below zero or above mapsize
     TerrainClass* cell;
 
@@ -192,7 +193,7 @@ void MapWidget::draw(Image * dest, SPoint off)
         {
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-            if (cell->isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
+            if (cell->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
             {
                 m_groundUnits.push_back(cell->getNonInfantryGroundObject());
             }
@@ -223,6 +224,11 @@ void MapWidget::draw(Image * dest, SPoint off)
                 ((UnitClass*)tmp3)->drawSelectionBox(dest);
             }
         }
+    }
+    
+    for (unsigned int i = 0; i < GameMan::Instance()->GetBullets()->size(); i++)
+    {
+        GameMan::Instance()->GetBullets()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
     }
 
 }

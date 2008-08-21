@@ -1,7 +1,7 @@
 #include "ConcatIterator.h"
 #include "DataCache.h"
 #include "Definitions.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Log.h"
 #include "Gfx.h"
 #include "TerrainClass.h"
@@ -34,35 +34,30 @@ TerrainClass::~TerrainClass()
 
 void TerrainClass::draw(Image * dest, SPoint pos)
 {
-	if(isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()))
-	{
+    if (isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+    {
         Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
         m_img->blitTo(dest, source, pos);
-    }
-    else
-    {
+        
         if (m_hideTile != Terrain_HiddenFull)
         {
-            Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-            m_img->blitTo(dest, source, pos);
             Rect sourceHidden(m_hideTile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
             m_hiddenImg->blitTo(dest, sourceHidden, pos);
-
         }
     }
-
+   
 }
 
 ObjectClass* TerrainClass::getAirUnit()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedAirUnits.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedAirUnits.front());
 }
 
 ObjectClass* TerrainClass::getDeadObject()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedDeadObjects.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedDeadObjects.front());
 }
 
 ObjectClass* TerrainClass::getGroundObject()
@@ -77,20 +72,20 @@ ObjectClass* TerrainClass::getGroundObject()
 
 ObjectClass* TerrainClass::getInfantry()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedInfantry.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedInfantry.front());
 }
 
 ObjectClass* TerrainClass::getNonInfantryGroundObject()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedNonInfantryGroundObjects.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedNonInfantryGroundObjects.front());
 }
 
 ObjectClass* TerrainClass::getUndergroundUnit()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
 }
 
 void TerrainClass::assignAirUnit(Uint32 newObjectID) 
@@ -217,7 +212,7 @@ ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID)
 	{
 		if(*iterator == objectID) 
 		{
-			return GameState::Instance()->GetObjectTree()->getObject(*iterator);
+			return GameMan::Instance()->GetObjectTree()->getObject(*iterator);
 		}
 	
 		++iterator;
@@ -252,7 +247,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     ObjectClass* object;
     while(!iterator.IterationFinished()) {
 
-    	object = GameState::Instance()->GetObjectTree()->getObject(*iterator);
+    	object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
     	
     	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
     	distance = lround(distance_from(centrePoint, realPos));

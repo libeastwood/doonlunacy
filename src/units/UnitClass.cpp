@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "Definitions.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
@@ -30,6 +30,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_speed = 0.0;
     m_speedCap = NONE;
     m_turnSpeed = 0.0625;
+    m_maxHealth = 100;
+    m_health = m_maxHealth;
 
     m_destination = SPoint(INVALID_POS, INVALID_POS);
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
@@ -38,7 +40,7 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     setActive(false);
     m_adjust = 0.0;
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
-    GameState::Instance()->GetUnits()->push_back(this);
+    GameMan::Instance()->GetUnits()->push_back(this);
 }
 
 /*virtual*/
@@ -58,7 +60,7 @@ bool UnitClass::canPass(UPoint pos)
 /*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
     
     if (map->cellExists(newPosition))
     {
@@ -84,6 +86,43 @@ void UnitClass::deploy(SPoint newPosition)
     }
 
 }
+
+void UnitClass::destroy()
+{
+    GameMan* gman = GameMan::Instance();
+    if (!m_destroyed)
+    {
+        LOG_INFO("UnitClass","Destroying unit %d (itemID=%d)... ",m_objectID, m_itemID);
+        setTarget(NULL);
+        gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
+        //gman->GetObjectTree()->RemoveObject(getObjectID());
+
+        m_owner->decrementUnits(m_itemID);
+
+        m_destroyed = true;
+        m_respondable = false;
+        m_pic = DataCache::Instance()->getObjPic((ObjPic_enum)m_deathFrame, (HOUSETYPE)getOwner()->getHouse());
+/*
+        imageW = graphic->w / numDeathFrames;
+        imageH = graphic->h;
+        xOffset = (imageW - BLOCKSIZE) / 2;    //this is where it actually draws the graphic
+        yOffset = (imageH - BLOCKSIZE) / 2;    //cause it draws at top left, not middle
+*/
+        //m_frameTimer = m_frameTime;
+        //m_deathFrame = 0;
+
+        //if (isVisible(getOwner()->getTeam()))
+        //    PlayDestroySound();
+
+        //gman->GetUnits()->remove(this);
+
+        //delete this;
+
+        //if (map->cellExists(&location))
+        // map->getCell(&location)->assignDeadObject(this);
+    }
+}
+
 
 /*virtual*/
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
@@ -144,7 +183,7 @@ void UnitClass::drawSelectionBox(Image* dest)
 /*virtual*/
 void UnitClass::move()
 {
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
     if (m_moving)
@@ -293,13 +332,34 @@ void UnitClass::setDestination(SPoint destination)
     ObjectClass::setDestination(destination);
 }
 
+void UnitClass::setDrawnPos(SPoint off, SPoint view)
+{
+    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
+    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
+}
+
+void UnitClass::setGuardPoint(UPoint newGuardPoint)
+{
+	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
+}
+
+void UnitClass::setGuardPoint(int newX, int newY)
+{
+	MapClass* map = m_owner->getMap();
+	
+	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
+	{
+		m_guardPoint.x = newX;
+		m_guardPoint.y = newY;
+	}
+}
+
 void UnitClass::setPosition(SPoint pos)
 {
     if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
     {
         ObjectClass::setPosition(pos);
     }
-
     else if (m_owner->getMap()->cellExists(pos))
     {
         ObjectClass::setPosition(pos);
@@ -378,11 +438,6 @@ void UnitClass::setSpeeds()
     m_speed = maxSpeed;
 }
 
-void UnitClass::setDrawnPos(SPoint off, SPoint view)
-{
-    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
-    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
-}
 
 /*virtual*/
 
@@ -515,22 +570,6 @@ void UnitClass::turn()
     }
 }
 
-
-void UnitClass::setGuardPoint(UPoint newGuardPoint)
-{
-	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
-}
-
-void UnitClass::setGuardPoint(int newX, int newY)
-{
-	MapClass* map = GameState::Instance()->GetMap();
-	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
-	{
-		m_guardPoint.x = newX;
-		m_guardPoint.y = newY;
-	}
-}
-
 /*virtual*/
 void UnitClass::update(float dt)
 {
@@ -547,6 +586,15 @@ void UnitClass::update(float dt)
             if (m_active)
                 turn();
         }
+
+        if (m_badlyDamaged)
+        {
+            if (m_health <= 0)
+            {
+                destroy();
+                return;
+            }
+    }
     }
 
 #if 0 
@@ -624,7 +672,7 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
     heuristic,
     f;
     
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
 
     UPoint  checkedPoint = m_destination,
                            tempLocation;

@@ -1,6 +1,6 @@
 #include "DataCache.h"
 #include "Definitions.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "houses.h"
 #include "Log.h"
 #include "MapClass.h"
@@ -59,7 +59,7 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
 
 PlayerClass::~PlayerClass()
 {
-
+    LOG_INFO("PlayerClass", "Player deleted");
 }
 
 void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
@@ -104,37 +104,46 @@ UnitClass* PlayerClass::createUnit(int itemID)
 	return newUnit;
 }
 
-MapClass* PlayerClass::getMap()
-{
-    return GameState::Instance()->GetMap();
-}
 
-UnitClass* PlayerClass::placeUnit(int itemID, UPoint itemPos)
+void PlayerClass::decrementUnits(int itemID)
 {
-	UnitClass* newUnit = NULL;
-	if (GameState::Instance()->GetMap()->cellExists(itemPos))
-		newUnit = (UnitClass*)createUnit(itemID);
-
-	if (newUnit)
+	if (itemID != Unit_Sandworm)
+		m_numUnits--;
+		
+	switch (itemID)
 	{
-		if (newUnit->canPass(itemPos))
-			newUnit->deploy(itemPos);
-		else
-		{
-			newUnit->setVisible(VIS_ALL, false);
-			newUnit->destroy();
-			newUnit = NULL;
-		}
+	case (Unit_Carryall):
+		m_numCarryalls--;
+		break;
+	case (Unit_Frigate):
+		m_numFrigates--;
+		break;
+	case (Unit_Harvester):
+		//decrementHarvesters();
+		LOG_INFO("PlayerClass", "Decrement harvesters not implemented");
+		break;
+	default:
+		break;
 	}
 
-	return newUnit;
+	//if (!isAlive())
+	//	lose();
+
+    LOG_INFO("PlayerClass", "numUnits:%d", m_numUnits);
+   
+    //currentGame->AddToNewsTicker(temp);
+}
+
+/*inline*/
+MapClass* PlayerClass::getMap()
+{
+    return GameMan::Instance()->GetMap();
 }
 
 void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos)
 {
-	GameState* currentGame = GameState::Instance();
-	MapClass* map = currentGame->GetMap();
-	PlayerClass* thisPlayer = currentGame->LocalPlayer();
+	GameMan* gman = GameMan::Instance();
+	MapClass* map = gman->GetMap();
 
 	if(!map->cellExists(itemPos)) {
 		return NULL;
@@ -261,11 +270,33 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 	return tempStructure;
 }
 
+UnitClass* PlayerClass::placeUnit(int itemID, UPoint itemPos)
+{
+	UnitClass* newUnit = NULL;
+	if (GameMan::Instance()->GetMap()->cellExists(itemPos))
+		newUnit = (UnitClass*)createUnit(itemID);
+
+	if (newUnit)
+	{
+		if (newUnit->canPass(itemPos))
+			newUnit->deploy(itemPos);
+		else
+		{
+			newUnit->setVisible(VIS_ALL, false);
+			newUnit->destroy();
+			newUnit = NULL;
+		}
+	}
+
+	return newUnit;
+}
+
+
 void PlayerClass::update()
 {
 	if (m_oldCredits != m_credits)
 	{
-//		if ((this == GameState::Instance()->LocalPlayer()) && (getAmountOfCredits() > 0))
+//		if ((this == GameMan::Instance()->LocalPlayer()) && (getAmountOfCredits() > 0))
 //			SoundPlayer::Instance()->playSound(CreditsTick);
 		m_oldCredits = m_credits;
 	}
@@ -273,7 +304,7 @@ void PlayerClass::update()
 	if (m_credits > m_capacity)
 	{
 		m_credits--;// = capacity;
-		if (this == GameState::Instance()->LocalPlayer())
+		if (this == GameMan::Instance()->LocalPlayer())
 		{
 			//TODO: Add news ticker, etc.:)
 			//currentGame->AddToNewsTicker("spice lost, build more silos.");

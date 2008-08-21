@@ -1,6 +1,6 @@
 #include "DataCache.h" //It should not be included here, but all enums are here
 #include "DuneConstants.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Log.h"
 #include "MapClass.h"
 #include "MapGenerator.h"
@@ -25,15 +25,131 @@ MapGenerator::~MapGenerator()
 
 }
 
+void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai, int team)
+{
+    if (m_gman->m_players->size() > (unsigned)House)
+    {
+        LOG_ERROR("MapGenerator" , "Trying to create already existing player!");
+        exit(EXIT_FAILURE);
+    }
+
+    if (ai == true)
+    {
+        //player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
+        LOG_WARNING("MapGenerator" , "Trying to create unimplemented ai player!");
+    }
+
+    else
+    {
+        PlayerClass * localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
+        m_gman->m_players->push_back(localPlayer);
+        m_gman->m_localPlayer = m_gman->m_players->at(0);//localPlayer;
+    }
+
+    m_gman->m_players->at(House)->assignMapPlayerNum(House);
+}
+
+void MapGenerator::addRockBits()
+{
+    int spotX, spotY;
+    int done = 0;
+    TerrainClass * tmp;
+
+    while (done < m_rockBits)
+    {
+        spotX = getRandomInt(0, m_map->w - 1);
+        spotY = getRandomInt(0, m_map->h - 1);
+        tmp = m_map->getCell(SPoint(spotX, spotY));
+
+        if (tmp->getType() == Terrain_Sand)
+        {
+            tmp->setTile(Terrain_t10);      // Rock bit
+            tmp->setType(Terrain_Rock);
+        }
+
+        done++;
+    }
+}
+
+void MapGenerator::addBlooms()
+{
+    int spotX, spotY;
+    int done = 0;
+    TerrainClass * tmp;
+
+    while (done < m_spiceBlooms)
+    {
+        spotX = getRandomInt(0, m_map->w - 1);
+        spotY = getRandomInt(0, m_map->h - 1);
+        tmp = m_map->getCell(SPoint(spotX, spotY));
+
+        if (tmp->getType() == Terrain_Sand && tmp->getTile() == Terrain_a1)
+            tmp->setTile(getRandomInt(Terrain_a2, Terrain_a3));     // Spice bloom
+
+        done++;
+    } // WHILE
+}
+
+bool MapGenerator::checkCell(SPoint& cellPos)
+{
+    if ((cellPos.x < 0) || (cellPos.y < 0) || (!m_map->contains(cellPos)))
+        return true;
+
+    return false;
+}
+
+void MapGenerator::clearTerrain(int tile, int type)
+{
+    for (int i = 0; i < m_map->w; i++)
+    {
+        for (int j = 0; j < m_map->h; j++)
+        {
+            m_map->getCell(SPoint(i, j))->setType(type);
+            m_map->getCell(SPoint(i, j))->setTile(tile);
+        }
+    }
+}
+
+bool MapGenerator::fixCell(SPoint& cellPos)
+{
+    bool error = false;
+
+    if (cellPos.x < 0)
+    {
+        cellPos.x = 0;
+        error = true;
+    }
+
+    else if (cellPos.x >= m_map->w)
+    {
+        cellPos.x = m_map->w - 1;
+        error = true;
+    }
+
+    if (cellPos.y < 0)
+    {
+        cellPos.y = 0;
+        error = true;
+    }
+
+    else if (cellPos.y >= m_map->w)
+    {
+        cellPos.y = m_map->w - 1;
+        error = true;
+    }
+
+    return error;
+}
+
 bool MapGenerator::loadOldMap(std::string mapName)
 {
     bool done = false; //this will be set to false if any errors, so level won't load
 
     Inifile * myInifile = new Inifile(mapName);
 
-    m_gs = GameState::Instance();
+    m_gman = GameMan::Instance();
     m_map = new MapClass(UPoint(64, 64));
-    m_gs->m_map = m_map;
+    m_gman->m_map = m_map;
 
     int SeedNum = myInifile->getIntValue("MAP", "Seed", -1);
 
@@ -44,7 +160,7 @@ bool MapGenerator::loadOldMap(std::string mapName)
         return false;
     }
 
-    Players *m_players = m_gs->m_players;
+    Players *m_players = m_gman->m_players;
 
     unsigned short SeedMap[64*64];
     createMapWithSeed(SeedNum, SeedMap);
@@ -466,58 +582,6 @@ bool MapGenerator::loadOldMap(std::string mapName)
     return true;
 }
 
-/*
- Splits a string into several substrings. This strings are separated with ','.
-*/
-bool MapGenerator::SplitString(string ParseString, unsigned int NumStringPointers, ...)
-{
-    va_list arg_ptr;
-    va_start(arg_ptr, NumStringPointers);
-
-    string** pStr;
-
-    if (NumStringPointers == 0)
-        return false;
-
-    if ((pStr = (string**) malloc(sizeof(string*) * NumStringPointers)) == NULL)
-    {
-        LOG_ERROR("MapClass", "SplitString: Cannot allocate memory!\n");
-        exit(EXIT_FAILURE);
-    }
-
-    for (unsigned int i = 0; i < NumStringPointers; i++)
-    {
-        pStr[i] = va_arg(arg_ptr, string* );
-    }
-
-    va_end(arg_ptr);
-
-    int startpos = 0;
-    unsigned int index = 0;
-
-    for (unsigned int i = 0; i < ParseString.size(); i++)
-    {
-        if (ParseString[i] == ',')
-        {
-            *(pStr[index]) = ParseString.substr(startpos, i - startpos);
-            startpos = i + 1;
-            index++;
-
-            if (index >= NumStringPointers)
-            {
-                free(pStr);
-                return false;
-            }
-        }
-    }
-
-    *(pStr[index]) = ParseString.substr(startpos, ParseString.size() - startpos);
-
-    free(pStr);
-    return true;
-}
-
-
 bool MapGenerator::makeRandomMap(UPoint size)
 {
     int i, count;
@@ -558,145 +622,6 @@ bool MapGenerator::makeRandomMap(UPoint size)
     smoothTerrain();
 
     return true;
-}
-
-
-
-void MapGenerator::takeMapScreenshot(std::string filename)
-{
-    int w = m_map->w;
-    int h = m_map->h;
-    Image * img = new Image(UPoint(w * 16, h * 16));
-
-
-    for (int i = 0 ; i < w; i++)
-    {
-        for (int j = 0 ; j < h; j++)
-        {
-            m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
-        }
-    }
-
-    SDL_SaveBMP(img->getSurface(), filename.c_str());
-
-    delete img;
-}
-
-
-void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai, int team)
-{
-    if (m_gs->m_players->size() > (unsigned)House)
-    {
-        LOG_ERROR("MapGenerator" , "Trying to create already existing player!");
-        exit(EXIT_FAILURE);
-    }
-
-    if (ai == true)
-    {
-        //player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
-        LOG_WARNING("MapGenerator" , "Trying to create unimplemented ai player!");
-    }
-
-    else
-    {
-        PlayerClass * localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
-        m_gs->m_players->push_back(localPlayer);
-        m_gs->m_localPlayer = m_gs->m_players->at(0);//localPlayer;
-    }
-
-    m_gs->m_players->at(House)->assignMapPlayerNum(House);
-}
-
-void MapGenerator::addRockBits()
-{
-    int spotX, spotY;
-    int done = 0;
-    TerrainClass * tmp;
-
-    while (done < m_rockBits)
-    {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-        tmp = m_map->getCell(SPoint(spotX, spotY));
-
-        if (tmp->getType() == Terrain_Sand)
-        {
-            tmp->setTile(Terrain_t10);      // Rock bit
-            tmp->setType(Terrain_Rock);
-        }
-
-        done++;
-    }
-}
-
-void MapGenerator::addBlooms()
-{
-    int spotX, spotY;
-    int done = 0;
-    TerrainClass * tmp;
-
-    while (done < m_spiceBlooms)
-    {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-        tmp = m_map->getCell(SPoint(spotX, spotY));
-
-        if (tmp->getType() == Terrain_Sand && tmp->getTile() == Terrain_a1)
-            tmp->setTile(getRandomInt(Terrain_a2, Terrain_a3));     // Spice bloom
-
-        done++;
-    } // WHILE
-}
-
-bool MapGenerator::checkCell(SPoint& cellPos)
-{
-    if ((cellPos.x < 0) || (cellPos.y < 0) || (!m_map->contains(cellPos)))
-        return true;
-
-    return false;
-}
-
-void MapGenerator::clearTerrain(int tile, int type)
-{
-    for (int i = 0; i < m_map->w; i++)
-    {
-        for (int j = 0; j < m_map->h; j++)
-        {
-            m_map->getCell(SPoint(i, j))->setType(type);
-            m_map->getCell(SPoint(i, j))->setTile(tile);
-        }
-    }
-}
-
-bool MapGenerator::fixCell(SPoint& cellPos)
-{
-    bool error = false;
-
-    if (cellPos.x < 0)
-    {
-        cellPos.x = 0;
-        error = true;
-    }
-
-    else if (cellPos.x >= m_map->w)
-    {
-        cellPos.x = m_map->w - 1;
-        error = true;
-    }
-
-    if (cellPos.y < 0)
-    {
-        cellPos.y = 0;
-        error = true;
-    }
-
-    else if (cellPos.y >= m_map->w)
-    {
-        cellPos.y = m_map->w - 1;
-        error = true;
-    }
-
-    return error;
 }
 
 void MapGenerator::makeSpot(SPoint cellPos, int type)
@@ -1098,6 +1023,26 @@ void MapGenerator::smoothTerrain()
 }
 
 
+void MapGenerator::takeMapScreenshot(std::string filename)
+{
+    int w = m_map->w;
+    int h = m_map->h;
+    Image * img = new Image(UPoint(w * 16, h * 16));
+
+
+    for (int i = 0 ; i < w; i++)
+    {
+        for (int j = 0 ; j < h; j++)
+        {
+            m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
+        }
+    }
+
+    SDL_SaveBMP(img->getSurface(), filename.c_str());
+
+    delete img;
+}
+
 void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
 {
     for (int i = 0; i < m_map->w; i++)
@@ -1115,6 +1060,57 @@ void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
                 }
             }
         }
+}
+
+/*
+ Splits a string into several substrings. This strings are separated with ','.
+*/
+bool MapGenerator::SplitString(string ParseString, unsigned int NumStringPointers, ...)
+{
+    va_list arg_ptr;
+    va_start(arg_ptr, NumStringPointers);
+
+    string** pStr;
+
+    if (NumStringPointers == 0)
+        return false;
+
+    if ((pStr = (string**) malloc(sizeof(string*) * NumStringPointers)) == NULL)
+    {
+        LOG_ERROR("MapClass", "SplitString: Cannot allocate memory!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (unsigned int i = 0; i < NumStringPointers; i++)
+    {
+        pStr[i] = va_arg(arg_ptr, string* );
+    }
+
+    va_end(arg_ptr);
+
+    int startpos = 0;
+    unsigned int index = 0;
+
+    for (unsigned int i = 0; i < ParseString.size(); i++)
+    {
+        if (ParseString[i] == ',')
+        {
+            *(pStr[index]) = ParseString.substr(startpos, i - startpos);
+            startpos = i + 1;
+            index++;
+
+            if (index >= NumStringPointers)
+            {
+                free(pStr);
+                return false;
+            }
+        }
+    }
+
+    *(pStr[index]) = ParseString.substr(startpos, ParseString.size() - startpos);
+
+    free(pStr);
+    return true;
 }
 
 vector<string> MapGenerator::SplitString(string ParseString)

@@ -17,6 +17,7 @@ inline int lround(double number) { return round(number); }
 
 double dest_angle(UPoint p1, UPoint p2);
 int getRandomInt(int min, int max);
+int getRandomOf(int numParam, ...);
 double normalize(double value, double max);
 double min_delta(double from, double to, double max);
 double trajectory_angle(double x1, double y1, double x2, double y2);

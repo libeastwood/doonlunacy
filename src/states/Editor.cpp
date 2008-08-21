@@ -32,8 +32,7 @@ EditorState::EditorState()
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
     m_mapWidget->setSize(UPoint(set->GetWidth(),set->GetHeight()));
-    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA005.INI");
-    m_mapWidget->getGameState();
+    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA001.INI");
     m_container->addChild(m_mapWidget);
 #endif 
 }
@@ -41,19 +40,12 @@ EditorState::EditorState()
 
 EditorState::~EditorState()
 {
-
+    GameMan::Instance()->Clear();
 }
 
 int EditorState::Execute(float dt)
 {
-   GameState::Instance()->Update(dt);
-   SDL_Event event;
-   SDL_PollEvent(&event);
-   if (event.type == SDL_KEYDOWN) {
-	   switch (event.key.keysym.sym) {
-		case SDLK_ESCAPE : PopState(); break;
-		default : break;
-	   }
-   }
+    GameMan::Instance()->Update(dt);
+
     return 0;
 }

@@ -18,20 +18,17 @@ class PlayerClass
 	virtual ~PlayerClass();
 	
 	void assignMapPlayerNum(int newMapPlayerNum);
-	
-	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
+    
 	virtual void update();
 	
-	MapClass* getMap();
-	
-	UnitClass* createUnit(int itemID);
-	UnitClass* placeUnit(int itemID, UPoint itemPos);
-	
-	//! @name Functions used to fetch information from non-public attributes
+	void decrementUnits(int itemID);
+
+	//! @name setters and getters
 	//@{
 	
 	inline int getCapacity() { return m_capacity; }
 	inline int getColour() { return m_colour; }
+	MapClass* getMap();
 	inline int getPlayerNumber() { return m_mapPlayerNum; }
 	inline int getPower() { return m_power; }
 	inline int getPowerRequirement() { return m_powerRequirement; }
@@ -51,9 +48,14 @@ class PlayerClass
 	inline bool hasStarPort() { return (m_numStarPorts > 0); }
 	inline bool hasWindTrap() { return (m_numWindTraps > 0); }
 	int getMapPlayerNum() { return	m_mapPlayerNum; }
+
 	inline bool isAI() { return m_ai; }
-	
+	inline bool isAlive() { return !(((m_numStructures - m_numWalls) <= 0) && (((m_numUnits - m_numCarryalls - m_numHarvesters - m_numFrigates) <= 0))); }	
 	//@}
+	
+	UnitClass* createUnit(int itemID);
+	UnitClass* placeUnit(int itemID, UPoint itemPos);	
+	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
   protected:
     //! @name Protected functions
     

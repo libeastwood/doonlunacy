@@ -68,7 +68,7 @@ class DataCache : public Singleton<DataCache>
     //@{
 	DataCache();
 	~DataCache();
-	//}@
+	//@}
 
     public:
 		void Init();

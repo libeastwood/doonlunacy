@@ -59,7 +59,6 @@ class PakViewState : public State
 			   }
 		   }
 		   SDL_Surface* surf = Application::Instance()->Screen()->getSurface();
-		   SDL_FillRect(surf, NULL, 3);
            m_test->blitToScreenCentered();
            return 0;
        };

@@ -38,10 +38,12 @@ class ObjectClass : public Rect
     virtual void unassignFromMap(SPoint pos);
 
 	static ObjectClass* createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID = NONE);
-
+    //bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
+    bool clearObject() { return (m_destroyed); }
+    
     virtual void draw(Image * dest, SPoint off, SPoint view);
 	void drawSmoke(UPoint pos);
-    virtual void destroy() = 0;
+    virtual void destroy() {};
     virtual void update() {};
 
     //! @name Setters and getters
@@ -67,6 +69,7 @@ class ObjectClass : public Rect
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }
     inline bool isSelected() { return m_selected; }
+    //! Checks if a given team can see this object
 	inline bool isVisible(int team);
     int getHealthColour();
 
@@ -78,26 +81,27 @@ class ObjectClass : public Rect
 
     inline Uint32 getObjectID() { return m_objectID; }
     inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
-    
+    inline int getArmour() { return m_armour; }
+    inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
 
 
     bool isOnScreen(Rect rect);
 
-    virtual UPoint getClosestPoint(UPoint objectLocation);
+    UPoint getClosestPoint(UPoint point);
+    UPoint getClosestCentrePoint(UPoint objectPos);
+    UPoint getCentrePoint();
 
     inline PlayerClass* getOwner() { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
     //@}
-	//
-	// Attack related functions
-	//
-	
-	bool canAttack(ObjectClass* object);
-	void handleDamage(int damage, ObjectClass* damager);
-	ObjectClass* findTarget();
-
+	//! @name  Attack related functions
+	//@{
+    bool canAttack(ObjectClass* object);
+    void handleDamage(int damage, ObjectClass* damager);
+    ObjectClass* findTarget();
+    //@}
   protected:
     ATTACKTYPE m_attackMode;
 
@@ -129,6 +133,7 @@ class ObjectClass : public Rect
          m_canAttackStuff,
          m_forced,
          m_isAnimating,
+    //! if true and target is friendly guard it or if it's e.g. refinery/repair yard go there
          m_targetFriendly;
 
 
@@ -167,7 +172,9 @@ class ObjectClass : public Rect
 
         m_weaponRange;
 
-    int m_deathFrame,
+    int m_armour,
+        m_radius,
+        m_deathFrame,
 
         m_numDeathFrames,
 		m_guardRange;

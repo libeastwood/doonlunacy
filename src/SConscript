@@ -16,9 +16,6 @@ base_sources = [ "Application.cpp",
                 "Log.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
-              ]
-
-battle_sources = [ 
 				"TerrainClass.cpp",
 				"MapClass.cpp",
 				"gui2/MapWidget.cpp",
@@ -33,12 +30,14 @@ battle_sources = [
 				"units/UnitClass.cpp",
 				"units/GroundUnit.cpp",				
 				"units/QuadClass.cpp",				
-				"GameState.cpp",
+				"GameMan.cpp",
 				"PriorityQ.cpp",
 				"ObjectTree.cpp",
 				"ObjectPointer.cpp",
+				"BulletClass.cpp",
                 ]
 
+battle_sources = []
 state_sources = [
 #    				"CampaignMenu.cpp",
 				    "states/Editor.cpp",

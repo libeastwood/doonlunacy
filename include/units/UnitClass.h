@@ -20,12 +20,13 @@ class UnitClass : public ObjectClass
     //@}
 
     bool canPass(UPoint pos);
+    //! Function used e.g. by air units to calculate their posision, etc.
     virtual void checkPos() = 0;
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
     virtual void drawSelectionBox(Image* dest);
     
-    virtual void destroy() {};
+    virtual void destroy();
    	virtual void deploy(SPoint newPosition);
    	
     inline bool isAttacking() { return m_attacking; }
@@ -44,8 +45,10 @@ class UnitClass : public ObjectClass
     void nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node);
 	bool AStarSearch();
 	
+	
+	//! That's where the actual move of unit takes place
    	virtual void move();
-
+    //! Find next spot to which to move unit and set all neede variables
 	virtual void navigate();
 
     void setDrawnPos(SPoint off, SPoint view);
