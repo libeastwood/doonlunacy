@@ -240,7 +240,7 @@ void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool loc
     {
         drawHLine(surface, rect.x, rect.y, rect.x + rect.w-1, color, false);
         drawHLine(surface, rect.x, rect.y + rect.h-1, rect.x + rect.w-1, color, false);
-        drawVLine(surface, rect.x, rect.y, rect.y + rect.h, color, false);
+        drawVLine(surface, rect.x, rect.y, rect.y + rect.h-1, color, false);
         drawVLine(surface, rect.x + rect.w-1, rect.y, rect.y + rect.h-1, color, false);
         if (lock == false || SDL_MUSTLOCK(surface))
             SDL_UnlockSurface(surface);
