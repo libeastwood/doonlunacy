@@ -227,16 +227,59 @@ ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID)
 }
 
 
-void TerrainClass::clearDamage() {
-#if 0
+void TerrainClass::clearDamage() 
+{
 	m_damagePos = 0;
+	
 	for(int i=0; i<DAMAGEPERCELL; i++)
+	{
 		m_damage[i].damageType = NONE;
-#endif
+    }
 }
 
 
-void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air) {
+void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
+{
+    int     distance;
+    double  damageProp;
+    UPoint centrePoint;
+    // non air damage
+    ConcatIterator<Uint32> iterator;
+    iterator.addList(m_assignedNonInfantryGroundObjects);
+    iterator.addList(m_assignedInfantry);
+    iterator.addList(m_assignedUndergroundUnits);
+
+    ObjectClass* object;
+    while(!iterator.IterationFinished()) {
+
+    	object = GameState::Instance()->GetObjectTree()->getObject(*iterator);
+    	
+    	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
+    	distance = lround(distance_from(centrePoint, realPos));
+    	if (distance <= 0) {
+    		distance = 1;
+    	}
+    	
+    	if (distance - object->getRadius() <= damageRadius)	{
+    		#if 0 //We ain't got sonic tanks yet
+    		if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
+    			((UnitClass*)object)->netDeviate(damagerOwner);
+    		}
+    		#endif
+    		
+    		damageProp = ((double)(damageRadius + object->getRadius() - distance))/((double)distance);
+    		if (damageProp > 0)	{
+    			if (damageProp > 1.0) {
+    				damageProp = 1.0;
+    			}
+
+    			object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmour(), damager);
+    		}
+    	}
+    	
+    	++iterator;
+    }
+
 #if 0
 	TerrainClass* cell;
 	
@@ -423,4 +466,6 @@ bool TerrainClass::isFogged(int player)
 	return false; 
 	
 #endif	
+    //FIXME:Need to implement fog-o-war
+    return false;
 }
