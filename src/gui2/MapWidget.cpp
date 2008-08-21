@@ -13,6 +13,7 @@ MapWidget::MapWidget()
 {
     m_view = SPoint(0, 0);
     m_speed = SPoint(0, 0);
+    m_mouseButtonDown = false;
 }
 
 MapWidget::~MapWidget()
@@ -23,37 +24,46 @@ bool MapWidget::handleMotion(SPoint p)
 {
     MapClass* m_map = GameMan::Instance()->GetMap();
     
-    if (contains(p) && p.x > x + w - 10 && m_view.x < m_map->w - w / BLOCKSIZE)
+    if (m_mouseButtonDown)
     {
-        Application::Instance()->SetCursor(CURSOR_RIGHT);
-        m_speed.x = 1;
-        return true;
+        m_selectEnd = p;
     }
-
-    if (contains(p) && p.x < x + 10 && m_view.x > 0)
+    else
     {
-        Application::Instance()->SetCursor(CURSOR_LEFT);
-        m_speed.x = -1;
-        return true;
+    
+        if (contains(p) && p.x > x + w - 10 && m_view.x < m_map->w - w / BLOCKSIZE)
+        {
+            Application::Instance()->SetCursor(CURSOR_RIGHT);
+            m_speed.x = 1;
+            return true;
+        }
+
+        if (contains(p) && p.x < x + 10 && m_view.x > 0)
+        {
+            Application::Instance()->SetCursor(CURSOR_LEFT);
+            m_speed.x = -1;
+            return true;
+        }
+
+        if (contains(p) && p.y > y + h - 10 && m_view.y < m_map->h - h / BLOCKSIZE)
+        {
+            Application::Instance()->SetCursor(CURSOR_DOWN);
+            m_speed.y = 1;
+            return true;
+        }
+
+        if (contains(p) && p.y < y + 10 && m_view.y > 0)
+        {
+            Application::Instance()->SetCursor(CURSOR_UP);
+            m_speed.y = -1;
+            return true;
+        }
+
+        m_speed = SPoint(0, 0);
+
+        Application::Instance()->SetCursor(CURSOR_NORMAL);
+
     }
-
-    if (contains(p) && p.y > y + h - 10 && m_view.y < m_map->h - h / BLOCKSIZE)
-    {
-        Application::Instance()->SetCursor(CURSOR_DOWN);
-        m_speed.y = 1;
-        return true;
-    }
-
-    if (contains(p) && p.y < y + 10 && m_view.y > 0)
-    {
-        Application::Instance()->SetCursor(CURSOR_UP);
-        m_speed.y = -1;
-        return true;
-    }
-
-    m_speed = SPoint(0, 0);
-
-    Application::Instance()->SetCursor(CURSOR_NORMAL);
 
     return false;
 }
@@ -64,7 +74,7 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
     {
 
         case SDLK_PRINT:
-            MapGenerator::Instance()->takeMapScreenshot();
+            GameMan::Instance()->TakeMapScreenshot();
             return true;
         case SDLK_ESCAPE:
             Application::Instance()->RootState()->PopState();
@@ -86,6 +96,9 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
     {
 
         case SDL_BUTTON_LEFT:
+
+            m_mouseButtonDown = true;
+            m_selectStart = p;
 
             if (m_map->cellExists(pos))
             {
@@ -144,6 +157,18 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
 bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 {
+    switch (button)
+    {
+
+        case SDL_BUTTON_LEFT:
+            m_selectRect = Rect(0,0,0,0);
+            m_selectEnd = UPoint(0,0);
+            m_selectStart = UPoint(0,0);
+            m_mouseButtonDown = false;
+            return true;
+        default:
+            return false;
+    }
 
     return false;
 }
@@ -229,6 +254,34 @@ void MapWidget::draw(Image * dest, SPoint off)
     for (unsigned int i = 0; i < GameMan::Instance()->GetBullets()->size(); i++)
     {
         GameMan::Instance()->GetBullets()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+    }
+
+
+    if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
+    {
+        if (m_selectStart.x < m_selectEnd.x)
+        {
+            m_selectRect.x = m_selectStart.x;
+            m_selectRect.w = m_selectEnd.x - m_selectStart.x;
+        }
+        else
+        {
+            m_selectRect.x = m_selectEnd.x;
+            m_selectRect.w = m_selectStart.x - m_selectEnd.x;
+        }
+        
+        if (m_selectStart.y < m_selectEnd.y)
+        {
+            m_selectRect.y = m_selectStart.y;
+            m_selectRect.h = m_selectEnd.y - m_selectStart.y;
+        }
+        else
+        {
+            m_selectRect.y = m_selectEnd.y;
+            m_selectRect.h = m_selectStart.y - m_selectEnd.y;
+        }
+        
+        dest->drawRect(m_selectRect, 255);
     }
 
 }

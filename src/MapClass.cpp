@@ -522,6 +522,8 @@ void MapClass::removeObjectFromMap(Uint32 ObjectID)
 
 void MapClass::selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode)
 {
+    
+
 #if 0
 	ObjectClass	*lastCheckedObject = NULL,
 				*lastSelectedObject = NULL;

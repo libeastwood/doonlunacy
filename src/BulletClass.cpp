@@ -344,9 +344,10 @@ void BulletClass::draw(Image * dest, SPoint off, SPoint view)
 
 }
 
-void BulletClass::updatePosition()
+void BulletClass::updatePosition(float dt)
 {
     MapClass* map = GameMan::Instance()->GetMap();
+    m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
     
 	if (m_shooter && m_shooter->wasDestroyed())
 		m_shooter = NULL;
@@ -356,8 +357,8 @@ void BulletClass::updatePosition()
 		UPoint oldLocation = UPoint(x,y);
 		LOG_INFO("BulletClass", "Old location was %d-%d", x,y);
 
-		m_realPos.x += m_xSpeed;  //keep the bullet moving by its current speeds
-		m_realPos.y += m_ySpeed;
+		m_realPos.x += m_xSpeed * m_adjust;  //keep the bullet moving by its current speeds
+		m_realPos.y += m_ySpeed * m_adjust;
 		x = (short)(m_realPos.x/BLOCKSIZE);
 		y = (short)(m_realPos.y/BLOCKSIZE);
 

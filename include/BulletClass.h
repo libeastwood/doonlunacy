@@ -11,7 +11,7 @@ class BulletClass : public Rect
     BulletClass(ObjectClass* newShooter, UPoint position, UPoint destination, int bulletType, bool air);
     ~BulletClass();
 	void draw(Image * img, SPoint off, SPoint view);
-	void updatePosition();
+	void updatePosition(float dt);
 	void destroy();
 	
 	inline bool isDirectShot() { return (m_source == m_destination); }
@@ -49,6 +49,8 @@ class BulletClass : public Rect
             m_ySpeed, m_initialYSpeed,
             m_turnSpeed,
             m_distanceTraveled;
+            
+    float m_adjust;
 
     PointFloat m_realPos;
     SPoint m_drawnPos;

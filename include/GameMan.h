@@ -11,6 +11,8 @@
 #include "structures/StructureClass.h"
 #include "units/UnitClass.h"
 
+typedef std::list <Uint32> List;
+
 typedef std::vector<PlayerClass*> Players;
 typedef std::vector<StructureClass*> Structures;
 typedef std::list<UnitClass*> Units;
@@ -30,6 +32,19 @@ class GameMan : public Singleton<GameMan>
     
     void Init();
     void Clear();
+    bool LoadScenario(std::string scenarioName);
+    
+    void AddPlayer(PLAYERHOUSE House, bool ai, int team);
+
+    /*!
+     *  As the name suggests it saves current map to a BMP file.
+     *  Currently only terrain without units, buildings, etc.
+     *  @param filename of file to which mapshot should be saved. By default: mapshot.bmp
+     */
+
+    void TakeMapScreenshot(std::string filename = "mapshot.bmp");
+    
+    bool SplitString(std::string ParseString, unsigned int NumStringPointers, ...);
     
     MapClass* GetMap() { return m_map; }
     Players* GetPlayers() { return m_players; }
@@ -42,6 +57,9 @@ class GameMan : public Singleton<GameMan>
     void Update(float dt);
 	//FIXME: This shouldn't be here
 	bool placingMode;
+	
+	void Select(List* objectList);
+	void Unselect(List* objectList);
   protected:
 
     Bullets* m_bulletList;

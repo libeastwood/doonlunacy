@@ -32,7 +32,7 @@ EditorState::EditorState()
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,0));
     m_mapWidget->setSize(UPoint(set->GetWidth(),set->GetHeight()));
-    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA001.INI");
+    GameMan::Instance()->LoadScenario("SCENARIO:SCENA001.INI");
     m_container->addChild(m_mapWidget);
 #endif 
 }

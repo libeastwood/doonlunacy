@@ -45,6 +45,11 @@ class MapWidget : public Widget {
     //@}
 
   private:
+  
+    bool m_mouseButtonDown;
+    UPoint m_selectStart;
+    UPoint m_selectEnd;
+    Rect m_selectRect;
     /*!  
      *  Scroll speed multiplied by BLOCKSIZE. E.g. m_speed equal to (1,1)
      *  means that every time widget is updated, visible area is scrolled by

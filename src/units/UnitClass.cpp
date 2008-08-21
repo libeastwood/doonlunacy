@@ -46,7 +46,7 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
 /*virtual*/
 UnitClass::~UnitClass()
 {
-
+    LOG_INFO("UnitClass", "Unit deleted");
 }
 
 

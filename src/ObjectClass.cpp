@@ -9,6 +9,9 @@
 #include "MapClass.h"
 #include "SoundPlayer.h"
 
+#include "structures/ConstructionYardClass.h"
+#include "units/InfantryClass.h"
+#include "units/TrikeClass.h"
 #include "units/QuadClass.h"
 
 int lookDist[11];
@@ -64,7 +67,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner) :
 
 ObjectClass::~ObjectClass()
 {
-
+    LOG_INFO("ObjectClass", "Object destroyed"); 
 }
 
 /* virtual */
@@ -99,7 +102,6 @@ ObjectClass* ObjectClass::createObject(int ItemID,PlayerClass* Owner, Uint32 Obj
 {
 	ObjectClass* newObject = NULL;
     //FIXME: Temporarily create quads only
-	ItemID = 48; //QUAD
 	switch (ItemID)
 	{
 	#if 0
@@ -142,7 +144,9 @@ ObjectClass* ObjectClass::createObject(int ItemID,PlayerClass* Owner, Uint32 Obj
 		case Unit_Sardaukar:				newObject = new SardaukarClass(Owner); break;
 		case Unit_Fremen:					newObject = new FremenClass(Owner); break;
 	#endif
-    	case Structure_ConstructionYard:	break;
+    	case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
+		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
+        case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
 		case Unit_Quad:						newObject = new QuadClass(Owner); break;
 		default:							newObject = NULL;
 											LOG_ERROR("ObjectClass", "%d is no valid ItemID!",ItemID);
@@ -312,7 +316,6 @@ int ObjectClass::getViewRange()
 
 void ObjectClass::handleDamage(int damage, ObjectClass* damager)
 {
-    LOG_INFO("ObjectClass", "Object damaged");    
 	if (!wasDestroyed()) 
 	{
 		if (damage >= 0) 
