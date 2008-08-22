@@ -2,10 +2,31 @@
 
 #include "pakfile/Inifile.h"
 
+
+#include "structures/ConstructionYardClass.h"
+#include "units/InfantryClass.h"
+#include "units/TrikeClass.h"
+#include "units/QuadClass.h"
+
 using namespace std;
+
+
+int lookDist[11];
 
 GameMan::GameMan()
 {
+    lookDist[0] = 10; 
+    lookDist[1] = 10;
+    lookDist[2] = 9;
+    lookDist[3] = 9;
+    lookDist[4] = 9;
+    lookDist[5] = 8;
+    lookDist[6] = 8;
+    lookDist[7] = 7;
+    lookDist[8] = 6;
+    lookDist[9] = 4;
+    lookDist[10] = 1;
+
     Init();
 }
 
@@ -72,6 +93,75 @@ void GameMan::Clear()
     m_units->clear();
     
     delete m_map;
+}
+
+/*static*/
+ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 ObjectID)
+{
+	ObjectClass* newObject = NULL;
+    //FIXME: Temporarily create quads only
+	switch (ItemID)
+	{
+	#if 0
+		case Structure_Barracks:			newObject = new BarracksClass(Owner); break;
+		case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
+		case Structure_GunTurret:			newObject = new GunTurretClass(Owner); break;
+		case Structure_HeavyFactory:		newObject = new HeavyFactoryClass(Owner); break;
+		case Structure_HighTechFactory:		newObject = new HighTechFactoryClass(Owner); break;
+		case Structure_IX:					newObject = new IXClass(Owner); break;
+		case Structure_LightFactory:		newObject = new LightFactoryClass(Owner); break;
+		case Structure_Palace:				newObject = new PalaceClass(Owner); break;
+		case Structure_Radar:				newObject = new RadarClass(Owner); break;
+		case Structure_Refinery:			newObject = new RefineryClass(Owner); break;
+		case Structure_RepairYard:			newObject = new RepairYardClass(Owner); break;
+		case Structure_RocketTurret:		newObject = new RocketTurretClass(Owner); break;
+		case Structure_Silo:				newObject = new SiloClass(Owner); break;
+		case Structure_StarPort:			newObject = new StarPortClass(Owner); break;
+		case Structure_Wall:				newObject = new WallClass(Owner); break;
+		case Structure_WindTrap:			newObject = new WindTrapClass(Owner); break;
+		case Structure_WOR:					newObject = new WORClass(Owner); break;
+		
+		case Unit_Carryall:					newObject = new Carryall(Owner); break;
+		case Unit_Devastator:				newObject = new DevastatorClass(Owner); break;
+		case Unit_Deviator:					newObject = new DeviatorClass(Owner); break;
+		case Unit_Frigate:					newObject = new Frigate(Owner); break;
+		case Unit_Harvester:				newObject = new HarvesterClass(Owner); break;
+		case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
+		case Unit_Launcher:					newObject = new LauncherClass(Owner); break;
+		case Unit_MCV:						newObject = new MCVClass(Owner); break;
+		case Unit_Ornithopter:				newObject = new Ornithopter(Owner); break;
+		case Unit_Quad:						newObject = new QuadClass(Owner); break;
+		case Unit_Saboteur:					newObject = new Saboteur(Owner); break;
+		case Unit_Sandworm:					newObject = new Sandworm(Owner); break;
+		case Unit_SiegeTank:				newObject = new SiegeTankClass(Owner); break;
+		case Unit_SonicTank:				newObject = new SonicTankClass(Owner); break;
+		case Unit_Tank:						newObject = new TankClass(Owner); break;
+		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
+		case Unit_Raider:					newObject = new RaiderClass(Owner); break;
+		case Unit_Trooper:					newObject = new TrooperClass(Owner); break;
+		case Unit_Sardaukar:				newObject = new SardaukarClass(Owner); break;
+		case Unit_Fremen:					newObject = new FremenClass(Owner); break;
+	#endif
+    	case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
+		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
+        case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
+		case Unit_Quad:						newObject = new QuadClass(Owner); break;
+		default:							newObject = NULL;
+											LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);
+											break;
+	}
+	
+	if(newObject == NULL)
+		return NULL;
+	
+	if(ObjectID == NONE) {
+		ObjectID = GetObjectTree()->AddObject(newObject);
+		newObject->setObjectID(ObjectID);
+	} else {
+		newObject->setObjectID(ObjectID);
+	}
+	
+	return newObject;
 }
 
 bool GameMan::LoadScenario(string scenarioName)

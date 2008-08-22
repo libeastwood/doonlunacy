@@ -18,8 +18,6 @@
  *        - normal - coordinates of a cell an object is in
  */
 
-extern int lookDist[11];
-
 class ObjectClass : public Rect
 {
 
@@ -36,8 +34,6 @@ class ObjectClass : public Rect
 	
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
-
-	static ObjectClass* createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID = NONE);
     //bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
     bool clearObject() { return (m_destroyed); }
     

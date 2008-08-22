@@ -74,7 +74,7 @@ UnitClass* PlayerClass::createUnit(int itemID)
 {
 	UnitClass* newUnit = NULL;
 
-	newUnit = (UnitClass*) ObjectClass::createObject(itemID,this);
+	newUnit = (UnitClass*) GameMan::Instance()->CreateObject(itemID,this);
 
 	if(newUnit == NULL) 
 	{
@@ -152,7 +152,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 	StructureClass* tempStructure = NULL;
 	
 	if((itemID != Structure_Slab1) && (itemID != Structure_Slab4)) {
-		tempStructure = (StructureClass*) ObjectClass::createObject(itemID,this);
+		tempStructure = (StructureClass*) GameMan::Instance()->CreateObject(itemID,this);
 		if(tempStructure == NULL) {
 			LOG_ERROR("PlayerClass", "Cannot create Object with itemID %d",itemID);
 			exit(EXIT_FAILURE);

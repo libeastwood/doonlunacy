@@ -20,6 +20,8 @@ typedef std::vector<BulletClass*> Bullets;
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
+extern int lookDist[11];
+
 class GameMan : public Singleton<GameMan>
 {
   friend class Singleton<GameMan>;
@@ -35,7 +37,7 @@ class GameMan : public Singleton<GameMan>
     bool LoadScenario(std::string scenarioName);
     
     void AddPlayer(PLAYERHOUSE House, bool ai, int team);
-
+    ObjectClass* CreateObject(int ItemID, PlayerClass* Owner, Uint32 ObjectID = NONE);
     /*!
      *  As the name suggests it saves current map to a BMP file.
      *  Currently only terrain without units, buildings, etc.
