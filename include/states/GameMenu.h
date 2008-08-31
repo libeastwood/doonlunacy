@@ -3,12 +3,14 @@
 
 #include "states/MenuBase.h"
 
+#include "houses.h"
+
 #include "gui2/MapWidget.h"
 
 class GraphicButton;
 class GameMenuState : public MenuBaseState {
     public:
-        GameMenuState();
+        GameMenuState(HOUSETYPE house);
         ~GameMenuState();
 
         int Execute(float dt);
@@ -18,6 +20,7 @@ class GameMenuState : public MenuBaseState {
 		GraphicButton *m_mentatButton, *m_optionsButton;
 		void drawMenu();
 		void doMentat();
+		HOUSETYPE m_house;
 };
 
 #endif // DUNE_STATES_GAMEMENU_H

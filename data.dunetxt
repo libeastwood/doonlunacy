@@ -1917,7 +1917,7 @@ units:
         filename = "DUNE:UNITS.SHP";
         health = 450;
         num_weapons = 2;
-        picture_array = 0;
+        picture_array = 1;
         primary_weapon_reload_time = 100;
         radius = 6;
         speed = 0.64;
