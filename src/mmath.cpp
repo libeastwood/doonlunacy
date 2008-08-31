@@ -26,6 +26,23 @@ int max(int num1, int num2)
 	return maximum;
 }
 */
+
+int getRandomOf(int numParam, ...) {
+	int nthParam = getRandomInt(0,numParam-1);
+	
+	va_list arg_ptr;
+	va_start(arg_ptr, numParam);
+	
+	int ret = va_arg(arg_ptr, int);
+	
+	for(int i = 1; i <= nthParam; i++) {
+		ret = va_arg(arg_ptr, int);
+	}
+	va_end(arg_ptr);
+	
+	return ret;
+}
+
 int power(int num1, int num2)
 {
 	int result = 1;

@@ -112,12 +112,6 @@ private:
 	*/
 	void RemoveSubTree(TreeNode* node);
 	
-	/*!
-		Helper method for saving a complete subtree.
-		@param	stream	Stream to save to
-		@param	node	root node of this subtree
-		@return none
-	*/
 	void PrintSubTree(TreeNode* node,int indend) {
 		if(node == NULL)
 			return;

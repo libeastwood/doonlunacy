@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "gui2/Button.h"
+#include "gui2/HScale.h"
 #include "gui2/VBox.h"
 
 #include <boost/bind.hpp>
@@ -86,6 +87,16 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butOk);
 
+    m_hscaleGameSpeed = new HScale(1, 10, 4);
+    m_hscaleGameSpeed->setSize(SPoint(bw, bh));
+    m_vbox->addChild(m_hscaleGameSpeed);
+
+	m_vbox->fit(2);
+    Uint16 x = (set->GetWidth() / 2) - 
+                (m_vbox->w / 2);
+    m_vbox->setPosition(UPoint(x - 5, 312));
+    m_vbox->reshape();
+    m_container->addChild(m_vbox);
 }
 
 //FIXME: doSound, doMusic,doScreenMode and future functions with bool value could be

@@ -1,33 +1,17 @@
 #include <math.h>
 
-#include "GameState.h"
+#include "GameMan.h"
 #include "ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"
 #include "Log.h"
+#include "PlayerClass.h"
 #include "MapClass.h"
 #include "SoundPlayer.h"
-
-#include "units/QuadClass.h"
-
-int lookDist[11];
 
 ObjectClass::ObjectClass(PlayerClass* newOwner) :
         Rect(0, 0, 0, 0)
 {
-    lookDist[0] = 10; 
-    lookDist[1] = 10;
-    lookDist[2] = 9;
-    lookDist[3] = 9;
-    lookDist[4] = 9;
-    lookDist[5] = 8;
-    lookDist[6] = 8;
-    lookDist[7] = 7;
-    lookDist[8] = 6;
-    lookDist[9] = 4;
-    lookDist[10] = 1;
-
-
     m_itemID = Unknown;
     m_objectID = NONE;
 
@@ -40,14 +24,19 @@ ObjectClass::ObjectClass(PlayerClass* newOwner) :
     m_unit = false;
     m_infantry = false;
     m_builder = false;
-
+    m_badlyDamaged = false;
+    m_destroyed = false;
+    m_maxHealth = 100;
+    m_health = m_maxHealth;
     m_realPos = PointFloat(0, 0);
-
+    m_armour = 0;
+    m_radius = 0;
     m_animCounter = 0;
     m_animFrames = 1;
     m_curAnimFrame = 0;
     m_isAnimating = false;
     m_selected = false;
+
 
     m_checkTimer = 0;
     m_drawnAngle = 2;
@@ -58,7 +47,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner) :
 
 ObjectClass::~ObjectClass()
 {
-
+    LOG_INFO("ObjectClass", "Object destroyed"); 
 }
 
 /* virtual */
@@ -71,6 +60,19 @@ void ObjectClass::assignToMap(SPoint pos)
         map->getCell(pos)->assignNonInfantryGroundObject(getObjectID());
         map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
     }
+}
+
+bool ObjectClass::canAttack(ObjectClass* object)
+{
+	if ( (object != NULL) && !object->wasDestroyed() 
+	    && ( object->isAStructure() || !object->isAFlyingUnit() )
+	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
+	    || object->getItemID() == Unit_Sandworm) && object->isVisible(m_owner->getTeam()) ) 
+	{
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /* virtual */
@@ -109,27 +111,6 @@ void ObjectClass::drawSmoke(UPoint pos)
 #endif
 }
 
-/* virtual */
-UPoint ObjectClass::getClosestPoint(UPoint point)
-{
-    return UPoint(x, y);
-}
-
-bool ObjectClass::canAttack(ObjectClass* object)
-{
-	if ((object != NULL)
-		&& !object->wasDestroyed()
-		&& (object->isAStructure()
-			|| !object->isAFlyingUnit())
-		&& ((object->getOwner()->getTeam() != m_owner->getTeam())
-			|| object->getItemID() == Unit_Sandworm)
-		&& object->isVisible(m_owner->getTeam())) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 ObjectClass* ObjectClass::findTarget()
 {
 	ObjectClass	*tempTarget,
@@ -139,7 +120,7 @@ ObjectClass* ObjectClass::findTarget()
 		xPos = x,
 		yPos = y;
 
-	MapClass * map = GameState::Instance()->GetMap();
+	MapClass * map = m_owner->getMap();
 
 	double closestDistance = 1000000.0;
 
@@ -199,6 +180,29 @@ ObjectClass* ObjectClass::findTarget()
 	return closestTarget;
 }
 
+/* virtual */
+UPoint ObjectClass::getClosestPoint(UPoint point)
+{
+    return UPoint(x, y);
+}
+
+UPoint ObjectClass::getClosestCentrePoint(UPoint objectPos)
+{
+	return getCentrePoint();
+}
+
+
+
+UPoint ObjectClass::getCentrePoint()
+{
+    UPoint result;
+    
+    result.x = int(round(m_realPos.x));
+    result.y = int(round(m_realPos.y));
+
+    return result;
+}
+
 int ObjectClass::getHealthColour()
 {
     float healthPercent = (float)m_health / (float)m_maxHealth;
@@ -234,7 +238,7 @@ void ObjectClass::handleDamage(int damage, ObjectClass* damager)
 				m_badlyDamaged = true;
 		}
 
-		if (m_owner == GameState::Instance()->LocalPlayer()) 
+		if (m_owner == GameMan::Instance()->LocalPlayer()) 
 		{
 			//FIXME: Yeah, whatever
 			//soundPlayer->changeMusic(MUSIC_ATTACK);
@@ -250,6 +254,22 @@ bool ObjectClass::isOnScreen(Rect rect)
     return rect.containsPartial(Rect(m_realPos.x, m_realPos.y, w, h));
 }
 
+bool ObjectClass::isVisible(int team)
+{
+	if ((team >= 1) && (team <= MAX_PLAYERS))
+		return m_visible[team-1];
+	else
+		return false;
+}
+
+void ObjectClass::setDestination(SPoint destination)
+{
+    if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
+    {
+        m_destination = destination;
+    }
+}
+
 void ObjectClass::setHealth(int newHealth)
 {
 	if ((newHealth >= 0) && (newHealth <= m_maxHealth))
@@ -259,36 +279,6 @@ void ObjectClass::setHealth(int newHealth)
 		if (!m_badlyDamaged && (m_health/(double)m_maxHealth < HEAVILYDAMAGEDRATIO))
 			m_badlyDamaged = true;
 	}
-}
-
-bool ObjectClass::isVisible(int team)
-{
-	if ((team >= 1) && (team <= MAX_PLAYERS))
-		return m_visible[team-1];
-	else
-		return false;
-}
-
-void ObjectClass::setVisible(int team, bool status)
-{
-	if (team == VIS_ALL) 
-	{
-		for(int i = 0; i < MAX_PLAYERS; i++)
-		{
-			m_visible[i] = status;
-		}
-	} else if ((team >= 1) && (team <= MAX_PLAYERS)) 
-	{
-		m_visible[--team] = status;
-	}
-}
-
-void ObjectClass::setDestination(SPoint destination)
-{
-    if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
-    {
-        m_destination = destination;
-    }
 }
 
 void ObjectClass::setPosition(SPoint pos)
@@ -311,74 +301,22 @@ void ObjectClass::setPosition(SPoint pos)
     }
 }
 
+void ObjectClass::setVisible(int team, bool status)
+{
+	if (team == VIS_ALL) 
+	{
+		for(int i = 0; i < MAX_PLAYERS; i++)
+		{
+			m_visible[i] = status;
+		}
+	} else if ((team >= 1) && (team <= MAX_PLAYERS)) 
+	{
+		m_visible[--team] = status;
+	}
+}
+
 void ObjectClass::unassignFromMap(SPoint pos)
 {
     if (m_owner->getMap()->cellExists(pos))
         m_owner->getMap()->getCell(pos)->unassignObject(getObjectID());
-}
-
-ObjectClass* ObjectClass::createObject(int ItemID,PlayerClass* Owner, Uint32 ObjectID)
-{
-	ObjectClass* newObject = NULL;
-    //FIXME: Temporarily create quads only
-	ItemID = 48; //QUAD
-	switch (ItemID)
-	{
-	#if 0
-		case Structure_Barracks:			newObject = new BarracksClass(Owner); break;
-		case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
-		case Structure_GunTurret:			newObject = new GunTurretClass(Owner); break;
-		case Structure_HeavyFactory:		newObject = new HeavyFactoryClass(Owner); break;
-		case Structure_HighTechFactory:		newObject = new HighTechFactoryClass(Owner); break;
-		case Structure_IX:					newObject = new IXClass(Owner); break;
-		case Structure_LightFactory:		newObject = new LightFactoryClass(Owner); break;
-		case Structure_Palace:				newObject = new PalaceClass(Owner); break;
-		case Structure_Radar:				newObject = new RadarClass(Owner); break;
-		case Structure_Refinery:			newObject = new RefineryClass(Owner); break;
-		case Structure_RepairYard:			newObject = new RepairYardClass(Owner); break;
-		case Structure_RocketTurret:		newObject = new RocketTurretClass(Owner); break;
-		case Structure_Silo:				newObject = new SiloClass(Owner); break;
-		case Structure_StarPort:			newObject = new StarPortClass(Owner); break;
-		case Structure_Wall:				newObject = new WallClass(Owner); break;
-		case Structure_WindTrap:			newObject = new WindTrapClass(Owner); break;
-		case Structure_WOR:					newObject = new WORClass(Owner); break;
-		
-		case Unit_Carryall:					newObject = new Carryall(Owner); break;
-		case Unit_Devastator:				newObject = new DevastatorClass(Owner); break;
-		case Unit_Deviator:					newObject = new DeviatorClass(Owner); break;
-		case Unit_Frigate:					newObject = new Frigate(Owner); break;
-		case Unit_Harvester:				newObject = new HarvesterClass(Owner); break;
-		case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
-		case Unit_Launcher:					newObject = new LauncherClass(Owner); break;
-		case Unit_MCV:						newObject = new MCVClass(Owner); break;
-		case Unit_Ornithopter:				newObject = new Ornithopter(Owner); break;
-		case Unit_Quad:						newObject = new QuadClass(Owner); break;
-		case Unit_Saboteur:					newObject = new Saboteur(Owner); break;
-		case Unit_Sandworm:					newObject = new Sandworm(Owner); break;
-		case Unit_SiegeTank:				newObject = new SiegeTankClass(Owner); break;
-		case Unit_SonicTank:				newObject = new SonicTankClass(Owner); break;
-		case Unit_Tank:						newObject = new TankClass(Owner); break;
-		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
-		case Unit_Raider:					newObject = new RaiderClass(Owner); break;
-		case Unit_Trooper:					newObject = new TrooperClass(Owner); break;
-		case Unit_Sardaukar:				newObject = new SardaukarClass(Owner); break;
-		case Unit_Fremen:					newObject = new FremenClass(Owner); break;
-	#endif
-		case Unit_Quad:						newObject = new QuadClass(Owner); break;
-		default:							newObject = NULL;
-											LOG_ERROR("ObjectClass", "%d is no valid ItemID!",ItemID);
-											break;
-	}
-	
-	if(newObject == NULL)
-		return NULL;
-	
-	if(ObjectID == (Uint32)NONE) {
-		ObjectID = GameState::Instance()->GetObjectTree()->AddObject(newObject);
-		newObject->setObjectID(ObjectID);
-	} else {
-		newObject->setObjectID(ObjectID);
-	}
-	
-	return newObject;
 }

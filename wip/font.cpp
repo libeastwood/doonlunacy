@@ -31,7 +31,7 @@ struct FNTCharacter
 
 int main(int argc, char* argv[])
 {
-    FILE* file = fopen("intro.fnt", "rb");
+    FILE* file = fopen("new10p.fnt", "rb");
 
     FNTHeader header;
 

@@ -1,5 +1,7 @@
-#include "DataCache.h"
 #include "structures/WallClass.h"
+
+#include "DataCache.h"
+#include "GCObject.h"
 
 WallClass::WallClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
@@ -11,7 +13,7 @@ WallClass::WallClass(PlayerClass* newOwner) : StructureClass(newOwner)
 	m_powerRequirement = 0;
 	m_health = m_maxHealth;
 	m_viewRange = 2;
-	m_pic = DataCache::Instance()->getObjPic(ObjPic_Wall);
+    m_pic = DataCache::Instance()->getGCObject("ObjPic_Wall")->getImage();
     m_offset = UPoint(0,0);                //cause it draws at top left, not middle
 
 //    setTile(25);

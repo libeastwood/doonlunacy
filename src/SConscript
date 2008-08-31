@@ -17,9 +17,6 @@ base_sources = [ "Application.cpp",
                 "Log.cpp",
                 "ResMan.cpp",
 				"SoundPlayer.cpp",
-              ]
-
-battle_sources = [ 
 				"TerrainClass.cpp",
 				"MapClass.cpp",
 				"gui2/MapWidget.cpp",
@@ -43,19 +40,22 @@ battle_sources = [
 			#	"structures/SiloClass.cpp",
 			#	"structures/StarPortClass.cpp",
 				"structures/StructureClass.cpp",
-				#"structures/TurretClass.cpp",
-			#	"structures/WallClass.cpp",
-			#	"structures/WindTrapClass.cpp",
-			#	"structures/WORClass.cpp",
+				"structures/WallClass.cpp",				
+				"structures/SiloClass.cpp",
+                "structures/ConstructionYardClass.cpp",				
+				"units/TrikeClass.cpp",
+				"units/InfantryClass.cpp",
 				"units/UnitClass.cpp",
 				"units/GroundUnit.cpp",				
 				"units/QuadClass.cpp",				
-				"GameState.cpp",
+				"GameMan.cpp",
 				"PriorityQ.cpp",
 				"ObjectTree.cpp",
 				"ObjectPointer.cpp",
+				"BulletClass.cpp",
                 ]
 
+battle_sources = []
 state_sources = [
 #    				"CampaignMenu.cpp",
 				    "states/Editor.cpp",
@@ -81,6 +81,7 @@ gui_sources = [
                 "gui2/VBox.cpp",
                 "gui2/Label.cpp",
                 "gui2/Frame.cpp",
+                "gui2/HScale.cpp",
 
               ]
 

@@ -3,7 +3,7 @@
 
 #include "gui2/Widget.h"
 #include "Gfx.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "MapClass.h"
 
 #include "ObjectClass.h"
@@ -41,15 +41,15 @@ class MapWidget : public Widget {
     bool handleMotion(SPoint p);
     bool handleKeyDown(SDL_keysym* key);
     bool handleButtonDown(Uint8 button, SPoint p);
-    bool handleButtonUp(Uint8 button, SPoint p);
-
-    void getGameState();
+    bool handleButtonUp(Uint8 button, SPoint p);    
+    //@}
 
   private:
-    GameState* m_gs;    
-    MapClass * m_map;
-    Structures* m_structures;
-    Units* m_units;
+  
+    bool m_mouseButtonDown;
+    UPoint m_selectStart;
+    UPoint m_selectEnd;
+    Rect m_selectRect;
     /*!  
      *  Scroll speed multiplied by BLOCKSIZE. E.g. m_speed equal to (1,1)
      *  means that every time widget is updated, visible area is scrolled by

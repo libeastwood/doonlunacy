@@ -33,8 +33,7 @@ EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
     m_mapWidget = new MapWidget();
     m_mapWidget->setPosition(UPoint(0,56));
     m_mapWidget->setSize(UPoint(set->GetWidth() - 144, set->GetHeight() - m_mapWidget->getPosition().y));
-    MapGenerator::Instance()->loadOldMap("SCENARIO:SCENA005.INI");
-    m_mapWidget->getGameState();
+    GameMan::Instance()->LoadScenario("SCENARIO:SCENA001.INI");
     m_backgroundFrame->addChild(m_mapWidget);
 #endif 
 }
@@ -42,5 +41,12 @@ EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
 
 EditorState::~EditorState()
 {
+    GameMan::Instance()->Clear();
+}
 
+int EditorState::Execute(float dt)
+{
+    GameMan::Instance()->Update(dt);
+
+    return 0;
 }

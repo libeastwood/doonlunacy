@@ -35,6 +35,7 @@ void Settings::load()
         Setting &root = configFile->lookup(".");
         root.add("data_dir", Setting::TypeString) = "paks/";
         root.add("debug", Setting::TypeInt) = 8;
+        root.add("game_speed", Setting::TypeInt) = 4;
         root.add("play_intro", Setting::TypeBoolean) = true;        
         root.add("graphics", Setting::TypeGroup);
         root.add("sound", Setting::TypeGroup);    
@@ -61,6 +62,7 @@ void Settings::load()
     configFile->lookupValue(".graphics.fullscreen", m_fullscreen);
     configFile->lookupValue(".graphics.double_buffer", m_doubleBuffered);
     configFile->lookupValue(".debug", m_debug);
+    configFile->lookupValue(".game_speed", m_gameSpeed);
     configFile->lookupValue(".play_intro", m_playIntro);
 
     configFile->lookupValue(".data_dir", m_dataDir);
@@ -112,6 +114,7 @@ void Settings::save()
     configFile->lookup(".graphics.fullscreen") = m_fullscreen;
     configFile->lookup(".graphics.double_buffer") = m_doubleBuffered;
     configFile->lookup(".debug") = m_debug;
+    configFile->lookup(".game_speed") = m_gameSpeed;
     configFile->lookup(".play_intro") = m_playIntro;
 
     configFile->lookup(".data_dir") = m_dataDir;

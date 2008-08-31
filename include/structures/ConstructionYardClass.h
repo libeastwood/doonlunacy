@@ -1,21 +1,14 @@
-#ifndef DUNE_STRUCTURES_CONSTRUCTIONYARDCLASS_H
-#define DUNE_STRUCTURES_CONSTRUCTIONYARDCLASS_H
+#ifndef CONSTRUCTIONYARDCLASS_H_INCLUDED
+#define CONSTRUCTIONYARDCLASS_H_INCLUDED
 
-#include "structures/StructureClass.h"
-
-class PlayerClass;
+#include "StructureClass.h"
 
 class ConstructionYardClass : public StructureClass
 {
-public:
-	ConstructionYardClass(PlayerClass* newOwner);
-	~ConstructionYardClass();
-
-	void doSpecificStuff();
-
-private:
-
+  public:
+    ConstructionYardClass(PlayerClass* newOwner);
+    ~ConstructionYardClass();
 };
 
-#endif // DUNE_STRUCTURES_CONSTRUCTIONYARDCLASS_H
 
+#endif // CONSTRUCTIONYARDCLASS_H_INCLUDED

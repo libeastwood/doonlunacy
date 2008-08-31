@@ -1,11 +1,14 @@
+#include "TerrainClass.h"
+
 #include "ConcatIterator.h"
 #include "DataCache.h"
 #include "GCObject.h"
 #include "Definitions.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Log.h"
 #include "Gfx.h"
-#include "TerrainClass.h"
+
+#include <math.h>
 
 using namespace std;
 
@@ -35,35 +38,30 @@ TerrainClass::~TerrainClass()
 
 void TerrainClass::draw(Image * dest, SPoint pos)
 {
-	if(isExplored(GameState::Instance()->LocalPlayer()->getPlayerNumber()))
-	{
+    if (isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+    {
         Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
         m_img->blitTo(dest, source, pos);
-    }
-    else
-    {
+        
         if (m_hideTile != Terrain_HiddenFull)
         {
-            Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
-            m_img->blitTo(dest, source, pos);
             Rect sourceHidden(m_hideTile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
             m_hiddenImg->blitTo(dest, sourceHidden, pos);
-
         }
     }
-
+   
 }
 
 ObjectClass* TerrainClass::getAirUnit()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedAirUnits.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedAirUnits.front());
 }
 
 ObjectClass* TerrainClass::getDeadObject()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedDeadObjects.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedDeadObjects.front());
 }
 
 ObjectClass* TerrainClass::getGroundObject()
@@ -78,20 +76,20 @@ ObjectClass* TerrainClass::getGroundObject()
 
 ObjectClass* TerrainClass::getInfantry()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedInfantry.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedInfantry.front());
 }
 
 ObjectClass* TerrainClass::getNonInfantryGroundObject()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedNonInfantryGroundObjects.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedNonInfantryGroundObjects.front());
 }
 
 ObjectClass* TerrainClass::getUndergroundUnit()
 {
-	GameState* gs = GameState::Instance();
-    return gs->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
+	GameMan* gman = GameMan::Instance();
+    return gman->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
 }
 
 void TerrainClass::assignAirUnit(Uint32 newObjectID) 
@@ -218,7 +216,7 @@ ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID)
 	{
 		if(*iterator == objectID) 
 		{
-			return GameState::Instance()->GetObjectTree()->getObject(*iterator);
+			return GameMan::Instance()->GetObjectTree()->getObject(*iterator);
 		}
 	
 		++iterator;
@@ -228,16 +226,59 @@ ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID)
 }
 
 
-void TerrainClass::clearDamage() {
-#if 0
+void TerrainClass::clearDamage() 
+{
 	m_damagePos = 0;
+	
 	for(int i=0; i<DAMAGEPERCELL; i++)
+	{
 		m_damage[i].damageType = NONE;
-#endif
+    }
 }
 
 
-void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air) {
+void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
+{
+    int     distance;
+    double  damageProp;
+    UPoint centrePoint;
+    // non air damage
+    ConcatIterator<Uint32> iterator;
+    iterator.addList(m_assignedNonInfantryGroundObjects);
+    iterator.addList(m_assignedInfantry);
+    iterator.addList(m_assignedUndergroundUnits);
+
+    ObjectClass* object;
+    while(!iterator.IterationFinished()) {
+
+    	object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
+    	
+    	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
+    	distance = lround(distance_from(centrePoint, realPos));
+    	if (distance <= 0) {
+    		distance = 1;
+    	}
+    	
+    	if (distance - object->getRadius() <= damageRadius)	{
+    		#if 0 //We ain't got sonic tanks yet
+    		if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
+    			((UnitClass*)object)->netDeviate(damagerOwner);
+    		}
+    		#endif
+    		
+    		damageProp = ((double)(damageRadius + object->getRadius() - distance))/((double)distance);
+    		if (damageProp > 0)	{
+    			if (damageProp > 1.0) {
+    				damageProp = 1.0;
+    			}
+
+    			object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmour(), damager);
+    		}
+    	}
+    	
+    	++iterator;
+    }
+
 #if 0
 	TerrainClass* cell;
 	
@@ -424,4 +465,6 @@ bool TerrainClass::isFogged(int player)
 	return false; 
 	
 #endif	
+    //FIXME:Need to implement fog-o-war
+    return false;
 }

@@ -2,7 +2,7 @@
 
 #include "Definitions.h"
 #include "GCObject.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
@@ -31,6 +31,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_speed = 0.0;
     m_speedCap = NONE;
     m_turnSpeed = 0.0625;
+    m_maxHealth = 100;
+    m_health = m_maxHealth;
 
     m_destination = SPoint(INVALID_POS, INVALID_POS);
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
@@ -38,14 +40,15 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     setAngle(LEFT);
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
     setActive(false);
-    
-    GameState::Instance()->GetUnits()->push_back(this);
+    m_adjust = 0.0;
+    m_gameSpeed = Settings::Instance()->GetGameSpeed();
+    GameMan::Instance()->GetUnits()->push_back(this);
 }
 
 /*virtual*/
 UnitClass::~UnitClass()
 {
-
+    LOG_INFO("UnitClass", "Unit deleted");
 }
 
 
@@ -59,13 +62,13 @@ bool UnitClass::canPass(UPoint pos)
 /*virtual*/
 void UnitClass::deploy(SPoint newPosition)
 {
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
     
     if (map->cellExists(newPosition))
     {
         setPosition(newPosition);
 
-        if ((m_guardPoint.x == NONE) || (m_guardPoint.y == NONE))
+        if ((m_guardPoint.x == INVALID_POS) || (m_guardPoint.y == INVALID_POS))
             m_guardPoint = UPoint(x, y);
 
         setDestination(m_guardPoint);
@@ -85,6 +88,43 @@ void UnitClass::deploy(SPoint newPosition)
     }
 
 }
+
+void UnitClass::destroy()
+{
+    GameMan* gman = GameMan::Instance();
+    if (!m_destroyed)
+    {
+        LOG_INFO("UnitClass","Destroying unit %d (itemID=%d)... ",m_objectID, m_itemID);
+        setTarget(NULL);
+        gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
+        //gman->GetObjectTree()->RemoveObject(getObjectID());
+
+        m_owner->decrementUnits(m_itemID);
+
+        m_destroyed = true;
+        m_respondable = false;
+		m_pic = DataCache::Instance()->getGCObject(m_deathFrame)->getImage(HOUSETYPE(getOwner()->getColour()));
+/*
+        imageW = graphic->w / numDeathFrames;
+        imageH = graphic->h;
+        xOffset = (imageW - BLOCKSIZE) / 2;    //this is where it actually draws the graphic
+        yOffset = (imageH - BLOCKSIZE) / 2;    //cause it draws at top left, not middle
+*/
+        //m_frameTimer = m_frameTime;
+        //m_deathFrame = 0;
+
+        //if (isVisible(getOwner()->getTeam()))
+        //    PlayDestroySound();
+
+        //gman->GetUnits()->remove(this);
+
+        //delete this;
+
+        //if (map->cellExists(&location))
+        // map->getCell(&location)->assignDeadObject(this);
+    }
+}
+
 
 /*virtual*/
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
@@ -107,7 +147,9 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 
     else
     {
-        src.x = m_deathFrame * w;
+//FIXME:        src.x = m_deathFrame * w;
+
+        src.x = 1 * w;
         src.y = 0;
 
         m_pic->blitTo(dest, src, m_drawnPos);
@@ -144,7 +186,7 @@ void UnitClass::drawSelectionBox(Image* dest)
 /*virtual*/
 void UnitClass::move()
 {
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
     if (m_moving)
@@ -153,14 +195,14 @@ void UnitClass::move()
 
         if (!m_badlyDamaged || isAFlyingUnit())
         {
-            m_realPos.x += m_xSpeed;
-            m_realPos.y += m_ySpeed;
+            m_realPos.x += m_xSpeed * m_adjust;
+            m_realPos.y += m_ySpeed * m_adjust;
         }
 
         else
         {
-            m_realPos.x += m_xSpeed / 2;
-            m_realPos.y += m_ySpeed / 2;
+            m_realPos.x += (m_xSpeed / 2) * m_adjust;
+            m_realPos.y += (m_ySpeed / 2) * m_adjust;
         }
 
         // if vehicle is half way out of old cell
@@ -293,13 +335,34 @@ void UnitClass::setDestination(SPoint destination)
     ObjectClass::setDestination(destination);
 }
 
+void UnitClass::setDrawnPos(SPoint off, SPoint view)
+{
+    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
+    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
+}
+
+void UnitClass::setGuardPoint(UPoint newGuardPoint)
+{
+	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
+}
+
+void UnitClass::setGuardPoint(int newX, int newY)
+{
+	MapClass* map = m_owner->getMap();
+	
+	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
+	{
+		m_guardPoint.x = newX;
+		m_guardPoint.y = newY;
+	}
+}
+
 void UnitClass::setPosition(SPoint pos)
 {
     if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
     {
         ObjectClass::setPosition(pos);
     }
-
     else if (m_owner->getMap()->cellExists(pos))
     {
         ObjectClass::setPosition(pos);
@@ -378,11 +441,6 @@ void UnitClass::setSpeeds()
     m_speed = maxSpeed;
 }
 
-void UnitClass::setDrawnPos(SPoint off, SPoint view)
-{
-    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
-    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
-}
 
 /*virtual*/
 
@@ -451,7 +509,7 @@ void UnitClass::targeting()
 
 void UnitClass::turnLeft()
 {
-    m_angle += m_turnSpeed;
+    m_angle += m_turnSpeed * m_adjust;
 
     if (m_angle >= 7.5)
         m_angle -= 8.0;
@@ -461,7 +519,7 @@ void UnitClass::turnLeft()
 
 void UnitClass::turnRight()
 {
-    m_angle -= m_turnSpeed;
+    m_angle -= m_turnSpeed * m_adjust;
 
     if (m_angle < -0.5)
         m_angle += 8;
@@ -515,25 +573,11 @@ void UnitClass::turn()
     }
 }
 
-
-void UnitClass::setGuardPoint(UPoint newGuardPoint)
-{
-	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
-}
-
-void UnitClass::setGuardPoint(int newX, int newY)
-{
-	MapClass* map = GameState::Instance()->GetMap();
-	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
-	{
-		m_guardPoint.x = newX;
-		m_guardPoint.y = newY;
-	}
-}
-
 /*virtual*/
-void UnitClass::update()
+void UnitClass::update(float dt)
 {
+    m_adjust = dt * (m_gameSpeed * 10);
+    
     if (!m_destroyed)
     {
         if (m_active)
@@ -545,6 +589,15 @@ void UnitClass::update()
             if (m_active)
                 turn();
         }
+
+        if (m_badlyDamaged)
+        {
+            if (m_health <= 0)
+            {
+                destroy();
+                return;
+            }
+    }
     }
 
 #if 0 
@@ -622,7 +675,7 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
     heuristic,
     f;
     
-    MapClass* map = GameState::Instance()->GetMap();
+    MapClass* map = m_owner->getMap();
 
     UPoint  checkedPoint = m_destination,
                            tempLocation;

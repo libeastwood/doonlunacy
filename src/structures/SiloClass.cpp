@@ -1,5 +1,7 @@
-#include "DataCache.h"
 #include "structures/SiloClass.h"
+
+#include "DataCache.h"
+#include "GCObject.h"
 
 SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
@@ -11,7 +13,7 @@ SiloClass::SiloClass(PlayerClass* newOwner) : StructureClass(newOwner)
 	m_health = m_maxHealth;
 	m_viewRange = 3;
 
-	m_pic = DataCache::Instance()->getObjPic(ObjPic_Silo, HOUSETYPE(getOwner()->getColour()));
+    m_pic = DataCache::Instance()->getGCObject("ObjPic_Silo")->getImage(HOUSETYPE(getOwner()->getColour()));
     
     m_offset = UPoint(0,0);
     m_firstAnimFrame = 2;

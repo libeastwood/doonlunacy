@@ -1,7 +1,7 @@
 #include "MapGenerator.h"
 
 #include "DuneConstants.h"
-#include "GameState.h"
+#include "GameMan.h"
 #include "Log.h"
 #include "MapClass.h"
 #include "MapSeed.h"
@@ -9,7 +9,6 @@
 #include "ResMan.h"
 
 #include "mmath.h"
-
 #include <eastwood/IniFile.h>
 
 MapGenerator::MapGenerator ()
@@ -24,590 +23,6 @@ MapGenerator::MapGenerator ()
 MapGenerator::~MapGenerator()
 {
 
-}
-
-bool MapGenerator::loadOldMap(std::string mapName)
-{
-    bool done = false; //this will be set to false if any errors, so level won't load
-    int bufsize;
-    uint8_t *data;
-    data = ResMan::Instance()->readFile(mapName, &bufsize);
-    IniFile * myIniFile = new IniFile(data, bufsize);
-
-    m_gs = GameState::Instance();
-    m_map = new MapClass(UPoint(64, 64));
-    m_gs->m_map = m_map;
-
-    int SeedNum = myIniFile->getIntValue("MAP", "Seed", -1);
-
-    if (SeedNum == -1)
-    {
-        LOG_ERROR("MapGenerator", "Cannot find Seednum in %s!", mapName.c_str());
-        delete m_map;
-        return false;
-    }
-
-    Players *m_players = m_gs->m_players;
-
-    unsigned short SeedMap[64*64];
-    createMapWithSeed(SeedNum, SeedMap);
-
-
-    for (int j = 0; j < m_map->h; j++)
-    {
-        for (int i = 0; i < m_map->w; i++)
-        {
-            int type = Terrain_Sand;
-            unsigned char seedmaptype = SeedMap[j*64+i] >> 4;
-
-            switch (seedmaptype)
-            {
-
-                case 0x7:
-                    /* Sand */
-                    type = Terrain_Sand;
-                    break;
-
-                case 0x9:
-                    /* Dunes */
-                    type = Terrain_Dunes;
-                    break;
-
-                case 0x2:
-                    /* Building */
-
-                case 0x8:
-                    /* Rock */
-                    type = Terrain_Rock;
-                    break;
-
-                case 0xb:
-                    /* Spice */
-                    type = Terrain_Spice;
-                    break;
-
-                case 0xc:
-                    /* ThickSpice */
-                    type = Terrain_ThickSpice;
-                    break;
-
-                case 0xa:
-                    /* Mountain */
-                    type = Terrain_Mountain;
-                    break;
-
-                default:
-                    LOG_WARNING("MapClass", "Unknown maptype %x\n", type);
-                    exit(EXIT_FAILURE);
-            }
-
-            m_map->getCell(i, j)->setType(type);
-
-            m_map->getCell(i, j)->setTile(Terrain_a1);
-        }
-
-    }
-
-    done = true;
-
-    //createSandRegions();
-
-    string BloomString = myIniFile->getStringValue("MAP", "Bloom");
-
-    if (BloomString != "")
-    {
-        vector<string> BloomPositions  = SplitString(BloomString);
-
-        for (unsigned int i = 0; i < BloomPositions.size();i++)
-        {
-            // set bloom
-            int BloomPos = atol(BloomPositions[i].c_str());
-
-            if ((BloomPos != 0) || (BloomPositions[i] == "0"))
-            {
-                int xpos = BloomPos % m_map->w;
-                int ypos = BloomPos / m_map->w;
-
-                if (m_map->cellExists(xpos, ypos))
-                {
-                    m_map->getCell(xpos, ypos)->setTile(getRandomInt(Terrain_a2, Terrain_a3));
-                }
-
-                else
-                {
-                    LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", xpos, ypos);
-                }
-            }
-        }
-    }
-
-    string FieldString = myIniFile->getStringValue("MAP", "Field");
-
-    if (FieldString != "")
-    {
-        vector<string> FieldPositions  = SplitString(FieldString);
-
-        for (unsigned int i = 0; i < FieldPositions.size();i++)
-        {
-            // set bloom
-            int FieldPos = atol(FieldPositions[i].c_str());
-
-            if ((FieldPos != 0) || (FieldPositions[i] == "0"))
-            {
-                int xpos = FieldPos % m_map->w;
-                int ypos = FieldPos / m_map->w;
-
-                if (m_map->cellExists(xpos, ypos))
-                {
-                    for (int x = -6; x <= 6; x++)
-                    {
-                        for (int y = -6; y <= 6; y++)
-                        {
-                            if (m_map->cellExists(xpos + x, ypos + y)
-                                    && (distance_from(xpos, ypos, xpos + x, ypos + y) <= 6))
-                            {
-                                TerrainClass *cell = m_map->getCell(xpos + x, ypos + y);
-
-                                if ((cell != NULL) & (cell->isSand()))
-                                    cell->setType(Terrain_Spice);
-                            }
-                        }
-                    }
-
-                    for (int x = xpos - 8; x <= xpos + 8; x++)
-                    {
-                        for (int y = ypos - 8; y <= ypos + 8; y++)
-                        {
-                            if (m_map->cellExists(x, y))
-                            {
-                                smoothSpot(UPoint(x, y));
-                            }
-                        }
-                    }
-                }
-
-                else
-                {
-                    LOG_WARNING("MapGenerator", "Cannot set field at %d, %d", xpos, ypos);
-                }
-            }
-        }
-    }
-
-    smoothTerrain();
-
-    // now set up all the players
-
-    addPlayer(ATREIDES, false, 1);
-    addPlayer(ORDOS, false, 2);
-    addPlayer(HARKONNEN, false, 2);
-    addPlayer(SARDAUKAR, false, 2);
-    addPlayer(FREMEN, false, 2);
-    addPlayer(MERCENERY, false, 2);
-
-    IniFile::KeyListHandle myListHandle;
-
-    myListHandle = myIniFile->KeyList_Open("UNITS");
-
-    while (!myIniFile->KeyList_EOF(myListHandle))
-    {
-        string tmpkey = myIniFile->KeyList_GetNextKey(&myListHandle);
-        string tmp = myIniFile->getStringValue("UNITS", tmpkey);
-        string HouseStr, UnitStr, health, PosStr, rotation, mode;
-        SplitString(tmp, 6, &HouseStr, &UnitStr, &health, &PosStr, &rotation, &mode);
-
-        int house;
-        int unitID;
-
-        if ((HouseStr == "Atreides") || (HouseStr == "ATREIDES"))
-            house = HOUSE_ATREIDES;
-        else if ((HouseStr == "Ordos") || (HouseStr == "ORDOS"))
-            house = HOUSE_ORDOS;
-        else if ((HouseStr == "Harkonnen") || (HouseStr == "HARKONNEN"))
-            house = HOUSE_HARKONNEN;
-        else if ((HouseStr == "Fremen") || (HouseStr == "FREMEN"))
-            house = HOUSE_FREMEN;
-        else if ((HouseStr == "Sardaukar") || (HouseStr == "SARDAUKAR"))
-            house = HOUSE_SARDAUKAR;
-        else if ((HouseStr == "Mercenary") || (HouseStr == "MERCENARY"))
-            house = HOUSE_MERCENARY;
-        else
-        {
-            LOG_WARNING("MapClass", "Invalid house string: %s", HouseStr.c_str());
-            house = HOUSE_ATREIDES;
-        }
-
-        int pos = atol(PosStr.c_str());
-
-        if (pos <= 0)
-        {
-            LOG_WARNING("MapClass", "Invalid position string: %s", PosStr.c_str());
-            pos = 0;
-        }
-
-        int Num2Place = 1;
-
-        if (UnitStr == "Devastator")
-            unitID = Unit_Devastator;
-        else if (UnitStr == "Deviator")
-            unitID = Unit_Deviator;
-        else if (UnitStr == "Harvester")
-            unitID = Unit_Harvester;
-        else if (UnitStr == "Infantry")
-        {
-            //make three
-            unitID = Unit_Infantry;
-            Num2Place = 3;
-        }
-
-        else if (UnitStr == "Launcher")
-            unitID = Unit_Launcher;
-        else if (UnitStr == "MCV")
-            unitID = Unit_MCV;
-        else if (UnitStr == "Quad")
-            unitID = Unit_Quad;
-        else if (UnitStr == "Sandworm")
-            unitID = Unit_Sandworm;
-        else if (UnitStr == "Siege Tank")
-            unitID = Unit_SiegeTank;
-        else if (UnitStr == "Sonic Tank")
-            unitID = Unit_SonicTank;
-        else if (UnitStr == "Soldier")
-            unitID = Unit_Infantry;
-        else if (UnitStr == "Tank")
-            unitID = Unit_Tank;
-        else if (UnitStr == "Trike")
-            unitID = Unit_Trike;
-        else if (UnitStr == "Raider Trike")
-            unitID = Unit_Raider;
-        else if (UnitStr == "Raider")
-            unitID = Unit_Raider;
-        else if (UnitStr == "Troopers")
-        {
-            //make three
-            unitID = Unit_Trooper;
-            Num2Place = 3;
-        }
-
-        else if (UnitStr == "Trooper")
-            unitID = Unit_Trooper;
-        else
-        {
-            LOG_WARNING("MapGenerator", "Invalid unit string: %s", UnitStr.c_str());
-            unitID = Unit_Quad;
-        }
-
-        /*        //FIXME: Fix this here and in addPlayer
-          if(m_players->size() > house) {
-           LOG_ERROR("MapGenerator", "player[%d]== NULL",(int) house);
-           exit(EXIT_FAILURE);
-          }
-        */
-
-        for (int i = 0; i < Num2Place; i++)
-        {
-            ObjectClass* newUnit = (ObjectClass*)m_players->at(house)->placeUnit(unitID, UPoint(pos % 64, pos / 64));
-
-            if (newUnit == NULL)
-            {
-                LOG_WARNING("MapGenerator", "This file is not a valid unit entry: %d. (invalid unit position)", pos);
-            }
-        }
-    }
-
-    myIniFile->KeyList_Close(&myListHandle);
-
-
-    myListHandle = myIniFile->KeyList_Open("STRUCTURES");
-
-    while (!myIniFile->KeyList_EOF(myListHandle))
-    {
-        string tmpkey = myIniFile->KeyList_GetNextKey(&myListHandle);
-        string tmp = myIniFile->getStringValue("STRUCTURES", tmpkey);
-
-        if (tmpkey.find("GEN") == 0)
-        {
-            // Gen Object/Structure
-            string PosStr = tmpkey.substr(3, tmpkey.size() - 3);
-            int pos = atol(PosStr.c_str());
-
-            string HouseStr, BuildingStr;
-            SplitString(tmp, 2, &HouseStr, &BuildingStr);
-
-            int house;
-
-            if ((HouseStr == "Atreides") || (HouseStr == "ATREIDES"))
-                house = HOUSE_ATREIDES;
-            else if ((HouseStr == "Ordos") || (HouseStr == "ORDOS"))
-                house = HOUSE_ORDOS;
-            else if ((HouseStr == "Harkonnen") || (HouseStr == "HARKONNEN"))
-                house = HOUSE_HARKONNEN;
-            else if ((HouseStr == "Fremen") || (HouseStr == "FREMEN"))
-                house = HOUSE_FREMEN;
-            else if ((HouseStr == "Sardaukar") || (HouseStr == "SARDAUKAR"))
-                house = HOUSE_SARDAUKAR;
-            else if ((HouseStr == "Mercenary") || (HouseStr == "MERCENARY"))
-                house = HOUSE_MERCENARY;
-            else
-            {
-                LOG_WARNING("MapGenerator", "loadOldMap: Invalid house string: %s", HouseStr.c_str());
-                house = HOUSE_ATREIDES;
-            }
-
-            /*
-                //FIXME: Fix this here and in addPlayer
-                if(m_players->size() > house) {
-                LOG_ERROR("MapGenerator","player[%d]== NULL",(int) house);
-                exit(EXIT_FAILURE);
-               }
-            */
-
-
-            //Using INVALID_POS instead of NONE to avoid warnings.
-            //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
-            if (BuildingStr == "Concrete")
-            {
-                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Slab1, UPoint(pos % 64, pos / 64));
-            }
-
-            else if (BuildingStr == "Wall")
-            {
-                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Wall, UPoint(pos % 64, pos / 64));
-            }
-
-            else
-            {
-                LOG_WARNING("MapGenerator", "loadINIMap: Invalid building string: %s", BuildingStr.c_str());
-            }
-        }
-
-        else
-        {
-            // other structure
-            string HouseStr, BuildingStr, health, PosStr;
-            SplitString(tmp, 6, &HouseStr, &BuildingStr, &health, &PosStr);
-
-            int pos = atol(PosStr.c_str());
-
-            int house;
-
-            if ((HouseStr == "Atreides") || (HouseStr == "ATREIDES"))
-                house = HOUSE_ATREIDES;
-            else if ((HouseStr == "Ordos") || (HouseStr == "ORDOS"))
-                house = HOUSE_ORDOS;
-            else if ((HouseStr == "Harkonnen") || (HouseStr == "HARKONNEN"))
-                house = HOUSE_HARKONNEN;
-            else if ((HouseStr == "Fremen") || (HouseStr == "FREMEN"))
-                house = HOUSE_FREMEN;
-            else if ((HouseStr == "Sardaukar") || (HouseStr == "SARDAUKAR"))
-                house = HOUSE_SARDAUKAR;
-            else if ((HouseStr == "Mercenary") || (HouseStr == "MERCENARY"))
-                house = HOUSE_MERCENARY;
-            else
-            {
-                LOG_WARNING("MapGenerator", "loadINIMap: Invalid house string: %s", HouseStr.c_str());
-                house = HOUSE_ATREIDES;
-            }
-
-            int itemID = 0;
-
-            if (BuildingStr == "Barracks")
-                itemID = Structure_Barracks;
-            else if (BuildingStr == "Const Yard")
-                itemID = Structure_ConstructionYard;
-            else if (BuildingStr == "R-Turret")
-                itemID = Structure_RocketTurret;
-            else if (BuildingStr == "Turret")
-                itemID = Structure_GunTurret;
-            else if (BuildingStr == "Heavy Fctry")
-                itemID = Structure_HeavyFactory;
-            else if (BuildingStr == "Hi-Tech")
-                itemID = Structure_HighTechFactory;
-            else if (BuildingStr == "IX")
-                itemID = Structure_IX;
-            else if (BuildingStr == "Light Fctry")
-                itemID = Structure_LightFactory;
-            else if (BuildingStr == "Palace")
-                itemID = Structure_Palace;
-            else if (BuildingStr == "Outpost")
-                itemID = Structure_Radar;
-            else if (BuildingStr == "Refinery")
-                itemID = Structure_Refinery;
-            else if (BuildingStr == "Repair")
-                itemID = Structure_RepairYard;
-            else if (BuildingStr == "Spice Silo")
-                itemID = Structure_Silo;
-            else if (BuildingStr == "Star Port")
-                itemID = Structure_StarPort;
-            else if (BuildingStr == "Windtrap")
-                itemID = Structure_WindTrap;
-            else if (BuildingStr == "WOR")
-                itemID = Structure_WOR;
-            else
-            {
-                LOG_WARNING("MapGenerator", "loadINIMap: Invalid building: %s", BuildingStr.c_str());
-                itemID = 0;
-            }
-
-            if ((m_players->at(house) != NULL) && (itemID != 0))
-            {
-                //Using INVALID_POS instead of NONE to avoid warnings.
-                //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
-                ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, itemID, UPoint(pos % 64, pos / 64));
-
-                if (newStructure == NULL)
-                {
-                    LOG_WARNING("MapGenerator", "loadINIMap: Invalid position: %s", PosStr.c_str());
-                }
-            }
-
-        }
-    }
-
-    myIniFile->KeyList_Close(&myListHandle);
-
-    return true;
-}
-
-/*
- Splits a string into several substrings. This strings are separated with ','.
-*/
-bool MapGenerator::SplitString(string ParseString, unsigned int NumStringPointers, ...)
-{
-    va_list arg_ptr;
-    va_start(arg_ptr, NumStringPointers);
-
-    string** pStr;
-
-    if (NumStringPointers == 0)
-        return false;
-
-    if ((pStr = (string**) malloc(sizeof(string*) * NumStringPointers)) == NULL)
-    {
-        LOG_ERROR("MapClass", "SplitString: Cannot allocate memory!\n");
-        exit(EXIT_FAILURE);
-    }
-
-    for (unsigned int i = 0; i < NumStringPointers; i++)
-    {
-        pStr[i] = va_arg(arg_ptr, string* );
-    }
-
-    va_end(arg_ptr);
-
-    int startpos = 0;
-    unsigned int index = 0;
-
-    for (unsigned int i = 0; i < ParseString.size(); i++)
-    {
-        if (ParseString[i] == ',')
-        {
-            *(pStr[index]) = ParseString.substr(startpos, i - startpos);
-            startpos = i + 1;
-            index++;
-
-            if (index >= NumStringPointers)
-            {
-                free(pStr);
-                return false;
-            }
-        }
-    }
-
-    *(pStr[index]) = ParseString.substr(startpos, ParseString.size() - startpos);
-
-    free(pStr);
-    return true;
-}
-
-
-bool MapGenerator::makeRandomMap(UPoint size)
-{
-    int i, count;
-    int spotX, spotY;
-
-    m_map = new MapClass(size);
-
-    clearTerrain(Terrain_a1, Terrain_Sand);
-
-    for (i = 0; i < m_rockSpots; i++)
-    {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-
-        makeSpot(SPoint(spotX, spotY), Terrain_Rock);
-    }
-
-    // Spice fields
-
-    for (i = 0; i < m_spiceFields; i++)
-    {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-
-        makeSpot(SPoint(spotX, spotY), Terrain_Spice);
-    }
-
-    for (count = 0; count < ROCKFILLER; count++)
-        thickSpots(Terrain_Rock); //SPOT ROCK
-
-    for (count = 0; count < SPICEFILLER; count++)
-        thickSpots(Terrain_Spice);
-
-    addRockBits();
-
-    addBlooms();
-
-    smoothTerrain();
-
-    return true;
-}
-
-
-
-void MapGenerator::takeMapScreenshot(std::string filename)
-{
-    int w = m_map->w;
-    int h = m_map->h;
-    Image * img = new Image(UPoint(w * 16, h * 16));
-
-
-    for (int i = 0 ; i < w; i++)
-    {
-        for (int j = 0 ; j < h; j++)
-        {
-            m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
-        }
-    }
-
-    SDL_SaveBMP(img->getSurface(), filename.c_str());
-
-    delete img;
-}
-
-
-void MapGenerator::addPlayer(PLAYERHOUSE House, bool ai, int team)
-{
-    if (m_gs->m_players->size() > (unsigned)House)
-    {
-        LOG_ERROR("MapGenerator" , "Trying to create already existing player!");
-        exit(EXIT_FAILURE);
-    }
-
-    if (ai == true)
-    {
-        //player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
-        LOG_WARNING("MapGenerator" , "Trying to create unimplemented ai player!");
-    }
-
-    else
-    {
-        PlayerClass * localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
-        m_gs->m_players->push_back(localPlayer);
-        m_gs->m_localPlayer = m_gs->m_players->at(0);//localPlayer;
-    }
-
-    m_gs->m_players->at(House)->assignMapPlayerNum(House);
 }
 
 void MapGenerator::addRockBits()
@@ -700,6 +115,196 @@ bool MapGenerator::fixCell(SPoint& cellPos)
     }
 
     return error;
+}
+
+MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::string BloomString)
+{
+    m_map = new MapClass(UPoint(64,64));
+ 
+    unsigned short SeedMap[64*64];
+    createMapWithSeed(SeedNum, SeedMap);
+
+
+    for (int j = 0; j < m_map->h; j++)
+    {
+        for (int i = 0; i < m_map->w; i++)
+        {
+            int type = Terrain_Sand;
+            unsigned char seedmaptype = SeedMap[j*64+i] >> 4;
+
+            switch (seedmaptype)
+            {
+
+                case 0x7:
+                    /* Sand */
+                    type = Terrain_Sand;
+                    break;
+
+                case 0x9:
+                    /* Dunes */
+                    type = Terrain_Dunes;
+                    break;
+
+                case 0x2:
+                    /* Building */
+
+                case 0x8:
+                    /* Rock */
+                    type = Terrain_Rock;
+                    break;
+
+                case 0xb:
+                    /* Spice */
+                    type = Terrain_Spice;
+                    break;
+
+                case 0xc:
+                    /* ThickSpice */
+                    type = Terrain_ThickSpice;
+                    break;
+
+                case 0xa:
+                    /* Mountain */
+                    type = Terrain_Mountain;
+                    break;
+
+                default:
+                    LOG_WARNING("MapClass", "Unknown maptype %x\n", type);
+                    exit(EXIT_FAILURE);
+            }
+
+            m_map->getCell(i, j)->setType(type);
+
+            m_map->getCell(i, j)->setTile(Terrain_a1);
+        }
+
+    }
+
+    //createSandRegions();
+
+    if (BloomString != "")
+    {
+        vector<std::string> BloomPositions  = SplitString(BloomString);
+
+        for (unsigned int i = 0; i < BloomPositions.size();i++)
+        {
+            // set bloom
+            int BloomPos = atol(BloomPositions[i].c_str());
+
+            if ((BloomPos != 0) || (BloomPositions[i] == "0"))
+            {
+                int xpos = BloomPos % m_map->w;
+                int ypos = BloomPos / m_map->w;
+
+                if (m_map->cellExists(xpos, ypos))
+                {
+                    m_map->getCell(xpos, ypos)->setTile(getRandomInt(Terrain_a2, Terrain_a3));
+                }
+
+                else
+                {
+                    LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", xpos, ypos);
+                }
+            }
+        }
+    }
+
+    if (FieldString != "")
+    {
+        vector<std::string> FieldPositions  = SplitString(FieldString);
+
+        for (unsigned int i = 0; i < FieldPositions.size();i++)
+        {
+            // set bloom
+            int FieldPos = atol(FieldPositions[i].c_str());
+
+            if ((FieldPos != 0) || (FieldPositions[i] == "0"))
+            {
+                int xpos = FieldPos % m_map->w;
+                int ypos = FieldPos / m_map->w;
+
+                if (m_map->cellExists(xpos, ypos))
+                {
+                    for (int x = -6; x <= 6; x++)
+                    {
+                        for (int y = -6; y <= 6; y++)
+                        {
+                            if (m_map->cellExists(xpos + x, ypos + y)
+                                    && (distance_from(xpos, ypos, xpos + x, ypos + y) <= 6))
+                            {
+                                TerrainClass *cell = m_map->getCell(xpos + x, ypos + y);
+
+                                if ((cell != NULL) & (cell->isSand()))
+                                    cell->setType(Terrain_Spice);
+                            }
+                        }
+                    }
+
+                    for (int x = xpos - 8; x <= xpos + 8; x++)
+                    {
+                        for (int y = ypos - 8; y <= ypos + 8; y++)
+                        {
+                            if (m_map->cellExists(x, y))
+                            {
+                                smoothSpot(UPoint(x, y));
+                            }
+                        }
+                    }
+                }
+
+                else
+                {
+                    LOG_WARNING("MapGenerator", "Cannot set field at %d, %d", xpos, ypos);
+                }
+            }
+        }
+    }
+
+    smoothTerrain();
+    
+    return m_map;
+}
+
+bool MapGenerator::makeRandomMap(UPoint size)
+{
+    int i, count;
+    int spotX, spotY;
+
+    m_map = new MapClass(size);
+
+    clearTerrain(Terrain_a1, Terrain_Sand);
+
+    for (i = 0; i < m_rockSpots; i++)
+    {
+        spotX = getRandomInt(0, m_map->w - 1);
+        spotY = getRandomInt(0, m_map->h - 1);
+
+        makeSpot(SPoint(spotX, spotY), Terrain_Rock);
+    }
+
+    // Spice fields
+
+    for (i = 0; i < m_spiceFields; i++)
+    {
+        spotX = getRandomInt(0, m_map->w - 1);
+        spotY = getRandomInt(0, m_map->h - 1);
+
+        makeSpot(SPoint(spotX, spotY), Terrain_Spice);
+    }
+
+    for (count = 0; count < ROCKFILLER; count++)
+        thickSpots(Terrain_Rock); //SPOT ROCK
+
+    for (count = 0; count < SPICEFILLER; count++)
+        thickSpots(Terrain_Spice);
+
+    addRockBits();
+
+    addBlooms();
+
+    smoothTerrain();
+
+    return true;
 }
 
 void MapGenerator::makeSpot(SPoint cellPos, int type)
@@ -1100,7 +705,6 @@ void MapGenerator::smoothTerrain()
             smoothSpot(SPoint(i, j));
 }
 
-
 void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
 {
     for (int i = 0; i < m_map->w; i++)
@@ -1120,9 +724,9 @@ void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
         }
 }
 
-vector<string> MapGenerator::SplitString(string ParseString)
+vector<std::string> MapGenerator::SplitString(std::string ParseString)
 {
-    vector<string> retVector;
+    vector<std::string> retVector;
     int startpos = 0;
 
     for (unsigned int i = 0; i < ParseString.size(); i++)

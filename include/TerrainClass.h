@@ -8,6 +8,9 @@
 
 #include <list>
 
+#define DAMAGEPERCELL 5
+#define FOGTIMEOUT 10
+
 typedef std::list <Uint32> List;
 
 typedef struct
@@ -79,6 +82,9 @@ class TerrainClass  : public UPoint
 	ObjectClass* getObjectWithID(Uint32 objectID);
 	
 	bool hasAnObject();
+	
+	//!@{
+	//! @name setters and getters
     inline bool hasADeadObject() { return !m_assignedDeadObjects.empty(); }
     inline bool hasAGroundObject() { return (hasInfantry() || hasANonInfantryGroundObject()); }
     inline bool hasAnAirUnit() { return !m_assignedAirUnits.empty(); }
@@ -95,18 +101,11 @@ class TerrainClass  : public UPoint
 
     bool isMountain() { return  (m_type == Terrain_Mountain); }
 
-    inline bool isRock() {
-        return ((m_type == Terrain_Rock) || (m_type == Structure_Slab1) || (m_type == Terrain_Mountain));
-    }
-
-    inline bool isSand() {
-        return ((m_type == Terrain_Dunes) || (m_type == Terrain_Sand));
-    }
-
-    inline bool isBloom() {
-        return ((m_type == Terrain_Sand) && ((m_tile == Terrain_a2) || (m_tile == Terrain_a3)));
-    }
-
+    inline bool isRock() { return ((m_type == Terrain_Rock) || (m_type == Structure_Slab1) 
+                           || (m_type == Terrain_Mountain)); }
+    inline bool isSand() { return ((m_type == Terrain_Dunes) || (m_type == Terrain_Sand)); }
+    inline bool isBloom() { return ((m_type == Terrain_Sand) && ((m_tile == Terrain_a2) 
+                            || (m_tile == Terrain_a3))); }
     inline bool isSpice() { return ((m_type == Terrain_Spice) || (m_type == Terrain_ThickSpice)); }
     inline bool isThickSpice() { return (m_type == Terrain_ThickSpice); }
 
@@ -132,7 +131,7 @@ class TerrainClass  : public UPoint
 	inline void setHideTile(int newTile) { m_hideTile = newTile; }
 	
 	inline void setFogTile(int newTile) { m_fogTile = newTile; }
-
+    //@}
     //! @name Path searching variables
     //@{ 
     //! True if A* has already checked the node
@@ -145,11 +144,23 @@ class TerrainClass  : public UPoint
            //! estimate for how much it will cost to get from here to dest
            m_heuristic;  
 
-    //FIXME:What's this for?
+    //! This variable is used in A* search algorithm for path finding.
     TerrainClass*  m_parent;
     //@}
 
 	void clearDamage();
+	/*!
+	 *  Inflict damage to all objects assigned to given cell and change
+	 *  tile to a damaged one.
+	 *  @param damager pointer to object that causes damage
+	 *  @param damagerOwner pointer to owner of the damager
+	 *  @param realPos bullets always have realPos as they are not assigned to any cells
+	 *  @param bulletType can be bullet, rocket, deviator rocket, large rocket, etc.
+	 *  @param bulletDamage how deadly a given bullet is
+	 *  @param damagePiercing additional damage caused by byllet
+	 *  @param damageRadius bullets affect only one cell, rockets can have bigger radius of destruction
+	 *  @param air the bullet is aimed at an air unit
+	 */
 	void damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, int bulletType, int bulletDamage, int damagePiercing, int damageRadius, bool air);
 
   private:
@@ -162,23 +173,20 @@ class TerrainClass  : public UPoint
     float m_difficulty,
 
     //! How much spice on this particular cell is left
-    m_spice;
+        m_spice;
 
 	int	m_hideTile,
 		m_fogTile,
-		m_fogColour,/*remember last colour(radar)*/
+		//! Remember last colour(radar)
+		m_fogColour,
+		m_owner,
 		m_sandRegion,
-		m_owner;
-		
-	Uint32 m_damageType;
-
+		m_type;
     /*!
      * tile assigned to current cell
      * @note need pretile because when smoothing random map, you need to know what all the tiles are before smoothed
      */
-    int m_tile;
-
-    int m_type;
+        int m_tile;		
 
     ImagePtr m_img;
     ImagePtr m_hiddenImg;
@@ -189,10 +197,10 @@ class TerrainClass  : public UPoint
           m_assignedUndergroundUnits,
           m_assignedInfantry;
 
-	DAMAGETYPE	damage[2];	//damage positions		
-//	DAMAGETYPE	damage[DAMAGEPERCELL];	//damage positions
-	Uint32 damageType;
-	int	damagePos;
+    //! damage positions
+	DAMAGETYPE	m_damage[DAMAGEPERCELL];
+	Uint32 m_damageType;
+	int	m_damagePos;
 };
 
 #endif // DUNE_TERRAINCLASS_H

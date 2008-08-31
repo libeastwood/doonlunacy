@@ -4,15 +4,13 @@
 #include <list>
 #include "Log.h"
 
-using namespace std;
-
 template <class T> class ConcatIterator {
 	
 private:
-	typedef list<T> TList;
+	typedef std::list<T> TList;
 	typedef TList* TListPointer;
 	typedef typename TList::iterator TList_Iter;
-	typedef list< TListPointer> TListOfList;
+	typedef std::list< TListPointer> TListOfList;
 	typedef typename TListOfList::iterator TListOfList_Iter;
 
 
@@ -23,7 +21,7 @@ public:
 	ConcatIterator() { };
 	~ConcatIterator() { };
 
-	void addList(list<T>& _List) {
+	void addList(std::list<T>& _List) {
 		if(_List.empty()) {
 			// ignore this list
 			return;

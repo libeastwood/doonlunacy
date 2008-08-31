@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "GameMan.h"
 #include "ObjectClass.h"
 #include "ObjectPointer.h"
 
@@ -9,7 +9,7 @@ ObjectClass* ObjectPointer::getObjPointer()
 		return NULL;
 	}
 
-	ObjectClass* objPointer = GameState::Instance()->GetObjectTree()->getObject(m_objectID);
+	ObjectClass* objPointer = GameMan::Instance()->GetObjectTree()->getObject(m_objectID);
 
 	if(objPointer == NULL) 
 	{
