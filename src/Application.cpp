@@ -2,6 +2,7 @@
 #include "Colours.h"
 #include "DataCache.h"
 #include "FontManager.h"
+#include "GCObject.h"
 #include "DuneConstants.h"
 #include "Gfx.h"
 #include "Log.h"
@@ -241,7 +242,7 @@ void Application::LoadData()
     DataCache::Instance()->Init();
     
     SetPalette();
-    m_cursor.reset(DataCache::Instance()->getGuiPic(UI_MouseCursor).get()); //mouse.getPicture(0));
+    m_cursor = DataCache::Instance()->getGCObject("UI_MouseCursor")->getImage();
 
     LOG_INFO("Application", "Starting sound...");
     SoundPlayer::Instance();
