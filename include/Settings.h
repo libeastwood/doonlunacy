@@ -1,8 +1,7 @@
 #ifndef DUNE_SETTINGS_H
 #define DUNE_SETTINGS_H
 
-#include "SDL.h"
-#include "SDL_net.h"
+#include <SDL.h>
 #include <string>
 
 #include "DuneConstants.h"

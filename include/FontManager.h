@@ -5,8 +5,6 @@
 
 #include <eastwood/Font.h>
 
-#include <SDL_ttf.h>
-
 class FontManager : public Singleton<FontManager>
 {
     friend class Singleton<FontManager>;
