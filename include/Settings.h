@@ -48,7 +48,7 @@ typedef struct
 			
 	Uint16	port;
 
-	IPaddress	serverIp;
+	//IPaddress	serverIp;
 } SETTINGSTYPE;
 
 extern SETTINGSTYPE settings;
