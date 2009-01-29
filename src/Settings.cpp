@@ -31,8 +31,6 @@ void Settings::load()
     python::dict global(main.attr("__dict__"));
     python::dict local;
 
-    configFile = new Config();
-
     if (ResMan::Instance()->exists(settingsfile))
     {
 	try{
@@ -63,24 +61,23 @@ void Settings::load()
 
     } else
     {
-    
-	m_dataDir = "paks/";
-	m_debug= 8;
-	m_gameSpeed = 4;
-	m_playIntro = true;
+	local["data_dir"] = m_dataDir = "paks/";
+	local["debug"] = m_debug= 8;
+	local["game_speed"] = m_gameSpeed = 4;
+	local["play_intro"] = m_playIntro = true;
 
-	m_height = 480;
-	m_width = 640;
-	m_fullscreen = false;
-	m_doubleBuffered = true;
+	local["height"] = m_height = 480;
+	local["width"] = m_width = 640;
+	local["fullscreen"] = m_fullscreen = false;
+	local["double_buffered"] = m_doubleBuffered = true;
 
-	m_soundOn = true;
-	m_sfxVolume = MIX_MAX_VOLUME/2;
-	m_responseVolume = 100;
-    	m_voiceVolume = 128;
-    	m_musicOn = true;
-    	m_musicVolume = MIX_MAX_VOLUME/2;
-	m_emuOpl = (int)CT_EMUOPL;
+	local["sound_on"] = m_soundOn = true;
+	local["sound_volume"] = m_sfxVolume = MIX_MAX_VOLUME/2;
+	local["response_volume"] = m_responseVolume = 100;
+	local["voice_volume"] = m_voiceVolume = 128;
+	local["music_on"] = m_musicOn = true;
+	local["music_volume"] = m_musicVolume = MIX_MAX_VOLUME/2;
+	local["opl_emulator"] = m_emuOpl = (int)CT_EMUOPL;
     }
 
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
@@ -117,6 +114,8 @@ void Settings::load()
 
 void Settings::save()
 {
+    //TODO: dump __repr__() of local to disk..
+    
 //    String configText = configFile::saveFile(configFile);
 //	ResMan::Instance()->writeText("CONFIG:config.txt", configText);    
 /*
