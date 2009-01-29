@@ -1,6 +1,8 @@
 #ifndef DUNE_APPLICATION_H
 #define DUNE_APPLICATION_H
 
+#include <boost/python.hpp>
+
 #include "singleton.h"
 #include "states/State.h"
 #include "states/TopLevelState.h"
@@ -9,6 +11,8 @@
 #include "gui2/Label.h"
 
 #define VERSION "0.95"
+
+namespace python = boost::python;
 
 typedef enum
 {
@@ -57,12 +61,14 @@ class Application : public Singleton<Application>
         void UpdateVideoMode(bool fullscreen);
         void UpdateVideoMode(Uint16 w, Uint16 h);
         void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
+
         
     private:
         void InitSettings();
         void InitAudio();
         void InitNet();
         void InitFont();
+	void InitPython();
         void InitVideo();
         void LoadData();
 

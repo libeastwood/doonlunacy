@@ -1,11 +1,15 @@
 #ifndef DUNE_SETTINGS_H
 #define DUNE_SETTINGS_H
 
+
+#include <boost/python.hpp>
 #include <SDL.h>
 #include <string>
 
 #include "DuneConstants.h"
 #include "Definitions.h"
+
+namespace python = boost::python;
 
 
 typedef struct
@@ -14,38 +18,38 @@ typedef struct
 	PLAYERTYPE playerType;
 
 	bool	concreteRequired,
-			doubleBuffered,
-			finished,
-			isHuman[MAX_PLAYERS],
-			update,
-			won;
+		doubleBuffered,
+		finished,
+		isHuman[MAX_PLAYERS],
+		update,
+		won;
 
 	char	lastAddress[MAX_LINE],
-			localPlayerName[MAX_NAMELENGTH],
-			mapFilename[MAX_LINE],
-			playerName[MAX_PLAYERS][MAX_NAMELENGTH],
-			screen[MAX_LINE],
-			serverString[MAX_LINE];
+		localPlayerName[MAX_NAMELENGTH],
+		mapFilename[MAX_LINE],
+		playerName[MAX_PLAYERS][MAX_NAMELENGTH],
+		screen[MAX_LINE],
+		serverString[MAX_LINE];
 
-	int		maxPlayers,
-			width, height,
-			winFlags,
-			
-			playerColour[MAX_PLAYERS],
-			playerHouse[MAX_PLAYERS],
-			playerTeam[MAX_PLAYERS],
-			playerMapNumber[MAX_PLAYERS],
-			playerNum,
-			techLevel,
-			numPlayers,
-			gamespeed,
-			campaignLevel;
+	int	maxPlayers,
+		width, height,
+		winFlags,
 
-        float  unitScale;
-	
+		playerColour[MAX_PLAYERS],
+		playerHouse[MAX_PLAYERS],
+		playerTeam[MAX_PLAYERS],
+		playerMapNumber[MAX_PLAYERS],
+		playerNum,
+		techLevel,
+		numPlayers,
+		gamespeed,
+		campaignLevel;
+
+	float  unitScale;
+
 
 	DIFFICULTYTYPE	playerDifficulty[MAX_PLAYERS];
-			
+
 	Uint16	port;
 
 	//IPaddress	serverIp;
@@ -56,15 +60,14 @@ extern SETTINGSTYPE settings;
 
 #include "singleton.h"
 #include "Log.h"
-#include <libconfig.h++>
 
 class Settings: public Singleton<Settings>
 {
-    friend class Singleton<Settings>;
-    friend class SoundPlayer;
-    friend class Application;
-    friend class HScale;
-  protected:
+	friend class Singleton<Settings>;
+	friend class SoundPlayer;
+	friend class Application;
+	friend class HScale;
+	protected:
 	Settings();
 
 	// protected so Application can change them 
@@ -74,8 +77,8 @@ class Settings: public Singleton<Settings>
 	bool m_doubleBuffered;
 	bool m_playIntro;
 
-    //! Used for frame independent movement.
-    int m_gameSpeed;
+	//! Used for frame independent movement.
+	int m_gameSpeed;
 
 	//! @name SFX
 	//@{
@@ -87,40 +90,42 @@ class Settings: public Singleton<Settings>
 
 	//! volume of voice over sounds
 	int	m_voiceVolume;
-    	
+
 	//! volume of unit responses played when a unit is selected
 	int	m_responseVolume;
-    //@}
-    
-    //! @name MUSIC
-    //@{
+	//@}
 
-    //! whether music should be played  
+	//! @name MUSIC
+	//@{
+
+	//! whether music should be played  
 	bool m_musicOn;
 
-    //! music volume
+	//! music volume
 	int	m_musicVolume;
-    //@}
-    
-    //! how many nodes units will search to path before stopping
-    int m_maxPathSearch;
+	//@}
+
+	//! how many nodes units will search to path before stopping
+	int m_maxPathSearch;
 
 	int m_emuOpl;
 
 	std::string m_dataDir;
-    
-    libconfig::Config * configFile;
-        
-  public:
+
+	python::object	main;
+	/*
+	   python::object	global;*/
+	python::object	local;
+	public:
 	void load();
 	void save();
-    
+
 	void ParseFile(const char* fn);
 	void ParseOptions(int argc, char* argv[]);
 
-    inline int GetGameSpeed() { return m_gameSpeed; }
-    
-    inline int GetMaxSearchPath() { return m_maxPathSearch; }
+	inline int GetGameSpeed() { return m_gameSpeed; }
+
+	inline int GetMaxSearchPath() { return m_maxPathSearch; }
 
 	inline int GetWidth() { return m_width; }
 
@@ -133,7 +138,7 @@ class Settings: public Singleton<Settings>
 	std::string GetDataDir() { return m_dataDir; }
 
 	EMUOPL GetEmuOpl();
-        
+
 	bool GetSound() { return m_soundOn; }
 	bool GetMusic() { return m_musicOn; }
 	bool GetPlayIntro() { return m_playIntro; }
