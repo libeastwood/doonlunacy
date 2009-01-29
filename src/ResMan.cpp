@@ -140,9 +140,9 @@ PAKResource::~PAKResource()
     delete m_pakfile;
 }
 
-unsigned char* PAKResource::readFile(std::string path, int *size)
+unsigned char* PAKResource::readFile(std::string path, size_t *size)
 {
-    int filesize;
+    size_t filesize;
     unsigned char *buf =  m_pakfile->getFile(path.c_str(), &filesize);
     
     //RESMAN_LOG_INFO(boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);

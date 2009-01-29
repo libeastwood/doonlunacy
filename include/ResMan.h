@@ -123,7 +123,7 @@ class PAKResource : public Resource
     public:
         PAKResource(boost::filesystem::path path) ;
         ~PAKResource();
-		unsigned char* readFile(std::string path, int *size);
+		unsigned char *readFile(std::string path, size_t *size);
 		bool exists(std::string path);
     private:
         PakFile *m_pakfile;
