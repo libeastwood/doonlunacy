@@ -44,7 +44,7 @@ void Settings::load()
             m_height = python::extract<int>(local["config"]["graphics"]["height"]);
             m_width = python::extract<int>(local["config"]["graphics"]["width"]);	
             m_fullscreen = python::extract<bool>(local["config"]["graphics"]["fullscreen"]);
-            m_doubleBuffered = python::extract<bool>(local["config"]["graphics"]["double_buffer"]);
+            m_doubleBuffered = python::extract<bool>(local["config"]["graphics"]["double_buffered"]);
 
             m_soundOn = python::extract<bool>(local["config"]["sound"]["sound_on"]);
             m_sfxVolume = python::extract<int>(local["config"]["sound"]["sound_volume"]);
