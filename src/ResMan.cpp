@@ -19,7 +19,7 @@
 
 namespace bfs = boost::filesystem;
 
-FileLike::FileLike(unsigned char* buf, int size)
+FileLike::FileLike(unsigned char* buf, size_t size)
 {
 	m_buf = buf;
 	m_size = size;
@@ -31,13 +31,13 @@ FileLike::~FileLike()
 	free(m_buf);
 }
 
-void FileLike::read(void* buf, int size)
+void FileLike::read(void* buf, size_t size)
 {
 	memcpy(buf, &m_buf[m_pos], size);
 	m_pos += size; 
 }
 
-void FileLike::seek(int offset)
+void FileLike::seek(off_t offset)
 {
 	m_pos = offset;
 }
@@ -61,14 +61,14 @@ DIRResource::DIRResource(bfs::path path)
    m_path = path; 
 }
 
-unsigned char* DIRResource::readFile(std::string path, int *size)
+unsigned char* DIRResource::readFile(std::string path, size_t *size)
 {
     bfs::path fullpath (m_path);
 	fullpath /= path;
 
     FILE *file = fopen (fullpath.string().c_str(), "rb");
     fseek(file, 0, SEEK_END);
-    int filesize = ftell(file);
+    size_t filesize = ftell(file);
 
     fseek(file, 0, SEEK_SET);
 
@@ -257,7 +257,7 @@ bool ResMan::exists(std::string path)
 	return res->exists(filename);
 }
 
-unsigned char*  ResMan::readFile(std::string name, int *size)
+unsigned char*  ResMan::readFile(std::string name, size_t *size)
 {
 	std::string filename;
     Resource* res = getResource(name, filename);
@@ -277,7 +277,7 @@ unsigned char*  ResMan::readFile(std::string name, int *size)
 
 FileLike* ResMan::readFile(std::string name)
 {
-    int size;
+    size_t size;
     unsigned char* buf = readFile(name, &size);
     return new FileLike(buf, size);
 }

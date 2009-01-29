@@ -167,7 +167,7 @@ ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 Object
 
 bool GameMan::LoadScenario(string scenarioName)
 {
-	int len;
+	size_t len;
 	uint8_t *data = ResMan::Instance()->readFile(scenarioName, &len);
 
     IniFile *myInifile = new IniFile(data, len);

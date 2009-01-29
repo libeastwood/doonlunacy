@@ -106,7 +106,7 @@ void GCObject::drawImage()
     {
         Setting& node = dataConfig->lookup(fullpath);
 		
-		int len;
+		size_t len;
 		uint8_t *data;
 
         std::string variable;
@@ -205,7 +205,7 @@ void GCObject::drawImage()
 				std::string mapName;
 				if(node.lookupValue("map", mapName))
 				{
-					int mapLen;
+					size_t mapLen;
 					uint8_t *mapData = ResMan::Instance()->readFile(mapName, &mapLen);
 					
 					IcnFile *icnfile(new IcnFile(data, len, mapData, mapLen, palette));

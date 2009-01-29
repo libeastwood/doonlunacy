@@ -65,7 +65,7 @@ void DataCache::Init(){
 
 
 	soundChunk.resize(NUM_SOUNDCHUNK);
-    int len;
+    size_t len;
     uint8_t *data;
 //    Image *tmp;
 
@@ -170,7 +170,7 @@ sprite* DataCache::getSpriteInfo(std::string spriteName)
 
 void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 {
-    int len;
+    size_t len;
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
     PalfilePtr tmp (new PalFile(data, len));
 
@@ -220,7 +220,7 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
         Setting& node = m_dataConfig->lookup(fullpath);
         node.lookupValue("filename", fileName);
         SDL_RWops* rwop;
-        int len;
+        size_t len;
         uint8_t * data;
 
         data = ResMan::Instance()->readFile(fileName.c_str(), &len);
@@ -301,7 +301,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
     {
         Setting& node = m_dataConfig->lookup(fullpath);
 		
-		int len;
+		size_t len;
 		uint8_t *data;
 
         std::string fileName;

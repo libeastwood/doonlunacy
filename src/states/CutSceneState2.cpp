@@ -141,7 +141,7 @@ void CutSceneState::loadScene(uint32_t scene)
 			m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))), true);
 		else
 		{
-			int len;
+			size_t len;
 			uint8_t *data = ResMan::Instance()->readFile(filename, &len);
 			if(filename.substr(filename.length()-3, 3) == "CPS")
 			{

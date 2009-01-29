@@ -18,7 +18,7 @@ class FileLike
     public:
 		//! @name Constructors & Destructor
         //@{
-        FileLike(unsigned char* buf, int size);
+        FileLike(unsigned char* buf, size_t size);
         ~FileLike();
 		//@}
 
@@ -29,17 +29,17 @@ class FileLike
             @param buf buffer to read data into 
 			@param size amount of bytes to read
         */
-        void read(void* buf, int size);
+        void read(void* buf, size_t size);
 		/*!
 			seek to a position in the buffer
 			@param offset offset from the beginning of the buffer in bytes
 		*/
-        void seek(int offset);    
+        void seek(off_t offset);
 		//@}
 
     private:
         unsigned char* m_buf;
-        int m_size;
+        size_t m_size;
         int m_pos;
 };
 
@@ -61,7 +61,7 @@ class Resource
 			@param size if not NULL the file size is put here 
 			@return file data
 		*/
-        virtual unsigned char* readFile(std::string path, int *size) { return NULL; }
+        virtual unsigned char* readFile(std::string path, size_t *size) { return NULL; }
 		
 		/*!
 			read a text file from resource
@@ -100,7 +100,7 @@ class DIRResource : public Resource
 {
     public:
         DIRResource(boost::filesystem::path path) ;
-        unsigned char* readFile(std::string path, int *size);
+        unsigned char* readFile(std::string path, size_t *size);
 		std::string readText(std::string path);
 		bool exists(std::string path);
 };
@@ -169,7 +169,7 @@ class ResMan : public Singleton<ResMan>
 			@param size if not NULL the file size is put here 
 			@return file data
 		*/
-        unsigned char* readFile(std::string path, int *size);
+        unsigned char* readFile(std::string path, size_t *size);
 		/*!
 			read a file from the resource.
 			@param path path to the file to read

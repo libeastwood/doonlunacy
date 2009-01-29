@@ -118,7 +118,7 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 	m_currentSong->filename = filename;
 	m_currentSong->track = trackNum;
         changeEmuOpl(Settings::Instance()->GetEmuOpl());
-	int bufsize;
+	size_t bufsize;
 	uint8_t *data;
 	data = ResMan::Instance()->readFile(filename, &bufsize);
         m_player->load(data, bufsize);
