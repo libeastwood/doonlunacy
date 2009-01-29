@@ -14,9 +14,6 @@ namespace boost {
 
 int main(int argc, char *argv[])
 {
-    Settings::Instance()->ParseFile("dunelegacy.cfg");
-    Settings::Instance()->ParseOptions(argc, argv);
-
     Application::Instance()->Init();
     Application::Instance()->RootState()->PushState( new MainMenuState() );
     if(Settings::Instance()->GetPlayIntro())
