@@ -1,5 +1,8 @@
-#include <fstream>
 #include <SDL_mixer.h>
+#include <boost/python.hpp>
+
+
+
 
 #include "Settings.h"
 #include "Strings.h"
@@ -7,8 +10,7 @@
 #include "SoundPlayer.h"
 
 
-
-using namespace libconfig;
+using namespace boost;
 SETTINGSTYPE settings;
 
 Settings::Settings()
@@ -24,57 +26,65 @@ Settings::Settings()
 
 void Settings::load()
 {
-	const char* settingsfile = "CONFIG:config.txt";
-	configFile = new Config();
+    const char* settingsfile = "CONFIG:config.py";
+    python::object main = python::import("__main__");
+    python::dict global(main.attr("__dict__"));
+    python::dict local;
+
+    configFile = new Config();
+
     if (ResMan::Instance()->exists(settingsfile))
     {
-        configFile->readFile("config.txt");
+	try{
+	    python::object result = python::exec_file("config.py", global, local);
+	    m_dataDir = python::extract<std::string>(local["data_dir"]);
+	    m_debug = python::extract<int>(local["debug"]);
+	    m_gameSpeed = python::extract<int>(local["game_speed"]);
+	    m_playIntro = python::extract<bool>(local["play_intro"]);
+
+	    m_height = python::extract<int>(local["graphics"]["height"]);
+	    m_width = python::extract<int>(local["graphics"]["width"]);	
+	    m_fullscreen = python::extract<bool>(local["graphics"]["fullscreen"]);
+	    m_doubleBuffered = python::extract<bool>(local["graphics"]["double_buffer"]);
+
+	    m_soundOn = python::extract<bool>(local["sound"]["sound_on"]);
+	    m_sfxVolume = python::extract<int>(local["sound"]["sound_volume"]);
+	    m_responseVolume = python::extract<int>(local["sound"]["response_volume"]);
+	    m_voiceVolume = python::extract<int>(local["sound"]["voice_volume"]);
+	    m_musicOn = python::extract<bool>(local["sound"]["music_on"]);
+	    m_musicVolume = python::extract<int>(local["sound"]["music_volume"]);
+	    m_emuOpl = python::extract<int>(local["sound"]["opl_emulator"]);
+	}
+	catch(python::error_already_set const &)
+	{
+	    // print all other errors to stderr
+	    PyErr_Print();
+	}
+
     } else
     {
+    
+	m_dataDir = "paks/";
+	m_debug= 8;
+	m_gameSpeed = 4;
+	m_playIntro = true;
 
-        Setting &root = configFile->lookup(".");
-        root.add("data_dir", Setting::TypeString) = "paks/";
-        root.add("debug", Setting::TypeInt) = 8;
-        root.add("game_speed", Setting::TypeInt) = 4;
-        root.add("play_intro", Setting::TypeBoolean) = true;        
-        root.add("graphics", Setting::TypeGroup);
-        root.add("sound", Setting::TypeGroup);    
+	m_height = 480;
+	m_width = 640;
+	m_fullscreen = false;
+	m_doubleBuffered = true;
 
-        Setting& node = configFile->lookup(".graphics");
-        node.add("height", Setting::TypeInt) = 480;
-        node.add("width", Setting::TypeInt) = 640;
-        node.add("fullscreen", Setting::TypeBoolean) = false;
-        node.add("double_buffer", Setting::TypeBoolean) = true;
-        
-        Setting& node2 = configFile->lookup(".sound");
-        node2.add("sound_on", Setting::TypeBoolean) = true;
-        node2.add("sound_volume", Setting::TypeInt) = MIX_MAX_VOLUME/2;
-        node2.add("response_volume", Setting::TypeInt) = 100;
-        node2.add("voice_volume", Setting::TypeInt) = 128;
-        node2.add("music_on", Setting::TypeBoolean) = true;
-        node2.add("music_volume", Setting::TypeInt) = MIX_MAX_VOLUME/2;
-        node2.add("opl_emulator", Setting::TypeInt) = (int)CT_EMUOPL;
-        configFile->writeFile("config.txt");
+	m_soundOn = true;
+	m_sfxVolume = MIX_MAX_VOLUME/2;
+	m_responseVolume = 100;
+    	m_voiceVolume = 128;
+    	m_musicOn = true;
+    	m_musicVolume = MIX_MAX_VOLUME/2;
+	m_emuOpl = (int)CT_EMUOPL;
     }
 
-    configFile->lookupValue(".graphics.width", m_width);
-    configFile->lookupValue(".graphics.height", m_height);
-    configFile->lookupValue(".graphics.fullscreen", m_fullscreen);
-    configFile->lookupValue(".graphics.double_buffer", m_doubleBuffered);
-    configFile->lookupValue(".debug", m_debug);
-    configFile->lookupValue(".game_speed", m_gameSpeed);
-    configFile->lookupValue(".play_intro", m_playIntro);
-
-    configFile->lookupValue(".data_dir", m_dataDir);
-    configFile->lookupValue(".sound.sound_on", m_soundOn);
-    configFile->lookupValue(".sound.sound_volume", m_sfxVolume);
-    configFile->lookupValue(".sound.response_volume", m_responseVolume);
-    configFile->lookupValue(".sound.voice_volume", m_voiceVolume);        
-    configFile->lookupValue(".sound.music_on", m_musicOn);
-    configFile->lookupValue(".sound.music_volume", m_musicVolume);
-    configFile->lookupValue(".sound.opl_emulator", m_emuOpl);
-
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
+    /*
     if (configFile->exists("log_verbosity"))
     {
         Setting& node = configFile->lookup(".log_verbosity");
@@ -86,7 +96,7 @@ void Settings::load()
 
             Log::Instance()->setVerbosity(logSystem, (LogVerbosity)logVerbosity);
         }
-    }
+    }*/
 
 
 
@@ -109,6 +119,7 @@ void Settings::save()
 {
 //    String configText = configFile::saveFile(configFile);
 //	ResMan::Instance()->writeText("CONFIG:config.txt", configText);    
+/*
     configFile->lookup(".graphics.width") =  m_width;
     configFile->lookup(".graphics.height") =  m_height;
     configFile->lookup(".graphics.fullscreen") = m_fullscreen;
@@ -126,6 +137,7 @@ void Settings::save()
     configFile->lookup(".sound.music_volume") = m_musicVolume;
     configFile->lookup(".sound.opl_emulator") = m_emuOpl;
     configFile->writeFile("config.txt");
+    */
 }
 
 void Settings::ParseFile(const char* fn)

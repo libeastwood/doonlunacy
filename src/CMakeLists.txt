@@ -98,6 +98,8 @@ TARGET_LINK_LIBRARIES(../doonlunacy ${LIBEASTWOOD_LIBRARIES} )
 TARGET_LINK_LIBRARIES(../doonlunacy boost_signals-mt )
 TARGET_LINK_LIBRARIES(../doonlunacy boost_filesystem-mt )
 TARGET_LINK_LIBRARIES(../doonlunacy config++ )
+TARGET_LINK_LIBRARIES(../doonlunacy boost_python )
+TARGET_LINK_LIBRARIES(../doonlunacy ${PYTHON_LIBRARY} )
 
 
 

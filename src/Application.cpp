@@ -1,3 +1,9 @@
+#include <boost/python.hpp>
+#include <assert.h>
+
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "Application.h"
 #include "Colours.h"
 #include "DataCache.h"
@@ -13,11 +19,6 @@
 #include "gui2/Container.h"
 
 #include "houses.h"
-
-#include <assert.h>
-
-#include <SDL.h>
-#include <SDL_mixer.h>
 
 Uint8 gpaloff;
 
@@ -91,6 +92,8 @@ void Application::Init()
     houseColour[HOUSE_SARDAUKAR]    = COLOUR_SARDAUKAR;
     houseColour[HOUSE_FREMEN]       = COLOUR_FREMEN;
     houseColour[HOUSE_MERCENARY]    = COLOUR_MERCENARY;
+
+    Py_Initialize();
 
     //printf("loading mentat.....\n");
     //MentatClass* m = new MentatClass();
