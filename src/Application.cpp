@@ -30,6 +30,7 @@ Application::Application()
     m_cursorX = 0;
     m_cursorY = 0;
     m_cursorFrame = CURSOR_NORMAL;
+    m_currentPalette = NULL;
 }
 
 Application::~Application()
