@@ -27,6 +27,7 @@ Application::Application()
     m_running = false;
     m_rootState = NULL;
 
+    m_clearColor = 0;
     m_cursorX = 0;
     m_cursorY = 0;
     m_cursorFrame = CURSOR_NORMAL;
