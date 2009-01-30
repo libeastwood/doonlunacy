@@ -157,7 +157,7 @@ unsigned char* PAKResource::readFile(std::string path, size_t *size)
 
 bool PAKResource::exists(std::string path)
 {
-	for (int i=0; i!= m_pakfile->getNumFiles(); i++)
+	for (unsigned int i = 0; i != m_pakfile->getNumFiles(); i++)
 	{
 		if (m_pakfile->getFilename(i) == path) return true;
 	};
