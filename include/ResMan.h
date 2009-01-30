@@ -40,7 +40,7 @@ class FileLike
     private:
         unsigned char* m_buf;
         size_t m_size;
-        int m_pos;
+        off_t m_pos;
 };
 
 /*!
