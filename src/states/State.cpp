@@ -16,7 +16,7 @@ State::State()
 State::~State()
 {
     if(m_song != NULL)
-        free(m_song);
+        delete m_song;
 }
 
 
