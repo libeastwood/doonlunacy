@@ -192,6 +192,7 @@ void GCObject::drawImage()
 					for(Uint32 i = 0; i < tiles.size(); i++)
 						tilesArray[i] = tiles[i];
 					m_surface.reset(new Image(shpfile->getSurfaceArray(tilesX, tilesY, tilesArray)));
+					delete [] tilesArray;
 				}
 				else
 				{
