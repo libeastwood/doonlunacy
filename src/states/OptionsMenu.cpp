@@ -91,12 +91,11 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
     m_hscaleGameSpeed->setSize(SPoint(bw, bh));
     m_vbox->addChild(m_hscaleGameSpeed);
 
-	m_vbox->fit(2);
+    m_vbox->fit(2);
     Uint16 x = (set->GetWidth() / 2) - 
                 (m_vbox->w / 2);
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
-    m_container->addChild(m_vbox);
 }
 
 //FIXME: doSound, doMusic,doScreenMode and future functions with bool value could be
