@@ -76,6 +76,9 @@ Font* FontManager::loadFont(std::string fn)
 		characters[i].bitmap = bitmap;       
 	};
 
+	delete[] dchar;
+	delete[] hchar;
+	delete[] wchar;
 	delete file;
     
 	Font* font = new Font(characters, header);
