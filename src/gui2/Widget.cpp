@@ -6,11 +6,6 @@ Widget::Widget() : Rect(0, 0, 0, 0), m_enabled(true), m_visible(true), m_parent(
 {
 }
 
-Widget::~Widget()
-{
-
-}
-
 bool Widget::handleMotion(SPoint p)
 {
 	if (contains(p)) return true;

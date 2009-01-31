@@ -13,7 +13,6 @@ class Widget : public Rect
 		//! @name Constructors & Destructor
         //@{
         Widget();
-        virtual ~Widget();
 		//@}
 
         virtual void draw(Image * dest, SPoint off) {}
