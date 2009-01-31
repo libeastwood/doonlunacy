@@ -15,7 +15,7 @@
 HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatMenuState(HOUSE_SARDAUKAR)
 {
 
-	free(m_song);
+	delete m_song;
 	m_song = NULL;
 	if (newHouse == HOUSE_ATREIDES)
 		m_planetAnimation = DataCache::Instance()->getAnimationLabel("Anim_AtreidesPlanet");
