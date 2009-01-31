@@ -393,11 +393,8 @@ void Application::HandleEvents()
 
 void Application::BlitCursor()
 {
-    Rect src;
-    UPoint dest;
-    src.setSize(SPoint(16,16));
-    dest.x = m_cursorX;
-    dest.y = m_cursorY;
+    Rect src(0,0,16,16);
+    UPoint dest(m_cursorX, m_cursorY);
     //src.w = surface->w / NUM_CURSORS;
     //src.h = surface->h;
     //src.x = src.w * m_cursorFrame;
