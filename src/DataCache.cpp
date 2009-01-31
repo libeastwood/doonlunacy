@@ -78,6 +78,7 @@ void DataCache::Init(){
     addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
     data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
     IntroStrings = new StringFile(data);
+    free(data);
 
     ResMan::Instance()->addRes("DUNE");
 
@@ -101,10 +102,13 @@ void DataCache::Init(){
 
 	data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
 	BriefingStrings[0] = new StringFile(data);
+	free(data);
 	data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
 	BriefingStrings[1] = new StringFile(data);
+	free(data);
 	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
 	BriefingStrings[2] = new StringFile(data);
+	free(data);
 }
 
 void DataCache::cacheSprites()
@@ -173,6 +177,7 @@ void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
     size_t len;
     uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
     PalfilePtr tmp (new PalFile(data, len));
+    free(data);
 
     m_palette[palette] = tmp;
     m_palStrings.insert(std::pair<std::string, PalfilePtr>(paletteFile, tmp));
