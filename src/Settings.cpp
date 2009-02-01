@@ -27,12 +27,12 @@ Settings::Settings()
 void Settings::load()
 {
     const char* settingsfile = "CONFIG:config.py";
-    main = python::import("__main__");
-    python::object global = main.attr("__dict__");
-    python::object settings = python::import("settings");
-    local = settings.attr("__dict__");
+    try{
+        main = python::import("__main__");
+        python::object global = main.attr("__dict__");
+        python::object settings = python::import("settings");
+        local = settings.attr("__dict__");
 
-    try {
         if (ResMan::Instance()->exists(settingsfile))
         {
             python::object result = python::exec_file("config.py", global, local);
@@ -78,6 +78,7 @@ void Settings::load()
     catch(python::error_already_set const &)
     {
         PyErr_Print();
+        exit(EXIT_FAILURE);
     }
 
 

@@ -190,6 +190,8 @@ void Application::SetPalette()
 
 void Application::InitPython()
 {
+    setenv("PYTHONPATH", "python", 1);
+
     Py_Initialize();
 
 /*    py_main = python::import("__main__");
