@@ -34,6 +34,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_maxHealth = 100;
     m_health = m_maxHealth;
 
+    m_deathFrame = "ObjPic_Hit_ExplosionSmallUnit";
+
     m_destination = SPoint(INVALID_POS, INVALID_POS);
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
