@@ -69,6 +69,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
             
     m_vbox->addChild(m_butIntro); 
 
+    /* Disabled for now as we don't currently don't ship several opl emulators..
     m_caption = "OPL Emulator ";
     char num[2];
     snprintf(num, 2, "%d", set->GetEmuOpl());
@@ -79,7 +80,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
             boost::bind(&OptionsMenuState::doEmuOpl, this) );
    
     m_vbox->addChild(m_butEmuOpl);
-
+*/
     m_butOk = new BoringButton("Ok");
     m_butOk->setSize(UPoint(bw, bh));
     m_butOk->onClick.connect(
