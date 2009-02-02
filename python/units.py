@@ -129,16 +129,6 @@ units = {
     
     'trike' : {
         'armour' : 4,
-	'health' : 250,
-	'num_weapons' : 2,
-	'radius' : 4,
-	'speed' : 1.0,
-	'view_range' : 4,
-	'weapon_range' : 3,
-	},
-
-    'trike' : {
-        'armour' : 4,
         'health' : 250,
         'num_weapons' : 2,
         'pic' : "ObjPic_Trike",
