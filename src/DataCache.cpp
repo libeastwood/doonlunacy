@@ -145,6 +145,9 @@ void DataCache::cacheSprites()
             if(unit.has_key("numWeapons"))
                 tmp.numWeapons = python::extract<int>(unit["numWeapons"]);
 
+            if(unit.has_key("object_class"))
+                tmp.objectClass = python::extract<std::string>(unit["object_class"]);
+
             if(unit.has_key("pic"))
                 tmp.pic = python::extract<std::string>(unit["pic"]);
 
