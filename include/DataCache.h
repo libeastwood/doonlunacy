@@ -34,7 +34,7 @@ typedef struct {
         viewRange,
         weaponDamage,
         weaponRange;
-    double  speed;
+    float  speed;
     UPoint size;
     
 } sprite;
