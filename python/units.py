@@ -1,5 +1,4 @@
 units = {
-		'kos' : 1,
     'carryall' : {
     	'armour' : 2,
     	'health' : 100,
