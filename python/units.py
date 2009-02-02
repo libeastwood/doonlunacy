@@ -96,7 +96,17 @@ units = {
         'view_range' : 6,
         'weapon_range' : 5,
     },        
-
+    
+    'saboteur' : {
+        'armour' : 1,
+        'health' : 100,
+        'num_weapons' : 0,
+        'radius' : 2,
+        'speed' : 0.3,
+        'view_range' : 4,
+        'weapon_range' : 0,
+    },
+    
     'sandworm' : {
         'armour' : 5,
         'damage' : 1000,
@@ -109,7 +119,14 @@ units = {
         'view_range' : 8,
         'weapon_range' : 0,
     },
-    
+
+    'sardaukar' : {
+        'armour' : 1,
+        'health' : 100,
+        'speed' : 0.18,        
+
+    },
+
     'siege_tank' : {
         'armour' : 12,
         'health' : 600,
@@ -131,6 +148,7 @@ units = {
         'view_range' : 8,
         'weapon_range' : 7,
     },
+
     
     'tank' : {
         'armour' : 10,
@@ -153,23 +171,6 @@ units = {
         'weapon_range' : 3,
     },
 
-    'saboteur' : {
-        'armour' : 1,
-        'health' : 100,
-        'num_weapons' : 0,
-        'radius' : 2,
-        'speed' : 0.3,
-        'view_range' : 4,
-        'weapon_range' : 0,
-    },
-    
-    'sardaukar' : {
-        'armour' : 1,
-        'health' : 100,
-        'speed' : 0.18,        
-
-    },
-    
     'trooper' : {
         'armour' : 1,
         'damage' : 50,
