@@ -153,6 +153,11 @@ void DataCache::cacheSprites()
             if(unit.has_key("speed"))
                 tmp.radius = python::extract<float>(units[key]["speed"]);
 
+            tmp.size = UPoint(-1,-1);
+            if(unit.has_key("size"))
+                tmp.size = UPoint(python::extract<int>(units[key]["size"][0]),
+                            python::extract<int>(units[key]["size"][1]));
+
             tmp.viewRange = -1;
             if(unit.has_key("view_range"))
                 tmp.radius = python::extract<int>(units[key]["view_range"]);
