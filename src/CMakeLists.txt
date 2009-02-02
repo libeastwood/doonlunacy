@@ -41,7 +41,7 @@ SET( DOONLUNACY_BASE_SRCS
   structures/ConstructionYardClass.cpp
   units/AirUnit.cpp
   units/GroundUnit.cpp
-  units/SoldierClass.cpp
+  units/InfantryClass.cpp
   units/UnitClass.cpp
   GameMan.cpp
   PriorityQ.cpp

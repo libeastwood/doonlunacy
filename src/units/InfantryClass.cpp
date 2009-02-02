@@ -1,12 +1,12 @@
-#include "units/SoldierClass.h"
+#include "units/InfantryClass.h"
 
 #include "DataCache.h"
 #include "GCObject.h"
 
-SoldierClass::SoldierClass(PlayerClass* newOwner, std::string unitName) : GroundUnit(newOwner, unitName)
+InfantryClass::InfantryClass(PlayerClass* newOwner, std::string unitName) : GroundUnit(newOwner, unitName)
 {
-	m_attributes |= OBJECT_SOLDIER;
-	m_deathFrame = "ObjPic_DeadSoldier";
+	m_attributes |= OBJECT_INFANTRY;
+	m_deathFrame = "ObjPic_DeadInfantry";
 	m_numDeathFrames = 2;
 
 	m_armour = 1;
@@ -25,7 +25,7 @@ SoldierClass::SoldierClass(PlayerClass* newOwner, std::string unitName) : Ground
 	h = m_pic->getSize().y / 3;
 }
 
-SoldierClass::~SoldierClass()
+InfantryClass::~InfantryClass()
 {
 
 }

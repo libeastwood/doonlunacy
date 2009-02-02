@@ -5,7 +5,7 @@
 #include "structures/ConstructionYardClass.h"
 #include "units/AirUnit.h"
 #include "units/GroundUnit.h"
-#include "units/SoldierClass.h"
+#include "units/InfantryClass.h"
 
 #include <eastwood/IniFile.h>
 
@@ -126,10 +126,10 @@ ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 Object
 		case Unit_Carryall:				newObject = new AirUnit(Owner, "Carryall"); break;
 		case Unit_Devastator:				newObject = new GroundUnit(Owner, "Devastator"); break;
 		case Unit_Deviator:				newObject = new GroundUnit(Owner, "Deviator"); break;
-		case Unit_Fremen:				newObject = new SoldierClass(Owner, "Fremen"); break;
+		case Unit_Fremen:				newObject = new InfantryClass(Owner, "Fremen"); break;
 		case Unit_Frigate:				newObject = new AirUnit(Owner, "Frigate"); break;
 		case Unit_Harvester:				newObject = new GroundUnit(Owner, "Harvester"); break;
-		case Unit_Infantry:				newObject = new SoldierClass(Owner, "Infantry"); break;
+		case Unit_Infantry:				newObject = new InfantryClass(Owner, "Infantry"); break;
 		case Unit_Launcher:				newObject = new GroundUnit(Owner, "Launcher"); break;
 		case Unit_MCV:					newObject = new GroundUnit(Owner, "MCV"); break;
 		case Unit_Ornithopter:				newObject = new AirUnit(Owner, "Ornithopter"); break;
@@ -141,8 +141,8 @@ ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 Object
 		case Unit_Tank:					newObject = new GroundUnit(Owner, "Tank"); break;
 		case Unit_Trike:				newObject = new GroundUnit(Owner, "Trike"); break;
 		case Unit_Raider:				newObject = new GroundUnit(Owner, "Raider"); break;
-		case Unit_Trooper:				newObject = new SoldierClass(Owner, "Trooper"); break;
-		case Unit_Sardaukar:				newObject = new SoldierClass(Owner, "Sardaukar"); break;
+		case Unit_Trooper:				newObject = new InfantryClass(Owner, "Trooper"); break;
+		case Unit_Sardaukar:				newObject = new InfantryClass(Owner, "Sardaukar"); break;
 		case Structure_ConstructionYard:		newObject = new ConstructionYardClass(Owner); break;
 		default:					newObject = NULL;
 								LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);

@@ -14,7 +14,7 @@ enum attribute {
     OBJECT_CLASS = 0,
     OBJECT_UNIT = 1 << 0,
     OBJECT_GROUNDUNIT = 1 << 1,
-    OBJECT_SOLDIER = 1 << 2,
+    OBJECT_INFANTRY = 1 << 2,
     OBJECT_AIRUNIT = 1 << 3,
     OBJECT_STRUCTURE = 1 << 4,
     OBJECT_BUILDER = 1 << 5
@@ -72,7 +72,7 @@ class ObjectClass : public Rect
     inline bool isAGroundUnit() { return m_attributes & OBJECT_GROUNDUNIT; }
     inline bool isAStructure()  { return m_attributes & OBJECT_STRUCTURE; }
     inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
-    inline bool isInfantry()    { return m_attributes & OBJECT_SOLDIER; }
+    inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
 
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }

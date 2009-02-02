@@ -18,7 +18,6 @@
 
 #include <boost/format.hpp>
 
-namespace python = boost::python;
 
 using namespace libconfig;
 
@@ -186,6 +185,7 @@ void DataCache::cacheSprites()
             if(unit.has_key("weaponRange"))
                 tmp.weaponRange = python::extract<int>(unit["weaponRange"]);
 
+            tmp.unitDict = unit;
             m_sprites[key] = tmp;
             LOG_INFO("DataCache", "Cached info for %s", key.c_str());
         }
