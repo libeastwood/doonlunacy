@@ -32,6 +32,7 @@ typedef struct {
         numWeapons,
         primaryWeaponReloadTime,
         radius,
+	turnSpeed,
         viewRange,
         weaponDamage,
         weaponRange;

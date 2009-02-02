@@ -156,6 +156,10 @@ void DataCache::cacheSprites()
             if(unit.has_key("radius"))
                 tmp.radius = python::extract<int>(unit["radius"]);
 
+            tmp.turnSpeed = -1;
+            if(unit.has_key("turn_speed"))
+                tmp.turnSpeed = python::extract<float>(unit["turn_speed"]);
+
             tmp.speed = -1;
             if(unit.has_key("speed"))
                 tmp.radius = python::extract<float>(unit["speed"]);
@@ -170,8 +174,12 @@ void DataCache::cacheSprites()
                 tmp.radius = python::extract<int>(unit["view_range"]);
 
             tmp.weaponDamage = -1;
-            tmp.weaponRange = -1;
+            if(unit.has_key("weapon_damage"))
+                tmp.weaponDamage = python::extract<int>(unit["weapon_damage"]);
 
+            tmp.weaponRange = -1;
+            if(unit.has_key("weapon_range"))
+                tmp.weaponRange = python::extract<int>(unit["weapon_range"]);
 
             m_sprites[key] = tmp;
             LOG_INFO("DataCache", "Cached info for %s", key.c_str());
