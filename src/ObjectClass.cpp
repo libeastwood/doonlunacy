@@ -130,7 +130,7 @@ ObjectClass* ObjectClass::findTarget()
 
 	MapClass * map = m_owner->getMap();
 
-	double closestDistance = 1000000.0;
+	float closestDistance = 1000000.0;
 
 	//searches for a target in an area like as shown below 
 	//                     *****
@@ -169,7 +169,7 @@ ObjectClass* ObjectClass::findTarget()
 
 				if (((tempTarget->getItemID() != Structure_Wall) || (closestTarget == NULL)) && canAttack(tempTarget))
 				{
-					double targetDistance = blockDistance( getPosition(), tempTarget->getPosition());
+					float targetDistance = blockDistance( getPosition(), tempTarget->getPosition());
 					if (targetDistance < closestDistance)
 					{
 						closestTarget = tempTarget;
@@ -242,7 +242,7 @@ void ObjectClass::handleDamage(int damage, ObjectClass* damager)
 			if (m_health < 0)
 				m_health = 0;
 
-			if (!m_badlyDamaged && (m_health/(double)m_maxHealth < HEAVILYDAMAGEDRATIO))
+			if (!m_badlyDamaged && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
 				m_badlyDamaged = true;
 		}
 
@@ -284,7 +284,7 @@ void ObjectClass::setHealth(int newHealth)
 	{
 		m_health = newHealth;
 
-		if (!m_badlyDamaged && (m_health/(double)m_maxHealth < HEAVILYDAMAGEDRATIO))
+		if (!m_badlyDamaged && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
 			m_badlyDamaged = true;
 	}
 }
