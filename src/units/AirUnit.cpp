@@ -14,9 +14,9 @@ AirUnit::~AirUnit()
 {
 }
 
-/*
 void AirUnit::checkPos()
 {
+	/*
 	if (goingToRepairYard)
 	{
                 COORDTYPE cp = target->getClosestPoint(&location);
@@ -31,5 +31,5 @@ void AirUnit::checkPos()
 			}
 		}
 	}
+	*/
 }
-*/
