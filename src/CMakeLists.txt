@@ -35,10 +35,11 @@ SET( DOONLUNACY_BASE_SRCS
   #structures/RocketTurretClass.cpp
   #structures/SiloClass.cpp
   #structures/StarPortClass.cpp
+  #structures/WallClass.cpp
+  #structures/SiloClass.cpp
+  #structures/ConstructionYardClass.cpp
+  structures/BuilderClass.cpp
   structures/StructureClass.cpp
-  structures/WallClass.cpp
-  structures/SiloClass.cpp
-  structures/ConstructionYardClass.cpp
   units/AirUnit.cpp
   units/GroundUnit.cpp
   units/InfantryClass.cpp
