@@ -30,19 +30,19 @@ DataCache::DataCache() {
 
 #include <iostream>
 Uint32 *GROUNDUNIT_ROW(Uint32 i){
-	Uint32 *row = new Uint32[8];
-	row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
-	row[4] = (i+2)|TILE_FLIPV, row[5] = (i+3)|TILE_FLIPV, row[6] = (i+4)|TILE_NORMAL, row[7] = (i+3)|TILE_NORMAL;
-	return row;
+    Uint32 *row = new Uint32[8];
+    row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
+        row[4] = (i+2)|TILE_FLIPV, row[5] = (i+3)|TILE_FLIPV, row[6] = (i+4)|TILE_NORMAL, row[7] = (i+3)|TILE_NORMAL;
+    return row;
 }
 
 //#define AIRUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+1)|TILE_ROTATE, i|TILE_FLIPH,(i+1)|TILE_FLIPH
 
 Uint32 *AIRUNIT_ROW(Uint32 i){
-	Uint32 *row = new Uint32[8];
-	row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
-	row[4] = (i+2)|TILE_FLIPV, row[5] = (i+1)|TILE_ROTATE, row[6] = i|TILE_FLIPH, row[7] = (i+1)|TILE_FLIPH;
-	return row;
+    Uint32 *row = new Uint32[8];
+    row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
+        row[4] = (i+2)|TILE_FLIPV, row[5] = (i+1)|TILE_ROTATE, row[6] = i|TILE_FLIPH, row[7] = (i+1)|TILE_FLIPH;
+    return row;
 }
 
 void DataCache::Init(){
@@ -56,7 +56,7 @@ void DataCache::Init(){
     catch(ParseException& ex)
     {
         LOG_FATAL("DataCache", "Fatal error loading configuration file on line %d: %s", 
-            ex.getLine(), ex.getError());
+                ex.getLine(), ex.getError());
 
         exit(EXIT_FAILURE);
     }
@@ -64,16 +64,16 @@ void DataCache::Init(){
     cacheSprites();
 
 
-	soundChunk.resize(NUM_SOUNDCHUNK);
+    soundChunk.resize(NUM_SOUNDCHUNK);
     size_t len;
     uint8_t *data;
-//    Image *tmp;
+    //    Image *tmp;
 
     ResMan::Instance()->addRes("ENGLISH");
 
     addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
-	// Not properly decoded yet..
-	// CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
+    // Not properly decoded yet..
+    // CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
     addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
     data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
@@ -88,7 +88,7 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("SOUND");
 
     ResMan::Instance()->addRes("ATRE");
-	ResMan::Instance()->addRes("GERMAN");
+    ResMan::Instance()->addRes("GERMAN");
     ResMan::Instance()->addRes("FINALE");
     ResMan::Instance()->addRes("HARK");
     ResMan::Instance()->addRes("HERC");
@@ -100,15 +100,15 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("VOC");
     ResMan::Instance()->addRes("XTRE");
 
-	data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
-	BriefingStrings[0] = new StringFile((const char*)data);
-	free(data);
-	data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
-	BriefingStrings[1] = new StringFile((const char*)data);
-	free(data);
-	data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
-	BriefingStrings[2] = new StringFile((const char*)data);
-	free(data);
+    data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
+    BriefingStrings[0] = new StringFile((const char*)data);
+    free(data);
+    data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
+    BriefingStrings[1] = new StringFile((const char*)data);
+    free(data);
+    data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
+    BriefingStrings[2] = new StringFile((const char*)data);
+    free(data);
 }
 
 void DataCache::cacheSprites()
@@ -129,7 +129,7 @@ void DataCache::cacheSprites()
 
             tmp.primaryWeaponReloadTime = -1;
             node[i].lookupValue("primary_weapon_reload_time", tmp.primaryWeaponReloadTime);
-                        
+
             tmp.radius = -1;
             node[i].lookupValue("radius", tmp.radius);
 
@@ -142,7 +142,7 @@ void DataCache::cacheSprites()
             tmp.weaponDamage = -1;
             tmp.weaponRange = -1;
 
-            
+
             m_sprites[node[i].getName()] = tmp;
             LOG_INFO("DataCache", "Cached info for %s", node[i].getName());
         }
@@ -150,16 +150,16 @@ void DataCache::cacheSprites()
     catch(ParseException& ex)
     {
         LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
-            ex.getLine(), ex.getError());
+                ex.getLine(), ex.getError());
     }
 }
 
 sprite* DataCache::getSpriteInfo(std::string spriteName)
 {
     std::map<std::string, sprite>::iterator iter;
-    
+
     iter = m_sprites.find(spriteName);
-    
+
     if (iter != m_sprites.end())
     { 
         return &m_sprites.find(spriteName)->second;
@@ -196,7 +196,7 @@ SDL_Palette* DataCache::getPalette(std::string paletteFile)
 
 song *DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
-  
+
     Setting& node = m_dataConfig->lookup("music");
     song * newSong = new song;
 
@@ -218,8 +218,8 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
 
     std::string fileName;
 
-	Mix_Chunk* returnChunk;
-	
+    Mix_Chunk* returnChunk;
+
     try
     {
         Setting& node = m_dataConfig->lookup(fullpath);
@@ -248,51 +248,51 @@ Mix_Chunk* DataCache::getSoundChunk(std::string ID)
     catch(ParseException& ex)
     {
         LOG_FATAL("DataCache", "Setting not found %d: %s", 
-            ex.getLine(), ex.getError());
+                ex.getLine(), ex.getError());
     }
 
-	return returnChunk;
+    return returnChunk;
 }
 
 
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
-	return BriefingStrings[house]->getString(mission,textType);
+    return BriefingStrings[house]->getString(mission,textType);
 }
 
 std::string	DataCache::getIntroString(uint16_t i){
-	return IntroStrings->getString(i);
+    return IntroStrings->getString(i);
 }
 
 std::string	DataCache::getCreditsString(uint16_t i){
-	return CreditsStrings->getString(i);
+    return CreditsStrings->getString(i);
 }
 
 libconfig::Config *DataCache::getConfig()
 {
-	return m_dataConfig;
+    return m_dataConfig;
 }
 
 GCObject *DataCache::getGCObject(std::string path)
 {
-	GCObject *gcObj = NULL;
-	if(!m_gcObjs.empty())
-		for(uint32_t i = 0; i < m_gcObjs.size(); i++)
-			if(m_gcObjs[i]->getPath() == path)
-			{
-				gcObj = m_gcObjs[i];
-			}
-	if(gcObj == NULL){
-		gcObj = new GCObject(path);
-		m_gcObjs.push_back(gcObj);
-	}
-	return gcObj;
+    GCObject *gcObj = NULL;
+    if(!m_gcObjs.empty())
+        for(uint32_t i = 0; i < m_gcObjs.size(); i++)
+            if(m_gcObjs[i]->getPath() == path)
+            {
+                gcObj = m_gcObjs[i];
+            }
+    if(gcObj == NULL){
+        gcObj = new GCObject(path);
+        m_gcObjs.push_back(gcObj);
+    }
+    return gcObj;
 
 }
 
 void DataCache::freeGCObjects()
 {
-	for(uint32_t i = 0; i < m_gcObjs.size(); i++)
-		m_gcObjs[i]->freeIfUnique();
+    for(uint32_t i = 0; i < m_gcObjs.size(); i++)
+        m_gcObjs[i]->freeIfUnique();
 }
 
 AnimationLabel *DataCache::getAnimationLabel(std::string path)
@@ -301,23 +301,23 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
     fullpath+=path;
 
     AnimationLabel* animationLabel = new AnimationLabel();
-    
+
     try
     {
         Setting& node = m_dataConfig->lookup(fullpath);
-		
-		size_t len;
-		uint8_t *data;
+
+        size_t len;
+        uint8_t *data;
 
         std::string fileName;
-		
-		SDL_Palette* palette;
+
+        SDL_Palette* palette;
         if(node.lookupValue("palette", fileName))
-		{
-			palette = getPalette(fileName);
-		}
-		else
-			palette = getPalette(IBM_PAL);
+        {
+            palette = getPalette(fileName);
+        }
+        else
+            palette = getPalette(IBM_PAL);
 
         node.lookupValue("filename", fileName);
         std::string type = fileName.substr(fileName.length()-3, 3);
@@ -328,18 +328,18 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
         if (type.compare("WSA") == 0)
         {
             WsaFile *wsafile(new WsaFile(data, len, palette));
-        	
-			for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
-				animationLabel->addFrame(ImagePtr(new Image(wsafile->getSurface(i))));
-            
-			float frameRate = 1.0;
+
+            for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
+                animationLabel->addFrame(ImagePtr(new Image(wsafile->getSurface(i))));
+
+            float frameRate = 1.0;
             node.lookupValue("frame_rate", frameRate);
             animationLabel->setFrameRate(frameRate);
 
             delete wsafile;
 
         }
-        
+
         if (type.compare("SHP") == 0)
         {
             uint32_t startIndex, endIndex;
@@ -348,21 +348,21 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
             node.lookupValue("end_index", endIndex);
 
             ShpFile *shpfile = new ShpFile(data, len, palette);
-			for(uint32_t i = startIndex; i < endIndex; i++)
-				animationLabel->addFrame(ImagePtr(new Image(shpfile->getSurface(i))));
+            for(uint32_t i = startIndex; i < endIndex; i++)
+                animationLabel->addFrame(ImagePtr(new Image(shpfile->getSurface(i))));
 
             node.lookupValue("frame_rate", frameRate);
-       		animationLabel->setFrameRate(frameRate);
+            animationLabel->setFrameRate(frameRate);
 
-       		delete shpfile;
-    
+            delete shpfile;
+
         }
-    
+
     }
     catch(ParseException& ex)
     {
         LOG_FATAL("DataCache", "Setting not found %d: %s", 
-            ex.getLine(), ex.getError());
+                ex.getLine(), ex.getError());
 
         exit(EXIT_FAILURE);
     }
@@ -374,3 +374,6 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 DataCache::~DataCache() {
 
 }
+
+// vim:ts=8:sw=4:et
+
