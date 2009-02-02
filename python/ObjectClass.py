@@ -19,9 +19,6 @@ class Object(object):
         self.radius = 0
         self.guardRange = 0
         self.viewRange = 5
-        self.weaponRange = 0
-
-        self.weaponDamage = 0
 
 	
 # vim:ts=4:sw=4:et
