@@ -759,7 +759,7 @@ gcobjects:
 		tiles = ([29, 30, 31]);
 	};
 
-	ObjPic_DeadInfantry =
+	ObjPic_DeadSoldier =
 	{
 		filename = "DUNE:ICON.ICN";
 		map = "DUNE:ICON.MAP";
@@ -2069,7 +2069,7 @@ units:
         /*
         xOffset = (imageW - BLOCKSIZE)/2;	//these are needed so image will be drawn at the right place
         yOffset = (imageH - BLOCKSIZE)/2;
-        deathFrame = Object_DeadInfantry;
+        deathFrame = Object_DeadSoldier;
         numDeathFrames = 2;
         */
     };
@@ -2101,7 +2101,7 @@ units:
         yOffset = (imageH - BLOCKSIZE)/2;
 
 
-        deathFrame = Object_DeadInfantry;
+        deathFrame = Object_DeadSoldier;
         numDeathFrames = 2;
 
         numAttackSounds = 1;
