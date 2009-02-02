@@ -184,4 +184,4 @@ units = {
     },
 }
 
-# vim:ts:8:sw:4:et
+# vim:ts=8:sw=4:et
