@@ -32,6 +32,17 @@ class Ornithopter(AirUnit):
         self.turnSpeed = 0.125
         self.viewRange = 5
 
+class Devastator(GroundUnit):
+    def __init__(self):
+        GroundUnit.__init__(self)
+        self.picture = "ObjPic_Devastator_Base"
+        self.gunPicture = "ObjPic_Devastator_Gun"
+        self.armor = 15
+        self.maxHealth = 1000
+        self.radius = 7
+        self.speed = 0.2
+        self.viewRange = 8
+
 class Deviator(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
@@ -178,9 +189,11 @@ units = {
         'Ornithopter' : Ornithopter(),
         
         'Deviator' : Deviator(),
+        'Devastator' : Devastator(),
         'MCV' : MCV(),
         'Quad' : Quad(),
         'Raider' : Raider(),
+        'Raider Trike' : Raider(),
         'Sandworm' : Sandworm(),
         'Siege Tank' : SiegeTank(),
         'Sonic Tank' : SonicTank(),
