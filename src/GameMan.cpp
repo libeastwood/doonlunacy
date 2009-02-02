@@ -3,6 +3,7 @@
 #include "ResMan.h"
 
 #include "structures/ConstructionYardClass.h"
+#include "units/AirUnit.h"
 #include "units/GroundUnit.h"
 #include "units/SoldierClass.h"
 
@@ -120,36 +121,32 @@ ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 Object
 		case Structure_Wall:				newObject = new WallClass(Owner); break;
 		case Structure_WindTrap:			newObject = new WindTrapClass(Owner); break;
 		case Structure_WOR:					newObject = new WORClass(Owner); break;
+        #endif
 		
-		case Unit_Carryall:					newObject = new Carryall(Owner); break;
-		case Unit_Devastator:				newObject = new DevastatorClass(Owner); break;
-		case Unit_Deviator:					newObject = new DeviatorClass(Owner); break;
-		case Unit_Frigate:					newObject = new Frigate(Owner); break;
-		case Unit_Harvester:				newObject = new HarvesterClass(Owner); break;
-		case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
-		case Unit_Launcher:					newObject = new LauncherClass(Owner); break;
-		case Unit_MCV:						newObject = new MCVClass(Owner); break;
-		case Unit_Ornithopter:				newObject = new Ornithopter(Owner); break;
-		case Unit_Quad:						newObject = new QuadClass(Owner); break;
-		case Unit_Saboteur:					newObject = new Saboteur(Owner); break;
-		case Unit_Sandworm:					newObject = new Sandworm(Owner); break;
-		case Unit_SiegeTank:				newObject = new SiegeTankClass(Owner); break;
-		case Unit_SonicTank:				newObject = new SonicTankClass(Owner); break;
-		case Unit_Tank:						newObject = new TankClass(Owner); break;
-		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
-		case Unit_Raider:					newObject = new RaiderClass(Owner); break;
-		case Unit_Trooper:					newObject = new TrooperClass(Owner); break;
-		case Unit_Sardaukar:				newObject = new SardaukarClass(Owner); break;
-		case Unit_Fremen:					newObject = new FremenClass(Owner); break;
-	#endif
-    	case Unit_Infantry:					newObject = new GroundUnit(Owner, "trike"); break;
-//SoldierClass(Owner, "infantry"); break;
-		case Unit_Trike:					newObject = new GroundUnit(Owner, "trike"); break;
-        case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
-		case Unit_Quad:						newObject = new GroundUnit(Owner, "quad"); break;
-		default:							newObject = NULL;
-											LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);
-											break;
+		case Unit_Carryall:				newObject = new AirUnit(Owner, "carryall"); break;
+		case Unit_Devastator:				newObject = new GroundUnit(Owner, "devastator"); break;
+		case Unit_Deviator:				newObject = new GroundUnit(Owner, "deviator"); break;
+		case Unit_Fremen:				newObject = new SoldierClass(Owner, "fremen"); break;
+		case Unit_Frigate:				newObject = new AirUnit(Owner, "frigate"); break;
+		case Unit_Harvester:				newObject = new GroundUnit(Owner, "harvester"); break;
+		case Unit_Infantry:				newObject = new SoldierClass(Owner, "infantry"); break;
+		case Unit_Launcher:				newObject = new GroundUnit(Owner, "launcher"); break;
+		case Unit_MCV:					newObject = new GroundUnit(Owner, "mvc"); break;
+		case Unit_Ornithopter:				newObject = new AirUnit(Owner, "ornithopter"); break;
+		case Unit_Quad:					newObject = new GroundUnit(Owner, "quad"); break;
+		case Unit_Saboteur:				newObject = new GroundUnit(Owner, "saboteur"); break;
+		case Unit_Sandworm:				newObject = new GroundUnit(Owner, "sandworm"); break;
+		case Unit_SiegeTank:				newObject = new GroundUnit(Owner, "siege_tank"); break;
+		case Unit_SonicTank:				newObject = new GroundUnit(Owner, "sonic_tank"); break;
+		case Unit_Tank:					newObject = new GroundUnit(Owner, "tank"); break;
+		case Unit_Trike:				newObject = new GroundUnit(Owner, "trike"); break;
+		case Unit_Raider:				newObject = new GroundUnit(Owner, "raider"); break;
+		case Unit_Trooper:				newObject = new SoldierClass(Owner, "trooper"); break;
+		case Unit_Sardaukar:				newObject = new SoldierClass(Owner, "sardaukar"); break;
+		case Structure_ConstructionYard:		newObject = new ConstructionYardClass(Owner); break;
+		default:					newObject = NULL;
+								LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);
+								break;
 	}
 	
 	if(newObject == NULL)
