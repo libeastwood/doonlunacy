@@ -28,6 +28,7 @@ typedef	std::map<std::string, PalfilePtr> palStrings;
 
 typedef struct {
     int health,
+        maxHealth,
         numWeapons,
         primaryWeaponReloadTime,
         radius,

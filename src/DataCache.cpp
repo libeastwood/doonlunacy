@@ -137,6 +137,10 @@ void DataCache::cacheSprites()
             if(unit.has_key("health"))
                 tmp.health = python::extract<int>(unit["health"]);
 
+            tmp.maxHealth = -1;
+            if(unit.has_key("max_health"))
+                tmp.maxHealth = python::extract<int>(unit["max_health"]);
+
             tmp.numWeapons = -1;
             if(unit.has_key("numWeapons"))
                 tmp.numWeapons = python::extract<int>(unit["numWeapons"]);
@@ -145,8 +149,8 @@ void DataCache::cacheSprites()
                 tmp.pic = python::extract<std::string>(unit["pic"]);
 
             tmp.primaryWeaponReloadTime = -1;
-            if(unit.has_key("primaryWeaponReloadTime"))
-                tmp.primaryWeaponReloadTime = python::extract<int>(unit["primaryWeaponReloadTime"]);
+            if(unit.has_key("primary_weapon_reload_time"))
+                tmp.primaryWeaponReloadTime = python::extract<int>(unit["primary_weapon_reload_time"]);
 
             tmp.radius = -1;
             if(unit.has_key("radius"))
