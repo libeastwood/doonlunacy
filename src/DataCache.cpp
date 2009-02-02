@@ -135,32 +135,32 @@ void DataCache::cacheSprites()
 
             tmp.health = -1;
             if(unit.has_key("health"))
-                tmp.health = python::extract<int>(units[key]["health"]);
+                tmp.health = python::extract<int>(unit["health"]);
 
             tmp.numWeapons = -1;
             if(unit.has_key("numWeapons"))
-                tmp.numWeapons = python::extract<int>(units[key]["numWeapons"]);
+                tmp.numWeapons = python::extract<int>(unit["numWeapons"]);
 
             tmp.primaryWeaponReloadTime = -1;
             if(unit.has_key("primaryWeaponReloadTime"))
-                tmp.primaryWeaponReloadTime = python::extract<int>(units[key]["primaryWeaponReloadTime"]);
+                tmp.primaryWeaponReloadTime = python::extract<int>(unit["primaryWeaponReloadTime"]);
 
             tmp.radius = -1;
             if(unit.has_key("radius"))
-                tmp.radius = python::extract<int>(units[key]["radius"]);
+                tmp.radius = python::extract<int>(unit["radius"]);
 
             tmp.speed = -1;
             if(unit.has_key("speed"))
-                tmp.radius = python::extract<float>(units[key]["speed"]);
+                tmp.radius = python::extract<float>(unit["speed"]);
 
             tmp.size = UPoint(-1,-1);
             if(unit.has_key("size"))
-                tmp.size = UPoint(python::extract<int>(units[key]["size"][0]),
-                            python::extract<int>(units[key]["size"][1]));
+                tmp.size = UPoint(python::extract<int>(unit["size"][0]),
+                            python::extract<int>(unit["size"][1]));
 
             tmp.viewRange = -1;
             if(unit.has_key("view_range"))
-                tmp.radius = python::extract<int>(units[key]["view_range"]);
+                tmp.radius = python::extract<int>(unit["view_range"]);
 
             tmp.weaponDamage = -1;
             tmp.weaponRange = -1;
