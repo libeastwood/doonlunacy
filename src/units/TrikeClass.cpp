@@ -26,7 +26,7 @@ TrikeClass::TrikeClass(PlayerClass* newOwner) : GroundUnit(newOwner)
     //m_bulletType[0] = Bullet_Gun;
     //m_primaryWeaponReloadTime = 100;
 
-    m_pic = cache->getGCObject("ObjPic_Trike")->getImage(HOUSETYPE(getOwner()->getColour()));
+    m_pic = cache->getGCObject(tmp->pic)->getImage(HOUSETYPE(getOwner()->getColour()));
 
     //FIXME:What is the standard offset for units?
     //m_offset = UPoint((w - BLOCKSIZE)/2, (h - BLOCKSIZE)/2);

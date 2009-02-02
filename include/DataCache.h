@@ -36,6 +36,7 @@ typedef struct {
         weaponRange;
     float  speed;
     UPoint size;
+    std::string pic;
     
 } sprite;
 

@@ -141,6 +141,9 @@ void DataCache::cacheSprites()
             if(unit.has_key("numWeapons"))
                 tmp.numWeapons = python::extract<int>(unit["numWeapons"]);
 
+            if(unit.has_key("pic"))
+                tmp.pic = python::extract<std::string>(unit["pic"]);
+
             tmp.primaryWeaponReloadTime = -1;
             if(unit.has_key("primaryWeaponReloadTime"))
                 tmp.primaryWeaponReloadTime = python::extract<int>(unit["primaryWeaponReloadTime"]);

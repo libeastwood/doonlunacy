@@ -141,6 +141,7 @@ units = {
         'armour' : 4,
         'health' : 250,
         'num_weapons' : 2,
+        'pic' : "ObjPic_Trike",
         'radius' : 4,
         'speed' : 1.0,
         'view_range' : 4,
