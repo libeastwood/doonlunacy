@@ -9,7 +9,7 @@ public:
 	AirUnit(PlayerClass* newOwner, std::string unitName);
 	virtual ~AirUnit();
 
-	//void checkPos();
+	void checkPos();
 
 };
 
