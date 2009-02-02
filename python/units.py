@@ -12,7 +12,7 @@ units = {
     
     'deviator' : {
         'armour' : 5,
-        'maxHealth' : 200,
+        'max_health' : 200,
         'num_weapons' : 1,
         'primary_weapon_reload_time' : 285,
         'radius' : 6,
@@ -22,6 +22,7 @@ units = {
     },
 
     'fremen' : {
+        'class' : "infantry",
         'speed' : 0.25,
     },
 
@@ -32,6 +33,18 @@ units = {
     	'speed' : 1.0,
     	'view_range' : 5,
     	'weapon_range' : 0,
+    },
+
+    'infantry' : {
+        'armour' : 1,
+        'class' : "infantry",
+        'max_health' : 10,
+        'pic' : "ObjPic_Infantry",
+        'primary_weapon_reload_time' : 55,
+	'radius' : 2,
+        'speed' : 0.25,
+	'view_range' : 4,
+	'weapon_range' : 6,
     },
 
     'launcher' : {

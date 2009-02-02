@@ -26,7 +26,7 @@ class ObjectClass : public Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner);
+    ObjectClass(PlayerClass* newOwner, std::string objectName = "");
     virtual ~ObjectClass();
     //@}
 
@@ -103,6 +103,8 @@ class ObjectClass : public Rect
   protected:
     ATTACKTYPE m_attackMode;
 
+    std::string m_objectClass,
+	        m_objectName;
     bool m_active,
          m_builder,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it

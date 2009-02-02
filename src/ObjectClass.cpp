@@ -1,6 +1,5 @@
-#include <math.h>
-
 #include "GameMan.h"
+#include "GCObject.h"
 #include "ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"
@@ -9,9 +8,15 @@
 #include "MapClass.h"
 #include "SoundPlayer.h"
 
-ObjectClass::ObjectClass(PlayerClass* newOwner) :
+ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
         Rect(0, 0, 0, 0)
 {
+    DataCache *cache = DataCache::Instance();
+    sprite *tmp;
+
+    m_objectName = objectName;
+
+
     m_itemID = Unknown;
     m_objectID = NONE;
 
@@ -43,6 +48,15 @@ ObjectClass::ObjectClass(PlayerClass* newOwner) :
     m_angle = 256 / 8 * m_drawnAngle;
     
     m_attackMode = STANDGROUND;
+
+    if(objectName != "")
+    {
+	    tmp = cache->getSpriteInfo(m_objectName);
+	    m_objectClass = tmp->objectClass;
+	    m_pic = cache->getGCObject(tmp->pic)->getImage(HOUSETYPE(getOwner()->getColour()));
+    }
+
+
 }
 
 ObjectClass::~ObjectClass()

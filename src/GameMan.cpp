@@ -3,9 +3,8 @@
 #include "ResMan.h"
 
 #include "structures/ConstructionYardClass.h"
-#include "units/InfantryClass.h"
-#include "units/TrikeClass.h"
-#include "units/QuadClass.h"
+#include "units/GroundUnit.h"
+#include "units/SoldierClass.h"
 
 #include <eastwood/IniFile.h>
 
@@ -143,10 +142,11 @@ ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 Object
 		case Unit_Sardaukar:				newObject = new SardaukarClass(Owner); break;
 		case Unit_Fremen:					newObject = new FremenClass(Owner); break;
 	#endif
-    	case Unit_Infantry:					newObject = new InfantryClass(Owner); break;
-		case Unit_Trike:					newObject = new TrikeClass(Owner); break;
+    	case Unit_Infantry:					newObject = new GroundUnit(Owner, "trike"); break;
+//SoldierClass(Owner, "infantry"); break;
+		case Unit_Trike:					newObject = new GroundUnit(Owner, "trike"); break;
         case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
-		case Unit_Quad:						newObject = new QuadClass(Owner); break;
+		case Unit_Quad:						newObject = new GroundUnit(Owner, "quad"); break;
 		default:							newObject = NULL;
 											LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);
 											break;

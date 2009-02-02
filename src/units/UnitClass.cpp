@@ -11,8 +11,11 @@
 
 #include "units/UnitClass.h"
 
-UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
+UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(newOwner, unitName)
 {
+    DataCache *cache = DataCache::Instance();
+    sprite *tmp = cache->getSpriteInfo(m_objectName);
+
     m_unit = true;
     m_attacking = false;
     m_canAttackStuff = true;
@@ -28,11 +31,18 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_respondable = true;
     m_attackMode = DEFENSIVE;
 
-    m_speed = 0.0;
     m_speedCap = NONE;
-    m_turnSpeed = 0.0625;
-    m_maxHealth = 100;
-    m_health = m_maxHealth;
+
+    if((m_speed = tmp->speed) == -1)
+        m_speed = 0.0;
+    if((m_turnSpeed = tmp->turnSpeed) == -1)
+        m_turnSpeed = 0.0625;
+    if((m_maxHealth = tmp->maxHealth) == -1)
+        m_maxHealth = 100;
+    if((m_health = tmp->health) == -1)
+        m_health = m_maxHealth;
+    if((m_viewRange = tmp->viewRange) == -1)
+        m_viewRange = 5;
 
     m_deathFrame = "ObjPic_Hit_ExplosionSmallUnit";
 
@@ -45,6 +55,8 @@ UnitClass::UnitClass(PlayerClass* newOwner) : ObjectClass(newOwner)
     m_adjust = 0.0;
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
     GameMan::Instance()->GetUnits()->push_back(this);
+
+    w = h = m_pic->getSize().y;
 }
 
 /*virtual*/

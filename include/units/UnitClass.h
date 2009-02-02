@@ -3,11 +3,13 @@
 
 #include <list>
 #include <queue>
+#include <string>
 
 #include "ObjectClass.h"
 #include "PlayerClass.h"
 #include "TerrainClass.h"
 #include "PriorityQ.h"
+
 typedef std::list <UPoint> Path;
 //! Base class for all units
 class UnitClass : public ObjectClass
@@ -16,6 +18,7 @@ class UnitClass : public ObjectClass
     //! @name Constructor and destructor
     //@{
     UnitClass(PlayerClass* newOwner);
+    UnitClass(PlayerClass* newOwner, std::string unitName);
     virtual ~UnitClass();
     //@}
 
@@ -98,7 +101,7 @@ class UnitClass : public ObjectClass
 
     Path m_pathList;
 
-	ImagePtr m_selectionBox;
+    ImagePtr m_selectionBox;
 };
 
 #endif // DUNE_UNITCLASS_H

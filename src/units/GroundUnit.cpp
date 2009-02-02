@@ -2,7 +2,7 @@
 
 #include "units/GroundUnit.h"
 
-GroundUnit::GroundUnit(PlayerClass* newOwner) : UnitClass(newOwner)
+GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName) : UnitClass(newOwner, unitName)
 {
     m_groundUnit = true;
 }
