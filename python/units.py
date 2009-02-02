@@ -22,7 +22,6 @@ units = {
     },
 
     'fremen' : {
-        'class' : "infantry",
         'speed' : 0.25,
     },
 
@@ -37,7 +36,6 @@ units = {
 
     'infantry' : {
         'armour' : 1,
-        'class' : "infantry",
         'max_health' : 10,
         'pic' : "ObjPic_Infantry",
         'primary_weapon_reload_time' : 55,
