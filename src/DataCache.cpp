@@ -18,6 +18,8 @@
 
 #include <boost/format.hpp>
 
+namespace python = boost::python;
+
 using namespace libconfig;
 
 typedef boost::shared_ptr<IcnFile> IcnfilePtr;
@@ -111,46 +113,62 @@ void DataCache::Init(){
     free(data);
 }
 
+// TODO: Eventually we want to create the unit objects in python rather than in C++..
 void DataCache::cacheSprites()
 {
-    Setting &node = m_dataConfig->lookup("units");
-
-    try
-    {
-        for (int i = 0; i < node.getLength(); i++)
+    try {
+        python::object main = python::import("__main__");
+        python::dict global(main.attr("__dict__"));
+        python::dict local;
+        python::object result = python::exec_file("python/units.py", global, local);
+        
+        // TODO: figure out how to use the iterator :p
+        // python::object units = ((python::dict)local["units"]).iterkeys();
+        python::dict units = python::extract<python::dict>(local["units"]);
+        python::list keys = units.keys();
+        while(keys)
         {
             sprite tmp;
+            std::string key = python::extract<std::string>(keys.pop());
+            python::dict unit = (python::dict)units[key];
+
 
             tmp.health = -1;
-            node[i].lookupValue("health", tmp.health);
+            if(unit.has_key("health"))
+                tmp.health = python::extract<int>(units[key]["health"]);
 
             tmp.numWeapons = -1;
-            node[i].lookupValue("num_weapons", tmp.numWeapons);
+            if(unit.has_key("numWeapons"))
+                tmp.numWeapons = python::extract<int>(units[key]["numWeapons"]);
 
             tmp.primaryWeaponReloadTime = -1;
-            node[i].lookupValue("primary_weapon_reload_time", tmp.primaryWeaponReloadTime);
+            if(unit.has_key("primaryWeaponReloadTime"))
+                tmp.primaryWeaponReloadTime = python::extract<int>(units[key]["primaryWeaponReloadTime"]);
 
             tmp.radius = -1;
-            node[i].lookupValue("radius", tmp.radius);
+            if(unit.has_key("radius"))
+                tmp.radius = python::extract<int>(units[key]["radius"]);
 
-            tmp.radius = -1;
-            node[i].lookupValue("speed", tmp.speed);
+            tmp.speed = -1;
+            if(unit.has_key("speed"))
+                tmp.radius = python::extract<float>(units[key]["speed"]);
 
             tmp.viewRange = -1;
-            node[i].lookupValue("view_range", tmp.viewRange);
+            if(unit.has_key("view_range"))
+                tmp.radius = python::extract<int>(units[key]["view_range"]);
 
             tmp.weaponDamage = -1;
             tmp.weaponRange = -1;
 
 
-            m_sprites[node[i].getName()] = tmp;
-            LOG_INFO("DataCache", "Cached info for %s", node[i].getName());
+            m_sprites[key] = tmp;
+            LOG_INFO("DataCache", "Cached info for %s", key.c_str());
         }
-    }  
-    catch(ParseException& ex)
+    }
+    catch(python::error_already_set const &)
     {
-        LOG_FATAL("CutSceneState", "Setting not found %d: %s", 
-                ex.getLine(), ex.getError());
+        LOG_FATAL("DataCache", "Error loading sprites..");
+        PyErr_Print();
     }
 }
 
