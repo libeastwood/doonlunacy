@@ -10,26 +10,6 @@ units = {
     	'weapon_range' : 0,
     },
     
-    'ornithopter' : {
-        'armour' : 3,
-        'damage' : 30,
-        'max_health' : 250,
-        'radius' : 6,
-        'speed' : 1.6,
-        'turn_speed' : 0.125,
-        'view_range' : 8,
-        'weapon_range' : 5,
-    },
-    
-    'frigate' : {
-    	'armour' : 10,
-    	'health' : 10000,
-        'radius' : 16,
-    	'speed' : 1.0,
-    	'view_range' : 5,
-    	'weapon_range' : 0,
-    },
-    
     'deviator' : {
         'armour' : 5,
         'maxHealth' : 200,
@@ -39,6 +19,19 @@ units = {
         'speed' : 0.5,
         'view_range' : 8,
         'weapon_range' : 6,
+    },
+
+    'fremen' : {
+        'speed' : 0.25,
+    },
+
+    'frigate' : {
+    	'armour' : 10,
+    	'health' : 10000,
+        'radius' : 16,
+    	'speed' : 1.0,
+    	'view_range' : 5,
+    	'weapon_range' : 0,
     },
 
     'launcher' : {
@@ -55,6 +48,17 @@ units = {
         'radius' : 9,
         'speed' : 0.125,
         'view_range' : 7,
+    },
+
+    'ornithopter' : {
+        'armour' : 3,
+        'damage' : 30,
+        'max_health' : 250,
+        'radius' : 6,
+        'speed' : 1.6,
+        'turn_speed' : 0.125,
+        'view_range' : 8,
+        'weapon_range' : 5,
     },
 
     'quad' : {
@@ -138,10 +142,6 @@ units = {
         'weapon_range' : 3,
     },
 
-    'fremen' : {
-        'speed' : 0.25,
-    },
-    
     'saboteur' : {
         'armour' : 1,
         'health' : 100,
