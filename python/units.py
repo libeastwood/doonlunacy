@@ -148,8 +148,6 @@ units = {
         'weapon_range' : 3,
     },
 
-
-
     'fremen' : {
         'speed' : 0.25,
     },
