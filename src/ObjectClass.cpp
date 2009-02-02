@@ -23,12 +23,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_animCounter = 0;
 
     m_owner = newOwner;
-    m_flyingUnit = false;
-    m_groundUnit = false;
-    m_structure = false;
-    m_unit = false;
-    m_infantry = false;
-    m_builder = false;
     m_badlyDamaged = false;
     m_destroyed = false;
     m_maxHealth = 100;
@@ -49,10 +43,10 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     
     m_attackMode = STANDGROUND;
 
+    m_attributes = OBJECT_CLASS;
     if(objectName != "")
     {
 	    tmp = cache->getSpriteInfo(m_objectName);
-	    m_objectClass = tmp->objectClass;
 	    m_pic = cache->getGCObject(tmp->pic)->getImage(HOUSETYPE(getOwner()->getColour()));
     }
 

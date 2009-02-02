@@ -10,6 +10,16 @@
 #include <string>
 #include <vector>
 
+enum attribute {
+    OBJECT_CLASS = 0,
+    OBJECT_UNIT = 1 << 0,
+    OBJECT_GROUNDUNIT = 1 << 1,
+    OBJECT_SOLDIER = 1 << 2,
+    OBJECT_AIRUNIT = 1 << 3,
+    OBJECT_STRUCTURE = 1 << 4,
+    OBJECT_BUILDER = 1 << 5
+};
+
 /*!
  *  @brief Base class for all objects (buildins, units, bullets)
  *
@@ -57,12 +67,12 @@ class ObjectClass : public Rect
     virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
 	
-    inline bool isABuilder()    { return m_builder; }
-    inline bool isAFlyingUnit() { return m_flyingUnit; }
-    inline bool isAGroundUnit() { return m_groundUnit; }
-    inline bool isAStructure()  { return m_structure; }
-    inline bool isAUnit()       { return m_unit; }
-    inline bool isInfantry()    { return m_infantry; }
+    inline bool isABuilder()    { return m_attributes & OBJECT_BUILDER; }
+    inline bool isAFlyingUnit() { return m_attributes & OBJECT_AIRUNIT; }
+    inline bool isAGroundUnit() { return m_attributes & OBJECT_GROUNDUNIT; }
+    inline bool isAStructure()  { return m_attributes & OBJECT_STRUCTURE; }
+    inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
+    inline bool isInfantry()    { return m_attributes & OBJECT_SOLDIER; }
 
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }
@@ -103,24 +113,15 @@ class ObjectClass : public Rect
   protected:
     ATTACKTYPE m_attackMode;
 
-    std::string m_objectClass,
-	        m_objectName;
+    std::string m_objectName;
+    
+    uint32_t m_attributes;
+
     bool m_active,
-         m_builder,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_destroyed,
-    //! True if this object is an air unit
-         m_flyingUnit,
-    //! True if this object is a ground unit
-         m_groundUnit,
-    //! True if this object is infantry
-         m_infantry,
          m_respondable,
          m_selected,
-    //! True if this object is a structure
-         m_structure,
-    //! True if this object is a unit
-         m_unit,
 	//! Specifies which players can see a given object
          m_visible[MAX_PLAYERS+1];
 

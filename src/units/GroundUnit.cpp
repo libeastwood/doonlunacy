@@ -4,7 +4,7 @@
 
 GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName) : UnitClass(newOwner, unitName)
 {
-    m_groundUnit = true;
+    m_attributes |= OBJECT_GROUNDUNIT;
 }
 
 GroundUnit::~GroundUnit()

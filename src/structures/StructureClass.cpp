@@ -6,9 +6,9 @@
 StructureClass::StructureClass(PlayerClass* newOwner) : ObjectClass(newOwner)
 {
     m_justPlacedTimer = 0;
-	m_itemID = Unknown;
-	w = h = 0;
-    m_structure = true;
+    m_itemID = Unknown;
+    w = h = 0;
+    m_attributes |= OBJECT_STRUCTURE;
 }
 
 StructureClass::~StructureClass()

@@ -5,8 +5,7 @@
 
 SoldierClass::SoldierClass(PlayerClass* newOwner, std::string unitName) : GroundUnit(newOwner, unitName)
 {
-	m_infantry = true;
-
+	m_attributes |= OBJECT_SOLDIER;
 	m_deathFrame = "ObjPic_DeadSoldier";
 	m_numDeathFrames = 2;
 
