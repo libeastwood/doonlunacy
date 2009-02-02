@@ -1,4 +1,5 @@
 units = {
+		'kos' : 1,
     'carryall' : {
     	'armour' : 2,
     	'health' : 100,
@@ -181,7 +182,6 @@ units = {
         'view_range' : 4,
         'weapon_range' : 7,
     },
-
-},
+}
 
 # vim:ts:8:sw:4:et
