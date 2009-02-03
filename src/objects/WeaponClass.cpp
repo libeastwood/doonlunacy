@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "BulletClass.h"
+#include "objects/WeaponClass.h"
 #include "DataCache.h"
 #include "Definitions.h"
 #include "GameMan.h"
@@ -11,7 +11,7 @@
 #include "mmath.h"
 
 
-BulletClass::BulletClass(ObjectClass* newShooter, UPoint realPosition, UPoint realDestination, int bulletType, bool air) :
+WeaponClass::WeaponClass(ObjectClass* newShooter, UPoint realPosition, UPoint realDestination, int bulletType, bool air) :
     Rect(0,0,0,0)
 {
     DataCache* cache = DataCache::Instance();
@@ -159,7 +159,7 @@ BulletClass::BulletClass(ObjectClass* newShooter, UPoint realPosition, UPoint re
             break;
 
         default:
-            LOG_WARNING("BulletClass", "Unknown Bullet type %d.", getItemID());
+            LOG_WARNING("WeaponClass", "Unknown Bullet type %d.", getItemID());
             m_damage = 500;
             inaccuracy = 0;
             //So let's just have a 1x1 image then
@@ -200,7 +200,7 @@ BulletClass::BulletClass(ObjectClass* newShooter, UPoint realPosition, UPoint re
     m_destAngle = dest_angle(realPosition, m_destination);
     m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
     m_angle = m_destAngle;
-    LOG_INFO("BulletClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
+    LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
     m_frameTime = 5;
     m_frameTimer = -1;
 
@@ -211,18 +211,18 @@ BulletClass::BulletClass(ObjectClass* newShooter, UPoint realPosition, UPoint re
     m_ySpeed = m_speed * -sin(m_destAngle * conv2char);
 }
 
-BulletClass::~BulletClass()
+WeaponClass::~WeaponClass()
 {
 
 }
 
-void BulletClass::setDrawnPos(SPoint off, SPoint view)
+void WeaponClass::setDrawnPos(SPoint off, SPoint view)
 {
     m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
     m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
 }
 
-void BulletClass::draw(Image * dest, SPoint off, SPoint view)
+void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
     setDrawnPos(off, view);
     Rect source;
@@ -349,7 +349,7 @@ void BulletClass::draw(Image * dest, SPoint off, SPoint view)
 
 }
 
-void BulletClass::updatePosition(float dt)
+void WeaponClass::updatePosition(float dt)
 {
     MapClass* map = GameMan::Instance()->GetMap();
     m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
@@ -360,7 +360,7 @@ void BulletClass::updatePosition(float dt)
 	if (!m_destroyed)
 	{
 		UPoint oldLocation = UPoint(x,y);
-		LOG_INFO("BulletClass", "Old location was %d-%d", x,y);
+		LOG_INFO("WeaponClass", "Old location was %d-%d", x,y);
 
 		m_realPos.x += m_xSpeed * m_adjust;  //keep the bullet moving by its current speeds
 		m_realPos.y += m_ySpeed * m_adjust;
@@ -406,7 +406,7 @@ void BulletClass::updatePosition(float dt)
 	*/
 }
 
-void BulletClass::destroy()
+void WeaponClass::destroy()
 {
     DataCache* cache = DataCache::Instance();
     MapClass* map = GameMan::Instance()->GetMap();

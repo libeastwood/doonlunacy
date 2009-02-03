@@ -1,7 +1,7 @@
 #ifndef DUNE_GAMEMANAGER_H
 #define DUNE_GAMEMANAGER_H
 
-#include "BulletClass.h"
+#include "objects/WeaponClass.h"
 #include "MapGenerator.h"
 #include "MapClass.h"
 #include "ObjectTree.h"
@@ -16,7 +16,7 @@ typedef std::list <Uint32> List;
 typedef std::vector<PlayerClass*> Players;
 typedef std::vector<StructureClass*> Structures;
 typedef std::list<UnitClass*> Units;
-typedef std::vector<BulletClass*> Bullets;
+typedef std::vector<WeaponClass*> Bullets;
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 

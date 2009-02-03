@@ -69,11 +69,11 @@ void GameMan::Init()
 	m_objectTree = new ObjectTree();
     m_bulletList = new Bullets;
 
-    m_bulletList->push_back(new BulletClass(NULL, UPoint(50,50), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
-    m_bulletList->push_back(new BulletClass(NULL, UPoint(50,200), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
-    m_bulletList->push_back(new BulletClass(NULL, UPoint(200,50), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
-    m_bulletList->push_back(new BulletClass(NULL, UPoint(400,400), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
-    m_bulletList->push_back(new BulletClass(NULL, UPoint(200,400), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, UPoint(50,50), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, UPoint(50,200), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, UPoint(200,50), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, UPoint(400,400), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, UPoint(200,400), UPoint(498, 352), (int)Bullet_LargeRocket, false)); 
 
 }
 

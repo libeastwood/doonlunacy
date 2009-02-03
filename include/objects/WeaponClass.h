@@ -1,15 +1,15 @@
-#ifndef BULLETCLASS_H
-#define BULLETCLASS_H
+#ifndef DUNE_OBJECTS_WEAPONCLASS_H
+#define DUNE_OBJECTS_WEAPONCLASS_H
 
 #include "Gfx.h"
 #include "ObjectClass.h"
 #include "PlayerClass.h"
 
-class BulletClass : public Rect
+class WeaponClass : public Rect
 {
   public:
-    BulletClass(ObjectClass* newShooter, UPoint position, UPoint destination, int bulletType, bool air);
-    ~BulletClass();
+    WeaponClass(ObjectClass* newShooter, UPoint position, UPoint destination, int bulletType, bool air);
+    ~WeaponClass();
 	void draw(Image * img, SPoint off, SPoint view);
 	void updatePosition(float dt);
 	void destroy();
@@ -69,4 +69,4 @@ class BulletClass : public Rect
     
 }; 
 
-#endif // BULLETCLASS_H
+#endif // DUNE_OBJECTS_WEAPONCLASS_H

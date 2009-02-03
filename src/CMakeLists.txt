@@ -21,6 +21,7 @@ SET( DOONLUNACY_BASE_SRCS
   MapSeed.cpp
   PlayerClass.cpp
   ObjectClass.cpp
+  objects/WeaponClass.cpp
   #structures/BarracksClass.cpp
   #structures/ConstructionYardClass.cpp
   #structures/GunTurretClass.cpp
@@ -48,7 +49,6 @@ SET( DOONLUNACY_BASE_SRCS
   PriorityQ.cpp
   ObjectTree.cpp
   ObjectPointer.cpp
-  BulletClass.cpp
 )
 
 SET( DOONLUNACY_STATE_SRCS
