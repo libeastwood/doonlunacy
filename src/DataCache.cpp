@@ -27,8 +27,6 @@ typedef boost::shared_ptr<ShpFile> ShpfilePtr;
 DataCache::DataCache() {
 }
 
-//#define GROUNDUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+3)|TILE_FLIPV, (i+4)|TILE_NORMAL,(i+3)|TILE_NORMAL
-
 #include <iostream>
 
 void DataCache::Init(){
