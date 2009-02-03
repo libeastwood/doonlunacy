@@ -126,7 +126,8 @@ class SonicTank(GroundUnit):
 class Tank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Tank"
+        self.picture = "ObjPic_Tank_Base"
+        self.gunPicture = "ObjPic_Tank_Base"
         self.armor = 10
         self.maxHealth = 400
         self.radius = 6
