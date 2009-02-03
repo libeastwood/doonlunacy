@@ -150,6 +150,7 @@ structures = {
 
         #'Concrete' : Concrete(),
         'IX' : IX(),
+        'Outpost' : Radar(),        
         'Radar' : Radar(),
         'Refinery' : Refinery(),
         'Repair Yard' : RepairYard(),
