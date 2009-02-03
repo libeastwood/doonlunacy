@@ -30,21 +30,6 @@ DataCache::DataCache() {
 //#define GROUNDUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+3)|TILE_FLIPV, (i+4)|TILE_NORMAL,(i+3)|TILE_NORMAL
 
 #include <iostream>
-Uint32 *GROUNDUNIT_ROW(Uint32 i){
-    Uint32 *row = new Uint32[8];
-    row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
-        row[4] = (i+2)|TILE_FLIPV, row[5] = (i+3)|TILE_FLIPV, row[6] = (i+4)|TILE_NORMAL, row[7] = (i+3)|TILE_NORMAL;
-    return row;
-}
-
-//#define AIRUNIT_ROW(i) (i+2)|TILE_NORMAL,(i+1)|TILE_NORMAL,i|TILE_NORMAL,(i+1)|TILE_FLIPV,(i+2)|TILE_FLIPV,(i+1)|TILE_ROTATE, i|TILE_FLIPH,(i+1)|TILE_FLIPH
-
-Uint32 *AIRUNIT_ROW(Uint32 i){
-    Uint32 *row = new Uint32[8];
-    row[0] = (i+2)|TILE_NORMAL, row[1] = (i+1)|TILE_NORMAL, row[2] = i|TILE_NORMAL, row[3] = (i+1)|TILE_FLIPV,
-        row[4] = (i+2)|TILE_FLIPV, row[5] = (i+1)|TILE_ROTATE, row[6] = i|TILE_FLIPH, row[7] = (i+1)|TILE_FLIPH;
-    return row;
-}
 
 void DataCache::Init(){
     //TODO:Should use ResMan.
