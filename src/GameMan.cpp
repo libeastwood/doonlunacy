@@ -184,7 +184,6 @@ bool GameMan::LoadScenario(string scenarioName)
 
         int house;
 
-	std::cout << HouseStr << std::endl;
         if ((HouseStr == "Atreides") || (HouseStr == "ATREIDES"))
             house = HOUSE_ATREIDES;
         else if ((HouseStr == "Ordos") || (HouseStr == "ORDOS"))
