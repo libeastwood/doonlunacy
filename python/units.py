@@ -3,7 +3,7 @@ from UnitClass import *
 class Carryall(AirUnit):
     def __init__(self):
         AirUnit.__init__(self)
-        self.picture = "ObjPic_Carryall"
+        self.graphic = "ObjPic_Carryall"
         self.armor = 2
         self.maxHealth = 100
         self.offset = [8,8]
@@ -15,7 +15,7 @@ class Carryall(AirUnit):
 class Frigate(AirUnit):
     def __init__(self):
         AirUnit.__init__(self)
-        self.picture = "ObjPic_Frigate"
+        self.graphic = "ObjPic_Frigate"
         self.armor = 10
         self.maxHealth = 10000
         self.speed = 1.0
@@ -24,7 +24,7 @@ class Frigate(AirUnit):
 class Ornithopter(AirUnit):
     def __init__(self):
         AirUnit.__init__(self)
-        self.picture = "ObjPic_Ornithopter"
+        self.graphic = "ObjPic_Ornithopter"
         self.armor = 3
         self.maxHealth = 100
         self.offset = [8,8]
@@ -35,7 +35,7 @@ class Ornithopter(AirUnit):
 class Devastator(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Devastator_Base"
+        self.graphic = "ObjPic_Devastator_Base"
         self.gunPicture = "ObjPic_Devastator_Gun"
         self.armor = 15
         self.maxHealth = 1000
@@ -46,7 +46,7 @@ class Devastator(GroundUnit):
 class Deviator(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Deviator"
+        self.graphic = "ObjPic_Deviator"
         self.armor = 5
         self.maxHealth =  200
         self.radius = 6
@@ -57,7 +57,7 @@ class Deviator(GroundUnit):
 class Launcher(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Launcher"
+        self.graphic = "ObjPic_Launcher"
         self.armor = 7
         self.maxHealth = 300
         self.radius = 6
@@ -66,7 +66,7 @@ class Launcher(GroundUnit):
 class MCV(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_MCV"
+        self.graphic = "ObjPic_MCV"
         self.armor = 7
         self.maxHealth = 600
         self.radius = 9
@@ -76,7 +76,7 @@ class MCV(GroundUnit):
 class Quad(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Quad"
+        self.graphic = "ObjPic_Quad"
         self.maxHealth = 450
         self.speed = 0.64
         self.viewRange = 4
@@ -84,7 +84,7 @@ class Quad(GroundUnit):
 class Raider(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Raider"
+        self.graphic = "ObjPic_Raider"
         self.armor = 3
         self.maxHealth = 250
         self.speed = 1.3
@@ -94,7 +94,7 @@ class Raider(GroundUnit):
 class Sandworm(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Sandworm"        
+        self.graphic = "ObjPic_Sandworm"        
         self.armor = 5
         self.maxHealth = 3000
         self.radius = 8
@@ -105,7 +105,7 @@ class Sandworm(GroundUnit):
 class SiegeTank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_SiegeTank"        
+        self.graphic = "ObjPic_SiegeTank"        
         self.armor = 12
         self.maxHealth = 600
         self.radius = 7
@@ -115,7 +115,7 @@ class SiegeTank(GroundUnit):
 class SonicTank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_SonicTank"
+        self.graphic = "ObjPic_SonicTank"
         self.armor = 7
         self.maxHealth = 350
         self.radius = 6
@@ -125,7 +125,7 @@ class SonicTank(GroundUnit):
 class Tank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Tank_Base"
+        self.graphic = "ObjPic_Tank_Base"
         self.gunPicture = "ObjPic_Tank_Base"
         self.armor = 10
         self.maxHealth = 400
@@ -138,7 +138,7 @@ class Trike(GroundUnit):
         GroundUnit.__init__(self)
         self.armor = 4
         self.maxHealth = 250
-        self.picture = "ObjPic_Trike"
+        self.graphic = "ObjPic_Trike"
         self.radius = 4
         self.speed = 1.0
         self.viewRange = 4
@@ -150,7 +150,7 @@ class Fremen(InfantryUnit):
 class Infantry(InfantryUnit):
     def __init__(self):
         InfantryUnit.__init__(self)
-        self.picture = "ObjPic_Infantry"
+        self.graphic = "ObjPic_Infantry"
         self.armor = 1
         self.maxHealth = 10
         self.radius = 2
@@ -160,7 +160,7 @@ class Infantry(InfantryUnit):
 class Saboteur(InfantryUnit):
     def __init__(self):
         InfantryUnit.__init__(self)
-        self.picture = "ObjPic_Saboteur"
+        self.graphic = "ObjPic_Saboteur"
         self.armor = 1
         self.maxHealth = 100
         self.radius = 2

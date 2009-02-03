@@ -1,7 +1,7 @@
 class Object(ObjectBase):
     def __init__(self):
         ObjectBase.__init__(self)
-        self.picture = None
+        self.graphic = None
 
         self.animFrames = 1
 
