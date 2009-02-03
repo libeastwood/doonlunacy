@@ -38,7 +38,7 @@ class DeviatorRocket(Weapon):
         self.speed = 4.0
         self.numDeathFrames = 5
         self.deathFrame = "ObjPic_Hit_Gas"
-        self.deathSound = "Sound_ExplosionGas"
+        self.deathSound = "Sound_Hit_ExplosionGas"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_MediumRocket"
 
@@ -51,7 +51,7 @@ class SmallRocket(Weapon):
         self.damage = 15 //30//50
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathFrame = "ObjPic_ExplosionSmall"
+        self.deathFrame = "ObjPic_Hit_ExplosionSmall"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_SmallRocket"
 
@@ -65,7 +65,7 @@ class SmallRocketHeavy(Weapon):
         self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathFrame = "ObjPic_ExplosionSmall"
+        self.deathFrame = "ObjPic_Hit_ExplosionSmall"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_SmallRocket"
 
@@ -83,7 +83,7 @@ class MediumRocket(Weapon):
         self.damage = 60
         self.speed = 5.0
         self.numDeathFrames = 5
-        self.deathFrame = "ObjPic_ExplosionSmall"
+        self.deathFrame = "ObjPic_Hit_ExplosionSmall"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_MediumRocket"
 
@@ -96,7 +96,7 @@ class LargeRocket(Weapon):
         self.damage = 100
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathFrame = "ObjPic_ExplosionSmall"
+        self.deathFrame = "ObjPic_Hit_ExplosionSmall"
         self.deathSound = "Sound_ExplosionLarge"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_LargeRocket"
