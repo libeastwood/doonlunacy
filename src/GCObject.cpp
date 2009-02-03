@@ -294,11 +294,9 @@ void GCObject::drawImage()
     
     }
 
-    catch(ParseException& ex)
+    catch(SettingNotFoundException& ex)
     {
-        LOG_FATAL("GCObject", "Setting not found %d: %s", 
-            ex.getLine(), ex.getError());
-
+        LOG_FATAL("GCObject", "Setting not found %s", m_path.c_str());
         exit(EXIT_FAILURE);
     }
 }
