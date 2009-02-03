@@ -48,7 +48,7 @@ class SmallRocket(Weapon):
         self.damagePiercing = 8
         self.damageRadius = 5
         inaccuracy = 6
-        self.damage = 15 //30//50
+        self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
         self.deathFrame = "ObjPic_Hit_ExplosionSmall"
@@ -108,7 +108,7 @@ class Shell(Weapon):
         self.damageRadius = 3
         self.groundBlocked = True
         inaccuracy = 6
-        self.damage = 30//50
+        self.damage = 30
         self.speed = 9.0
         self.numDeathFrames = 3
         self.deathFrame = "ObjPic_Hit_Shell"
@@ -121,7 +121,7 @@ class Sonic(Weapon):
         self.damagePiercing = 4
         self.damageRadius = 8
         inaccuracy = 4
-        self.damage = 40//50
+        self.damage = 40
         self.speed = 4.0
         self.numDeathFrames = 1
         self.deathFrame = "ObjPic_Bullet_Sonic"
