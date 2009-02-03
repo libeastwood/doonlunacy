@@ -7,10 +7,10 @@ class Object(object):
         self.drawnAngle = 2
         self.angle = 256 / 8 * self.drawnAngle
 
-        self.drawn_pos = [0,0]
-        self.offset = [0,0]
-        self.real_pos = [0.0, 0.0]
-        self.size = (16, 16)
+        self.drawn_pos = (0,0)
+        self.offset = (0,0)
+        self.real_pos = (0.0, 0.0)
+        self.size = (1, 1)
 
         self.armor = 0
         self.maxHealth = 100
