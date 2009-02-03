@@ -11,167 +11,47 @@
 #include "mmath.h"
 
 
-WeaponClass::WeaponClass(ObjectClass* newShooter, UPoint realPosition, UPoint realDestination, int bulletType, bool air) :
-    Rect(0,0,0,0)
+WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air) :
+    ObjectClass(m_shooter ? NULL : m_shooter->getOwner(), weaponName)
 {
     DataCache* cache = DataCache::Instance();
+    sprite *tmp;
+
 
     m_groundBlocked = false;
     m_airAttack = air;
 
     int inaccuracy;
 
-    m_bulletType = bulletType;
     m_destroyed = false;
     m_shooter = newShooter;
     
-    if (m_shooter)
-        m_owner = m_shooter->getOwner();
-    else
-        m_owner = NULL;
-
     m_deathSound = NONE;
 
-    switch (m_bulletType)
-    {
-
-        case(Bullet_Inf_Gun):
-            m_damagePiercing = 2;
-            m_damageRadius = 2;
-            m_groundBlocked = true;
-            inaccuracy = 2;
-            m_damage = 5;
-            m_speed = 9.0;
-            m_numDeathFrames = 1;
-            m_deathFrame = "ObjPic_Bullet_Small";
-            m_numFrames = 1;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_Small")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            break;
-
-        case(Bullet_Gun):
-            m_damagePiercing = 2;
-            m_damageRadius = 2;
-            m_groundBlocked = true;
-            inaccuracy = 2;
-            m_damage = 18;
-            m_speed = 9.0;
-            m_numDeathFrames = 1;
-            m_deathFrame = "ObjPic_Bullet_Small";
-            m_numFrames = 1;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_Small")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            break;
-
-        case(Bullet_DRocket):
-            m_damagePiercing = 0;
-            m_damageRadius = 16;
-            inaccuracy = 16;
-            m_damage = 0;
-            m_speed = 4.0;
-            m_numDeathFrames = 5;
-            m_deathFrame = "ObjPic_Hit_Gas";
-            m_deathSound = Sound_ExplosionGas;
-            m_numFrames = 16;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_MediumRocket")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            break;
-
-        case(Bullet_LargeRocket):
-            m_damagePiercing = 8;
-            m_damageRadius = 16;
-            inaccuracy = 0;
-            m_damage = 100;
-            m_speed = 4.0;
-            m_numDeathFrames = 5;
-            m_deathFrame = "ObjPic_ExplosionSmall";
-            m_deathSound = Sound_ExplosionLarge;
-            m_numFrames = 16;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_LargeRocket")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            break;
-
-        case(Bullet_Rocket):
-            m_damagePiercing = 8;
-            m_damageRadius = 4;
-
-            if (newShooter->getItemID() == Unit_Launcher)
-                inaccuracy = 20;
-            else
-                inaccuracy = 8;
-
-            m_damage = 60;//80
-            m_speed = 5.0;
-            m_numDeathFrames = 5;
-            m_deathFrame = "ObjPic_ExplosionSmall";
-            m_numFrames = 16;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_MediumRocket")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            break;
-
-        case(Bullet_Shell):
-            m_damagePiercing = 12;
-
-            m_damageRadius = 3;
-            m_groundBlocked = true;
-            inaccuracy = 6;
-            m_damage = 30;//50
-            m_speed = 9.0;
-            m_numDeathFrames = 3;
-            m_deathFrame = "ObjPic_Hit_Shell";
-            m_numFrames = 1;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_Medium")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-
-            break;
-
-        case(Bullet_SmallRocket):
-            m_damagePiercing = 8;
-            m_damageRadius = 5;
-            inaccuracy = 6;
-            m_damage = 15; //30;//50
-            m_speed = 4.0;
-            m_numDeathFrames = 5;
-            m_deathFrame = "ObjPic_ExplosionSmall";
-            m_numFrames = 16;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_SmallRocket")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-
-            break;
-
-        case(Bullet_SmallRocketHeavy):
-            m_damagePiercing = 12;
-            m_damageRadius = 5;
-            inaccuracy = 6;
-            m_damage = 15; //30;//50
-            m_speed = 4.0;
-            m_numDeathFrames = 5;
-            m_deathFrame = "ObjPic_ExplosionSmall";
-            m_numFrames = 16;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_SmallRocket")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-
-            break;
-
-        case(Bullet_Sonic):
-            m_damagePiercing = 4;
-            m_damageRadius = 8;
-            inaccuracy = 4;
-            m_damage = 40;//50
-            m_speed = 4.0;
-            m_numDeathFrames = 1;
-            m_deathFrame = "ObjPic_Bullet_Sonic";
-            m_numFrames = 1;
-			m_graphic = cache->getGCObject("ObjPic_Bullet_Sonic")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-            m_graphic = m_graphic->getCopy();
-            break;
-
-        default:
-            LOG_WARNING("WeaponClass", "Unknown Bullet type %d.", getItemID());
-            m_damage = 500;
-            inaccuracy = 0;
-            //So let's just have a 1x1 image then
-            m_graphic.reset(new Image(UPoint(1,1)));
-
-            break;
+    tmp = cache->getSpriteInfo(m_objectName);
+    try {
+	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+            m_damagePiercing = python::extract<int>(object["damagePiercing"]);
+            m_damageRadius = python::extract<int>(object["damageRadius"]);
+            m_groundBlocked = python::extract<bool>(object["groundBlocked"]);
+            inaccuracy = python::extract<int>(object["inaccuracy"]);
+            m_damage = python::extract<int>(object["damage"]);
+            m_speed = python::extract<float>(object["speed"]);
+            m_numDeathFrames = python::extract<int>(object["damagePiercing"]);
+            m_deathFrame = python::extract<std::string>(object["deathFrame"]);
+            m_numFrames = python::extract<int>(object["numFrames"]);
     }
-    
+    catch(python::error_already_set const &)
+    {
+        LOG_FATAL("WeapontClass", "Error loading object: %s", m_objectName.c_str());
+        PyErr_Print();
+        exit(1);
+    }
+
     m_destination.x = realDestination.x + getRandomInt(-inaccuracy, inaccuracy);
     m_destination.y = realDestination.y + getRandomInt(-inaccuracy, inaccuracy);
     
-    if (m_bulletType == Bullet_Sonic)
+    if (weaponName == "Bullet_Sonic")
     {
         int diffX = m_destination.x - realPosition.x,
             diffY = m_destination.y - realPosition.y;

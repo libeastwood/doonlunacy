@@ -13,12 +13,11 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 {
     DataCache *cache = DataCache::Instance();
     sprite *tmp;
-    std::string pic;
+    std::string graphic;
 
     m_objectName = objectName;
 
 
-    m_itemID = Unknown;
     m_objectID = NONE;
 
     m_animCounter = 0;
@@ -29,7 +28,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_maxHealth = 100;
     m_health = m_maxHealth;
     m_realPos = PointFloat(0, 0);
-    m_armour = 0;
     m_radius = 0;
     m_animCounter = 0;
     m_animFrames = 1;
@@ -49,13 +47,14 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     tmp = cache->getSpriteInfo(m_objectName);
     try {
 	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+	    m_armor = python::extract<int>(object["armor"]);
 	    m_health = python::extract<int>(object["health"]);
 	    m_maxHealth = python::extract<int>(object["maxHealth"]);
 	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
 			   python::extract<int>(object["offset"][1]));
 	    m_radius = python::extract<int>(object["radius"]);
 	    m_viewRange = python::extract<int>(object["viewRange"]);
-	    pic = python::extract<std::string>(object["picture"]);
+	    graphic = python::extract<std::string>(object["graphic"]);
    	    w = python::extract<int>(object["size"][0]) * 16;
 	    h = python::extract<int>(object["size"][1]) * 16;
     }
@@ -66,7 +65,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
         exit(1);
     }
 
-    m_pic = cache->getGCObject(pic)->getImage(HOUSETYPE(getOwner()->getColour()));
+    m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
 
 }
@@ -93,7 +92,7 @@ bool ObjectClass::canAttack(ObjectClass* object)
 	if ( (object != NULL) && !object->wasDestroyed() 
 	    && ( object->isAStructure() || !object->isAFlyingUnit() )
 	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
-	    || object->getItemID() == Unit_Sandworm) && object->isVisible(m_owner->getTeam()) ) 
+	    || object->getObjectName() == "Sandworm") && object->isVisible(m_owner->getTeam()) ) 
 	{
 		return true;
 	} else {
@@ -104,7 +103,7 @@ bool ObjectClass::canAttack(ObjectClass* object)
 /* virtual */
 void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    m_pic->blitTo(dest, UPoint(x + off.x, y + off.y));
+    m_graphic->blitTo(dest, UPoint(x + off.x, y + off.y));
 }
 
 void ObjectClass::drawSmoke(UPoint pos)
@@ -185,7 +184,7 @@ ObjectClass* ObjectClass::findTarget()
 			{
 				tempTarget = map->getCell(xCheck,yCheck)->getObject();
 
-				if (((tempTarget->getItemID() != Structure_Wall) || (closestTarget == NULL)) && canAttack(tempTarget))
+				if (((tempTarget->getObjectName() != "Wall") || (closestTarget == NULL)) && canAttack(tempTarget))
 				{
 					float targetDistance = blockDistance( getPosition(), tempTarget->getPosition());
 					if (targetDistance < closestDistance)

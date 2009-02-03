@@ -272,7 +272,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     				damageProp = 1.0;
     			}
 
-    			object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmour(), damager);
+    			object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
     		}
     	}
     	
@@ -332,7 +332,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 							if (damageProp > 1.0) {
 								damageProp = 1.0;
 							}
-							airUnit->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - airUnit->getArmour(), damager);
+							airUnit->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - airUnit->getArmor(), damager);
 						}
 					}
 				}
@@ -366,7 +366,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 							damageProp = 1.0;
 						}
 
-						object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmour(), damager);
+						object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
 					}
 				}
 				

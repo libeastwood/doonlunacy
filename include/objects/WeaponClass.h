@@ -1,14 +1,13 @@
 #ifndef DUNE_OBJECTS_WEAPONCLASS_H
 #define DUNE_OBJECTS_WEAPONCLASS_H
 
-#include "Gfx.h"
 #include "ObjectClass.h"
 #include "PlayerClass.h"
 
-class WeaponClass : public Rect
+class WeaponClass : public ObjectClass
 {
   public:
-    WeaponClass(ObjectClass* newShooter, UPoint position, UPoint destination, int bulletType, bool air);
+    WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint position, UPoint destination, bool air);
     ~WeaponClass();
 	void draw(Image * img, SPoint off, SPoint view);
 	void updatePosition(float dt);
@@ -27,8 +26,7 @@ class WeaponClass : public Rect
     int	m_damage,
         m_damagePiercing, //from 0 for none to 10 max
         m_damageRadius,
-        m_drawnAngle,
-        m_bulletType,//itemID,
+        m_bulletType,
         m_numDeathFrames,
         m_numFrames,
         m_xOffset,
@@ -39,7 +37,6 @@ class WeaponClass : public Rect
     std::string m_deathFrame;
 
     float m_speed,
-            m_angle,
             m_destAngle,
             m_angleLeft,
             m_angleRight,
@@ -53,17 +50,11 @@ class WeaponClass : public Rect
             
     float m_adjust;
 
-    PointFloat m_realPos;
-    SPoint m_drawnPos;
-    ImagePtr m_graphic;
-
 	Uint32 m_deathSound;
 	
-    UPoint  m_destination,
-            m_source;
+    UPoint  m_source;
 
     ObjectClass*    m_shooter;
-    PlayerClass*    m_owner;
     ImagePtr        m_deathGraphic[5][5];
 
     

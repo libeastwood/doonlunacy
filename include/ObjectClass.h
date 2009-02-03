@@ -3,7 +3,7 @@
 
 #define VIS_ALL -1
 
-#include "Gfx.h"
+#include "Rect.h"
 #include "ObjectPointer.h"
 #include "PlayerClass.h"
 
@@ -36,7 +36,7 @@ class ObjectClass : public Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner, std::string objectName = "");
+    ObjectClass(PlayerClass* newOwner, std::string objectName);
     virtual ~ObjectClass();
     //@}
 
@@ -81,15 +81,15 @@ class ObjectClass : public Rect
 	inline bool isVisible(int team);
     int getHealthColour();
 
-	inline bool wasDestroyed() { return m_destroyed; }
-	inline bool wasForced() { return m_forced; }
+    inline bool wasDestroyed() { return m_destroyed; }
+    inline bool wasForced() { return m_forced; }
 
-    inline int getItemID() { return m_itemID; }
-	int getViewRange();
+    std::string getObjectName() { return m_objectName; }
+    int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
     inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
-    inline int getArmour() { return m_armour; }
+    inline int getArmor() { return m_armor; }
     inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
@@ -163,9 +163,6 @@ class ObjectClass : public Rect
 
         m_drawnAngle,
 
-        //! Type of current object e.g. Structure_Silo
-        m_itemID,
-
         m_maxHealth,
 
         //! Used for fog of war and area exploring.
@@ -173,7 +170,7 @@ class ObjectClass : public Rect
 
         m_weaponRange;
 
-    int m_armour,
+    int m_armor,
         m_radius,
 
         m_numDeathFrames,
@@ -183,7 +180,7 @@ class ObjectClass : public Rect
 
 
     //! SharedPtr to image for current object
-    ImagePtr m_pic;
+    ImagePtr m_graphic;
 
     //! Pointer to map to which object is assigned.
     PlayerClass * m_owner;

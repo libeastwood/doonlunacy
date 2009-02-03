@@ -59,7 +59,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
     GameMan::Instance()->GetUnits()->push_back(this);
 
-    w = h = m_pic->getSize().y;
+    w = h = m_graphic->getSize().y;
 }
 
 /*virtual*/
@@ -111,7 +111,7 @@ void UnitClass::destroy()
     GameMan* gman = GameMan::Instance();
     if (!m_destroyed)
     {
-        LOG_INFO("UnitClass","Destroying unit %d (itemID=%d)... ",m_objectID, m_itemID);
+        LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, m_objectName.c_str());
         setTarget(NULL);
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
@@ -120,7 +120,7 @@ void UnitClass::destroy()
 
         m_destroyed = true;
         m_respondable = false;
-		m_pic = DataCache::Instance()->getGCObject(m_deathFrame)->getImage(HOUSETYPE(getOwner()->getColour()));
+		m_graphic = DataCache::Instance()->getGCObject(m_deathFrame)->getImage(HOUSETYPE(getOwner()->getColour()));
 /*
         imageW = graphic->w / numDeathFrames;
         imageH = graphic->h;
@@ -150,8 +150,6 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 
     Rect src(0, 0, w, h);
 
-    if (getItemID() == Unit_Frigate)
-        m_itemID = Unit_Frigate;
 
     if (!m_destroyed)
     {
@@ -159,7 +157,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
         src.x = m_drawnAngle * w;
         src.y = 0;
 
-        m_pic->blitTo(dest, src, m_drawnPos);
+        m_graphic->blitTo(dest, src, m_drawnPos);
     }
 
     else
@@ -169,7 +167,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
         src.x = 1 * w;
         src.y = 0;
 
-        m_pic->blitTo(dest, src, m_drawnPos);
+        m_graphic->blitTo(dest, src, m_drawnPos);
     }
 
     // Show path on the screen
@@ -276,9 +274,9 @@ void UnitClass::navigate()
                                 && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
                         { //try searching for a path a number of times then give up
                             if (m_target && m_targetFriendly
-                                    && (m_target.getObjPointer()->getItemID() != Structure_RepairYard)
-                                    && ((m_target.getObjPointer()->getItemID() != Structure_Refinery)
-                                        || (getItemID() != Unit_Harvester)))
+                                    && (m_target.getObjPointer()->getObjectName() != "Repair Yard")
+                                    && ((m_target.getObjPointer()->getObjectName() != "Refinery")
+                                        || (getObjectName() != "Harvester")))
                             {
 
                                 setTarget(NULL);
@@ -674,7 +672,7 @@ if (!m_destroyed)
             setGuardPoint(&location);
             setDestination(&location);
             m_owner = m_realOwner;
-            m_pic = DataCache::Instance->getObjPic(GraphicID, getOwner()->getColour());
+            m_graphic = DataCache::Instance->getObjPic(GraphicID, getOwner()->getColour());
         }
     }
 
@@ -858,7 +856,7 @@ bool UnitClass::AStarSearch()
                 node = node->m_parent;
             }
 
-            LOG_INFO("UnitClass", "%d at %d,%d to %d, %d: %d", m_itemID, x, y, m_destination.x, m_destination.y, numNodesChecked);
+            LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", m_objectName.c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
 
             return true;
         }

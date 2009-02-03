@@ -310,7 +310,7 @@ ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
 void MapClass::fixWall(int xPos, int yPos)
 {
     if (getCell(xPos, yPos)->hasAGroundObject() 
-        && getCell(xPos, yPos)->getGroundObject()->getItemID() == Structure_Wall)
+        && getCell(xPos, yPos)->getGroundObject()->getObjectName() == "Wall")
     {
         int up, down, left, right;
 
@@ -319,17 +319,17 @@ void MapClass::fixWall(int xPos, int yPos)
 
         // Walls
         up = (!cellExists(i, j - 1) || (getCell(i, j - 1)->hasAGroundObject()
-              && (getCell(i, j - 1)->getGroundObject()->getItemID() == Structure_Wall)));
+              && (getCell(i, j - 1)->getGroundObject()->getObjectName() == "Wall")));
         //|| (cell[i][j-1].getGroundObject()->getItemID() == Structure_GunTurret)
         //|| (cell[i][j-1].getGroundObject()->getItemID() == Structure_RocketTurret))));
         down = (!cellExists(i, j + 1) || (getCell(i, j + 1)->hasAGroundObject()
-                && (getCell(i, j + 1)->getGroundObject()->getItemID() == Structure_Wall)));
+                && (getCell(i, j + 1)->getGroundObject()->getObjectName() == "Wall")));
 
         left = (!cellExists(i - 1, j) || (getCell(i - 1, j)->hasAGroundObject()
-                && (getCell(i - 1, j)->getGroundObject()->getItemID() == Structure_Wall)));
+                && (getCell(i - 1, j)->getGroundObject()->getObjectName() == "Wall")));
 
         right = (!cellExists(i + 1, j) || (getCell(i + 1, j)->hasAGroundObject()
-                 && (getCell(i + 1, j)->getGroundObject()->getItemID() == Structure_Wall)));
+                 && (getCell(i + 1, j)->getGroundObject()->getObjectName() == "Wall")));
 
         // Now perform the test
 

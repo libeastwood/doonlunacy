@@ -114,7 +114,7 @@ void StructureClass::drawStructure(Image * dest)
 	else
 	{
 //		m_lastVisible = source;
-		m_pic->blitTo(dest, src, m_drawnPos);
+		m_graphic->blitTo(dest, src, m_drawnPos);
 	}
 }
 
