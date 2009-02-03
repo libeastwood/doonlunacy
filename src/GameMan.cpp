@@ -294,7 +294,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
             else if (BuildingStr == "Wall")
             {
-                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "ObjPic_Wall", UPoint(pos % 64, pos / 64));
+                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "Wall", UPoint(pos % 64, pos / 64));
             }
 
             else
