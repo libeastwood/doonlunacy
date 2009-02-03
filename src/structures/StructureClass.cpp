@@ -71,6 +71,7 @@ void StructureClass::draw(Image * dest, SPoint off, SPoint view)
 	if (!m_destroyed)
 	{
 		drawStructure(dest);
+		update();
 
 //		if (m_selected)
 //		drawSelectRect(dest);
