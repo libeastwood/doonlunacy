@@ -185,20 +185,20 @@ BulletClass::BulletClass(ObjectClass* newShooter, UPoint realPosition, UPoint re
         if ((diffX == 0) && (diffY == 0))
             diffY = SonicTankWeaponRange * BLOCKSIZE;
 
-        square_root = sqrt((double)(diffX*diffX + diffY*diffY));
+        square_root = sqrt((float)(diffX*diffX + diffY*diffY));
         ratio = (SonicTankWeaponRange * BLOCKSIZE)/square_root;
-        m_destination.x = realPosition.x + (int)(((double)diffX)*ratio);
-        m_destination.y = realPosition.y + (int)(((double)diffY)*ratio);
+        m_destination.x = realPosition.x + (int)(((float)diffX)*ratio);
+        m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
     }
 
-    m_realPos = UPoint((double)realPosition.x, (double)realPosition.y);
+    m_realPos = UPoint((float)realPosition.x, (float)realPosition.y);
     m_source = realPosition;
     x = realPosition.x/BLOCKSIZE;
     y = realPosition.y/BLOCKSIZE;
     h  = w = m_graphic->getSize().y;
 	
     m_destAngle = dest_angle(realPosition, m_destination);
-    m_drawnAngle = (int)((double)m_numFrames*m_destAngle/256.0);
+    m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
     m_angle = m_destAngle;
     LOG_INFO("BulletClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
     m_frameTime = 5;
