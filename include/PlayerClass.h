@@ -21,7 +21,7 @@ class PlayerClass
     
 	virtual void update();
 	
-	void decrementUnits(int itemID);
+	void decrementUnits(std::string itemName);
 
 	//! @name setters and getters
 	//@{
@@ -53,9 +53,9 @@ class PlayerClass
 	inline bool isAlive() { return !(((m_numStructures - m_numWalls) <= 0) && (((m_numUnits - m_numCarryalls - m_numHarvesters - m_numFrigates) <= 0))); }	
 	//@}
 	
-	UnitClass* createUnit(int itemID);
-	UnitClass* placeUnit(int itemID, UPoint itemPos);	
-	void* placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos);
+	UnitClass* createUnit(std::string itemName);
+	UnitClass* placeUnit(std::string itemName, UPoint itemPos);	
+	void* placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos);
   protected:
     //! @name Protected functions
     

@@ -65,61 +65,47 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 		m_mapPlayerNum = 0;
 }
 
-UnitClass* PlayerClass::createUnit(int itemID)
+UnitClass* PlayerClass::createUnit(std::string itemName)
 {
 	UnitClass* newUnit = NULL;
 
-	newUnit = (UnitClass*) GameMan::Instance()->CreateObject(itemID,this);
+	newUnit = (UnitClass*) GameMan::Instance()->createObject(itemName,this);
 
 	if(newUnit == NULL) 
 	{
-		LOG_ERROR("PlayerClass", "Cannot create Object with itemID %d",itemID);
+		LOG_ERROR("PlayerClass", "Cannot create Object %s", itemName.c_str());
 		exit(EXIT_FAILURE);
 	}
 
-	if (itemID != Unit_Sandworm) 
+	if (itemName != "Sandworm") 
 	{
 		m_numUnits++;
 	}
 
-	switch (itemID)	{
-		case (Unit_Frigate): 
-			m_numFrigates++;
-			break;
 
-		case (Unit_Carryall): 
-			m_numCarryalls++;
-			break;
-
-		case (Unit_Harvester):
-			m_numHarvesters++;
-			break;
-	}
+	if(itemName == "Frigate")
+		m_numFrigates++;
+	else if(itemName == "Carryall")
+		m_numCarryalls++;
+	else if(itemName == "Harvester")
+		m_numHarvesters++;
 
 	return newUnit;
 }
 
-
-void PlayerClass::decrementUnits(int itemID)
+void PlayerClass::decrementUnits(std::string itemName)
 {
-	if (itemID != Unit_Sandworm)
+	if (itemName != "Sandworm")
 		m_numUnits--;
 		
-	switch (itemID)
-	{
-	case (Unit_Carryall):
+	if(itemName == "Carryall")
 		m_numCarryalls--;
-		break;
-	case (Unit_Frigate):
+	else if(itemName == "Frigate")
 		m_numFrigates--;
-		break;
-	case (Unit_Harvester):
+	else if(itemName == "Harvester")
+		m_numHarvesters--;
 		//decrementHarvesters();
-		LOG_INFO("PlayerClass", "Decrement harvesters not implemented");
-		break;
-	default:
-		break;
-	}
+//		LOG_INFO("PlayerClass", "Decrement harvesters not implemented");
 
 	//if (!isAlive())
 	//	lose();
@@ -129,13 +115,14 @@ void PlayerClass::decrementUnits(int itemID)
     //currentGame->AddToNewsTicker(temp);
 }
 
+
 /*inline*/
 MapClass* PlayerClass::getMap()
 {
     return GameMan::Instance()->GetMap();
 }
 
-void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, UPoint itemPos)
+void* PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos)
 {
 	GameMan* gman = GameMan::Instance();
 	MapClass* map = gman->GetMap();
@@ -146,20 +133,18 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 	
 	StructureClass* tempStructure = NULL;
 	
-	if((itemID != Structure_Slab1) && (itemID != Structure_Slab4)) {
-		tempStructure = (StructureClass*) GameMan::Instance()->CreateObject(itemID,this);
+	if((itemName != "Slab1") && (itemName != "Slab4")) {
+		tempStructure = (StructureClass*) GameMan::Instance()->createObject(itemName,this);
 		if(tempStructure == NULL) {
-			LOG_ERROR("PlayerClass", "Cannot create Object with itemID %d",itemID);
+			LOG_ERROR("PlayerClass", "Cannot create Object %s", itemName.c_str());
 			exit(EXIT_FAILURE);
 		}
 		
 		//numStructures++;
 	}
 	
-	switch (itemID)
-	{	
-		case (Structure_Slab1):
-		{
+	if(itemName == "Slab1")
+	{
 			// Slabs are no normal buildings
 			map->getCell(itemPos)->setType(Structure_Slab1);
 			map->getCell(itemPos)->setOwner(getPlayerNumber());
@@ -179,10 +164,9 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 				currentGame->placingMode = false;
 			}
 */			
-		} break;
-	
-		case (Structure_Slab4):
-		{
+		}
+	else if(itemName == "Slab4")
+	{
 			// Slabs are no normal buildings
 			int i,j;
 			for(i = itemPos.x; i < itemPos.x + 2; i++) {
@@ -214,7 +198,6 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 				currentGame->placingMode = false;
 			}
 */			
-		} break;	
 	}
 
 	if (tempStructure) {
@@ -231,7 +214,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 
 		tempStructure->setPosition(itemPos);
 
-		if (itemID == Structure_Wall)
+		if (itemName == "Wall")
 			map->fixWalls(itemPos.x, itemPos.y);
 
 		// at the beginning of the game every refinery gets one harvester for free (brought by a carryall)
@@ -265,11 +248,11 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, int itemID, 
 	return tempStructure;
 }
 
-UnitClass* PlayerClass::placeUnit(int itemID, UPoint itemPos)
+UnitClass* PlayerClass::placeUnit(std::string itemName, UPoint itemPos)
 {
 	UnitClass* newUnit = NULL;
 	if (GameMan::Instance()->GetMap()->cellExists(itemPos))
-		newUnit = (UnitClass*)createUnit(itemID);
+		newUnit = (UnitClass*)createUnit(itemName);
 
 	if (newUnit)
 	{
@@ -285,7 +268,6 @@ UnitClass* PlayerClass::placeUnit(int itemID, UPoint itemPos)
 
 	return newUnit;
 }
-
 
 void PlayerClass::update()
 {

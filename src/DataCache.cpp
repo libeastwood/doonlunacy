@@ -112,80 +112,29 @@ void DataCache::Init(){
     free(data);
 }
 
-// TODO: Eventually we want to create the unit objects in python rather than in C++..
+// TODO: Eventually we want to create the object objects in python rather than in C++..
 void DataCache::cacheSprites()
 {
     std::string key;
     try {
         python::object main = python::import("__main__");
         python::dict global(main.attr("__dict__"));
-        python::object unitClass = python::import("units");
-        python::dict local(unitClass.attr("__dict__"));
+        python::object objectClass = python::import("objects");
+        python::dict local(objectClass.attr("__dict__"));
 
-//        python::object result = python::exec_file("python/units.py", global, local);
+//        python::object result = python::exec_file("python/objects.py", global, local);
         
         // TODO: figure out how to use the iterator :p
-        // python::object units = ((python::dict)local["units"]).iterkeys();
-        python::dict units = python::extract<python::dict>(local["units"]);
-        python::list keys = units.keys();
+        // python::object objects = ((python::dict)local["objects"]).iterkeys();
+        python::dict objects = python::extract<python::dict>(local["objects"]);
+        python::list keys = objects.keys();
         while(keys)
         {
             sprite tmp;
             key = python::extract<std::string>(keys.pop());
-            python::dict unit = (python::dict)((python::object)units[key]).attr("__dict__");
+            python::dict object = (python::dict)((python::object)objects[key]).attr("__dict__");
 
-            tmp.health = -1;
-            if(unit.has_key("health"))
-                tmp.health = python::extract<int>(unit["health"]);
-
-            tmp.maxHealth = -1;
-            if(unit.has_key("maxHealth"))
-                tmp.maxHealth = python::extract<int>(unit["maxHealth"]);
-
-            tmp.numWeapons = -1;
-            if(unit.has_key("numWeapons"))
-                tmp.numWeapons = python::extract<int>(unit["numWeapons"]);
-
-            if(unit.has_key("object_class"))
-                tmp.objectClass = python::extract<std::string>(unit["object_class"]);
-
-            if(unit.has_key("picture"))
-                tmp.pic = python::extract<std::string>(unit["picture"]);
-
-            tmp.primaryWeaponReloadTime = -1;
-            if(unit.has_key("primary_weapon_reload_time"))
-                tmp.primaryWeaponReloadTime = python::extract<int>(unit["primary_weapon_reload_time"]);
-
-            tmp.radius = -1;
-            if(unit.has_key("radius"))
-                tmp.radius = python::extract<int>(unit["radius"]);
-
-            tmp.turnSpeed = -1;
-            if(unit.has_key("turnSpeed"))
-                tmp.turnSpeed = python::extract<float>(unit["turnSpeed"]);
-
-            tmp.speed = -1;
-            if(unit.has_key("speed"))
-                tmp.radius = python::extract<float>(unit["speed"]);
-
-            tmp.size = UPoint(-1,-1);
-            if(unit.has_key("size"))
-                tmp.size = UPoint(python::extract<int>(unit["size"][0]),
-                            python::extract<int>(unit["size"][1]));
-
-            tmp.viewRange = -1;
-            if(unit.has_key("viewRange"))
-                tmp.radius = python::extract<int>(unit["viewRange"]);
-
-            tmp.weaponDamage = -1;
-            if(unit.has_key("weaponDamage"))
-                tmp.weaponDamage = python::extract<int>(unit["weaponDamage"]);
-
-            tmp.weaponRange = -1;
-            if(unit.has_key("weaponRange"))
-                tmp.weaponRange = python::extract<int>(unit["weaponRange"]);
-
-            tmp.unitDict = unit;
+            tmp.pyObject = objects[key];
             m_sprites[key] = tmp;
             LOG_INFO("DataCache", "Cached info for %s", key.c_str());
         }
@@ -420,4 +369,3 @@ DataCache::~DataCache() {
 }
 
 // vim:ts=8:sw=4:et
-

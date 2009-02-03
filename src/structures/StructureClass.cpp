@@ -3,12 +3,28 @@
 #include "MapClass.h"
 #include "structures/StructureClass.h"
 
-StructureClass::StructureClass(PlayerClass* newOwner) : ObjectClass(newOwner)
+StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName) : ObjectClass(newOwner, structureName)
 {
+    DataCache *cache = DataCache::Instance();
+    sprite *tmp;
+
     m_justPlacedTimer = 0;
-    m_itemID = Unknown;
-    w = h = 0;
     m_attributes |= OBJECT_STRUCTURE;
+    tmp = cache->getSpriteInfo(m_objectName);
+    try {
+	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+	    m_isAnimating = python::extract<bool>(object["animate"]);
+	    m_firstAnimFrame = python::extract<int>(object["firstAnimFrame"]);
+	    m_lastAnimFrame = python::extract<int>(object["lastAnimFrame"]);
+	    m_powerRequirement = python::extract<int>(object["powerRequirement"]);
+    }
+    catch(python::error_already_set const &)
+    {
+        LOG_FATAL("ObjectClass", "Error loading object: %s", m_objectName.c_str());
+        PyErr_Print();
+        exit(1);
+    }
+
 }
 
 StructureClass::~StructureClass()

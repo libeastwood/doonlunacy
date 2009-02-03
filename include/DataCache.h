@@ -25,6 +25,9 @@ typedef boost::shared_ptr<PalFile> PalfilePtr;
 
 typedef	std::map<std::string, PalfilePtr> palStrings;
 
+#include <boost/python.hpp>
+
+namespace python = boost::python;
 
 typedef struct {
     int health,
@@ -38,8 +41,8 @@ typedef struct {
         weaponRange;
     float  speed;
     UPoint size;
-    std::string pic,
-	        objectClass; 
+    std::string pic;
+    python::object pyObject;
 } sprite;
 
 typedef struct {

@@ -2,7 +2,8 @@
 
 #include "ResMan.h"
 
-#include "structures/ConstructionYardClass.h"
+#include "structures/BuilderClass.h"
+#include "structures/StructureClass.h"
 #include "units/AirUnit.h"
 #include "units/GroundUnit.h"
 #include "units/InfantryClass.h"
@@ -96,59 +97,38 @@ void GameMan::Clear()
     delete m_map;
 }
 
-/*static*/
-ObjectClass* GameMan::CreateObject(int ItemID, PlayerClass* Owner, Uint32 ObjectID)
+ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID)
 {
+	std::string objectClass;
 	ObjectClass* newObject = NULL;
-    //FIXME: Temporarily create quads only
-	switch (ItemID)
-	{
-	#if 0
-		case Structure_Barracks:			newObject = new BarracksClass(Owner); break;
-		case Structure_ConstructionYard:	newObject = new ConstructionYardClass(Owner); break;
-		case Structure_GunTurret:			newObject = new GunTurretClass(Owner); break;
-		case Structure_HeavyFactory:		newObject = new HeavyFactoryClass(Owner); break;
-		case Structure_HighTechFactory:		newObject = new HighTechFactoryClass(Owner); break;
-		case Structure_IX:					newObject = new IXClass(Owner); break;
-		case Structure_LightFactory:		newObject = new LightFactoryClass(Owner); break;
-		case Structure_Palace:				newObject = new PalaceClass(Owner); break;
-		case Structure_Radar:				newObject = new RadarClass(Owner); break;
-		case Structure_Refinery:			newObject = new RefineryClass(Owner); break;
-		case Structure_RepairYard:			newObject = new RepairYardClass(Owner); break;
-		case Structure_RocketTurret:		newObject = new RocketTurretClass(Owner); break;
-		case Structure_Silo:				newObject = new SiloClass(Owner); break;
-		case Structure_StarPort:			newObject = new StarPortClass(Owner); break;
-		case Structure_Wall:				newObject = new WallClass(Owner); break;
-		case Structure_WindTrap:			newObject = new WindTrapClass(Owner); break;
-		case Structure_WOR:					newObject = new WORClass(Owner); break;
-        #endif
+	try {
+		python::object obj = DataCache::Instance()->getSpriteInfo(itemName)->pyObject;
+		objectClass = python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[1]).attr("__name__")));
 		
-		case Unit_Carryall:				newObject = new AirUnit(Owner, "Carryall"); break;
-		case Unit_Devastator:				newObject = new GroundUnit(Owner, "Devastator"); break;
-		case Unit_Deviator:				newObject = new GroundUnit(Owner, "Deviator"); break;
-		case Unit_Fremen:				newObject = new InfantryClass(Owner, "Fremen"); break;
-		case Unit_Frigate:				newObject = new AirUnit(Owner, "Frigate"); break;
-		case Unit_Harvester:				newObject = new GroundUnit(Owner, "Harvester"); break;
-		case Unit_Infantry:				newObject = new InfantryClass(Owner, "Infantry"); break;
-		case Unit_Launcher:				newObject = new GroundUnit(Owner, "Launcher"); break;
-		case Unit_MCV:					newObject = new GroundUnit(Owner, "MCV"); break;
-		case Unit_Ornithopter:				newObject = new AirUnit(Owner, "Ornithopter"); break;
-		case Unit_Quad:					newObject = new GroundUnit(Owner, "Quad"); break;
-		case Unit_Saboteur:				newObject = new GroundUnit(Owner, "Saboteur"); break;
-		case Unit_Sandworm:				newObject = new GroundUnit(Owner, "Sandworm"); break;
-		case Unit_SiegeTank:				newObject = new GroundUnit(Owner, "Siege Tank"); break;
-		case Unit_SonicTank:				newObject = new GroundUnit(Owner, "Sonic Tank"); break;
-		case Unit_Tank:					newObject = new GroundUnit(Owner, "Tank"); break;
-		case Unit_Trike:				newObject = new GroundUnit(Owner, "Trike"); break;
-		case Unit_Raider:				newObject = new GroundUnit(Owner, "Raider"); break;
-		case Unit_Trooper:				newObject = new InfantryClass(Owner, "Trooper"); break;
-		case Unit_Sardaukar:				newObject = new InfantryClass(Owner, "Sardaukar"); break;
-		case Structure_ConstructionYard:		newObject = new ConstructionYardClass(Owner); break;
-		default:					newObject = NULL;
-								LOG_ERROR("GameMan", "%d is no valid ItemID!",ItemID);
-								break;
 	}
-	
+    catch(python::error_already_set const &)
+    {
+        PyErr_Print();
+    }
+
+    if(objectClass == "AirUnit")
+	    newObject = new AirUnit(Owner, itemName);
+    else if(objectClass == "GroundUnit")
+	    newObject = new GroundUnit(Owner, itemName);
+    else if(objectClass == "InfantryUnit")
+	    newObject = new InfantryClass(Owner, itemName);
+    else if(objectClass == "Object")
+	    newObject = new ObjectClass(Owner, itemName);
+/*    else if(objectClass == "Unit")
+	    newObject = new UnitClass(Owner, itemName);
+	    */
+    else if(objectClass == "Builder")
+	    newObject = new BuilderClass(Owner, itemName);
+    else if(objectClass == "Structure")
+	    newObject = new StructureClass(Owner, itemName);
+    else
+	LOG_ERROR("GameMan", "createObject: item %s, %s unknown type!", itemName.c_str(), objectClass.c_str());
+
 	if(newObject == NULL)
 		return NULL;
 	
@@ -203,8 +183,8 @@ bool GameMan::LoadScenario(string scenarioName)
         SplitString(tmp, 6, &HouseStr, &UnitStr, &health, &PosStr, &rotation, &mode);
 
         int house;
-        int unitID;
 
+	std::cout << HouseStr << std::endl;
         if ((HouseStr == "Atreides") || (HouseStr == "ATREIDES"))
             house = HOUSE_ATREIDES;
         else if ((HouseStr == "Ordos") || (HouseStr == "ORDOS"))
@@ -233,55 +213,12 @@ bool GameMan::LoadScenario(string scenarioName)
 
         int Num2Place = 1;
 
-        if (UnitStr == "Devastator")
-            unitID = Unit_Devastator;
-        else if (UnitStr == "Deviator")
-            unitID = Unit_Deviator;
-        else if (UnitStr == "Harvester")
-            unitID = Unit_Harvester;
-        else if (UnitStr == "Infantry")
-        {
             //make three
-            unitID = Unit_Infantry;
-            Num2Place = 3;
-        }
 
-        else if (UnitStr == "Launcher")
-            unitID = Unit_Launcher;
-        else if (UnitStr == "MCV")
-            unitID = Unit_MCV;
-        else if (UnitStr == "Quad")
-            unitID = Unit_Quad;
-        else if (UnitStr == "Sandworm")
-            unitID = Unit_Sandworm;
-        else if (UnitStr == "Siege Tank")
-            unitID = Unit_SiegeTank;
-        else if (UnitStr == "Sonic Tank")
-            unitID = Unit_SonicTank;
-        else if (UnitStr == "Soldier")
-            unitID = Unit_Infantry;
-        else if (UnitStr == "Tank")
-            unitID = Unit_Tank;
-        else if (UnitStr == "Trike")
-            unitID = Unit_Trike;
-        else if (UnitStr == "Raider Trike")
-            unitID = Unit_Raider;
-        else if (UnitStr == "Raider")
-            unitID = Unit_Raider;
+        if (UnitStr == "Infantry")
+            Num2Place = 3;
         else if (UnitStr == "Troopers")
-        {
-            //make three
-            unitID = Unit_Trooper;
             Num2Place = 3;
-        }
-
-        else if (UnitStr == "Trooper")
-            unitID = Unit_Trooper;
-        else
-        {
-            LOG_WARNING("GameMan", "LoadScenario: Invalid unit string: %s", UnitStr.c_str());
-            unitID = Unit_Quad;
-        }
 
         /*        //FIXME: Fix this here and in addPlayer
           if(m_players->size() > house) {
@@ -292,7 +229,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
         for (int i = 0; i < Num2Place; i++)
         {
-            ObjectClass* newUnit = (ObjectClass*)m_players->at(house)->placeUnit(unitID, UPoint(pos % 64, pos / 64));
+            ObjectClass* newUnit = (ObjectClass*)m_players->at(house)->placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
 
             if (newUnit == NULL)
             {
@@ -353,12 +290,12 @@ bool GameMan::LoadScenario(string scenarioName)
             //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
             if (BuildingStr == "Concrete")
             {
-                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Slab1, UPoint(pos % 64, pos / 64));
+                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "Slab1", UPoint(pos % 64, pos / 64));
             }
 
             else if (BuildingStr == "Wall")
             {
-                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, Structure_Wall, UPoint(pos % 64, pos / 64));
+                m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "ObjPic_Wall", UPoint(pos % 64, pos / 64));
             }
 
             else
@@ -395,51 +332,12 @@ bool GameMan::LoadScenario(string scenarioName)
                 house = HOUSE_ATREIDES;
             }
 
-            int itemID = 0;
-
-            if (BuildingStr == "Barracks")
-                itemID = Structure_WOR;//Structure_Barracks;
-            else if (BuildingStr == "Const Yard")
-                itemID = Structure_ConstructionYard;
-            else if (BuildingStr == "R-Turret")
-                itemID = Structure_RocketTurret;
-            else if (BuildingStr == "Turret")
-                itemID = Structure_GunTurret;
-            else if (BuildingStr == "Heavy Fctry")
-                itemID = Structure_HeavyFactory;
-            else if (BuildingStr == "Hi-Tech")
-                itemID = Structure_HighTechFactory;
-            else if (BuildingStr == "IX")
-                itemID = Structure_IX;
-            else if (BuildingStr == "Light Fctry")
-                itemID = Structure_LightFactory;
-            else if (BuildingStr == "Palace")
-                itemID = Structure_Palace;
-            else if (BuildingStr == "Outpost")
-                itemID = Structure_Radar;
-            else if (BuildingStr == "Refinery")
-                itemID = Structure_Refinery;
-            else if (BuildingStr == "Repair")
-                itemID = Structure_RepairYard;
-            else if (BuildingStr == "Spice Silo")
-                itemID = Structure_Silo;
-            else if (BuildingStr == "Star Port")
-                itemID = Structure_StarPort;
-            else if (BuildingStr == "Windtrap")
-                itemID = Structure_WindTrap;
-            else if (BuildingStr == "WOR")
-                itemID = Structure_WOR;
-            else
-            {
-                LOG_WARNING("GameMan", "LoadScenario: Invalid building: %s", BuildingStr.c_str());
-                itemID = 0;
-            }
-
-            if ((m_players->at(house) != NULL) && (itemID != 0))
+	   
+            if (m_players->at(house) != NULL)
             {
                 //Using INVALID_POS instead of NONE to avoid warnings.
                 //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
-                ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, itemID, UPoint(pos % 64, pos / 64));
+                ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
                 if (newStructure == NULL)
                 {

@@ -13,6 +13,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 {
     DataCache *cache = DataCache::Instance();
     sprite *tmp;
+    std::string pic;
 
     m_objectName = objectName;
 
@@ -44,11 +45,28 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_attackMode = STANDGROUND;
 
     m_attributes = OBJECT_CLASS;
-    if(objectName != "")
-    {
-	    tmp = cache->getSpriteInfo(m_objectName);
-	    m_pic = cache->getGCObject(tmp->pic)->getImage(HOUSETYPE(getOwner()->getColour()));
+
+    tmp = cache->getSpriteInfo(m_objectName);
+    try {
+	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+	    m_health = python::extract<int>(object["health"]);
+	    m_maxHealth = python::extract<int>(object["maxHealth"]);
+	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
+			   python::extract<int>(object["offset"][1]));
+	    m_radius = python::extract<int>(object["radius"]);
+	    m_viewRange = python::extract<int>(object["viewRange"]);
+	    pic = python::extract<std::string>(object["picture"]);
+   	    w = python::extract<int>(object["size"][0]) * 16;
+	    h = python::extract<int>(object["size"][1]) * 16;
     }
+    catch(python::error_already_set const &)
+    {
+        LOG_FATAL("ObjectClass", "Error loading object: %s", m_objectName.c_str());
+        PyErr_Print();
+        exit(1);
+    }
+
+    m_pic = cache->getGCObject(pic)->getImage(HOUSETYPE(getOwner()->getColour()));
 
 
 }

@@ -33,16 +33,19 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
 
     m_speedCap = NONE;
 
-    if((m_speed = tmp->speed) == -1)
-        m_speed = 0.0;
-    if((m_turnSpeed = tmp->turnSpeed) == -1)
-        m_turnSpeed = 0.0625;
-    if((m_maxHealth = tmp->maxHealth) == -1)
-        m_maxHealth = 100;
-    if((m_health = tmp->health) == -1)
-        m_health = m_maxHealth;
-    if((m_viewRange = tmp->viewRange) == -1)
-        m_viewRange = 5;
+
+    try {
+	python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+	m_speed = python::extract<float>(object["speed"]);
+        m_turnSpeed = python::extract<float>(object["turnSpeed"]);
+    }
+    catch(python::error_already_set const &)
+    {
+        LOG_FATAL("UnitClass", "Error loading unit settings: %s", m_objectName.c_str());
+        PyErr_Print();
+        exit(1);
+    }
+
 
     m_deathFrame = "ObjPic_Hit_ExplosionSmallUnit";
 
@@ -113,7 +116,7 @@ void UnitClass::destroy()
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
-        m_owner->decrementUnits(m_itemID);
+        m_owner->decrementUnits(m_objectName);
 
         m_destroyed = true;
         m_respondable = false;
