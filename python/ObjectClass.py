@@ -1,5 +1,6 @@
-class Object(object):
+class Object(ObjectBase):
     def __init__(self):
+        ObjectBase.__init__(self)
         self.picture = None
 
         self.animFrames = 1

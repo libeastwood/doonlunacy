@@ -1,5 +1,5 @@
 import ObjectClass
-from WeaponClass import Weapon
+from weapons import *
 
 class Unit(ObjectClass.Object):
     def __init__(self):
@@ -41,7 +41,7 @@ class InfantryUnit(GroundUnit):
 	self.viewRange = 4
 	self.weaponRange = 6
 
-	self.weapons = [Weapon("Bullet_Inf_Gun", 30, 55, 6)]
+	self.weapons = [weapons["Infantry Gun"]]
 
 kos = 1        
 # vim:ts=4:sw=4:et
