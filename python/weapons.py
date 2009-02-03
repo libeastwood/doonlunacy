@@ -12,7 +12,7 @@ class InfantryGun(Weapon):
         self.numDeathFrames = 1
         self.deathFrame = "ObjPic_Bullet_Small"
         self.numFrames = 1
-        self.graphics = "ObjPic_Bullet_Small"
+        self.graphic = "ObjPic_Bullet_Small"
 
 class RegularGun(Weapon):
     def __init__(self):
