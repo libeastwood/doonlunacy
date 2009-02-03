@@ -726,7 +726,7 @@ gcobjects:
 	ObjPic_Hit_ExplosionSmall =
 	{
 		filename = "DUNE:UNITS1.SHP";
-		tiles = ([57, 58, 59, 60, 61]);
+		tiles = ([32, 33, 34, 35, 36]);
 	};
 
 	ObjPic_Hit_ExplosionMedium1 =
