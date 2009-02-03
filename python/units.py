@@ -78,7 +78,6 @@ class Quad(GroundUnit):
         GroundUnit.__init__(self)
         self.picture = "ObjPic_Quad"
         self.maxHealth = 450
-        self.numWeapons = 2
         self.speed = 0.64
         self.viewRange = 4
 
