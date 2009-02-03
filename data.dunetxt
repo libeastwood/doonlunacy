@@ -559,7 +559,7 @@ gcobjects:
 		mapindex = 17;
 	};
 	
-	ObjPic_WindTrap =
+	ObjPic_Windtrap =
 	{
 		filename = "DUNE:ICON.ICN";
 		map = "DUNE:ICON.MAP";
