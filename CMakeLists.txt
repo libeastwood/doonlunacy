@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.6)
 
 SET(VERSION "0.95")
 
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -O0 -Wno-long-long -Wno-variadic-macros -g -I${DOONLUNACY_SOURCE_DIR}/include" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -O0 -Wno-long-long -Wno-variadic-macros -g" )
 
 IF( DEFINED CMAKE_INSTALL_PREFIX )
   SET( INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
