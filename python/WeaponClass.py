@@ -2,6 +2,7 @@ import ObjectClass
 
 class Weapon(ObjectClass.Object):
     def __init__(self):
+        ObjectClass.Object.__init__(self)
         self.damagePiercing = 2
         self.damageRadius = 2
         self.deathFrame = None
