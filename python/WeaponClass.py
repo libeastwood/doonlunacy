@@ -1,8 +1,7 @@
-from ObjectClass import ObjectBase
+import ObjectClass
 
-class Weapon(ObjectBase):
+class Weapon(ObjectClass.Object):
     def __init__(self):
-        ObjectBase.__init__(self)
         self.damagePiercing = 2
         self.damageRadius = 2
         self.deathFrame = None
