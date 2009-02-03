@@ -1,5 +1,5 @@
-#ifndef INFANTRYCLASS_H_INCLUDED
-#define INFANTRYCLASS_H_INCLUDED
+#ifndef DUNE_OBJECTS_INFANTRYCLASS_H
+#define DUNE_OBJECTS_INFANTRYCLASS_H
 
 #include "GroundUnit.h"
 
@@ -11,4 +11,4 @@ public:
 	~InfantryClass();
 };
 
-#endif // INFANTRYCLASS_H_INCLUDED
+#endif // DUNE_OBJECTS_INFANTRYCLASS_H

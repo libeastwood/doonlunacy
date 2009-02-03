@@ -1,7 +1,7 @@
-#ifndef DUNE_UNITS_AIRUNIT_H
-#define DUNE_UNITS_AIRUNIT_H
+#ifndef DUNE_OBJECTS_AIRUNIT_H
+#define DUNE_OBJECTS_AIRUNIT_H
 
-#include "units/UnitClass.h"
+#include "objects/UnitClass.h"
 
 class AirUnit : public UnitClass
 {
@@ -13,4 +13,4 @@ public:
 
 };
 
-#endif // DUNE_UNITS_AIRUNIT_H
+#endif // DUNE_OBJECTS_AIRUNIT_H

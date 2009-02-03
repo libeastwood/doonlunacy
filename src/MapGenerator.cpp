@@ -1,3 +1,5 @@
+#include <eastwood/IniFile.h>
+
 #include "MapGenerator.h"
 
 #include "DuneConstants.h"
@@ -5,11 +7,10 @@
 #include "Log.h"
 #include "MapClass.h"
 #include "MapSeed.h"
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "ResMan.h"
 
 #include "mmath.h"
-#include <eastwood/IniFile.h>
 
 MapGenerator::MapGenerator ()
 {

@@ -1,14 +1,13 @@
-#include "GameMan.h"
+#include <eastwood/IniFile.h>
 
+#include "GameMan.h"
 #include "ResMan.h"
 
-#include "structures/BuilderClass.h"
-#include "structures/StructureClass.h"
-#include "units/AirUnit.h"
-#include "units/GroundUnit.h"
-#include "units/InfantryClass.h"
-
-#include <eastwood/IniFile.h>
+#include "objects/BuilderClass.h"
+#include "objects/StructureClass.h"
+#include "objects/AirUnit.h"
+#include "objects/GroundUnit.h"
+#include "objects/InfantryClass.h"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
 #include "MapClass.h"
 
-#include "units/GroundUnit.h"
+#include "objects/GroundUnit.h"
 
 GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName) : UnitClass(newOwner, unitName)
 {

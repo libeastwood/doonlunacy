@@ -1,15 +1,15 @@
 #ifndef DUNE_GAMEMANAGER_H
 #define DUNE_GAMEMANAGER_H
 
-#include "objects/WeaponClass.h"
 #include "MapGenerator.h"
 #include "MapClass.h"
 #include "ObjectTree.h"
 #include "PlayerClass.h"
 #include "singleton.h"
 
-#include "structures/StructureClass.h"
-#include "units/UnitClass.h"
+#include "objects/StructureClass.h"
+#include "objects/UnitClass.h"
+#include "objects/WeaponClass.h"
 
 typedef std::list <Uint32> List;
 

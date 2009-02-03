@@ -7,8 +7,9 @@
 #include "TerrainClass.h"
 
 #include "gui2/MapWidget.h"
-#include "structures/StructureClass.h"
-#include "units/UnitClass.h"
+#include "objects/StructureClass.h"
+#include "objects/UnitClass.h"
+
 MapWidget::MapWidget()
 {
     m_view = SPoint(0, 0);

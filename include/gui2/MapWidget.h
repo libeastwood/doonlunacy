@@ -6,9 +6,7 @@
 #include "GameMan.h"
 #include "MapClass.h"
 
-#include "ObjectClass.h"
-#include "structures/StructureClass.h"
-#include "units/UnitClass.h"
+#include "objects/ObjectClass.h"
 
 #include <vector>
 #include <list>

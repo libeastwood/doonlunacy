@@ -6,10 +6,10 @@
 #include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
-#include "ObjectClass.h"
 #include "Settings.h"
 
-#include "units/UnitClass.h"
+#include "objects/ObjectClass.h"
+#include "objects/UnitClass.h"
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(newOwner, unitName)
 {

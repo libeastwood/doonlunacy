@@ -2,7 +2,6 @@
 #include "GameMan.h"
 #include "Log.h"
 #include "MapClass.h"
-#include "structures/WallClass.h"
 
 using namespace std;
 
@@ -379,7 +378,7 @@ void MapClass::fixWall(int xPos, int yPos)
             maketile = Structure_w6; //missing left and right
 
         ///////
-        ((WallClass*)getCell(i, j)->getGroundObject())->setTile(maketile);
+        //((WallClass*)getCell(i, j)->getGroundObject())->setTile(maketile);
 
     }
 }

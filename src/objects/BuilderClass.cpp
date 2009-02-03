@@ -1,4 +1,4 @@
-#include "structures/BuilderClass.h"
+#include "objects/BuilderClass.h"
 
 BuilderClass::BuilderClass(PlayerClass* newOwner, std::string structureName) : StructureClass(newOwner, structureName) {
     m_attributes |= OBJECT_STRUCTURE;

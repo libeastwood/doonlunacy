@@ -1,9 +1,8 @@
 #ifndef DUNE_MAPGENERATOR_H
 #define DUNE_MAPGENERATOR_H
 
-#include "Gfx.h"
 #include "singleton.h"
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "MapClass.h"
 #include "PlayerClass.h"
 

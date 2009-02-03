@@ -8,7 +8,7 @@
 #include "SoundPlayer.h"
 
 //FIXME:When it's done these includes should be moved to Items.h
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 
 PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int newCredits, int team)
 {

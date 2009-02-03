@@ -1,7 +1,7 @@
 #include "DuneConstants.h"
 #include "Log.h"
 #include "MapClass.h"
-#include "structures/StructureClass.h"
+#include "objects/StructureClass.h"
 
 StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName) : ObjectClass(newOwner, structureName)
 {

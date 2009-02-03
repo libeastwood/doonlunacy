@@ -1,7 +1,7 @@
 #ifndef DUNE_OBJECTS_WEAPONCLASS_H
 #define DUNE_OBJECTS_WEAPONCLASS_H
 
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "PlayerClass.h"
 
 class WeaponClass : public ObjectClass

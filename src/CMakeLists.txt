@@ -20,8 +20,6 @@ SET( DOONLUNACY_BASE_SRCS
   mmath.cpp
   MapSeed.cpp
   PlayerClass.cpp
-  ObjectClass.cpp
-  objects/WeaponClass.cpp
   #structures/BarracksClass.cpp
   #structures/ConstructionYardClass.cpp
   #structures/GunTurretClass.cpp
@@ -39,12 +37,14 @@ SET( DOONLUNACY_BASE_SRCS
   #structures/WallClass.cpp
   #structures/SiloClass.cpp
   #structures/ConstructionYardClass.cpp
-  structures/BuilderClass.cpp
-  structures/StructureClass.cpp
-  units/AirUnit.cpp
-  units/GroundUnit.cpp
-  units/InfantryClass.cpp
-  units/UnitClass.cpp
+  objects/BuilderClass.cpp
+  objects/AirUnit.cpp
+  objects/GroundUnit.cpp
+  objects/InfantryClass.cpp
+  objects/ObjectClass.cpp
+  objects/StructureClass.cpp
+  objects/UnitClass.cpp
+  objects/WeaponClass.cpp
   GameMan.cpp
   PriorityQ.cpp
   ObjectTree.cpp

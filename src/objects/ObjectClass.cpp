@@ -1,6 +1,6 @@
 #include "GameMan.h"
 #include "GCObject.h"
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"
 #include "Log.h"

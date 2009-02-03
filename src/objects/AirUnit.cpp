@@ -1,13 +1,9 @@
-#include "units/AirUnit.h"
-#include "structures/RepairYardClass.h"
+#include "objects/AirUnit.h"
 #include "PlayerClass.h"
 
 AirUnit::AirUnit(PlayerClass *newOwner, std::string unitName) : UnitClass(newOwner, unitName)
 {
 	m_attributes |= OBJECT_AIRUNIT;
-
-	m_deathFrame = "Object_AirUnitExplosion";
-	m_numDeathFrames = 5;
 }
 
 AirUnit::~AirUnit()

@@ -4,7 +4,7 @@
 #include "DataCache.h"
 #include "Gfx.h"
 #include "mmath.h"
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 
 #include <list>
 

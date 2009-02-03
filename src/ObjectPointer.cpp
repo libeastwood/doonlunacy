@@ -1,6 +1,7 @@
 #include "GameMan.h"
-#include "ObjectClass.h"
 #include "ObjectPointer.h"
+
+#include "objects/ObjectClass.h"
 
 ObjectClass* ObjectPointer::getObjPointer()
 {

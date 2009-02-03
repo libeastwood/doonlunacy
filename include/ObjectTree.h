@@ -1,8 +1,8 @@
-#ifndef OBJECTTREE_H
-#define OBJECTTREE_H
+#ifndef DUNE_OBJECTTREE_H
+#define DUNE_OBJECTTREE_H
 
 #include "Definitions.h"
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "Log.h"
 
 /// This class holds a tree with all objects (structures and units) in the game.
@@ -138,4 +138,4 @@ private:
 	TreeNode *rootNode;		//< root node of this tree
 };
 
-#endif // OBJECTTREE_H
+#endif // DUNE_OBJECTTREE_H

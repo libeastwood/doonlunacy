@@ -1,11 +1,11 @@
-#ifndef DUNE_UNITCLASS_H
-#define DUNE_UNITCLASS_H
+#ifndef DUNE_OBJECTS_UNITCLASS_H
+#define DUNE_OBJECTS_UNITCLASS_H
 
 #include <list>
 #include <queue>
 #include <string>
 
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "PlayerClass.h"
 #include "TerrainClass.h"
 #include "PriorityQ.h"
@@ -104,5 +104,4 @@ class UnitClass : public ObjectClass
     ImagePtr m_selectionBox;
 };
 
-#endif // DUNE_UNITCLASS_H
-
+#endif // DUNE_OBJECTS_UNITCLASS_H

@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "structures/StructureClass.h"
+#include "objects/StructureClass.h"
 class BuilderClass : public StructureClass
 {
     public:

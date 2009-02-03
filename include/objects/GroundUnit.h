@@ -1,9 +1,9 @@
-#ifndef DUNE_GROUNDUNIT_H
-#define DUNE_GROUNDUNIT_H
+#ifndef DUNE_OBJECTS_GROUNDUNIT_H
+#define DUNE_OBJECTS_GROUNDUNIT_H
 
 #include <string>
 #include "PlayerClass.h"
-#include "units/UnitClass.h"
+#include "objects/UnitClass.h"
 
 class GroundUnit : public UnitClass
 {
@@ -19,5 +19,4 @@ class GroundUnit : public UnitClass
   
 };
 
-#endif // DUNE_GROUNDUNIT_H
-
+#endif // DUNE_OBJECTS_GROUNDUNIT_H

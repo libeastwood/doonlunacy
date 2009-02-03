@@ -1,4 +1,4 @@
-#include "units/InfantryClass.h"
+#include "objects/InfantryClass.h"
 
 #include "DataCache.h"
 #include "GCObject.h"

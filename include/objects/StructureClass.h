@@ -1,10 +1,10 @@
-#ifndef DUNE_STRUCTURECLASS_H
-#define DUNE_STRUCTURECLASS_H
+#ifndef DUNE_OBJECTS_STRUCTURECLASS_H
+#define DUNE_OBJECTS_STRUCTURECLASS_H
 
 #define ANIMATIONTIMER 25
 #define ANIMMOVETIMER 50
 
-#include "ObjectClass.h"
+#include "objects/ObjectClass.h"
 #include "PlayerClass.h"
 /*! 
  * Base class for all structures
@@ -56,4 +56,4 @@ class StructureClass : public ObjectClass
     void setDrawnPos(SPoint off, SPoint view);
 };
 
-#endif // DUNE_STRUCTURECLASS_H
+#endif // DUNE_OBJECTS_STRUCTURECLASS_H
