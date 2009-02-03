@@ -148,7 +148,7 @@ structures = {
         'Star Port' : Starport(),
         'WOR' : WOR(),
 
-        'Concrete' : Concrete(),
+        #'Concrete' : Concrete(),
         'IX' : IX(),
         'Radar' : Radar(),
         'Refinery' : Refinery(),
