@@ -12,7 +12,7 @@
 
 
 WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air) :
-    ObjectClass(NULL, weaponName) //m_shooter ? NULL : m_shooter->getOwner(), weaponName)
+    ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName)
 {
     DataCache* cache = DataCache::Instance();
     sprite *tmp;
