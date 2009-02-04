@@ -457,6 +457,6 @@ void GameMan::Update(float dt)
     Bullets::iterator bullet;
     for (bullet = m_bulletList->begin(); bullet != m_bulletList->end(); bullet++)
     {
-        (*bullet)->updatePosition(dt);
+        (*bullet)->update(dt);
     }
 }

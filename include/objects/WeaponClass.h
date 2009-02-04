@@ -10,7 +10,7 @@ class WeaponClass : public ObjectClass
     WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint position, UPoint destination, bool air);
     ~WeaponClass();
 	virtual void draw(Image * img, SPoint off, SPoint view);
-	virtual void updatePosition(float dt);
+	virtual void update(float dt);
 	virtual void destroy();
 
 	

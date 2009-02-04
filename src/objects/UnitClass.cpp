@@ -183,6 +183,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
         }
     }
     #endif
+
 }
 
 /*virtual*/

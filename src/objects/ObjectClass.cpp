@@ -146,7 +146,7 @@ void ObjectClass::drawSmoke(UPoint pos)
 #endif
 }
 
-void ObjectClass::update()
+void ObjectClass::animate()
 {
     if (m_frameTimer > 0)
     {

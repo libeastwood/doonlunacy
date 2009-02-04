@@ -178,7 +178,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 	       doDeath(dest);
 }
 
-void WeaponClass::updatePosition(float dt)
+void WeaponClass::update(float dt)
 {
     MapClass* map = GameMan::Instance()->GetMap();
     m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
@@ -220,7 +220,7 @@ void WeaponClass::updatePosition(float dt)
 			}
 		}
 	}
-	update();
+	animate();
 }
 
 void WeaponClass::destroy()

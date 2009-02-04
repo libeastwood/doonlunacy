@@ -53,7 +53,8 @@ class ObjectClass : public Rect
     virtual void draw(Image * dest, SPoint off, SPoint view);
     void drawSmoke(UPoint pos);
     virtual void destroy() {};
-    virtual void update();
+    virtual void update(float dt) {};
+    virtual void animate();
     virtual void doDeath(Image *dest);
 
     //! @name Setters and getters
