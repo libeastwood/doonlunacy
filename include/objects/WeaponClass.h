@@ -12,7 +12,6 @@ class WeaponClass : public ObjectClass
 	virtual void draw(Image * img, SPoint off, SPoint view);
 	virtual void updatePosition(float dt);
 	virtual void destroy();
-	virtual void update();
 
 	
 	inline bool isDirectShot() { return (m_source == m_destination); }
@@ -26,10 +25,7 @@ class WeaponClass : public ObjectClass
     int	m_damage,
         m_damagePiercing, //from 0 for none to 10 max
         m_damageRadius,
-	m_deathFrame,
-	m_numFrames,
-        m_frameTime,
-        m_frameTimer;
+	m_deathFrame;
 
     float   m_destAngle,
             m_angleLeft,
@@ -48,7 +44,6 @@ class WeaponClass : public ObjectClass
     UPoint  m_source;
 
     ObjectClass*    m_shooter;
-    ImagePtr        m_deathGraphic[5][5];
 
     
 }; 

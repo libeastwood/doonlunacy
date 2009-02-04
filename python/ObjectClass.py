@@ -6,10 +6,12 @@ class Object(object):
         self.drawnAngle = 2
         self.angle = 256 / 8 * self.drawnAngle
         self.drawnPos = (0,0)
+        self.explosionSize = 1
         self.graphic = None
         self.guardRange = 0
         self.maxHealth = 100
         self.numDeathFrames = 1
+        self.numFrames = 1
         self.health = self.maxHealth
         self.offset = (0,0)
         self.radius = 0

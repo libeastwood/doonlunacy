@@ -21,12 +21,13 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_objectID = NONE;
 
     m_animCounter = 0;
+    m_frameTime = 5;
+    m_frameTimer = -1;
 
     m_owner = newOwner;
     m_badlyDamaged = false;
     m_destroyed = false;
     m_realPos = PointFloat(0, 0);
-    m_animCounter = 0;
     m_curAnimFrame = 0;
     m_deathFrame = 0;
     m_isAnimating = false;
@@ -49,10 +50,12 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 	    m_drawnAngle = python::extract<int>(object["drawnAngle"]);
 	    m_drawnPos = UPoint(python::extract<int>(object["drawnPos"][0]),
 			   python::extract<int>(object["drawnPos"][1]));
+	    m_explosionSize = python::extract<int>(object["explosionSize"]);
 	    m_guardRange = python::extract<int>(object["guardRange"]);
 	    graphic = python::extract<std::string>(object["graphic"]);
 	    m_maxHealth = python::extract<int>(object["maxHealth"]);
             m_numDeathFrames = python::extract<int>(object["numDeathFrames"]);
+            m_numFrames = python::extract<int>(object["numFrames"]);
 	    m_health = python::extract<int>(object["health"]);
 	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
 			   python::extract<int>(object["offset"][1]));
@@ -141,6 +144,36 @@ void ObjectClass::drawSmoke(UPoint pos)
 
 	SDL_BlitSurface(smoke, &source, screen, &dest);
 #endif
+}
+
+void ObjectClass::update()
+{
+    if (m_frameTimer > 0)
+    {
+	if(m_frameTimer == 1)
+		{
+			if(++m_curAnimFrame < m_numDeathFrames)
+				m_frameTimer = m_frameTime;
+		}
+	m_frameTimer--;
+    }	
+}
+
+void ObjectClass::doDeath(Image *dest)
+{
+		Rect source(w * m_curAnimFrame, 0, w, h);
+
+		for(int i = 0; i < m_explosionSize; i++)
+    		for(int j = 0; j < m_explosionSize; j++)
+        	if ((m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
+        	{
+			UPoint destPoint;
+        		destPoint.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+        		destPoint.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+			m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+
+			m_graphic->blitTo(dest, source, destPoint);
+		}
 }
 
 ObjectClass* ObjectClass::findTarget()

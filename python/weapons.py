@@ -92,14 +92,15 @@ class LargeRocket(Weapon):
         Weapon.__init__(self)
         self.damagePiercing = 8
         self.damageRadius = 16
-        self.inaccuracy = 0
         self.damage = 100
-        self.speed = 4.0
-        self.numDeathFrames = 5
         self.deathAnim = "ObjPic_Hit_ExplosionLarge1"
         self.deathSound = "Sound_ExplosionLarge"
-        self.numFrames = 16
+        self.explosionSize = 5
         self.graphic = "ObjPic_Bullet_LargeRocket"
+        self.inaccuracy = 0
+        self.numDeathFrames = 5
+        self.numFrames = 16
+        self.speed = 4.0
 
 class Shell(Weapon):
     def __init__(self):

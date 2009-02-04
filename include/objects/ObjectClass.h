@@ -52,7 +52,8 @@ class ObjectClass : public Rect
     virtual void draw(Image * dest, SPoint off, SPoint view);
     void drawSmoke(UPoint pos);
     virtual void destroy() {};
-    virtual void update() {};
+    virtual void update();
+    virtual void doDeath(Image *dest);
 
     //! @name Setters and getters
 	//@{
@@ -176,10 +177,14 @@ class ObjectClass : public Rect
     int m_armor,
         m_radius,
 	m_deathFrame,
+	m_explosionSize,
         m_numDeathFrames,
-	m_guardRange;
+	m_guardRange,
+	m_numFrames,
+        m_frameTime,
+        m_frameTimer;
 
-	std::string m_deathAnim;
+    std::string m_deathAnim;
 
 
     //! SharedPtr to image for current object

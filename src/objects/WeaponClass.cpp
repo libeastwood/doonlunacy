@@ -36,7 +36,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
             m_groundBlocked = python::extract<bool>(object["groundBlocked"]);
             inaccuracy = python::extract<int>(object["inaccuracy"]);
             m_damage = python::extract<int>(object["damage"]);
-            m_numFrames = python::extract<int>(object["numFrames"]);
     }
     catch(python::error_already_set const &)
     {
@@ -78,8 +77,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
     m_angle = m_destAngle;
     LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
-    m_frameTime = 5;
-    m_frameTimer = -1;
 
     m_xSpeed = m_speed * cos(m_destAngle * conv2char);
     m_ySpeed = m_speed * -sin(m_destAngle * conv2char);
@@ -179,45 +176,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
         m_graphic->blitTo(dest, source, m_drawnPos);
 	}
 	else if (m_numDeathFrames > 1)
-	{
-        UPoint destPoint;
-		source.y = 0;
-
-		if (m_objectName == "Large Rocket")
-		{
-            UPoint destPoint;
-			source.w = w;
-			source.h = h;
-			source.x = source.w * m_curAnimFrame;
-
-			for(int i = 0; i < 5; i++)
-			{
-    			for(int j = 0; j < 5; j++)
-    			{
-        			if (((i != 0) && (i != 4)) || ((j != 0) && (j != 4)))
-        			{
-        				destPoint.x = m_drawnPos.x + (i - 2)*BLOCKSIZE - BLOCKSIZE/2;
-        				destPoint.y = m_drawnPos.y + (j - 2)*BLOCKSIZE - BLOCKSIZE/2;
-        				m_deathGraphic[i][j]->blitTo(dest, source, destPoint);
-        			}
-			    }
-			}
-		}
-		else
-		{
-			source.w = w;
-			source.h = h;
-			source.x = source.w * m_curAnimFrame;
-			
-
-//			if (m_objectName == Bullet_DRocket)
-//				SDL_SetPalette(graphic, SDL_LOGPAL, &palette->colors[houseColour[owner->getHouse()]], COLOUR_HARKONNEN, 7);
-			m_graphic->blitTo(dest, source, m_drawnPos);
-		}
-	}
-	else
-		m_frameTimer = 0;
-
+	       doDeath(dest);
 }
 
 void WeaponClass::updatePosition(float dt)
@@ -265,66 +224,34 @@ void WeaponClass::updatePosition(float dt)
 	update();
 }
 
-void WeaponClass::update()
-{
-    if (m_frameTimer > 0)
-    {
-		if(m_frameTimer == 1)
-		{
-			if(++m_curAnimFrame < m_numDeathFrames)
-				m_frameTimer = m_frameTime;
-		}
-		m_frameTimer--;
-    }	
-}
-
 void WeaponClass::destroy()
 {
-    DataCache* cache = DataCache::Instance();
     MapClass* map = GameMan::Instance()->GetMap();
     
 	if (!m_destroyed)
 	{
 		UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
 
-		if (m_objectName == "Large Rocket")
+		for(int i = 0; i < m_explosionSize; i++)
+		for(int j = 0; j < m_explosionSize; j++)
+		if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
 		{
-			int i, j;
-			for(i = 0; i < 5; i++)
-			for(j = 0; j < 5; j++)
-			if (((i != 0) && (i != 4)) || ((j != 0) && (j != 4)))
-			{
-//FIXME:				m_deathGraphic[i][j] = cache->getObjPic((ObjPic_enum)getRandomOf(2,ObjPic_ExplosionLarge1,ObjPic_ExplosionLarge2),(m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());;
+        		realPos.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+        		realPos.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
 
-				m_deathGraphic[i][j] = cache->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-				realPos.x = (short)m_realPos.x + (i - 2)*BLOCKSIZE;
-				realPos.y = (short)m_realPos.y + (j - 2)*BLOCKSIZE;
-
-				map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
-				//if (deathSound != NONE)
-				//	soundPlayer->playSound(deathSound);
-			}
-
-			//imageW = deathGraphic[0][1]->w/numDeathFrames;
-			//imageH = deathGraphic[0][1]->h;
-			//xOffset = (imageW - BLOCKSIZE)/2;		    //this is where it actually draws the graphic
-			//yOffset = (imageH - BLOCKSIZE)/2;		    //cause it draws at top left, not middle
-		}
-		else
-		{
-			//if (m_objectName == Bullet_Sonic)
-			//	SDL_FreeSurface(graphic);
-			
-			m_graphic = cache->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-			//xOffset = (graphic->w/numDeathFrames)/2;		    //this is where it actually draws the graphic
-			//yOffset = (graphic->h)/2;		    //cause it draws at top left, not middle
-			
 			map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
-    		//if (deathSound != NONE)
+			//if (deathSound != NONE)
 			//	soundPlayer->playSound(deathSound);
 		}
 
-//FIXME:		m_deathAnim = 0;
+		//imageW = deathGraphic[0][1]->w/numDeathFrames;
+		//imageH = deathGraphic[0][1]->h;
+		//xOffset = (imageW - BLOCKSIZE)/2;		    //this is where it actually draws the graphic
+		//yOffset = (imageH - BLOCKSIZE)/2;		    //cause it draws at top left, not middle
+		//	SDL_FreeSurface(graphic);
+    		//if (deathSound != NONE)
+		//	soundPlayer->playSound(deathSound);
+
 		m_destroyed = true;
 		m_frameTimer = m_frameTime;
 	}
