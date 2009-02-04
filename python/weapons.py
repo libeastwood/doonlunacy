@@ -6,7 +6,7 @@ class InfantryGun(Weapon):
         self.damagePiercing = 2
         self.damageRadius = 2
         self.groundBlocked = True
-        self.inaccuracy = 2
+        self.self.inaccuracy = 2
         self.damage = 5
         self.speed = 9.0
         self.numDeathFrames = 1
@@ -20,7 +20,7 @@ class RegularGun(Weapon):
         self.damagePiercing = 2
         self.damageRadius = 2
         self.groundBlocked = True
-        inaccuracy = 2
+        self.inaccuracy = 2
         self.damage = 18
         self.speed = 9.0
         self.numDeathFrames = 1
@@ -33,7 +33,7 @@ class DeviatorRocket(Weapon):
         Weapon.__init__(self)
         self.damagePiercing = 0
         self.damageRadius = 16
-        inaccuracy = 16
+        self.inaccuracy = 16
         self.damage = 0
         self.speed = 4.0
         self.numDeathFrames = 5
@@ -47,7 +47,7 @@ class SmallRocket(Weapon):
         Weapon.__init__(self)
         self.damagePiercing = 8
         self.damageRadius = 5
-        inaccuracy = 6
+        self.inaccuracy = 6
         self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
@@ -61,7 +61,7 @@ class SmallRocketHeavy(Weapon):
 
         self.damagePiercing = 12
         self.damageRadius = 5
-        inaccuracy = 6
+        self.inaccuracy = 6
         self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
@@ -76,9 +76,9 @@ class MediumRocket(Weapon):
         self.damageRadius = 4
 
         #if (newShooter->getItemID() == Unit_Launcher)
-        #    inaccuracy = 20
+        #    self.inaccuracy = 20
         #else
-        #    inaccuracy = 8
+        #    self.inaccuracy = 8
 
         self.damage = 60
         self.speed = 5.0
@@ -92,7 +92,7 @@ class LargeRocket(Weapon):
         Weapon.__init__(self)
         self.damagePiercing = 8
         self.damageRadius = 16
-        inaccuracy = 0
+        self.inaccuracy = 0
         self.damage = 100
         self.speed = 4.0
         self.numDeathFrames = 5
@@ -107,7 +107,7 @@ class Shell(Weapon):
         self.damagePiercing = 12
         self.damageRadius = 3
         self.groundBlocked = True
-        inaccuracy = 6
+        self.inaccuracy = 6
         self.damage = 30
         self.speed = 9.0
         self.numDeathFrames = 3
@@ -120,7 +120,7 @@ class Sonic(Weapon):
         Weapon.__init__(self)
         self.damagePiercing = 4
         self.damageRadius = 8
-        inaccuracy = 4
+        self.inaccuracy = 4
         self.damage = 40
         self.speed = 4.0
         self.numDeathFrames = 1
