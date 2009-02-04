@@ -26,8 +26,6 @@ class WeaponClass : public ObjectClass
         m_damageRadius,
         m_numDeathFrames,
         m_numFrames,
-        m_xOffset,
-        m_yOffset,
         m_frameTime,
         m_frameTimer;
 

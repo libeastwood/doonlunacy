@@ -82,9 +82,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     m_frameTime = 5;
     m_frameTimer = -1;
 
-    m_xOffset = 8;                    //this is where it actually draws the graphic
-    m_yOffset = 8;                    //cause it will draw from top left, not middle
-
     m_xSpeed = m_speed * cos(m_destAngle * conv2char);
     m_ySpeed = m_speed * -sin(m_destAngle * conv2char);
 }
@@ -315,8 +312,6 @@ void WeaponClass::destroy()
 			//imageH = deathGraphic[0][1]->h;
 			//xOffset = (imageW - BLOCKSIZE)/2;		    //this is where it actually draws the graphic
 			//yOffset = (imageH - BLOCKSIZE)/2;		    //cause it draws at top left, not middle
-			m_xOffset = 8;
-			m_yOffset = 8;
 		}
 		else
 		{
@@ -326,8 +321,6 @@ void WeaponClass::destroy()
 			m_graphic = cache->getGCObject(m_deathFrame)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 			//xOffset = (graphic->w/numDeathFrames)/2;		    //this is where it actually draws the graphic
 			//yOffset = (graphic->h)/2;		    //cause it draws at top left, not middle
-			m_xOffset = 8;
-			m_yOffset = 8;
 			
 			map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
     		//if (deathSound != NONE)
