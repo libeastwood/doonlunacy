@@ -61,7 +61,7 @@ void DataCache::Init(){
 
     addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
     data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
-    IntroStrings = new StringFile((const char*)data);
+    IntroStrings = new StringFile(data);
     free(data);
 
     ResMan::Instance()->addRes("DUNE");
@@ -85,13 +85,13 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("XTRE");
 
     data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
-    BriefingStrings[0] = new StringFile((const char*)data);
+    BriefingStrings[0] = new StringFile(data);
     free(data);
     data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
-    BriefingStrings[1] = new StringFile((const char*)data);
+    BriefingStrings[1] = new StringFile(data);
     free(data);
     data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
-    BriefingStrings[2] = new StringFile((const char*)data);
+    BriefingStrings[2] = new StringFile(data);
     free(data);
 }
 
