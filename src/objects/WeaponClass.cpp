@@ -36,7 +36,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
             m_groundBlocked = python::extract<bool>(object["groundBlocked"]);
             inaccuracy = python::extract<int>(object["inaccuracy"]);
             m_damage = python::extract<int>(object["damage"]);
-            m_numDeathFrames = python::extract<int>(object["damagePiercing"]);
             m_numFrames = python::extract<int>(object["numFrames"]);
     }
     catch(python::error_already_set const &)
@@ -71,7 +70,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
 
     m_realPos = PointFloat(realPosition.x, realPosition.y);
     m_source = realPosition;
-    m_curAnimFrame = 0;
     x = realPosition.x/BLOCKSIZE;
     y = realPosition.y/BLOCKSIZE;
     h  = w = m_graphic->getSize().y;
@@ -318,7 +316,7 @@ void WeaponClass::destroy()
 			//if (m_objectName == Bullet_Sonic)
 			//	SDL_FreeSurface(graphic);
 			
-			m_graphic = cache->getGCObject(m_deathFrame)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+			m_graphic = cache->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 			//xOffset = (graphic->w/numDeathFrames)/2;		    //this is where it actually draws the graphic
 			//yOffset = (graphic->h)/2;		    //cause it draws at top left, not middle
 			
@@ -327,8 +325,7 @@ void WeaponClass::destroy()
 			//	soundPlayer->playSound(deathSound);
 		}
 
-//FIXME:		m_deathFrame = 0;
-		m_deathFrame = "";
+//FIXME:		m_deathAnim = 0;
 		m_destroyed = true;
 		m_frameTimer = m_frameTime;
 	}

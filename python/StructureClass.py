@@ -6,7 +6,7 @@ class Structure(ObjectClass.Object):
         ObjectClass.Object.__init__(self)
         self.animate = True
         self.capacity = 0
-        self.deathFrame = ""
+        self.deathAnim = ""
         self.firstAnimFrame = 2
         self.lastAnimFrame = 3
         self.maxHealth = 1000

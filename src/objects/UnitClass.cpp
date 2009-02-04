@@ -114,7 +114,7 @@ void UnitClass::destroy()
 
         m_destroyed = true;
         m_respondable = false;
-		m_graphic = DataCache::Instance()->getGCObject(m_deathFrame)->getImage(HOUSETYPE(getOwner()->getColour()));
+		m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage(HOUSETYPE(getOwner()->getColour()));
 /*
         imageW = graphic->w / numDeathFrames;
         imageH = graphic->h;

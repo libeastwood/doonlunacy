@@ -4,8 +4,6 @@ from weapons import *
 class Unit(ObjectClass.Object):
     def __init__(self):
         ObjectClass.Object.__init__(self)
-        self.deathFrame = None
-        self.numDeathFrames = 1
 
         self.speed = 0.0
         self.speedCap = None
@@ -19,20 +17,20 @@ class Unit(ObjectClass.Object):
 class AirUnit(Unit):
     def __init__(self):
         Unit.__init__(self)
-	self.deathFrame = "Object_AirUnitExplosion"
+	self.deathAnim = "Object_AirUnitExplosion"
 	self.numDeathFrames = 5;
 
 class GroundUnit(Unit):
     def __init__(self):
         Unit.__init__(self)
-        self.deathFrame = "ObjPic_Hit_ExplosionSmallUnit"
+        self.deathAnim = "ObjPic_Hit_ExplosionSmallUnit"
 
 class InfantryUnit(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.picture = "ObjPic_Trooper"
 
-	self.deathFrame = "ObjPic_DeadInfantry"
+	self.deathAnim = "ObjPic_DeadInfantry"
 	self.numDeathFrames = 2
 
         self.armor = 1

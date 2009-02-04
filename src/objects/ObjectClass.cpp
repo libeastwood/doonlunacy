@@ -28,6 +28,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_realPos = PointFloat(0, 0);
     m_animCounter = 0;
     m_curAnimFrame = 0;
+    m_deathFrame = 0;
     m_isAnimating = false;
     m_selected = false;
 
@@ -44,13 +45,14 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 	    m_angle = python::extract<int>(object["angle"]);
 	    m_animFrames = python::extract<int>(object["animFrames"]);
 	    m_armor = python::extract<int>(object["armor"]);
-            m_deathFrame = python::extract<std::string>(object["deathFrame"]);
+            m_deathAnim = python::extract<std::string>(object["deathAnim"]);
 	    m_drawnAngle = python::extract<int>(object["drawnAngle"]);
 	    m_drawnPos = UPoint(python::extract<int>(object["drawnPos"][0]),
 			   python::extract<int>(object["drawnPos"][1]));
 	    m_guardRange = python::extract<int>(object["guardRange"]);
 	    graphic = python::extract<std::string>(object["graphic"]);
 	    m_maxHealth = python::extract<int>(object["maxHealth"]);
+            m_numDeathFrames = python::extract<int>(object["numDeathFrames"]);
 	    m_health = python::extract<int>(object["health"]);
 	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
 			   python::extract<int>(object["offset"][1]));

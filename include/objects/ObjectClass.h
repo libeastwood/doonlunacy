@@ -175,11 +175,11 @@ class ObjectClass : public Rect
 
     int m_armor,
         m_radius,
-
+	m_deathFrame,
         m_numDeathFrames,
-		m_guardRange;
+	m_guardRange;
 
-	std::string m_deathFrame;
+	std::string m_deathAnim;
 
 
     //! SharedPtr to image for current object
