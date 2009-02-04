@@ -69,10 +69,10 @@ void GameMan::Init()
     m_bulletList = new Bullets;
 
     m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 352), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 352), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 352), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 352), false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 412), false)); 
+    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false)); 
 
 }
 
