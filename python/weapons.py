@@ -6,7 +6,7 @@ class InfantryGun(Weapon):
         self.damagePiercing = 2
         self.damageRadius = 2
         self.groundBlocked = True
-        self.self.inaccuracy = 2
+        self.inaccuracy = 2
         self.damage = 5
         self.speed = 9.0
         self.numDeathFrames = 1
