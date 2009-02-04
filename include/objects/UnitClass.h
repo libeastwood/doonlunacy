@@ -73,10 +73,8 @@ class UnitClass : public ObjectClass
          m_turreted,
          m_tracked;
 
-    float   m_speed,
-            m_speedCap,
+    float   m_speedCap,
             m_targetDistance,
-            m_turnSpeed,
             m_xSpeed, 
             m_ySpeed;
 
@@ -86,11 +84,6 @@ class UnitClass : public ObjectClass
         m_findTargetTimer,
         m_nextSpotAngle,
         m_noCloserPointCount,
-        m_numWeapons,
-        m_primaryWeaponReloadTime,
-        m_primaryWeaponTimer,
-        m_secondaryWeaponReloadTime,
-        m_secondaryWeaponTimer,
         m_targetAngle;
     
     float m_adjust;

@@ -12,7 +12,7 @@
 
 
 WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air) :
-    ObjectClass(m_shooter ? NULL : m_shooter->getOwner(), weaponName)
+    ObjectClass(NULL, weaponName) //m_shooter ? NULL : m_shooter->getOwner(), weaponName)
 {
     DataCache* cache = DataCache::Instance();
     sprite *tmp;
@@ -36,9 +36,7 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
             m_groundBlocked = python::extract<bool>(object["groundBlocked"]);
             inaccuracy = python::extract<int>(object["inaccuracy"]);
             m_damage = python::extract<int>(object["damage"]);
-            m_speed = python::extract<float>(object["speed"]);
             m_numDeathFrames = python::extract<int>(object["damagePiercing"]);
-            m_deathFrame = python::extract<std::string>(object["deathFrame"]);
             m_numFrames = python::extract<int>(object["numFrames"]);
     }
     catch(python::error_already_set const &)
@@ -51,7 +49,7 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     m_destination.x = realDestination.x + getRandomInt(-inaccuracy, inaccuracy);
     m_destination.y = realDestination.y + getRandomInt(-inaccuracy, inaccuracy);
     
-    if (weaponName == "Bullet_Sonic")
+    if (m_objectName == "Sonic")
     {
         int diffX = m_destination.x - realPosition.x,
             diffY = m_destination.y - realPosition.y;
@@ -118,7 +116,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
         
         
         
-		if (m_bulletType == Bullet_Sonic)
+		if (m_objectName == "Sonic")
 		{
 			ImagePtr tmp = DataCache::Instance()->getGCObject("ObjPic_Bullet_Sonic")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
@@ -190,7 +188,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
         UPoint destPoint;
 		source.y = 0;
 
-		if (m_bulletType == Bullet_LargeRocket)
+		if (m_objectName == "Large Rocket")
 		{
             UPoint destPoint;
 			source.w = w;
@@ -219,7 +217,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 			source.x = source.w * 1;
 			
 
-//			if (m_bulletType == Bullet_DRocket)
+//			if (m_objectName == Bullet_DRocket)
 //				SDL_SetPalette(graphic, SDL_LOGPAL, &palette->colors[houseColour[owner->getHouse()]], COLOUR_HARKONNEN, 7);
 			m_graphic->blitTo(dest, source, m_drawnPos);
 		}
@@ -256,12 +254,12 @@ void WeaponClass::updatePosition(float dt)
 				m_realPos = m_destination;
 				destroy();
 			}
-			else if (getItemID() == Bullet_Sonic)
+			else if (m_objectName == "Sonic")
 			{
 				if (getPosition() != oldLocation.x)
 				{
 					UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
-					map->damage(m_shooter, m_owner, realPos, getItemID(), m_damage, m_damagePiercing, m_damageRadius, false);
+					map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, false);
 				}
 			}
 			else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->isAStructure())
@@ -295,7 +293,7 @@ void WeaponClass::destroy()
 	{
 		UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
 
-		if (m_bulletType == Bullet_LargeRocket)
+		if (m_objectName == "Large Rocket")
 		{
 			int i, j;
 			for(i = 0; i < 5; i++)
@@ -308,7 +306,7 @@ void WeaponClass::destroy()
 				realPos.x = (short)m_realPos.x + (i - 2)*BLOCKSIZE;
 				realPos.y = (short)m_realPos.y + (j - 2)*BLOCKSIZE;
 
-				map->damage(m_shooter, m_owner, realPos, m_bulletType, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
+				map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
 				//if (deathSound != NONE)
 				//	soundPlayer->playSound(deathSound);
 			}
@@ -322,7 +320,7 @@ void WeaponClass::destroy()
 		}
 		else
 		{
-			//if (m_bulletType == Bullet_Sonic)
+			//if (m_objectName == Bullet_Sonic)
 			//	SDL_FreeSurface(graphic);
 			
 			m_graphic = cache->getGCObject(m_deathFrame)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
@@ -331,7 +329,7 @@ void WeaponClass::destroy()
 			m_xOffset = 8;
 			m_yOffset = 8;
 			
-			map->damage(m_shooter, m_owner, realPos, m_bulletType, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
+			map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
     		//if (deathSound != NONE)
 			//	soundPlayer->playSound(deathSound);
 		}

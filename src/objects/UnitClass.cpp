@@ -36,8 +36,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
 
     try {
 	python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
-	m_speed = python::extract<float>(object["speed"]);
-        m_turnSpeed = python::extract<float>(object["turnSpeed"]);
     }
     catch(python::error_already_set const &)
     {
@@ -46,8 +44,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
         exit(1);
     }
 
-
-    m_deathFrame = "ObjPic_Hit_ExplosionSmallUnit";
 
     m_destination = SPoint(INVALID_POS, INVALID_POS);
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
@@ -58,8 +54,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_adjust = 0.0;
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
     GameMan::Instance()->GetUnits()->push_back(this);
-
-    w = h = m_graphic->getSize().y;
 }
 
 /*virtual*/

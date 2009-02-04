@@ -225,7 +225,7 @@ void MapClass::createSandRegions()
 }
 
 void MapClass::damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, 
-    int itemID, int damage, int damagePiercing, int damageRadius, bool air)
+    std::string objectName, int damage, int damagePiercing, int damageRadius, bool air)
 {
     int i, j;
     UPoint centreCell = UPoint(realPos.x/BLOCKSIZE, realPos.y/BLOCKSIZE);
@@ -235,7 +235,7 @@ void MapClass::damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint re
     	for (j = centreCell.y-2; j <= centreCell.y+2; j++)
     	{
     		if (cellExists(i, j))
-    			getCell(i, j)->damageCell(damager, damagerOwner, realPos, itemID, damage, damagePiercing, damageRadius, air);
+    			getCell(i, j)->damageCell(damager, damagerOwner, realPos, objectName, damage, damagePiercing, damageRadius, air);
         }
     }
 }

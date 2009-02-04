@@ -50,7 +50,7 @@ class ObjectClass : public Rect
     bool clearObject() { return (m_destroyed); }
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
-	void drawSmoke(UPoint pos);
+    void drawSmoke(UPoint pos);
     virtual void destroy() {};
     virtual void update() {};
 
@@ -93,6 +93,7 @@ class ObjectClass : public Rect
     inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
+    inline float getSpeed() { return m_speed; }
 
 
     bool isOnScreen(Rect rect);
@@ -138,8 +139,10 @@ class ObjectClass : public Rect
          m_targetFriendly;
 
 
-    float  m_angle,
-            m_health;
+    float   m_angle,
+            m_health,
+	    m_speed,
+	    m_turnSpeed;
 
     PointFloat m_realPos;
 

@@ -25,20 +25,14 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_owner = newOwner;
     m_badlyDamaged = false;
     m_destroyed = false;
-    m_maxHealth = 100;
-    m_health = m_maxHealth;
     m_realPos = PointFloat(0, 0);
-    m_radius = 0;
     m_animCounter = 0;
-    m_animFrames = 1;
     m_curAnimFrame = 0;
     m_isAnimating = false;
     m_selected = false;
 
 
     m_checkTimer = 0;
-    m_drawnAngle = 2;
-    m_angle = 256 / 8 * m_drawnAngle;
     
     m_attackMode = STANDGROUND;
 
@@ -47,14 +41,25 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     tmp = cache->getSpriteInfo(m_objectName);
     try {
 	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
+	    m_angle = python::extract<int>(object["angle"]);
+	    m_animFrames = python::extract<int>(object["animFrames"]);
 	    m_armor = python::extract<int>(object["armor"]);
-	    m_health = python::extract<int>(object["health"]);
+            m_deathFrame = python::extract<std::string>(object["deathFrame"]);
+	    m_drawnAngle = python::extract<int>(object["drawnAngle"]);
+	    m_drawnPos = UPoint(python::extract<int>(object["drawnPos"][0]),
+			   python::extract<int>(object["drawnPos"][1]));
+	    m_guardRange = python::extract<int>(object["guardRange"]);
+	    graphic = python::extract<std::string>(object["graphic"]);
 	    m_maxHealth = python::extract<int>(object["maxHealth"]);
+	    m_health = python::extract<int>(object["health"]);
 	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
 			   python::extract<int>(object["offset"][1]));
 	    m_radius = python::extract<int>(object["radius"]);
+	    m_realPos = PointFloat(python::extract<float>(object["realPos"][0]),
+			   python::extract<float>(object["realPos"][1]));
+            m_speed = python::extract<float>(object["speed"]);
+            m_turnSpeed = python::extract<float>(object["turnSpeed"]);
 	    m_viewRange = python::extract<int>(object["viewRange"]);
-	    graphic = python::extract<std::string>(object["graphic"]);
    	    w = python::extract<int>(object["size"][0]) * 16;
 	    h = python::extract<int>(object["size"][1]) * 16;
     }

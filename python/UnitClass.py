@@ -25,6 +25,7 @@ class AirUnit(Unit):
 class GroundUnit(Unit):
     def __init__(self):
         Unit.__init__(self)
+        self.deathFrame = "ObjPic_Hit_ExplosionSmallUnit"
 
 class InfantryUnit(GroundUnit):
     def __init__(self):

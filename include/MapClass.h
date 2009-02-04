@@ -50,7 +50,7 @@ class MapClass : public Rect
     UPoint getMapPos(int angle, UPoint source);
     //@}
     void damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, 
-                int itemID, int damage, int damagePiercing, int damageRadius, bool air);
+                std::string objectName, int damage, int damagePiercing, int damageRadius, bool air);
                 
     void fixWall(int xPos, int yPos);
     void fixWalls(int xPos, int yPos);
