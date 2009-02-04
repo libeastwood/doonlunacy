@@ -69,8 +69,9 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
         m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
     }
 
-    m_realPos = UPoint((float)realPosition.x, (float)realPosition.y);
+    m_realPos = PointFloat(realPosition.x, realPosition.y);
     m_source = realPosition;
+    m_curAnimFrame = 0;
     x = realPosition.x/BLOCKSIZE;
     y = realPosition.y/BLOCKSIZE;
     h  = w = m_graphic->getSize().y;
@@ -190,8 +191,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
             UPoint destPoint;
 			source.w = w;
 			source.h = h;
-			//FIXME: source.x = source.w * m_deathFrame;
-			source.x = source.w * 1;
+			source.x = source.w * m_curAnimFrame;
 
 			for(int i = 0; i < 5; i++)
 			{
@@ -210,8 +210,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 		{
 			source.w = w;
 			source.h = h;
-//FIXME:			source.x = source.w * m_deathFrame;
-			source.x = source.w * 1;
+			source.x = source.w * m_curAnimFrame;
 			
 
 //			if (m_objectName == Bullet_DRocket)
@@ -266,19 +265,20 @@ void WeaponClass::updatePosition(float dt)
 			}
 		}
 	}
-//FIXME:
-	/*
-	if (m_frameTimer > 0)   //death frame has started
-	{
-		if (m_frameTimer == 1)
+	update();
+}
+
+void WeaponClass::update()
+{
+    if (m_frameTimer > 0)
+    {
+		if(m_frameTimer == 1)
 		{
-			m_deathFrame++;
-			if (m_deathFrame < m_numDeathFrames)
+			if(++m_curAnimFrame < m_numDeathFrames)
 				m_frameTimer = m_frameTime;
 		}
 		m_frameTimer--;
-	}
-	*/
+    }	
 }
 
 void WeaponClass::destroy()

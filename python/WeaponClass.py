@@ -7,7 +7,7 @@ class Weapon(ObjectClass.Object):
         self.damagePiercing = 2
         self.damageRadius = 2
         self.deathFrame = None
-        self.graphics = None
+        self.graphic = None
         self.groundBlocked = True
         self.inaccuracy = 2
         self.numDeathFrames = 1

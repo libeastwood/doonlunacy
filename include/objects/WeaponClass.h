@@ -9,9 +9,11 @@ class WeaponClass : public ObjectClass
   public:
     WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint position, UPoint destination, bool air);
     ~WeaponClass();
-	void draw(Image * img, SPoint off, SPoint view);
-	void updatePosition(float dt);
-	void destroy();
+	virtual void draw(Image * img, SPoint off, SPoint view);
+	virtual void updatePosition(float dt);
+	virtual void destroy();
+	virtual void update();
+
 	
 	inline bool isDirectShot() { return (m_source == m_destination); }
     void setDrawnPos(SPoint off, SPoint view);
@@ -26,6 +28,7 @@ class WeaponClass : public ObjectClass
         m_damageRadius,
         m_numDeathFrames,
         m_numFrames,
+        m_curAnimFrame,
         m_frameTime,
         m_frameTimer;
 
