@@ -72,7 +72,7 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     m_source = realPosition;
     x = realPosition.x/BLOCKSIZE;
     y = realPosition.y/BLOCKSIZE;
-    h  = w = m_graphic->getSize().y;
+    h = w = m_graphic->getSize().y;
 	
     m_destAngle = dest_angle(realPosition, m_destination);
     m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
@@ -114,8 +114,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
         
 		if (m_objectName == "Sonic")
 		{
-			ImagePtr tmp = DataCache::Instance()->getGCObject("ObjPic_Bullet_Sonic")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-
+			ImagePtr tmp = m_graphic->getCopy();
 			SDL_Surface *mask = tmp->getSurface();
 			SDL_Surface* screen = dest->getSurface();
 			SDL_Surface* graphic = m_graphic->getSurface();
