@@ -6,7 +6,7 @@ class Carryall(AirUnit):
         self.graphic = "ObjPic_Carryall"
         self.armor = 2
         self.maxHealth = 100
-        self.offset = [8,8]
+        self.offset = (8,8)
         self.speed = 1.8
         self.turnSpeed = 0.125
         self.viewRange = 5
@@ -27,7 +27,7 @@ class Ornithopter(AirUnit):
         self.graphic = "ObjPic_Ornithopter"
         self.armor = 3
         self.maxHealth = 100
-        self.offset = [8,8]
+        self.offset = (8,8)
         self.speed = 1.8
         self.turnSpeed = 0.125
         self.viewRange = 5
