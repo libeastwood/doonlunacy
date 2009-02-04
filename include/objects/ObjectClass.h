@@ -17,7 +17,8 @@ enum attribute {
     OBJECT_INFANTRY = 1 << 2,
     OBJECT_AIRUNIT = 1 << 3,
     OBJECT_STRUCTURE = 1 << 4,
-    OBJECT_BUILDER = 1 << 5
+    OBJECT_BUILDER = 1 << 5,
+    OBJECT_WEAPON = 1 << 6
 };
 
 /*!

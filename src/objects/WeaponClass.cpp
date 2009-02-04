@@ -15,6 +15,7 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     DataCache* cache = DataCache::Instance();
     sprite *tmp;
 
+    m_attributes |= OBJECT_WEAPON;
 
     m_groundBlocked = false;
     m_airAttack = air;
