@@ -96,7 +96,7 @@ class LargeRocket(Weapon):
         self.damage = 100
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathAnim = "ObjPic_Hit_ExplosionSmall"
+        self.deathAnim = "ObjPic_Hit_ExplosionLarge1"
         self.deathSound = "Sound_ExplosionLarge"
         self.numFrames = 16
         self.graphic = "ObjPic_Bullet_LargeRocket"

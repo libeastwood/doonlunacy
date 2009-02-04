@@ -296,7 +296,7 @@ void WeaponClass::destroy()
 			{
 //FIXME:				m_deathGraphic[i][j] = cache->getObjPic((ObjPic_enum)getRandomOf(2,ObjPic_ExplosionLarge1,ObjPic_ExplosionLarge2),(m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());;
 
-				m_deathGraphic[i][j] = cache->getGCObject("ObjPic_Hit_ExplosionLarge1")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+				m_deathGraphic[i][j] = cache->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 				realPos.x = (short)m_realPos.x + (i - 2)*BLOCKSIZE;
 				realPos.y = (short)m_realPos.y + (j - 2)*BLOCKSIZE;
 
