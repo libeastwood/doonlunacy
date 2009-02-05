@@ -13,9 +13,6 @@
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(newOwner, unitName)
 {
-    DataCache *cache = DataCache::Instance();
-    sprite *tmp = cache->getSpriteInfo(m_objectName);
-
     m_attributes |= OBJECT_UNIT;
     m_attacking = false;
     m_canAttackStuff = true;

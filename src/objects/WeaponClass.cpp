@@ -13,7 +13,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName)
 {
     DataCache* cache = DataCache::Instance();
-    sprite *tmp;
 
     m_attributes |= OBJECT_WEAPON;
 
@@ -26,14 +25,13 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
     
     m_deathSound = NONE;
 
-    tmp = cache->getSpriteInfo(m_objectName);
     try {
-	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
-            m_damagePiercing = python::extract<int>(object["damagePiercing"]);
-            m_damageRadius = python::extract<int>(object["damageRadius"]);
-            m_groundBlocked = python::extract<bool>(object["groundBlocked"]);
-            inaccuracy = python::extract<int>(object["inaccuracy"]);
-            m_damage = python::extract<int>(object["damage"]);
+            m_damage = cache->getPyObjectAttribute<int>(m_objectName, "damage");
+            m_damagePiercing = cache->getPyObjectAttribute<int>(m_objectName, "damagePiercing");
+            m_damageRadius =  cache->getPyObjectAttribute<int>(m_objectName, "damageRadius");
+            m_groundBlocked =  cache->getPyObjectAttribute<int>(m_objectName, "groundBlocked");
+            inaccuracy = cache->getPyObjectAttribute<int>(m_objectName, "inaccuracy");
+            m_range = cache->getPyObjectAttribute<int>(m_objectName, "range");
     }
     catch(python::error_already_set const &)
     {
@@ -53,14 +51,11 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
         float ratio;
         float square_root;
 
-        int SonicTankWeaponRange;
-        SonicTankWeaponRange = cache->getSpriteParameter("units.sonic_tank.weapon_range", 1);
-        
         if ((diffX == 0) && (diffY == 0))
-            diffY = SonicTankWeaponRange * BLOCKSIZE;
+            diffY = m_range * BLOCKSIZE;
 
         square_root = sqrt((float)(diffX*diffX + diffY*diffY));
-        ratio = (SonicTankWeaponRange * BLOCKSIZE)/square_root;
+        ratio = (m_range * BLOCKSIZE)/square_root;
         m_destination.x = realPosition.x + (int)(((float)diffX)*ratio);
         m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
     }

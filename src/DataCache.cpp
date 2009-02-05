@@ -45,7 +45,7 @@ void DataCache::Init(){
         exit(EXIT_FAILURE);
     }
 
-    cacheSprites();
+    loadPyObjects();
 
 
     soundChunk.resize(NUM_SOUNDCHUNK);
@@ -95,8 +95,7 @@ void DataCache::Init(){
     free(data);
 }
 
-// TODO: Eventually we want to create the object objects in python rather than in C++..
-void DataCache::cacheSprites()
+void DataCache::loadPyObjects()
 {
     std::string key;
     try {
@@ -105,53 +104,29 @@ void DataCache::cacheSprites()
         python::object objectClass = python::import("objects");
         python::dict local(objectClass.attr("__dict__"));
 
-//        python::object result = python::exec_file("python/objects.py", global, local);
-        
         // TODO: figure out how to use the iterator :p
         // python::object objects = ((python::dict)local["objects"]).iterkeys();
         python::dict objects = python::extract<python::dict>(local["objects"]);
         python::list keys = objects.keys();
         while(keys)
         {
-            sprite tmp;
             key = python::extract<std::string>(keys.pop());
-            python::dict object = (python::dict)((python::object)objects[key]).attr("__dict__");
-
-            tmp.pyObject = objects[key];
-            m_sprites[key] = tmp;
-            LOG_INFO("DataCache", "Cached info for %s", key.c_str());
+            m_pyObjects[key] = objects[key];
+            LOG_INFO("DataCache", "Loaded python object %s", key.c_str());
         }
     }
     catch(python::error_already_set const &)
     {
-        LOG_FATAL("DataCache", "Error loading sprite: %s", key.c_str());
+        LOG_FATAL("DataCache", "Error loading python object: %s", key.c_str());
         PyErr_Print();
         exit(1);
     }
 }
 
-sprite* DataCache::getSpriteInfo(std::string spriteName)
-{
-    std::map<std::string, sprite>::iterator iter;
-
-    iter = m_sprites.find(spriteName);
-
-    if (iter != m_sprites.end())
-    { 
-        return &m_sprites.find(spriteName)->second;
-    }
-    else
-    {
-        LOG_ERROR("DataCache", "Info for sprite \"%s\" was not cached", spriteName.c_str());
-        exit(1);
-    }
-
-}
-
 void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
 {
     size_t len;
-    uint8_t * data = ResMan::Instance()->readFile(paletteFile, &len);
+    uint8_t *data = ResMan::Instance()->readFile(paletteFile, &len);
     PalfilePtr tmp (new PalFile(data, len));
     free(data);
 

@@ -6,21 +6,18 @@
 StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName) : ObjectClass(newOwner, structureName)
 {
     DataCache *cache = DataCache::Instance();
-    sprite *tmp;
 
     m_justPlacedTimer = 0;
     m_attributes |= OBJECT_STRUCTURE;
-    tmp = cache->getSpriteInfo(m_objectName);
     try {
-	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
-	    m_isAnimating = python::extract<bool>(object["animate"]);
-	    m_firstAnimFrame = python::extract<int>(object["firstAnimFrame"]);
-	    m_lastAnimFrame = python::extract<int>(object["lastAnimFrame"]);
-	    m_powerRequirement = python::extract<int>(object["powerRequirement"]);
+	    m_isAnimating = cache->getPyObjectAttribute<bool>(m_objectName, "animate");
+	    m_firstAnimFrame = cache->getPyObjectAttribute<int>(m_objectName, "firstAnimFrame");
+	    m_lastAnimFrame = cache->getPyObjectAttribute<int>(m_objectName, "lastAnimFrame");
+	    m_powerRequirement = cache->getPyObjectAttribute<int>(m_objectName, "powerRequirement");
     }
     catch(python::error_already_set const &)
     {
-        LOG_FATAL("ObjectClass", "Error loading object: %s", m_objectName.c_str());
+        LOG_FATAL("StructureClass", "Error loading object: %s", m_objectName.c_str());
         PyErr_Print();
         exit(1);
     }

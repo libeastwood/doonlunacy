@@ -30,22 +30,6 @@ typedef	std::map<std::string, PalfilePtr> palStrings;
 namespace python = boost::python;
 
 typedef struct {
-    int health,
-        maxHealth,
-        numWeapons,
-        primaryWeaponReloadTime,
-        radius,
-	turnSpeed,
-        viewRange,
-        weaponDamage,
-        weaponRange;
-    float  speed;
-    UPoint size;
-    std::string pic;
-    python::object pyObject;
-} sprite;
-
-typedef struct {
     //! ResMan filename to song file e.g. SOUND:DUNE0.ADL
     std::string filename;
     //! It's track number in adl file. they usually have several tracks.
@@ -96,7 +80,7 @@ class DataCache : public Singleton<DataCache>
          *  @return pointer to SDL_Palette
          *  @note Currently we have several palettes:
          *        <ul>
-         *        <li>BENE_PAL - No idea what it is used for</li>
+         *        <li>BENE_PAL - Used for Bene Gesserit mentat graphics</li>
          *        <li>IBM_PAL - Used for sprites</li>
          *        <li>INTRO_PAL - Used in Intro sequence</li>
          *        <li>WESTWOOD_PAL - Not properly decoded yet..</li>
@@ -106,19 +90,29 @@ class DataCache : public Singleton<DataCache>
 
         SDL_Palette* getPalette(std::string paletteFile);
 
-        void cacheSprites();
-        sprite* getSpriteInfo(std::string spriteName);
+        void loadPyObjects();
         
+
+	inline python::object getPyObject(std::string objectName)
+	{
+	    return m_pyObjects[objectName];
+	}
+
         template<typename T>
-        T getSpriteParameter(std::string path, const T defaultResult) 
-        { 
-            T result = defaultResult; 
-            if (!m_dataConfig->lookupValue(path, result))
-            {
-                LOG_WARNING("DataCache", "Sprite parameter %s not found. Using default value.", path.c_str(), defaultResult);
-            }
-            return result;
+        T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
+        {
+	    python::object obj = m_pyObjects[objectName].attr(parameter.c_str());
+	    if(index < 0)
+		return python::extract<T>(obj);
+	    else
+		return python::extract<T>(obj[index]);
         }
+
+	inline std::string getPyObjectType(std::string objectName)
+	{
+    	    python::object obj = m_pyObjects[objectName];
+    	    return python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[1]).attr("__name__")));
+	}
 
         Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
@@ -139,7 +133,7 @@ class DataCache : public Singleton<DataCache>
 		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
 		std::vector<GCObject*> m_gcObjs;
-		std::map<std::string, sprite> m_sprites;
+		std::map<std::string, python::object> m_pyObjects;
 };
 
 #endif // DUNE_DATACACHE_H

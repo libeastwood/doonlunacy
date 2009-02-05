@@ -98,16 +98,14 @@ void GameMan::Clear()
 
 ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID)
 {
-	std::string objectClass;
-	ObjectClass* newObject = NULL;
-	try {
-		python::object obj = DataCache::Instance()->getSpriteInfo(itemName)->pyObject;
-		objectClass = python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[1]).attr("__name__")));
-		
-	}
+    std::string objectClass;
+    ObjectClass* newObject = NULL;
+    try {
+	objectClass = DataCache::Instance()->getPyObjectType(itemName);
+    }
     catch(python::error_already_set const &)
     {
-        PyErr_Print();
+	PyErr_Print();
     }
 
     if(objectClass == "AirUnit")

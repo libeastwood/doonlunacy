@@ -12,7 +12,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
         Rect(0, 0, 0, 0)
 {
     DataCache *cache = DataCache::Instance();
-    sprite *tmp;
     std::string graphic;
 
     m_objectName = objectName;
@@ -40,33 +39,32 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 
     m_attributes = OBJECT_CLASS;
 
-    tmp = cache->getSpriteInfo(m_objectName);
     try {
-	    python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
-	    m_angle = python::extract<int>(object["angle"]);
-	    m_animFrames = python::extract<int>(object["animFrames"]);
-	    m_armor = python::extract<int>(object["armor"]);
-            m_deathAnim = python::extract<std::string>(object["deathAnim"]);
-	    m_drawnAngle = python::extract<int>(object["drawnAngle"]);
-	    m_drawnPos = UPoint(python::extract<int>(object["drawnPos"][0]),
-			   python::extract<int>(object["drawnPos"][1]));
-	    m_explosionSize = python::extract<int>(object["explosionSize"]);
-	    m_guardRange = python::extract<int>(object["guardRange"]);
-	    graphic = python::extract<std::string>(object["graphic"]);
-	    m_maxHealth = python::extract<int>(object["maxHealth"]);
-            m_numDeathFrames = python::extract<int>(object["numDeathFrames"]);
-            m_numFrames = python::extract<int>(object["numFrames"]);
-	    m_health = python::extract<int>(object["health"]);
-	    m_offset = UPoint(python::extract<int>(object["offset"][0]),
-			   python::extract<int>(object["offset"][1]));
-	    m_radius = python::extract<int>(object["radius"]);
-	    m_realPos = PointFloat(python::extract<float>(object["realPos"][0]),
-			   python::extract<float>(object["realPos"][1]));
-            m_speed = python::extract<float>(object["speed"]);
-            m_turnSpeed = python::extract<float>(object["turnSpeed"]);
-	    m_viewRange = python::extract<int>(object["viewRange"]);
-   	    w = python::extract<int>(object["size"][0]) * 16;
-	    h = python::extract<int>(object["size"][1]) * 16;
+	    python::dict object = (python::dict)((python::object)cache->getPyObject(m_objectName)).attr("__dict__");
+	    m_angle = cache->getPyObjectAttribute<int>(m_objectName, "angle");
+	    m_animFrames = cache->getPyObjectAttribute<int>(m_objectName, "animFrames");
+	    m_armor = cache->getPyObjectAttribute<int>(m_objectName, "armor");
+            m_deathAnim = cache->getPyObjectAttribute<std::string>(m_objectName, "deathAnim");
+	    m_drawnAngle = cache->getPyObjectAttribute<int>(m_objectName, "drawnAngle");
+	    m_drawnPos = UPoint(cache->getPyObjectAttribute<int>(m_objectName, "drawnPos", 0),
+			   cache->getPyObjectAttribute<int>(m_objectName, "drawnPos", 1));
+	    m_explosionSize = cache->getPyObjectAttribute<int>(m_objectName, "explosionSize");
+	    m_guardRange = cache->getPyObjectAttribute<int>(m_objectName, "guardRange");
+	    graphic = cache->getPyObjectAttribute<std::string>(m_objectName, "graphic");
+	    m_maxHealth = cache->getPyObjectAttribute<int>(m_objectName, "maxHealth");
+            m_numDeathFrames = cache->getPyObjectAttribute<int>(m_objectName, "numDeathFrames");
+            m_numFrames = cache->getPyObjectAttribute<int>(m_objectName, "numFrames");
+	    m_health = cache->getPyObjectAttribute<int>(m_objectName, "health");
+	    m_offset = UPoint(cache->getPyObjectAttribute<int>(m_objectName, "offset", 0),
+			   cache->getPyObjectAttribute<int>(m_objectName, "offset", 1));
+	    m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
+	    m_realPos = PointFloat(cache->getPyObjectAttribute<float>(m_objectName, "realPos", 0),
+			   cache->getPyObjectAttribute<float>(m_objectName, "realPos", 1));
+            m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
+            m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
+	    m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
+   	    w = cache->getPyObjectAttribute<int>(m_objectName, "size", 0) * BLOCKSIZE;
+	    h = cache->getPyObjectAttribute<int>(m_objectName, "size", 1) * BLOCKSIZE;
     }
     catch(python::error_already_set const &)
     {

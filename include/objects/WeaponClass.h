@@ -24,7 +24,8 @@ class WeaponClass : public ObjectClass
     int	m_damage,
         m_damagePiercing, //from 0 for none to 10 max
         m_damageRadius,
-	m_deathFrame;
+	m_deathFrame,
+	m_range;
 
     float   m_destAngle,
             m_angleLeft,
