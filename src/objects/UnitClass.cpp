@@ -34,24 +34,12 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_speedCap = NONE;
 
 
-    try {
-	python::dict object = (python::dict)((python::object)tmp->pyObject).attr("__dict__");
-    }
-    catch(python::error_already_set const &)
-    {
-        LOG_FATAL("UnitClass", "Error loading unit settings: %s", m_objectName.c_str());
-        PyErr_Print();
-        exit(1);
-    }
-
-
     m_destination = SPoint(INVALID_POS, INVALID_POS);
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
     setActive(false);
-    m_adjust = 0.0;
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
     GameMan::Instance()->GetUnits()->push_back(this);
 }
@@ -112,9 +100,7 @@ void UnitClass::destroy()
 
         m_owner->decrementUnits(m_objectName);
 
-        m_destroyed = true;
         m_respondable = false;
-		m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage(HOUSETYPE(getOwner()->getColour()));
 /*
         imageW = graphic->w / numDeathFrames;
         imageH = graphic->h;
@@ -134,35 +120,14 @@ void UnitClass::destroy()
         //if (map->cellExists(&location))
         // map->getCell(&location)->assignDeadObject(this);
     }
+    ObjectClass::destroy();
 }
 
 
 /*virtual*/
 void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    setDrawnPos(off, view);
-
-    Rect src(0, 0, w, h);
-
-
-    if (!m_destroyed)
-    {
-
-        src.x = m_drawnAngle * w;
-        src.y = 0;
-
-        m_graphic->blitTo(dest, src, m_drawnPos);
-    }
-
-    else
-    {
-//FIXME:        src.x = m_deathFrame * w;
-
-        src.x = 1 * w;
-        src.y = 0;
-
-        m_graphic->blitTo(dest, src, m_drawnPos);
-    }
+    ObjectClass::draw(dest, off, view);
 
     // Show path on the screen
     #if 1

@@ -86,7 +86,6 @@ class UnitClass : public ObjectClass
         m_noCloserPointCount,
         m_targetAngle;
     
-    float m_adjust;
     int m_gameSpeed;
 
     SPoint  m_nextSpot,

@@ -22,7 +22,6 @@ WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint
 
     int inaccuracy;
 
-    m_destroyed = false;
     m_shooter = newShooter;
     
     m_deathSound = NONE;
@@ -86,45 +85,25 @@ WeaponClass::~WeaponClass()
 
 }
 
-void WeaponClass::setDrawnPos(SPoint off, SPoint view)
-{
-    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
-    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
-}
-
 void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    setDrawnPos(off, view);
-    Rect source;
-	
-	if (!m_destroyed)
+	if (!m_destroyed && m_objectName == "Sonic")
 	{
-		source.x = 0;
-
-		if (m_numFrames > 1)
-			source.x = m_drawnAngle * w;
-
-		source.y = 0;
-        
-        
-        
-		if (m_objectName == "Sonic")
+		ImagePtr tmp = m_graphic->getCopy();
+		SDL_Surface *mask = tmp->getSurface();
+		SDL_Surface* screen = dest->getSurface();
+		SDL_Surface* graphic = m_graphic->getSurface();
+		if (mask->format->BitsPerPixel == 8)
 		{
-			ImagePtr tmp = m_graphic->getCopy();
-			SDL_Surface *mask = tmp->getSurface();
-			SDL_Surface* screen = dest->getSurface();
-			SDL_Surface* graphic = m_graphic->getSurface();
-			if (mask->format->BitsPerPixel == 8)
-			{
-				if ((!SDL_MUSTLOCK(screen) || (SDL_LockSurface(screen) == 0))
+			if ((!SDL_MUSTLOCK(screen) || (SDL_LockSurface(screen) == 0))
 					&& (!SDL_MUSTLOCK(mask) || (SDL_LockSurface(mask) == 0))
 					&& (!SDL_MUSTLOCK(graphic) || (SDL_LockSurface(graphic) == 0)))
-				{
-					unsigned char	*maskPixels = (unsigned char*)mask->pixels,
-									*screenPixels = (unsigned char*)screen->pixels,
-									*surfacePixels = (unsigned char*)graphic->pixels;
-					int	i,j, x,y, maxX = 10;//gameBarPos.x;
-					for (i = 0; i < w; i++)
+			{
+				unsigned char	*maskPixels = (unsigned char*)mask->pixels,
+						*screenPixels = (unsigned char*)screen->pixels,
+						*surfacePixels = (unsigned char*)graphic->pixels;
+				int	i,j, x,y, maxX = 10;//gameBarPos.x;
+				for (i = 0; i < w; i++)
 					for (j = 0; j < h; j++)
 					{
 						if (maskPixels[i + j*mask->pitch] == 0)	//not masked, direct copy
@@ -143,7 +122,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 						else if (m_drawnPos.x >= maxX)
 							m_drawnPos.x = maxX - 1;
 						if (x < 0)
-                            x = 0;
+							x = 0;
 						else if (m_drawnPos.x + x >= maxX)
 							x = maxX - m_drawnPos.x - 1;
 
@@ -152,30 +131,23 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 						else if (m_drawnPos.y >= screen->h)
 							m_drawnPos.y = screen->h - 1;
 						if (y < 0)
-                            y = 0;
+							y = 0;
 						else if (m_drawnPos.y + y >= screen->h)
 							x = screen->h - m_drawnPos.y - 1;
 
 						surfacePixels[i + j*graphic->pitch] = screenPixels[m_drawnPos.x + x + (m_drawnPos.y + y)*screen->pitch];
 					}
 
-					if (SDL_MUSTLOCK(graphic))
-						SDL_UnlockSurface(graphic);
-					if (SDL_MUSTLOCK(mask))
-						SDL_UnlockSurface(mask);
-					if (SDL_MUSTLOCK(screen))
-						SDL_UnlockSurface(screen);
-				}
+				if (SDL_MUSTLOCK(graphic))
+					SDL_UnlockSurface(graphic);
+				if (SDL_MUSTLOCK(mask))
+					SDL_UnlockSurface(mask);
+				if (SDL_MUSTLOCK(screen))
+					SDL_UnlockSurface(screen);
 			}
-		}//end of if sonic
-        //Rect testSource(0,0, 16, 16);
-        //m_graphic->blitTo(dest, testSource, UPoint(0,0));
-        source.w = 16;
-        source.h = 16;
-        m_graphic->blitTo(dest, source, m_drawnPos);
-	}
-	else if (m_numDeathFrames > 1)
-	       doDeath(dest);
+		}
+	}//end of if sonic
+	ObjectClass::draw(dest, off, view);
 }
 
 void WeaponClass::update(float dt)
@@ -220,38 +192,25 @@ void WeaponClass::update(float dt)
 			}
 		}
 	}
-	animate();
+//	animate();
 }
 
 void WeaponClass::destroy()
 {
+    ObjectClass::destroy();
     MapClass* map = GameMan::Instance()->GetMap();
     
-	if (!m_destroyed)
-	{
-		UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
-
-		for(int i = 0; i < m_explosionSize; i++)
-		for(int j = 0; j < m_explosionSize; j++)
-		if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
-		{
-        		realPos.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
-        		realPos.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
-
-			map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
-			//if (deathSound != NONE)
-			//	soundPlayer->playSound(deathSound);
-		}
-
-		//imageW = deathGraphic[0][1]->w/numDeathFrames;
-		//imageH = deathGraphic[0][1]->h;
-		//xOffset = (imageW - BLOCKSIZE)/2;		    //this is where it actually draws the graphic
-		//yOffset = (imageH - BLOCKSIZE)/2;		    //cause it draws at top left, not middle
-		//	SDL_FreeSurface(graphic);
-    		//if (deathSound != NONE)
-		//	soundPlayer->playSound(deathSound);
-
-		m_destroyed = true;
-		m_frameTimer = m_frameTime;
+    if (!m_destroyed)
+    {
+	    UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
+	    for(int i = 0; i < m_explosionSize; i++)
+    	    for(int j = 0; j < m_explosionSize; j++)
+    	    if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
+	    {
+		    realPos.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+		    realPos.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+		    
+		    map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
+	    }
 	}
 }

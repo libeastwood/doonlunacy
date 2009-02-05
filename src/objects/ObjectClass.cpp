@@ -29,9 +29,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_destroyed = false;
     m_realPos = PointFloat(0, 0);
     m_curAnimFrame = 0;
-    m_deathFrame = 0;
     m_isAnimating = false;
     m_selected = false;
+    m_adjust = 0.0;
 
 
     m_checkTimer = 0;
@@ -110,11 +110,42 @@ bool ObjectClass::canAttack(ObjectClass* object)
 	}
 }
 
+void ObjectClass::setDrawnPos(SPoint off, SPoint view)
+{
+    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
+    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
+}
+
+
 /* virtual */
 void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    m_graphic->blitTo(dest, UPoint(x + off.x, y + off.y));
+
+    setDrawnPos(off, view);
+    Rect source;
+	
+	if (!m_destroyed)
+	{
+		source.x = 0;
+
+		if (m_numFrames > 1)
+			source.x = m_drawnAngle * w;
+
+		source.y = 0;
+        
+        source.w = 16;
+        source.h = 16;
+        m_graphic->blitTo(dest, source, m_drawnPos);
+	}
+	else if (m_numDeathFrames > 1)
+	{
+	       doDeath(dest);
+	       animate();
+	}
+
+
 }
+
 
 void ObjectClass::drawSmoke(UPoint pos)
 {
@@ -146,10 +177,46 @@ void ObjectClass::drawSmoke(UPoint pos)
 #endif
 }
 
+void ObjectClass::destroy()
+{
+    MapClass* map = GameMan::Instance()->GetMap();
+    
+	if (!m_destroyed)
+	{
+		/*
+		UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
+
+		for(int i = 0; i < m_explosionSize; i++)
+		for(int j = 0; j < m_explosionSize; j++)
+		if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
+		{
+        		realPos.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+        		realPos.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+
+			//if (deathSound != NONE)
+			//	soundPlayer->playSound(deathSound);
+		}
+*/
+		//imageW = deathGraphic[0][1]->w/numDeathFrames;
+		//imageH = deathGraphic[0][1]->h;
+		//xOffset = (imageW - BLOCKSIZE)/2;		    //this is where it actually draws the graphic
+		//yOffset = (imageH - BLOCKSIZE)/2;		    //cause it draws at top left, not middle
+		//	SDL_FreeSurface(graphic);
+    		//if (deathSound != NONE)
+		//	soundPlayer->playSound(deathSound);
+
+		m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+
+		m_destroyed = true;
+		m_frameTimer = m_frameTime;
+	}
+}
+
 void ObjectClass::animate()
 {
     if (m_frameTimer > 0)
     {
+
 	if(m_frameTimer == 1)
 		{
 			if(++m_curAnimFrame < m_numDeathFrames)
@@ -170,8 +237,6 @@ void ObjectClass::doDeath(Image *dest)
 			UPoint destPoint;
         		destPoint.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
         		destPoint.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
-			m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-
 			m_graphic->blitTo(dest, source, destPoint);
 		}
 }

@@ -9,13 +9,12 @@ class WeaponClass : public ObjectClass
   public:
     WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint position, UPoint destination, bool air);
     ~WeaponClass();
-	virtual void draw(Image * img, SPoint off, SPoint view);
+	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);
 	virtual void destroy();
 
 	
 	inline bool isDirectShot() { return (m_source == m_destination); }
-    void setDrawnPos(SPoint off, SPoint view);
   private:
     //! Is bullet headig for an air unit?
     bool m_airAttack,
@@ -36,8 +35,6 @@ class WeaponClass : public ObjectClass
             m_xSpeed, m_initialXSpeed,
             m_ySpeed, m_initialYSpeed,
             m_distanceTraveled;
-            
-    float m_adjust;
 
 	Uint32 m_deathSound;
 	

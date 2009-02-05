@@ -50,10 +50,11 @@ class ObjectClass : public Rect
     //bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
     bool clearObject() { return (m_destroyed); }
     
+    void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
     void drawSmoke(UPoint pos);
-    virtual void destroy() {};
-    virtual void update(float dt) {};
+    virtual void destroy();
+    virtual void update(float dt){};
     virtual void animate();
     virtual void doDeath(Image *dest);
 
@@ -142,7 +143,8 @@ class ObjectClass : public Rect
          m_targetFriendly;
 
 
-    float   m_angle,
+    float   m_adjust,
+	    m_angle,
             m_health,
 	    m_speed,
 	    m_turnSpeed;
@@ -178,7 +180,6 @@ class ObjectClass : public Rect
 
     int m_armor,
         m_radius,
-	m_deathFrame,
 	m_explosionSize,
         m_numDeathFrames,
 	m_guardRange,
