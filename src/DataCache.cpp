@@ -99,14 +99,11 @@ void DataCache::loadPyObjects()
 {
     std::string key;
     try {
-        python::object main = python::import("__main__");
-        python::dict global(main.attr("__dict__"));
         python::object objectClass = python::import("objects");
-        python::dict local(objectClass.attr("__dict__"));
 
         // TODO: figure out how to use the iterator :p
         // python::object objects = ((python::dict)local["objects"]).iterkeys();
-        python::dict objects = python::extract<python::dict>(local["objects"]);
+        python::dict objects = python::extract<python::dict>(objectClass.attr("objects"));
         python::list keys = objects.keys();
         while(keys)
         {
