@@ -45,5 +45,4 @@ class InfantryUnit(GroundUnit):
 
 	self.weapons = [SmallRocket()]
 
-kos = 1        
 # vim:ts=4:sw=4:et
