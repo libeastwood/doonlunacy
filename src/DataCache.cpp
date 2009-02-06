@@ -2,6 +2,7 @@
 #include "ResMan.h"
 #include "Log.h"
 
+#include <boost/python/converter/rvalue_from_python_data.hpp>
 #include "GCObject.h"
 
 #include "gui2/Label.h"
@@ -97,18 +98,18 @@ void DataCache::Init(){
 
 void DataCache::loadPyObjects()
 {
+
     std::string key;
     try {
         python::object objectClass = python::import("objects");
 
-        // TODO: figure out how to use the iterator :p
-        // python::object objects = ((python::dict)local["objects"]).iterkeys();
         python::dict objects = python::extract<python::dict>(objectClass.attr("objects"));
         python::list keys = objects.keys();
         while(keys)
         {
             key = python::extract<std::string>(keys.pop());
             m_pyObjects[key] = objects[key];
+
             LOG_INFO("DataCache", "Loaded python object %s", key.c_str());
         }
     }

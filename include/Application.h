@@ -68,7 +68,6 @@ class Application : public Singleton<Application>
         void InitAudio();
         void InitNet();
         void InitFont();
-	void InitPython();
         void InitVideo();
         void LoadData();
 

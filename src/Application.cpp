@@ -12,6 +12,7 @@
 #include "DuneConstants.h"
 #include "Gfx.h"
 #include "Log.h"
+#include "PythonObjects.h"
 #include "ResMan.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
@@ -99,7 +100,7 @@ void Application::Init()
     //MentatClass* m = new MentatClass();
     //setMentat( m );
     //MentatClass::Instance();
-    InitPython();
+    ::InitPython();
 
     Settings::Instance()->load();
 
@@ -186,17 +187,6 @@ void Application::SetPalette()
     SDL_Palette* palette = m_screen->getSurface()->format->palette;
     
     palette = m_currentPalette;
-}
-
-void Application::InitPython()
-{
-    setenv("PYTHONPATH", "python", 1);
-
-    Py_Initialize();
-
-/*    py_main = python::import("__main__");
-    py_global = new python::dict(py_main.attr("__dict__"));*/
-
 }
 
 void Application::InitVideo()

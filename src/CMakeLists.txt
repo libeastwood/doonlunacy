@@ -20,6 +20,7 @@ SET( DOONLUNACY_BASE_SRCS
   mmath.cpp
   MapSeed.cpp
   PlayerClass.cpp
+  PythonObjects.cpp
   #structures/BarracksClass.cpp
   #structures/ConstructionYardClass.cpp
   #structures/GunTurretClass.cpp

@@ -40,14 +40,12 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_attributes = OBJECT_CLASS;
 
     try {
-	    python::dict object = (python::dict)((python::object)cache->getPyObject(m_objectName)).attr("__dict__");
 	    m_angle = cache->getPyObjectAttribute<int>(m_objectName, "angle");
 	    m_animFrames = cache->getPyObjectAttribute<int>(m_objectName, "animFrames");
 	    m_armor = cache->getPyObjectAttribute<int>(m_objectName, "armor");
             m_deathAnim = cache->getPyObjectAttribute<std::string>(m_objectName, "deathAnim");
 	    m_drawnAngle = cache->getPyObjectAttribute<int>(m_objectName, "drawnAngle");
-	    m_drawnPos = UPoint(cache->getPyObjectAttribute<int>(m_objectName, "drawnPos", 0),
-			   cache->getPyObjectAttribute<int>(m_objectName, "drawnPos", 1));
+	    m_drawnPos = cache->getPyObjectAttribute<UPoint>(m_objectName, "drawnPos");
 	    m_explosionSize = cache->getPyObjectAttribute<int>(m_objectName, "explosionSize");
 	    m_guardRange = cache->getPyObjectAttribute<int>(m_objectName, "guardRange");
 	    graphic = cache->getPyObjectAttribute<std::string>(m_objectName, "graphic");
@@ -55,11 +53,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
             m_numDeathFrames = cache->getPyObjectAttribute<int>(m_objectName, "numDeathFrames");
             m_numFrames = cache->getPyObjectAttribute<int>(m_objectName, "numFrames");
 	    m_health = cache->getPyObjectAttribute<int>(m_objectName, "health");
-	    m_offset = UPoint(cache->getPyObjectAttribute<int>(m_objectName, "offset", 0),
-			   cache->getPyObjectAttribute<int>(m_objectName, "offset", 1));
+	    m_offset = cache->getPyObjectAttribute<UPoint>(m_objectName, "offset"),
 	    m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
-	    m_realPos = PointFloat(cache->getPyObjectAttribute<float>(m_objectName, "realPos", 0),
-			   cache->getPyObjectAttribute<float>(m_objectName, "realPos", 1));
+	    m_realPos = cache->getPyObjectAttribute<PointFloat>(m_objectName, "realPos");
             m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
             m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
 	    m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
