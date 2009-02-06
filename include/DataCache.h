@@ -92,12 +92,6 @@ class DataCache : public Singleton<DataCache>
 
         void loadPyObjects();
         
-
-	inline python::object getPyObject(std::string objectName)
-	{
-	    return m_pyObjects[objectName];
-	}
-
         template<typename T>
         T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
         {
