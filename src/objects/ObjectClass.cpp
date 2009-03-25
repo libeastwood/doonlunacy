@@ -173,8 +173,6 @@ void ObjectClass::drawSmoke(UPoint pos)
 
 void ObjectClass::destroy()
 {
-    MapClass* map = GameMan::Instance()->GetMap();
-
     if (!m_destroyed)
     {
 	/*
