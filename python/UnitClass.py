@@ -5,8 +5,6 @@ class Unit(ObjectClass.Object):
     def __init__(self):
         ObjectClass.Object.__init__(self)
         self.deathAnim = "ObjPic_Hit_ExplosionSmallUnit"
-
-
         self.speed = 0.0
         self.speedCap = None
         self.turnSpeed = 0.0625
@@ -19,8 +17,8 @@ class Unit(ObjectClass.Object):
 class AirUnit(Unit):
     def __init__(self):
         Unit.__init__(self)
-	self.deathAnim = "Object_AirUnitExplosion"
-	self.numDeathFrames = 5;
+        self.deathAnim = "Object_AirUnitExplosion"
+        self.numDeathFrames = 5;
 
 class GroundUnit(Unit):
     def __init__(self):
@@ -32,17 +30,14 @@ class InfantryUnit(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.picture = "ObjPic_Trooper"
-
-	self.deathAnim = "ObjPic_DeadInfantry"
-	self.numDeathFrames = 2
-
+        self.deathAnim = "ObjPic_DeadInfantry"
+        self.numDeathFrames = 2
         self.armor = 1
-	self.maxHealth = 10
-	self.radius = 2
-	self.speed = 0.25
-	self.viewRange = 4
-	self.weaponRange = 6
-
-	self.weapons = [SmallRocket()]
+        self.maxHealth = 10
+        self.radius = 2
+        self.speed = 0.25
+        self.viewRange = 4
+        self.weaponRange = 6
+        self.weapons = [SmallRocket()]
 
 # vim:ts=4:sw=4:et
