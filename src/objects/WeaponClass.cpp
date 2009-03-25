@@ -198,6 +198,7 @@ void WeaponClass::destroy()
     if (!m_destroyed)
     {
 	UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
+	/* Here we deal damage to explosion area according to it's size */
 	for(int i = 0; i < m_explosionSize; i++)
 	    for(int j = 0; j < m_explosionSize; j++)
 		if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
