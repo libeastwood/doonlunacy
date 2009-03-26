@@ -192,7 +192,6 @@ void WeaponClass::update(float dt)
 
 void WeaponClass::destroy()
 {
-    ObjectClass::destroy();
     MapClass* map = GameMan::Instance()->GetMap();
 
     if (!m_destroyed)
@@ -209,4 +208,6 @@ void WeaponClass::destroy()
 		    map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
 		}
     }
+    ObjectClass::destroy();
+
 }
