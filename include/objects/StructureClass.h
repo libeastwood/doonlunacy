@@ -19,8 +19,6 @@ class StructureClass : public ObjectClass
     virtual ~StructureClass();
     //@} 
     
-    virtual void destroy() {};
-    
     virtual void draw(Image * dest, SPoint off, SPoint view);
     void drawStructure(Image * dest);
     void drawSelectRect(Image * dest);
