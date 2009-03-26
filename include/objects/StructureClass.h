@@ -19,8 +19,6 @@ class StructureClass : public ObjectClass
     virtual ~StructureClass();
     //@} 
     
-    void assignToMap(SPoint pos);
-
     virtual void destroy() {};
     
     virtual void draw(Image * dest, SPoint off, SPoint view);

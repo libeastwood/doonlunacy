@@ -29,6 +29,7 @@ StructureClass::~StructureClass()
 
 }
 
+/*
 void StructureClass::assignToMap(SPoint pos)
 {
     MapClass * map = m_owner->getMap();
@@ -51,6 +52,7 @@ void StructureClass::assignToMap(SPoint pos)
 			}
 		}
 }
+*/
 
 void StructureClass::setJustPlaced()
 {
