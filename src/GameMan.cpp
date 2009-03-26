@@ -193,7 +193,7 @@ bool GameMan::LoadScenario(string scenarioName)
             house = HOUSE_ATREIDES;
         }
 
-        int pos = atol(PosStr.c_str());
+        int pos = atoi(PosStr.c_str());
 
         if (pos <= 0)
         {
