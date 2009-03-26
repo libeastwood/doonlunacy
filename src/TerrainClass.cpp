@@ -240,7 +240,7 @@ void TerrainClass::clearDamage()
 void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
 {
     int     distance;
-    double  damageProp;
+    float  damageProp;
     UPoint centrePoint;
     // non air damage
     ConcatIterator<Uint32> iterator;
@@ -266,13 +266,13 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     		}
     		#endif
     		
-    		damageProp = ((double)(damageRadius + object->getRadius() - distance))/((double)distance);
+    		damageProp = ((float)(damageRadius + object->getRadius() - distance))/((float)distance);
     		if (damageProp > 0)	{
     			if (damageProp > 1.0) {
     				damageProp = 1.0;
     			}
 
-    			object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
+    			object->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
     		}
     	}
     	
@@ -300,7 +300,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 		}
 	} else {
 		int			distance;
-		double		damageProp;
+		float		damageProp;
 		COORDTYPE	centrePoint;
 
 		if (air == true) {
@@ -327,12 +327,12 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 							((UnitClass*)airUnit)->netDeviate(damagerOwner);
 						}
 
-						damageProp = ((double)(damageRadius + airUnit->getRadius() - distance))/((double)distance);
+						damageProp = ((float)(damageRadius + airUnit->getRadius() - distance))/((float)distance);
 						if (damageProp > 0)	{
 							if (damageProp > 1.0) {
 								damageProp = 1.0;
 							}
-							airUnit->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - airUnit->getArmor(), damager);
+							airUnit->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - airUnit->getArmor(), damager);
 						}
 					}
 				}
@@ -360,13 +360,13 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 						((UnitClass*)object)->netDeviate(damagerOwner);
 					}
 					
-					damageProp = ((double)(damageRadius + object->getRadius() - distance))/((double)distance);
+					damageProp = ((float)(damageRadius + object->getRadius() - distance))/((float)distance);
 					if (damageProp > 0)	{
 						if (damageProp > 1.0) {
 							damageProp = 1.0;
 						}
 
-						object->handleDamage(lround((double)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
+						object->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
 					}
 				}
 				
