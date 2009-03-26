@@ -47,8 +47,7 @@ class ObjectClass : public Rect
 	
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
-    //bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
-    bool clearObject() { return (m_destroyed); }
+    bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
