@@ -219,7 +219,6 @@ void MapWidget::draw(Image * dest, SPoint off)
         m_speed.y = 0;
     }
 
-    m_groundUnits.clear();
     //FIXME:This needs to be optimised. Why to redraw the whole map all the time? It takes a lot of CPU
     for (int i = 0; i < w / BLOCKSIZE; i++)
         for (int j = 0; j < h / BLOCKSIZE; j++)
