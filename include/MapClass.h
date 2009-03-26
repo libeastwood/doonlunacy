@@ -15,9 +15,9 @@ typedef std::vector<TerrainClass*> Cells;
 
 class MapClass : public Rect
 {
-  friend class MapGenerator;
+    friend class MapGenerator;
 
-  public:
+    public:
     //! @name Constructors & Destructor
     //@{
     /*!
@@ -29,10 +29,10 @@ class MapClass : public Rect
     bool cellExists(SPoint pos);
     bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); }
 
-    
+
     //! @name position and angle calculation
     //@{
-    
+
     /*!
      *  Calculates the angle from source point to other point
      *  @param source source point
@@ -50,37 +50,46 @@ class MapClass : public Rect
     UPoint getMapPos(int angle, UPoint source);
     //@}
     void damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, 
-                std::string objectName, int damage, int damagePiercing, int damageRadius, bool air);
-                
-    void fixWall(int xPos, int yPos);
-    void fixWalls(int xPos, int yPos);
+	    std::string objectName, int damage, int damagePiercing, int damageRadius, bool air);
+
+    void fixWall(SPoint pos);
+    void fixWalls(SPoint pos);
     void removeObjectFromMap(Uint32 ObjectID);
     void selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode);
-	void viewMap(int playerTeam, UPoint location, int maxViewRange);
-	void viewMap(int playerTeam, int x, int y, int maxViewRange);
-    
-	ObjectClass* findObjectWithID(int objectID, int lx, int ly);
+    void viewMap(int playerTeam, UPoint location, int maxViewRange);
+    void viewMap(int playerTeam, int x, int y, int maxViewRange);
+
+    ObjectClass* findObjectWithID(int objectID, int lx, int ly);
 
     TerrainClass * getCell(SPoint pos);    
-    TerrainClass * getCell(int x, int y) { return getCell(SPoint(x,y)); }
 
-    
-    
+
+
     //FIXME:Remove this later or sth.
     short *depthCheckCount,
-    ***depthCheckMax;
-    
+	  ***depthCheckMax;
 
 
-	BLOCKEDTYPE cellBlocked(UPoint pos);
 
-  protected:
+    BLOCKEDTYPE cellBlocked(UPoint pos);
+
+    protected:
     void createSandRegions();
-    
+
     Cells m_cells;
-    
-  private: 
-	ObjectClass* lastSinglySelectedObject;
+
+    private: 
+    ObjectClass* lastSinglySelectedObject;
+    inline bool checkPos(SPoint pos, SPoint possy) {
+	SPoint tmpPos = pos + possy;
+	ObjectClass *tmpObj;
+
+	return (!cellExists(tmpPos) || ((tmpObj = getCell(tmpPos)->getGroundObject()) != NULL
+		    && tmpObj->getObjectName() == "Wall"));
+	//|| (cell[i][j-1].getGroundObject()->getItemID() == Structure_GunTurret)
+	//|| (cell[i][j-1].getGroundObject()->getItemID() == Structure_RocketTurret))));
+    }
+
 };
 
 #endif // DUNE_MAPCLASS_H

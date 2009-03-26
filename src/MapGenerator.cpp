@@ -127,11 +127,11 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
 
     for (int j = 0; j < m_map->h; j++)
-    {
         for (int i = 0; i < m_map->w; i++)
         {
             int type = Terrain_Sand;
             unsigned char seedmaptype = SeedMap[j*64+i] >> 4;
+	    SPoint pos(i,j);
 
             switch (seedmaptype)
             {
@@ -174,12 +174,9 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
                     exit(EXIT_FAILURE);
             }
 
-            m_map->getCell(i, j)->setType(type);
-
-            m_map->getCell(i, j)->setTile(Terrain_a1);
+            m_map->getCell(pos)->setType(type);
+            m_map->getCell(pos)->setTile(Terrain_a1);
         }
-
-    }
 
     //createSandRegions();
 
@@ -194,18 +191,12 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
             if ((BloomPos != 0) || (BloomPositions[i] == "0"))
             {
-                int xpos = BloomPos % m_map->w;
-                int ypos = BloomPos / m_map->w;
+                SPoint pos(BloomPos % m_map->w, BloomPos / m_map->w);
 
-                if (m_map->cellExists(xpos, ypos))
-                {
-                    m_map->getCell(xpos, ypos)->setTile(getRandomInt(Terrain_a2, Terrain_a3));
-                }
-
+                if (m_map->cellExists(pos))
+                    m_map->getCell(pos)->setTile(getRandomInt(Terrain_a2, Terrain_a3));
                 else
-                {
-                    LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", xpos, ypos);
-                }
+                    LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", pos.x, pos.y);
             }
         }
     }
@@ -221,41 +212,32 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
             if ((FieldPos != 0) || (FieldPositions[i] == "0"))
             {
-                int xpos = FieldPos % m_map->w;
-                int ypos = FieldPos / m_map->w;
+                SPoint pos(FieldPos % m_map->w, FieldPos / m_map->w);
 
-                if (m_map->cellExists(xpos, ypos))
+                if (m_map->cellExists(pos))
                 {
                     for (int x = -6; x <= 6; x++)
-                    {
                         for (int y = -6; y <= 6; y++)
-                        {
-                            if (m_map->cellExists(xpos + x, ypos + y)
-                                    && (distance_from(xpos, ypos, xpos + x, ypos + y) <= 6))
+                            if (m_map->cellExists(pos + SPoint(x, y))
+                                    && (distance_from(pos.x, pos.y, pos.x + x, pos.y + y) <= 6))
                             {
-                                TerrainClass *cell = m_map->getCell(xpos + x, ypos + y);
+                                TerrainClass *cell = m_map->getCell(pos + SPoint(x, y));
 
                                 if ((cell != NULL) & (cell->isSand()))
                                     cell->setType(Terrain_Spice);
                             }
-                        }
-                    }
 
-                    for (int x = xpos - 8; x <= xpos + 8; x++)
-                    {
-                        for (int y = ypos - 8; y <= ypos + 8; y++)
+                    for (int x = pos.x - 8; x <= pos.x + 8; x++)
+                        for (int y = pos.y - 8; y <= pos.y + 8; y++)
                         {
-                            if (m_map->cellExists(x, y))
-                            {
+                            if (m_map->cellExists(UPoint(x, y)))
                                 smoothSpot(UPoint(x, y));
-                            }
                         }
-                    }
                 }
 
                 else
                 {
-                    LOG_WARNING("MapGenerator", "Cannot set field at %d, %d", xpos, ypos);
+                    LOG_WARNING("MapGenerator", "Cannot set field at %d, %d", pos.x, pos.y);
                 }
             }
         }

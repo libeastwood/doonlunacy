@@ -245,13 +245,14 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     }
 
+    /*
     // FIXME: This hangs after short wile..
     std::vector<ObjectClass*> *objects = GameMan::Instance()->GetObjects();
     std::vector<ObjectClass*>::const_iterator iter;
     for(iter = objects->begin(); iter != objects->end(); iter++)
 	if((*iter)->isWeapon())
 	    (*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-
+*/
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
     {
         if (m_selectStart.x < m_selectEnd.x)

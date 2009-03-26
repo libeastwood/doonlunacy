@@ -29,10 +29,10 @@ class TerrainClass  : public UPoint
 
 	void draw(Image * dest, SPoint pos);
 
-	void assignAirUnit(Uint32 newObjectID);
+/*	void assignAirUnit(Uint32 newObjectID);
 	void assignDeadObject(Uint32 newObjectID);
 	void assignNonInfantryGroundObject(Uint32 newObjectID);
-	void assignUndergroundUnit(Uint32 newObjectID);
+	void assignUndergroundUnit(Uint32 newObjectID);*/
 	void assignObject(Uint32 newObjectID);
 
 	/*

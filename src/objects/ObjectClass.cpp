@@ -278,9 +278,9 @@ ObjectClass* ObjectClass::findTarget()
 
 	while ((yCheck < m_owner->getMap()->h) && ((yCheck - yPos) <=  lookDist[abs(xCheck - xPos)]))
 	{
-	    if (map->getCell(xCheck,yCheck)->hasAnObject())
+	    if (map->getCell(SPoint(xCheck,yCheck))->hasAnObject())
 	    {
-		tempTarget = map->getCell(xCheck,yCheck)->getObject();
+		tempTarget = map->getCell(SPoint(xCheck,yCheck))->getObject();
 
 		if (((tempTarget->getObjectName() != "Wall") || (closestTarget == NULL)) && canAttack(tempTarget))
 		{

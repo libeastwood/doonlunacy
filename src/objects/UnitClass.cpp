@@ -360,7 +360,7 @@ void UnitClass::setSpeeds()
 
     if (!isAFlyingUnit())
     {
-        m_speed += m_speed * (1.0 - m_owner->getMap()->getCell(x, y)->getDifficulty());
+        m_speed += m_speed * (1.0 - m_owner->getMap()->getCell(SPoint(x, y))->getDifficulty());
         m_speed *= HEAVILYDAMAGEDSPEEDMULTIPLIER;
     }
 

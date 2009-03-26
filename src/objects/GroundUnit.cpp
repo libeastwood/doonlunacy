@@ -25,7 +25,7 @@ void GroundUnit::checkPos()
         //if (currentGame->playerType == SERVER)
         // netDoConsistancy();
 
-        if (map->getCell(x, y)->isBloom())
+        if (map->getCell(SPoint(x, y))->isBloom())
         {
 #if 0
             COORDTYPE realPos;
