@@ -221,27 +221,17 @@ void MapWidget::draw(Image * dest, SPoint off)
 
     m_groundUnits.clear();
     //FIXME:This needs to be optimised. Why to redraw the whole map all the time? It takes a lot of CPU
-
     for (int i = 0; i < w / BLOCKSIZE; i++)
-    {
         for (int j = 0; j < h / BLOCKSIZE; j++)
         {
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-	    /*
-            if (cell->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
-            {
-                m_groundUnits.push_back(cell->getNonInfantryGroundObject());
-            }*/
+	    ObjectClass *object;
+            if (cell->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+		if((object = cell->getObject()))
+		    object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
         }
-    }
     
-    while (!m_groundUnits.empty())
-    {
-        m_groundUnits.front()->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-        m_groundUnits.pop_front();
-    }
-
     ObjectClass* tmp3;
 
     for (unsigned int i = 0; i < m_selectedList.size(); i++)
@@ -261,18 +251,14 @@ void MapWidget::draw(Image * dest, SPoint off)
             }
         }
     }
-    
-    for (unsigned int i = 0; i < GameMan::Instance()->GetObjects()->size(); i++)
-    {
-        GameMan::Instance()->GetObjects()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-    }
 
-    /*
-    for (unsigned int i = 0; i < GameMan::Instance()->GetBullets()->size(); i++)
-    {
-        GameMan::Instance()->GetBullets()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-    }*/
 
+    // FIXME: This hangs after short wile..
+    std::vector<ObjectClass*> *objects = GameMan::Instance()->GetObjects();
+    std::vector<ObjectClass*>::const_iterator iter;
+    for(iter = objects->begin(); iter != objects->end(); iter++)
+	if((*iter)->isWeapon())
+	    (*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
     {

@@ -87,7 +87,7 @@ void ObjectClass::assignToMap(SPoint pos)
 
     if (map->cellExists(pos))
     {
-	map->getCell(pos)->assignNonInfantryGroundObject(getObjectID());
+	map->getCell(pos)->assignObject(getObjectID());
 	map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
     }
 }

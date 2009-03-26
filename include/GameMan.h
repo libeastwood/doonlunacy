@@ -14,7 +14,6 @@
 typedef std::list <Uint32> List;
 
 typedef std::vector<PlayerClass*> Players;
-typedef std::vector<ObjectClass*> Objects;
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
@@ -50,7 +49,7 @@ class GameMan : public Singleton<GameMan>
     MapClass* GetMap() { return m_map; }
     Players* GetPlayers() { return m_players; }
     PlayerClass* GetPlayer(int i) { return m_players->at(i); }
-    Objects* GetObjects() { return m_objects; }
+    std::vector<ObjectClass*> * GetObjects() { return m_objects; }
     PlayerClass* LocalPlayer() { return m_localPlayer; }
     ObjectTree* GetObjectTree() { return m_objectTree; }
     void Update(float dt);
@@ -65,7 +64,7 @@ class GameMan : public Singleton<GameMan>
     ObjectTree* m_objectTree;
     PlayerClass * m_localPlayer;
     Players* m_players;
-    Objects* m_objects;
+    std::vector<ObjectClass*> *m_objects;
 };
 
 #endif // DUNE_GAMEMANAGER_H

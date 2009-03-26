@@ -33,14 +33,20 @@ class TerrainClass  : public UPoint
 	void assignDeadObject(Uint32 newObjectID);
 	void assignNonInfantryGroundObject(Uint32 newObjectID);
 	void assignUndergroundUnit(Uint32 newObjectID);
+	void assignObject(Uint32 newObjectID);
 
+	/*
 	void unassignAirUnit(Uint32 ObjectID);
 	void unassignDeadObject(Uint32 ObjectID);
 	void unassignNonInfantryGroundObject(Uint32 ObjectID);
+	*/
 	void unassignObject(Uint32 ObjectID);
+	/*
 	void unassignInfantry(Uint32 ObjectID, int currentPosition);
 	void unassignUndergroundUnit(Uint32 ObjectID);
+	*/
 
+#if 0
 	/*!
 	 * returns a pointer to an air unit in current cell (if there's one)
 	 * @return ObjectClass* pointer to air unit
@@ -64,7 +70,7 @@ class TerrainClass  : public UPoint
 	 * @return ObjectClass*  pointer to underground object(sandworm?)
 	 */
 	ObjectClass* getUndergroundUnit();
-
+#endif
 	/*!
 	 * returns a pointer to an ground object in current cell (if there's one)
 	 * @return ObjectClass*  pointer to ground object
@@ -75,8 +81,9 @@ class TerrainClass  : public UPoint
 	 * returns a pointer to infantry object in current cell (if there's one)
 	 * @return ObjectClass*  pointer to infantry object
 	 */
+	/*
 	ObjectClass* getInfantry();
-	//ObjectClass* getInfantry(int i);
+	//ObjectClass* getInfantry(int i);*/
 	ObjectClass* getObject();
 	ObjectClass* getObjectAt(UPoint pos);
 	ObjectClass* getObjectWithID(Uint32 objectID);
@@ -85,12 +92,16 @@ class TerrainClass  : public UPoint
 
 	//!@{
 	//! @name setters and getters
+	/*
 	inline bool hasADeadObject() { return !m_assignedDeadObjects.empty(); }
-	inline bool hasAGroundObject() { return (hasInfantry() || hasANonInfantryGroundObject()); }
+	*/
+	inline bool hasAGroundObject() { return (getGroundObject() != NULL); }
+	/*
 	inline bool hasAnAirUnit() { return !m_assignedAirUnits.empty(); }
 	inline bool hasAnUndergroundUnit() { return !m_assignedUndergroundUnits.empty(); }
 	inline bool hasANonInfantryGroundObject() { return !m_assignedNonInfantryGroundObjects.empty(); }
 	inline bool hasInfantry() { return !m_assignedInfantry.empty(); }
+	*/
 	inline bool hasSpice() { return (fixDouble(m_spice) > 0.0); }
 
 	inline int getTile() { return m_tile; }
@@ -191,11 +202,7 @@ class TerrainClass  : public UPoint
 	ImagePtr m_img;
 	ImagePtr m_hiddenImg;
 
-	List  m_assignedAirUnits,
-	      m_assignedDeadObjects,
-	      m_assignedNonInfantryGroundObjects,
-	      m_assignedUndergroundUnits,
-	      m_assignedInfantry;
+	List m_assignedObjects;
 
 	//! damage positions
 	DAMAGETYPE	m_damage[DAMAGEPERCELL];

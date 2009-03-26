@@ -64,7 +64,7 @@ void GameMan::Init()
 {
     m_players = new Players;
     m_objectTree = new ObjectTree();
-    m_objects = new Objects;
+    m_objects = new std::vector<ObjectClass*>;
 
 }
 
@@ -425,12 +425,12 @@ void GameMan::Unselect(List* objectList)
 
 void GameMan::Update(float dt)
 {
-    Objects::iterator object;
+    std::vector<ObjectClass*>::iterator object;
     for (object = m_objects->begin(); object != m_objects->end(); object++)
     {
-        if ((*object)->clearObject())
+	if ((*object)->clearObject())
 	    m_objectTree->RemoveObject((*object)->getObjectID());
 	else
-    	    (*object)->update(dt);
+	    (*object)->update(dt);
     }
 }

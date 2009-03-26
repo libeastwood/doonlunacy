@@ -52,6 +52,7 @@ void TerrainClass::draw(Image * dest, SPoint pos)
    
 }
 
+/*
 ObjectClass* TerrainClass::getAirUnit()
 {
 	GameMan* gman = GameMan::Instance();
@@ -63,17 +64,20 @@ ObjectClass* TerrainClass::getDeadObject()
 	GameMan* gman = GameMan::Instance();
     return gman->GetObjectTree()->getObject(m_assignedDeadObjects.front());
 }
-
+*/
 ObjectClass* TerrainClass::getGroundObject()
 {
-    if (hasANonInfantryGroundObject())
-        return getNonInfantryGroundObject();
-    else if (hasInfantry())
-        return getInfantry();
-    else
-        return NULL;
+    std::list<Uint32>::const_iterator iter;
+    for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
+    {
+	ObjectClass *object = GameMan::Instance()->GetObjectTree()->getObject(*iter);
+	if(object->isAGroundUnit())
+	    return object;
+    }
+    return NULL;
 }
 
+/*
 ObjectClass* TerrainClass::getInfantry()
 {
 	GameMan* gman = GameMan::Instance();
@@ -91,42 +95,24 @@ ObjectClass* TerrainClass::getUndergroundUnit()
 	GameMan* gman = GameMan::Instance();
     return gman->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
 }
-
-void TerrainClass::assignAirUnit(Uint32 newObjectID) 
+*/
+void TerrainClass::assignObject(Uint32 newObjectID) 
 {
-	m_assignedAirUnits.push_back(newObjectID);
-}
-
-void TerrainClass::assignDeadObject(Uint32 newObjectID) 
-{
-	m_assignedDeadObjects.push_back(newObjectID);
-}
-
-void TerrainClass::assignNonInfantryGroundObject(Uint32 newObjectID) 
-{
-	m_assignedNonInfantryGroundObjects.push_back(newObjectID);
-}
-
-void TerrainClass::assignUndergroundUnit(Uint32 newObjectID) 
-{
-	m_assignedUndergroundUnits.push_back(newObjectID);
+	m_assignedObjects.push_back(newObjectID);
 }
 
 ObjectClass* TerrainClass::getObject() {
 	ObjectClass* temp = NULL;
-	if (hasAnAirUnit())
-		temp = getAirUnit();
-	else if (hasANonInfantryGroundObject())
-		temp = getNonInfantryGroundObject();
-	else if (hasInfantry())
-		temp = getInfantry();
-	else if (hasAnUndergroundUnit())
-		temp = getUndergroundUnit();
+	if(!m_assignedObjects.empty())
+		temp = GameMan::Instance()->GetObjectTree()->getObject(m_assignedObjects.front());
+
 	return temp;
 }
 
 
 ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
+	return getObject();
+#if 0
 	ObjectClass* temp = NULL;
 
 	if (hasAnAirUnit())
@@ -159,68 +145,25 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 		temp = getUndergroundUnit();
 
 	return temp;
+#endif
 }
 
 bool TerrainClass::hasAnObject() {
-	return (hasAGroundObject() || hasAnAirUnit() || hasInfantry() || hasAnUndergroundUnit());
+	return !m_assignedObjects.empty();
 }
 
-void TerrainClass::unassignAirUnit(Uint32 ObjectID) 
-{
-	m_assignedAirUnits.remove(ObjectID);
-	LOG_INFO("TerrainClass", "Unassigned air unit.");
-}
-
-void TerrainClass::unassignDeadObject(Uint32 ObjectID) 
-{
-	m_assignedDeadObjects.remove(ObjectID); 
-    LOG_INFO("TerrainClass", "Unassigned dead object.");
-}
-
-void TerrainClass::unassignNonInfantryGroundObject(Uint32 ObjectID) 
-{
-	m_assignedNonInfantryGroundObjects.remove(ObjectID);
-    LOG_INFO("TerrainClass", "Unassigned non-infantry ground object.");
-}
-
-void TerrainClass::unassignUndergroundUnit(Uint32 ObjectID) 
-{
-	m_assignedUndergroundUnits.remove(ObjectID);
-    LOG_INFO("TerrainClass", "Unassigned underground object.");
-}
-
-void TerrainClass::unassignInfantry(Uint32 ObjectID, int currentPosition) 
-{
-	m_assignedInfantry.remove(ObjectID);
-	LOG_INFO("TerrainClass", "Unassigned infantry.");
-}
 
 void TerrainClass::unassignObject(Uint32 ObjectID) {
-	unassignInfantry(ObjectID,-1);
-	unassignUndergroundUnit(ObjectID);
-	unassignNonInfantryGroundObject(ObjectID);
-	unassignAirUnit(ObjectID);
+	m_assignedObjects.remove(ObjectID);
     LOG_INFO("TerrainClass", "Unassigning object with ID: %d", ObjectID);
 }
 
 ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID) 
 {
-	ConcatIterator<Uint32> iterator;
-	iterator.addList(m_assignedInfantry);
-	iterator.addList(m_assignedNonInfantryGroundObjects);
-	iterator.addList(m_assignedUndergroundUnits);
-	iterator.addList(m_assignedAirUnits);
-	iterator.addList(m_assignedDeadObjects);
-
-	while(!iterator.IterationFinished()) 
-	{
-		if(*iterator == objectID) 
-		{
-			return GameMan::Instance()->GetObjectTree()->getObject(*iterator);
-		}
-	
-		++iterator;
-	}
+	std::list<Uint32>::const_iterator iter;
+	for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
+		if(*iter == objectID) 
+			return GameMan::Instance()->GetObjectTree()->getObject(*iter);
 
 	return NULL;
 }
@@ -243,15 +186,10 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     float  damageProp;
     UPoint centrePoint;
     // non air damage
-    ConcatIterator<Uint32> iterator;
-    iterator.addList(m_assignedNonInfantryGroundObjects);
-    iterator.addList(m_assignedInfantry);
-    iterator.addList(m_assignedUndergroundUnits);
 
-    ObjectClass* object;
-    while(!iterator.IterationFinished()) {
-
-    	object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
+    std::list<Uint32>::const_iterator iterator;
+    for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
+	ObjectClass* object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
     	
     	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
     	distance = lround(distance_from(centrePoint, realPos));
