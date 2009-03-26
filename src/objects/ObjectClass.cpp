@@ -71,6 +71,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 
     m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
+    GameMan::Instance()->GetObjects()->push_back(this);
 
 }
 

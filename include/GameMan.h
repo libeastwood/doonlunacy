@@ -14,9 +14,7 @@
 typedef std::list <Uint32> List;
 
 typedef std::vector<PlayerClass*> Players;
-typedef std::vector<StructureClass*> Structures;
-typedef std::list<UnitClass*> Units;
-typedef std::vector<WeaponClass*> Bullets;
+typedef std::vector<ObjectClass*> Objects;
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
@@ -52,9 +50,7 @@ class GameMan : public Singleton<GameMan>
     MapClass* GetMap() { return m_map; }
     Players* GetPlayers() { return m_players; }
     PlayerClass* GetPlayer(int i) { return m_players->at(i); }
-    Structures* GetStructures() { return m_structures; }
-    Units* GetUnits()  { return m_units; }
-    Bullets* GetBullets() { return m_bulletList; }    
+    Objects* GetObjects() { return m_objects; }
     PlayerClass* LocalPlayer() { return m_localPlayer; }
     ObjectTree* GetObjectTree() { return m_objectTree; }
     void Update(float dt);
@@ -65,14 +61,11 @@ class GameMan : public Singleton<GameMan>
 	void Unselect(List* objectList);
   protected:
 
-    Bullets* m_bulletList;
     MapClass* m_map;
     ObjectTree* m_objectTree;
     PlayerClass * m_localPlayer;
     Players* m_players;
-    Structures* m_structures;
-
-    Units* m_units;
+    Objects* m_objects;
 };
 
 #endif // DUNE_GAMEMANAGER_H

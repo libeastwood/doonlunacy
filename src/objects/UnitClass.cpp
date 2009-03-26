@@ -38,7 +38,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
     setActive(false);
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
-    GameMan::Instance()->GetUnits()->push_back(this);
 }
 
 /*virtual*/
@@ -118,6 +117,7 @@ void UnitClass::destroy()
         // map->getCell(&location)->assignDeadObject(this);
     }
     ObjectClass::destroy();
+
 }
 
 

@@ -63,16 +63,8 @@ void GameMan::AddPlayer(PLAYERHOUSE House, bool ai, int team)
 void GameMan::Init()
 {
     m_players = new Players;
-    m_structures = new Structures;
-    m_units = new Units;
-	m_objectTree = new ObjectTree();
-    m_bulletList = new Bullets;
-
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 412), false)); 
-    m_bulletList->push_back(new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false)); 
+    m_objectTree = new ObjectTree();
+    m_objects = new Objects;
 
 }
 
@@ -84,6 +76,7 @@ void GameMan::Clear()
     }
     m_players->clear();
     
+    /*
     for (unsigned int i = 0; i < m_units->size(); i++)
     {
         UnitClass* unit = m_units->back(); 
@@ -92,6 +85,7 @@ void GameMan::Clear()
         delete unit;
     }
     m_units->clear();
+    */
     
     delete m_map;
 }
@@ -431,30 +425,12 @@ void GameMan::Unselect(List* objectList)
 
 void GameMan::Update(float dt)
 {
-    Units::iterator unit = m_units->begin();
-    UnitClass* tmp;
-    while (unit != m_units->end())
+    Objects::iterator object;
+    for (object = m_objects->begin(); object != m_objects->end(); object++)
     {
-        tmp = *unit;
-        if (tmp->clearObject())
-        {
-            m_objectTree->RemoveObject(tmp->getObjectID());
-            unit++;
-        }
-        else
-        {
-            unit++;
-        }
-    }
-    
-    for (unit = m_units->begin(); unit != m_units->end(); unit++)
-    {
-        (*unit)->update(dt);
-    }
-    
-    Bullets::iterator bullet;
-    for (bullet = m_bulletList->begin(); bullet != m_bulletList->end(); bullet++)
-    {
-        (*bullet)->update(dt);
+        if ((*object)->clearObject())
+	    m_objectTree->RemoveObject((*object)->getObjectID());
+	else
+    	    (*object)->update(dt);
     }
 }

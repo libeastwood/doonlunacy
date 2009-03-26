@@ -15,6 +15,11 @@ MapWidget::MapWidget()
     m_view = SPoint(0, 0);
     m_speed = SPoint(0, 0);
     m_mouseButtonDown = false;
+    new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
+    new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
+    new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false);
+    new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 412), false);
+    new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false);
 }
 
 MapWidget::~MapWidget()
@@ -223,10 +228,11 @@ void MapWidget::draw(Image * dest, SPoint off)
         {
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
+	    /*
             if (cell->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()) && cell->hasANonInfantryGroundObject())
             {
                 m_groundUnits.push_back(cell->getNonInfantryGroundObject());
-            }
+            }*/
         }
     }
     
@@ -256,10 +262,16 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     }
     
+    for (unsigned int i = 0; i < GameMan::Instance()->GetObjects()->size(); i++)
+    {
+        GameMan::Instance()->GetObjects()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+    }
+
+    /*
     for (unsigned int i = 0; i < GameMan::Instance()->GetBullets()->size(); i++)
     {
         GameMan::Instance()->GetBullets()->at(i)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
-    }
+    }*/
 
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))

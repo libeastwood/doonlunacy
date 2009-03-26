@@ -246,7 +246,7 @@ ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
 	int			x,y;
 	ObjectClass	*object = NULL;
 
-	Units* unitList = GameMan::Instance()->GetUnits();
+	//Units* unitList = GameMan::Instance()->GetUnits();
 
 	if (cellExists(lx, ly))
 		object = getCell(lx, ly)->getObjectWithID(objectID);
