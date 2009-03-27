@@ -37,16 +37,3 @@ EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
     m_backgroundFrame->addChild(m_mapWidget);
 #endif 
 }
-
-
-EditorState::~EditorState()
-{
-    GameMan::Instance()->Clear();
-}
-
-int EditorState::Execute(float dt)
-{
-    GameMan::Instance()->Update(dt);
-
-    return 0;
-}

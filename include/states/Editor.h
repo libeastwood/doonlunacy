@@ -8,9 +8,6 @@
 class EditorState : public GameMenuState {
 public:
 	EditorState(HOUSETYPE house = HOUSE_ATREIDES);
-	~EditorState();
-
-	int Execute(float dt);
 
 	virtual const char* GetName() { return "Editor"; }
 

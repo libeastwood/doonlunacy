@@ -19,7 +19,7 @@ GameMenuState::GameMenuState(HOUSETYPE house)
 
 GameMenuState::~GameMenuState()
 {
-
+    GameMan::Instance()->Clear();
 }
 
 void GameMenuState::drawMenu()
@@ -94,6 +94,8 @@ int GameMenuState::Execute(float dt)
         drawMenu();
 		m_drawMenu = false;
     }
+
+    GameMan::Instance()->Update(dt);
 
     return 0;
 }
