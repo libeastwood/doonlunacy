@@ -28,7 +28,6 @@ MapWidget::~MapWidget()
 
 bool MapWidget::handleMotion(SPoint p)
 {
-    std::cout << "mapwidget" << std::endl;
     MapClass* m_map = GameMan::Instance()->GetMap();
     
     if (m_mouseButtonDown)
