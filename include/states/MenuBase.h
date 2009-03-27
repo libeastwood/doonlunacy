@@ -11,8 +11,8 @@ class MenuBaseState : public State
         MenuBaseState();
         ~MenuBaseState();
 
-        void JustMadeActive();
-        void JustMadeInactive();
+        virtual void JustMadeActive();
+        virtual void JustMadeInactive();
 
         int Execute(float dt);
 
