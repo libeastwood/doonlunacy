@@ -214,7 +214,6 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     		}
     	}
     	
-    	++iterator;
     }
 
 #if 0
