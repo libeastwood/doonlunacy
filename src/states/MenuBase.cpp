@@ -18,7 +18,6 @@ MenuBaseState::MenuBaseState()
     
     m_backgroundFrame = new Frame();
     m_container->addChild(m_backgroundFrame);
-    Application::Instance()->RootWidget()->addChild(m_container);
 }
 
 MenuBaseState::~MenuBaseState()
