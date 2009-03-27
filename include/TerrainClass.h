@@ -127,7 +127,7 @@ class TerrainClass  : public UPoint
 	inline int getDamageType() { return m_damageType; }
 	inline void setSandRegion(int newSandRegion) { m_sandRegion = newSandRegion; }
 
-	double getDifficulty() { return m_difficulty; }
+	float getDifficulty() { return m_difficulty; }
 
 	inline bool isExplored(int player) 	{return m_explored[player];}
 	inline void setExplored(int player, bool truth) { //if(truth)
