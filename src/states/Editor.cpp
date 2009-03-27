@@ -34,6 +34,7 @@ EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
     m_mapWidget->setPosition(UPoint(0,56));
     m_mapWidget->setSize(UPoint(set->GetWidth() - 144, set->GetHeight() - m_mapWidget->getPosition().y));
     GameMan::Instance()->LoadScenario("SCENARIO:SCENA001.INI");
-    m_backgroundFrame->addChild(m_mapWidget);
+    //FIXME: Should really use m_backgroundFrame..
+    m_container->addChild(m_mapWidget);
 #endif 
 }

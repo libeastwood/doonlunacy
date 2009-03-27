@@ -27,6 +27,7 @@ void GameMenuState::drawMenu()
     ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
     top->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
     Frame *topFrame = new Frame(top);
+    //FIXME: Why does events gets messed up when using m_backgroundFrame?
     m_container->addChild(topFrame);
 
     ImagePtr messageBox(new Image(UPoint(set->GetWidth(), 28)));
