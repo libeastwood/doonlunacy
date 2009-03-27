@@ -190,30 +190,29 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
     std::list<Uint32>::const_iterator iterator;
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
 	ObjectClass* object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
-    	
-    	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
-    	distance = lround(distance_from(centrePoint, realPos));
-    	if (distance <= 0) {
-    		distance = 1;
-    	}
-    	
-    	if (distance - object->getRadius() <= damageRadius)	{
-    		#if 0 //We ain't got sonic tanks yet
-    		if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
-    			((UnitClass*)object)->netDeviate(damagerOwner);
-    		}
-    		#endif
-    		
-    		damageProp = ((float)(damageRadius + object->getRadius() - distance))/((float)distance);
-    		if (damageProp > 0)	{
-    			if (damageProp > 1.0) {
-    				damageProp = 1.0;
-    			}
 
-    			object->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
-    		}
-    	}
-    	
+	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
+	distance = lround(distance_from(centrePoint, realPos));
+	if (distance <= 0)
+	    distance = 1;
+
+	if (distance - object->getRadius() <= damageRadius)	{
+	#if 0 //We ain't got sonic tanks yet
+	    if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
+		((UnitClass*)object)->netDeviate(damagerOwner);
+	    }
+	#endif
+
+	    damageProp = ((float)(damageRadius + object->getRadius() - distance))/((float)distance);
+	    if (damageProp > 0)	{
+		if (damageProp > 1.0)
+		    damageProp = 1.0;
+
+
+		object->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
+	    }
+	}
+
     }
 
 #if 0
