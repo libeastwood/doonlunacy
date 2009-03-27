@@ -88,7 +88,7 @@ class TerrainClass  : public UPoint
 	ObjectClass* getObjectAt(UPoint pos);
 	ObjectClass* getObjectWithID(Uint32 objectID);
 
-	bool hasAnObject();
+	inline bool hasAnObject() { return !m_assignedObjects.empty(); }
 
 	//!@{
 	//! @name setters and getters

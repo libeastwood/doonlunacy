@@ -148,11 +148,6 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 #endif
 }
 
-bool TerrainClass::hasAnObject() {
-	return !m_assignedObjects.empty();
-}
-
-
 bool TerrainClass::unassignObject(Uint32 objectID) {
     bool ret = (getObjectWithID(objectID) != NULL);
     if(ret) {
