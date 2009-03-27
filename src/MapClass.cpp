@@ -491,9 +491,11 @@ int MapClass::getPosAngle(UPoint source, UPoint pos)
 
 void MapClass::removeObjectFromMap(Uint32 ObjectID)
 {
+    // TODO: This has still room for optimization..
     for(int y = 0; y < h ; y++) 
 	for(int x = 0 ; x < w ; x++) 
-	    getCell(SPoint(x, y))->unassignObject(ObjectID);
+	    if(getCell(SPoint(x, y))->unassignObject(ObjectID))
+		return;
 }
 
 void MapClass::selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode)

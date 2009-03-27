@@ -153,9 +153,15 @@ bool TerrainClass::hasAnObject() {
 }
 
 
-void TerrainClass::unassignObject(Uint32 ObjectID) {
-	m_assignedObjects.remove(ObjectID);
-    LOG_INFO("TerrainClass", "Unassigning object with ID: %d", ObjectID);
+bool TerrainClass::unassignObject(Uint32 objectID) {
+    std::list<Uint32>::const_iterator iter;
+    for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
+	if(getObjectWithID(objectID) != NULL) {
+	    LOG_INFO("TerrainClass", "Unassigning object with ID: %d", objectID);
+	    m_assignedObjects.remove(objectID);
+	    return true;
+	}
+    return false;
 }
 
 ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID) 

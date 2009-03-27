@@ -40,7 +40,7 @@ class TerrainClass  : public UPoint
 	void unassignDeadObject(Uint32 ObjectID);
 	void unassignNonInfantryGroundObject(Uint32 ObjectID);
 	*/
-	void unassignObject(Uint32 ObjectID);
+	bool unassignObject(Uint32 objectID);
 	/*
 	void unassignInfantry(Uint32 ObjectID, int currentPosition);
 	void unassignUndergroundUnit(Uint32 ObjectID);
