@@ -345,7 +345,7 @@ void Application::Run()
 
 void Application::HandleEvents()
 {
-    SDL_Event event;
+    SDL_Event event = {};
 
     while (SDL_PollEvent(&event))
     {
@@ -379,8 +379,8 @@ void Application::HandleEvents()
             case SDL_KEYUP:
                 m_rootWidget->handleKeyUp(&(event.key.keysym));
                 break;
-        };
-    };
+        }
+    }
 }
 
 void Application::BlitCursor()
