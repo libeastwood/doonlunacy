@@ -85,11 +85,14 @@ void ObjectClass::assignToMap(SPoint pos)
 {
     MapClass* map = m_owner->getMap();
 
-    if (map->cellExists(pos))
-    {
-	map->getCell(pos)->assignObject(getObjectID());
-	map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
-    }
+    for (int i = x; i < x + w/BLOCKSIZE; i++)
+	for (int j = y; j < y + h/BLOCKSIZE; j++) {
+	    SPoint temp(i,j);
+	    if (map->cellExists(temp)) {
+		map->getCell(temp)->assignObject(getObjectID());
+		map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
+	    }
+	}
 }
 
 bool ObjectClass::canAttack(ObjectClass* object)
