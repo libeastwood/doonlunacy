@@ -299,12 +299,6 @@ void UnitClass::setDestination(SPoint destination)
     ObjectClass::setDestination(destination);
 }
 
-void UnitClass::setDrawnPos(SPoint off, SPoint view)
-{
-    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
-    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
-}
-
 void UnitClass::setGuardPoint(UPoint newGuardPoint)
 {
 	setGuardPoint(newGuardPoint.x, newGuardPoint.y);

@@ -46,8 +46,6 @@ class StructureClass : public ObjectClass
 
      //! Specifies for how long building is going to be shown as under construction (Frame 0)
         m_justPlacedTimer;
-
-    void setDrawnPos(SPoint off, SPoint view);
 };
 
 #endif // DUNE_OBJECTS_STRUCTURECLASS_H

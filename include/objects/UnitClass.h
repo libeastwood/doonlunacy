@@ -53,7 +53,6 @@ class UnitClass : public ObjectClass
     //! Find next spot to which to move unit and set all neede variables
 	virtual void navigate();
 
-    void setDrawnPos(SPoint off, SPoint view);
     virtual void setSpeeds();
     virtual void turn();
    	void turnLeft();

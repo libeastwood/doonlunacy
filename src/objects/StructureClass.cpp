@@ -121,12 +121,6 @@ void StructureClass::drawSelectionBox(Image * dest)
     dest->drawRect(Rect(m_drawnPos.x, m_drawnPos.y, w, h), COLOUR_WHITE);
 }
 
-void StructureClass::setDrawnPos(SPoint off, SPoint view)
-{
-    m_drawnPos.x = off.x + m_realPos.x - view.x*BLOCKSIZE - m_offset.x;
-    m_drawnPos.y = off.y + m_realPos.y - view.y*BLOCKSIZE - m_offset.y; 
-}
-
 void StructureClass::animate()
 {
     if (!m_destroyed)

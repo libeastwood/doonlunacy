@@ -13,10 +13,10 @@ class Object(object):
         self.numDeathFrames = 1
         self.numFrames = 1
         self.health = self.maxHealth
-        self.offset = (0,0)
         self.radius = 0
         self.realPos = (0.0, 0.0)
         self.size = (1, 1)
+        self.offset = (self.size[0]/2.0,self.size[1]/2.0)
         self.speed = 0
         self.turnSpeed = 0
         self.viewRange = 5

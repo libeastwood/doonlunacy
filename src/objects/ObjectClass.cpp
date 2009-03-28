@@ -53,7 +53,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 	m_numDeathFrames = cache->getPyObjectAttribute<int>(m_objectName, "numDeathFrames");
 	m_numFrames = cache->getPyObjectAttribute<int>(m_objectName, "numFrames");
 	m_health = cache->getPyObjectAttribute<int>(m_objectName, "health");
-	m_offset = cache->getPyObjectAttribute<UPoint>(m_objectName, "offset"),
+	m_offset = UPoint(PointFloat(cache->getPyObjectAttribute<PointFloat>(m_objectName, "offset")) * BLOCKSIZE),
 		 m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
 	m_realPos = cache->getPyObjectAttribute<PointFloat>(m_objectName, "realPos");
 	m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
@@ -111,8 +111,7 @@ bool ObjectClass::canAttack(ObjectClass* object)
 
 void ObjectClass::setDrawnPos(SPoint off, SPoint view)
 {
-    m_drawnPos.x = off.x + m_realPos.x - view.x * BLOCKSIZE - w / 2;
-    m_drawnPos.y = off.y + m_realPos.y - view.y * BLOCKSIZE - h / 2;
+    m_drawnPos = (off + m_realPos - view * BLOCKSIZE) - m_offset;
 }
 
 
