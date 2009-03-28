@@ -117,9 +117,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
 
                 if (!m_selectedList.empty())
-                {
                     m_selectedList.front()->setSelected(false);
-                }
 
                 m_selectedList.clear();
 
@@ -131,9 +129,6 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                     tmp->setSelected(true);
                     LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
                 }
-
-
-
             }
 
             return true;
@@ -145,12 +140,8 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             if (!m_selectedList.empty())
             {
                 tmp = m_selectedList.front();
-
                 if (tmp->isAUnit())
-                {
                     ((UnitClass*)tmp)->setDestination(pos);
-                }
-
             }
 
             return true;
@@ -162,7 +153,6 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             break;
 
     }
-
 }
 
 bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
@@ -225,26 +215,19 @@ void MapWidget::draw(Image * dest, SPoint off)
         {
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
-	    ObjectClass *object;
-            if (cell->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
-		if((object = cell->getObject()))
-		    object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
         }
     
-    ObjectClass* tmp3;
 
     for (unsigned int i = 0; i < m_selectedList.size(); i++)
     {
-        tmp3 = m_selectedList.at(i);
-        if (tmp3->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-        {
-	    tmp3->drawSelectionBox(dest);
-        }
+        ObjectClass *tmp = m_selectedList.at(i);
+        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
+	    tmp->drawSelectionBox(dest);
     }
 
     std::vector<ObjectClass*> *objects = GameMan::Instance()->GetObjects();
     for(std::vector<ObjectClass*>::const_iterator iter = objects->begin(); iter != objects->end(); iter++)
-	if((*iter)->isWeapon())
+	if((*iter)->isWeapon() || (m_map->getCell(SPoint((*iter)->x, (*iter)->y)))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
 	    (*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
