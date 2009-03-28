@@ -85,11 +85,23 @@ struct Point
         {
             return Point(x + point.x, y + point.y);
         }
+
+        Point operator+(T value) const
+        {
+            return Point(x + value, y + value);
+        }
+
         //! operator -
         Point operator-(const Point &point) const
         {
             return Point(x - point.x, y - point.y);
         }
+
+        Point operator-(T value) const
+        {
+            return Point(x - value, y - value);
+        }
+
         //! operator *
         Point operator*(T times) const
         {
