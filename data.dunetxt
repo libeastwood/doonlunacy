@@ -759,7 +759,7 @@ gcobjects:
 		tiles = ([29, 30, 31]);
 	};
 
-	ObjPic_DeadInfantry =
+	ObjPic_DeadInfantryOrig =
 	{
 		filename = "DUNE:ICON.ICN";
 		map = "DUNE:ICON.MAP";
@@ -767,6 +767,12 @@ gcobjects:
 		x = 1;
 		y = 1;
 		num = 6;
+	};
+
+	ObjPic_DeadInfantry =
+	{
+		gcobject = "ObjPic_DeadInfantryOrig";
+		colorkey = 0;
 	};
 
 	ObjPic_Smoke =
