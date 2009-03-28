@@ -35,7 +35,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
-    m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
     setActive(false);
     m_gameSpeed = Settings::Instance()->GetGameSpeed();
 }
@@ -147,13 +146,6 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
     #endif
 
 }
-
-/*virtual*/
-void UnitClass::drawSelectionBox(Image* dest)
-{
-    m_selectionBox->blitTo(dest, m_drawnPos);
-    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
-} //want it to start in one from edges  finish one from right edge
 
 /*virtual*/
 void UnitClass::move()

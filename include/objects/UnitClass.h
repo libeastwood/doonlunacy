@@ -27,7 +27,6 @@ class UnitClass : public ObjectClass
     virtual void checkPos() = 0;
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
-    virtual void drawSelectionBox(Image* dest);
     
     virtual void destroy();
    	virtual void deploy(SPoint newPosition);
@@ -92,8 +91,6 @@ class UnitClass : public ObjectClass
             m_guardPoint;        
 
     Path m_pathList;
-
-    ImagePtr m_selectionBox;
 };
 
 #endif // DUNE_OBJECTS_UNITCLASS_H

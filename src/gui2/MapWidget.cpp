@@ -238,10 +238,7 @@ void MapWidget::draw(Image * dest, SPoint off)
         tmp3 = m_selectedList.at(i);
         if (tmp3->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
         {
-            if (tmp3->isAStructure())
-                ((StructureClass*)tmp3)->drawSelectRect(dest);
-            else
-                ((UnitClass*)tmp3)->drawSelectionBox(dest);
+	    tmp3->drawSelectionBox(dest);
         }
     }
 

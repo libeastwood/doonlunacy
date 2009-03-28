@@ -62,15 +62,24 @@ void StructureClass::setJustPlaced()
         m_curAnimFrame = 0;
     }
 }
+#if 0
 
 void StructureClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    setDrawnPos(off, view);
-
 	if (!m_destroyed)
 	{
-		drawStructure(dest);
-		update();
+    Rect src(m_curAnimFrame * w,0,w,h);
+    /*
+    //TODO: Put m_fogged somw    
+if(m_fogged)
+	{
+		//m_pic->blitTo(SDL_BlitSurface(graphic, &lastVisible, screen, &dest);
+		//SDL_BlitSurface(fogSurf, &lastVisible, screen, &dest);
+	}
+	else
+	{*/
+//		m_lastVisible = source;
+		m_graphic->blitTo(dest, src, m_drawnPos);
 
 //		if (m_selected)
 //		drawSelectRect(dest);
@@ -97,54 +106,19 @@ void StructureClass::draw(Image * dest, SPoint off, SPoint view)
 		}
 	#endif
 	}
-
 }
+#endif
 
-void StructureClass::drawStructure(Image * dest)
+void StructureClass::drawSelectionBox(Image * dest)
 {
-    Rect src(m_curAnimFrame * w,0,w,h);
-    //TODO: Put m_fogged somw    
-//	if(m_fogged)
-    if (0)
-	{
-		//m_pic->blitTo(SDL_BlitSurface(graphic, &lastVisible, screen, &dest);
-		//SDL_BlitSurface(fogSurf, &lastVisible, screen, &dest);
-	}
-	else
-	{
-//		m_lastVisible = source;
-		m_graphic->blitTo(dest, src, m_drawnPos);
-	}
-}
+    int x2 = m_drawnPos.x + ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))),
+	color = getHealthColour();
 
-void StructureClass::drawSelectRect(Image * dest)
-{
-    SDL_Surface * surf = dest->getSurface();
+    for(int i = 2; i < 5; i++)
+    	dest->drawHLine(m_drawnPos + UPoint(2, i), x2, color);
 
-    //now draw the selection box thing, with parts at all corners of structure
-	if (!SDL_MUSTLOCK(surf) || (SDL_LockSurface(surf) == 0))
-	{
-		dest->putPixel(m_drawnPos, COLOUR_WHITE);	//top left bit
-		dest->putPixel(UPoint(m_drawnPos.x+1, m_drawnPos.y), COLOUR_WHITE);
-		dest->putPixel(UPoint(m_drawnPos.x, m_drawnPos.y+1), COLOUR_WHITE);
-
-		dest->putPixel(UPoint(m_drawnPos.x-1 + w, m_drawnPos.y), COLOUR_WHITE);	//top right bit
-		dest->putPixel(UPoint(m_drawnPos.x-2 + w, m_drawnPos.y), COLOUR_WHITE);
-		dest->putPixel(UPoint(m_drawnPos.x-1 + w, m_drawnPos.y+1), COLOUR_WHITE);
-
-		dest->putPixel(UPoint(m_drawnPos.x, m_drawnPos.y-1 + h), COLOUR_WHITE);	//bottom left bit
-		dest->putPixel(UPoint(m_drawnPos.x+1, m_drawnPos.y-1 + h), COLOUR_WHITE);
-		dest->putPixel(UPoint(m_drawnPos.x, m_drawnPos.y-2 + h), COLOUR_WHITE);
-
-		dest->putPixel(UPoint(m_drawnPos.x-1 + w, m_drawnPos.y-1 + h), COLOUR_WHITE);	//bottom right bit
-		dest->putPixel(UPoint(m_drawnPos.x-2 + w, m_drawnPos.y-1 + h), COLOUR_WHITE);
-		dest->putPixel(UPoint(m_drawnPos.x-1 + w, m_drawnPos.y-2 + h), COLOUR_WHITE);
-
-		if (SDL_MUSTLOCK(surf))
-			SDL_UnlockSurface(surf);
-	}
-
-	dest->drawHLine(UPoint(m_drawnPos.x, m_drawnPos.y-2), m_drawnPos.x + ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))), getHealthColour());
+    // TODO: Should be glowing..
+    dest->drawRect(Rect(m_drawnPos.x, m_drawnPos.y, w, h), COLOUR_WHITE);
 }
 
 void StructureClass::setDrawnPos(SPoint off, SPoint view)
@@ -153,26 +127,27 @@ void StructureClass::setDrawnPos(SPoint off, SPoint view)
     m_drawnPos.y = off.y + m_realPos.y - view.y*BLOCKSIZE - m_offset.y; 
 }
 
-void StructureClass::update()
+void StructureClass::animate()
 {
     if (!m_destroyed)
     {
-		// update animations
-		m_animCounter++;
-		if(m_animCounter > ANIMATIONTIMER) 
-		{
-			m_animCounter = 0;
-			m_curAnimFrame++;
-			if((m_curAnimFrame < m_firstAnimFrame) || (m_curAnimFrame > m_lastAnimFrame)) 
-			{
-				m_curAnimFrame = m_firstAnimFrame;
-			}
-		    
-			m_justPlacedTimer--;
-			if((m_justPlacedTimer > 0) && (m_justPlacedTimer % 2 == 0)) 
-			{
-				m_curAnimFrame = 0;
-			}
-        }
+
+	// update animations
+	m_animCounter++;
+	if(m_animCounter > ANIMATIONTIMER) 
+	{
+	    m_animCounter = 0;
+	    m_curAnimFrame++;
+	    if((m_curAnimFrame < m_firstAnimFrame) || (m_curAnimFrame > m_lastAnimFrame)) 
+	    {
+		m_curAnimFrame = m_firstAnimFrame;
+	    }
+
+	    m_justPlacedTimer--;
+	    if((m_justPlacedTimer > 0) && (m_justPlacedTimer % 2 == 0)) 
+	    {
+		m_curAnimFrame = 0;
+	    }
+	}
     }	
 }

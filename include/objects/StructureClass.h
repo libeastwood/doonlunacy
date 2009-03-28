@@ -19,11 +19,9 @@ class StructureClass : public ObjectClass
     virtual ~StructureClass();
     //@} 
     
-    virtual void draw(Image * dest, SPoint off, SPoint view);
-    void drawStructure(Image * dest);
-    void drawSelectRect(Image * dest);
+    virtual void drawSelectionBox(Image * dest);
     
-    virtual void update();
+    virtual void animate();
 
 	inline int getPowerRequirement() { return m_powerRequirement; }
 	

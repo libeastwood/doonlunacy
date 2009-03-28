@@ -31,6 +31,8 @@ enum attribute {
  *        - normal - coordinates of a cell an object is in
  */
 
+#define SMOKEDELAY 30
+
 class ObjectClass : public Rect
 {
 
@@ -51,7 +53,9 @@ class ObjectClass : public Rect
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
-    void drawSmoke(UPoint pos);
+    virtual void drawSelectionBox(Image* dest);
+
+    void drawSmoke(Image *dest);
     virtual void destroy();
     virtual void update(float dt){};
     virtual void animate();
@@ -185,13 +189,16 @@ class ObjectClass : public Rect
 	m_guardRange,
 	m_numFrames,
         m_frameTime,
-        m_frameTimer;
+        m_frameTimer,
+	m_smokeCounter,
+	m_smokeFrame;
 
     std::string m_deathAnim;
 
 
     //! SharedPtr to image for current object
-    ImagePtr m_graphic;
+    ImagePtr m_graphic,
+	     m_selectionBox;
 
     //! Pointer to map to which object is assigned.
     PlayerClass * m_owner;

@@ -70,9 +70,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     }
 
     m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+    m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
 
     GameMan::Instance()->GetObjects()->push_back(this);
-
 }
 
 ObjectClass::~ObjectClass()
@@ -120,58 +120,41 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 {
 
     setDrawnPos(off, view);
-    Rect source;
 
     if (!m_destroyed)
     {
-	source.x = 0;
-
-	if (m_numFrames > 1)
-	    source.x = m_drawnAngle * w;
-
-	source.y = 0;
-
-	source.w = 16;
-	source.h = 16;
+	Rect source(m_numFrames > 1 ? m_drawnAngle * w : m_curAnimFrame * w, 0, w, h);
 	m_graphic->blitTo(dest, source, m_drawnPos);
     }
     else if (m_numDeathFrames > 1)
-    {
 	doDeath(dest);
-	animate();
-    }
 
-
+    animate();
 }
 
-
-void ObjectClass::drawSmoke(UPoint pos)
+void ObjectClass::drawSelectionBox(Image* dest)
 {
-#if 0
-    int imageW;
-    SDL_Rect dest, source;
-    ImagePtr smoke = DataCache::Instance()->getObjPic(ObjPic_Smoke);
+    m_selectionBox->blitTo(dest, m_drawnPos);
+    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
+} //want it to start in one from edges  finish one from right edge
 
-    imageW = smoke->w/3;
+void ObjectClass::drawSmoke(Image *dest)
+{
+#if 1
+    Rect source(w * m_curAnimFrame, 0, w, h);
 
-    dest.x = x - imageW/2;
-    dest.y = y - smoke->h;
-    dest.w = imageW;
-    dest.h = smoke->h;
+    ImagePtr smoke = DataCache::Instance()->getGCObject("ObjPic_Smoke")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
-    source.x = smokeLast;
 
-    if(++smokeCounter >=SMOKEDELAY) {
-	smokeCounter = 0;
-	source.x = imageW*getRandomInt(0, 2);
-	smokeLast = source.x;
+    source.x = m_smokeFrame;
+
+    if(++m_smokeCounter >=SMOKEDELAY) {
+	m_smokeCounter = 0;
+	source.x = w*getRandomInt(0, 2);
+	m_smokeFrame = source.x;
     };
 
-    source.y = 0;
-    source.w = imageW;
-    source.h = smoke->h;
-
-    SDL_BlitSurface(smoke, &source, screen, &dest);
+    m_graphic->blitTo(dest, source, m_drawnPos);
 #endif
 }
 
