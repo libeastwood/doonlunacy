@@ -192,21 +192,16 @@ void WeaponClass::update(float dt)
 
 void WeaponClass::destroy()
 {
-    MapClass* map = GameMan::Instance()->GetMap();
-
     if (!m_destroyed)
     {
-	UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
 	/* Here we deal damage to explosion area according to it's size */
-	for(int i = 0; i < m_explosionSize; i++)
-	    for(int j = 0; j < m_explosionSize; j++)
-		if (( m_explosionSize <= 2) || ((i != 0) && (i != (m_explosionSize-1))) || ((j != 0) && (j != (m_explosionSize-1))))
-		{
-		    realPos.x = m_drawnPos.x + (i - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
-		    realPos.y = m_drawnPos.y + (j - (m_explosionSize/2))*BLOCKSIZE - BLOCKSIZE/2;
+    	MapClass* map = GameMan::Instance()->GetMap();
+	UPoint destPoint((UPoint(m_realPos) - ((m_explosionSize/2) * BLOCKSIZE)) - BLOCKSIZE/2);
 
-		    map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
-		}
+	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
+	    for(int y = 0; y < m_explosionSize; y++)
+		if ((m_explosionSize <= 2) || ((x != 0) && (x != (m_explosionSize-1))) || ((y != 0) && (y != (m_explosionSize-1))))
+		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
     }
     ObjectClass::destroy();
 
