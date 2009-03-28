@@ -10,6 +10,7 @@ class Structure(ObjectClass.Object):
         self.firstAnimFrame = 2
         self.lastAnimFrame = 3
         self.health = self.maxHealth = 1000
+        self.offset = (0,0)
         self.powerRequirement = 0
         self.size = (2,2)
         self.upgradeLevels = 0
