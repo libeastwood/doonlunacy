@@ -769,6 +769,12 @@ gcobjects:
 		num = 6;
 	};
 
+	ObjPic_Smoke =
+	{
+		filename = "DUNE:UNITS1.SHP";
+		tiles = ([29,30,31]);
+	};
+
 	ObjPic_SandWormShimmerMask =
 	{
 		filename = "DUNE:UNITS1.SHP";
