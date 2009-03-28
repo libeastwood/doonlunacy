@@ -400,19 +400,13 @@ void ObjectClass::setHealth(int newHealth)
 
 void ObjectClass::setPosition(SPoint pos)
 {
-
     if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
-    {
-	x = INVALID_POS;
-	y = INVALID_POS;
-    }
-
+	x = y = INVALID_POS;
     else if (m_owner->getMap()->cellExists(pos))
     {
 	x = pos.x;
 	y = pos.y;
-	m_realPos.x = pos.x * BLOCKSIZE;
-	m_realPos.y = pos.y * BLOCKSIZE;
+	m_realPos = pos * BLOCKSIZE;
 
 	assignToMap(pos);
     }
