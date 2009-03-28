@@ -3,6 +3,7 @@
 
 #include "Settings.h"
 
+#include <assert.h>
 #include <iostream>
 
 //------------------------------------------------------------------------------
@@ -69,12 +70,9 @@ struct Point
             return *this;
         }
         //! operator /=
-        /*
-            @warning: Do not divide by zero !
-        */
         Point &operator/=(T times)
         {
-            // TODO: assert ?
+	    assert(times != 0);
             x /= times;
             y /= times;
             return *this;
@@ -108,12 +106,9 @@ struct Point
             return Point(x*times, y*times);
         }
         //! operator /
-        /*!
-            @warning: Do not divide by zero !
-        */
         Point operator/(T times) const
         {
-            // TODO: assert ?
+	    assert(times != 0);
             return Point(x/times, y/times);
         }
         
