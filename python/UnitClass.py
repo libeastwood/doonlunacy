@@ -33,7 +33,7 @@ class InfantryUnit(GroundUnit):
         self.deathAnim = "ObjPic_DeadInfantry"
         self.numDeathFrames = 2
         self.armor = 1
-        self.maxHealth = 10
+        self.maxHealth = self.health = 10
         self.radius = 2
         self.speed = 0.25
         self.viewRange = 4

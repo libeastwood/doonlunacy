@@ -9,10 +9,9 @@ class Object(object):
         self.explosionSize = 1
         self.graphic = None
         self.guardRange = 0
-        self.maxHealth = 100
         self.numDeathFrames = 1
         self.numFrames = 1
-        self.health = self.maxHealth
+        self.health = self.maxHealth = 100
         self.radius = 0
         self.realPos = (0.0, 0.0)
         self.size = (1, 1)
