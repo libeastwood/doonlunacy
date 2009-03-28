@@ -111,14 +111,9 @@ if(m_fogged)
 
 void StructureClass::drawSelectionBox(Image * dest)
 {
-    int x2 = m_drawnPos.x + ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))),
-	color = getHealthColour();
-
-    for(int i = 2; i < 5; i++)
-    	dest->drawHLine(m_drawnPos + UPoint(2, i), x2, color);
-
     // TODO: Should be glowing..
     dest->drawRect(Rect(m_drawnPos.x, m_drawnPos.y, w, h), COLOUR_WHITE);
+    dest->fillRect(getHealthColour(), Rect(m_drawnPos.x + 2, m_drawnPos.y + 2, ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))), 2));
 }
 
 void StructureClass::animate()
