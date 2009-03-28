@@ -86,8 +86,8 @@ void ObjectClass::assignToMap(SPoint pos)
     MapClass* map = m_owner->getMap();
 
     // If structure is more than 1x1, be sure to assign it to all cells required
-    for (int i = x; i < x + w/BLOCKSIZE; i++)
-	for (int j = y; j < y + h/BLOCKSIZE; j++) {
+    for (int i = pos.x; i < x + w/BLOCKSIZE; i++)
+	for (int j = pos.y; j < y + h/BLOCKSIZE; j++) {
 	    SPoint temp(i,j);
 	    if (map->cellExists(temp)) {
 		map->getCell(temp)->assignObject(getObjectID());
