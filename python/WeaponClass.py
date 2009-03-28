@@ -12,9 +12,6 @@ class Weapon(ObjectClass.Object):
         self.inaccuracy = 2
         self.numDeathFrames = 1
         self.numFrames = 1
-        # this is where it actually draws the graphic
-        # cause it will draw from top left, not the middle
-        self.offset = (8,8)
         self.range = 5
         self.reloadTime = 50
         self.speed = 9.0
