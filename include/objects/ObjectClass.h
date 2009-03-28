@@ -53,7 +53,7 @@ class ObjectClass : public Rect
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
-    virtual void drawSelectionBox(Image* dest);
+    void drawSelectionBox(Image* dest);
 
     void drawSmoke(Image *dest);
     virtual void destroy();
@@ -192,13 +192,16 @@ class ObjectClass : public Rect
         m_frameTimer,
 	m_smokeCounter,
 	m_smokeFrame;
+    bool m_fadingIn;
+
 
     std::string m_deathAnim;
 
 
     //! SharedPtr to image for current object
     ImagePtr m_graphic,
-	     m_selectionBox;
+	     m_selectionBox,
+	     m_selectionBoxGlowing;
 
     //! Pointer to map to which object is assigned.
     PlayerClass * m_owner;

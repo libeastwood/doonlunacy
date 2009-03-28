@@ -22,6 +22,10 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName)
         exit(1);
     }
 
+    m_selectionBox.reset(new Image(UPoint(w,h)));
+    m_selectionBox->setColorKey();
+    m_selectionBox->drawRect(Rect(0, 0, w, h), COLOUR_WHITE);
+
 }
 
 StructureClass::~StructureClass()
@@ -108,13 +112,6 @@ if(m_fogged)
 	}
 }
 #endif
-
-void StructureClass::drawSelectionBox(Image * dest)
-{
-    // TODO: Should be glowing..
-    dest->drawRect(Rect(m_drawnPos.x, m_drawnPos.y, w, h), COLOUR_WHITE);
-    dest->fillRect(getHealthColour(), Rect(m_drawnPos.x + 2, m_drawnPos.y + 2, ((int)(((float)m_health/(float)m_maxHealth)*(w - 1))), 2));
-}
 
 void StructureClass::animate()
 {

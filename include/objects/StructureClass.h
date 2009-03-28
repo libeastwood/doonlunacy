@@ -19,8 +19,6 @@ class StructureClass : public ObjectClass
     virtual ~StructureClass();
     //@} 
     
-    virtual void drawSelectionBox(Image * dest);
-    
     virtual void animate();
 
 	inline int getPowerRequirement() { return m_powerRequirement; }

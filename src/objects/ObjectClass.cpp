@@ -134,8 +134,20 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 
 void ObjectClass::drawSelectionBox(Image* dest)
 {
-    m_selectionBox->blitTo(dest, m_drawnPos);
-    dest->drawHLine(UPoint(m_drawnPos.x + 1, m_drawnPos.y - 1), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
+    if(!m_selectionBoxGlowing)
+	m_selectionBoxGlowing = m_selectionBox->getCopy();
+
+    bool reset = m_fadingIn ? m_selectionBoxGlowing->fadeIn() : !m_selectionBoxGlowing->fadeOut();
+
+    m_selectionBoxGlowing->blitTo(dest, m_drawnPos);
+
+    if(m_fadingIn != reset)
+    {
+	    m_selectionBoxGlowing.reset();
+	    m_fadingIn = reset;
+    }
+ 
+    dest->drawHLine(UPoint(m_drawnPos.x + 2, m_drawnPos.y + 2), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
 void ObjectClass::drawSmoke(Image *dest)
