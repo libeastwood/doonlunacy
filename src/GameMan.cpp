@@ -300,7 +300,7 @@ bool GameMan::LoadScenario(string scenarioName)
             string HouseStr, BuildingStr, health, PosStr;
             SplitString(tmp, 6, &HouseStr, &BuildingStr, &health, &PosStr);
 
-            int pos = atol(PosStr.c_str());
+            int pos = atoi(PosStr.c_str());
 
             int house;
 
