@@ -69,9 +69,7 @@ void GameMan::Init()
 void GameMan::Clear()
 {
     for (unsigned int i = 0; i < m_players->size(); i++)
-    {
         delete m_players->at(i);
-    }
     m_players->clear();
     
     /*
@@ -88,20 +86,36 @@ void GameMan::Clear()
     delete m_map;
 }
 
+ObjectClass * GameMan::getObject(uint32_t objectID) {
+    ObjectClass *object = NULL;
+    for(ObjectTypeMap::const_iterator iter = getObjectsBegin(); !object || iter != getObjectsEnd(); iter++)
+    {
+	ObjectMap::const_iterator objMap = (*iter).second.find(objectID);
+	if(objMap != (*iter).second.end())
+	    object = objMap->second;
+    }
+
+    return object;
+}
+
 uint32_t GameMan::addObject(ObjectClass *object) {
-    uint32_t objectID = ++m_objectIDCounter;
-    if(!m_objects.count(OBJECT_CLASS))
-	m_objects[OBJECT_CLASS] = ObjectMap();
-    m_objects[OBJECT_CLASS][objectID] = object;
+    uint32_t objectID = ++m_objectIDCounter,
+	     objectType = object->getAttributes();
+
+    if(m_objects.find(objectType) == m_objects.end())
+	m_objects[objectType] = ObjectMap();
+    m_objects[objectType][objectID] = object;
 
     return objectID;
 }
 
 void GameMan::removeObject(uint32_t objectID) {
-    m_objects[OBJECT_CLASS].erase(objectID);
+    for(ObjectTypeMap::const_iterator iter = getObjectsBegin(); iter != getObjectsEnd(); iter++)
+	if(((ObjectMap)iter->second).erase(objectID))
+	    return;
 }
 
-ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID)
+ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner)
 {
     std::string objectClass;
     ObjectClass* newObject = NULL;
@@ -283,19 +297,11 @@ bool GameMan::LoadScenario(string scenarioName)
             //Using INVALID_POS instead of NONE to avoid warnings.
             //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
             if (BuildingStr == "Concrete")
-            {
                 m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "Slab1", UPoint(pos % 64, pos / 64));
-            }
-
             else if (BuildingStr == "Wall")
-            {
                 m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, "Wall", UPoint(pos % 64, pos / 64));
-            }
-
             else
-            {
                 LOG_WARNING("GameMan", "LoadScenario: Invalid building string: %s", BuildingStr.c_str());
-            }
         }
 
         else
@@ -334,9 +340,7 @@ bool GameMan::LoadScenario(string scenarioName)
                 ObjectClass*  newStructure = (ObjectClass*)m_players->at(house)->placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
                 if (newStructure == NULL)
-                {
                     LOG_WARNING("GameMan", "LoadScenario: Invalid position: %s", PosStr.c_str());
-                }
             }
 
         }
@@ -410,12 +414,8 @@ void GameMan::TakeMapScreenshot(string filename)
 
 
     for (int i = 0 ; i < w; i++)
-    {
         for (int j = 0 ; j < h; j++)
-        {
             m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
-        }
-    }
 
     SDL_SaveBMP(img->getSurface(), filename.c_str());
 
@@ -429,12 +429,13 @@ void GameMan::Unselect(List* objectList)
 
 void GameMan::Update(float dt)
 {
-    for(ObjectMap::const_iterator iter = getObjectsBegin(); iter != getObjectsEnd(); iter++)
-    {
-	ObjectClass *object = iter->second;
-	if (object->clearObject())
-	    removeObject(object->getObjectID());
-	else
-	    object->update(dt);
+    for(ObjectTypeMap::const_iterator objTypeMap = getObjectsBegin(); objTypeMap != getObjectsEnd(); objTypeMap++)
+    	for(ObjectMap::const_iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++)
+    	{
+    	    ObjectClass *object = objMap->second;
+    	    if (object->clearObject())
+		m_objects[0].erase(objMap->first);
+    	    else
+    		object->update(dt);
     }
 }

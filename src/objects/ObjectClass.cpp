@@ -73,7 +73,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
 
     m_objectID = GameMan::Instance()->addObject(this);
-    std::cout << "ny :" << m_objectID << " " << getAttributes() << " " << getObjectName() << std::endl;
 }
 
 ObjectClass::~ObjectClass()

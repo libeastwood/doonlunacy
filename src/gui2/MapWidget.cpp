@@ -10,6 +10,7 @@
 #include "objects/StructureClass.h"
 #include "objects/UnitClass.h"
 
+#include <stack>
 MapWidget::MapWidget()
 {
     m_view = SPoint(0, 0);
@@ -218,30 +219,31 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     
 
-    std::vector<ObjectClass*>	weapons;
-
-    for(ObjectMap::const_iterator iter = GameMan::Instance()->getObjectsBegin(); iter != GameMan::Instance()->getObjectsEnd(); iter++)
-    {
-	ObjectClass *object = iter->second;
-    	if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
-	{
-	    // We need to draw this later to ensure that they get drawn on top
-    	    if(object->isWeapon())
-    		weapons.push_back(object);
-	    else
+    std::stack<ObjectMap> attributeKeys;
+    for(ObjectTypeMap::const_iterator objTypeMap = GameMan::Instance()->getObjectsBegin(); objTypeMap != GameMan::Instance()->getObjectsEnd(); objTypeMap++) {
+	uint32_t attribute = objTypeMap->first;
+	if(attribute & OBJECT_WEAPON || attribute & OBJECT_AIRUNIT) {
+	    attributeKeys.push((*objTypeMap).second);
+	    continue;
+	}
+	for(ObjectMap::const_iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++) {
+	    ObjectClass *object = objMap->second;
+	    if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
 		object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 	}
     }
-
-    for (unsigned int i = 0; i < m_selectedList.size(); i++)
-    {
-        ObjectClass *tmp = m_selectedList.at(i);
-        if (tmp->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
-	    tmp->drawSelectionBox(dest);
+    while(!attributeKeys.empty()) {
+	for(ObjectMap::const_iterator objMap = attributeKeys.top().begin(); objMap != attributeKeys.top().end(); objMap++) {
+	    ObjectClass *object = objMap->second;
+	    if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+    		object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+	}
+	attributeKeys.pop();
     }
 
-    for (unsigned int i = 0; i < weapons.size(); i++)
-	weapons[i]->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+    for (std::list<ObjectClass*>::const_iterator iter = m_selectedList.begin(); iter != m_selectedList.end(); iter++)
+        if ((*iter)->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
+	    (*iter)->drawSelectionBox(dest);
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
     {
