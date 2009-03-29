@@ -3,12 +3,11 @@
 #include "MapClass.h"
 #include "objects/StructureClass.h"
 
-StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName) : ObjectClass(newOwner, structureName)
+StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attribute) : ObjectClass(newOwner, structureName, attribute | OBJECT_STRUCTURE)
 {
     DataCache *cache = DataCache::Instance();
 
     m_justPlacedTimer = 0;
-    m_attributes |= OBJECT_STRUCTURE;
     try {
 	    m_isAnimating = cache->getPyObjectAttribute<bool>(m_objectName, "animate");
 	    m_firstAnimFrame = cache->getPyObjectAttribute<int>(m_objectName, "firstAnimFrame");

@@ -11,9 +11,8 @@
 #include "objects/ObjectClass.h"
 #include "objects/UnitClass.h"
 
-UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(newOwner, unitName)
+UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
-    m_attributes |= OBJECT_UNIT;
     m_attacking = false;
     m_canAttackStuff = true;
     m_moving = false;

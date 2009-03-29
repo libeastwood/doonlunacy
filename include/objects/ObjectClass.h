@@ -38,7 +38,7 @@ class ObjectClass : public Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner, std::string objectName);
+    ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute = 0);
     virtual ~ObjectClass();
     //@}
 
@@ -80,7 +80,7 @@ class ObjectClass : public Rect
     inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
     inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
     inline bool isWeapon()    { return m_attributes & OBJECT_WEAPON; }
-    inline bool getAttributes() { return m_attributes; }
+    inline uint32_t getAttributes() { return m_attributes; }
 
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }
@@ -92,7 +92,7 @@ class ObjectClass : public Rect
     inline bool wasDestroyed() { return m_destroyed; }
     inline bool wasForced() { return m_forced; }
 
-    std::string getObjectName() { return m_objectName; }
+    inline std::string getObjectName() { return m_objectName; }
     int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
@@ -124,8 +124,6 @@ class ObjectClass : public Rect
 
     std::string m_objectName;
     
-    uint32_t m_attributes;
-
     bool m_active,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_destroyed,
@@ -220,6 +218,10 @@ class ObjectClass : public Rect
     UPoint m_offset;
 
     ObjectClass *m_target;
+
+  private:
+    uint32_t m_attributes;
+
 };
 
 #endif //OBJECTCLASS_H

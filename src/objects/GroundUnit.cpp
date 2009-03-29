@@ -2,9 +2,8 @@
 
 #include "objects/GroundUnit.h"
 
-GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName) : UnitClass(newOwner, unitName)
+GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName, uint32_t attributes) : UnitClass(newOwner, unitName, attributes | OBJECT_GROUNDUNIT)
 {
-    m_attributes |= OBJECT_GROUNDUNIT;
 }
 
 GroundUnit::~GroundUnit()

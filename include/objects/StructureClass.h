@@ -15,7 +15,7 @@ class StructureClass : public ObjectClass
   public:
     //! @name Constructors & Destructor
     //@{
-    StructureClass(PlayerClass* newOwner, std::string structureName);
+    StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attributes = 0);
     virtual ~StructureClass();
     //@} 
     

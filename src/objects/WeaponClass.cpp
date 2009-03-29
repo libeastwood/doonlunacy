@@ -9,12 +9,10 @@
 #include "mmath.h"
 
 
-WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air) :
-    ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName)
+WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
+    ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName, attribute | OBJECT_WEAPON)
 {
     DataCache* cache = DataCache::Instance();
-
-    m_attributes |= OBJECT_WEAPON;
 
     m_groundBlocked = false;
     m_airAttack = air;

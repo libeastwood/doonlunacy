@@ -1,7 +1,6 @@
 #include "objects/BuilderClass.h"
 
-BuilderClass::BuilderClass(PlayerClass* newOwner, std::string structureName) : StructureClass(newOwner, structureName) {
-    m_attributes |= OBJECT_STRUCTURE;
+BuilderClass::BuilderClass(PlayerClass* newOwner, std::string structureName, uint32_t attribute) : StructureClass(newOwner, structureName, attribute | OBJECT_BUILDER) {
 }
 
 BuilderClass::~BuilderClass()

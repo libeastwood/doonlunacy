@@ -8,9 +8,12 @@
 #include "MapClass.h"
 #include "SoundPlayer.h"
 
-ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
+ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute) :
     Rect(0, 0, 0, 0)
 {
+    m_attributes = OBJECT_CLASS | attribute;
+
+
     DataCache *cache = DataCache::Instance();
     std::string graphic;
 
@@ -35,7 +38,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 
     m_attackMode = STANDGROUND;
 
-    m_attributes = OBJECT_CLASS;
 
     try {
 	m_angle = cache->getPyObjectAttribute<int>(m_objectName, "angle");
@@ -71,6 +73,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
 
     m_objectID = GameMan::Instance()->addObject(this);
+    std::cout << "ny :" << m_objectID << " " << getAttributes() << " " << getObjectName() << std::endl;
 }
 
 ObjectClass::~ObjectClass()
