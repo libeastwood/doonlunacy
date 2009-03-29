@@ -59,8 +59,8 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 	m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
 	m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
 	m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
-	w = cache->getPyObjectAttribute<int>(m_objectName, "size", 0) * BLOCKSIZE;
-	h = cache->getPyObjectAttribute<int>(m_objectName, "size", 1) * BLOCKSIZE;
+	w = (cache->getPyObjectAttribute<float>(m_objectName, "size", 0) * BLOCKSIZE);
+	h = (cache->getPyObjectAttribute<float>(m_objectName, "size", 1) * BLOCKSIZE);
     }
     catch(python::error_already_set const &)
     {
