@@ -36,7 +36,7 @@ GameMan::~GameMan()
     Clear();
 }
 
-void GameMan::AddPlayer(PLAYERHOUSE House, bool ai, int team)
+void GameMan::AddPlayer(HOUSETYPE House, bool ai, int team)
 {
     if (m_players->size() > (unsigned)House)
     {
@@ -173,12 +173,12 @@ bool GameMan::LoadScenario(string scenarioName)
     m_map = MapGenerator::Instance()->createOldMap(FieldString, SeedNum, BloomString);
     // now set up all the players
 
-    AddPlayer(ATREIDES, false, 1);
-    AddPlayer(ORDOS, false, 2);
-    AddPlayer(HARKONNEN, false, 2);
-    AddPlayer(SARDAUKAR, false, 2);
-    AddPlayer(FREMEN, false, 2);
-    AddPlayer(MERCENERY, false, 2);
+    AddPlayer(HOUSE_ATREIDES, false, 1);
+    AddPlayer(HOUSE_ORDOS, false, 2);
+    AddPlayer(HOUSE_HARKONNEN, false, 2);
+    AddPlayer(HOUSE_SARDAUKAR, false, 2);
+    AddPlayer(HOUSE_FREMEN, false, 2);
+    AddPlayer(HOUSE_MERCENARY, false, 2);
 
     IniFile::KeyListHandle myListHandle;
 

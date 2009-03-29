@@ -1,6 +1,7 @@
 #ifndef DUNE_MAPGENERATOR_H
 #define DUNE_MAPGENERATOR_H
 
+#include "houses.h"
 #include "singleton.h"
 #include "objects/ObjectClass.h"
 #include "MapClass.h"
@@ -30,7 +31,7 @@ class MapGenerator : public Singleton<MapGenerator>
   public:
     //! @name Map loading and generating
     //@{
-    void addPlayer(PLAYERHOUSE House, bool ai, int team);
+    void addPlayer(HOUSETYPE House, bool ai, int team);
 
     GameMan* getGMan() { return m_gman; }
 

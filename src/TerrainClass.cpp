@@ -67,7 +67,7 @@ ObjectClass* TerrainClass::getDeadObject()
 */
 ObjectClass* TerrainClass::getGroundObject()
 {
-    std::list<Uint32>::const_iterator iter;
+    std::list<uint32_t>::const_iterator iter;
     for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
     {
 	ObjectClass *object = GameMan::Instance()->getObject(*iter);
@@ -157,7 +157,7 @@ bool TerrainClass::unassignObject(Uint32 objectID) {
     return ret;
 }
 
-ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID) 
+ObjectClass* TerrainClass::getObjectWithID(uint32_t objectID) 
 {
 	std::list<Uint32>::const_iterator iter;
 	for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)

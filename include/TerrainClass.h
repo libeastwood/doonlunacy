@@ -86,7 +86,7 @@ class TerrainClass  : public UPoint
 	//ObjectClass* getInfantry(int i);*/
 	ObjectClass* getObject();
 	ObjectClass* getObjectAt(UPoint pos);
-	ObjectClass* getObjectWithID(Uint32 objectID);
+	ObjectClass* getObjectWithID(uint32_t objectID);
 
 	inline bool hasAnObject() { return !m_assignedObjects.empty(); }
 

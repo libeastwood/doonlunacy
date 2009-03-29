@@ -53,7 +53,7 @@ class GameMan : public Singleton<GameMan>
     PlayerClass * GetPlayer(int i) { return m_players->at(i); }
     inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
     inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
-    inline ObjectClass * getObject(uint32_t objectID);
+    ObjectClass * getObject(uint32_t objectID);
     uint32_t addObject(ObjectClass* object);
     void removeObject(uint32_t objectID);
     PlayerClass * LocalPlayer() { return m_localPlayer; }
