@@ -52,7 +52,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
 	m_numFrames = cache->getPyObjectAttribute<int>(m_objectName, "numFrames");
 	m_health = cache->getPyObjectAttribute<int>(m_objectName, "health");
 	m_offset = UPoint(PointFloat(cache->getPyObjectAttribute<PointFloat>(m_objectName, "offset")) * BLOCKSIZE),
-		 m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
+	m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
 	m_realPos = cache->getPyObjectAttribute<PointFloat>(m_objectName, "realPos");
 	m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
 	m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
@@ -428,4 +428,9 @@ void ObjectClass::unassignFromMap(SPoint pos)
 {
     if (m_owner->getMap()->cellExists(pos))
 	m_owner->getMap()->getCell(pos)->unassignObject(getObjectID());
+}
+
+void ObjectClass::update(float dt)
+{
+    m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
 }

@@ -27,6 +27,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_nextSpotFound = false;
     m_respondable = true;
     m_attackMode = DEFENSIVE;
+    m_target = NULL;
 
     m_speedCap = NONE;
 
@@ -36,7 +37,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName) : ObjectClass(
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
     setActive(false);
-    m_gameSpeed = Settings::Instance()->GetGameSpeed();
 }
 
 /*virtual*/
@@ -534,8 +534,7 @@ void UnitClass::turn()
 /*virtual*/
 void UnitClass::update(float dt)
 {
-    m_adjust = dt * (m_gameSpeed * 10);
-    
+    ObjectClass::update(dt);
     if (!m_destroyed)
     {
         if (m_active)

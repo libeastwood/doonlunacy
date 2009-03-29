@@ -56,7 +56,7 @@ class ObjectClass : public Rect
 
     void drawSmoke(Image *dest);
     virtual void destroy();
-    virtual void update(float dt){};
+    virtual void update(float dt);
     virtual void animate();
     virtual void doDeath(Image *dest);
 
@@ -185,8 +185,8 @@ class ObjectClass : public Rect
     int m_armor,
         m_radius,
 	m_explosionSize,
-        m_numDeathFrames,
 	m_guardRange,
+        m_numDeathFrames,
 	m_numFrames,
         m_frameTime,
         m_frameTimer,

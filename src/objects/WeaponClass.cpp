@@ -147,8 +147,8 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 
 void WeaponClass::update(float dt)
 {
+    ObjectClass::update(dt);
     MapClass* map = GameMan::Instance()->GetMap();
-    m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
 
     if (m_shooter && m_shooter->wasDestroyed())
 	m_shooter = NULL;
