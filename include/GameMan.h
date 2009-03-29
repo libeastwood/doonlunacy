@@ -36,7 +36,7 @@ class GameMan : public Singleton<GameMan>
     bool LoadScenario(std::string scenarioName);
     
     void AddPlayer(HOUSETYPE House, bool ai, int team);
-    ObjectClass* createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID = NONE);
+    ObjectClass* createObject(std::string itemName, PlayerClass* Owner);
 
     /*!
      *  As the name suggests it saves current map to a BMP file.
