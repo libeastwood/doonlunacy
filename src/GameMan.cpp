@@ -242,7 +242,7 @@ bool GameMan::LoadScenario(string scenarioName)
         {
             // Gen Object/Structure
             string PosStr = tmpkey.substr(3, tmpkey.size() - 3);
-            int pos = atol(PosStr.c_str());
+            int pos = atoi(PosStr.c_str());
 
             string HouseStr, BuildingStr;
             SplitString(tmp, 2, &HouseStr, &BuildingStr);
