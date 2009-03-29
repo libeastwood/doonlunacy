@@ -52,7 +52,7 @@ void GameMan::AddPlayer(PLAYERHOUSE House, bool ai, int team)
 
     else
     {
-        PlayerClass * localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
+        PlayerClass *localPlayer = new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team);
         m_players->push_back(localPlayer);
         m_localPlayer = m_players->at(0);//localPlayer;
     }
@@ -63,9 +63,7 @@ void GameMan::AddPlayer(PLAYERHOUSE House, bool ai, int team)
 void GameMan::Init()
 {
     m_players = new Players;
-    m_objectTree = new ObjectTree();
-    m_objects = new std::vector<ObjectClass*>;
-
+    m_objectIDCounter = 0;
 }
 
 void GameMan::Clear()
@@ -88,6 +86,19 @@ void GameMan::Clear()
     */
     
     delete m_map;
+}
+
+uint32_t GameMan::addObject(ObjectClass *object) {
+    uint32_t objectID = ++m_objectIDCounter;
+    if(!m_objects.count(OBJECT_CLASS))
+	m_objects[OBJECT_CLASS] = ObjectMap();
+    m_objects[OBJECT_CLASS][objectID] = object;
+
+    return objectID;
+}
+
+void GameMan::removeObject(uint32_t objectID) {
+    m_objects[OBJECT_CLASS].erase(objectID);
 }
 
 ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID)
@@ -122,13 +133,6 @@ ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner, Uin
 
 	if(newObject == NULL)
 		return NULL;
-	
-	if(ObjectID == NONE) {
-		ObjectID = GetObjectTree()->AddObject(newObject);
-		newObject->setObjectID(ObjectID);
-	} else {
-		newObject->setObjectID(ObjectID);
-	}
 	
 	return newObject;
 }
@@ -425,12 +429,12 @@ void GameMan::Unselect(List* objectList)
 
 void GameMan::Update(float dt)
 {
-    std::vector<ObjectClass*>::iterator object;
-    for (object = m_objects->begin(); object != m_objects->end(); object++)
+    for(ObjectMap::const_iterator iter = getObjectsBegin(); iter != getObjectsEnd(); iter++)
     {
-	if ((*object)->clearObject())
-	    m_objectTree->RemoveObject((*object)->getObjectID());
+	ObjectClass *object = iter->second;
+	if (object->clearObject())
+	    removeObject(object->getObjectID());
 	else
-	    (*object)->update(dt);
+	    object->update(dt);
     }
 }

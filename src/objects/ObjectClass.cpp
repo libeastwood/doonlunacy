@@ -17,8 +17,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_objectName = objectName;
 
 
-    m_objectID = NONE;
-
     m_animCounter = 0;
     m_frameTime = 5;
     m_frameTimer = -1;
@@ -72,7 +70,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName) :
     m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
 
-    GameMan::Instance()->GetObjects()->push_back(this);
+    m_objectID = GameMan::Instance()->addObject(this);
 }
 
 ObjectClass::~ObjectClass()

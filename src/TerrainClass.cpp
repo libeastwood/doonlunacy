@@ -70,7 +70,7 @@ ObjectClass* TerrainClass::getGroundObject()
     std::list<Uint32>::const_iterator iter;
     for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
     {
-	ObjectClass *object = GameMan::Instance()->GetObjectTree()->getObject(*iter);
+	ObjectClass *object = GameMan::Instance()->getObject(*iter);
 	if(object->isAGroundUnit())
 	    return object;
     }
@@ -104,7 +104,7 @@ void TerrainClass::assignObject(Uint32 newObjectID)
 ObjectClass* TerrainClass::getObject() {
 	ObjectClass* temp = NULL;
 	if(!m_assignedObjects.empty())
-		temp = GameMan::Instance()->GetObjectTree()->getObject(m_assignedObjects.front());
+		temp = GameMan::Instance()->getObject(m_assignedObjects.front());
 
 	return temp;
 }
@@ -162,7 +162,7 @@ ObjectClass* TerrainClass::getObjectWithID(Uint32 objectID)
 	std::list<Uint32>::const_iterator iter;
 	for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
 		if(*iter == objectID) 
-			return GameMan::Instance()->GetObjectTree()->getObject(*iter);
+			return GameMan::Instance()->getObject(*iter);
 
 	return NULL;
 }
@@ -188,7 +188,7 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 
     std::list<Uint32>::const_iterator iterator;
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
-	ObjectClass* object = GameMan::Instance()->GetObjectTree()->getObject(*iterator);
+	ObjectClass* object = GameMan::Instance()->getObject(*iterator);
 
 	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
 	distance = lround(distance_from(centrePoint, realPos));

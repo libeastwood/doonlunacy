@@ -1,9 +1,10 @@
 #ifndef DUNE_GAMEMANAGER_H
 #define DUNE_GAMEMANAGER_H
 
+#include <map>
+
 #include "MapGenerator.h"
 #include "MapClass.h"
-#include "ObjectTree.h"
 #include "PlayerClass.h"
 #include "singleton.h"
 
@@ -14,6 +15,8 @@
 typedef std::list <Uint32> List;
 
 typedef std::vector<PlayerClass*> Players;
+typedef std::map<uint32_t, ObjectClass*> ObjectMap;
+typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
@@ -46,12 +49,15 @@ class GameMan : public Singleton<GameMan>
     
     bool SplitString(std::string ParseString, unsigned int NumStringPointers, ...);
     
-    MapClass* GetMap() { return m_map; }
-    Players* GetPlayers() { return m_players; }
-    PlayerClass* GetPlayer(int i) { return m_players->at(i); }
-    std::vector<ObjectClass*> * GetObjects() { return m_objects; }
-    PlayerClass* LocalPlayer() { return m_localPlayer; }
-    ObjectTree* GetObjectTree() { return m_objectTree; }
+    MapClass * GetMap() { return m_map; }
+    Players * GetPlayers() { return m_players; }
+    PlayerClass * GetPlayer(int i) { return m_players->at(i); }
+    inline ObjectMap::const_iterator getObjectsBegin() { return m_objects[OBJECT_CLASS].begin(); }
+    inline ObjectMap::const_iterator getObjectsEnd() { return m_objects[OBJECT_CLASS].end(); }
+    inline ObjectClass * getObject(uint32_t objectID) { return m_objects[OBJECT_CLASS][objectID]; }
+    uint32_t addObject(ObjectClass* object);
+    void removeObject(uint32_t objectID);
+    PlayerClass * LocalPlayer() { return m_localPlayer; }
     void Update(float dt);
 	//FIXME: This shouldn't be here
 	bool placingMode;
@@ -61,10 +67,10 @@ class GameMan : public Singleton<GameMan>
   protected:
 
     MapClass* m_map;
-    ObjectTree* m_objectTree;
     PlayerClass * m_localPlayer;
     Players* m_players;
-    std::vector<ObjectClass*> *m_objects;
+    ObjectTypeMap m_objects;
+    uint32_t m_objectIDCounter;
 };
 
 #endif // DUNE_GAMEMANAGER_H

@@ -48,8 +48,8 @@ SET( DOONLUNACY_BASE_SRCS
   objects/WeaponClass.cpp
   GameMan.cpp
   PriorityQ.cpp
-  ObjectTree.cpp
-  ObjectPointer.cpp
+  #ObjectTree.cpp
+  #ObjectPointer.cpp
 )
 
 SET( DOONLUNACY_STATE_SRCS

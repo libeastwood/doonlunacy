@@ -4,7 +4,6 @@
 #define VIS_ALL -1
 
 #include "Rect.h"
-#include "ObjectPointer.h"
 #include "PlayerClass.h"
 
 #include <string>
@@ -81,6 +80,7 @@ class ObjectClass : public Rect
     inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
     inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
     inline bool isWeapon()    { return m_attributes & OBJECT_WEAPON; }
+    inline bool getAttributes() { return m_attributes; }
 
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }
@@ -219,7 +219,7 @@ class ObjectClass : public Rect
 
     UPoint m_offset;
 
-    ObjectPointer m_target;
+    ObjectClass *m_target;
 };
 
 #endif //OBJECTCLASS_H

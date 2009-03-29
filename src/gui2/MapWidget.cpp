@@ -218,18 +218,20 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     
 
-    std::vector<ObjectClass*>	weapons,
-				*objects = GameMan::Instance()->GetObjects(),
+    std::vector<ObjectClass*>	weapons;
 
-    for(std::vector<ObjectClass*>::const_iterator iter = objects->begin(); iter != objects->end(); iter++)
-    	if(m_map->getCell(SPoint((*iter)->x, (*iter)->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+    for(ObjectMap::const_iterator iter = GameMan::Instance()->getObjectsBegin(); iter != GameMan::Instance()->getObjectsEnd(); iter++)
+    {
+	ObjectClass *object = iter->second;
+    	if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
 	{
 	    // We need to draw this later to ensure that they get drawn on top
-    	    if((*iter)->isWeapon())
-    		weapons.push_back(*iter);
+    	    if(object->isWeapon())
+    		weapons.push_back(object);
 	    else
-    		(*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+		object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 	}
+    }
 
     for (unsigned int i = 0; i < m_selectedList.size(); i++)
     {
