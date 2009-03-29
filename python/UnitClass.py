@@ -29,7 +29,7 @@ class GroundUnit(Unit):
 class InfantryUnit(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.picture = "ObjPic_Trooper"
+        self.graphic = "ObjPic_Trooper"
         self.deathAnim = "ObjPic_DeadInfantry"
         self.numDeathFrames = 2
         self.armor = 1
