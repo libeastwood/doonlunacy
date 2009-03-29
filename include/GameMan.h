@@ -7,12 +7,11 @@
 #include "MapClass.h"
 #include "PlayerClass.h"
 #include "singleton.h"
+#include "houses.h"
 
 #include "objects/StructureClass.h"
 #include "objects/UnitClass.h"
 #include "objects/WeaponClass.h"
-
-typedef std::list <Uint32> List;
 
 typedef std::vector<PlayerClass*> Players;
 typedef std::map<uint32_t, ObjectClass*> ObjectMap;
@@ -36,7 +35,7 @@ class GameMan : public Singleton<GameMan>
     void Clear();
     bool LoadScenario(std::string scenarioName);
     
-    void AddPlayer(PLAYERHOUSE House, bool ai, int team);
+    void AddPlayer(HOUSETYPE House, bool ai, int team);
     ObjectClass* createObject(std::string itemName, PlayerClass* Owner, Uint32 ObjectID = NONE);
 
     /*!
@@ -52,9 +51,9 @@ class GameMan : public Singleton<GameMan>
     MapClass * GetMap() { return m_map; }
     Players * GetPlayers() { return m_players; }
     PlayerClass * GetPlayer(int i) { return m_players->at(i); }
-    inline ObjectMap::const_iterator getObjectsBegin() { return m_objects[OBJECT_CLASS].begin(); }
-    inline ObjectMap::const_iterator getObjectsEnd() { return m_objects[OBJECT_CLASS].end(); }
-    inline ObjectClass * getObject(uint32_t objectID) { return m_objects[OBJECT_CLASS][objectID]; }
+    inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
+    inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
+    inline ObjectClass * getObject(uint32_t objectID);
     uint32_t addObject(ObjectClass* object);
     void removeObject(uint32_t objectID);
     PlayerClass * LocalPlayer() { return m_localPlayer; }
