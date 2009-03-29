@@ -93,7 +93,7 @@ class DataCache : public Singleton<DataCache>
         void loadPyObjects();
         
         template<typename T>
-        T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
+        const T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
         {
 	    python::object obj = m_pyObjects[objectName].attr(parameter.c_str());
 	    if(index < 0)
