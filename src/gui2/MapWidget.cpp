@@ -218,6 +218,19 @@ void MapWidget::draw(Image * dest, SPoint off)
         }
     
 
+    std::vector<ObjectClass*>	weapons,
+				*objects = GameMan::Instance()->GetObjects(),
+
+    for(std::vector<ObjectClass*>::const_iterator iter = objects->begin(); iter != objects->end(); iter++)
+    	if(m_map->getCell(SPoint((*iter)->x, (*iter)->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+	{
+	    // We need to draw this later to ensure that they get drawn on top
+    	    if((*iter)->isWeapon())
+    		weapons.push_back(*iter);
+	    else
+    		(*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+	}
+
     for (unsigned int i = 0; i < m_selectedList.size(); i++)
     {
         ObjectClass *tmp = m_selectedList.at(i);
@@ -225,10 +238,8 @@ void MapWidget::draw(Image * dest, SPoint off)
 	    tmp->drawSelectionBox(dest);
     }
 
-    std::vector<ObjectClass*> *objects = GameMan::Instance()->GetObjects();
-    for(std::vector<ObjectClass*>::const_iterator iter = objects->begin(); iter != objects->end(); iter++)
-	if((*iter)->isWeapon() || (m_map->getCell(SPoint((*iter)->x, (*iter)->y)))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
-	    (*iter)->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
+    for (unsigned int i = 0; i < weapons.size(); i++)
+	weapons[i]->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
     {
