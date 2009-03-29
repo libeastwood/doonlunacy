@@ -84,7 +84,7 @@ class Quad(GroundUnit):
 class Raider(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.graphic = "ObjPic_Raider"
+        self.graphic = "ObjPic_Trike"
         self.armor = 3
         self.health = self.maxHealth = 250
         self.speed = 1.3
