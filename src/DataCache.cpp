@@ -56,19 +56,14 @@ void DataCache::Init(){
 
     ResMan::Instance()->addRes("ENGLISH");
 
-    addPalette("INTRO:WESTWOOD.PAL");
     // Not properly decoded yet..
     // CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
-    addPalette("INTRO:INTRO.PAL");
     data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
     IntroStrings = new StringFile(data);
     free(data);
 
     ResMan::Instance()->addRes("DUNE");
-
-    addPalette("DUNE:BENE.PAL");
-    addPalette("DUNE:IBM.PAL");
 
     ResMan::Instance()->addRes("SOUND");
 
@@ -121,18 +116,15 @@ void DataCache::loadPyObjects()
     }
 }
 
-void DataCache::addPalette(std::string paletteFile)
-{
-    size_t len;
-    uint8_t *data = ResMan::Instance()->readFile(paletteFile, &len);
-    PalfilePtr tmp (new PalFile(data, len));
-    free(data);
-
-    m_palette[paletteFile] = tmp;
-}
-
 SDL_Palette* DataCache::getPalette(std::string paletteFile)
 {
+    if(m_palette.find(paletteFile) == m_palette.end())
+    {
+        size_t len;
+        uint8_t *data = ResMan::Instance()->readFile(paletteFile, &len);
+        m_palette[paletteFile] = PalfilePtr(new PalFile(data, len));
+        free(data);
+    }
     return m_palette[paletteFile]->getPalette();
 }
 
@@ -317,5 +309,3 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 DataCache::~DataCache() {
 
 }
-
-// vim:ts=8:sw=4:et

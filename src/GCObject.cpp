@@ -115,8 +115,6 @@ void GCObject::drawImage()
 		SDL_Palette* palette;
         if(node.lookupValue("palette", variable))
 		{
-			data = ResMan::Instance()->readFile(variable, &len);
-			PalfilePtr tmp(new PalFile(data, len));
 			palette = DataCache::Instance()->getPalette(variable);
 		}
 		else

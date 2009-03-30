@@ -62,12 +62,6 @@ class DataCache : public Singleton<DataCache>
          */
         AnimationLabel *getAnimationLabel(std::string path);
 
-        /*! Adds palette from a file 
-         *  @param paletteFile file from which Palette is to be loaded
-         */
-		void addPalette(std::string paletteFile);
-		//@}
-
         //! @name Fetch methods	
         //@{
         
