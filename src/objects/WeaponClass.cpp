@@ -154,7 +154,7 @@ void WeaponClass::update(float dt)
     if (!m_destroyed)
     {
 	UPoint oldLocation = UPoint(x,y);
-	LOG_INFO("WeaponClass", "Old location was %d-%d", x,y);
+	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
 
 	m_realPos.x += m_xSpeed * m_adjust;  //keep the bullet moving by its current speeds
 	m_realPos.y += m_ySpeed * m_adjust;
