@@ -68,17 +68,13 @@ void GameMan::Clear()
 {
     m_players.clear();
     
-    /*
-    for (unsigned int i = 0; i < m_units->size(); i++)
-    {
-        UnitClass* unit = m_units->back(); 
-        m_objectTree->RemoveObject(unit->getObjectID());
-        m_units->pop_back();
-        delete unit;
-    }
-    m_units->clear();
-    */
-    
+    for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
+    	for(ObjectMap::iterator objMap = objTypeMap->second.begin(); objMap != objTypeMap->second.end(); objMap++)
+    	{
+	    objTypeMap->second.erase(objMap);
+	    delete objMap->second;
+	}
+
     delete m_map;
 }
 
@@ -420,12 +416,12 @@ void GameMan::Unselect(List* objectList)
 
 void GameMan::Update(float dt)
 {
-    for(ObjectTypeMap::const_iterator objTypeMap = getObjectsBegin(); objTypeMap != getObjectsEnd(); objTypeMap++)
-    	for(ObjectMap::const_iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++)
+    for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
+    	for(ObjectMap::iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++)
     	{
     	    ObjectClass *object = objMap->second;
     	    if (object->clearObject())
-		m_objects[0].erase(objMap->first);
+		objTypeMap->second.erase(objMap);
     	    else
     		object->update(dt);
     }
