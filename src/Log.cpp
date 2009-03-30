@@ -96,6 +96,17 @@ void Log::logInfo(ConstString logSystem, const char *format, ...)
         
     va_end(args);
 }
+void Log::logDebug(ConstString logSystem, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    // try to log it
+    if (checkMessageVerbosity(logSystem, LV_DEBUG))
+        doLog(logSystem, LV_DEBUG, format, args);
+        
+    va_end(args);
+}
        
 void Log::setVerbosity(ConstString logSystem, LogVerbosity verbosity)
 {

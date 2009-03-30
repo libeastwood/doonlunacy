@@ -49,6 +49,7 @@ enum LogVerbosity
     LV_WARNING,
     //! look what's happening
     LV_INFO,
+    LV_DEBUG,
     //! first user loglevel
     LV_AVAILABLE,
     //! last loglevel (used to set full logging)
@@ -107,7 +108,7 @@ class LogBackendStdout : public LogBackend
     
     @note: For logging itself, do not use this class, use macros !
 
-    @see LOG, LOG_FATAL, LOG_ERROR, LOG_WARNING, LOG_INFO
+    @see LOG, LOG_FATAL, LOG_ERROR, LOG_WARNING, LOG_INFO, LOG_DEBUG
 */
 class Log : public Singleton<Log>
 {
@@ -136,6 +137,7 @@ class Log : public Singleton<Log>
         void logError(ConstString logSystem, const char *format, ...);
         void logWarning(ConstString logSystem, const char *format, ...);
         void logInfo(ConstString logSystem, const char *format, ...);
+        void logDebug(ConstString logSystem, const char *format, ...);
 
         //@}
 
@@ -218,6 +220,7 @@ class Log : public Singleton<Log>
 #define LOG_WARNING   Log::Instance()->logWarning
 //! Log info message emitted by given system
 #define LOG_INFO      Log::Instance()->logInfo
+#define LOG_DEBUG     Log::Instance()->logDebug
 
 //! Increase indentation for following messages
 #define LOG_INDENT      Log::Instance()->indent
@@ -237,6 +240,7 @@ class Log : public Singleton<Log>
 #define LOG_ERROR     ((void)(0))
 #define LOG_WARNING   ((void)(0))
 #define LOG_INFO      ((void)(0))
+#define LOG_DEBUG     ((void)(0))
 
 #define LOG_INDENT      ((void)(0))
 #define LOG_UNINDENT    ((void)(0))
