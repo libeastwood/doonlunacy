@@ -120,7 +120,7 @@ void GCObject::drawImage()
 			palette = DataCache::Instance()->getPalette(variable);
 		}
 		else
-			palette = DataCache::Instance()->getPalette(IBM_PAL);
+			palette = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
 
         if(node.lookupValue("filename", variable)){
 			// TODO: autodetection would be nice..

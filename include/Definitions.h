@@ -31,14 +31,6 @@ typedef enum { MUSIC_ATTACK, /*!<Played when at least one of player's units was 
 			 } MUSICTYPE;
 
 
-typedef enum {
-	INTRO_PAL,
-	BENE_PAL,
-	IBM_PAL,
-	WESTWOOD_PAL,
-	NUM_PALETTES
-} Palette_enum;
-
 // ObjPics
 typedef enum {
 	ObjPic_Tank_Base,

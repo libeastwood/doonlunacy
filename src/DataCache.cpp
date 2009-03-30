@@ -56,19 +56,19 @@ void DataCache::Init(){
 
     ResMan::Instance()->addRes("ENGLISH");
 
-    addPalette(WESTWOOD_PAL, "INTRO:WESTWOOD.PAL");
+    addPalette("INTRO:WESTWOOD.PAL");
     // Not properly decoded yet..
     // CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
-    addPalette(INTRO_PAL, "INTRO:INTRO.PAL");
+    addPalette("INTRO:INTRO.PAL");
     data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
     IntroStrings = new StringFile(data);
     free(data);
 
     ResMan::Instance()->addRes("DUNE");
 
-    addPalette(BENE_PAL, "DUNE:BENE.PAL");
-    addPalette(IBM_PAL, "DUNE:IBM.PAL");
+    addPalette("DUNE:BENE.PAL");
+    addPalette("DUNE:IBM.PAL");
 
     ResMan::Instance()->addRes("SOUND");
 
@@ -121,25 +121,19 @@ void DataCache::loadPyObjects()
     }
 }
 
-void DataCache::addPalette(Palette_enum palette, std::string paletteFile)
+void DataCache::addPalette(std::string paletteFile)
 {
     size_t len;
     uint8_t *data = ResMan::Instance()->readFile(paletteFile, &len);
     PalfilePtr tmp (new PalFile(data, len));
     free(data);
 
-    m_palette[palette] = tmp;
-    m_palStrings.insert(std::pair<std::string, PalfilePtr>(paletteFile, tmp));
-}
-
-SDL_Palette* DataCache::getPalette(Palette_enum palette)
-{
-    return m_palette[palette]->getPalette();
+    m_palette[paletteFile] = tmp;
 }
 
 SDL_Palette* DataCache::getPalette(std::string paletteFile)
 {
-    return m_palStrings[paletteFile]->getPalette();
+    return m_palette[paletteFile]->getPalette();
 }
 
 
@@ -266,7 +260,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
             palette = getPalette(fileName);
         }
         else
-            palette = getPalette(IBM_PAL);
+            palette = getPalette("DUNE:IBM.PAL");
 
         node.lookupValue("filename", fileName);
         std::string type = fileName.substr(fileName.length()-3, 3);

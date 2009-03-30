@@ -23,8 +23,6 @@ class Mix_Chunk;
 class PalFile;
 typedef boost::shared_ptr<PalFile> PalfilePtr;
 
-typedef	std::map<std::string, PalfilePtr> palStrings;
-
 #include <boost/python.hpp>
 
 namespace python = boost::python;
@@ -65,10 +63,9 @@ class DataCache : public Singleton<DataCache>
         AnimationLabel *getAnimationLabel(std::string path);
 
         /*! Adds palette from a file 
-         *  @param palette identification number Palette is assigned
          *  @param paletteFile file from which Palette is to be loaded
          */
-		void addPalette(Palette_enum palette, std::string paletteFile);
+		void addPalette(std::string paletteFile);
 		//@}
 
         //! @name Fetch methods	
@@ -80,13 +77,12 @@ class DataCache : public Singleton<DataCache>
          *  @return pointer to SDL_Palette
          *  @note Currently we have several palettes:
          *        <ul>
-         *        <li>BENE_PAL - Used for Bene Gesserit mentat graphics</li>
-         *        <li>IBM_PAL - Used for sprites</li>
-         *        <li>INTRO_PAL - Used in Intro sequence</li>
-         *        <li>WESTWOOD_PAL - Not properly decoded yet..</li>
+         *        <li>DUNE:BENE.PAL	- Used for Bene Gesserit mentat graphics</li>
+         *        <li>DUNE:IBM.PAL	- Used for sprites</li>
+         *        <li>DUNE:INTRO_PAL	- Used in Intro sequence</li>
+         *        <li>DUNE:WESTWOOD_PAL	- Used for Westwood studios sequence before intro</li>
          *         </ul>
          */
-        SDL_Palette* getPalette(Palette_enum palette);
 
         SDL_Palette* getPalette(std::string paletteFile);
 
@@ -119,8 +115,7 @@ class DataCache : public Singleton<DataCache>
     private:
 		libconfig::Config *m_dataConfig;
 		
-		PalfilePtr m_palette[NUM_PALETTES];
-		palStrings m_palStrings;
+		std::map<std::string, PalfilePtr> m_palette;
 
 		StringFile* BriefingStrings[3];
 		StringFile* IntroStrings;

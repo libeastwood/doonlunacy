@@ -171,7 +171,7 @@ void Application::InitNet()
 
 void Application::SetPalette()
 {
-    SDL_Palette * pal = DataCache::Instance()->getPalette(IBM_PAL);
+    SDL_Palette * pal = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
     
     //This fixes white wheels. Is palette broken or sth??
 
