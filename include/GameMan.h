@@ -13,7 +13,6 @@
 #include "objects/UnitClass.h"
 #include "objects/WeaponClass.h"
 
-typedef std::vector<PlayerClass*> Players;
 typedef std::map<uint32_t, ObjectClass*> ObjectMap;
 typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;
 
@@ -49,8 +48,8 @@ class GameMan : public Singleton<GameMan>
     bool SplitString(std::string ParseString, unsigned int NumStringPointers, ...);
     
     MapClass * GetMap() { return m_map; }
-    Players * GetPlayers() { return m_players; }
-    PlayerClass * GetPlayer(int i) { return m_players->at(i); }
+    std::vector<PlayerClass> GetPlayers() { return m_players; }
+    PlayerClass * GetPlayer(int i) { return &m_players[i]; }
     inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
     inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
     ObjectClass * getObject(uint32_t objectID);
@@ -65,9 +64,9 @@ class GameMan : public Singleton<GameMan>
 	void Unselect(List* objectList);
   protected:
 
-    MapClass* m_map;
-    PlayerClass * m_localPlayer;
-    Players* m_players;
+    MapClass *m_map;
+    PlayerClass *m_localPlayer;
+    std::vector<PlayerClass> m_players;
     ObjectTypeMap m_objects;
     uint32_t m_objectIDCounter;
 };
