@@ -31,6 +31,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_curAnimFrame = 0;
     m_isAnimating = false;
     m_selected = false;
+    m_fadingIn = false;
     m_adjust = 0.0;
 
 
