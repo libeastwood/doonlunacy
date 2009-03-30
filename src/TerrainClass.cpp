@@ -188,7 +188,6 @@ void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, U
 
     std::list<Uint32>::const_iterator iterator;
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
-	std::cout << "hmhmhm: " << *iterator << std::endl;
 	ObjectClass* object = GameMan::Instance()->getObject(*iterator);
 
 	if(object == NULL)
