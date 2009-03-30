@@ -49,12 +49,11 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
     m_numWORs = 0;
     m_numWalls = 0;
     m_numStructures = 0;
-
 }
 
 PlayerClass::~PlayerClass()
 {
-    LOG_INFO("PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum);
+    LOG_INFO("PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum, m_house);
 }
 
 void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
