@@ -1,4 +1,5 @@
 #include <eastwood/IniFile.h>
+#include <stack>
 
 #include "GameMan.h"
 #include "ResMan.h"
@@ -417,12 +418,21 @@ void GameMan::Unselect(List* objectList)
 void GameMan::Update(float dt)
 {
     for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
-    	for(ObjectMap::iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++)
+    {
+	ObjectMap ObjMap = (*objTypeMap).second;
+	std::stack<uint32_t> eraseStack;
+    	for(ObjectMap::iterator objMap = ObjMap.begin(); objMap != ObjMap.end(); objMap++)
     	{
     	    ObjectClass *object = objMap->second;
     	    if (object->clearObject())
-		objTypeMap->second.erase(objMap);
+		eraseStack.push(objMap->first);
     	    else
     		object->update(dt);
+    	}
+	while(!eraseStack.empty())
+	{
+	    ObjMap.erase(eraseStack.top());
+	    eraseStack.pop();
+	}
     }
 }
