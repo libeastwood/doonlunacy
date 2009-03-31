@@ -45,8 +45,8 @@ class GameMan : public Singleton<GameMan>
     bool SplitString(std::string ParseString, unsigned int NumStringPointers, ...);
     
     MapClass * GetMap() { return m_map; }
-    std::vector<PlayerClass> GetPlayers() { return m_players; }
-    PlayerClass * GetPlayer(int i) { return &m_players[i]; }
+    std::vector<PlayerClass*> GetPlayers() { return m_players; }
+    PlayerClass * GetPlayer(int i) { return m_players[i]; }
     inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
     inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
     ObjectPtr getObject(uint32_t objectID);
@@ -63,7 +63,7 @@ class GameMan : public Singleton<GameMan>
 
     MapClass *m_map;
     PlayerClass *m_localPlayer;
-    std::vector<PlayerClass> m_players;
+    std::vector<PlayerClass*> m_players;
     ObjectTypeMap m_objects;
     uint32_t m_objectIDCounter;
 };
