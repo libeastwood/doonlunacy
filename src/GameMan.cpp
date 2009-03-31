@@ -415,11 +415,11 @@ void GameMan::Unselect(List* objectList)
 */
 void GameMan::Update(float dt)
 {
-    for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
+    for(ObjectTypeMap::const_iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
     {
 	ObjectMap ObjMap = (*objTypeMap).second;
 	std::stack<uint32_t> eraseStack;
-    	for(ObjectMap::iterator objMap = ObjMap.begin(); objMap != ObjMap.end(); objMap++)
+    	for(ObjectMap::const_iterator objMap = ObjMap.begin(); objMap != ObjMap.end(); objMap++)
     	{
     	    ObjectPtr object = objMap->second;
     	    if (object->clearObject())
