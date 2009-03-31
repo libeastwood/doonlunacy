@@ -73,7 +73,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
 
-    m_objectID = GameMan::Instance()->addObject(this);
 }
 
 ObjectClass::~ObjectClass()
@@ -91,13 +90,13 @@ void ObjectClass::assignToMap(SPoint pos)
 	for (int j = pos.y; j < y + h/BLOCKSIZE; j++) {
 	    SPoint temp(i,j);
 	    if (map->cellExists(temp)) {
-		map->getCell(temp)->assignObject(getObjectID());
+		map->getCell(temp)->assignObject(m_objectID);
 		map->viewMap(m_owner->getTeam(), getPosition(), m_viewRange);
 	    }
 	}
 }
 
-bool ObjectClass::canAttack(ObjectClass* object)
+bool ObjectClass::canAttack(ObjectPtr object)
 {
     if ( (object != NULL) && !object->wasDestroyed() 
 	    && ( object->isAStructure() || !object->isAFlyingUnit() )
@@ -229,10 +228,10 @@ void ObjectClass::doDeath(Image *dest)
 		m_graphic->blitTo(dest, source, destPoint + UPoint(0, y*BLOCKSIZE));
 }
 
-ObjectClass* ObjectClass::findTarget()
+ObjectPtr ObjectClass::findTarget()
 {
-    ObjectClass	*tempTarget,
-		*closestTarget = NULL;
+    ObjectPtr	tempTarget,
+		closestTarget;
 
     int	checkRange,
 	xPos = x,
@@ -341,7 +340,7 @@ int ObjectClass::getViewRange()
 	return m_viewRange;
 }
 
-void ObjectClass::handleDamage(int damage, ObjectClass* damager)
+void ObjectClass::handleDamage(int damage, ObjectPtr damager)
 {
     if (!wasDestroyed()) 
     {
@@ -430,7 +429,7 @@ void ObjectClass::setVisible(int team, bool status)
 void ObjectClass::unassignFromMap(SPoint pos)
 {
     if (m_owner->getMap()->cellExists(pos))
-	m_owner->getMap()->getCell(pos)->unassignObject(getObjectID());
+	m_owner->getMap()->getCell(pos)->unassignObject(m_objectID);
 }
 
 void ObjectClass::update(float dt)

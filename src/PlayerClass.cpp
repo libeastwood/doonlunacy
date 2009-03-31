@@ -64,17 +64,9 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 	m_mapPlayerNum = 0;
 }
 
-UnitClass* PlayerClass::createUnit(std::string itemName)
+ObjectPtr PlayerClass::createUnit(std::string itemName)
 {
-    UnitClass* newUnit = NULL;
-
-    newUnit = (UnitClass*) GameMan::Instance()->createObject(itemName,this);
-
-    if(newUnit == NULL) 
-    {
-	LOG_ERROR("PlayerClass", "Cannot create Object %s", itemName.c_str());
-	exit(EXIT_FAILURE);
-    }
+    ObjectPtr newUnit = GameMan::Instance()->createObject(itemName,this);
 
     if (itemName != "Sandworm") 
     {
@@ -121,20 +113,20 @@ MapClass* PlayerClass::getMap()
     return GameMan::Instance()->GetMap();
 }
 
-void* PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos)
+ObjectPtr PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos)
 {
+    ObjectPtr structure;
     GameMan* gman = GameMan::Instance();
     MapClass* map = gman->GetMap();
 
     if(!map->cellExists(itemPos)) {
-	return NULL;
+	return structure;
     }
 
-    StructureClass* tempStructure = NULL;
 
     if((itemName != "Slab1") && (itemName != "Slab4")) {
-	tempStructure = (StructureClass*) GameMan::Instance()->createObject(itemName,this);
-	if(tempStructure == NULL) {
+	structure = GameMan::Instance()->createObject(itemName,this);
+	if(!structure) {
 	    LOG_ERROR("PlayerClass", "Cannot create Object %s", itemName.c_str());
 	    exit(EXIT_FAILURE);
 	}
@@ -198,9 +190,9 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string 
 		*/			
     }
 
-    if (tempStructure) {
-	for(int i=0;i<tempStructure->w;i++)
-	    for(int j=0;j<tempStructure->h;j++) {
+    if (structure) {
+	for(int i=0;i<structure->w;i++)
+	    for(int j=0;j<structure->h;j++) {
 		//sprintf(temp, "clear x: %d, y: %d", xPos + i, yPos + j);
 		//currentGame->AddToNewsTicker(temp);
 
@@ -209,7 +201,7 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string 
 		    map->getCell(pos)->clearDamage();
 	    }
 
-	tempStructure->setPosition(itemPos);
+	structure->setPosition(itemPos);
 
 	if (itemName == "Wall")
 	    map->fixWalls(itemPos);
@@ -242,24 +234,25 @@ void* PlayerClass::placeStructure(int builderID, UPoint builderPos, std::string 
 	*/			
     }
 
-    return tempStructure;
+    return structure;
 }
 
-UnitClass* PlayerClass::placeUnit(std::string itemName, UPoint itemPos)
+ObjectPtr PlayerClass::placeUnit(std::string itemName, UPoint itemPos)
 {
-    UnitClass* newUnit = NULL;
+    ObjectPtr newUnit;
     if (GameMan::Instance()->GetMap()->cellExists(itemPos))
-	newUnit = (UnitClass*)createUnit(itemName);
+	newUnit = createUnit(itemName);
 
     if (newUnit)
     {
-	if (newUnit->canPass(itemPos))
-	    newUnit->deploy(itemPos);
+	UnitClass *unit = (UnitClass*)newUnit.get();
+	if (unit->canPass(itemPos))
+	    unit->deploy(itemPos);
 	else
 	{
 	    newUnit->setVisible(VIS_ALL, false);
 	    newUnit->destroy();
-	    newUnit = NULL;
+	    newUnit.reset();
 	}
     }
 

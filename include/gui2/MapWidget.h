@@ -65,7 +65,7 @@ class MapWidget : public Widget {
      *        It's a bit confusing.
      */
     SPoint m_view;
-    std::list<ObjectClass*> m_selectedList;    
+    std::list<ObjectPtr> m_selectedList;    
 };
 
 #endif // DUNE_MAPWIDGET_H

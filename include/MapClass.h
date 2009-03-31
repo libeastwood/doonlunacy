@@ -49,7 +49,7 @@ class MapClass : public Rect
      */    
     UPoint getMapPos(int angle, UPoint source);
     //@}
-    void damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, 
+    void damage(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, 
 	    std::string objectName, int damage, int damagePiercing, int damageRadius, bool air);
 
     void fixWall(SPoint pos);
@@ -59,7 +59,7 @@ class MapClass : public Rect
     void viewMap(int playerTeam, UPoint location, int maxViewRange);
     void viewMap(int playerTeam, int x, int y, int maxViewRange);
 
-    ObjectClass* findObjectWithID(int objectID, int lx, int ly);
+    ObjectPtr findObjectWithID(int objectID, int lx, int ly);
 
     TerrainClass * getCell(SPoint pos);    
 
@@ -79,10 +79,10 @@ class MapClass : public Rect
     Cells m_cells;
 
     private: 
-    ObjectClass* lastSinglySelectedObject;
+    ObjectPtr lastSinglySelectedObject;
     inline bool checkPos(SPoint pos, SPoint possy) {
 	SPoint tmpPos = pos + possy;
-	ObjectClass *tmpObj;
+	ObjectPtr tmpObj;
 
 	return (!cellExists(tmpPos) || ((tmpObj = getCell(tmpPos)->getGroundObject()) != NULL
 		    && tmpObj->getObjectName() == "Wall"));

@@ -68,33 +68,28 @@ void GameMan::Init()
 void GameMan::Clear()
 {
     m_players.clear();
-    
-    for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
-    	for(ObjectMap::iterator objMap = objTypeMap->second.begin(); objMap != objTypeMap->second.end(); objMap++)
-    	{
-	    objTypeMap->second.erase(objMap);
-	    delete objMap->second;
-	}
+    m_objects.clear();
 
     delete m_map;
 }
 
-ObjectClass * GameMan::getObject(uint32_t objectID) {
-    ObjectClass *object = NULL;
-    for(ObjectTypeMap::const_iterator iter = getObjectsBegin(); !object || iter != getObjectsEnd(); iter++)
+ObjectPtr GameMan::getObject(uint32_t objectID) {
+    ObjectPtr object;
+    for(ObjectTypeMap::const_iterator iter = getObjectsBegin(); iter != getObjectsEnd(); iter++)
     {
 	ObjectMap::const_iterator objMap = (*iter).second.find(objectID);
 	if(objMap != (*iter).second.end())
-	    object = objMap->second;
+	    return objMap->second;
     }
 
     return object;
 }
 
-uint32_t GameMan::addObject(ObjectClass *object) {
+uint32_t GameMan::addObject(ObjectPtr object) {
     uint32_t objectID = ++m_objectIDCounter,
 	     objectType = object->getAttributes();
 
+    object->setObjectID(objectID);
     if(m_objects.find(objectType) == m_objects.end())
 	m_objects[objectType] = ObjectMap();
     m_objects[objectType][objectID] = object;
@@ -108,10 +103,10 @@ void GameMan::removeObject(uint32_t objectID) {
 	    return;
 }
 
-ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner)
+ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
 {
     std::string objectClass;
-    ObjectClass* newObject = NULL;
+    ObjectPtr newObject;;
     try {
 	objectClass = DataCache::Instance()->getPyObjectType(itemName);
     }
@@ -121,27 +116,26 @@ ObjectClass* GameMan::createObject(std::string itemName, PlayerClass* Owner)
     }
 
     if(objectClass == "AirUnit")
-	    newObject = new AirUnit(Owner, itemName);
+	    newObject.reset(new AirUnit(Owner, itemName));
     else if(objectClass == "GroundUnit")
-	    newObject = new GroundUnit(Owner, itemName);
+	    newObject.reset(new GroundUnit(Owner, itemName));
     else if(objectClass == "InfantryUnit")
-	    newObject = new InfantryClass(Owner, itemName);
+	    newObject.reset(new InfantryClass(Owner, itemName));
     else if(objectClass == "Object")
-	    newObject = new ObjectClass(Owner, itemName);
+	    newObject.reset(new ObjectClass(Owner, itemName));
 /*    else if(objectClass == "Unit")
 	    newObject = new UnitClass(Owner, itemName);
 	    */
     else if(objectClass == "Builder")
-	    newObject = new BuilderClass(Owner, itemName);
+	    newObject.reset(new BuilderClass(Owner, itemName));
     else if(objectClass == "Structure")
-	    newObject = new StructureClass(Owner, itemName);
+	    newObject.reset(new StructureClass(Owner, itemName));
     else
 	LOG_ERROR("GameMan", "createObject: item %s, %s unknown type!", itemName.c_str(), objectClass.c_str());
 
-	if(newObject == NULL)
-		return NULL;
-	
-	return newObject;
+    addObject(newObject);
+
+    return newObject;
 }
 
 bool GameMan::LoadScenario(string scenarioName)
@@ -230,9 +224,9 @@ bool GameMan::LoadScenario(string scenarioName)
 
         for (int i = 0; i < Num2Place; i++)
         {
-            ObjectClass* newUnit = (ObjectClass*)m_players[house].placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
+            ObjectPtr newUnit = m_players[house].placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
 
-            if (newUnit == NULL)
+            if (!newUnit)
             {
                 LOG_WARNING("GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
             }
@@ -327,7 +321,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
 	    //Using INVALID_POS instead of NONE to avoid warnings.
 	    //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
-	    ObjectClass*  newStructure = (ObjectClass*)m_players[house].placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
+	    ObjectPtr newStructure = m_players[house].placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
 	    if (newStructure == NULL)
 		LOG_WARNING("GameMan", "LoadScenario: Invalid position: %s", PosStr.c_str());
@@ -338,11 +332,12 @@ bool GameMan::LoadScenario(string scenarioName)
     return true;
 }
 
+/*
 void GameMan::Select(List* objectList)
 {
 
 }
-
+*/
 /*
  Splits a string into several substrings. This strings are separated with ','.
 */
@@ -410,11 +405,12 @@ void GameMan::TakeMapScreenshot(string filename)
     delete img;
 }
 
+/*
 void GameMan::Unselect(List* objectList)
 {
 
 }
-
+*/
 void GameMan::Update(float dt)
 {
     for(ObjectTypeMap::iterator objTypeMap = m_objects.begin(); objTypeMap != m_objects.end(); objTypeMap++)
@@ -423,7 +419,7 @@ void GameMan::Update(float dt)
 	std::stack<uint32_t> eraseStack;
     	for(ObjectMap::iterator objMap = ObjMap.begin(); objMap != ObjMap.end(); objMap++)
     	{
-    	    ObjectClass *object = objMap->second;
+    	    ObjectPtr object = objMap->second;
     	    if (object->clearObject())
 		eraseStack.push(objMap->first);
     	    else

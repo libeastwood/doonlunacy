@@ -115,9 +115,9 @@ class ObjectClass : public Rect
     //@}
 	//! @name  Attack related functions
 	//@{
-    bool canAttack(ObjectClass* object);
-    void handleDamage(int damage, ObjectClass* damager);
-    ObjectClass* findTarget();
+    bool canAttack(ObjectPtr object);
+    void handleDamage(int damage, ObjectPtr damager);
+    ObjectPtr findTarget();
     //@}
   protected:
     ATTACKTYPE m_attackMode;
@@ -217,7 +217,7 @@ class ObjectClass : public Rect
 
     UPoint m_offset;
 
-    ObjectClass *m_target;
+    ObjectPtr m_target;
 
   private:
     uint32_t m_attributes;

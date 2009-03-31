@@ -26,7 +26,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     m_nextSpotFound = false;
     m_respondable = true;
     m_attackMode = DEFENSIVE;
-    m_target = NULL;
 
     m_speedCap = NONE;
 
@@ -88,7 +87,7 @@ void UnitClass::destroy()
     if (!m_destroyed)
     {
         LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, m_objectName.c_str());
-        setTarget(NULL);
+        setTarget(ObjectPtr());
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
@@ -227,7 +226,7 @@ void UnitClass::navigate()
                                         || (getObjectName() != "Harvester")))
                             {
 
-                                setTarget(NULL);
+                                setTarget(ObjectPtr());
                             }
 
                             setDestination(UPoint(x, y)); //can't get any closer, give up
@@ -332,7 +331,7 @@ void UnitClass::setPosition(SPoint pos)
     m_nextSpotFound = false;
     m_nextSpotAngle = m_drawnAngle;
     m_pickedUp = false;
-    setTarget(NULL);
+    setTarget(ObjectPtr());
     // clearPath
     m_pathList.clear();
     m_noCloserPointCount = 0;
@@ -401,7 +400,7 @@ void UnitClass::setSpeeds()
 
 /*virtual*/
 
-void UnitClass::setTarget(ObjectClass* newTarget)
+void UnitClass::setTarget(ObjectPtr newTarget)
 {
 #if 0
 	if (goingToRepairYard && target && (target.getObjPointer()->getItemID() == Structure_RepairYard))

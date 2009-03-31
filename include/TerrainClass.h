@@ -11,8 +11,6 @@
 #define DAMAGEPERCELL 5
 #define FOGTIMEOUT 10
 
-typedef std::list <Uint32> List;
-
 typedef struct
 {
     Uint32 damageType;
@@ -33,14 +31,14 @@ class TerrainClass  : public UPoint
 	void assignDeadObject(Uint32 newObjectID);
 	void assignNonInfantryGroundObject(Uint32 newObjectID);
 	void assignUndergroundUnit(Uint32 newObjectID);*/
-	void assignObject(Uint32 newObjectID);
+	void assignObject(uint32_t newObjectID);
 
 	/*
 	void unassignAirUnit(Uint32 ObjectID);
 	void unassignDeadObject(Uint32 ObjectID);
 	void unassignNonInfantryGroundObject(Uint32 ObjectID);
 	*/
-	bool unassignObject(Uint32 objectID);
+	bool unassignObject(uint32_t ObjectID);
 	/*
 	void unassignInfantry(Uint32 ObjectID, int currentPosition);
 	void unassignUndergroundUnit(Uint32 ObjectID);
@@ -75,7 +73,7 @@ class TerrainClass  : public UPoint
 	 * returns a pointer to an ground object in current cell (if there's one)
 	 * @return ObjectClass*  pointer to ground object
 	 */
-	ObjectClass* getGroundObject();
+	ObjectPtr getGroundObject();
 
 	/*!
 	 * returns a pointer to infantry object in current cell (if there's one)
@@ -84,9 +82,9 @@ class TerrainClass  : public UPoint
 	/*
 	ObjectClass* getInfantry();
 	//ObjectClass* getInfantry(int i);*/
-	ObjectClass* getObject();
-	ObjectClass* getObjectAt(UPoint pos);
-	ObjectClass* getObjectWithID(uint32_t objectID);
+	ObjectPtr getObject();
+	ObjectPtr getObjectAt(UPoint pos);
+	ObjectPtr getObjectWithID(uint32_t objectID);
 
 	inline bool hasAnObject() { return !m_assignedObjects.empty(); }
 
@@ -172,7 +170,7 @@ class TerrainClass  : public UPoint
 	 *  @param damageRadius bullets affect only one cell, rockets can have bigger radius of destruction
 	 *  @param air the bullet is aimed at an air unit
 	 */
-	void damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air);
+	void damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air);
 
     private:
 
@@ -202,7 +200,7 @@ class TerrainClass  : public UPoint
 	ImagePtr m_img;
 	ImagePtr m_hiddenImg;
 
-	List m_assignedObjects;
+	ObjectMap m_assignedObjects;
 
 	//! damage positions
 	DAMAGETYPE	m_damage[DAMAGEPERCELL];

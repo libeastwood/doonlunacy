@@ -41,7 +41,7 @@ class UnitClass : public ObjectClass
     virtual void update(float dt);
     virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
-    virtual void setTarget(ObjectClass* newTarget);
+    virtual void setTarget(ObjectPtr newTarget);
         
   protected:
     void nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node);

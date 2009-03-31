@@ -13,9 +13,6 @@
 #include "objects/UnitClass.h"
 #include "objects/WeaponClass.h"
 
-typedef std::map<uint32_t, ObjectClass*> ObjectMap;
-typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;
-
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
 extern int lookDist[11];
@@ -35,7 +32,7 @@ class GameMan : public Singleton<GameMan>
     bool LoadScenario(std::string scenarioName);
     
     void AddPlayer(HOUSETYPE House, bool ai, int team);
-    ObjectClass* createObject(std::string itemName, PlayerClass* Owner);
+    ObjectPtr createObject(std::string itemName, PlayerClass* Owner);
 
     /*!
      *  As the name suggests it saves current map to a BMP file.
@@ -52,16 +49,16 @@ class GameMan : public Singleton<GameMan>
     PlayerClass * GetPlayer(int i) { return &m_players[i]; }
     inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
     inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
-    ObjectClass * getObject(uint32_t objectID);
-    uint32_t addObject(ObjectClass* object);
+    ObjectPtr getObject(uint32_t objectID);
+    uint32_t addObject(ObjectPtr object);
     void removeObject(uint32_t objectID);
     PlayerClass * LocalPlayer() { return m_localPlayer; }
     void Update(float dt);
 	//FIXME: This shouldn't be here
 	bool placingMode;
 	
-	void Select(List* objectList);
-	void Unselect(List* objectList);
+	//void Select(List* objectList);
+	//void Unselect(List* objectList);
   protected:
 
     MapClass *m_map;

@@ -53,9 +53,9 @@ class PlayerClass
 	inline bool isAlive() { return !(((m_numStructures - m_numWalls) <= 0) && (((m_numUnits - m_numCarryalls - m_numHarvesters - m_numFrigates) <= 0))); }	
 	//@}
 	
-	UnitClass* createUnit(std::string itemName);
-	UnitClass* placeUnit(std::string itemName, UPoint itemPos);	
-	void* placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos);
+	ObjectPtr createUnit(std::string itemName);
+	ObjectPtr placeUnit(std::string itemName, UPoint itemPos);	
+	ObjectPtr placeStructure(int builderID, UPoint builderPos, std::string itemName, UPoint itemPos);
   protected:
     //! @name Protected functions
     

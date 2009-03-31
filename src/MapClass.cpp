@@ -224,7 +224,7 @@ void MapClass::createSandRegions()
 #endif
 }
 
-void MapClass::damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, 
+void MapClass::damage(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, 
 	std::string objectName, int damage, int damagePiercing, int damageRadius, bool air)
 {
     int i, j;
@@ -238,9 +238,9 @@ void MapClass::damage(ObjectClass* damager, PlayerClass* damagerOwner, UPoint re
 }
 
 
-ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
+ObjectPtr MapClass::findObjectWithID(int objectID, int lx, int ly)
 {
-    ObjectClass	*object = NULL;
+    ObjectPtr object;
     SPoint pos = SPoint(lx, ly);
 
     //Units* unitList = GameMan::Instance()->GetUnits();
@@ -249,7 +249,7 @@ ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
 	object = getCell(pos)->getObjectWithID(objectID);
 
 
-    if (object == NULL)	{ //object wasn't found in expected cell
+    if (!object)	{ //object wasn't found in expected cell
 	//search surrounding cells
 	for(int x = pos.x-5; x < pos.x+5 && !object; x++) {
 	    for(int y = pos.y-5; y<pos.y+5 && !object; y++) {
@@ -305,7 +305,7 @@ ObjectClass* MapClass::findObjectWithID(int objectID, int lx, int ly)
 
 void MapClass::fixWall(SPoint pos)
 {
-    ObjectClass *object;
+    ObjectPtr object;
     if (cellExists(pos) && (object = getCell(pos)->getGroundObject()) && object->getObjectName() == "Wall")
     {
 	bool up, down, left, right;

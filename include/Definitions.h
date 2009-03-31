@@ -3,8 +3,10 @@
 //TODO: Sort it somehow.
 
 #include <boost/shared_ptr.hpp>
+#include <map>
 
 class Image;
+class ObjectClass;
 
 //! Smart pointer around Image class instance
 typedef boost::shared_ptr<Image> ImagePtr;
@@ -19,6 +21,11 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
     favorable), it avoids memory leaks...
         
 */
+
+typedef boost::shared_ptr<ObjectClass> ObjectPtr;
+typedef std::pair<uint32_t, ObjectPtr> ObjectPair;
+typedef std::map<uint32_t, ObjectPtr> ObjectMap;
+typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;
 
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/

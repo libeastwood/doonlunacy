@@ -16,11 +16,11 @@ MapWidget::MapWidget()
     m_view = SPoint(0, 0);
     m_speed = SPoint(0, 0);
     m_mouseButtonDown = false;
-    new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
+    /*new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 412), false);
-    new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false);
+    new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false);*/
 }
 
 MapWidget::~MapWidget()
@@ -101,7 +101,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();
 
-    ObjectClass * tmp = NULL;
+    ObjectPtr tmp;
 
     switch (button)
     {
@@ -142,7 +142,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             {
                 tmp = m_selectedList.front();
                 if (tmp->isAUnit())
-                    ((UnitClass*)tmp)->setDestination(pos);
+                    ((UnitClass*)tmp.get())->setDestination(pos);
             }
 
             return true;
@@ -154,6 +154,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             break;
 
     }
+    return false;
 }
 
 bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
@@ -227,21 +228,21 @@ void MapWidget::draw(Image * dest, SPoint off)
 	    continue;
 	}
 	for(ObjectMap::const_iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++) {
-	    ObjectClass *object = objMap->second;
+	    ObjectPtr object = objMap->second;
 	    if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
 		object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 	}
     }
     while(!attributeKeys.empty()) {
 	for(ObjectMap::const_iterator objMap = attributeKeys.top().begin(); objMap != attributeKeys.top().end(); objMap++) {
-	    ObjectClass *object = objMap->second;
+	    ObjectPtr object = objMap->second;
 	    if(m_map->getCell(SPoint(object->x, object->y))->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
     		object->draw(dest, SPoint(off.x + x, off.y + y), SPoint(m_view.x, m_view.y));
 	}
 	attributeKeys.pop();
     }
 
-    for (std::list<ObjectClass*>::const_iterator iter = m_selectedList.begin(); iter != m_selectedList.end(); iter++)
+    for (std::list<ObjectPtr>::const_iterator iter = m_selectedList.begin(); iter != m_selectedList.end(); iter++)
         if ((*iter)->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
 	    (*iter)->drawSelectionBox(dest);
 

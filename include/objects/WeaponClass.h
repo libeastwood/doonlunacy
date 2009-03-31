@@ -7,7 +7,7 @@
 class WeaponClass : public ObjectClass
 {
   public:
-    WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint position, UPoint destination, bool air, uint32_t attribute = 0);
+    WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint position, UPoint destination, bool air, uint32_t attribute = 0);
     ~WeaponClass();
 	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);
@@ -40,7 +40,7 @@ class WeaponClass : public ObjectClass
 	
     UPoint  m_source;
 
-    ObjectClass*    m_shooter;
+    ObjectPtr m_shooter;
 
     
 }; 

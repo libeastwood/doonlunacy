@@ -65,16 +65,17 @@ ObjectClass* TerrainClass::getDeadObject()
     return gman->GetObjectTree()->getObject(m_assignedDeadObjects.front());
 }
 */
-ObjectClass* TerrainClass::getGroundObject()
+ObjectPtr TerrainClass::getGroundObject()
 {
-    std::list<uint32_t>::const_iterator iter;
+    ObjectMap::const_iterator iter;
+    ObjectPtr object;
     for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
     {
-	ObjectClass *object = GameMan::Instance()->getObject(*iter);
-	if(object->isAGroundUnit())
-	    return object;
+	ObjectPtr tmp = (*iter).second;
+	if(tmp->isAGroundUnit())
+	    return tmp;
     }
-    return NULL;
+    return object;
 }
 
 /*
@@ -96,21 +97,21 @@ ObjectClass* TerrainClass::getUndergroundUnit()
     return gman->GetObjectTree()->getObject(m_assignedUndergroundUnits.front());
 }
 */
-void TerrainClass::assignObject(Uint32 newObjectID) 
+void TerrainClass::assignObject(uint32_t newObjectID)
 {
-	m_assignedObjects.push_back(newObjectID);
+	m_assignedObjects.insert(ObjectPair(newObjectID, GameMan::Instance()->getObject(newObjectID)));
 }
 
-ObjectClass* TerrainClass::getObject() {
-	ObjectClass* temp = NULL;
-	if(!m_assignedObjects.empty())
-		temp = GameMan::Instance()->getObject(m_assignedObjects.front());
+ObjectPtr TerrainClass::getObject() {
+    ObjectPtr object;
+    if(!m_assignedObjects.empty())
+	object = m_assignedObjects.begin()->second;
 
-	return temp;
+    return object;
 }
 
 
-ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
+ObjectPtr TerrainClass::getObjectAt(UPoint pos) {
 	return getObject();
 #if 0
 	ObjectClass* temp = NULL;
@@ -148,23 +149,13 @@ ObjectClass* TerrainClass::getObjectAt(UPoint pos) {
 #endif
 }
 
-bool TerrainClass::unassignObject(Uint32 objectID) {
-    bool ret = (getObjectWithID(objectID) != NULL);
-    if(ret) {
-	LOG_INFO("TerrainClass", "Unassigning object with ID: %d", objectID);
-	m_assignedObjects.remove(objectID);
-    }
-    return ret;
+bool TerrainClass::unassignObject(uint32_t objectID) {
+    return m_assignedObjects.erase(objectID);
 }
 
-ObjectClass* TerrainClass::getObjectWithID(uint32_t objectID) 
+ObjectPtr TerrainClass::getObjectWithID(uint32_t objectID) 
 {
-	std::list<Uint32>::const_iterator iter;
-	for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
-		if(*iter == objectID) 
-			return GameMan::Instance()->getObject(*iter);
-
-	return NULL;
+	return m_assignedObjects.find(objectID)->second;
 }
 
 
@@ -179,18 +170,18 @@ void TerrainClass::clearDamage()
 }
 
 
-void TerrainClass::damageCell(ObjectClass* damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
+void TerrainClass::damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
 {
     int     distance;
     float  damageProp;
     UPoint centrePoint;
     // non air damage
 
-    std::list<Uint32>::const_iterator iterator;
+    ObjectMap::const_iterator iterator;
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
-	ObjectClass* object = GameMan::Instance()->getObject(*iterator);
+	ObjectPtr object = iterator->second;
 
-	if(object == NULL)
+	if(!object)
 	    continue;
 	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
 	distance = lround(distance_from(centrePoint, realPos));

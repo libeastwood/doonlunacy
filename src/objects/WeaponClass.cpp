@@ -9,7 +9,7 @@
 #include "mmath.h"
 
 
-WeaponClass::WeaponClass(ObjectClass* newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
+WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
     ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName, attribute | OBJECT_WEAPON)
 {
     DataCache* cache = DataCache::Instance();
@@ -149,7 +149,7 @@ void WeaponClass::update(float dt)
     MapClass* map = GameMan::Instance()->GetMap();
 
     if (m_shooter && m_shooter->wasDestroyed())
-	m_shooter = NULL;
+	m_shooter.reset();
 
     if (!m_destroyed)
     {
