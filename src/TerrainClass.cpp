@@ -23,11 +23,8 @@ TerrainClass::TerrainClass() : UPoint(0,0)
     m_hiddenImg = DataCache::Instance()->getGCObject("ObjPic_Terrain_Hidden")->getImage();
     m_visited = false;
 
-    m_explored = new bool[MAX_PLAYERS];
-	for (int i = 0; i < MAX_PLAYERS; i++)
-	{
+    for (int i = 0; i < MAX_PLAYERS; i++)
     	m_explored[i] = false;
-	}
 
 }
 

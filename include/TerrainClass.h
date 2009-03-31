@@ -174,7 +174,7 @@ class TerrainClass  : public UPoint
 
     private:
 
-	bool	*m_explored;
+	bool	m_explored[MAX_PLAYERS];
 
 	clock_t	*m_lastAccess;
 
