@@ -27,22 +27,6 @@ int max(int num1, int num2)
 }
 */
 
-int getRandomOf(int numParam, ...) {
-	int nthParam = getRandomInt(0,numParam-1);
-	
-	va_list arg_ptr;
-	va_start(arg_ptr, numParam);
-	
-	int ret = va_arg(arg_ptr, int);
-	
-	for(int i = 1; i <= nthParam; i++) {
-		ret = va_arg(arg_ptr, int);
-	}
-	va_end(arg_ptr);
-	
-	return ret;
-}
-
 int power(int num1, int num2)
 {
 	int result = 1;
@@ -117,11 +101,6 @@ float dest_angle(UPoint p1, UPoint p2)
         return (destAngle*256.0/(2*PI));
 }
 
-int getRandomInt(int min, int max)
-{
-	max++;
-	return ((rand() % (max-min)) + min);
-}
 float normalize(float value, float max)
 {
 	while(value < 0.0)
