@@ -92,6 +92,19 @@ class DataCache : public Singleton<DataCache>
 		return python::extract<T>(obj[index]);
         }
 
+        template<typename T>
+        inline std::vector<T> getPyObjectVector(std::string objectName, std::string parameter)
+        {
+	    python::object obj = m_pyObjects[objectName].attr(parameter.c_str());
+
+	    ssize_t size = python::len(obj);
+	    std::vector<T> ret(size);
+	    for(ssize_t i = 0; i < size; i++)
+		ret[i] = python::extract<T>(obj[i]);
+	    return ret;
+        }
+
+
 	inline std::string getPyObjectType(std::string objectName)
 	{
     	    python::object obj = m_pyObjects[objectName];
