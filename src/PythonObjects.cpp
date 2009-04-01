@@ -9,10 +9,9 @@ static void * PointFloatExtract(PyObject *intermediate)
     if(!PyArg_ParseTuple(intermediate, "ff", &x, &y))
 	python::throw_error_already_set();
 
-    PointFloat tmp(x, y);
-    void *ret = &tmp;
+    PointFloat *tmp = new PointFloat(x, y);
 
-    return ret;
+    return (void*)tmp;
 }
 
 static void * UPointExtract(PyObject *intermediate)
@@ -21,10 +20,9 @@ static void * UPointExtract(PyObject *intermediate)
     if(!PyArg_ParseTuple(intermediate, "HH", &x, &y))
 	python::throw_error_already_set();
 
-    UPoint tmp(x, y);
-    void *ret = &tmp;
+    UPoint *tmp = new UPoint(x, y);
 
-    return ret;
+    return (void*)tmp;
 }
 
 static void * SPointExtract(PyObject *intermediate)
@@ -33,10 +31,9 @@ static void * SPointExtract(PyObject *intermediate)
     if(!PyArg_ParseTuple(intermediate, "hh", &x, &y))
 	python::throw_error_already_set();
 
-    SPoint tmp(x, y);
-    void *ret = &tmp;
+    SPoint *tmp = new SPoint(x, y);
 
-    return ret;
+    return (void*)tmp;
 }
 
 static void * RectExtract(PyObject *intermediate)
@@ -46,10 +43,9 @@ static void * RectExtract(PyObject *intermediate)
     if(!PyArg_ParseTuple(intermediate, "hhHH", &x, &y, &w, &h))
 	python::throw_error_already_set();
 
-    Rect tmp(x, y, w, h);
-    void *ret = &tmp;
+    Rect *tmp = new Rect(x, y, w, h);
 
-    return ret;
+    return (void*)tmp;
 }
 
 
