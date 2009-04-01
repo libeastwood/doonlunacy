@@ -11,6 +11,8 @@ class Unit(ObjectClass.Object):
 
         self.canAttack = True
         self.respondable = True
+        self.confirmSound = ["MovingOut", "InfantryOut", "Acknowledged", "Affirmative"]
+        self.selectSound = ["YesSir", "Reporting"]
 
         self.weapons = []
 

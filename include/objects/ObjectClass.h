@@ -66,7 +66,7 @@ class ObjectClass : public Rect
     inline void setActive(bool status) { m_active = status; }
     inline void setForced(bool status) { m_forced = status; }
 	void setHealth(int newHealth);
-    inline void setSelected(bool value) { m_selected = value; }
+    virtual inline void setSelected(bool value) { m_selected = value; }
     inline void setRespondable(bool status) { m_respondable = status; }
 	void setVisible(int team, bool status);
 

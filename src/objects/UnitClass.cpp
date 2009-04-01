@@ -7,12 +7,15 @@
 #include "Log.h"
 #include "MapClass.h"
 #include "Settings.h"
+#include "SoundPlayer.h"
 
 #include "objects/ObjectClass.h"
 #include "objects/UnitClass.h"
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
+    DataCache *cache = DataCache::Instance();
+
     m_attacking = false;
     m_canAttackStuff = true;
     m_moving = false;
@@ -26,6 +29,23 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     m_nextSpotFound = false;
     m_respondable = true;
     m_attackMode = DEFENSIVE;
+
+    try {
+	std::vector<std::string> soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "confirmSound");
+	m_confirmSound.resize(soundStrings.size());
+	for(size_t i = 0; i < soundStrings.size(); i++)
+	    m_confirmSound[i] = DataCache::Instance()->getGCObject(soundStrings[i])->getSound();
+	soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "selectSound");
+	m_selectSound.resize(soundStrings.size());
+	for(size_t i = 0; i < soundStrings.size(); i++)
+	    m_selectSound[i] = DataCache::Instance()->getGCObject(soundStrings[i])->getSound();
+    }
+    catch(python::error_already_set const &)
+    {
+	LOG_FATAL("UnitClass", "Error loading object: %s", m_objectName.c_str());
+	PyErr_Print();
+	exit(1);
+    }
 
     m_speedCap = NONE;
 
@@ -290,11 +310,29 @@ void UnitClass::setAngle(int newAngle)
     }
 }
 
+
+void UnitClass::playConfirmSound() {
+    if(!m_confirmSound.empty())
+    	SoundPlayer::Instance()->playSound(m_confirmSound[getRandomInt(0,m_confirmSound.size()-1)].get());
+}
+
+void UnitClass::playSelectSound() {
+    if(!m_selectSound.empty())
+    	SoundPlayer::Instance()->playSound(m_selectSound[getRandomInt(0,m_selectSound.size()-1)].get());
+}
 /*virtual*/
 void UnitClass::setDestination(SPoint destination)
 {
     m_pathList.clear();
+    if(m_guardPoint != destination)
+	playConfirmSound();
     ObjectClass::setDestination(destination);
+}
+
+void UnitClass::setSelected(bool value) {
+    ObjectClass::setSelected(value);
+    if(value)
+	playSelectSound();
 }
 
 void UnitClass::setGuardPoint(UPoint newGuardPoint)

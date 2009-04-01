@@ -42,6 +42,10 @@ class UnitClass : public ObjectClass
     virtual void setDestination(SPoint destination);
     virtual void setPosition(SPoint pos);
     virtual void setTarget(ObjectPtr newTarget);
+    virtual void setSelected(bool value);
+
+    void playConfirmSound();
+    void playSelectSound();
         
   protected:
     void nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node);
@@ -88,6 +92,8 @@ class UnitClass : public ObjectClass
             m_guardPoint;        
 
     Path m_pathList;
+    std::vector<SoundPtr> m_confirmSound,
+			  m_selectSound;
 };
 
 #endif // DUNE_OBJECTS_UNITCLASS_H
