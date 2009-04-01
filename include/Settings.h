@@ -76,6 +76,7 @@ class Settings: public Singleton<Settings>
 	int m_debug;
 	bool m_doubleBuffered;
 	bool m_playIntro;
+	bool m_updated;
 
 	//! Used for frame independent movement.
 	int m_gameSpeed;
@@ -142,9 +143,9 @@ class Settings: public Singleton<Settings>
 	bool GetSound() { return m_soundOn; }
 	bool GetMusic() { return m_musicOn; }
 	bool GetPlayIntro() { return m_playIntro; }
-	void ToggleSound() { m_soundOn = !m_soundOn; }
-	void ToggleMusic() { m_musicOn = !m_musicOn; }
-	void ToggleIntro() { m_playIntro = !m_playIntro; }
+	void ToggleSound() { m_soundOn = !m_soundOn; m_updated = true; }
+	void ToggleMusic() { m_musicOn = !m_musicOn; m_updated = true; }
+	void ToggleIntro() { m_playIntro = !m_playIntro; m_updated = true; }
 	EMUOPL ToggleEmuOpl();
 
 };

@@ -21,6 +21,7 @@ Settings::Settings()
 
     //FIXME:Should this be in config file?? And should this be set for each game seperately??
     m_maxPathSearch = 100;
+    m_updated = false;
 }
 
 
@@ -73,6 +74,7 @@ void Settings::load()
             local["config"]["sound"]["music_on"] = m_musicOn = true;
             local["config"]["sound"]["music_volume"] = m_musicVolume = MIX_MAX_VOLUME/2;
             local["config"]["sound"]["opl_emulator"] = m_emuOpl = (int)CT_EMUOPL;
+            m_updated = true;
         }
     }
     catch(python::error_already_set const &)
@@ -116,21 +118,22 @@ void Settings::load()
 
 void Settings::save()
 {
-    try {
-        python::object global = main.attr("__dict__");
-        python::object settings = python::import("settings");
+    if(m_updated) {
+	try {
+	    python::object global = main.attr("__dict__");
+	    python::object settings = python::import("settings");
 
-        python::exec("confstring = printconf('config', config)", global, local);
+	    python::exec("confstring = printconf('config', config)", global, local);
 
-        std::string configText = python::extract<std::string>(local["confstring"]);
+	    std::string configText = python::extract<std::string>(local["confstring"]);
 
-        ResMan::Instance()->writeText("CONFIG:config.py", configText);
+	    ResMan::Instance()->writeText("CONFIG:config.py", configText);
+	}
+	catch(python::error_already_set const &)
+	{
+	    PyErr_Print();
+	}
     }
-    catch(python::error_already_set const &)
-    {
-        PyErr_Print();
-    }
-
 }
 
 void Settings::ParseFile(const char* fn)
@@ -195,8 +198,7 @@ EMUOPL Settings::ToggleEmuOpl(){
             break;
     }
     SoundPlayer::Instance()->changeEmuOpl((EMUOPL)m_emuOpl);
+    m_updated = true;
     return (EMUOPL)m_emuOpl;
 
 }
-
-// vim:ts=8:sw=4:et
