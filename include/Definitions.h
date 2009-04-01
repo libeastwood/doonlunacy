@@ -7,6 +7,7 @@
 
 class Image;
 class ObjectClass;
+class Mix_Chunk;
 
 //! Smart pointer around Image class instance
 typedef boost::shared_ptr<Image> ImagePtr;
@@ -21,6 +22,8 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
     favorable), it avoids memory leaks...
         
 */
+
+typedef boost::shared_ptr<Mix_Chunk> SoundPtr;
 
 typedef boost::shared_ptr<ObjectClass> ObjectPtr;
 typedef std::pair<uint32_t, ObjectPtr> ObjectPair;

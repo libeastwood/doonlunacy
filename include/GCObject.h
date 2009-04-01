@@ -18,12 +18,15 @@ class GCObject
 		bool freeIfUnique();
 		ImagePtr getImage();
 		ImagePtr getImage(HOUSETYPE house);
+		SoundPtr getSound();
 		std::string getPath() { return m_path; }
 
 	private:
 		void drawImage();
 		ImagePtr m_surface;
 		std::map<HOUSETYPE, ImagePtr> m_remappedImg;
+		SoundPtr m_sound;
+
 		std::string m_path;
 		uint32_t m_freeCounter;
 		bool m_persistent;

@@ -8,6 +8,7 @@
 #include <eastwood/IcnFile.h>
 #include <eastwood/PalFile.h>
 #include <eastwood/ShpFile.h>
+#include <eastwood/VocFile.h>
 
 using namespace libconfig;
 
@@ -43,6 +44,11 @@ bool GCObject::freeIfUnique()
 					m_freeCounter++;
 				}
 			}
+		}
+		if(m_sound.unique())
+		{
+			m_sound.reset();
+			m_freeCounter++;
 		}
 		
 		if(m_freeCounter > 50)
@@ -322,3 +328,12 @@ ImagePtr GCObject::getImage(HOUSETYPE house)
         return copy;
     }
 }
+
+SoundPtr GCObject::getSound()
+{
+    if(!m_sound)
+	m_sound.reset(DataCache::Instance()->getSoundChunk(m_path));
+
+    return m_sound;
+}
+
