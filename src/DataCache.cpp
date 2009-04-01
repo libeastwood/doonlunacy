@@ -207,27 +207,25 @@ libconfig::Config *DataCache::getConfig()
     return m_dataConfig;
 }
 
-GCObject *DataCache::getGCObject(std::string path)
+GCObject * DataCache::getGCObject(std::string path)
 {
-    GCObject *gcObj = NULL;
-    if(!m_gcObjs.empty())
-        for(uint32_t i = 0; i < m_gcObjs.size(); i++)
-            if(m_gcObjs[i]->getPath() == path)
-            {
-                gcObj = m_gcObjs[i];
-            }
-    if(gcObj == NULL){
-        gcObj = new GCObject(path);
-        m_gcObjs.push_back(gcObj);
+    std::map<std::string, GCObject*>::iterator gcObj = m_gcObjs.find(path);
+    GCObject *ret;
+
+    if(gcObj == m_gcObjs.end()) {
+        m_gcObjs[path] = ret = new GCObject(path);
     }
-    return gcObj;
+    else
+	ret = gcObj->second;
+
+    return ret;
 
 }
 
 void DataCache::freeGCObjects()
 {
-    for(uint32_t i = 0; i < m_gcObjs.size(); i++)
-        m_gcObjs[i]->freeIfUnique();
+    for(std::map<std::string, GCObject*>::const_iterator iter = m_gcObjs.begin(); iter != m_gcObjs.end(); iter++)
+        iter->second->freeIfUnique();
 }
 
 AnimationLabel *DataCache::getAnimationLabel(std::string path)

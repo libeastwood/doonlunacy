@@ -128,7 +128,7 @@ class DataCache : public Singleton<DataCache>
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
-		std::vector<GCObject*> m_gcObjs;
+		std::map<std::string, GCObject*> m_gcObjs;
 		std::map<std::string, python::object> m_pyObjects;
 };
 
