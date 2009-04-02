@@ -59,7 +59,7 @@ void StructureClass::assignToMap(SPoint pos)
 
 void StructureClass::setJustPlaced()
 {
-    if (!m_destroyed)
+    if (!getAction(STATUS_DESTROYED))
     {
         m_justPlacedTimer = 4;
         m_curAnimFrame = 0;
@@ -114,7 +114,7 @@ if(m_fogged)
 
 void StructureClass::animate()
 {
-    if (!m_destroyed)
+    if (!getAction(STATUS_DESTROYED))
     {
 
 	// update animations

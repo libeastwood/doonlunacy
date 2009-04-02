@@ -8,10 +8,11 @@
 #include "MapClass.h"
 #include "SoundPlayer.h"
 
-ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute) :
+ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
     Rect(0, 0, 0, 0)
 {
     m_attributes = OBJECT_CLASS | attribute;
+    m_status = STATUS_NONE;
 
 
     DataCache *cache = DataCache::Instance();
@@ -26,7 +27,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
 
     m_owner = newOwner;
     m_badlyDamaged = false;
-    m_destroyed = false;
     m_realPos = PointFloat(0, 0);
     m_curAnimFrame = 0;
     m_isAnimating = false;
@@ -99,7 +99,7 @@ void ObjectClass::assignToMap(SPoint pos)
 
 bool ObjectClass::canAttack(ObjectPtr object)
 {
-    if ( (object != NULL) && !object->wasDestroyed() 
+    if ( (object != NULL) && !object->getAction(STATUS_DESTROYED) 
 	    && ( object->isAStructure() || !object->isAFlyingUnit() )
 	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
 		|| object->getObjectName() == "Sandworm") && object->isVisible(m_owner->getTeam()) ) 
@@ -122,7 +122,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 
     setDrawnPos(off, view);
 
-    if (!m_destroyed)
+    if (!(m_status & STATUS_DESTROYED))
     {
 	Rect source(m_numFrames > 1 ? m_drawnAngle * w : m_curAnimFrame * w, 0, w, h);
 	m_graphic->blitTo(dest, source, m_drawnPos);
@@ -173,7 +173,7 @@ void ObjectClass::drawSmoke(Image *dest)
 
 void ObjectClass::destroy()
 {
-    if (!m_destroyed)
+    if (!(m_status & STATUS_DESTROYED))
     {
 	/*
 	   UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
@@ -199,7 +199,7 @@ void ObjectClass::destroy()
 
 	m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
-	m_destroyed = true;
+	m_status |= STATUS_DESTROYED;
 	m_frameTimer = m_frameTime;
     }
 }
@@ -343,7 +343,7 @@ int ObjectClass::getViewRange()
 
 void ObjectClass::handleDamage(int damage, ObjectPtr damager)
 {
-    if (!wasDestroyed()) 
+    if (!getAction(STATUS_DESTROYED))
     {
 	if (damage >= 0) 
 	{
@@ -380,10 +380,15 @@ bool ObjectClass::isVisible(int team)
 	return false;
 }
 
-void ObjectClass::setDestination(SPoint destination)
+void ObjectClass::setDestination(SPoint destination, Uint32 status)
 {
+    m_target.reset();
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
     {
+	if(status & STATUS_MOVING)
+	if(status & STATUS_ATTACKING) {
+    	    m_target = GameMan::Instance()->GetMap()->getCell(destination)->getObject();
+	}
 	m_destination = destination;
     }
 }

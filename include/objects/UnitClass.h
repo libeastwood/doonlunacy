@@ -31,17 +31,14 @@ class UnitClass : public ObjectClass
     virtual void destroy();
    	virtual void deploy(SPoint newPosition);
    	
-    inline bool isAttacking() { return m_attacking; }
 	inline bool isTracked() { return m_tracked; }
 	inline bool isTurreted() { return m_turreted; }
-	inline bool isMoving() { return m_moving; }
 
 	void setAngle(int newAngle);
 
     virtual void update(float dt);
-    virtual void setDestination(SPoint destination);
+    virtual void setDestination(SPoint destination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
-    virtual void setTarget(ObjectPtr newTarget);
     virtual void setSelected(bool value);
 
     void playConfirmSound();
@@ -65,10 +62,7 @@ class UnitClass : public ObjectClass
 	void targeting();
 	void setGuardPoint(UPoint newGuardPoint);
 	void setGuardPoint(int newX, int newY);
-    bool m_attacking,
-         m_goingToRepairYard,
-         m_justStoppedMoving,
-         m_moving,
+    bool m_justStoppedMoving,
          m_nextSpotFound,
          m_pickedUp,
          m_turning,

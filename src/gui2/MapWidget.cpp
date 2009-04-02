@@ -152,9 +152,16 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
             if (!m_selectedList.empty())
             {
+		Uint32 status = STATUS_NONE;
+		ObjectPtr targetObj;
+		if(m_keyPressed == SDLK_LCTRL || ((targetObj = m_map->getCell(pos)->getObject()) && targetObj->getOwner() != GameMan::Instance()->LocalPlayer()))
+		    status |= STATUS_ATTACKING;
+		else
+		    status |= STATUS_MOVING;
+
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
     		    if ((*unit).second->isControllable() && (*unit).second->isAUnit())
-    			((UnitClass*)((*unit).second).get())->setDestination(pos);
+    			    ((UnitClass*)((*unit).second).get())->setDestination(pos, status);
             }
 
             return true;

@@ -16,16 +16,12 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
 {
     DataCache *cache = DataCache::Instance();
 
-    m_attacking = false;
     m_canAttackStuff = true;
-    m_moving = false;
-    m_destroyed = false;
     m_pickedUp = false;
     m_justStoppedMoving = false;
     m_turning = false;
     m_tracked = false;
     m_turreted = false;
-    m_goingToRepairYard = false;
     m_nextSpotFound = false;
     m_respondable = true;
     m_attackMode = DEFENSIVE;
@@ -104,10 +100,11 @@ void UnitClass::deploy(SPoint newPosition)
 void UnitClass::destroy()
 {
     GameMan* gman = GameMan::Instance();
-    if (!m_destroyed)
+    if (!getAction(STATUS_DESTROYED))
     {
         LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, m_objectName.c_str());
-        setTarget(ObjectPtr());
+        m_target.reset();
+	m_status = STATUS_DESTROYED;
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
@@ -171,7 +168,7 @@ void UnitClass::move()
     MapClass* map = m_owner->getMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
-    if (m_moving)
+    if (getAction(STATUS_MOVING))
     {
         m_oldPosition = UPoint(x, y);
 
@@ -205,7 +202,7 @@ void UnitClass::move()
                 if (getPosition() == m_destination)
                     setForced(false);
 
-                m_moving = false;
+		m_status &= ~STATUS_MOVING;
 
                 m_justStoppedMoving = true;
 
@@ -225,7 +222,7 @@ void UnitClass::move()
 /*virtual*/
 void UnitClass::navigate()
 {
-    if (!m_moving)
+    if (!getAction(STATUS_MOVING))
     {
         if ((x != m_destination.x) || (y != m_destination.y))
         {
@@ -240,15 +237,15 @@ void UnitClass::navigate()
                         if (!AStarSearch() && (++m_noCloserPointCount >= 3)
                                 && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
                         { //try searching for a path a number of times then give up
-                            if (m_target && m_targetFriendly
+/*                            if (m_target && m_targetFriendly
                                     && (m_target->getObjectName() != "Repair Yard")
                                     && ((m_target->getObjectName() != "Refinery")
                                         || (getObjectName() != "Harvester")))
                             {
 
-                                setTarget(ObjectPtr());
+                                setTarget();
                             }
-
+*/
                             setDestination(UPoint(x, y)); //can't get any closer, give up
 
                             m_forced = false;
@@ -282,7 +279,7 @@ void UnitClass::navigate()
 
                 else if (m_drawnAngle == m_nextSpotAngle)
                 {
-                    m_moving = true;
+		    m_status |= STATUS_MOVING;
                     m_nextSpotFound = false;
                     assignToMap(m_nextSpot);
                     m_angle = m_drawnAngle;
@@ -302,7 +299,7 @@ void UnitClass::navigate()
 
 void UnitClass::setAngle(int newAngle)
 {
-    if (!m_moving && (newAngle >= 0) && (newAngle < NUM_ANGLES))
+    if (!getAction(STATUS_MOVING) && (newAngle >= 0) && (newAngle < NUM_ANGLES))
     {
         m_angle = m_drawnAngle = newAngle;
         m_nextSpotAngle = m_drawnAngle;
@@ -321,12 +318,12 @@ void UnitClass::playSelectSound() {
     	SoundPlayer::Instance()->playSound(m_selectSound[getRandomInt(0,m_selectSound.size()-1)].get());
 }
 /*virtual*/
-void UnitClass::setDestination(SPoint destination)
+void UnitClass::setDestination(SPoint destination, Uint32 status)
 {
     m_pathList.clear();
     if(m_guardPoint != destination && m_controllable)
 	playConfirmSound();
-    ObjectClass::setDestination(destination);
+    ObjectClass::setDestination(destination, status);
 }
 
 void UnitClass::setSelected(bool value) {
@@ -364,13 +361,12 @@ void UnitClass::setPosition(SPoint pos)
         m_realPos.y += BLOCKSIZE / 2;
     }
 
-    m_moving = false;
+    m_status &= ~STATUS_MOVING;
 
     m_nextSpotFound = false;
     m_nextSpotAngle = m_drawnAngle;
     m_pickedUp = false;
-    setTarget(ObjectPtr());
-    // clearPath
+    m_target.reset();
     m_pathList.clear();
     m_noCloserPointCount = 0;
 }
@@ -438,6 +434,7 @@ void UnitClass::setSpeeds()
 
 /*virtual*/
 
+/*
 void UnitClass::setTarget(ObjectPtr newTarget)
 {
 #if 0
@@ -460,9 +457,11 @@ void UnitClass::setTarget(ObjectPtr newTarget)
 	}
 #endif
 }
-
+*/
 void UnitClass::targeting()
 {
+    if(m_target)
+	m_destination = m_target->getPosition();
 #if 0
 	if (!target && !moving && !forced && (attackMode != SCOUT) && (findTargetTimer == 0) && (currentGame->playerType != CLIENT))
 	{
@@ -524,7 +523,7 @@ void UnitClass::turnRight()
 /*virtual*/
 void UnitClass::turn()
 {
-    if (!m_moving)
+    if (!getAction(STATUS_MOVING))
     {
         int wantedAngle;
         
@@ -571,7 +570,7 @@ void UnitClass::turn()
 void UnitClass::update(float dt)
 {
     ObjectClass::update(dt);
-    if (!m_destroyed)
+    if (!getAction(STATUS_DESTROYED))
     {
         if (m_active)
         {

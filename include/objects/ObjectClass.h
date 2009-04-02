@@ -20,6 +20,14 @@ enum attribute {
     OBJECT_WEAPON = 1 << 6
 };
 
+enum status {
+    STATUS_NONE = 0,
+    STATUS_MOVING = 1 << 0,
+    STATUS_ATTACKING = 1 << 1,
+    STATUS_REPAIR = 1 << 2,
+    STATUS_DESTROYED = 1 << 3
+};
+
 /*!
  *  @brief Base class for all objects (buildins, units, bullets)
  *
@@ -38,7 +46,7 @@ class ObjectClass : public Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute = 0);
+    ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute = 0);
     virtual ~ObjectClass();
     //@}
 
@@ -48,7 +56,7 @@ class ObjectClass : public Rect
 	
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
-    bool clearObject() { return (m_destroyed && (m_frameTimer == 0)); }
+    bool clearObject() { return ((m_status & STATUS_DESTROYED) && (m_frameTimer == 0)); }
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
@@ -70,7 +78,7 @@ class ObjectClass : public Rect
     inline void setRespondable(bool status) { m_respondable = status; }
 	void setVisible(int team, bool status);
 
-    virtual void setDestination(SPoint destination);
+    virtual void setDestination(SPoint destination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
 	
     inline bool isABuilder()    { return m_attributes & OBJECT_BUILDER; }
@@ -80,7 +88,7 @@ class ObjectClass : public Rect
     inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
     inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
     inline bool isWeapon()    { return m_attributes & OBJECT_WEAPON; }
-    inline uint32_t getAttributes() { return m_attributes; }
+    inline Uint32 getAttributes() { return m_attributes; }
 
     inline bool isActive()     { return m_active; }
     inline bool isRespondable() { return m_respondable; }
@@ -89,7 +97,6 @@ class ObjectClass : public Rect
 	inline bool isVisible(int team);
     int getHealthColour();
 
-    inline bool wasDestroyed() { return m_destroyed; }
     inline bool wasForced() { return m_forced; }
 
     inline std::string getObjectName() { return m_objectName; }
@@ -104,6 +111,7 @@ class ObjectClass : public Rect
     inline float getSpeed() { return m_speed; }
     inline bool isControllable() { return m_controllable; }
 
+    inline bool getAction(Uint32 status) { return m_status & status; }
 
     bool isOnScreen(Rect rect);
 
@@ -127,7 +135,6 @@ class ObjectClass : public Rect
     
     bool m_active,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
-         m_destroyed,
          m_respondable,
          m_selected,
 	 m_controllable,
@@ -221,8 +228,7 @@ class ObjectClass : public Rect
 
     ObjectPtr m_target;
 
-  private:
-    uint32_t m_attributes;
+    Uint32 m_attributes, m_status;
 
 };
 
