@@ -271,8 +271,8 @@ void Application::Run()
 {
     Uint32 now = SDL_GetTicks();
     Uint32 then;
-    // keep the frame rate down to around 30 fps
-    const Uint32 min_frame_duration = 30; 
+    // keep the frame rate down to around 25 fps
+    const Uint32 min_frame_duration = 40; 
 
     Uint32 fps_start = now;
     int fps_frames = 0;
@@ -302,7 +302,7 @@ void Application::Run()
         // FIXME: If user clicks when SDL_Delay is run, input will be ignored.
         if (now - then < min_frame_duration)
         {
-            SDL_Delay(min_frame_duration -(now - then));
+            SDL_Delay(min_frame_duration - (now - then));
             now = SDL_GetTicks();
         };
         #endif
@@ -345,7 +345,7 @@ void Application::Run()
 
 void Application::HandleEvents()
 {
-    SDL_Event event = {};
+    SDL_Event event;
 
     while (SDL_PollEvent(&event))
     {

@@ -37,8 +37,6 @@ class InfantryUnit(GroundUnit):
         self.armor = 1
         self.maxHealth = self.health = 10
         self.radius = 2
-        self.size = (0.5, 0.5)
-        self.offset = (self.size[0]/2.0,self.size[1]/2.0)        
         self.speed = 0.25
         self.viewRange = 4
         self.weaponRange = 6
