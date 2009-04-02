@@ -171,11 +171,14 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
     UPoint start(m_view + ((m_selectStart - getPosition()) / BLOCKSIZE));
     UPoint end(m_view + ((m_selectEnd - getPosition()) / BLOCKSIZE));
 
+    if(start > end)
+	std::swap(start,end);
+
     UPoint pos;
     switch (button)
     {
 	case SDL_BUTTON_LEFT:
-	    if(m_selectedList.front()->getOwner() == GameMan::Instance()->LocalPlayer())
+	    if(m_selectedList.empty() || m_selectedList.front()->getOwner() == GameMan::Instance()->LocalPlayer())
 		for(pos.x = start.x; pos.x <= end.x; pos.x++)
 		    for(pos.y = start.y; pos.y <= end.y; pos.y++) {
 			if (m_map->cellExists(pos)) {
