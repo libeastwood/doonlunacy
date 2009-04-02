@@ -36,6 +36,7 @@ class MapWidget : public Widget {
     //@{
     bool handleMotion(SPoint p);
     bool handleKeyDown(SDL_keysym* key);
+    bool handleKeyUp(SDL_keysym* key);
     bool handleButtonDown(Uint8 button, SPoint p);
     bool handleButtonUp(Uint8 button, SPoint p);    
     //@}
@@ -43,6 +44,7 @@ class MapWidget : public Widget {
   private:
   
     bool m_mouseButtonDown;
+    int m_keyPressed;
     UPoint m_selectStart;
     UPoint m_selectEnd;
     Rect m_selectRect;

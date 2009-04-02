@@ -16,6 +16,7 @@ MapWidget::MapWidget()
     m_view = SPoint(0, 0);
     m_speed = SPoint(0, 0);
     m_mouseButtonDown = false;
+    m_keyPressed = 0;
     /*new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false);
@@ -77,9 +78,9 @@ bool MapWidget::handleMotion(SPoint p)
 
 bool MapWidget::handleKeyDown(SDL_keysym* key)
 {
+    m_keyPressed = key->sym;
     switch (key->sym)
     {
-
         case SDLK_PRINT:
             GameMan::Instance()->TakeMapScreenshot();
             return true;
@@ -91,6 +92,12 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
     }
 }
 
+bool MapWidget::handleKeyUp(SDL_keysym* key)
+{
+    m_keyPressed = 0;
+    return true;
+}
+
 bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 {
     //FIXME: This is a bit lame way to get coordinates for selection on map
@@ -98,12 +105,10 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
     UPoint pos(m_view + ((p - getPosition()) / BLOCKSIZE));
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();
-
     ObjectPtr tmp;
 
     switch (button)
     {
-
         case SDL_BUTTON_LEFT:
 
             m_mouseButtonDown = true;
@@ -118,13 +123,19 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                 if (!m_selectedList.empty())
                     m_selectedList.front()->setSelected(false);
 
-                m_selectedList.clear();
+		if(m_keyPressed != SDLK_LSHIFT)
+		    m_selectedList.clear();
 
-                if (tmp)
+		if (tmp)
                 {
+		    if(m_selectedList.empty() || (!m_selectedList.empty()
+				&& m_selectedList.front()->getOwner() == GameMan::Instance()->LocalPlayer()
+				&& tmp->getOwner() == m_selectedList.front()->getOwner()
+				&& tmp->getOwner() == GameMan::Instance()->LocalPlayer())) {
                     m_selectedList.push_back(tmp);
                     tmp->setSelected(true);
                     LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
+		    }
                 }
             }
 
@@ -164,22 +175,22 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
     UPoint pos;
     switch (button)
     {
-
-        case SDL_BUTTON_LEFT:
-	    for(pos.x = start.x; pos.x <= end.x; pos.x++)
-    		for(pos.y = start.y; pos.y <= end.y; pos.y++) {
-		    if (m_map->cellExists(pos)) {
-			ObjectPtr tmp = m_map->getCell(pos)->getObject();
-			LOG_DEBUG("MapWidget", "multi: %d-%d", pos.x, pos.y);
-			if(tmp) {
-			    if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->isAUnit()) {
-    				m_selectedList.push_back(tmp);
-    				tmp->setSelected(true);
-    				LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);
+	case SDL_BUTTON_LEFT:
+	    if(m_selectedList.front()->getOwner() == GameMan::Instance()->LocalPlayer())
+		for(pos.x = start.x; pos.x <= end.x; pos.x++)
+		    for(pos.y = start.y; pos.y <= end.y; pos.y++) {
+			if (m_map->cellExists(pos)) {
+			    ObjectPtr tmp = m_map->getCell(pos)->getObject();
+			    LOG_DEBUG("MapWidget", "multi: %d-%d", pos.x, pos.y);
+			    if(tmp) {
+				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->isAUnit()) {
+				    m_selectedList.push_back(tmp);
+				    tmp->setSelected(true);
+				    LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);
+				}
 			    }
 			}
 		    }
-		}
             m_selectRect = Rect(0,0,0,0);
             m_selectEnd = UPoint(0,0);
             m_selectStart = UPoint(0,0);
