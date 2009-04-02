@@ -324,14 +324,14 @@ void UnitClass::playSelectSound() {
 void UnitClass::setDestination(SPoint destination)
 {
     m_pathList.clear();
-    if(m_guardPoint != destination)
+    if(m_guardPoint != destination && m_controllable)
 	playConfirmSound();
     ObjectClass::setDestination(destination);
 }
 
 void UnitClass::setSelected(bool value) {
     ObjectClass::setSelected(value);
-    if(value)
+    if(value && m_controllable)
 	playSelectSound();
 }
 

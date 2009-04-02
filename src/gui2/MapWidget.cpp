@@ -150,7 +150,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             if (!m_selectedList.empty())
             {
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
-    		    if ((*unit).second->isAUnit())
+    		    if ((*unit).second->isControllable() && (*unit).second->isAUnit())
     			((UnitClass*)((*unit).second).get())->setDestination(pos);
             }
 

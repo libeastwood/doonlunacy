@@ -33,6 +33,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_selected = false;
     m_fadingIn = false;
     m_adjust = 0.0;
+    m_controllable = (m_owner == GameMan::Instance()->LocalPlayer());
 
 
     m_checkTimer = 0;

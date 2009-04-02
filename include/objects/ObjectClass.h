@@ -102,6 +102,7 @@ class ObjectClass : public Rect
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
     inline float getSpeed() { return m_speed; }
+    inline bool isControllable() { return m_controllable; }
 
 
     bool isOnScreen(Rect rect);
@@ -129,6 +130,7 @@ class ObjectClass : public Rect
          m_destroyed,
          m_respondable,
          m_selected,
+	 m_controllable,
 	//! Specifies which players can see a given object
          m_visible[MAX_PLAYERS+1];
 
