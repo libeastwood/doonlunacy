@@ -174,7 +174,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 			ObjectPtr tmp = m_map->getCell(pos)->getObject();
 			LOG_DEBUG("MapWidget", "multi: %d-%d", pos.x, pos.y);
 			if(tmp) {
-			    if(tmp->isAUnit()) {
+			    if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->isAUnit()) {
     				m_selectedList.push_back(tmp);
     				tmp->setSelected(true);
     				LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);
