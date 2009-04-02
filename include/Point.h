@@ -118,16 +118,32 @@ struct Point
 
         friend bool operator!=(const Point& a, const Point& b){
             return (a.x != b.x || a.y != b.y);
-        }
+	}
 
-		friend std::ostream& operator<<(std::ostream& os, const Point& c){
-			return os << '(' << c.x << 'x' << c.y << ')';
-		}
+	bool operator<(const Point &point) const {
+	    return x < point.x && y < point.y;
+	}
 
-        //! Type-casting operator
-        /*!
-            If it doesn't compile, then the types are incompatible.
-        */
+	bool operator<=(const Point &point) const {
+	    return x <= point.x && y <= point.y;
+	}
+
+	bool operator>(const Point &point) const {
+	    return !operator<(point);
+	}
+
+	bool operator>=(const Point &point) const {
+	    return !operator<=(point);
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Point& c){
+	    return os << '(' << c.x << 'x' << c.y << ')';
+	}
+
+	//! Type-casting operator
+	/*!
+	  If it doesn't compile, then the types are incompatible.
+	  */
         template <typename T2>
         operator Point<T2>() const
         {
