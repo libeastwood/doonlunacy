@@ -122,8 +122,6 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
                 if (tmp)
                 {
-                    //TODO:Yeah. Add code to unselect units.
-                    m_selectedList.clear();
                     m_selectedList.push_back(tmp);
                     tmp->setSelected(true);
                     LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
