@@ -130,7 +130,6 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
                 {
 		    if(m_selectedList.empty() || (!m_selectedList.empty()
 				&& m_selectedList.front()->getOwner() == GameMan::Instance()->LocalPlayer()
-				&& tmp->getOwner() == m_selectedList.front()->getOwner()
 				&& tmp->getOwner() == GameMan::Instance()->LocalPlayer())) {
                     m_selectedList.push_back(tmp);
                     tmp->setSelected(true);
