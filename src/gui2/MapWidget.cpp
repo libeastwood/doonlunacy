@@ -16,7 +16,8 @@ MapWidget::MapWidget()
     m_view = SPoint(0, 0);
     m_speed = SPoint(0, 0);
     m_mouseButtonDown = false;
-    m_keyPressed = 0;
+    m_keyPressed = SDLK_UNKNOWN;
+    m_modPressed = KMOD_NONE; 
     /*new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false);
@@ -79,6 +80,7 @@ bool MapWidget::handleMotion(SPoint p)
 bool MapWidget::handleKeyDown(SDL_keysym* key)
 {
     m_keyPressed = key->sym;
+    m_modPressed = key->mod;
     switch (key->sym)
     {
         case SDLK_PRINT:
@@ -94,7 +96,8 @@ bool MapWidget::handleKeyDown(SDL_keysym* key)
 
 bool MapWidget::handleKeyUp(SDL_keysym* key)
 {
-    m_keyPressed = 0;
+    m_keyPressed = SDLK_UNKNOWN;
+    m_modPressed = key->mod;    
     return true;
 }
 

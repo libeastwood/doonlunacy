@@ -44,7 +44,8 @@ class MapWidget : public Widget {
   private:
   
     bool m_mouseButtonDown;
-    int m_keyPressed;
+    SDLKey m_keyPressed;
+    SDLMod m_modPressed;
     UPoint m_selectStart;
     UPoint m_selectEnd;
     Rect m_selectRect;
