@@ -95,9 +95,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 {
     //FIXME: This is a bit lame way to get coordinates for selection on map
     //       relative to the menu..
-    p.x -= getPosition().x;
-    p.y -= getPosition().y;
-    UPoint pos(m_view.x + p.x / BLOCKSIZE, m_view.y + p.y / BLOCKSIZE);
+    UPoint pos(m_view + ((p - getPosition()) / BLOCKSIZE));
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();
 
@@ -122,7 +120,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
                 m_selectedList.clear();
 
-                if (tmp != NULL)
+                if (tmp)
                 {
                     //TODO:Yeah. Add code to unselect units.
                     m_selectedList.clear();
@@ -140,9 +138,9 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
             if (!m_selectedList.empty())
             {
-                tmp = m_selectedList.front();
-                if (tmp->isAUnit())
-                    ((UnitClass*)tmp.get())->setDestination(pos);
+		for(std::list<ObjectPtr>::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
+    		    if ((*unit)->isAUnit())
+    			((UnitClass*)(*unit).get())->setDestination(pos);
             }
 
             return true;
@@ -159,10 +157,31 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
 bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 {
+    GameMan* gman = GameMan::Instance();
+    MapClass* m_map = gman->GetMap();
+
+    UPoint start(m_view + ((m_selectStart - getPosition()) / BLOCKSIZE));
+    UPoint end(m_view + ((m_selectEnd - getPosition()) / BLOCKSIZE));
+
+    UPoint pos;
     switch (button)
     {
 
         case SDL_BUTTON_LEFT:
+	    for(pos.x = start.x; pos.x <= end.x; pos.x++)
+    		for(pos.y = start.y; pos.y <= end.y; pos.y++) {
+		    if (m_map->cellExists(pos)) {
+			ObjectPtr tmp = m_map->getCell(pos)->getObject();
+			LOG_DEBUG("MapWidget", "multi: %d-%d", pos.x, pos.y);
+			if(tmp) {
+			    if(tmp->isAUnit()) {
+    				m_selectedList.push_back(tmp);
+    				tmp->setSelected(true);
+    				LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);
+			    }
+			}
+		    }
+		}
             m_selectRect = Rect(0,0,0,0);
             m_selectEnd = UPoint(0,0);
             m_selectStart = UPoint(0,0);
@@ -218,7 +237,6 @@ void MapWidget::draw(Image * dest, SPoint off)
             cell = m_map->getCell(UPoint(i + m_view.x, j + m_view.y));
             cell->draw(dest, SPoint(off.x + x + BLOCKSIZE*i, off.y + y + BLOCKSIZE*j));
         }
-    
 
     std::stack<ObjectMap> attributeKeys;
     for(ObjectTypeMap::const_iterator objTypeMap = GameMan::Instance()->getObjectsBegin(); objTypeMap != GameMan::Instance()->getObjectsEnd(); objTypeMap++) {
@@ -245,6 +263,7 @@ void MapWidget::draw(Image * dest, SPoint off)
     for (std::list<ObjectPtr>::const_iterator iter = m_selectedList.begin(); iter != m_selectedList.end(); iter++)
         if ((*iter)->isOnScreen(Rect(m_view.x*BLOCKSIZE, m_view.y*BLOCKSIZE, w, h)))
 	    (*iter)->drawSelectionBox(dest);
+
 
     if (m_mouseButtonDown && m_selectEnd!= UPoint(0,0))
     {
