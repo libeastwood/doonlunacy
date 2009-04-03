@@ -58,7 +58,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_offset = UPoint(PointFloat(cache->getPyObjectAttribute<PointFloat>(m_objectName, "offset")) * BLOCKSIZE),
 	m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
 	m_realPos = cache->getPyObjectAttribute<PointFloat>(m_objectName, "realPos");
-	m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
+	m_maxSpeed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
 	m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
 	m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
 	m_weapons = cache->getPyObjectVector<std::string>(m_objectName, "weapons");

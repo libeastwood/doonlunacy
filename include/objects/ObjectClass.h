@@ -108,7 +108,7 @@ class ObjectClass : public Rect
     inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
-    inline float getSpeed() { return m_speed; }
+    inline float getSpeed() { return m_maxSpeed; }
     inline bool isControllable() { return m_controllable; }
 
     inline bool getStatus(Uint32 status) { return m_status & status; }
@@ -159,10 +159,11 @@ class ObjectClass : public Rect
     float   m_adjust,
 	    m_angle,
             m_health,
-	    m_speed,
+	    m_maxSpeed,
 	    m_turnSpeed;
 
-    PointFloat m_realPos;
+    PointFloat m_realPos,
+	       m_speed;
 
     //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
     int m_animCounter;

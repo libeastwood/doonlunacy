@@ -29,11 +29,10 @@ class WeaponClass : public ObjectClass
     float   m_destAngle,
             m_angleLeft,
             m_angleRight,
-            m_maxSpeed,
             m_acceleration,
             m_initialSpeed,
-            m_xSpeed, m_initialXSpeed,
-            m_ySpeed, m_initialYSpeed,
+            m_initialXSpeed,
+            m_initialYSpeed,
             m_distanceTraveled;
 
 	Uint32 m_deathSound;

@@ -174,14 +174,12 @@ void UnitClass::move()
 
         if (!m_badlyDamaged || isAFlyingUnit())
         {
-            m_realPos.x += m_xSpeed * m_adjust;
-            m_realPos.y += m_ySpeed * m_adjust;
+            m_realPos += m_speed * m_adjust;
         }
 
         else
         {
-            m_realPos.x += (m_xSpeed / 2) * m_adjust;
-            m_realPos.y += (m_ySpeed / 2) * m_adjust;
+            m_realPos += (m_speed / 2) * m_adjust;
         }
 
         // if vehicle is half way out of old cell
@@ -374,61 +372,56 @@ void UnitClass::setPosition(SPoint pos)
 /*virtual*/
 void UnitClass::setSpeeds()
 {
-    float maxSpeed = m_speed;
+    float maxSpeed = m_maxSpeed;
 
     if (!isAFlyingUnit())
     {
-        m_speed += m_speed * (1.0 - m_owner->getMap()->getCell(SPoint(x, y))->getDifficulty());
-        m_speed *= HEAVILYDAMAGEDSPEEDMULTIPLIER;
+        m_maxSpeed += m_maxSpeed * (1.0 - m_owner->getMap()->getCell(SPoint(x, y))->getDifficulty());
+        m_maxSpeed *= HEAVILYDAMAGEDSPEEDMULTIPLIER;
     }
 
-    if ((m_speedCap > 0) && (m_speedCap < m_speed))
-        m_speed = m_speedCap;
+    if ((m_speedCap > 0) && (m_speedCap < m_maxSpeed))
+        m_maxSpeed = m_speedCap;
 
     switch (m_drawnAngle)
     {
 
         case (LEFT):
-            m_xSpeed = -m_speed;
-            m_ySpeed = 0;
+            m_speed = PointFloat(-m_maxSpeed, 0);
             break;
 
         case (LEFTUP):
-            m_xSpeed = -m_speed * DIAGONALSPEEDCONST;
-            m_ySpeed = m_xSpeed;
+            m_speed = -m_maxSpeed * DIAGONALSPEEDCONST;
             break;
 
         case (UP):
-            m_xSpeed = 0;
-            m_ySpeed = -m_speed;
+            m_speed = PointFloat(0, -m_maxSpeed);
             break;
 
         case (RIGHTUP):
-            m_xSpeed = m_speed * DIAGONALSPEEDCONST;
-            m_ySpeed = -m_xSpeed;
+            m_speed.x = m_maxSpeed * DIAGONALSPEEDCONST;
+	    m_speed.y = -m_speed.x;
             break;
 
         case (RIGHT):
-            m_xSpeed = m_speed;
-            m_ySpeed = 0;
+            m_speed = PointFloat(m_maxSpeed, 0);
             break;
 
         case (RIGHTDOWN):
-            m_xSpeed = m_speed * DIAGONALSPEEDCONST;
-            m_ySpeed = m_xSpeed;
+            m_speed = m_maxSpeed * DIAGONALSPEEDCONST;
             break;
 
         case (DOWN):
-            m_xSpeed = 0;
-            m_ySpeed = m_speed;
+            m_speed = PointFloat(0, m_maxSpeed);
             break;
 
         case (LEFTDOWN):
-            m_xSpeed = -m_speed * DIAGONALSPEEDCONST;
-            m_ySpeed = -m_xSpeed;
+            m_speed.x = -m_maxSpeed * DIAGONALSPEEDCONST;
+	    m_speed.y = -m_speed.x;
+	    break;
     }
 
-    m_speed = maxSpeed;
+    m_maxSpeed = maxSpeed;
 }
 
 

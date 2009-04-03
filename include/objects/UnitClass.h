@@ -70,9 +70,7 @@ class UnitClass : public ObjectClass
          m_tracked;
 
     float   m_speedCap,
-            m_targetDistance,
-            m_xSpeed, 
-            m_ySpeed;
+            m_targetDistance;
 
     int	m_baseID,
         m_destAngle,

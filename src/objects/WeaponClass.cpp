@@ -69,8 +69,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
     m_angle = m_destAngle;
     LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
-    m_xSpeed = m_speed * cos(m_destAngle * conv2char);
-    m_ySpeed = m_speed * -sin(m_destAngle * conv2char);
+    m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
 }
 
 WeaponClass::~WeaponClass()
@@ -156,8 +155,7 @@ void WeaponClass::update(float dt)
 	UPoint oldLocation = UPoint(x,y);
 	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
 
-	m_realPos.x += m_xSpeed * m_adjust;  //keep the bullet moving by its current speeds
-	m_realPos.y += m_ySpeed * m_adjust;
+	m_realPos += m_speed * m_adjust;  //keep the bullet moving by its current speeds
 	x = (short)(m_realPos.x/BLOCKSIZE);
 	y = (short)(m_realPos.y/BLOCKSIZE);
 
