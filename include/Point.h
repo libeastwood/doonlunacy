@@ -48,6 +48,14 @@ struct Point
             y = point.y;
             return *this;
         }
+
+        //! operator =
+        Point &operator=(T value)
+        {
+	    x = y = value;
+            return *this;
+        }
+
         //! operator +=
         Point &operator+=(const Point &point)
         {
