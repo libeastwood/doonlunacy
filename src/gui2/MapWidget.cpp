@@ -18,8 +18,7 @@ MapWidget::MapWidget()
     m_mouseButtonDown = false;
     m_keyPressed = SDLK_UNKNOWN;
     m_modPressed = KMOD_NONE; 
-    /*new WeaponClass(NULL, "Large Rocket", UPoint(50,50), UPoint(498, 352), false);
-    new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
+    /*new WeaponClass(NULL, "Large Rocket", UPoint(50,200), UPoint(498, 372), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(200,50), UPoint(498, 392), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(400,400), UPoint(498, 412), false);
     new WeaponClass(NULL, "Large Rocket", UPoint(200,400), UPoint(498, 422), false);*/
@@ -156,8 +155,6 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 		ObjectPtr targetObj;
 		if(m_keyPressed == SDLK_LCTRL || ((targetObj = m_map->getCell(pos)->getObject()) && targetObj->getOwner() != GameMan::Instance()->LocalPlayer()))
 		    status |= STATUS_ATTACKING;
-		else
-		    status |= STATUS_MOVING;
 
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
     		    if ((*unit).second->isControllable() && (*unit).second->isAUnit())

@@ -10,7 +10,7 @@
 
 
 WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
-    ObjectClass(newShooter ? newShooter->getOwner() : NULL, weaponName, attribute | OBJECT_WEAPON)
+    ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
     DataCache* cache = DataCache::Instance();
 
@@ -80,7 +80,7 @@ WeaponClass::~WeaponClass()
 
 void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    if (!getAction(STATUS_DESTROYED) && m_objectName == "Sonic")
+    if (!getStatus(STATUS_DESTROYED) && m_objectName == "Sonic")
     {
 	ImagePtr tmp = m_graphic->getCopy();
 	SDL_Surface *mask = tmp->getSurface();
@@ -148,10 +148,10 @@ void WeaponClass::update(float dt)
     ObjectClass::update(dt);
     MapClass* map = GameMan::Instance()->GetMap();
 
-    if (m_shooter && m_shooter->getAction(STATUS_DESTROYED))
+    if (m_shooter && m_shooter->getStatus(STATUS_DESTROYED))
 	m_shooter.reset();
 
-    if (!getAction(STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
 	UPoint oldLocation = UPoint(x,y);
 	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
@@ -190,7 +190,7 @@ void WeaponClass::update(float dt)
 
 void WeaponClass::destroy()
 {
-    if (!getAction(STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
 	/* Here we deal damage to explosion area according to it's size */
     	MapClass* map = GameMan::Instance()->GetMap();

@@ -100,7 +100,7 @@ void UnitClass::deploy(SPoint newPosition)
 void UnitClass::destroy()
 {
     GameMan* gman = GameMan::Instance();
-    if (!getAction(STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
         LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, m_objectName.c_str());
         m_target.reset();
@@ -168,7 +168,7 @@ void UnitClass::move()
     MapClass* map = m_owner->getMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
-    if (getAction(STATUS_MOVING))
+    if (getStatus(STATUS_MOVING))
     {
         m_oldPosition = UPoint(x, y);
 
@@ -202,7 +202,7 @@ void UnitClass::move()
                 if (getPosition() == m_destination)
                     setForced(false);
 
-		m_status &= ~STATUS_MOVING;
+		unsetStatus(STATUS_MOVING);
 
                 m_justStoppedMoving = true;
 
@@ -222,7 +222,7 @@ void UnitClass::move()
 /*virtual*/
 void UnitClass::navigate()
 {
-    if (!getAction(STATUS_MOVING))
+    if (!getStatus(STATUS_MOVING))
     {
         if ((x != m_destination.x) || (y != m_destination.y))
         {
@@ -279,7 +279,7 @@ void UnitClass::navigate()
 
                 else if (m_drawnAngle == m_nextSpotAngle)
                 {
-		    m_status |= STATUS_MOVING;
+		    setStatus(STATUS_MOVING);
                     m_nextSpotFound = false;
                     assignToMap(m_nextSpot);
                     m_angle = m_drawnAngle;
@@ -299,7 +299,7 @@ void UnitClass::navigate()
 
 void UnitClass::setAngle(int newAngle)
 {
-    if (!getAction(STATUS_MOVING) && (newAngle >= 0) && (newAngle < NUM_ANGLES))
+    if (!getStatus(STATUS_MOVING) && (newAngle >= 0) && (newAngle < NUM_ANGLES))
     {
         m_angle = m_drawnAngle = newAngle;
         m_nextSpotAngle = m_drawnAngle;
@@ -321,9 +321,9 @@ void UnitClass::playSelectSound() {
 void UnitClass::setDestination(SPoint destination, Uint32 status)
 {
     m_pathList.clear();
-    if(m_guardPoint != destination && m_controllable)
-	playConfirmSound();
     ObjectClass::setDestination(destination, status);
+    if(m_guardPoint != destination && m_controllable && getStatus(STATUS_MOVING))
+	playConfirmSound();
 }
 
 void UnitClass::setSelected(bool value) {
@@ -361,7 +361,7 @@ void UnitClass::setPosition(SPoint pos)
         m_realPos.y += BLOCKSIZE / 2;
     }
 
-    m_status &= ~STATUS_MOVING;
+    unsetStatus(STATUS_MOVING);
 
     m_nextSpotFound = false;
     m_nextSpotAngle = m_drawnAngle;
@@ -523,7 +523,7 @@ void UnitClass::turnRight()
 /*virtual*/
 void UnitClass::turn()
 {
-    if (!getAction(STATUS_MOVING))
+    if (!getStatus(STATUS_MOVING))
     {
         int wantedAngle;
         
@@ -570,7 +570,7 @@ void UnitClass::turn()
 void UnitClass::update(float dt)
 {
     ObjectClass::update(dt);
-    if (!getAction(STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
         if (m_active)
         {

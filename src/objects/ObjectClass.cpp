@@ -61,6 +61,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_speed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
 	m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
 	m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
+	m_weapons = cache->getPyObjectVector<std::string>(m_objectName, "weapons");
 	w = (cache->getPyObjectAttribute<float>(m_objectName, "size", 0) * BLOCKSIZE);
 	h = (cache->getPyObjectAttribute<float>(m_objectName, "size", 1) * BLOCKSIZE);
     }
@@ -99,15 +100,13 @@ void ObjectClass::assignToMap(SPoint pos)
 
 bool ObjectClass::canAttack(ObjectPtr object)
 {
-    if ( (object != NULL) && !object->getAction(STATUS_DESTROYED) 
+    if ( (object != NULL) && !object->getStatus(STATUS_DESTROYED) 
 	    && ( object->isAStructure() || !object->isAFlyingUnit() )
 	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
 		|| object->getObjectName() == "Sandworm") && object->isVisible(m_owner->getTeam()) ) 
-    {
 	return true;
-    } else {
+    else
 	return false;
-    }
 }
 
 void ObjectClass::setDrawnPos(SPoint off, SPoint view)
@@ -122,7 +121,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 
     setDrawnPos(off, view);
 
-    if (!(m_status & STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
 	Rect source(m_numFrames > 1 ? m_drawnAngle * w : m_curAnimFrame * w, 0, w, h);
 	m_graphic->blitTo(dest, source, m_drawnPos);
@@ -173,7 +172,7 @@ void ObjectClass::drawSmoke(Image *dest)
 
 void ObjectClass::destroy()
 {
-    if (!(m_status & STATUS_DESTROYED))
+    if (!(getStatus(STATUS_DESTROYED)))
     {
 	/*
 	   UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
@@ -199,7 +198,7 @@ void ObjectClass::destroy()
 
 	m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
-	m_status |= STATUS_DESTROYED;
+	setStatus(STATUS_DESTROYED);
 	m_frameTimer = m_frameTime;
     }
 }
@@ -343,7 +342,7 @@ int ObjectClass::getViewRange()
 
 void ObjectClass::handleDamage(int damage, ObjectPtr damager)
 {
-    if (!getAction(STATUS_DESTROYED))
+    if (!getStatus(STATUS_DESTROYED))
     {
 	if (damage >= 0) 
 	{
@@ -382,14 +381,23 @@ bool ObjectClass::isVisible(int team)
 
 void ObjectClass::setDestination(SPoint destination, Uint32 status)
 {
+    setStatus(status);
     m_target.reset();
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
     {
-	if(status & STATUS_MOVING)
-	if(status & STATUS_ATTACKING) {
+
+	if(getStatus(STATUS_ATTACKING)) {
     	    m_target = GameMan::Instance()->GetMap()->getCell(destination)->getObject();
+	    UPoint targetPos(m_target ? m_target->getRealPos() : UPoint(destination * BLOCKSIZE));
+	    if(!m_weapons.empty())
+	    {
+    		ObjectPtr missile(new WeaponClass(GameMan::Instance()->getObject(getObjectID()), m_weapons.front(), m_realPos, targetPos, false));
+    		GameMan::Instance()->addObject(missile);
+		unsetStatus(STATUS_MOVING);
+	    }
 	}
-	m_destination = destination;
+
+        m_destination = destination;
     }
 }
 

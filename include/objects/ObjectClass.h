@@ -111,7 +111,9 @@ class ObjectClass : public Rect
     inline float getSpeed() { return m_speed; }
     inline bool isControllable() { return m_controllable; }
 
-    inline bool getAction(Uint32 status) { return m_status & status; }
+    inline bool getStatus(Uint32 status) { return m_status & status; }
+    inline void setStatus(Uint32 status) { m_status |= status; }
+    inline void unsetStatus(Uint32 status) { m_status &= ~status; }
 
     bool isOnScreen(Rect rect);
 
@@ -227,6 +229,8 @@ class ObjectClass : public Rect
     UPoint m_offset;
 
     ObjectPtr m_target;
+
+    std::vector<std::string> m_weapons;
 
     Uint32 m_attributes, m_status;
 
