@@ -15,10 +15,9 @@ void GroundUnit::checkPos()
 {
     MapClass* map = m_owner->getMap();
 
-    if (m_justStoppedMoving)
+    if (getStatus(STATUS_JUSTSTOPPEDMOVING))
     {
-        m_realPos.x = x * BLOCKSIZE + BLOCKSIZE / 2;
-        m_realPos.y = y * BLOCKSIZE + BLOCKSIZE / 2;
+        m_realPos = UPoint(x, y) * BLOCKSIZE + BLOCKSIZE / 2;
         m_findTargetTimer = 0; //allow a scan for new targets now
 
         //if (currentGame->playerType == SERVER)

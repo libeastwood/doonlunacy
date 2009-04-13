@@ -25,7 +25,13 @@ enum status {
     STATUS_MOVING = 1 << 0,
     STATUS_ATTACKING = 1 << 1,
     STATUS_REPAIR = 1 << 2,
-    STATUS_DESTROYED = 1 << 3
+    STATUS_DESTROYED = 1 << 3,
+    STATUS_PICKEDUP = 1 << 4,
+    STATUS_TURNING = 1 << 5,
+    STATUS_TRACKED = 1 << 6,
+    STATUS_TURRETED = 1 << 7,
+    STATUS_JUSTSTOPPEDMOVING = 1 << 8,
+    STATUS_NEXTSPOTFOUND = 1 << 9
 };
 
 /*!

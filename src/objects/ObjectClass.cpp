@@ -249,13 +249,10 @@ ObjectPtr ObjectClass::findTarget()
     //                     *****
 
     if (m_attackMode == STANDGROUND)
-    {
 	checkRange = m_weaponRange;
-    }
     else
-    {
 	checkRange = m_guardRange;
-    }
+
     int xCheck = xPos - checkRange;
 
     if (xCheck < 0)
@@ -429,15 +426,10 @@ void ObjectClass::setPosition(SPoint pos)
 void ObjectClass::setVisible(int team, bool status)
 {
     if (team == VIS_ALL) 
-    {
 	for(int i = 0; i < MAX_PLAYERS; i++)
-	{
 	    m_visible[i] = status;
-	}
-    } else if ((team >= 1) && (team <= MAX_PLAYERS)) 
-    {
+    else if ((team >= 1) && (team <= MAX_PLAYERS)) 
 	m_visible[--team] = status;
-    }
 }
 
 void ObjectClass::unassignFromMap(SPoint pos)

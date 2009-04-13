@@ -29,12 +29,9 @@ class UnitClass : public ObjectClass
     virtual void draw(Image * dest, SPoint off, SPoint view);
     
     virtual void destroy();
-   	virtual void deploy(SPoint newPosition);
+    virtual void deploy(SPoint newPosition);
    	
-	inline bool isTracked() { return m_tracked; }
-	inline bool isTurreted() { return m_turreted; }
-
-	void setAngle(int newAngle);
+    void setAngle(int newAngle);
 
     virtual void update(float dt);
     virtual void setDestination(SPoint destination, Uint32 status = 0);
@@ -61,13 +58,6 @@ class UnitClass : public ObjectClass
 
 	void targeting();
 	void setGuardPoint(UPoint newGuardPoint);
-	void setGuardPoint(int newX, int newY);
-    bool m_justStoppedMoving,
-         m_nextSpotFound,
-         m_pickedUp,
-         m_turning,
-         m_turreted,
-         m_tracked;
 
     float   m_speedCap,
             m_targetDistance;

@@ -16,13 +16,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
 {
     DataCache *cache = DataCache::Instance();
 
-    m_canAttackStuff = true;
-    m_pickedUp = false;
-    m_justStoppedMoving = false;
-    m_turning = false;
-    m_tracked = false;
-    m_turreted = false;
-    m_nextSpotFound = false;
     m_respondable = true;
     m_attackMode = DEFENSIVE;
 
@@ -81,7 +74,7 @@ void UnitClass::deploy(SPoint newPosition)
 
         setDestination(m_guardPoint);
 
-        //  pickedUp = false;
+        //  unsetStatus(STATUS_PICKEDUP);
 
         setRespondable(true);
 
@@ -173,14 +166,9 @@ void UnitClass::move()
         m_oldPosition = UPoint(x, y);
 
         if (!m_badlyDamaged || isAFlyingUnit())
-        {
             m_realPos += m_speed * m_adjust;
-        }
-
         else
-        {
             m_realPos += (m_speed / 2) * m_adjust;
-        }
 
         // if vehicle is half way out of old cell
 
@@ -202,7 +190,7 @@ void UnitClass::move()
 
 		unsetStatus(STATUS_MOVING);
 
-                m_justStoppedMoving = true;
+                setStatus(STATUS_JUSTSTOPPEDMOVING);
 
                 map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
             }
@@ -211,7 +199,7 @@ void UnitClass::move()
 
     else
     {
-        m_justStoppedMoving = false;
+        unsetStatus(STATUS_JUSTSTOPPEDMOVING);
     }
 
     checkPos();
@@ -224,7 +212,7 @@ void UnitClass::navigate()
     {
         if ((x != m_destination.x) || (y != m_destination.y))
         {
-            if (!m_nextSpotFound)
+            if (!getStatus(STATUS_NEXTSPOTFOUND))
             {
                 if (m_nextSpotAngle == m_drawnAngle)
                 {
@@ -255,7 +243,7 @@ void UnitClass::navigate()
                     {
                         m_nextSpot = m_pathList.front();
                         m_pathList.pop_front();
-                        m_nextSpotFound = true;
+                        setStatus(STATUS_NEXTSPOTFOUND);
                         m_checkTimer = 0;
                         m_noCloserPointCount = 0;
                     }
@@ -271,14 +259,14 @@ void UnitClass::navigate()
 
                 if (!canPass(m_nextSpot))
                 {
-                    m_nextSpotFound = false;
+                    unsetStatus(STATUS_NEXTSPOTFOUND);
                     m_pathList.clear();
                 }
 
                 else if (m_drawnAngle == m_nextSpotAngle)
                 {
 		    setStatus(STATUS_MOVING);
-                    m_nextSpotFound = false;
+                    unsetStatus(STATUS_NEXTSPOTFOUND);
                     assignToMap(m_nextSpot);
                     m_angle = m_drawnAngle;
                     setSpeeds();
@@ -301,7 +289,7 @@ void UnitClass::setAngle(int newAngle)
     {
         m_angle = m_drawnAngle = newAngle;
         m_nextSpotAngle = m_drawnAngle;
-        m_nextSpotFound = false;
+        unsetStatus(STATUS_NEXTSPOTFOUND);
     }
 }
 
@@ -340,19 +328,15 @@ void UnitClass::setGuardPoint(UPoint newGuardPoint)
 
 void UnitClass::setPosition(SPoint pos)
 {
-    if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
-        ObjectClass::setPosition(pos);
-    else if (m_owner->getMap()->cellExists(pos))
-    {
-        ObjectClass::setPosition(pos);
+    ObjectClass::setPosition(pos);
+    if (m_owner->getMap()->cellExists(pos))
         m_realPos += BLOCKSIZE / 2;
-    }
 
     unsetStatus(STATUS_MOVING);
 
-    m_nextSpotFound = false;
+    unsetStatus(STATUS_NEXTSPOTFOUND);
     m_nextSpotAngle = m_drawnAngle;
-    m_pickedUp = false;
+    unsetStatus(STATUS_PICKEDUP);
     m_target.reset();
     m_pathList.clear();
     m_noCloserPointCount = 0;
@@ -516,7 +500,7 @@ void UnitClass::turn()
 
         if (wantedAngle != -1)
         {
-            if (m_justStoppedMoving)
+            if (getStatus(STATUS_JUSTSTOPPEDMOVING))
             {
                 m_angle = wantedAngle;
                 m_drawnAngle = lround(m_angle);
