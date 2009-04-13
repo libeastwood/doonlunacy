@@ -150,10 +150,10 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 
         while (iter != m_pathList.end())
         {
-            rect.x = off.x + (*iter).x * BLOCKSIZE - view.x * BLOCKSIZE + BLOCKSIZE / 2;
-            rect.y = off.y + (*iter).y * BLOCKSIZE - view.y * BLOCKSIZE + BLOCKSIZE / 2;
-            rect.w = 2;
-            rect.h = 2;
+            UPoint pos(off + (*iter) * BLOCKSIZE - view * BLOCKSIZE + BLOCKSIZE / 2);
+	    rect.x = pos.x;
+	    rect.y = pos.y;
+            rect.w = rect.h = 2;
             dest->drawRect(rect, houseColour[m_owner->getColour()]);
             iter++;
         }
@@ -332,31 +332,20 @@ void UnitClass::setSelected(bool value) {
 
 void UnitClass::setGuardPoint(UPoint newGuardPoint)
 {
-	setGuardPoint(newGuardPoint.x, newGuardPoint.y);
-}
+    MapClass* map = m_owner->getMap();
 
-void UnitClass::setGuardPoint(int newX, int newY)
-{
-	MapClass* map = m_owner->getMap();
-	
-	if (map->cellExists(newX, newY) || ((newX == INVALID_POS) && (newY == INVALID_POS)))
-	{
-		m_guardPoint.x = newX;
-		m_guardPoint.y = newY;
-	}
+    if (map->cellExists(newGuardPoint) || ((newGuardPoint.x == INVALID_POS) && (newGuardPoint.y == INVALID_POS)))
+	m_guardPoint = newGuardPoint;
 }
 
 void UnitClass::setPosition(SPoint pos)
 {
     if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
-    {
         ObjectClass::setPosition(pos);
-    }
     else if (m_owner->getMap()->cellExists(pos))
     {
         ObjectClass::setPosition(pos);
-        m_realPos.x += BLOCKSIZE / 2;
-        m_realPos.y += BLOCKSIZE / 2;
+        m_realPos += BLOCKSIZE / 2;
     }
 
     unsetStatus(STATUS_MOVING);
