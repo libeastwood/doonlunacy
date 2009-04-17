@@ -5,14 +5,14 @@ TILE_ROTATE = 0x10000000
 
 class GameData(object):
     def __init__(self):
-        self.filename = ""
+        self.filename = None
         self.crop = None
-        self.type = ""
-        self.palette = ""
+        self.type = None
+        self.palette = "DUNE:IBM.PAL"
         self.tiles = []
-        self.index = -1
-        self.map = ""
-        self.mapindex = -1
+        self.index = None
+        self.map = None
+        self.mapindex = None
         self.tilepos = (0,0)
         self.num = 0
         self.row = None

@@ -3,15 +3,13 @@
 
 #include "GameMan.h"
 #include "ResMan.h"
+#include "PythonObjects.h"
 
 #include "objects/BuilderClass.h"
 #include "objects/StructureClass.h"
 #include "objects/AirUnit.h"
 #include "objects/GroundUnit.h"
 #include "objects/InfantryClass.h"
-
-using namespace std;
-
 
 int lookDist[11];
 
@@ -108,9 +106,9 @@ void GameMan::removeObject(uint32_t objectID) {
 ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
 {
     std::string objectClass;
-    ObjectPtr newObject;;
+    ObjectPtr newObject;
     try {
-	objectClass = DataCache::Instance()->getPyObjectType(itemName);
+	objectClass = getPyObjectType(DataCache::Instance()->getPyObject(itemName));
     }
     catch(python::error_already_set const &)
     {

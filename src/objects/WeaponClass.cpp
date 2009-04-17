@@ -7,12 +7,13 @@
 #include "Log.h"
 #include "MapClass.h"
 #include "mmath.h"
+#include "PythonObjects.h"
 
 
 WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
     ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
-    DataCache* cache = DataCache::Instance();
+    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
 
     m_groundBlocked = false;
     m_airAttack = air;
@@ -24,12 +25,12 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
     m_deathSound = NONE;
 
     try {
-	m_damage = cache->getPyObjectAttribute<int>(m_objectName, "damage");
-	m_damagePiercing = cache->getPyObjectAttribute<int>(m_objectName, "damagePiercing");
-	m_damageRadius =  cache->getPyObjectAttribute<int>(m_objectName, "damageRadius");
-	m_groundBlocked =  cache->getPyObjectAttribute<int>(m_objectName, "groundBlocked");
-	inaccuracy = cache->getPyObjectAttribute<int>(m_objectName, "inaccuracy");
-	m_range = cache->getPyObjectAttribute<int>(m_objectName, "range");
+	m_damage = python::extract<int>(pyObject.attr("damage"));
+	m_damagePiercing = python::extract<int>(pyObject.attr("damagePiercing"));
+	m_damageRadius =  python::extract<int>(pyObject.attr("damageRadius"));
+	m_groundBlocked =  python::extract<int>(pyObject.attr("groundBlocked"));
+	inaccuracy = python::extract<int>(pyObject.attr("inaccuracy"));
+	m_range = python::extract<int>(pyObject.attr("range"));
     }
     catch(python::error_already_set const &)
     {

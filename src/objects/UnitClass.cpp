@@ -8,23 +8,24 @@
 #include "MapClass.h"
 #include "Settings.h"
 #include "SoundPlayer.h"
+#include "PythonObjects.h"
 
 #include "objects/ObjectClass.h"
 #include "objects/UnitClass.h"
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
-    DataCache *cache = DataCache::Instance();
+    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
 
     m_respondable = true;
     m_attackMode = DEFENSIVE;
 
     try {
-	std::vector<std::string> soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "confirmSound");
+	std::vector<std::string> soundStrings = getPyObjectVector<std::string>(pyObject.attr("confirmSound"));
 	m_confirmSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
 	    m_confirmSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
-	soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "selectSound");
+	soundStrings = getPyObjectVector<std::string>(pyObject.attr("selectSound"));
 	m_selectSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
 	    m_selectSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();

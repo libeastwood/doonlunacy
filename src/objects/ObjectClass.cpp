@@ -7,6 +7,7 @@
 #include "PlayerClass.h"
 #include "MapClass.h"
 #include "SoundPlayer.h"
+#include "PythonObjects.h"
 
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
     Rect(0, 0, 0, 0)
@@ -15,10 +16,10 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     m_status = STATUS_NONE;
 
 
-    DataCache *cache = DataCache::Instance();
     std::string graphic;
 
     m_objectName = objectName;
+    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
 
 
     m_animCounter = 0;
@@ -42,28 +43,31 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 
     try {
-	m_angle = cache->getPyObjectAttribute<int>(m_objectName, "angle");
-	m_animFrames = cache->getPyObjectAttribute<int>(m_objectName, "animFrames");
-	m_armor = cache->getPyObjectAttribute<int>(m_objectName, "armor");
-	m_deathAnim = cache->getPyObjectAttribute<std::string>(m_objectName, "deathAnim");
-	m_drawnAngle = cache->getPyObjectAttribute<int>(m_objectName, "drawnAngle");
-	m_drawnPos = cache->getPyObjectAttribute<UPoint>(m_objectName, "drawnPos");
-	m_explosionSize = cache->getPyObjectAttribute<int>(m_objectName, "explosionSize");
-	m_guardRange = cache->getPyObjectAttribute<int>(m_objectName, "guardRange");
-	graphic = cache->getPyObjectAttribute<std::string>(m_objectName, "graphic");
-	m_maxHealth = cache->getPyObjectAttribute<int>(m_objectName, "maxHealth");
-	m_numDeathFrames = cache->getPyObjectAttribute<int>(m_objectName, "numDeathFrames");
-	m_numFrames = cache->getPyObjectAttribute<int>(m_objectName, "numFrames");
-	m_health = cache->getPyObjectAttribute<int>(m_objectName, "health");
-	m_offset = UPoint(PointFloat(cache->getPyObjectAttribute<PointFloat>(m_objectName, "offset")) * BLOCKSIZE),
-	m_radius = cache->getPyObjectAttribute<int>(m_objectName, "radius");
-	m_realPos = cache->getPyObjectAttribute<PointFloat>(m_objectName, "realPos");
-	m_maxSpeed = cache->getPyObjectAttribute<float>(m_objectName, "speed");
-	m_turnSpeed = cache->getPyObjectAttribute<float>(m_objectName, "turnSpeed");
-	m_viewRange = cache->getPyObjectAttribute<int>(m_objectName, "viewRange");
-	m_weapons = cache->getPyObjectVector<std::string>(m_objectName, "weapons");
-	w = (cache->getPyObjectAttribute<float>(m_objectName, "size", 0) * BLOCKSIZE);
-	h = (cache->getPyObjectAttribute<float>(m_objectName, "size", 1) * BLOCKSIZE);
+	PointFloat size;
+	m_angle = python::extract<int>(pyObject.attr("angle"));
+	m_animFrames = python::extract<int>(pyObject.attr("animFrames"));
+	m_armor = python::extract<int>(pyObject.attr("armor"));
+	m_deathAnim = python::extract<std::string>(pyObject.attr("deathAnim"));
+	m_drawnAngle = python::extract<int>(pyObject.attr("drawnAngle"));
+	m_drawnPos = python::extract<UPoint>(pyObject.attr("drawnPos"));
+	m_explosionSize = python::extract<int>(pyObject.attr("explosionSize"));
+	m_guardRange = python::extract<int>(pyObject.attr("guardRange"));
+	graphic = python::extract<std::string>(pyObject.attr("graphic"));
+	m_maxHealth = python::extract<int>(pyObject.attr("maxHealth"));
+	m_numDeathFrames = python::extract<int>(pyObject.attr("numDeathFrames"));
+	m_numFrames = python::extract<int>(pyObject.attr("numFrames"));
+	m_health = python::extract<int>(pyObject.attr("health"));
+	m_offset = UPoint(PointFloat(python::extract<PointFloat>(pyObject.attr("offset"))) * BLOCKSIZE),
+	m_radius = python::extract<int>(pyObject.attr("radius"));
+	m_realPos = python::extract<PointFloat>(pyObject.attr("realPos"));
+	m_maxSpeed = python::extract<float>(pyObject.attr("speed"));
+	m_turnSpeed = python::extract<float>(pyObject.attr("turnSpeed"));
+	m_viewRange = python::extract<int>(pyObject.attr("viewRange"));
+	m_weapons = getPyObjectVector<std::string>(pyObject.attr("weapons"));
+	if(getPyObject<PointFloat>(pyObject.attr("size"), &size)) {
+	    size *= BLOCKSIZE;
+	    w = size.x, h = size.y;
+	}
     }
     catch(python::error_already_set const &)
     {
@@ -72,7 +76,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	exit(EXIT_FAILURE);
     }
 
-    m_graphic = cache->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+    m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
 
 }

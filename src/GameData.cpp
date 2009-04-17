@@ -2,6 +2,7 @@
 
 #include "DataCache.h"
 #include "Gfx.h"
+#include "PythonObjects.h"
 #include "ResMan.h"
 
 #include <eastwood/CpsFile.h>
@@ -58,26 +59,25 @@ bool GameData::freeIfUnique()
 
 void GameData::drawImage()
 {
-    DataCache *cache = DataCache::Instance();
-
     try
     {
 	size_t len;
 	uint8_t *data;
-
 	std::string variable;
 	int value;
-
+	UPoint pos;
 	SDL_Palette* palette;
-	if(!(variable = cache->getPyObjectAttribute<std::string>(m_path, "palette")).empty())
+	python::object pyObject = DataCache::Instance()->getPyObject(m_path);
+
+	if(getPyObject(pyObject.attr("palette"), &variable))
 	    palette = DataCache::Instance()->getPalette(variable);
 	else
-	    palette = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
+	    LOG_ERROR("GameData", "No palette for %s!", m_path.c_str());
 
-	if(!(variable = cache->getPyObjectAttribute<std::string>(m_path, "filename")).empty()) {
+	if(getPyObject(pyObject.attr("filename"), &variable)) {
 	    // TODO: autodetection would be nice..
 	    std::string type;
-	    if((type = cache->getPyObjectAttribute<std::string>(m_path, "type")).empty())
+	    if(!getPyObject(pyObject.attr("type"), &type))
 		type = variable.substr(variable.length()-3, 3);
 
 	    data = ResMan::Instance()->readFile(variable, &len);
@@ -90,9 +90,9 @@ void GameData::drawImage()
 
 	    if (type == "SHP")
 	    {
-		std::vector<Uint32> tiles = cache->getPyObjectVector<Uint32>(m_path, "tiles");
+		std::vector<Uint32> tiles = getPyObjectVector<Uint32>(pyObject.attr("tiles"));
 		ShpFile shpfile(data, len, palette);
-		if((value = cache->getPyObjectAttribute<int>(m_path, "index")) >= 0)
+		if(getPyObject<int>(pyObject.attr("index"), &value))
 		    m_surface.reset(new Image(shpfile.getSurface(value)));
 		else if(!tiles.empty())
 		{
@@ -122,23 +122,21 @@ void GameData::drawImage()
 	    }
 	    if (type == "ICN") {
 		std::string mapName;
-		if(!(mapName = cache->getPyObjectAttribute<std::string>(m_path, "map")).empty()) {
+		if(getPyObject<std::string>(pyObject.attr("map"), &mapName)) {
 		    size_t mapLen;
 		    uint8_t *mapData = ResMan::Instance()->readFile(mapName, &mapLen);
 
-		    const char *tiss = m_path.c_str();
 		    IcnFile icnfile(data, len, mapData, mapLen, palette);
-    		    if((value = cache->getPyObjectAttribute<int>(m_path, "index")) >= 0)
+    		    if(getPyObject<int>(pyObject.attr("index"), &value))
 			m_surface.reset(new Image(icnfile.getSurface(value)));
-		    else if(!cache->nonePyObject(m_path, "row"))
+		    else if(getPyObject<UPoint>(pyObject.attr("row"), &pos))
 		    {
-			UPoint row = cache->getPyObjectAttribute<UPoint>(m_path, "row");
-			m_surface.reset(new Image(icnfile.getSurfaceRow(row.x, row.y)));
+			m_surface.reset(new Image(icnfile.getSurfaceRow(pos.x, pos.y)));
 		    }
-		    else if((value = cache->getPyObjectAttribute<int>(m_path, "mapindex")) >= 0)
+		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value))
 		    {
-			int tilesN = cache->getPyObjectAttribute<int>(m_path, "num");
-			UPoint tilePos = cache->getPyObjectAttribute<UPoint>(m_path, "tilepos");
+			int tilesN = python::extract<int>(pyObject.attr("num"));
+			UPoint tilePos = python::extract<UPoint>(pyObject.attr("tilepos"));
 			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
 		    }
 		    else
@@ -154,51 +152,48 @@ void GameData::drawImage()
 		}
 	    }
 	}
-	else if((variable = cache->getPyObjectType(m_path, "gcobject", 0)) != "NoneType")
+	else if((variable = getPyObjectType(pyObject.attr("gcobject"), 0)) != "NoneType")
 	{
 	    Uint32 colorkey = 0;
+	    Rect crop;
 	    ImagePtr gcObj = DataCache::Instance()->getGameData(variable)->getImage();
-	    if(!cache->nonePyObject(m_path, "crop")) {
-		Rect crop = cache->getPyObjectAttribute<Rect>(m_path, "crop");
+	    if(getPyObject(pyObject.attr("crop"), &crop))
 		m_surface.reset(gcObj->getPictureCrop(crop));
-	    } else
+	    else
 		m_surface = gcObj->getCopy();
 
-	    if(!cache->nonePyObject(m_path, "colorkey"))
-	    {
-		colorkey = cache->getPyObjectAttribute<int>(m_path, "colorkey");
+	    if(getPyObject(pyObject.attr("colorkey"), &colorkey))
 		m_surface->setColorKey(colorkey);
-	    }
 
-	    if(!cache->nonePyObject(m_path, "putpixel"))
+	    if(!nonePyObject(pyObject.attr("putpixel")))
 	    {
-		std::vector<UPoint> putPixels = cache->getPyObjectVector<UPoint>(m_path, "putpixel");
+		std::vector<UPoint> putPixels = getPyObjectVector<UPoint>(pyObject.attr("putpixel"));
 	    	for (std::vector<UPoint>::const_iterator iter = putPixels.begin(); iter != putPixels.end(); iter++)
 		    m_surface->putPixel(*iter, colorkey);
 	    }
 
-	    if(!cache->nonePyObject(m_path, "drawvline"))
+	    if(!nonePyObject(pyObject.attr("drawvline")))
 	    {
-		std::vector<Rect> drawVLines = cache->getPyObjectVector<Rect>(m_path, "drawvline");
+		std::vector<Rect> drawVLines = getPyObjectVector<Rect>(pyObject.attr("drawvline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawVLines.begin(); iter != drawVLines.end(); iter++)
 		    m_surface->drawVLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
 	    }
 
-	    if(!cache->nonePyObject(m_path, "drawhline"))
+	    if(!nonePyObject(pyObject.attr("drawhline")))
 	    {
-		std::vector<Rect> drawHLines = cache->getPyObjectVector<Rect>(m_path, "drawhline");
+		std::vector<Rect> drawHLines = getPyObjectVector<Rect>(pyObject.attr("drawhline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawHLines.begin(); iter != drawHLines.end(); iter++)
 		    m_surface->drawHLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
 	    }
 
-	    if(!cache->nonePyObject(m_path, "fillrect"))
+	    if(!nonePyObject(pyObject.attr("fillrect")))
 	    {
-		std::vector<Rect> fillRects = cache->getPyObjectVector<Rect>(m_path, "fillrect");
+		std::vector<Rect> fillRects = getPyObjectVector<Rect>(pyObject.attr("fillrect"));
 	    	for (std::vector<Rect>::const_iterator iter = fillRects.begin(); iter != fillRects.end(); iter++)
 		    m_surface->fillRect(colorkey, *iter);
 	    }
 	}
-	m_persistent = cache->getPyObjectAttribute<bool>(m_path, "persistent");
+	m_persistent = pyObject.attr("persistent");
     }
     catch(python::error_already_set const &)
     {

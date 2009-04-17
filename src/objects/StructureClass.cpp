@@ -5,14 +5,14 @@
 
 StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attribute) : ObjectClass(newOwner, structureName, attribute | OBJECT_STRUCTURE)
 {
-    DataCache *cache = DataCache::Instance();
+    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
 
     m_justPlacedTimer = 0;
     try {
-	    m_isAnimating = cache->getPyObjectAttribute<bool>(m_objectName, "animate");
-	    m_firstAnimFrame = cache->getPyObjectAttribute<int>(m_objectName, "firstAnimFrame");
-	    m_lastAnimFrame = cache->getPyObjectAttribute<int>(m_objectName, "lastAnimFrame");
-	    m_powerRequirement = cache->getPyObjectAttribute<int>(m_objectName, "powerRequirement");
+	    m_isAnimating = python::extract<bool>(pyObject.attr("animate"));
+	    m_firstAnimFrame = python::extract<int>(pyObject.attr("firstAnimFrame"));
+	    m_lastAnimFrame = python::extract<int>(pyObject.attr("lastAnimFrame"));
+	    m_powerRequirement = python::extract<int>(pyObject.attr("powerRequirement"));
     }
     catch(python::error_already_set const &)
     {

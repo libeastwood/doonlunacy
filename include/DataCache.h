@@ -83,45 +83,8 @@ class DataCache : public Singleton<DataCache>
 
         void loadPyObjects();
         
-	inline python::object getPyObject(std::string objectName)
-	{
+	inline python::object getPyObject(std::string objectName) {
 	    return m_pyObjects[objectName];
-	}
-
-        template<typename T>
-        inline const T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
-        {
-	    python::object obj = m_pyObjects[objectName].attr(parameter.c_str());
-	    if(index < 0)
-		return python::extract<T>(obj);
-	    else
-		return python::extract<T>(obj[index]);
-        }
-
-        template<typename T>
-        inline std::vector<T> getPyObjectVector(std::string objectName, std::string parameter)
-        {
-	    python::object obj = m_pyObjects[objectName].attr(parameter.c_str());
-
-	    ssize_t size = python::len(obj);
-	    std::vector<T> ret(size);
-	    for(ssize_t i = 0; i < size; i++)
-		ret[i] = python::extract<T>(obj[i]);
-	    return ret;
-        }
-
-	inline std::string getPyObjectType(std::string objectName, std::string child = "", int level = 1)
-	{
-	    python::object obj;
-	    if(child.empty())
-    		obj = m_pyObjects[objectName];
-	    else
-		obj = m_pyObjects[objectName].attr(child.c_str());
-    	    return python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[level]).attr("__name__")));
-	}
-
-	inline bool nonePyObject(std::string objectName, std::string child = "") {
-	    return getPyObjectType(objectName, child, 0) == "NoneType";
 	}
 
         Mix_Chunk* getSoundChunk(std::string ID);
