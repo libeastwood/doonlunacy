@@ -170,7 +170,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
                     break;
 
                 default:
-                    LOG_WARNING("MapClass", "Unknown maptype %x\n", type);
+                    LOG_ERROR("MapClass", "Unknown maptype %x\n", type);
                     exit(EXIT_FAILURE);
             }
 
