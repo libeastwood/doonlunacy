@@ -74,7 +74,12 @@ void GameData::drawImage()
 	else
 	    LOG_ERROR("GameData", "No palette for %s!", m_path.c_str());
 
-	if(getPyObject(pyObject.attr("filename"), &variable)) {
+	if(getPyObjectType(pyObject, 1) == "GameDataConst") {
+	    if(!getPyObject(pyObject.attr("filename"), &variable)) {
+		LOG_ERROR("GameData", "%s: 'filename' variable missing!", variable.c_str());
+		exit(EXIT_FAILURE);
+	    }
+
 	    // TODO: autodetection would be nice..
 	    std::string type;
 	    if(!getPyObject(pyObject.attr("type"), &type))
@@ -82,26 +87,23 @@ void GameData::drawImage()
 
 	    data = ResMan::Instance()->readFile(variable, &len);
 
-	    if (type == "CPS")
-	    {
+	    if (type == "CPS") {
 		CpsFile cpsfile(data, len, palette);
 		m_surface.reset(new Image(cpsfile.getSurface()));
 	    }
 
-	    if (type == "SHP")
-	    {
+	    if (type == "SHP") {
 		std::vector<Uint32> tiles = getPyObjectVector<Uint32>(pyObject.attr("tiles"));
 		ShpFile shpfile(data, len, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
 		    m_surface.reset(new Image(shpfile.getSurface(value)));
-		else if(!tiles.empty())
-		{
+		else if(!tiles.empty()) {
 		    Uint32 tilesX = 0, tilesY = 0;
-		    for(Uint32 j = 0; j < tiles.size(); j++){ 
+		    for(Uint32 j = 0; j < tiles.size(); j++) { 
 			if(TILE_GETINDEX(tiles[j]) >= (Uint32)shpfile.getNumFiles()) {
 			    LOG_ERROR("GameData","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile.getNumFiles());
 			    exit(EXIT_FAILURE);
-			}								
+			}				
 		    }
 		    if(!tilesX)
 			tilesX = tiles.size();
@@ -114,8 +116,7 @@ void GameData::drawImage()
 		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, tilesArray)));
 		    delete [] tilesArray;
 		}
-		else
-		{
+		else {
 		    LOG_FATAL("GameData", "%s: No index or tiles specified for %s!", m_path.c_str(), variable.c_str());
 		    exit(EXIT_FAILURE);
 		}
@@ -130,73 +131,69 @@ void GameData::drawImage()
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
 			m_surface.reset(new Image(icnfile.getSurface(value)));
 		    else if(getPyObject<UPoint>(pyObject.attr("row"), &pos))
-		    {
 			m_surface.reset(new Image(icnfile.getSurfaceRow(pos.x, pos.y)));
-		    }
-		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value))
-		    {
+		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value)) {
 			int tilesN = python::extract<int>(pyObject.attr("num"));
 			UPoint tilePos = python::extract<UPoint>(pyObject.attr("tilepos"));
 			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
 		    }
-		    else
-		    {
+		    else {
 			LOG_FATAL("GameData", "no index, mapindex or row specified for %s!", variable.c_str());
 			exit(EXIT_FAILURE);
 		    }
 		}
-		else
-		{
+		else {
 		    LOG_FATAL("GameData", "No map specified for %s!", variable.c_str());
 		    exit(EXIT_FAILURE);
 		}
 	    }
 	}
-	else if((variable = getPyObjectType(pyObject.attr("gcobject"), 0)) != "NoneType")
-	{
+	else if(getPyObjectType(pyObject, 1) == "GameDataMod") {
 	    Uint32 colorkey = 0;
 	    Rect crop;
-	    ImagePtr gcObj = DataCache::Instance()->getGameData(variable)->getImage();
+	    ImagePtr gameData;
+	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType")
+		gameData = DataCache::Instance()->getGameData(variable)->getImage();
+	    else {
+		LOG_ERROR("GameMan", "%s: gamedata variable missing!", variable.c_str());
+		exit(EXIT_FAILURE);
+	    }
 	    if(getPyObject(pyObject.attr("crop"), &crop))
-		m_surface.reset(gcObj->getPictureCrop(crop));
+		m_surface.reset(gameData->getPictureCrop(crop));
 	    else
-		m_surface = gcObj->getCopy();
+		m_surface = gameData->getCopy();
 
 	    if(getPyObject(pyObject.attr("colorkey"), &colorkey))
 		m_surface->setColorKey(colorkey);
 
-	    if(!nonePyObject(pyObject.attr("putpixel")))
-	    {
+	    if(!nonePyObject(pyObject.attr("putpixel"))) {
 		std::vector<UPoint> putPixels = getPyObjectVector<UPoint>(pyObject.attr("putpixel"));
 	    	for (std::vector<UPoint>::const_iterator iter = putPixels.begin(); iter != putPixels.end(); iter++)
 		    m_surface->putPixel(*iter, colorkey);
 	    }
-
-	    if(!nonePyObject(pyObject.attr("drawvline")))
-	    {
+	    if(!nonePyObject(pyObject.attr("drawvline"))) {
 		std::vector<Rect> drawVLines = getPyObjectVector<Rect>(pyObject.attr("drawvline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawVLines.begin(); iter != drawVLines.end(); iter++)
 		    m_surface->drawVLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
 	    }
-
-	    if(!nonePyObject(pyObject.attr("drawhline")))
-	    {
+	    if(!nonePyObject(pyObject.attr("drawhline"))) {
 		std::vector<Rect> drawHLines = getPyObjectVector<Rect>(pyObject.attr("drawhline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawHLines.begin(); iter != drawHLines.end(); iter++)
 		    m_surface->drawHLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
 	    }
-
-	    if(!nonePyObject(pyObject.attr("fillrect")))
-	    {
+	    if(!nonePyObject(pyObject.attr("fillrect"))) {
 		std::vector<Rect> fillRects = getPyObjectVector<Rect>(pyObject.attr("fillrect"));
 	    	for (std::vector<Rect>::const_iterator iter = fillRects.begin(); iter != fillRects.end(); iter++)
 		    m_surface->fillRect(colorkey, *iter);
 	    }
 	}
+	else {
+	    LOG_ERROR("GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str());
+	    exit(EXIT_FAILURE);
+	}
 	m_persistent = pyObject.attr("persistent");
     }
-    catch(python::error_already_set const &)
-    {
+    catch(python::error_already_set const &) {
 	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);

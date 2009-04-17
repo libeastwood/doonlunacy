@@ -5,10 +5,14 @@ TILE_ROTATE = 0x10000000
 
 class GameData(object):
     def __init__(self):
-        self.filename = None
-        self.crop = None
-        self.type = None
+        self.persistent = True
         self.palette = "DUNE:IBM.PAL"
+
+class GameDataConst(GameData):
+    def __init__(self):
+        GameData.__init__(self)
+        self.filename = None
+        self.type = None
         self.tiles = []
         self.index = None
         self.map = None
@@ -16,13 +20,17 @@ class GameData(object):
         self.tilepos = (0,0)
         self.num = 0
         self.row = None
-        self.gcobject = None
+
+class GameDataMod(GameData):
+    def __init__(self):
+        GameData.__init__(self)
+        self.gamedata = None
+        self.crop = None
         self.colorkey = None
         self.putpixel = None
         self.drawvline = None
         self.drawhline = None
         self.fillrect = None
-        self.persistent = True
 
 def normal_row(row):
     for i in xrange(0,len(row)):
