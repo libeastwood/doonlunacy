@@ -188,13 +188,13 @@ bool ResMan::addRes(std::string name)
 {
     std::string fullpath = Settings::Instance()->GetDataDir();
     fullpath.append(name);
-    LOG_INFO("Application", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
+    LOG_INFO("ResMan", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
     bfs::path file (fullpath);
     Resource *res = NULL;
 
     if (bfs::exists(file))
     {
-        LOG_INFO("Application", "Using DIRResource for %s", name.c_str());
+        LOG_INFO("ResMan", "Using DIRResource for %s", name.c_str());
         res = new DIRResource(file);
     }
     else 
@@ -205,7 +205,7 @@ bool ResMan::addRes(std::string name)
 
         if (!bfs::exists(pakpath))
         {
-            LOG_ERROR("Application", "Neither DIR or PAK found for %s", name.c_str());
+            LOG_ERROR("ResMan", "Neither DIR or PAK found for %s", name.c_str());
             return false;
         }
         
@@ -230,13 +230,13 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     std::string fsname = std::string(name, 0, p);
     filename = std::string(name, p+1, name.length() - fsname.length() - 1);
 
-    LOG_INFO("Application", "Opening file from %s named %s...", fsname.c_str(), filename.c_str());
+    LOG_INFO("ResMan", "Opening file from %s named %s...", fsname.c_str(), filename.c_str());
 
     Resource* res = m_resources[fsname];
 
     if (res == NULL)
     {
-        LOG_WARNING("Application", "Cannot find file!");
+        LOG_WARNING("ResMan", "Cannot find file!");
         
         return NULL;
     };
@@ -299,14 +299,14 @@ void ResMan::writeText(std::string name, std::string text)
 	Resource* res = getResource(name, filename);
 	if (res == NULL) 
 	{
-		LOG_ERROR("Application", "Resource not found!");
+		LOG_ERROR("ResMan", "Resource not found!");
 		assert(0);
 		return;
 	};
 
 	if (!res->isWritable())
 	{
-		LOG_ERROR("Application", "Resource not writable!\n");
+		LOG_ERROR("ResMan", "Resource not writable!\n");
 		assert(0);
 		return;
 	};
