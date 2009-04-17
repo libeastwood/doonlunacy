@@ -18,7 +18,7 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName,
     {
         LOG_FATAL("StructureClass", "Error loading object: %s", m_objectName.c_str());
         PyErr_Print();
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     m_selectionBox.reset(new Image(UPoint(w,h)));

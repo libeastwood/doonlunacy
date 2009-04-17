@@ -3,7 +3,8 @@
 #include "Log.h"
 
 #include <boost/python/converter/rvalue_from_python_data.hpp>
-#include "GCObject.h"
+#include "GameData.h"
+#include "GameData.h"
 
 #include "gui2/Label.h"
 
@@ -107,12 +108,24 @@ void DataCache::loadPyObjects()
 
             LOG_INFO("DataCache", "Loaded python object %s", key.c_str());
         }
+
+        objectClass = python::import("gamedata");
+        objects = python::extract<python::dict>(objectClass.attr("gamedata"));
+        keys = objects.keys();
+        while(keys)
+        {
+            key = python::extract<std::string>(keys.pop());
+            m_pyObjects[key] = objects[key];
+
+            LOG_INFO("DataCache", "Loaded python gamedata object %s", key.c_str());
+        }
+
     }
     catch(python::error_already_set const &)
     {
         LOG_FATAL("DataCache", "Error loading python object: %s", key.c_str());
         PyErr_Print();
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -207,13 +220,13 @@ libconfig::Config *DataCache::getConfig()
     return m_dataConfig;
 }
 
-GCObject * DataCache::getGCObject(std::string path)
+GameData * DataCache::getGameData(std::string name)
 {
-    std::map<std::string, GCObject*>::iterator gcObj = m_gcObjs.find(path);
-    GCObject *ret;
+    std::map<std::string, GameData*>::iterator gcObj = m_gameData.find(name);
+    GameData *ret;
 
-    if(gcObj == m_gcObjs.end()) {
-        m_gcObjs[path] = ret = new GCObject(path);
+    if(gcObj == m_gameData.end()) {
+        m_gameData[name] = ret = new GameData(name);
     }
     else
 	ret = gcObj->second;
@@ -222,9 +235,9 @@ GCObject * DataCache::getGCObject(std::string path)
 
 }
 
-void DataCache::freeGCObjects()
+void DataCache::freeGameData()
 {
-    for(std::map<std::string, GCObject*>::const_iterator iter = m_gcObjs.begin(); iter != m_gcObjs.end(); iter++)
+    for(std::map<std::string, GameData*>::const_iterator iter = m_gcObjs.begin(); iter != m_gcObjs.end(); iter++)
         iter->second->freeIfUnique();
 }
 

@@ -2,7 +2,7 @@
 #include "DataCache.h"
 #include "Definitions.h"
 #include "GameMan.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "houses.h"
 #include "Log.h"
 #include "MapClass.h"
@@ -35,7 +35,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
     {
 	LOG_FATAL("WeapontClass", "Error loading object: %s", m_objectName.c_str());
 	PyErr_Print();
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     m_destination.x = realDestination.x + getRandomInt(-inaccuracy, inaccuracy);

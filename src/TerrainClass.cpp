@@ -2,7 +2,7 @@
 
 #include "ConcatIterator.h"
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "Definitions.h"
 #include "GameMan.h"
 #include "Log.h"
@@ -19,8 +19,8 @@ TerrainClass::TerrainClass() : UPoint(0,0)
     m_tile = Terrain_a1;
     m_type = Terrain_Sand;
     m_hideTile = Terrain_HiddenFull;
-    m_img = DataCache::Instance()->getGCObject("ObjPic_Terrain")->getImage();
-    m_hiddenImg = DataCache::Instance()->getGCObject("ObjPic_Terrain_Hidden")->getImage();
+    m_img = DataCache::Instance()->getGameData("ObjPic_Terrain")->getImage();
+    m_hiddenImg = DataCache::Instance()->getGameData("ObjPic_Terrain_Hidden")->getImage();
     m_visited = false;
 
     for (int i = 0; i < MAX_PLAYERS; i++)

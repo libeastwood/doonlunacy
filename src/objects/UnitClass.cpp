@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "Definitions.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "GameMan.h"
 #include "Gfx.h"
 #include "Log.h"
@@ -23,17 +23,17 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
 	std::vector<std::string> soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "confirmSound");
 	m_confirmSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
-	    m_confirmSound[i] = DataCache::Instance()->getGCObject(soundStrings[i])->getSound();
+	    m_confirmSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
 	soundStrings = cache->getPyObjectVector<std::string>(m_objectName, "selectSound");
 	m_selectSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
-	    m_selectSound[i] = DataCache::Instance()->getGCObject(soundStrings[i])->getSound();
+	    m_selectSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
     }
     catch(python::error_already_set const &)
     {
 	LOG_FATAL("UnitClass", "Error loading object: %s", m_objectName.c_str());
 	PyErr_Print();
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     m_speedCap = NONE;

@@ -1,4 +1,5 @@
 from UnitClass import *
+from common import *
 
 class Carryall(AirUnit):
     def __init__(self):
@@ -6,7 +7,7 @@ class Carryall(AirUnit):
         self.graphic = "ObjPic_Carryall"
         self.armor = 2
         self.health = self.maxHealth = 100
-        self.offset = (8,8)
+        self.offset = Point(8,8)
         self.speed = 1.8
         self.turnSpeed = 0.125
         self.viewRange = 5
@@ -27,7 +28,7 @@ class Ornithopter(AirUnit):
         self.graphic = "ObjPic_Ornithopter"
         self.armor = 3
         self.health = self.maxHealth = 100
-        self.offset = (8,8)
+        self.offset = Point(8,8)
         self.speed = 1.8
         self.turnSpeed = 0.125
         self.viewRange = 5
@@ -90,6 +91,7 @@ class Raider(GroundUnit):
         self.speed = 1.3
         self.radius = 4
         self.viewRange = 6
+        self.weapons = ["Regular Gun", "RegularGun"]
 
 class Sandworm(GroundUnit):
     def __init__(self):
@@ -142,6 +144,7 @@ class Trike(GroundUnit):
         self.radius = 4
         self.speed = 1.0
         self.viewRange = 4
+        self.weapons = ["Small Rocket", "Large Rocket"]
 
 class Fremen(InfantryUnit):
     def __init__(self):

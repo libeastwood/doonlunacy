@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Label.h"
@@ -19,7 +19,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 	switch(house) {
 		case HOUSE_ATREIDES:
 		case HOUSE_FREMEN:
-			m_backgroundFrame->changeBackground(DataCache::Instance()->getGCObject("Mentat_Atreides")->getImage()->getResized());
+			m_backgroundFrame->changeBackground(DataCache::Instance()->getGameData("Mentat_Atreides")->getImage()->getResized());
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 3;
 
@@ -42,7 +42,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			break;
 		case HOUSE_ORDOS:
 		case HOUSE_MERCENARY:
-			m_backgroundFrame->changeBackground(DataCache::Instance()->getGCObject("Mentat_Ordos")->getImage()->getResized());
+			m_backgroundFrame->changeBackground(DataCache::Instance()->getGameData("Mentat_Ordos")->getImage()->getResized());
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 4;
 
@@ -64,7 +64,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 
 			break;
 		case HOUSE_HARKONNEN:
-			m_backgroundFrame->changeBackground(DataCache::Instance()->getGCObject("Mentat_Harkonnen")->getImage()->getResized());
+			m_backgroundFrame->changeBackground(DataCache::Instance()->getGameData("Mentat_Harkonnen")->getImage()->getResized());
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 2;
 
@@ -82,7 +82,7 @@ MentatMenuState::MentatMenuState(HOUSETYPE newHouse)
 			break;
 		case HOUSE_SARDAUKAR:
 		default:
-			m_backgroundFrame->changeBackground(DataCache::Instance()->getGCObject("Mentat_BeneGesserit")->getImage()->getResized());
+			m_backgroundFrame->changeBackground(DataCache::Instance()->getGameData("Mentat_BeneGesserit")->getImage()->getResized());
 			m_song->filename = "SOUND:DUNE7.ADL";
 			m_song->track = 2;
 

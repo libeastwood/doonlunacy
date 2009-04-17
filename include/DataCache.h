@@ -17,7 +17,8 @@
 
 class SDL_Palette;
 class AnimationLabel;
-class GCObject;
+class GameData;
+class GameData;
 class StringFile;
 class Mix_Chunk;
 class PalFile;
@@ -52,9 +53,9 @@ class DataCache : public Singleton<DataCache>
         //! @name Add methods
         //@{
 
-		GCObject *getGCObject(std::string path);
+		GameData *getGameData(std::string name);
 
-		void freeGCObjects();
+		void freeGameData();
 
         /*! 
          *  Parses animation parameters from a file and loads animation
@@ -82,6 +83,11 @@ class DataCache : public Singleton<DataCache>
 
         void loadPyObjects();
         
+	inline python::object getPyObject(std::string objectName)
+	{
+	    return m_pyObjects[objectName];
+	}
+
         template<typename T>
         inline const T getPyObjectAttribute(std::string objectName, std::string parameter, int index = -1)
         {
@@ -104,11 +110,18 @@ class DataCache : public Singleton<DataCache>
 	    return ret;
         }
 
-
-	inline std::string getPyObjectType(std::string objectName)
+	inline std::string getPyObjectType(std::string objectName, std::string child = "", int level = 1)
 	{
-    	    python::object obj = m_pyObjects[objectName];
-    	    return python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[1]).attr("__name__")));
+	    python::object obj;
+	    if(child.empty())
+    		obj = m_pyObjects[objectName];
+	    else
+		obj = m_pyObjects[objectName].attr(child.c_str());
+    	    return python::extract<std::string>(((python::object)((python::object)((python::object)obj.attr("__class__")).attr("__mro__")[level]).attr("__name__")));
+	}
+
+	inline bool nonePyObject(std::string objectName, std::string child = "") {
+	    return getPyObjectType(objectName, child, 0) == "NoneType";
 	}
 
         Mix_Chunk* getSoundChunk(std::string ID);
@@ -128,7 +141,8 @@ class DataCache : public Singleton<DataCache>
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
 		std::vector<Mix_Chunk*> soundChunk;
-		std::map<std::string, GCObject*> m_gcObjs;
+		std::map<std::string, GameData*> m_gcObjs;
+		std::map<std::string, GameData*> m_gameData;
 		std::map<std::string, python::object> m_pyObjects;
 };
 

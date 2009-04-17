@@ -40,6 +40,6 @@ class InfantryUnit(GroundUnit):
         self.speed = 0.25
         self.viewRange = 4
         self.weaponRange = 6
-        self.weapons = [SmallRocket()]
+        self.weapons = ["Large Rocket"]
 
 # vim:ts=4:sw=4:et

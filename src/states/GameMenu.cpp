@@ -1,7 +1,8 @@
 #include "states/GameMenu.h"
 
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
+#include "GameData.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
@@ -25,7 +26,7 @@ GameMenuState::~GameMenuState()
 void GameMenuState::drawMenu()
 {
     ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
-    top->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
+    top->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     Frame *topFrame = new Frame(top);
     //FIXME: Why does events gets messed up when using m_backgroundFrame?
     m_container->addChild(topFrame);
@@ -37,19 +38,19 @@ void GameMenuState::drawMenu()
     messageLabel->setPosition(UPoint(0, top->getSize().y - 28));
     topFrame->addChild(messageLabel);
 
-    ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage(m_house);
+    ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage(m_house);
 
 
-    m_mentatButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Mentat")->getImage(m_house),
-	    DataCache::Instance()->getGCObject("UI_Mentat_Pressed")->getImage(m_house));
+    m_mentatButton = new GraphicButton(DataCache::Instance()->getGameData("UI_Mentat")->getImage(m_house),
+	    DataCache::Instance()->getGameData("UI_Mentat_Pressed")->getImage(m_house));
     m_mentatButton->onClick.connect(
 	    boost::bind(&GameMenuState::doMentat, this) );    
 
     m_mentatButton->setPosition(UPoint(16,6));
     topFrame->addChild(m_mentatButton);
 
-    m_optionsButton = new GraphicButton(DataCache::Instance()->getGCObject("UI_Options")->getImage(m_house),
-	    DataCache::Instance()->getGCObject("UI_Options_Pressed")->getImage(m_house));
+    m_optionsButton = new GraphicButton(DataCache::Instance()->getGameData("UI_Options")->getImage(m_house),
+	    DataCache::Instance()->getGameData("UI_Options_Pressed")->getImage(m_house));
 
     m_optionsButton->setPosition(UPoint(104,6));
     topFrame->addChild(m_optionsButton);

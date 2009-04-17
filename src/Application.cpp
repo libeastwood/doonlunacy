@@ -8,7 +8,8 @@
 #include "Colours.h"
 #include "DataCache.h"
 #include "FontManager.h"
-#include "GCObject.h"
+#include "GameData.h"
+#include "GameData.h"
 #include "DuneConstants.h"
 #include "Gfx.h"
 #include "Log.h"
@@ -66,8 +67,8 @@ void Application::Init()
     
     if (SDL_Init(flags) < 0)
     {
-        LOG_ERROR("Application", "ERROR: Couldn't initialise SDL: %s", SDL_GetError());
-        //Die();
+	LOG_ERROR("Application", "ERROR: Couldn't initialise SDL: %s", SDL_GetError());
+	//Die();
     }
 
     SDL_EnableUNICODE(1);
@@ -87,7 +88,7 @@ void Application::Init()
 
 
     m_rootWidget = new Container();
-    
+
 
     houseColour[HOUSE_ATREIDES]     = COLOUR_ATREIDES;
     houseColour[HOUSE_ORDOS]        = COLOUR_ORDOS;
@@ -111,7 +112,7 @@ void Application::Init()
     //char versionString[100];
     //sprintf(versionString, "%s", VERSION);
     //menuText = TTF_RenderText_Solid(font[16], versionString, palette->colors[COLOUR_BLACK]);
-    
+
     //init_loadWindow();
 
     //realign_buttons();
@@ -248,7 +249,7 @@ void Application::LoadData()
     DataCache::Instance()->Init();
     
     SetPalette();
-    m_cursor = DataCache::Instance()->getGCObject("UI_MouseCursor")->getImage();
+    m_cursor = DataCache::Instance()->getGameData("UI_MouseCursor")->getImage();
 
     LOG_INFO("Application", "Starting sound...");
     SoundPlayer::Instance();
@@ -264,7 +265,7 @@ void Application::Die()
     Mix_CloseAudio();
     //SDLNet_Quit();
     SDL_Quit();
-    exit(1);
+    exit(EXIT_SUCCESS);
 }
 
 void Application::Run()

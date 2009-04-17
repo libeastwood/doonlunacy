@@ -1,7 +1,7 @@
 #include "structures/ConstructionYardClass.h"
 
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
 
 ConstructionYardClass::ConstructionYardClass(PlayerClass* newOwner) : StructureClass(newOwner)
 {
@@ -15,7 +15,7 @@ ConstructionYardClass::ConstructionYardClass(PlayerClass* newOwner) : StructureC
 	m_health = m_maxHealth;
 	m_viewRange = 3;
 
-    m_pic = DataCache::Instance()->getGCObject("ObjPic_ConstructionYard")->getImage(HOUSETYPE(getOwner()->getColour()));
+    m_pic = DataCache::Instance()->getGameData("ObjPic_ConstructionYard")->getImage(HOUSETYPE(getOwner()->getColour()));
     
     m_offset = UPoint(0,0);
     m_firstAnimFrame = 2;

@@ -1,7 +1,7 @@
 #include "states/HouseChoiceInfoMenu.h"
 
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
 
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
@@ -28,11 +28,11 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
 	m_planetAnimation->setPosition(UPoint(128, 48).getScaled());
 	m_backgroundFrame->addChild(m_planetAnimation);
 
-	m_butYes = new GraphicButton(DataCache::Instance()->getGCObject("UI_MentatYes")->getImage()->getResized(), DataCache::Instance()->getGCObject("UI_MentatYes_Pressed")->getImage()->getResized());
+	m_butYes = new GraphicButton(DataCache::Instance()->getGameData("UI_MentatYes")->getImage()->getResized(), DataCache::Instance()->getGameData("UI_MentatYes_Pressed")->getImage()->getResized());
 	m_butYes->setPosition(UPoint(168, 168).getScaled());
 	m_backgroundFrame->addChild(m_butYes);
 
-	m_butNo = new GraphicButton(DataCache::Instance()->getGCObject("UI_MentatNo")->getImage()->getResized(), DataCache::Instance()->getGCObject("UI_MentatNo_Pressed")->getImage()->getResized());
+	m_butNo = new GraphicButton(DataCache::Instance()->getGameData("UI_MentatNo")->getImage()->getResized(), DataCache::Instance()->getGameData("UI_MentatNo_Pressed")->getImage()->getResized());
 	m_butNo->setPosition(UPoint(240, 168).getScaled());
 	m_butNo->onClick.connect(
         boost::bind(&HouseChoiceInfoMenuState::doNo, this) );    

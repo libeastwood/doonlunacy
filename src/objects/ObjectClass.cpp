@@ -1,5 +1,5 @@
 #include "GameMan.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "objects/ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"
@@ -69,11 +69,11 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     {
 	LOG_FATAL("ObjectClass", "Error loading object: %s", m_objectName.c_str());
 	PyErr_Print();
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
-    m_graphic = cache->getGCObject(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
-    m_selectionBox = DataCache::Instance()->getGCObject("UI_SelectionBox")->getImage();
+    m_graphic = cache->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+    m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
 
 }
 
@@ -155,7 +155,7 @@ void ObjectClass::drawSmoke(Image *dest)
 #if 1
     Rect source(w * m_curAnimFrame, 0, w, h);
 
-    ImagePtr smoke = DataCache::Instance()->getGCObject("ObjPic_Smoke")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+    ImagePtr smoke = DataCache::Instance()->getGameData("ObjPic_Smoke")->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
 
     source.x = m_smokeFrame;
@@ -196,7 +196,7 @@ void ObjectClass::destroy()
 	//if (deathSound != NONE)
 	//	soundPlayer->playSound(deathSound);
 
-	m_graphic = DataCache::Instance()->getGCObject(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+	m_graphic = DataCache::Instance()->getGameData(m_deathAnim)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
 
 	setStatus(STATUS_DESTROYED);
 	m_frameTimer = m_frameTime;

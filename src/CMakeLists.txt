@@ -7,7 +7,7 @@ SET( DOONLUNACY_BASE_SRCS
   
   DataCache.cpp
   Gfx.cpp
-  GCObject.cpp
+  GameData.cpp
   houses.cpp		# just for colors, hope there will be a better place for these (otpetrik)
   Strings.cpp
   Log.cpp

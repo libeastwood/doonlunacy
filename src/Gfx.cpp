@@ -1,7 +1,7 @@
 #include "Gfx.h"
 
 #include "Application.h"    // for Screen
-#include "GCObject.h"
+#include "GameData.h"
 #include "houses.h"        // for house colors
 #include "Log.h"
 #include "Settings.h"
@@ -190,21 +190,21 @@ void Image::drawBorders(std::string nw, std::string ne, std::string sw,
 			std::string se, Uint16 edgeDistance)
 {
     ImagePtr corner_nw, corner_ne, corner_sw, corner_se, top, bottom, left, right;
-    corner_nw = DataCache::Instance()->getGCObject(nw)->getImage();
-    corner_ne = DataCache::Instance()->getGCObject(ne)->getImage();
-    corner_sw = DataCache::Instance()->getGCObject(sw)->getImage();
-    corner_se = DataCache::Instance()->getGCObject(se)->getImage();
-    top = DataCache::Instance()->getGCObject("UI_TopBorder")->getImage();
-    bottom = DataCache::Instance()->getGCObject("UI_BottomBorder")->getImage();
-    left = DataCache::Instance()->getGCObject("UI_LeftBorder")->getImage();
-    right = DataCache::Instance()->getGCObject("UI_RightBorder")->getImage();
+    corner_nw = DataCache::Instance()->getGameData(nw)->getImage();
+    corner_ne = DataCache::Instance()->getGameData(ne)->getImage();
+    corner_sw = DataCache::Instance()->getGameData(sw)->getImage();
+    corner_se = DataCache::Instance()->getGameData(se)->getImage();
+    top = DataCache::Instance()->getGameData("UI_TopBorder")->getImage();
+    bottom = DataCache::Instance()->getGameData("UI_BottomBorder")->getImage();
+    left = DataCache::Instance()->getGameData("UI_LeftBorder")->getImage();
+    right = DataCache::Instance()->getGameData("UI_RightBorder")->getImage();
     drawBorders(corner_nw, corner_ne, corner_sw, corner_se, top,
 		bottom, left, right, edgeDistance);
 }
 
 void Image::drawVBar(ConstUPoint start, int y2)
 {
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
@@ -220,7 +220,7 @@ void Image::drawVBar(ConstUPoint start, int y2)
 
 void Image::drawHBarSmall(ConstUPoint start, int x2)
 {
-	ImagePtr screen = DataCache::Instance()->getGCObject("Screen")->getImage();
+	ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));

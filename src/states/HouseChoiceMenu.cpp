@@ -1,7 +1,7 @@
 #include "states/HouseChoiceMenu.h"
 
 #include "DataCache.h"
-#include "GCObject.h"
+#include "GameData.h"
 #include "Gfx.h"
 #include "Settings.h"
 
@@ -14,7 +14,7 @@
 
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
-    ImagePtr background = DataCache::Instance()->getGCObject("UI_HouseChoiceBackground")->getImage()->getResized();
+    ImagePtr background = DataCache::Instance()->getGameData("UI_HouseChoiceBackground")->getImage()->getResized();
     
 	m_backgroundFrame->changeBackground(background);
 

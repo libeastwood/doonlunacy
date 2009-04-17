@@ -2,7 +2,8 @@
 
 #include "Application.h"
 #include "Gfx.h"
-#include "GCObject.h"
+#include "GameData.h"
+#include "GameData.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Frame.h"
@@ -50,13 +51,13 @@ void MainMenuBaseState::draw()
     menuBottomFrame->setPosition(UPoint(0,31));
     m_menuFrame->addChild(menuBottomFrame);
 
-    m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldHarkonnen")->getImage());
+    m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGameData("UI_Mentat_HeraldHarkonnen")->getImage());
     m_backgroundFrame->addChild(m_harkonnenHerald);
 
-    m_atreidesHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldAtreides")->getImage());
+    m_atreidesHerald = new GraphicsLabel(DataCache::Instance()->getGameData("UI_Mentat_HeraldAtreides")->getImage());
     m_backgroundFrame->addChild(m_atreidesHerald);
 
-    m_ordosHerald = new GraphicsLabel(DataCache::Instance()->getGCObject("UI_Mentat_HeraldOrdos")->getImage());
+    m_ordosHerald = new GraphicsLabel(DataCache::Instance()->getGameData("UI_Mentat_HeraldOrdos")->getImage());
     m_backgroundFrame->addChild(m_ordosHerald);
 
     ImagePtr version(new Image(UPoint(100, 30)));
@@ -69,7 +70,7 @@ void MainMenuBaseState::draw()
 
 void MainMenuBaseState::drawSpecifics()
 {
-    ImagePtr planet = DataCache::Instance()->getGCObject("BigPlanet")->getImage();
+    ImagePtr planet = DataCache::Instance()->getGameData("BigPlanet")->getImage();
     planet->drawBorders1();
     m_middleFrame->changeBackground(planet);
 }
@@ -79,7 +80,7 @@ void MainMenuBaseState::resize()
     Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
 
     ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
-    background->drawTiles(DataCache::Instance()->getGCObject("UI_MenuBackground")->getImage());
+    background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     background->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 
