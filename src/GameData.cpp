@@ -122,19 +122,20 @@ void GameData::drawImage()
 	    }
 	    if (type == "ICN") {
 		std::string mapName;
-		if(!(mapName = cache->getPyObjectAttribute<std::string>(m_path, "filename")).empty()) {
+		if(!(mapName = cache->getPyObjectAttribute<std::string>(m_path, "map")).empty()) {
 		    size_t mapLen;
 		    uint8_t *mapData = ResMan::Instance()->readFile(mapName, &mapLen);
 
+		    const char *tiss = m_path.c_str();
 		    IcnFile icnfile(data, len, mapData, mapLen, palette);
-    		    if((value = cache->getPyObjectAttribute<int>(m_path, "index")))
+    		    if((value = cache->getPyObjectAttribute<int>(m_path, "index")) >= 0)
 			m_surface.reset(new Image(icnfile.getSurface(value)));
 		    else if(!cache->nonePyObject(m_path, "row"))
 		    {
 			UPoint row = cache->getPyObjectAttribute<UPoint>(m_path, "row");
 			m_surface.reset(new Image(icnfile.getSurfaceRow(row.x, row.y)));
 		    }
-		    else if(!cache->nonePyObject(m_path, "mapindex"))
+		    else if((value = cache->getPyObjectAttribute<int>(m_path, "mapindex")) >= 0)
 		    {
 			int tilesN = cache->getPyObjectAttribute<int>(m_path, "num");
 			UPoint tilePos = cache->getPyObjectAttribute<UPoint>(m_path, "tilepos");

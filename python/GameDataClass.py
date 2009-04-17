@@ -12,8 +12,8 @@ class GameData(object):
         self.tiles = []
         self.index = -1
         self.map = ""
-        self.mapindex = None
-        self.tilepos = None
+        self.mapindex = -1
+        self.tilepos = (0,0)
         self.num = 0
         self.row = None
         self.gcobject = None

@@ -719,7 +719,6 @@ class HideTile(GameData):
         self.map = "DUNE:ICON.MAP"
         self.row = (108, 123)
 
-
 class ObjPic_Terrain_Hidden(GameData):
     def __init__(self):
         GameData.__init__(self)
@@ -839,7 +838,9 @@ gamedata = {
         'ObjPic_Terrain' : ObjPic_Terrain(),
         'ObjPic_RockDamage' : ObjPic_RockDamage(),
         'ObjPic_SandDamage' : ObjPic_SandDamage(),
+        'ObjPic_Terrain' : ObjPic_Terrain(),
         'HideTile' : HideTile(),
+        'ObjPic_Terrain_Hidden' : ObjPic_Terrain_Hidden(),
         'UI_MouseCursor' : UI_MouseCursor(),
         }
 
