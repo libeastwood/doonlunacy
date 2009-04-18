@@ -83,7 +83,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 ObjectClass::~ObjectClass()
 {
-    LOG_INFO("ObjectClass", "Object destroyed"); 
+    LOG_INFO("ObjectClass", "%s destroyed", m_objectName.c_str());
 }
 
 /* virtual */

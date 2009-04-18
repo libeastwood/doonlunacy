@@ -130,16 +130,4 @@ class Sonic(Weapon):
         self.numFrames = 1
         self.graphic = ObjPic_Bullet_Sonic()
 
-weapons = {
-        'Infantry Gun' : InfantryGun(),
-        'Regular Gun' : RegularGun(),
-        'Deviator Rocket' : DeviatorRocket(),
-        'Small Rocket' : SmallRocket(),
-        'Small Rocket Heavy' : SmallRocketHeavy(),
-        'Medium Rocket' : MediumRocket(),
-        'Large Rocket' : LargeRocket(),
-        'Shell' : Shell(),
-        'Sonic' : Sonic(),
-        }
-
 # vim:ts=4:sw=4:et

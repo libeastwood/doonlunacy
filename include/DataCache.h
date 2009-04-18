@@ -81,9 +81,13 @@ class DataCache : public Singleton<DataCache>
 
         SDL_Palette* getPalette(std::string paletteFile);
 
-        void loadPyObjects();
+	void loadPyObject(std::string objectName);
         
 	inline python::object getPyObject(std::string objectName) {
+	    if(m_pyObjects.find(objectName) == m_pyObjects.end()) {
+		loadPyObject(objectName);
+	    }
+
 	    return m_pyObjects[objectName];
 	}
 

@@ -1,9 +1,11 @@
 #include "DataCache.h" 
 #include "ResMan.h"
 #include "Log.h"
+#include "PythonObjects.h"
 
+
+#include <boost/python/class.hpp>
 #include <boost/python/converter/rvalue_from_python_data.hpp>
-#include "GameData.h"
 #include "GameData.h"
 
 #include "gui2/Label.h"
@@ -47,9 +49,6 @@ void DataCache::Init(){
         exit(EXIT_FAILURE);
     }
 
-    loadPyObjects();
-
-
     soundChunk.resize(NUM_SOUNDCHUNK);
     size_t len;
     uint8_t *data;
@@ -92,41 +91,15 @@ void DataCache::Init(){
     free(data);
 }
 
-void DataCache::loadPyObjects()
-{
+void DataCache::loadPyObject(std::string objectName) {
+    python::object main = python::import("__main__").attr("__dict__");
+    python::object gamedata = python::import("objects").attr("__dict__");
+    python::dict objects = python::extract<python::dict>(gamedata["objects"]);
 
-    std::string key;
-    try {
-        python::object objectClass = python::import("objects");
-
-        python::dict objects = python::extract<python::dict>(objectClass.attr("objects"));
-        python::list keys = objects.keys();
-        while(keys)
-        {
-            key = python::extract<std::string>(keys.pop());
-            m_pyObjects[key] = objects[key];
-
-            LOG_INFO("DataCache", "Loaded python object %s", key.c_str());
-        }
-
-        objectClass = python::import("gamedata");
-        objects = python::extract<python::dict>(objectClass.attr("gamedata"));
-        keys = objects.keys();
-        while(keys)
-        {
-            key = python::extract<std::string>(keys.pop());
-            m_pyObjects[key] = objects[key];
-
-            LOG_INFO("DataCache", "Loaded python gamedata object %s", key.c_str());
-        }
-
-    }
-    catch(python::error_already_set const &)
-    {
-        LOG_FATAL("DataCache", "Error loading python object: %s", key.c_str());
-        PyErr_Print();
-        exit(EXIT_FAILURE);
-    }
+    if(objects.has_key(objectName))
+	m_pyObjects[objectName] = python::eval(((std::string)python::extract<std::string>(objects[objectName].attr("__name__")) + "()").c_str(), main, gamedata);
+    else
+	m_pyObjects[objectName] = python::eval(((std::string)objectName + "()").c_str(), main, gamedata);
 }
 
 SDL_Palette* DataCache::getPalette(std::string paletteFile)

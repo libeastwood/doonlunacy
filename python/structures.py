@@ -141,25 +141,25 @@ class Windtrap(Structure):
         self.viewRange = 3
 
 structures = {
-        'Barracks' : Barracks(),
-        'Const Yard' : ConstructionYard(),
-        'Light Fctry' : LightFactory(),
-        'Heavy Fctry' : HeavyFactory(),
-        'Hi-Tech' : HighTechFactory(),
-        'Star Port' : Starport(),
-        'WOR' : WOR(),
+        'Barracks' : Barracks,
+        'Const Yard' : ConstructionYard,
+        'Light Fctry' : LightFactory,
+        'Heavy Fctry' : HeavyFactory,
+        'Hi-Tech' : HighTechFactory,
+        'Star Port' : Starport,
+        'WOR' : WOR,
 
-        #'Concrete' : Concrete(),
-        'IX' : IX(),
-        'Outpost' : Radar(),        
-        'Radar' : Radar(),
-        'Refinery' : Refinery(),
-        'Repair Yard' : RepairYard(),
-        'R-Turret' : RocketTurret(),
-        'Turret' : GunTurret(),
-        'Spice Silo' : Silo(),
-        'Wall' : Wall(),
-        'Windtrap' : Windtrap(),
+        #'Concrete' : Concrete,
+        'IX' : IX,
+        'Outpost' : Radar,
+        'Radar' : Radar,
+        'Refinery' : Refinery,
+        'Repair Yard' : RepairYard,
+        'R-Turret' : RocketTurret,
+        'Turret' : GunTurret,
+        'Spice Silo' : Silo,
+        'Wall' : Wall,
+        'Windtrap' : Windtrap,
         }
 
 # vim:ts=4:sw=4:et

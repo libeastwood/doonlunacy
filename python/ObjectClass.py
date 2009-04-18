@@ -19,5 +19,6 @@ class Object(object):
         self.speed = 0
         self.turnSpeed = 0
         self.viewRange = 5
+        self.weapons = []
 
 # vim:ts=4:sw=4:et

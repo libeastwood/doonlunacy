@@ -15,8 +15,6 @@ class Unit(ObjectClass.Object):
         self.confirmSound = ["MovingOut", "InfantryOut", "Acknowledged", "Affirmative"]
         self.selectSound = ["YesSir", "Reporting"]
 
-        self.weapons = []
-
 class AirUnit(Unit):
     def __init__(self):
         Unit.__init__(self)
