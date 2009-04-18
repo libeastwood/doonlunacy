@@ -6,6 +6,8 @@
 #include "Rect.h"
 #include "PlayerClass.h"
 
+#include <boost/python.hpp>
+
 #include <string>
 #include <vector>
 
@@ -220,7 +222,7 @@ class ObjectClass : public Rect
 	     m_selectionBoxGlowing;
 
     //! Pointer to map to which object is assigned.
-    PlayerClass * m_owner;
+    PlayerClass *m_owner;
 
     Uint32 m_objectID;
 
@@ -237,7 +239,7 @@ class ObjectClass : public Rect
 
     ObjectPtr m_target;
 
-    std::vector<std::string> m_weapons;
+    std::vector<python::object> m_weapons;
 
     Uint32 m_attributes, m_status;
 

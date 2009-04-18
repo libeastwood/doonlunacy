@@ -47,12 +47,12 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_angle = python::extract<int>(pyObject.attr("angle"));
 	m_animFrames = python::extract<int>(pyObject.attr("animFrames"));
 	m_armor = python::extract<int>(pyObject.attr("armor"));
-	m_deathAnim = python::extract<std::string>(pyObject.attr("deathAnim"));
+	m_deathAnim = getPyObjectType(pyObject.attr("deathAnim"), 0);
 	m_drawnAngle = python::extract<int>(pyObject.attr("drawnAngle"));
 	m_drawnPos = python::extract<UPoint>(pyObject.attr("drawnPos"));
 	m_explosionSize = python::extract<int>(pyObject.attr("explosionSize"));
 	m_guardRange = python::extract<int>(pyObject.attr("guardRange"));
-	graphic = python::extract<std::string>(pyObject.attr("graphic"));
+	graphic = getPyObjectType(pyObject.attr("graphic"), 0);
 	m_maxHealth = python::extract<int>(pyObject.attr("maxHealth"));
 	m_numDeathFrames = python::extract<int>(pyObject.attr("numDeathFrames"));
 	m_numFrames = python::extract<int>(pyObject.attr("numFrames"));
@@ -63,7 +63,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_maxSpeed = python::extract<float>(pyObject.attr("speed"));
 	m_turnSpeed = python::extract<float>(pyObject.attr("turnSpeed"));
 	m_viewRange = python::extract<int>(pyObject.attr("viewRange"));
-	m_weapons = getPyObjectVector<std::string>(pyObject.attr("weapons"));
+	m_weapons = getPyObjectVector<python::object>(pyObject.attr("weapons"));
 	if(getPyObject<PointFloat>(pyObject.attr("size"), &size)) {
 	    size *= BLOCKSIZE;
 	    w = size.x, h = size.y;
@@ -392,7 +392,7 @@ void ObjectClass::setDestination(SPoint destination, Uint32 status)
 	    UPoint targetPos(m_target ? m_target->getRealPos() : UPoint(destination * BLOCKSIZE));
 	    if(!m_weapons.empty())
 	    {
-    		ObjectPtr missile(new WeaponClass(GameMan::Instance()->getObject(getObjectID()), m_weapons.front(), m_realPos, targetPos, false));
+    		ObjectPtr missile(new WeaponClass(GameMan::Instance()->getObject(getObjectID()), getPyObjectType(m_weapons.front(), 0), m_realPos, targetPos, false));
     		GameMan::Instance()->addObject(missile);
 		unsetStatus(STATUS_MOVING);
 	    }

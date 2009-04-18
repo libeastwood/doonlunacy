@@ -1,4 +1,5 @@
 from WeaponClass import *
+from gamedata import *
 
 class InfantryGun(Weapon):
     def __init__(self):
@@ -10,9 +11,9 @@ class InfantryGun(Weapon):
         self.damage = 5
         self.speed = 9.0
         self.numDeathFrames = 1
-        self.deathAnim = "ObjPic_Bullet_Small"
+        self.deathAnim = ObjPic_Bullet_Small()
         self.numFrames = 1
-        self.graphic = "ObjPic_Bullet_Small"
+        self.graphic = ObjPic_Bullet_Small()
 
 class RegularGun(Weapon):
     def __init__(self):
@@ -24,9 +25,9 @@ class RegularGun(Weapon):
         self.damage = 18
         self.speed = 9.0
         self.numDeathFrames = 1
-        self.deathAnim = "ObjPic_Bullet_Small"
+        self.deathAnim = ObjPic_Bullet_Small()
         self.numFrames = 1
-        self.graphic = "ObjPic_Bullet_Small"
+        self.graphic = ObjPic_Bullet_Small()
 
 class DeviatorRocket(Weapon):
     def __init__(self):
@@ -37,10 +38,10 @@ class DeviatorRocket(Weapon):
         self.damage = 0
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathAnim = "ObjPic_Hit_Gas"
+        self.deathAnim = ObjPic_Hit_Gas()
         self.deathSound = "Sound_Hit_ExplosionGas"
         self.numFrames = 16
-        self.graphic = "ObjPic_Bullet_MediumRocket"
+        self.graphic = ObjPic_Bullet_MediumRocket()
 
 class SmallRocket(Weapon):
     def __init__(self):
@@ -51,9 +52,9 @@ class SmallRocket(Weapon):
         self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathAnim = "ObjPic_Hit_ExplosionSmall"
+        self.deathAnim = ObjPic_Hit_ExplosionSmall()
         self.numFrames = 16
-        self.graphic = "ObjPic_Bullet_SmallRocket"
+        self.graphic = ObjPic_Bullet_SmallRocket()
 
 class SmallRocketHeavy(Weapon):
     def __init__(self):
@@ -65,9 +66,9 @@ class SmallRocketHeavy(Weapon):
         self.damage = 15
         self.speed = 4.0
         self.numDeathFrames = 5
-        self.deathAnim = "ObjPic_Hit_ExplosionSmall"
+        self.deathAnim = ObjPic_Hit_ExplosionSmall()
         self.numFrames = 16
-        self.graphic = "ObjPic_Bullet_SmallRocket"
+        self.graphic = ObjPic_Bullet_SmallRocket()
 
 class MediumRocket(Weapon):
     def __init__(self):
@@ -83,9 +84,9 @@ class MediumRocket(Weapon):
         self.damage = 60
         self.speed = 5.0
         self.numDeathFrames = 5
-        self.deathAnim = "ObjPic_Hit_ExplosionSmall"
+        self.deathAnim = ObjPic_Hit_ExplosionSmall()
         self.numFrames = 16
-        self.graphic = "ObjPic_Bullet_MediumRocket"
+        self.graphic = ObjPic_Bullet_MediumRocket()
 
 class LargeRocket(Weapon):
     def __init__(self):
@@ -93,10 +94,10 @@ class LargeRocket(Weapon):
         self.damagePiercing = 8
         self.damageRadius = 16
         self.damage = 100
-        self.deathAnim = "ObjPic_Hit_ExplosionLarge1"
+        self.deathAnim = ObjPic_Hit_ExplosionLarge1()
         self.deathSound = "Sound_ExplosionLarge"
         self.explosionSize = 5
-        self.graphic = "ObjPic_Bullet_LargeRocket"
+        self.graphic = ObjPic_Bullet_LargeRocket()
         self.inaccuracy = 0
         self.numDeathFrames = 5
         self.numFrames = 16
@@ -112,9 +113,9 @@ class Shell(Weapon):
         self.damage = 30
         self.speed = 9.0
         self.numDeathFrames = 3
-        self.deathAnim = "ObjPic_Hit_Shell"
+        self.deathAnim = ObjPic_Hit_Shell()
         self.numFrames = 1
-        self.graphic = "ObjPic_Bullet_Medium"
+        self.graphic = ObjPic_Bullet_Medium()
 
 class Sonic(Weapon):
     def __init__(self):
@@ -125,9 +126,9 @@ class Sonic(Weapon):
         self.damage = 40
         self.speed = 4.0
         self.numDeathFrames = 1
-        self.deathAnim = "ObjPic_Bullet_Sonic"
+        self.deathAnim = ObjPic_Bullet_Sonic()
         self.numFrames = 1
-        self.graphic = "ObjPic_Bullet_Sonic"
+        self.graphic = ObjPic_Bullet_Sonic()
 
 weapons = {
         'Infantry Gun' : InfantryGun(),

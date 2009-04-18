@@ -1,9 +1,10 @@
 from StructureClass import *
+from gamedata import *
 
 class Barracks(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_Barracks"
+        self.graphic = ObjPic_Barracks()
         self.health = self.maxHealth = 800
         self.powerRequirement = 20
         self.viewRange = 4
@@ -11,7 +12,7 @@ class Barracks(Builder):
 class ConstructionYard(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_ConstructionYard"
+        self.graphic = ObjPic_ConstructionYard()
         self.health = self.maxHealth = 1500
         self.powerRequirement = 0
         self.viewRange = 6
@@ -19,7 +20,7 @@ class ConstructionYard(Builder):
 class GunTurret(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_GunTurret"
+        self.graphic = ObjPic_GunTurret()
         self.health = self.maxHealth = 700
         self.powerRequirement = 10
         self.size = (1,1)
@@ -28,7 +29,7 @@ class GunTurret(Structure):
 class HeavyFactory(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_HeavyFactory"
+        self.graphic = ObjPic_HeavyFactory()
         self.powerRequirement = 35
         self.size = (3,2)
         self.upgradeLevels = 2
@@ -36,20 +37,20 @@ class HeavyFactory(Builder):
 class HighTechFactory(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_HighTechFactory"
+        self.graphic = ObjPic_HighTechFactory()
         self.powerRequirement = 35
         self.size = (3,2)
 
 class LightFactory(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_LightFactory"
+        self.graphic = ObjPic_LightFactory()
         self.powerRequirement = 20
 
 class Starport(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_StarPort"
+        self.graphic = ObjPic_StarPort()
         self.health = self.maxHealth = 3000
         self.powerRequirement = 80
         self.size = (3,3)
@@ -58,7 +59,7 @@ class Starport(Builder):
 class WOR(Builder):
     def __init__(self):
         Builder.__init__(self)
-        self.graphic = "ObjPic_WOR"
+        self.graphic = ObjPic_WOR()
         self.health = self.maxHealth = 1500
         self.powerRequirement = 20
 
@@ -72,14 +73,14 @@ class Concrete(Structure):
 class IX(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_IX"
+        self.graphic = ObjPic_IX()
         self.powerRequirement = 40
         self.viewRange = 3
 
 class Palace(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Palace"        
+        self.graphic = ObjPic_Palace()
         self.health = self.maxHealth = 2000
         self.powerRequirement = 200
         self.viewRange = 8
@@ -87,14 +88,14 @@ class Palace(Structure):
 class Radar(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Radar"        
+        self.graphic = ObjPic_Radar()
         self.powerRequirement = 20
         self.viewRange = 8
 
 class Refinery(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Refinery"        
+        self.graphic = ObjPic_Refinery()
         self.capacity = 2000
         self.health = self.maxHealth = 1500
         self.powerRequirement = 30
@@ -104,14 +105,14 @@ class Refinery(Structure):
 class RepairYard(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_RepairYard"        
+        self.graphic = ObjPic_RepairYard()
         self.size = (3,2)
         self.powerRequirement = 30
 
 class RocketTurret(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_RocketTurret"        
+        self.graphic = ObjPic_RocketTurret()
         self.health = self.maxHealth = 700
         self.powerRequirement = 15
         self.size = (1,1)
@@ -120,7 +121,7 @@ class RocketTurret(Structure):
 class Silo(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Silo"        
+        self.graphic = ObjPic_Silo()
         self.capacity = 1000
         self.health = self.maxHealth = 750
         self.viewRange = 3
@@ -128,7 +129,7 @@ class Silo(Structure):
 class Wall(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Wall"        
+        self.graphic = ObjPic_Wall()
         self.health = self.maxHealth = 500
         self.size = (1,1)
         self.viewRange = 2
@@ -136,7 +137,7 @@ class Wall(Structure):
 class Windtrap(Structure):
     def __init__(self):
         Structure.__init__(self)
-        self.graphic = "ObjPic_Windtrap"        
+        self.graphic = ObjPic_Windtrap()
         self.viewRange = 3
 
 structures = {

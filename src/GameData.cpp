@@ -59,8 +59,7 @@ bool GameData::freeIfUnique()
 
 void GameData::drawImage()
 {
-    try
-    {
+//    try {
 	size_t len;
 	uint8_t *data;
 	std::string variable;
@@ -192,12 +191,12 @@ void GameData::drawImage()
 	    exit(EXIT_FAILURE);
 	}
 	m_persistent = pyObject.attr("persistent");
-    }
+/*    }
     catch(python::error_already_set const &) {
 	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
-    }
+    }*/
 }
 
 ImagePtr GameData::getImage()
