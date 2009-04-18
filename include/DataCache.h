@@ -105,7 +105,6 @@ class DataCache : public Singleton<DataCache>
 		StringFile* BriefingStrings[3];
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
-		std::map<std::string, GameData*> m_gcObjs;
 		std::map<std::string, GameData*> m_gameData;
 		std::map<std::string, python::object> m_pyObjects;
 };

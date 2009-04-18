@@ -162,7 +162,7 @@ GameData * DataCache::getGameData(std::string name)
 
 void DataCache::freeGameData()
 {
-    for(std::map<std::string, GameData*>::const_iterator iter = m_gcObjs.begin(); iter != m_gcObjs.end(); iter++)
+    for(std::map<std::string, GameData*>::const_iterator iter = m_gameData.begin(); iter != m_gameData.end(); iter++)
         iter->second->freeIfUnique();
 }
 
