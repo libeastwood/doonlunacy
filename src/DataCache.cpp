@@ -173,7 +173,8 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
     try
     {
         size_t len;
-        uint8_t *data;
+	uint8_t *data;
+	float frameRate;
 
         std::string variable, type;
         SDL_Palette* palette;
@@ -194,42 +195,26 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 	type = variable.substr(variable.length()-3, 3);
 
         if (type == "WSA") {
-            WsaFile *wsafile(new WsaFile(data, len, palette));
+            WsaFile wsafile(data, len, palette);
 
-            for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
-                animationLabel->addFrame(ImagePtr(new Image(wsafile->getSurface(i))));
-
-            float frameRate = 1.0;
-            animationLabel->setFrameRate(frameRate);
-
-            delete wsafile;
-
+            for(Uint16 i = 0; i < wsafile.getNumFrames(); i++)
+                animationLabel->addFrame(ImagePtr(new Image(wsafile.getSurface(i))));
         }
 
         if (type == "SHP") {
 	    UPoint index;
-            float frameRate;
+            ShpFile shpfile(data, len, palette);
 	    
     	    if(!::getPyObject(pyObject.attr("index"), &index)) {
     		LOG_ERROR("DataCache", "%s: 'index' variable missing!", path.c_str());
     		exit(EXIT_FAILURE);
     	    }
-    	    if(!::getPyObject(pyObject.attr("framerate"), &frameRate)) {
-    		LOG_ERROR("DataCache", "%s: 'framerate' variable missing!", path.c_str());
-    		exit(EXIT_FAILURE);
-    	    }
 
-
-            ShpFile *shpfile = new ShpFile(data, len, palette);
             for(Uint16 i = index.x; i < index.y; i++)
-                animationLabel->addFrame(ImagePtr(new Image(shpfile->getSurface(i))));
-
-
-            animationLabel->setFrameRate(frameRate);
-
-            delete shpfile;
-
+                animationLabel->addFrame(ImagePtr(new Image(shpfile.getSurface(i))));
         }
+	if(::getPyObject(pyObject.attr("framerate"), &frameRate))
+            animationLabel->setFrameRate(frameRate);
     }
     catch(python::error_already_set const &) {
 	LOG_FATAL("DataCache", "Error loading data: %s", path.c_str());
