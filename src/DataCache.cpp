@@ -168,76 +168,74 @@ void DataCache::freeGameData()
 
 AnimationLabel *DataCache::getAnimationLabel(std::string path)
 {
-    std::string fullpath = "animations.";
-    fullpath+=path;
-
     AnimationLabel* animationLabel = new AnimationLabel();
 
     try
     {
-        Setting& node = m_dataConfig->lookup(fullpath);
-
         size_t len;
         uint8_t *data;
 
-        std::string fileName;
-
+        std::string variable, type;
         SDL_Palette* palette;
-        if(node.lookupValue("palette", fileName))
-        {
-            palette = getPalette(fileName);
-        }
-        else
-            palette = getPalette("DUNE:IBM.PAL");
+	python::object pyObject = DataCache::Instance()->getPyObject(path);
 
-        node.lookupValue("filename", fileName);
-        std::string type = fileName.substr(fileName.length()-3, 3);
+	if(::getPyObject(pyObject.attr("palette"), &variable))
+	    palette = DataCache::Instance()->getPalette(variable);
+	else
+	    LOG_ERROR("DataCache", "No palette for %s!", path.c_str());
 
-        data = ResMan::Instance()->readFile(fileName, &len);
+	if(!::getPyObject(pyObject.attr("filename"), &variable)) {
+	    LOG_ERROR("DataCache", "%s: 'filename' variable missing!", path.c_str());
+	    exit(EXIT_FAILURE);
+	}
 
+	data = ResMan::Instance()->readFile(variable, &len);
 
-        if (type.compare("WSA") == 0)
-        {
+	type = variable.substr(variable.length()-3, 3);
+
+        if (type == "WSA") {
             WsaFile *wsafile(new WsaFile(data, len, palette));
 
             for(uint32_t i = 0; i < wsafile->getNumFrames(); i++)
                 animationLabel->addFrame(ImagePtr(new Image(wsafile->getSurface(i))));
 
             float frameRate = 1.0;
-            node.lookupValue("frame_rate", frameRate);
             animationLabel->setFrameRate(frameRate);
 
             delete wsafile;
 
         }
 
-        if (type.compare("SHP") == 0)
-        {
-            uint32_t startIndex, endIndex;
-            float frameRate = 1.0;
-            node.lookupValue("start_index", startIndex);
-            node.lookupValue("end_index", endIndex);
+        if (type == "SHP") {
+	    UPoint index;
+            float frameRate;
+	    
+    	    if(!::getPyObject(pyObject.attr("index"), &index)) {
+    		LOG_ERROR("DataCache", "%s: 'index' variable missing!", path.c_str());
+    		exit(EXIT_FAILURE);
+    	    }
+    	    if(!::getPyObject(pyObject.attr("framerate"), &frameRate)) {
+    		LOG_ERROR("DataCache", "%s: 'framerate' variable missing!", path.c_str());
+    		exit(EXIT_FAILURE);
+    	    }
+
 
             ShpFile *shpfile = new ShpFile(data, len, palette);
-            for(uint32_t i = startIndex; i < endIndex; i++)
+            for(Uint16 i = index.x; i < index.y; i++)
                 animationLabel->addFrame(ImagePtr(new Image(shpfile->getSurface(i))));
 
-            node.lookupValue("frame_rate", frameRate);
+
             animationLabel->setFrameRate(frameRate);
 
             delete shpfile;
 
         }
-
     }
-    catch(ParseException& ex)
-    {
-        LOG_FATAL("DataCache", "Setting not found %d: %s", 
-                ex.getLine(), ex.getError());
-
-        exit(EXIT_FAILURE);
+    catch(python::error_already_set const &) {
+	LOG_FATAL("DataCache", "Error loading data: %s", path.c_str());
+	PyErr_Print();
+	exit(EXIT_FAILURE);
     }
-
 
     return animationLabel;
 }

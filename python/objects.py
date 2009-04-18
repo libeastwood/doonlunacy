@@ -2,6 +2,7 @@ from structures import *
 from units import *
 from weapons import *
 from gamedata import *
+from animations import *
 
 objects = {}
 for structure in structures.iterkeys():
