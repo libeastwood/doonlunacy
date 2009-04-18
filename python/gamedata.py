@@ -173,7 +173,7 @@ class UI_MentatNo(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
         self.type = "SHP"
-        filename = "ENGLISH:MENTAT.ENG"
+        self.filename = "ENGLISH:MENTAT.ENG"
         self.index = 2
 
 class UI_MentatNo_Pressed(GameDataConst):
