@@ -199,6 +199,44 @@ void GameData::drawImage()
     }
 }
 
+void GameData::loadSound() {
+    Mix_Chunk* soundChunk;
+
+    try {
+        SDL_RWops *rwop;
+        size_t len;
+        uint8_t *data;
+	std::string filename;
+	python::object pyObject = DataCache::Instance()->getPyObject(m_path);
+
+
+	if(!getPyObject(pyObject.attr("filename"), &filename)) {
+	    LOG_ERROR("GameData", "%s: 'filename' variable missing!", filename.c_str());
+	    exit(EXIT_FAILURE);
+	    }
+
+        data = ResMan::Instance()->readFile(filename, &len);
+        if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
+            LOG_ERROR("GameData", "getChunkFromFile(): Cannot open %s!",filename.c_str());
+            exit(EXIT_FAILURE);
+        }
+
+        if((soundChunk = LoadVOC_RW(rwop, 0)) == NULL) {
+            LOG_ERROR("DataCache", "getChunkFromFile(): Cannot load %s!",filename.c_str());
+            exit(EXIT_FAILURE);		
+        }
+
+        SDL_RWclose(rwop);
+        free(data);
+    	m_sound.reset(soundChunk);
+    }
+    catch(python::error_already_set const &) {
+	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());
+	PyErr_Print();
+	exit(EXIT_FAILURE);
+    }
+}    
+
 ImagePtr GameData::getImage()
 {
     if(!m_surface)
@@ -226,7 +264,7 @@ ImagePtr GameData::getImage(HOUSETYPE house)
 SoundPtr GameData::getSound()
 {
     if(!m_sound)
-	m_sound.reset(DataCache::Instance()->getSoundChunk(m_path));
+	loadSound();
 
     return m_sound;
 }

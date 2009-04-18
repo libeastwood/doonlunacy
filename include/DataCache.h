@@ -20,7 +20,6 @@ class AnimationLabel;
 class GameData;
 class GameData;
 class StringFile;
-class Mix_Chunk;
 class PalFile;
 typedef boost::shared_ptr<PalFile> PalfilePtr;
 
@@ -91,7 +90,6 @@ class DataCache : public Singleton<DataCache>
 	    return m_pyObjects[objectName];
 	}
 
-        Mix_Chunk* getSoundChunk(std::string ID);
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
         std::string	getIntroString(uint16_t i);
@@ -107,7 +105,6 @@ class DataCache : public Singleton<DataCache>
 		StringFile* BriefingStrings[3];
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
-		std::vector<Mix_Chunk*> soundChunk;
 		std::map<std::string, GameData*> m_gcObjs;
 		std::map<std::string, GameData*> m_gameData;
 		std::map<std::string, python::object> m_pyObjects;

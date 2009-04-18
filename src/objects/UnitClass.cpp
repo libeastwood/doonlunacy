@@ -19,14 +19,14 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     m_attackMode = DEFENSIVE;
 
     try {
-	std::vector<std::string> soundStrings = getPyObjectVector<std::string>(m_pyObject.attr("confirmSound"));
+	std::vector<python::object> soundStrings = getPyObjectVector<python::object>(m_pyObject.attr("confirmSound"));
 	m_confirmSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
-	    m_confirmSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
-	soundStrings = getPyObjectVector<std::string>(m_pyObject.attr("selectSound"));
+	    m_confirmSound[i] = DataCache::Instance()->getGameData(getPyObjectType(soundStrings[i], 0))->getSound();
+	soundStrings = getPyObjectVector<python::object>(m_pyObject.attr("selectSound"));
 	m_selectSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
-	    m_selectSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
+	    m_selectSound[i] = DataCache::Instance()->getGameData(getPyObjectType(soundStrings[i], 0))->getSound();
     }
     catch(python::error_already_set const &)
     {
@@ -48,7 +48,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
 /*virtual*/
 UnitClass::~UnitClass()
 {
-    LOG_INFO("UnitClass", "Unit deleted");
+    LOG_INFO("UnitClass", "%s deleted", getObjectName().c_str());
 }
 
 

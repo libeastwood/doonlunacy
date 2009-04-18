@@ -23,6 +23,7 @@ class GameData
 
 	private:
 		void drawImage();
+		void loadSound();
 		ImagePtr m_surface;
 		std::map<HOUSETYPE, ImagePtr> m_remappedImg;
 		SoundPtr m_sound;

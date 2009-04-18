@@ -1,22 +1,20 @@
+#include <iostream>
+#include <libconfig.h++>
+#include <boost/bind.hpp>
+#include <eastwood/CpsFile.h>
+#include <eastwood/WsaFile.h>
+
 #include "states/CutSceneState2.h"
 
 #include "DataCache.h"
 #include "FontManager.h"
+#include "GameData.h"
 #include "ResMan.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
-
-#include <eastwood/CpsFile.h>
-#include <eastwood/WsaFile.h>
-
-#include <iostream>
-#include <libconfig.h++>
-
-#include <boost/bind.hpp>
-
 
 using namespace libconfig;
 
@@ -266,11 +264,11 @@ int CutSceneState::Execute(float ft)
 		while(!m_soundStrings.empty() && (uint32_t)m_soundStrings.back().first == m_animLabel->getCurFrame())
 		{
 			if(sound == NULL)
-				sound = DataCache::Instance()->getSoundChunk(m_soundStrings.back().second);
+				sound = DataCache::Instance()->getGameData(m_soundStrings.back().second)->getSound().get();
 			else
 			{
 				Mix_Chunk *sound1 = sound;
-				Mix_Chunk *sound2 = DataCache::Instance()->getSoundChunk(m_soundStrings.back().second);
+				Mix_Chunk *sound2 = DataCache::Instance()->getGameData(m_soundStrings.back().second)->getSound().get();
 				Mix_Chunk *newChunk;
 				if((newChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL) {
 					return -1;

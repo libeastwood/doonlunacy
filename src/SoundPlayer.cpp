@@ -1,16 +1,18 @@
-#include "SoundPlayer.h"
-
-#include "DataCache.h"
-#include "DuneConstants.h"
-#include "Log.h"
-#include "mmath.h"
-
 #include <eastwood/VocFile.h>
 #include <eastwood/AdlFile.h>
 
 #include <SDL_mixer.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include "SoundPlayer.h"
+
+#include "DataCache.h"
+#include "DuneConstants.h"
+#include "GameData.h"
+#include "Log.h"
+#include "mmath.h"
+
 
 SoundPlayer::SoundPlayer()
 {
@@ -93,7 +95,7 @@ void SoundPlayer::playSound(std::string soundID, int volume)
     {
         Mix_Chunk* tmp;
 
-        if ((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL)
+        if ((tmp = DataCache::Instance()->getGameData(soundID)->getSound().get()) == NULL)
         {
             return;
         }
@@ -146,7 +148,7 @@ void SoundPlayer::playSound(std::string soundID)
     {
         Mix_Chunk* tmp;
 
-        if ((tmp = DataCache::Instance()->getSoundChunk(soundID)) == NULL)
+        if ((tmp = DataCache::Instance()->getGameData(soundID)->getSound().get()) == NULL)
         {
             LOG_ERROR("SoundPlayer", "There is no sound with id %s!", soundID.c_str());
             exit(EXIT_FAILURE);

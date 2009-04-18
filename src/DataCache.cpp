@@ -49,7 +49,6 @@ void DataCache::Init(){
         exit(EXIT_FAILURE);
     }
 
-    soundChunk.resize(NUM_SOUNDCHUNK);
     size_t len;
     uint8_t *data;
     //    Image *tmp;
@@ -130,52 +129,6 @@ song *DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
     return newSong;
 }
 
-
-Mix_Chunk* DataCache::getSoundChunk(std::string ID)
-{
-
-    std::string fullpath = "sounds.";
-    fullpath+=ID;
-
-    std::string fileName;
-
-    Mix_Chunk* returnChunk;
-
-    try
-    {
-        Setting& node = m_dataConfig->lookup(fullpath);
-        node.lookupValue("filename", fileName);
-        SDL_RWops* rwop;
-        size_t len;
-        uint8_t * data;
-
-        data = ResMan::Instance()->readFile(fileName.c_str(), &len);
-        if((rwop = SDL_RWFromMem(data, len)) ==NULL) 
-        {
-            LOG_ERROR("DataCache", "getChunkFromFile(): Cannot open %s!",fileName.c_str());
-            exit(EXIT_FAILURE);
-        }
-
-        if((returnChunk = LoadVOC_RW(rwop, 0)) == NULL) 
-        {
-            LOG_ERROR("DataCache", "getChunkFromFile(): Cannot load %s!",fileName.c_str());
-            exit(EXIT_FAILURE);		
-        }
-
-        SDL_RWclose(rwop);
-        free(data);
-
-    }
-    catch(ParseException& ex)
-    {
-        LOG_FATAL("DataCache", "Setting not found %d: %s", 
-                ex.getLine(), ex.getError());
-    }
-
-    return returnChunk;
-}
-
-
 std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
     return BriefingStrings[house]->getString(mission,textType);
 }
@@ -205,7 +158,6 @@ GameData * DataCache::getGameData(std::string name)
 	ret = gcObj->second;
 
     return ret;
-
 }
 
 void DataCache::freeGameData()

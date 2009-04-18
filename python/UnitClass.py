@@ -1,6 +1,7 @@
 import ObjectClass
 from weapons import *
 from gamedata import *
+from sounds import *
 
 class Unit(ObjectClass.Object):
     def __init__(self):
@@ -12,8 +13,8 @@ class Unit(ObjectClass.Object):
 
         self.canAttack = True
         self.respondable = True
-        self.confirmSound = ["MovingOut", "InfantryOut", "Acknowledged", "Affirmative"]
-        self.selectSound = ["YesSir", "Reporting"]
+        self.confirmSound = [MovingOut(), InfantryOut(), Acknowledged(), Affirmative()]
+        self.selectSound = [YesSir(), Reporting()]
 
 class AirUnit(Unit):
     def __init__(self):

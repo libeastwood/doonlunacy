@@ -1,5 +1,6 @@
 from WeaponClass import *
 from gamedata import *
+from sounds import *
 
 class InfantryGun(Weapon):
     def __init__(self):
@@ -39,7 +40,7 @@ class DeviatorRocket(Weapon):
         self.speed = 4.0
         self.numDeathFrames = 5
         self.deathAnim = ObjPic_Hit_Gas()
-        self.deathSound = "Sound_Hit_ExplosionGas"
+        self.deathSound = Sound_Hit_ExplosionGas()
         self.numFrames = 16
         self.graphic = ObjPic_Bullet_MediumRocket()
 
@@ -95,7 +96,7 @@ class LargeRocket(Weapon):
         self.damageRadius = 16
         self.damage = 100
         self.deathAnim = ObjPic_Hit_ExplosionLarge1()
-        self.deathSound = "Sound_ExplosionLarge"
+        self.deathSound = Sound_ExplosionLarge()
         self.explosionSize = 5
         self.graphic = ObjPic_Bullet_LargeRocket()
         self.inaccuracy = 0
