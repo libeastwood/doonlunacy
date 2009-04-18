@@ -15,24 +15,22 @@
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
-    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
-
     m_respondable = true;
     m_attackMode = DEFENSIVE;
 
     try {
-	std::vector<std::string> soundStrings = getPyObjectVector<std::string>(pyObject.attr("confirmSound"));
+	std::vector<std::string> soundStrings = getPyObjectVector<std::string>(m_pyObject.attr("confirmSound"));
 	m_confirmSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
 	    m_confirmSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
-	soundStrings = getPyObjectVector<std::string>(pyObject.attr("selectSound"));
+	soundStrings = getPyObjectVector<std::string>(m_pyObject.attr("selectSound"));
 	m_selectSound.resize(soundStrings.size());
 	for(size_t i = 0; i < soundStrings.size(); i++)
 	    m_selectSound[i] = DataCache::Instance()->getGameData(soundStrings[i])->getSound();
     }
     catch(python::error_already_set const &)
     {
-	LOG_FATAL("UnitClass", "Error loading object: %s", m_objectName.c_str());
+	LOG_FATAL("UnitClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -96,13 +94,13 @@ void UnitClass::destroy()
     GameMan* gman = GameMan::Instance();
     if (!getStatus(STATUS_DESTROYED))
     {
-        LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, m_objectName.c_str());
+        LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
         m_target.reset();
 	m_status = STATUS_DESTROYED;
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
-        m_owner->decrementUnits(m_objectName);
+        m_owner->decrementUnits(getObjectName());
 
         m_respondable = false;
 /*
@@ -800,7 +798,7 @@ bool UnitClass::AStarSearch()
                 node = node->m_parent;
             }
 
-            LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", m_objectName.c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
+            LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", getObjectName().c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
 
             return true;
         }

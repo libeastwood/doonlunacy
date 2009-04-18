@@ -5,18 +5,16 @@
 
 StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attribute) : ObjectClass(newOwner, structureName, attribute | OBJECT_STRUCTURE)
 {
-    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
-
     m_justPlacedTimer = 0;
     try {
-	    m_isAnimating = python::extract<bool>(pyObject.attr("animate"));
-	    m_firstAnimFrame = python::extract<int>(pyObject.attr("firstAnimFrame"));
-	    m_lastAnimFrame = python::extract<int>(pyObject.attr("lastAnimFrame"));
-	    m_powerRequirement = python::extract<int>(pyObject.attr("powerRequirement"));
+	    m_isAnimating = python::extract<bool>(m_pyObject.attr("animate"));
+	    m_firstAnimFrame = python::extract<int>(m_pyObject.attr("firstAnimFrame"));
+	    m_lastAnimFrame = python::extract<int>(m_pyObject.attr("lastAnimFrame"));
+	    m_powerRequirement = python::extract<int>(m_pyObject.attr("powerRequirement"));
     }
     catch(python::error_already_set const &)
     {
-        LOG_FATAL("StructureClass", "Error loading object: %s", m_objectName.c_str());
+        LOG_FATAL("StructureClass", "Error loading object: %s", getObjectName().c_str());
         PyErr_Print();
         exit(EXIT_FAILURE);
     }

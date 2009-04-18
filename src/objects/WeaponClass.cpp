@@ -13,8 +13,6 @@
 WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
     ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
-    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
-
     m_groundBlocked = false;
     m_airAttack = air;
 
@@ -25,16 +23,16 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
     m_deathSound = NONE;
 
     try {
-	m_damage = python::extract<int>(pyObject.attr("damage"));
-	m_damagePiercing = python::extract<int>(pyObject.attr("damagePiercing"));
-	m_damageRadius =  python::extract<int>(pyObject.attr("damageRadius"));
-	m_groundBlocked =  python::extract<int>(pyObject.attr("groundBlocked"));
-	inaccuracy = python::extract<int>(pyObject.attr("inaccuracy"));
-	m_range = python::extract<int>(pyObject.attr("range"));
+	m_damage = python::extract<int>(m_pyObject.attr("damage"));
+	m_damagePiercing = python::extract<int>(m_pyObject.attr("damagePiercing"));
+	m_damageRadius =  python::extract<int>(m_pyObject.attr("damageRadius"));
+	m_groundBlocked =  python::extract<int>(m_pyObject.attr("groundBlocked"));
+	inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
+	m_range = python::extract<int>(m_pyObject.attr("range"));
     }
     catch(python::error_already_set const &)
     {
-	LOG_FATAL("WeapontClass", "Error loading object: %s", m_objectName.c_str());
+	LOG_FATAL("WeapontClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -42,7 +40,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
     m_destination.x = realDestination.x + getRandomInt(-inaccuracy, inaccuracy);
     m_destination.y = realDestination.y + getRandomInt(-inaccuracy, inaccuracy);
 
-    if (m_objectName == "Sonic")
+    if (getObjectName() == "Sonic")
     {
 	int diffX = m_destination.x - realPosition.x,
 	    diffY = m_destination.y - realPosition.y;
@@ -80,7 +78,7 @@ WeaponClass::~WeaponClass()
 
 void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
-    if (!getStatus(STATUS_DESTROYED) && m_objectName == "Sonic")
+    if (!getStatus(STATUS_DESTROYED) && getObjectName() == "Sonic")
     {
 	ImagePtr tmp = m_graphic->getCopy();
 	SDL_Surface *mask = tmp->getSurface();
@@ -169,12 +167,12 @@ void WeaponClass::update(float dt)
 		m_realPos = m_destination;
 		destroy();
 	    }
-	    else if (m_objectName == "Sonic")
+	    else if (getObjectName() == "Sonic")
 	    {
 		if (getPosition() != oldLocation.x)
 		{
 		    UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
-		    map->damage(m_shooter, m_owner, realPos, m_objectName, m_damage, m_damagePiercing, m_damageRadius, false);
+		    map->damage(m_shooter, m_owner, realPos, getObjectName(), m_damage, m_damagePiercing, m_damageRadius, false);
 		}
 	    }
 	    else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->isAStructure())
@@ -198,7 +196,7 @@ void WeaponClass::destroy()
 	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	    for(int y = 0; y < m_explosionSize; y++)
 		if ((m_explosionSize <= 2) || ((x != 0) && (x != (m_explosionSize-1))) || ((y != 0) && (y != (m_explosionSize-1))))
-		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), m_objectName, m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
+		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
     }
     ObjectClass::destroy();
 

@@ -3,13 +3,12 @@
 
 #define VIS_ALL -1
 
-#include "Rect.h"
-#include "PlayerClass.h"
-
-#include <boost/python.hpp>
-
 #include <string>
 #include <vector>
+
+#include "PlayerClass.h"
+#include "PythonObjects.h"
+#include "Rect.h"
 
 enum attribute {
     OBJECT_CLASS = 0,
@@ -107,7 +106,7 @@ class ObjectClass : public Rect
 
     inline bool wasForced() { return m_forced; }
 
-    inline std::string getObjectName() { return m_objectName; }
+    inline std::string getObjectName() { return getPyObjectType(m_pyObject, 0); }
     int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
@@ -141,8 +140,6 @@ class ObjectClass : public Rect
   protected:
     ATTACKTYPE m_attackMode;
 
-    std::string m_objectName;
-    
     bool m_active,
     //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
          m_respondable,
@@ -242,6 +239,8 @@ class ObjectClass : public Rect
     std::vector<python::object> m_weapons;
 
     Uint32 m_attributes, m_status;
+
+    python::object m_pyObject;
 
 };
 

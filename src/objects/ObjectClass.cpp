@@ -18,8 +18,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
     std::string graphic;
 
-    m_objectName = objectName;
-    python::object pyObject = DataCache::Instance()->getPyObject(m_objectName);
+    m_pyObject = DataCache::Instance()->getPyObject(objectName);
 
 
     m_animCounter = 0;
@@ -44,34 +43,34 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
     try {
 	PointFloat size;
-	m_angle = python::extract<int>(pyObject.attr("angle"));
-	m_animFrames = python::extract<int>(pyObject.attr("animFrames"));
-	m_armor = python::extract<int>(pyObject.attr("armor"));
-	m_deathAnim = getPyObjectType(pyObject.attr("deathAnim"), 0);
-	m_drawnAngle = python::extract<int>(pyObject.attr("drawnAngle"));
-	m_drawnPos = python::extract<UPoint>(pyObject.attr("drawnPos"));
-	m_explosionSize = python::extract<int>(pyObject.attr("explosionSize"));
-	m_guardRange = python::extract<int>(pyObject.attr("guardRange"));
-	graphic = getPyObjectType(pyObject.attr("graphic"), 0);
-	m_maxHealth = python::extract<int>(pyObject.attr("maxHealth"));
-	m_numDeathFrames = python::extract<int>(pyObject.attr("numDeathFrames"));
-	m_numFrames = python::extract<int>(pyObject.attr("numFrames"));
-	m_health = python::extract<int>(pyObject.attr("health"));
-	m_offset = UPoint(PointFloat(python::extract<PointFloat>(pyObject.attr("offset"))) * BLOCKSIZE),
-	m_radius = python::extract<int>(pyObject.attr("radius"));
-	m_realPos = python::extract<PointFloat>(pyObject.attr("realPos"));
-	m_maxSpeed = python::extract<float>(pyObject.attr("speed"));
-	m_turnSpeed = python::extract<float>(pyObject.attr("turnSpeed"));
-	m_viewRange = python::extract<int>(pyObject.attr("viewRange"));
-	m_weapons = getPyObjectVector<python::object>(pyObject.attr("weapons"));
-	if(getPyObject<PointFloat>(pyObject.attr("size"), &size)) {
+	m_angle = python::extract<int>(m_pyObject.attr("angle"));
+	m_animFrames = python::extract<int>(m_pyObject.attr("animFrames"));
+	m_armor = python::extract<int>(m_pyObject.attr("armor"));
+	m_deathAnim = getPyObjectType(m_pyObject.attr("deathAnim"), 0);
+	m_drawnAngle = python::extract<int>(m_pyObject.attr("drawnAngle"));
+	m_drawnPos = python::extract<UPoint>(m_pyObject.attr("drawnPos"));
+	m_explosionSize = python::extract<int>(m_pyObject.attr("explosionSize"));
+	m_guardRange = python::extract<int>(m_pyObject.attr("guardRange"));
+	graphic = getPyObjectType(m_pyObject.attr("graphic"), 0);
+	m_maxHealth = python::extract<int>(m_pyObject.attr("maxHealth"));
+	m_numDeathFrames = python::extract<int>(m_pyObject.attr("numDeathFrames"));
+	m_numFrames = python::extract<int>(m_pyObject.attr("numFrames"));
+	m_health = python::extract<int>(m_pyObject.attr("health"));
+	m_offset = UPoint(PointFloat(python::extract<PointFloat>(m_pyObject.attr("offset"))) * BLOCKSIZE),
+	m_radius = python::extract<int>(m_pyObject.attr("radius"));
+	m_realPos = python::extract<PointFloat>(m_pyObject.attr("realPos"));
+	m_maxSpeed = python::extract<float>(m_pyObject.attr("speed"));
+	m_turnSpeed = python::extract<float>(m_pyObject.attr("turnSpeed"));
+	m_viewRange = python::extract<int>(m_pyObject.attr("viewRange"));
+	m_weapons = getPyObjectVector<python::object>(m_pyObject.attr("weapons"));
+	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size)) {
 	    size *= BLOCKSIZE;
 	    w = size.x, h = size.y;
 	}
     }
     catch(python::error_already_set const &)
     {
-	LOG_FATAL("ObjectClass", "Error loading object: %s", m_objectName.c_str());
+	LOG_FATAL("ObjectClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -83,7 +82,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 ObjectClass::~ObjectClass()
 {
-    LOG_INFO("ObjectClass", "%s destroyed", m_objectName.c_str());
+    LOG_INFO("ObjectClass", "%s destroyed", getObjectName().c_str());
 }
 
 /* virtual */
