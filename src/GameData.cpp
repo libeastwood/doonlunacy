@@ -75,7 +75,7 @@ void GameData::drawImage()
 
 	if(getPyObjectType(pyObject, 1) == "GameDataConst") {
 	    if(!getPyObject(pyObject.attr("filename"), &variable)) {
-		LOG_ERROR("GameData", "%s: 'filename' variable missing!", variable.c_str());
+		LOG_ERROR("GameData", "%s: 'filename' variable missing!", m_path.c_str());
 		exit(EXIT_FAILURE);
 	    }
 
@@ -108,7 +108,7 @@ void GameData::drawImage()
 			tilesX = tiles.size();
 		    else if(tilesX != tiles.size())
 			LOG_FATAL("GameData:", "Tile row size %d is of different size than %d for %s!",
-				tiles.size(), tilesX, variable.c_str());
+				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
 		    Uint32 *tilesArray = new Uint32[tiles.size()];
 		    std::copy(tiles.begin(), tiles.end(), tilesArray);
@@ -116,7 +116,7 @@ void GameData::drawImage()
 		    delete [] tilesArray;
 		}
 		else {
-		    LOG_FATAL("GameData", "%s: No index or tiles specified for %s!", m_path.c_str(), variable.c_str());
+		    LOG_FATAL("GameData", "%s: No index or tiles specified!", m_path.c_str());
 		    exit(EXIT_FAILURE);
 		}
 	    }
@@ -137,12 +137,12 @@ void GameData::drawImage()
 			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
 		    }
 		    else {
-			LOG_FATAL("GameData", "no index, mapindex or row specified for %s!", variable.c_str());
+			LOG_FATAL("GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
 			exit(EXIT_FAILURE);
 		    }
 		}
 		else {
-		    LOG_FATAL("GameData", "No map specified for %s!", variable.c_str());
+		    LOG_FATAL("GameData", "No map specified for %s!", m_path.c_str());
 		    exit(EXIT_FAILURE);
 		}
 	    }
@@ -154,7 +154,7 @@ void GameData::drawImage()
 	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType")
 		gameData = DataCache::Instance()->getGameData(variable)->getImage();
 	    else {
-		LOG_ERROR("GameMan", "%s: gamedata variable missing!", variable.c_str());
+		LOG_ERROR("GameMan", "%s: gamedata variable missing!", m_path.c_str());
 		exit(EXIT_FAILURE);
 	    }
 	    if(getPyObject(pyObject.attr("crop"), &crop))
