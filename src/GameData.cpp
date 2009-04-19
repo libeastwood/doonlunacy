@@ -173,12 +173,12 @@ void GameData::drawImage()
 	    if(!nonePyObject(pyObject.attr("drawvline"))) {
 		std::vector<Rect> drawVLines = getPyObjectVector<Rect>(pyObject.attr("drawvline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawVLines.begin(); iter != drawVLines.end(); iter++)
-		    m_surface->drawVLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
+		    m_surface->drawVLine(UPoint((*iter).x, (*iter).y), (*iter).w, (*iter).h);
 	    }
 	    if(!nonePyObject(pyObject.attr("drawhline"))) {
 		std::vector<Rect> drawHLines = getPyObjectVector<Rect>(pyObject.attr("drawhline"));
 	    	for (std::vector<Rect>::const_iterator iter = drawHLines.begin(); iter != drawHLines.end(); iter++)
-		    m_surface->drawHLine((*iter).x, (*iter).y, (*iter).w, (*iter).h);
+		    m_surface->drawHLine(UPoint((*iter).x, (*iter).y), (*iter).w, (*iter).h);
 	    }
 	    if(!nonePyObject(pyObject.attr("fillrect"))) {
 		std::vector<Rect> fillRects = getPyObjectVector<Rect>(pyObject.attr("fillrect"));
