@@ -15,7 +15,7 @@ GameData::GameData(std::string path)
 {
     m_path = path;
     // set this to true to avoid it being freed
-    m_persistent = true;
+    m_persistent = false;
     m_freeCounter = 0;
 }
 
@@ -23,8 +23,7 @@ GameData::~GameData()
 {
 }
 
-bool GameData::freeIfUnique()
-{
+bool GameData::freeIfUnique() {
     if(!m_persistent){
 	if(m_surface.unique())
 	{
@@ -52,6 +51,7 @@ bool GameData::freeIfUnique()
 
 	if(m_freeCounter > 50)
 	    LOG_WARNING("GameData", "%s has been freed over 50 times!", m_path.c_str());
+	LOG_DEBUG("GameData", "Freeing %s", m_path.c_str());
 	return true;
     }
     return false;

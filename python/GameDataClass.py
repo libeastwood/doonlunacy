@@ -5,7 +5,7 @@ TILE_ROTATE = 0x10000000
 
 class GameData(object):
     def __init__(self):
-        self.persistent = True
+        self.persistent = False
         self.palette = "DUNE:IBM.PAL"
 
 class GameDataConst(GameData):
