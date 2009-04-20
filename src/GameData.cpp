@@ -4,6 +4,7 @@
 #include "Gfx.h"
 #include "PythonObjects.h"
 #include "ResMan.h"
+#include "Sfx.h"
 
 #include <eastwood/CpsFile.h>
 #include <eastwood/IcnFile.h>
@@ -200,9 +201,9 @@ void GameData::drawImage()
 }
 
 void GameData::loadSound() {
-    Mix_Chunk* soundChunk;
 
     try {
+    	Mix_Chunk* soundChunk;
         SDL_RWops *rwop;
         size_t len;
         uint8_t *data;
@@ -228,7 +229,7 @@ void GameData::loadSound() {
 
         SDL_RWclose(rwop);
         free(data);
-    	m_sound.reset(soundChunk);
+    	m_sound.reset(new Sound(soundChunk));
     }
     catch(python::error_already_set const &) {
 	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());

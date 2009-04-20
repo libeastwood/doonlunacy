@@ -7,7 +7,7 @@
 
 class Image;
 class ObjectClass;
-class Mix_Chunk;
+class Sound;
 
 //! Smart pointer around Image class instance
 typedef boost::shared_ptr<Image> ImagePtr;
@@ -23,7 +23,7 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
         
 */
 
-typedef boost::shared_ptr<Mix_Chunk> SoundPtr;
+typedef boost::shared_ptr<Sound> SoundPtr;
 
 typedef boost::shared_ptr<ObjectClass> ObjectPtr;
 typedef std::pair<uint32_t, ObjectPtr> ObjectPair;

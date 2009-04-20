@@ -295,12 +295,12 @@ void UnitClass::setAngle(int newAngle)
 
 void UnitClass::playConfirmSound() {
     if(!m_confirmSound.empty())
-    	SoundPlayer::Instance()->playSound(m_confirmSound[getRandomInt(0,m_confirmSound.size()-1)].get());
+    	SoundPlayer::Instance()->playSound(m_confirmSound[getRandomInt(0,m_confirmSound.size()-1)]);
 }
 
 void UnitClass::playSelectSound() {
     if(!m_selectSound.empty())
-    	SoundPlayer::Instance()->playSound(m_selectSound[getRandomInt(0,m_selectSound.size()-1)].get());
+    	SoundPlayer::Instance()->playSound(m_selectSound[getRandomInt(0,m_selectSound.size()-1)]);
 }
 /*virtual*/
 void UnitClass::setDestination(SPoint destination, Uint32 status)

@@ -1,11 +1,9 @@
 #ifndef SOUNDPLAYER_H_INCLUDED
 #define SOUNDPLAYER_H_INCLUDED
 
-#include "SDL_mixer.h"
 #include <string>
 #include <vector>
 
-#include "dMath.h"
 #include "DataCache.h"
 #include "Definitions.h"
 #include "houses.h"
@@ -18,6 +16,7 @@
 */
 
 class AdlFile;
+class Mix_Chunk;
 
 class SoundPlayer : public Singleton<SoundPlayer>
 {
@@ -35,7 +34,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
 
 	void playSound(std::string soundID);
 
-	void playSound(Mix_Chunk* sound, int channel = -1);
+	void playSound(SoundPtr sound, int channel = -1);
     
 
     /*! play music of certain type
@@ -84,4 +83,5 @@ class SoundPlayer : public Singleton<SoundPlayer>
 
 	AdlFile *m_player;
 };
+
 #endif //SOUNDPLAYER_H_INCLUDED

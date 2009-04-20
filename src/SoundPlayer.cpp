@@ -12,7 +12,7 @@
 #include "GameData.h"
 #include "Log.h"
 #include "mmath.h"
-
+#include "Sfx.h"
 
 SoundPlayer::SoundPlayer()
 {
@@ -93,14 +93,9 @@ void SoundPlayer::playSound(std::string soundID, int volume)
 {
     if (Settings::Instance()->m_soundOn)
     {
-        Mix_Chunk* tmp;
+        SoundPtr tmp = DataCache::Instance()->getGameData(soundID)->getSound();
 
-        if ((tmp = DataCache::Instance()->getGameData(soundID)->getSound().get()) == NULL)
-        {
-            return;
-        }
-
-        int channel = Mix_PlayChannel(-1, tmp, 0);
+        int channel = Mix_PlayChannel(-1, tmp->getChunk(), 0);
 
         if (channel != -1)
             Mix_Volume(channel, (volume*Settings::Instance()->m_sfxVolume) / MIX_MAX_VOLUME);
@@ -146,23 +141,17 @@ void SoundPlayer::playSound(std::string soundID)
 {
     if (Settings::Instance()->m_soundOn)
     {
-        Mix_Chunk* tmp;
+        SoundPtr tmp = DataCache::Instance()->getGameData(soundID)->getSound();
 
-        if ((tmp = DataCache::Instance()->getGameData(soundID)->getSound().get()) == NULL)
-        {
-            LOG_ERROR("SoundPlayer", "There is no sound with id %s!", soundID.c_str());
-            exit(EXIT_FAILURE);
-        }
-
-        Mix_PlayChannel(-1, tmp, 0);
+        Mix_PlayChannel(-1, tmp->getChunk(), 0);
     }
 }
 
-void SoundPlayer::playSound(Mix_Chunk* sound, int channel)
+void SoundPlayer::playSound(SoundPtr sound, int channel)
 {
     if (Settings::Instance()->m_soundOn)
     {
-        Mix_PlayChannel(channel, sound, 0);
+        Mix_PlayChannel(channel, sound->getChunk(), 0);
     }
 }
 
