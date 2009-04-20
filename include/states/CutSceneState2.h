@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <boost/python.hpp>
+#include <boost/dynamic_bitset.hpp>
 #include "Gfx.h"
 #include "states/MenuBase.h"
 
@@ -54,7 +55,7 @@ class CutSceneState : public MenuBaseState
 	std::map<int, SoundPtr> m_sounds;
 	std::string m_scene;
 	std::vector<python::object> m_scenes;
-	bool *m_framePlayed;
+	boost::dynamic_bitset<> m_framePlayed;
 };
 
 #endif // DUNE_STATES_CUTSCENESTATE_H

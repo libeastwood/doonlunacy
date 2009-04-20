@@ -36,7 +36,6 @@ CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
     m_curScene = 0;
     m_drawMenu = true;
     m_font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-    m_framePlayed = NULL;
     m_loop = NULL;
 }
 
@@ -44,8 +43,6 @@ CutSceneState::~CutSceneState()
 {
     if(m_loop)
 	delete m_loop;
-    if(m_framePlayed)
-	delete m_framePlayed;
 }
 
 void CutSceneState::loadScene(uint32_t scene)
@@ -62,8 +59,6 @@ void CutSceneState::loadScene(uint32_t scene)
     if(m_loop)
 	free(m_loop);
     m_loop = NULL;
-    if(m_framePlayed)
-	free(m_framePlayed);
     int song,
 	loopAnimFrames = 0;
     float fps;
@@ -184,7 +179,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	exit(EXIT_FAILURE);
     }
     m_sceneStart = SDL_GetTicks();
-    m_framePlayed = (bool*)calloc(m_animLabel->getNumFrames(), sizeof(bool));
+    m_framePlayed.resize(m_animLabel->getNumFrames());
 }
 
 int CutSceneState::Execute(float ft)
