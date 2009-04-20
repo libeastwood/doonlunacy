@@ -95,7 +95,7 @@ void SoundPlayer::playSound(std::string soundID, int volume)
     {
         SoundPtr tmp = DataCache::Instance()->getGameData(soundID)->getSound();
 
-        int channel = Mix_PlayChannel(-1, tmp->getChunk(), 0);
+        int channel = Mix_PlayChannel(-1, tmp.get(), 0);
 
         if (channel != -1)
             Mix_Volume(channel, (volume*Settings::Instance()->m_sfxVolume) / MIX_MAX_VOLUME);
@@ -143,16 +143,14 @@ void SoundPlayer::playSound(std::string soundID)
     {
         SoundPtr tmp = DataCache::Instance()->getGameData(soundID)->getSound();
 
-        Mix_PlayChannel(-1, tmp->getChunk(), 0);
+        Mix_PlayChannel(-1, tmp.get(), 0);
     }
 }
 
 void SoundPlayer::playSound(SoundPtr sound, int channel)
 {
     if (Settings::Instance()->m_soundOn)
-    {
-        Mix_PlayChannel(channel, sound->getChunk(), 0);
-    }
+        Mix_PlayChannel(channel, sound.get(), 0);
 }
 
 //FIXME:Remove this eventually and reuse all useful functions

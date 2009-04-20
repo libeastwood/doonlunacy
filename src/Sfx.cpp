@@ -1,37 +1,41 @@
 #include <SDL_mixer.h>
 
+#include <iostream>
 #include "Sfx.h"
 
-Sound::Sound(Mix_Chunk *soundChunk) : m_soundChunk(soundChunk) {
+Sound::Sound(Mix_Chunk *soundChunk) {
+    allocated = soundChunk->allocated;
+    volume = soundChunk->volume;
+    alen = soundChunk->alen;
+    abuf = soundChunk->abuf;
 
 }
 
 Sound::~Sound() {
-    if(m_soundChunk)
-    	Mix_FreeChunk(m_soundChunk);
+    if(allocated)
+	free(abuf);
 }
 
 void Sound::concatSound(SoundPtr sound) {
-    if(!m_soundChunk)
-	memcpy(m_soundChunk->abuf, sound->getChunk()->abuf, sound->getChunk()->alen);
-    else {
-	Mix_Chunk *newChunk;
-	if((newChunk = (Mix_Chunk*) malloc(sizeof(Mix_Chunk))) == NULL)
-	    throw(std::bad_alloc());
+    if(!allocated)
+    {
+	allocated = 1;
+	volume = sound->volume;
+	alen = sound->alen;
 
-	newChunk->allocated = 1;
-	newChunk->volume = m_soundChunk->volume;
-	newChunk->alen = m_soundChunk->alen + sound->getChunk()->alen;
-
-	if((newChunk->abuf = (Uint8 *)malloc(newChunk->alen)) == NULL) {
-	    free(newChunk);
+	if((abuf = (Uint8 *)malloc(alen)) == NULL) {
 	    throw(std::bad_alloc());
 	}
 
-	memcpy(newChunk->abuf, m_soundChunk->abuf, m_soundChunk->alen);
-	memcpy(newChunk->abuf + m_soundChunk->alen, sound->getChunk()->abuf, sound->getChunk()->alen);
-	Mix_FreeChunk(m_soundChunk);
-	m_soundChunk = newChunk;
+	memcpy(abuf, sound->abuf, sound->alen);
+    }
+    else {
+	alen += sound->alen;
+
+	if((abuf = (Uint8 *)realloc(abuf, alen)) == NULL)
+	    throw(std::bad_alloc());
+
+	memcpy(abuf + (alen - sound->alen), sound->abuf, sound->alen);
     }
 }
 
