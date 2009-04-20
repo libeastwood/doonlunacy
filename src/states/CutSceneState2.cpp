@@ -75,6 +75,7 @@ void CutSceneState::loadScene(uint32_t scene)
 	getPyObject(curScene.attr("fps"), &fps);
 	getPyObject(curScene.attr("fadeIn"), &m_fadeIn);
 	getPyObject(curScene.attr("fadeOut"), &m_fadeOut);
+	getPyObject(curScene.attr("textFadeIn"), &m_textFadeIn);
 
 	if(getPyObject(curScene.attr("song"), &song))
 	    SoundPlayer::Instance()->playMusic(MUSIC_INTRO, song);

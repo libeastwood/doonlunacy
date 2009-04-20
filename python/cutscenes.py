@@ -49,7 +49,7 @@ scene.sound = {
 scene.text = [(70, "a.k.a. Doon Lunacy")]
 scene.textPosition = (0,30)
 scene.animPosition = (0, -100)
-scene.textFade = False
+scene.textFadeIn = False
 intro.append(scene)
 
 scene = CutsceneClass()
@@ -133,7 +133,7 @@ scene.fps = 5.8
 scene.hold = 38
 scene.text = [(0, 13)]
 scene.textPosition = (0,0)
-scene.textFade = False	
+scene.textFadeIn = False	
 scene.sound = {
         0 : (Intro_AndNow(), Intro_3Houses(), Intro_ForControl(), Intro_OfDune())
         }
@@ -226,7 +226,7 @@ scene.fps = 4.9
 scene.hold = 22
 scene.text = [(0, 18)]
 scene.textPosition = (0,0)
-scene.textFade = False	
+scene.textFadeIn = False	
 scene.sound = {
         0 : (Intro_Your(), Intro_BattleForDune(), Intro_Begins())
         }
@@ -237,7 +237,7 @@ scene.fadeOut = True
 scene.hold = 50
 scene.text = [(0, 19)]
 scene.textPosition = (0,0)
-scene.textFade = False
+scene.textFadeIn = False
 scene.sound = {
         0 : (Intro_Now())
         }
