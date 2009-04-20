@@ -3,12 +3,7 @@
 #include <iostream>
 #include "Sfx.h"
 
-Sound::Sound(Mix_Chunk *soundChunk) {
-    allocated = soundChunk->allocated;
-    volume = soundChunk->volume;
-    alen = soundChunk->alen;
-    abuf = soundChunk->abuf;
-
+Sound::Sound(Mix_Chunk *soundChunk) : Mix_Chunk(*soundChunk) {
 }
 
 Sound::~Sound() {
