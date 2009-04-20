@@ -23,8 +23,6 @@
 #include <boost/format.hpp>
 
 
-using namespace libconfig;
-
 typedef boost::shared_ptr<IcnFile> IcnfilePtr;
 typedef boost::shared_ptr<ShpFile> ShpfilePtr;
 
@@ -34,21 +32,6 @@ DataCache::DataCache() {
 #include <iostream>
 
 void DataCache::Init(){
-    //TODO:Should use ResMan.
-    m_dataConfig = new Config();
-
-    try
-    {
-        m_dataConfig->readFile("data.dunetxt");
-    }
-    catch(ParseException& ex)
-    {
-        LOG_FATAL("DataCache", "Fatal error loading configuration file on line %d: %s", 
-                ex.getLine(), ex.getError());
-
-        exit(EXIT_FAILURE);
-    }
-
     size_t len;
     uint8_t *data;
     //    Image *tmp;
@@ -116,12 +99,22 @@ SDL_Palette* DataCache::getPalette(std::string paletteFile)
 
 song *DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
 {
-
-    Setting& node = m_dataConfig->lookup("music");
+    std::string mtype;
+    if(musicType == MUSIC_ATTACK)
+	mtype = "attack";
+    else if(musicType == MUSIC_LOSE)
+	mtype = "lose";
+    else if(musicType == MUSIC_PEACE)
+	mtype = "peace";
+    else if(musicType == MUSIC_WIN)
+	mtype = "win";
+    else if(musicType == MUSIC_INTRO)
+	mtype = "intro";
+    python::dict music = python::extract<python::dict>(python::import("music").attr("music"));
     song * newSong = new song;
 
-    std::string filename = node[musicType][ID][0];
-    int track = (int)node[musicType][ID][1];
+    std::string filename = python::extract<std::string>(music[mtype][ID][0]);
+    int track = python::extract<int>(music[mtype][ID][1]);
 
     newSong->filename = filename;
     newSong->track = track;
@@ -139,11 +132,6 @@ std::string	DataCache::getIntroString(uint16_t i){
 
 std::string	DataCache::getCreditsString(uint16_t i){
     return CreditsStrings->getString(i);
-}
-
-libconfig::Config *DataCache::getConfig()
-{
-    return m_dataConfig;
 }
 
 GameData * DataCache::getGameData(std::string name)
