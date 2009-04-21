@@ -19,105 +19,6 @@
 #include "Rect.h"
 
 //------------------------------------------------------------------------------
-// Single pixel operations
-//------------------------------------------------------------------------------
-//! @name Single pixel operations
-//@{
-
-//! Set pixel on given surface
-/*!
-  @param surface surface to draw to
-  @param x x-coord
-  @param y y-coord
-  @param color color
-
-  @warning The surface has to be locked !
-  */
-void putPixel(SDL_Surface *surface, int x, int y, Uint32 color);
-
-//! Get pixel from given surface
-/*!
-  @param surface surface to read from
-  @param x x-coord
-  @param y y-coord
-  @return read color
-
-  @warning The surface has to be locked !
-  */
-Uint32 getPixel(SDL_Surface *surface, int x, int y);
-
-//@}
-
-//------------------------------------------------------------------------------
-// Drawing operations
-//------------------------------------------------------------------------------
-//! @name Drawing operations
-//@{
-
-//! Draw horizontal line
-/*!
-  @param surface surface to draw to
-  @param x x-coord of start
-  @param y y-coord of start
-  @param x2 x-coord of finish
-  @param color color to draw with
-  @param lock whether to lock the surface (defaults to yes)
-  */
-void drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock = true);
-
-//! Draw vertical line
-/*!
-  @param surface surface to draw to
-  @param x x-coord of start
-  @param y y-coord of start
-  @param y2 y-coord of finish
-  @param color color to draw with
-  @param lock whether to lock the surface (defaults to yes)
-  */
-void drawVLine(SDL_Surface *surface, int x, int y, int y2, Uint32 color, bool lock = true);
-
-//! Draw rectangle
-/*!
-  @param surface surface to draw to
-  @param rect rectangle to draw
-  @param color color to draw with
-  @param lock whether to lock the surface (defaults to yes)
-  */
-void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool lock = true);
-
-//@}
-
-//------------------------------------------------------------------------------
-// Surface operations
-//------------------------------------------------------------------------------
-//! @name Surface operations
-//@{
-
-//! Make copy of surface 
-/*!
-  @param surface original surface
-  */
-SDL_Surface* copySurface(SDL_Surface* surface);
-
-//! Make resized copy of surface 
-/*!
-  @param surface original surface
-  @param w new width
-  @param h new height    
-  */
-SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h);
-
-
-//! Make resized copy of surface 
-/*!
-  @param surface original surface
-  @param ratio ratio of new surface to original (2 = double size)
-  */
-SDL_Surface* resizeSurface(SDL_Surface *surface, float ratio);
-
-//@}
-
-//------------------------------------------------------------------------------
 // Color remapping
 //------------------------------------------------------------------------------
 //! @name Color mapping
@@ -125,38 +26,6 @@ SDL_Surface* resizeSurface(SDL_Surface *surface, float ratio);
 
 #define DEFAULT_SURFACE_REMAP_LENGTH 7
 #define DEFAULT_SURFACE_REMAP_BEGIN COLOUR_HARKONNEN
-
-//! Remap colors of surface
-/*!
-  @param surface source (and destination) surface
-  @param colorSrc first color to be replaced
-  @param colorDst first color to be used as replacement
-  @param colorNum number of colors to replace (last is colorSrc+colorNum-1)
-  */
-void remapSurface(SDL_Surface *surface, int colorSrc, int colorDst, int colorNum = DEFAULT_SURFACE_REMAP_LENGTH);
-
-//! Remap colors of surface
-/*!
-  @param surface source (and destination) surface
-  @param house house to remap colors to
-
-  @note Starting color and color number defaults to hardcoded numbers.
-  */
-void remapSurfaceByHouse(SDL_Surface *surface, int house);
-
-//! Remap colors of surface
-/*!
-  @param surface source (and destination) surface
-  @param color first color to be used as replacement
-
-  @note Starting color and color number defaults to hardcoded numbers.
-  */
-inline void remapSurfaceByColor(SDL_Surface *surface, int color)
-{
-    remapSurface(surface, DEFAULT_SURFACE_REMAP_BEGIN, color);
-}
-
-//@}
 
 //------------------------------------------------------------------------------
 // Image class
@@ -215,10 +84,7 @@ class Image : private SDL_Surface
 
 	  @warning The surface has to be locked !
 	  */
-	friend void ::putPixel(SDL_Surface *surface, int x, int y, Uint32 color);
-	void putPixel(ConstUPoint point, Uint32 color) {
-	    ::putPixel(this, point.x, point.y, color);
-	}
+	void putPixel(ConstUPoint point, Uint32 color);
 
 	//! Get pixel from given surface
 	/*!
@@ -227,9 +93,7 @@ class Image : private SDL_Surface
 
 	  @warning The surface has to be locked !
 	  */
-	Uint32 getPixel(ConstUPoint point) const {
-	    return ::getPixel((Image*)this, point.x, point.y);
-	}
+	Uint32 getPixel(ConstUPoint point) const;
 
 	//@}
 
@@ -243,9 +107,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawHLine(ConstUPoint start, int x2, Uint32 color, bool lock = true) {
-	    ::drawHLine(this, start.x, start.y, x2, color, lock);
-	}
+	void drawHLine(UPoint start, int x2, Uint32 color, bool lock = true);
 
 	//! Draw vertical line
 	/*!
@@ -254,9 +116,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawVLine(ConstUPoint start, int y2, Uint32 color, bool lock = true) {
-	    ::drawVLine(this, start.x, start.y, y2, color, lock);
-	}
+	void drawVLine(UPoint start, int y2, Uint32 color, bool lock = true);
 
 	//! Draw rectangle
 	/*!
@@ -264,9 +124,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawRect(ConstRect rect, Uint32 color, bool lock = true) {
-	    ::drawRect(this, rect, color, lock);
-	}
+	void drawRect(ConstRect rect, Uint32 color, bool lock = true);
 
 	//@}
 
@@ -275,7 +133,7 @@ class Image : private SDL_Surface
 
 	//! Make copy of the image
 	ImagePtr getCopy() const {
-	    return ImagePtr(new Image(copySurface((Image*)this)));
+	    return ImagePtr(new Image(SDL_ConvertSurface((Image*)this, format, flags)));
 	}
 
 	//! Make resized copy of the image
@@ -283,16 +141,14 @@ class Image : private SDL_Surface
 	  @param ratio ratio of new image to original (2 = double size)
 	  */
 	ImagePtr getResized(const float ratio) {//const ?? what's the difference?
-	    return ImagePtr(new Image(resizeSurface(this, ratio)));
+	    return getResized(getSize()*ratio);
 	}
 
 	//! Make resized copy of the image
 	/*!
 	  @param size size of the new image
 	  */
-	ImagePtr getResized(ConstUPoint size) {
-	    return ImagePtr(new Image(resizeSurface(this, size.x, size.y)));
-	}
+	ImagePtr getResized(ConstUPoint size);
 
 	//! Make resized copy of the image relative to current resolution
 	ImagePtr getResized() {
@@ -446,9 +302,7 @@ class Image : private SDL_Surface
 	  @param colorDst first color to be used as replacement
 	  @param colorNum number of colors to replace (last is colorSrc+colorNum-1)
 	  */
-	void recolor(int colorSrc, int colorDst, int colorNum = DEFAULT_SURFACE_REMAP_LENGTH) {
-	    ::remapSurface(this, colorSrc, colorDst, colorNum);
-	}
+	void recolor(int colorSrc, int colorDst, int colorNum = DEFAULT_SURFACE_REMAP_LENGTH);
 
 	//! Remap colors of surface
 	/*!
@@ -456,9 +310,7 @@ class Image : private SDL_Surface
 
 	  @note Starting color and color number defaults to hardcoded numbers.
 	  */
-	void recolorByHouse(int house) {
-	    ::remapSurfaceByHouse(this, house);
-	}
+	void recolorByHouse(int house);
 
 	//! Remap colors of surface
 	/*!
@@ -467,7 +319,7 @@ class Image : private SDL_Surface
 	  @note Starting color and color number defaults to hardcoded numbers.
 	  */
 	inline void recolorByColor(int color) {
-	    ::remapSurfaceByColor(this, color);
+	    recolor(DEFAULT_SURFACE_REMAP_BEGIN, color);
 	}
 
 	//! Return copy with remapped colors of surface
@@ -569,67 +421,5 @@ class Image : private SDL_Surface
 	Image() { }
 	SDL_Color *m_origPal, *m_tmpPal;
 };
-
-//------------------------------------------------------------------------------
-// DEPRECATED:
-//------------------------------------------------------------------------------
-//! @name DEPRECATED (do not use !)
-//@{
-
-/*!
-  @deprecated Use putPixel(SDL_Surface *surface, int x, int y, Uint32 color) instead.
-  */
-inline void putpixel(SDL_Surface *surface, int x, int y, Uint32 colour) { putPixel(surface, x, y, colour); }
-
-/*!
-  @deprecated Use getPixel(SDL_Surface *surface, int x, int y); instead.
-  */
-inline Uint32 getpixel(SDL_Surface *surface, int x, int y) { return getPixel(surface, x, y); }
-
-/*!
-  @deprecated Use drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock = true) with lock = false instead.
-  */
-inline void hlineNoLock(SDL_Surface *surface, int x1, int y, int x2, Uint32 colour) {
-    drawHLine(surface, x1, y, x2, colour, false);
-}
-
-/*!
-  @deprecated Use void drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock = true) instead.
-  */
-inline void drawhline(SDL_Surface *surface, int x1, int y, int x2, Uint32 colour) {
-    drawHLine(surface, x1, y, x2, colour, true);
-}
-
-/*!
-  @deprecated Use drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool lock = true) instead.
-  */
-inline void drawrect(SDL_Surface *surface, int x1, int y1, int x2, int y2, Uint32 colour) { 
-    SDL_Rect r;
-    r.x = x1;
-    r.y = y1;
-    r.w = x2-x1;
-    r.h = y2-y1;
-    drawRect(surface, r, colour, true);
-}
-
-// DEPRECATED (works with surface, not with the 'Image' wrapper):
-/*!
-  @deprecated Use remapSurfaceByHouse(SDL_Surface *surface, int house) instead.
-  */
-inline void mapImageHouseColour(SDL_Surface* graphic, int house) {
-    remapSurfaceByHouse(graphic, house);
-}
-
-/*!
-  @deprecated If you really need to use this function, then your code is bad !
-  @note <b>PENDING FOR REMOVAL:</b> it is used only by Game.cpp in doubtful way (otpetrik)
-  */
-inline void mapImageHouseColourBase(SDL_Surface* graphic, int house, int baseCol) {
-    // slow, but it avoids additional include ;-) (it has to be enough till removed)
-    remapSurface(graphic, baseCol, 144); // remap back to harkonnen
-    remapSurfaceByHouse(graphic, house);
-}
-
-//@}
 
 #endif // DUNE_GFX_H

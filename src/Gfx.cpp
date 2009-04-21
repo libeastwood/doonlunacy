@@ -358,15 +358,13 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt)
 // Single pixel operations
 //------------------------------------------------------------------------------
 
-void putPixel(SDL_Surface *surface, int x, int y, Uint32 color)
-{
-    assert(surface != NULL);
+void Image::putPixel(ConstUPoint point, Uint32 color) {
     SDL_Surface *screen = Application::Instance()->Screen();
-    if (x >= 0 && x < screen->w && y >=0 && y < screen->h)
+    if (point.x >= 0 && point.x < screen->w && point.y >=0 && point.y < screen->h)
     {
-	int bpp = surface->format->BytesPerPixel;
+	int bpp = format->BytesPerPixel;
 	// p is the address of the pixel to set
-	Uint8 *p = (Uint8 *)surface->pixels + y*surface->pitch + x*bpp;
+	Uint8 *p = (Uint8 *)pixels + point.y*pitch + point.x*bpp;
 	switch(bpp) {
 	    case 1:
 		*p = color;
@@ -395,12 +393,11 @@ void putPixel(SDL_Surface *surface, int x, int y, Uint32 color)
     }
 }
 
-Uint32 getPixel(SDL_Surface *surface, int x, int y)
+Uint32 Image::getPixel(ConstUPoint point) const
 {
-    assert(surface != NULL);
-    int bpp = surface->format->BytesPerPixel;
+    int bpp = format->BytesPerPixel;
     // p is the address of the pixel to retrieve
-    Uint8 *p = (Uint8 *)surface->pixels + y*surface->pitch + x*bpp;
+    Uint8 *p = (Uint8 *)pixels + point.y*pitch + point.x*bpp;
     switch(bpp) {
 	case 1:
 	    return *p;
@@ -423,59 +420,51 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
 // Drawing operations
 //------------------------------------------------------------------------------
 
-void drawHLine(SDL_Surface *surface, int x, int y, int x2, Uint32 color, bool lock)
-{
-    assert(surface != NULL);
-
+void Image::drawHLine(UPoint start, int x2, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if (lock == false || (SDL_MUSTLOCK(surface) == 0) ||  (SDL_LockSurface(surface) == 0))
+    //
+    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
     {
-	if (x > x2)
+	if (start.x > x2)
 	{
-	    int t = x;
-	    x = x2;
+	    int t = start.x;
+	    start.x = x2;
 	    x2 = t;
 	}
-	for (int i = x; i <= x2; i++)
-	    putpixel(surface, i, y, color);
-	if (lock == false || SDL_MUSTLOCK(surface))
-	    SDL_UnlockSurface(surface);
+	for (; start.x <= x2; start.x++)
+	    putPixel(start, color);
+	if (lock == false || SDL_MUSTLOCK(this))
+	    SDL_UnlockSurface(this);
     }
 }
 
-void drawVLine(SDL_Surface *surface, int x, int y, int y2, Uint32 color, bool lock)
-{
-    assert(surface != NULL);
-
+void Image::drawVLine(UPoint start, int y2, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if (lock == false || (SDL_MUSTLOCK(surface) == 0) ||  (SDL_LockSurface(surface) == 0))
+    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
     {
-	if (y > y2)
+	if (start.y > y2)
 	{
-	    int t = y;
-	    y = y2;
+	    int t = start.y;
+	    start.y = y2;
 	    y2 = t;
 	}
-	for (int i = y; i <= y2; i++)
-	    putpixel(surface, x, i, color);
-	if (lock == false || SDL_MUSTLOCK(surface))
-	    SDL_UnlockSurface(surface);
+	for (; start.y <= y2; start.y++)
+	    putPixel(start, color);
+	if (lock == false || SDL_MUSTLOCK(this))
+	    SDL_UnlockSurface(this);
     }
 }
 
-void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool lock)
-{
-    assert(surface != NULL);
-
+void Image::drawRect(ConstRect rect, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if (lock == false || (SDL_MUSTLOCK(surface) == 0) ||  (SDL_LockSurface(surface) == 0))
+    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
     {
-	drawHLine(surface, rect.x, rect.y, rect.x + rect.w-1, color, false);
-	drawHLine(surface, rect.x, rect.y + rect.h-1, rect.x + rect.w-1, color, false);
-	drawVLine(surface, rect.x, rect.y, rect.y + rect.h-1, color, false);
-	drawVLine(surface, rect.x + rect.w-1, rect.y, rect.y + rect.h-1, color, false);
-	if (lock == false || SDL_MUSTLOCK(surface))
-	    SDL_UnlockSurface(surface);
+	drawHLine(UPoint(rect.x, rect.y), rect.x + rect.w-1, color, false);
+	drawHLine(UPoint(rect.x, rect.y + rect.h-1), rect.x + rect.w-1, color, false);
+	drawVLine(UPoint(rect.x, rect.y), rect.y + rect.h-1, color, false);
+	drawVLine(UPoint(rect.x + rect.w-1, rect.y), rect.y + rect.h-1, color, false);
+	if (lock == false || SDL_MUSTLOCK(this))
+	    SDL_UnlockSurface(this);
     }
 }
 
@@ -483,94 +472,60 @@ void drawRect(SDL_Surface *surface, const SDL_Rect &rect, Uint32 color, bool loc
 // Surface operations
 //------------------------------------------------------------------------------
 
-SDL_Surface* copySurface(SDL_Surface* surface)
+ImagePtr Image::getResized(ConstUPoint size)
 {
-    assert(surface != NULL);
+    assert(size.x != 0);
+    assert(size.y != 0);
 
-    //return SDL_DisplayFormat(surface);
-    return SDL_ConvertSurface(surface, surface->format, surface->flags);
-}
-
-SDL_Surface* resizeSurface(SDL_Surface *surface, Uint16 w, Uint16 h)
-{
-    assert(surface != NULL);
-    assert(w != 0);
-    assert(h != 0);
-
-    SDL_Surface *resized = 
-	SDL_CreateRGBSurface(
-		SDL_HWSURFACE,
-		w,              // width
-		h,              // height 
-		8,              // bits per pixel
-		0,0,0,0);       // r,g,b,a masks	
-
-    // TODO: throw an exception ?
-    if (resized == NULL)
-    {
-	return NULL;
-    }
+    Image *resized = new Image(size);
 
     // copy palette (otherwise you'll get only black image)
-    SDL_SetColors(resized, surface->format->palette->colors, 0, 256);
+    resized->setColors(getColors(), 0, 256);
 
     // copy colorkey (not sure what happens ;-) )
-    SDL_SetColorKey(resized, (surface->flags & SDL_SRCCOLORKEY) | (surface->flags & SDL_RLEACCEL), surface->format->colorkey);
+    resized->setColorKey(format->colorkey, (flags & SDL_SRCCOLORKEY) | (flags & SDL_RLEACCEL));
 
     if (SDL_MUSTLOCK(resized))
 	SDL_LockSurface(resized);
-    if (SDL_MUSTLOCK(surface))
-	SDL_LockSurface(surface);       
+    if (SDL_MUSTLOCK(this))
+	SDL_LockSurface(this);       
 
     for(int y = 0; y < resized->h; y++)
-    {
 	for(int x = 0; x < resized->w; x++)
-	{
-	    putPixel(resized, x, y, getPixel(surface, surface->w*x/resized->w, surface->h*y/resized->h));
-	}
-    }
+	    resized->putPixel(UPoint(x, y), getPixel(UPoint(w*x/resized->w, h*y/resized->h)));
 
     if (SDL_MUSTLOCK(resized))
 	SDL_UnlockSurface(resized);
-    if (SDL_MUSTLOCK(surface))
-	SDL_UnlockSurface(surface);
-    return resized;
-}
+    if (SDL_MUSTLOCK(this))
+	SDL_UnlockSurface(this);
 
-SDL_Surface* resizeSurface(SDL_Surface *surface, float ratio)
-{
-    assert(surface != NULL);
-    return resizeSurface(surface, (Uint16)(surface->w*ratio), (Uint16)(surface->h*ratio));
+    return ImagePtr(resized);
 }
 
 //------------------------------------------------------------------------------
 // Color mapping
 //------------------------------------------------------------------------------
 
-void remapSurface(SDL_Surface *surface, int colorSrc, int colorDst, int colorNum)
-{
-    assert(surface != NULL);
-    assert(surface->format->BitsPerPixel == 8);
-
+void Image::recolor(int colorSrc, int colorDst, int colorNum) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if ((SDL_MUSTLOCK(surface) == 0) ||  (SDL_LockSurface(surface) == 0))
+    if ((SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
     {
 	Uint8 *pixel;
 	int x, y;
-	for (y = 0; y < surface->h; y++)
-	    for (x = 0; x < surface->w; x++)
+	for (y = 0; y < h; y++)
+	    for (x = 0; x < w; x++)
 	    {
-		pixel = &(((Uint8*)surface->pixels)[y*surface->pitch + x]);
+		pixel = &(((Uint8*)pixels)[y*pitch + x]);
 		if ((*pixel >= colorSrc) && (*pixel < colorSrc + colorNum))
 
 		    *pixel = *pixel - colorSrc + colorDst;
 	    }
-	if (SDL_MUSTLOCK(surface))
-	    SDL_UnlockSurface(surface);
+	if (SDL_MUSTLOCK(this))
+	    SDL_UnlockSurface(this);
     }    
 }
 
-void remapSurfaceByHouse(SDL_Surface *surface, int house)
+void Image::recolorByHouse(int house)
 {
-    remapSurface(surface, COLOUR_HARKONNEN, houseColour[house]);
+    recolor(DEFAULT_SURFACE_REMAP_BEGIN, houseColour[house]);
 }
