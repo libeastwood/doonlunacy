@@ -550,7 +550,7 @@ class Image : private SDL_Surface
 	bool fadeOut(const int fadeAmt = 4);
 	bool morph(ImagePtr morphImg, const int morphAmt = 4);
 
-	int flip() {
+	inline int flip() {
 	    return SDL_Flip(this);
 	};
 
