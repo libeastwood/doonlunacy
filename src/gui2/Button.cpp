@@ -28,8 +28,7 @@ GraphicButton::GraphicButton(ImagePtr normal, ImagePtr pressed)
 
 void GraphicButton::setGraphics(ImagePtr normal, ImagePtr pressed)
 {
-    assert(pressed != NULL && ((normal->getSurface()->w == pressed->getSurface()->w) &&
-                               (normal->getSurface()->h == pressed->getSurface()->h)));
+    assert(pressed != NULL && normal->getSize() == pressed->getSize());
 
     m_surfNormal = normal;
     m_surfPressed = pressed;
@@ -188,10 +187,10 @@ void BoringButton::redraw()
     Uint16 textw, texth;
     font->extents(m_caption.c_str(), textw, texth);
 
-    font->render(m_caption.c_str(), m_surfNormal->getSurface(),
+    m_surfNormal->renderText(m_caption.c_str(), font,
                     (w / 2) - (textw / 2), 
                     ((h / 2) - (texth / 2)), fontColour);
-    font->render(m_caption.c_str(), m_surfPressed->getSurface(),
+    m_surfPressed->renderText(m_caption.c_str(), font,
                     (w / 2) - (textw / 2), 
                     ((h / 2) - (texth / 2)), fontColour);
 

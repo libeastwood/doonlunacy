@@ -70,17 +70,14 @@ void Label::redraw()
         drawBackground(width, texth, numLines);
         
         for (int i=0; i < numLines; i++)
-        {
-            font->render(lines[i].c_str(), m_surface->getSurface(),
-                0, 0 + texth * i, m_textColor);
-        }
+            m_surface->renderText(lines[i].c_str(), font, 0, 0 + texth * i, m_textColor);
     } else
     {
         font->extents(m_caption.c_str(), textw, texth);
         drawBackground(textw, texth);
-		font->render(m_caption.c_str(), m_surface->getSurface(),
-        m_surface->getSurface()->w/2 - textw/2, 
-        m_surface->getSurface()->h/2 - texth/2, m_textColor);
+	m_surface->renderText(m_caption.c_str(), font,
+        m_surface->getSize().x/2 - textw/2, 
+        m_surface->getSize().y/2 - texth/2, m_textColor);
     }
 
 	// This is quite lame, but will do for now..

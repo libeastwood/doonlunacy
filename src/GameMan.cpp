@@ -400,7 +400,7 @@ void GameMan::TakeMapScreenshot(string filename)
         for (int j = 0 ; j < h; j++)
             m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
 
-    SDL_SaveBMP(img->getSurface(), filename.c_str());
+    img->saveBMP(filename);
 
     delete img;
 }

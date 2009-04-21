@@ -142,7 +142,7 @@ void CutSceneState::loadScene(uint32_t scene)
 		m_animLabel->addFrame(ImagePtr(new Image(cpsfile.getSurface())), true);
 	    }
 	    else {
-		WsaFile wsafile(data, len, DataCache::Instance()->getPalette(palettefile), continuation ? m_lastFrame->getSurface() : NULL);
+		WsaFile wsafile(data, len, DataCache::Instance()->getPalette(palettefile), continuation ? m_lastFrame.get() : NULL);
 		std::vector<ImagePtr> wsaFrames;
 		for(uint32_t i = 0; i < wsafile.getNumFrames(); i++)
 		    wsaFrames.push_back(ImagePtr(new Image(wsafile.getSurface(i))));
@@ -238,7 +238,7 @@ int CutSceneState::Execute(float ft)
 
 		m_font->extents(thisLine, textw, texth);
 
-		m_font->render(thisLine, tmp->getSurface(), tmp->getSize().x/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+		tmp->renderText(thisLine, m_font, tmp->getSize().x/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
 
 		if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
 		    break;

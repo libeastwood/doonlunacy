@@ -78,6 +78,7 @@ WeaponClass::~WeaponClass()
 
 void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
+    /*
     if (!getStatus(STATUS_DESTROYED) && getObjectName() == "Sonic")
     {
 	ImagePtr tmp = m_graphic->getCopy();
@@ -138,6 +139,7 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 	    }
 	}
     }//end of if sonic
+    */
     ObjectClass::draw(dest, off, view);
 }
 

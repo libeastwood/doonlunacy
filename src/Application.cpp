@@ -182,12 +182,9 @@ void Application::SetPalette()
     
     assert(pal != NULL);
     LOG_INFO("Application", "Setting palette %d colors", pal->ncolors);
-    assert( SDL_SetColors(m_screen->getSurface(), pal->colors, 0, pal->ncolors) == 1 );
+    assert( m_screen->setColors(pal->colors, 0, pal->ncolors) == 1 );
     m_currentPalette = pal;
 
-    SDL_Palette* palette = m_screen->getSurface()->format->palette;
-    
-    palette = m_currentPalette;
 }
 
 void Application::InitVideo()
@@ -200,7 +197,8 @@ void Application::InitVideo()
     if (set->m_fullscreen)
         videoFlags |= SDL_FULLSCREEN;
 
-    SDL_Surface * surf = SDL_SetVideoMode(set->m_width, set->m_height, 8, videoFlags);
+
+    SDL_Surface *surf = SDL_SetVideoMode(set->m_width, set->m_height, 8, videoFlags);
     
     if(!surf)
     {
@@ -208,7 +206,7 @@ void Application::InitVideo()
         Die();
     };
 
-    m_screen = new Image(surf);
+    m_screen = (Image*)surf;
     
     // reset the palette if we've got one 
     if (m_currentPalette != NULL)
@@ -291,7 +289,7 @@ void Application::Run()
 
     while (m_running)
     {
-        SDL_FillRect(m_screen->getSurface(), NULL, m_clearColor);
+        m_screen->fillRect(m_clearColor);
 
         HandleEvents();
         
@@ -326,7 +324,7 @@ void Application::Run()
             SDL_FillRect(m_screen->getSurface(), &pdest, i);
         }    
 #endif
-        SDL_Flip(m_screen->getSurface());
+	m_screen->flip();
 
         fps_frames ++;
 
@@ -407,6 +405,6 @@ void Application::BlitCursor()
     case NUM_CURSORS: break;
     }
     
-    m_screen->blitFrom(m_cursor.get(), src, dest);
+    m_screen->blitFrom((Image*)m_cursor.get(), src, dest);
 }
 
