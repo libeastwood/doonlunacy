@@ -10,13 +10,12 @@
 #include "PythonObjects.h"
 
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
-    Rect(0, 0, 0, 0)
+    Rect(0, 0, 0, 0), m_attributes(attribute)
 {
     std::string graphic;
     std::vector<python::object> pyWeapons;
 
     m_owner = newOwner;
-    m_attributes = OBJECT_CLASS | attribute;
     m_status = STATUS_NONE;
 
     if(m_owner == GameMan::Instance()->LocalPlayer())
