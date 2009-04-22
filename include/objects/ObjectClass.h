@@ -90,14 +90,7 @@ class ObjectClass : public Rect
 
     virtual void setDestination(SPoint destination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
-	
-    inline bool isABuilder()    { return m_attributes & OBJECT_BUILDER; }
-    inline bool isAFlyingUnit() { return m_attributes & OBJECT_AIRUNIT; }
-    inline bool isAGroundUnit() { return m_attributes & OBJECT_GROUNDUNIT; }
-    inline bool isAStructure()  { return m_attributes & OBJECT_STRUCTURE; }
-    inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
-    inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
-    inline bool isWeapon()    { return m_attributes & OBJECT_WEAPON; }
+
     inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
     inline Uint32 getAttributes() { return m_attributes; }
 

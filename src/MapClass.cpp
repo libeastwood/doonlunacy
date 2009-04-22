@@ -156,7 +156,7 @@ BLOCKEDTYPE MapClass::cellBlocked(UPoint pos)
 	}
 	else if (getCell(pos)->hasAnObject())
 	{
-	    if (getCell(pos)->getObject()->isInfantry())
+	    if (getCell(pos)->getObject()->hasAttribute(OBJECT_INFANTRY))
 		blocked = INFANTRY;
 	    else
 		blocked = COMBLOCKED;

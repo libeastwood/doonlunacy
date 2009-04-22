@@ -164,7 +164,7 @@ void UnitClass::move()
     {
         m_oldPosition = UPoint(x, y);
 
-        if (!m_badlyDamaged || isAFlyingUnit())
+        if (!m_badlyDamaged || hasAttribute(OBJECT_AIRUNIT))
             m_realPos += m_speed * m_adjust;
         else
             m_realPos += (m_speed / 2) * m_adjust;
@@ -346,7 +346,7 @@ void UnitClass::setSpeeds()
 {
     float maxSpeed = m_maxSpeed;
 
-    if (!isAFlyingUnit())
+    if (!hasAttribute(OBJECT_AIRUNIT))
     {
         m_maxSpeed += m_maxSpeed * (1.0 - m_owner->getMap()->getCell(SPoint(x, y))->getDifficulty());
         m_maxSpeed *= HEAVILYDAMAGEDSPEEDMULTIPLIER;
@@ -650,9 +650,9 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
             cost = parent_node->m_cost;
 
             if ((x != parent_node->x) && (tempLocation.y != parent_node->y))
-                cost += DIAGONALCOST * (isAFlyingUnit() ? 1.0 : (float)node->getDifficulty()); //add diagonal movement cost
+                cost += DIAGONALCOST * (hasAttribute(OBJECT_AIRUNIT) ? 1.0 : (float)node->getDifficulty()); //add diagonal movement cost
             else
-                cost += (isAFlyingUnit() ? 1.0 : (float)node->getDifficulty());
+                cost += (hasAttribute(OBJECT_AIRUNIT) ? 1.0 : (float)node->getDifficulty());
 
             /*if (parent_node->parent) //add cost of turning time
             {

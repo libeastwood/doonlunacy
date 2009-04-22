@@ -157,7 +157,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 		    status |= STATUS_ATTACKING;
 
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
-    		    if ((*unit).second->isControllable() && (*unit).second->isAUnit())
+    		    if ((*unit).second->isControllable() && (*unit).second->hasAttribute(OBJECT_UNIT))
     			    ((UnitClass*)((*unit).second).get())->setDestination(pos, status);
             }
 
@@ -195,7 +195,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 			    ObjectPtr tmp = m_map->getCell(pos)->getObject();
 			    LOG_DEBUG("MapWidget", "multi: %d-%d", pos.x, pos.y);
 			    if(tmp) {
-				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->isAUnit()) {
+				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->hasAttribute(OBJECT_UNIT)) {
 				    m_selectedList[tmp->getObjectID()] = tmp;
 				    tmp->setSelected(true);
 				    LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);

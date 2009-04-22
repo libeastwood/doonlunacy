@@ -109,7 +109,7 @@ void ObjectClass::assignToMap(SPoint pos)
 bool ObjectClass::canAttack(ObjectPtr object)
 {
     if ( (object != NULL) && !object->getStatus(STATUS_DESTROYED) 
-	    && ( object->isAStructure() || !object->isAFlyingUnit() )
+	    && ( object->hasAttribute(OBJECT_STRUCTURE) || !object->hasAttribute(OBJECT_AIRUNIT) )
 	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
 		|| object->getObjectName() == "Sandworm") && object->isVisible(m_owner->getTeam()) ) 
 	return true;

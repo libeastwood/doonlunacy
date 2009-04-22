@@ -179,7 +179,7 @@ void WeaponClass::update(float dt)
 		    map->damage(m_shooter, m_owner, realPos, getObjectName(), m_damage, m_damagePiercing, m_damageRadius, false);
 		}
 	    }
-	    else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->isAStructure())
+	    else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 	    {
 		if (m_groundBlocked)
 		    destroy();

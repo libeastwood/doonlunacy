@@ -17,8 +17,7 @@ class WeaponClass : public ObjectClass
 
     private:
 	//! Is bullet headig for an air unit?
-	bool m_airAttack,
-	     m_groundBlocked;
+	bool m_groundBlocked;
 
 	int	m_damage,
 		m_damagePiercing, //from 0 for none to 10 max

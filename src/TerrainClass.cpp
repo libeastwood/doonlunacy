@@ -70,7 +70,7 @@ ObjectPtr TerrainClass::getGroundObject()
     {
 	ObjectPtr tmp = (*iter).second;
 	//FIXME: Checking that tmp isn't NULL first shouldn't be necessary..
-	if(tmp && tmp->isAGroundUnit())
+	if(tmp && tmp->hasAttribute(OBJECT_GROUNDUNIT))
 	    return tmp;
     }
     return object;
@@ -327,11 +327,11 @@ void TerrainClass::damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoi
 			{
 				cell = map->getCell(realPos->x/BLOCKSIZE, realPos->y/BLOCKSIZE);
 				if (((bulletType == Bullet_Rocket) || (bulletType == Bullet_SmallRocket) || (bulletType == Bullet_LargeRocket) || (bulletType == Unit_Devastator))
-					&& (!hasAGroundObject() || !getGroundObject()->isAStructure())
+					&& (!hasAGroundObject() || !getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 					&& ((realPos->x <= (location.x*BLOCKSIZE + BLOCKSIZE/2))//if hasn't been assigned an object or the assigned object isnt a structure
 						&& (realPos->y <= (location.y*BLOCKSIZE + BLOCKSIZE/2))))
 				{
-					if (!cell->hasAGroundObject() || !cell->getGroundObject()->isAStructure())
+					if (!cell->hasAGroundObject() || !cell->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 					{
 						if (((cell->getType() == Terrain_Rock) && (cell->getTile() == Terrain_t1))
 							|| (cell->getType() == Structure_Slab1))
