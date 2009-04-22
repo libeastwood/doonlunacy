@@ -28,7 +28,7 @@ Image::Image(ConstUPoint size) : SDL_Surface(*SDL_CreateRGBSurface(
     assert(size.y != 0);
 
     // copy palette from the screen (otherwise you'll get only black image)
-    setColors(Application::Instance()->Screen()->getColors(), 0, 256);
+    setPalette(Application::Instance()->Screen()->getPalette());
 }
 
 Image::~Image()
@@ -53,22 +53,12 @@ Image *Image::getPictureCrop(ConstRect dstRect)
 	exit(EXIT_FAILURE);	
     }
 
-    SDL_Surface *returnPic;
+    Image *returnPic = new Image(UPoint(dstRect.w, dstRect.h));
 
-    // create new picture surface
-    if((returnPic = SDL_CreateRGBSurface(SDL_HWSURFACE,dstRect.w, dstRect.h,8,0,0,0,0))== NULL) {
-	LOG_ERROR("GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
-		dstRect.x, dstRect.y, dstRect.w, dstRect.y);
+    returnPic->setPalette(getPalette());
+    returnPic->blitFrom(this, dstRect, UPoint(0,0));
 
-	exit(EXIT_FAILURE);	
-    }
-
-    SDL_SetColors(returnPic, format->palette->colors, 0, format->palette->ncolors);
-
-    Rect r(dstRect);
-    SDL_BlitSurface(this,&r,returnPic,NULL); 
-
-    return new Image(returnPic);
+    return returnPic;
 }
 
 void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
@@ -188,8 +178,8 @@ void Image::drawVBar(ConstUPoint start, int y2)
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
     sideBar->blitFrom(tmp.get());
     tmp.reset(screen->getPictureCrop(Rect(241, 58, 12, 13)));
-    for(int i = 6; i < y2 - 6; i += 13)
-	sideBar->blitFrom(tmp.get(), UPoint(0, i));
+    for(UPoint iter(0, 6); iter.y < y2 - 6; iter.y += 13)
+	sideBar->blitFrom(tmp.get(), iter);
     tmp.reset(screen->getPictureCrop(Rect(241, 117, 12, 6)));
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
@@ -204,8 +194,8 @@ void Image::drawHBarSmall(ConstUPoint start, int x2)
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
     sideBar->blitFrom(tmp.get());
     tmp.reset(screen->getPictureCrop(Rect(260, 127, 10, 6)));
-    for(int i = 5; i < x2 - 6; i += 10)
-	sideBar->blitFrom(tmp.get(), UPoint(i, 0));
+    for(UPoint iter(5, 0); iter.x < x2 - 6; iter.x += 10)
+	sideBar->blitFrom(tmp.get(), iter);
     tmp.reset(screen->getPictureCrop(Rect(313, 127, 6, 6)));
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(x2 - start.x - 6, 0));
@@ -223,36 +213,38 @@ void Image::drawTiles(ImagePtr tile, ConstRect area)
     ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
     UPoint size = getSize();
     UPoint bgSize = tile->getSize();
-    for(int x = 0; x < size.x; x += bgSize.x - 1)
-	for(int y = 0; y < size.y; y += bgSize.y - 1)
-	    tiledArea->blitFrom(tile.get(), UPoint(x,y));
+    UPoint iter;
+    for(iter.x = 0; iter.x < size.x; iter.x += bgSize.x - 1)
+	for(iter.y = 0; iter.y < size.y; iter.y += bgSize.y - 1)
+	    tiledArea->blitFrom(tile.get(), iter);
     blitFrom(tiledArea.get(), UPoint(area.x, area.y));
 }
 
 bool Image::fadeIn(const int fadeAmt)
 {
-    SDL_Color *src = format->palette->colors;
+    SDL_Color *src = getPalette()->colors;
+    int ncolors = getPalette()->ncolors;
     SDL_Color *dest = m_tmpPal;
     if(m_tmpPal == NULL)
     {
-	m_tmpPal = new SDL_Color[256];
+	m_tmpPal = new SDL_Color[ncolors];
 	memcpy((unsigned char*)m_tmpPal,
-		format->palette->colors,
-		sizeof(SDL_Color) * 256);
+		src,
+		sizeof(SDL_Color) * ncolors);
 	dest = m_tmpPal;
 
-	for (int i=0; i!=256; i++, src++)
+	for (int i=0; i!=ncolors; i++, src++)
 	{
 	    src->r = 0;
 	    src->g = 0;
 	    src->b = 0;
 	}
-	SDL_SetColors(this, format->palette->colors, 0, 256);
+	setPalette(getPalette());
 	return true;
     }
     bool fade = false;
 
-    for (int i=0; i!=256; i++, src++, dest++)
+    for (int i=0; i!=ncolors; i++, src++, dest++)
     {
 	if (src->r < dest->r || src->g < dest->g || src->b < dest->b)
 	{
@@ -267,16 +259,18 @@ bool Image::fadeIn(const int fadeAmt)
 	}
     }
     if(fade)
-	SDL_SetColors(this, format->palette->colors, 0, 256);
+	setPalette(getPalette());
+
     return fade;
 }
 
 bool Image::fadeOut(const int fadeAmt)
 {
     bool fade = false;
-    SDL_Color *src = format->palette->colors;
+    SDL_Palette *pal = getPalette();
+    SDL_Color *src = pal->colors;
 
-    for (int i=0; i!=256; i++, src++)
+    for (int i=0; i!=pal->ncolors; i++, src++)
     {
 	if (src->r > 0 || src->g > 0 || src->b > 0)
 	{
@@ -291,42 +285,41 @@ bool Image::fadeOut(const int fadeAmt)
 	}
     }
     if(fade)
-	SDL_SetColors(this, format->palette->colors, 0, 256);
+	setPalette(getPalette());
+
     return fade;
 }
 
-inline uint16_t colDiff(SDL_Color srcCol, SDL_Color dstCol)
-{
+inline uint16_t colDiff(SDL_Color srcCol, SDL_Color dstCol) {
     return abs(srcCol.r - dstCol.r) + abs(srcCol.g - dstCol.g) + abs(srcCol.b - dstCol.b);
 }
 
-bool Image::morph(ImagePtr morphImage, const int morphAmt)
-{
+bool Image::morph(ImagePtr morphImage, const int morphAmt) {
     bool morph = false;
-    uint16_t w = getSize().x, h = getSize().y;
+    UPoint point;
     std::vector<uint16_t> newCol;
-    newCol.assign(256, -1);
-    SDL_Color *colors = format->palette->colors;
+    SDL_Palette *pal = getPalette();
+    newCol.assign(pal->ncolors, -1);
 
-    for(uint16_t x = 0; x != w; x++)
-	for(uint16_t y = 0; y != h; y++)
+    for(point.x = 0;  point.x != w; point.x++)
+	for(point.y = 0; point.y != h; point.y++)
 	{
-	    uint8_t curPix = getPixel(UPoint(x, y));
-	    uint8_t dstPix = morphImage->getPixel(UPoint(x,y));
+	    uint8_t curPix = getPixel(point);
+	    uint8_t dstPix = morphImage->getPixel(point);
 	    if(curPix != dstPix){
 		uint8_t newPix;
 		if(newCol[curPix] != (uint16_t)-1)
 		    newPix = (uint8_t)newCol[curPix];
 		else
 		{
-		    SDL_Color srcCol = colors[curPix];
-		    SDL_Color dstCol = colors[dstPix];
+		    SDL_Color srcCol = pal->colors[curPix];
+		    SDL_Color dstCol = pal->colors[dstPix];
 		    uint16_t minDiff = -1;
 		    std::vector<uint8_t> newCols;
-		    for(uint16_t i = 0; i != 256; i++)
+		    for(uint16_t i = 0; i != pal->ncolors; i++)
 		    {
 			if(i == curPix) continue;
-			SDL_Color col = colors[i];
+			SDL_Color col = pal->colors[i];
 			uint16_t diff = colDiff(srcCol, col);
 			uint16_t dstDiff = colDiff(srcCol, dstCol);
 			if(diff == dstDiff)
@@ -347,7 +340,7 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt)
 		}
 		if(curPix != dstPix)
 		    morph = true;
-		putPixel(UPoint(x,y), newPix);
+		putPixel(point, newPix);
 	    }
 	}
     return morph;
@@ -359,8 +352,8 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt)
 //------------------------------------------------------------------------------
 
 void Image::putPixel(ConstUPoint point, Uint32 color) {
-    SDL_Surface *screen = Application::Instance()->Screen();
-    if (point.x >= 0 && point.x < screen->w && point.y >=0 && point.y < screen->h)
+    UPoint screenSize = Application::Instance()->Screen()->getSize();
+    if (point.x >= 0 && point.x < screenSize.x && point.y >=0 && point.y < screenSize.y)
     {
 	int bpp = format->BytesPerPixel;
 	// p is the address of the pixel to set
@@ -423,7 +416,7 @@ Uint32 Image::getPixel(ConstUPoint point) const
 void Image::drawHLine(UPoint start, int x2, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     //
-    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
+    if (lock == false || !mustLock() || (lockSurface() == 0))
     {
 	if (start.x > x2)
 	{
@@ -433,14 +426,14 @@ void Image::drawHLine(UPoint start, int x2, Uint32 color, bool lock) {
 	}
 	for (; start.x <= x2; start.x++)
 	    putPixel(start, color);
-	if (lock == false || SDL_MUSTLOCK(this))
-	    SDL_UnlockSurface(this);
+	if (lock == false || mustLock())
+	    unlockSurface();
     }
 }
 
 void Image::drawVLine(UPoint start, int y2, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
+    if (lock == false || !mustLock() ||  (lockSurface() == 0))
     {
 	if (start.y > y2)
 	{
@@ -450,21 +443,21 @@ void Image::drawVLine(UPoint start, int y2, Uint32 color, bool lock) {
 	}
 	for (; start.y <= y2; start.y++)
 	    putPixel(start, color);
-	if (lock == false || SDL_MUSTLOCK(this))
-	    SDL_UnlockSurface(this);
+	if (lock == false || mustLock())
+	    unlockSurface();
     }
 }
 
 void Image::drawRect(ConstRect rect, Uint32 color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if (lock == false || (SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
+    if (lock == false || !mustLock() ||  (lockSurface() == 0))
     {
 	drawHLine(UPoint(rect.x, rect.y), rect.x + rect.w-1, color, false);
 	drawHLine(UPoint(rect.x, rect.y + rect.h-1), rect.x + rect.w-1, color, false);
 	drawVLine(UPoint(rect.x, rect.y), rect.y + rect.h-1, color, false);
 	drawVLine(UPoint(rect.x + rect.w-1, rect.y), rect.y + rect.h-1, color, false);
-	if (lock == false || SDL_MUSTLOCK(this))
-	    SDL_UnlockSurface(this);
+	if (lock == false || mustLock())
+	    unlockSurface();
     }
 }
 
@@ -480,24 +473,24 @@ ImagePtr Image::getResized(ConstUPoint size)
     Image *resized = new Image(size);
 
     // copy palette (otherwise you'll get only black image)
-    resized->setColors(getColors(), 0, 256);
+    resized->setPalette(getPalette());
 
     // copy colorkey (not sure what happens ;-) )
     resized->setColorKey(format->colorkey, (flags & SDL_SRCCOLORKEY) | (flags & SDL_RLEACCEL));
 
-    if (SDL_MUSTLOCK(resized))
-	SDL_LockSurface(resized);
-    if (SDL_MUSTLOCK(this))
-	SDL_LockSurface(this);       
+    if (resized->mustLock())
+	resized->lockSurface();
+    if (mustLock())
+	lockSurface();
 
     for(int y = 0; y < resized->h; y++)
 	for(int x = 0; x < resized->w; x++)
 	    resized->putPixel(UPoint(x, y), getPixel(UPoint(w*x/resized->w, h*y/resized->h)));
 
-    if (SDL_MUSTLOCK(resized))
-	SDL_UnlockSurface(resized);
-    if (SDL_MUSTLOCK(this))
-	SDL_UnlockSurface(this);
+    if (resized->mustLock())
+	resized->unlockSurface();
+    if (mustLock())
+	unlockSurface();
 
     return ImagePtr(resized);
 }
@@ -508,7 +501,7 @@ ImagePtr Image::getResized(ConstUPoint size)
 
 void Image::recolor(int colorSrc, int colorDst, int colorNum) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
-    if ((SDL_MUSTLOCK(this) == 0) ||  (SDL_LockSurface(this) == 0))
+    if (!mustLock() || (lockSurface() == 0))
     {
 	Uint8 *pixel;
 	int x, y;
@@ -520,8 +513,8 @@ void Image::recolor(int colorSrc, int colorDst, int colorNum) {
 
 		    *pixel = *pixel - colorSrc + colorDst;
 	    }
-	if (SDL_MUSTLOCK(this))
-	    SDL_UnlockSurface(this);
+	if (mustLock())
+	    unlockSurface();
     }    
 }
 

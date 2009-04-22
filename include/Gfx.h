@@ -67,9 +67,9 @@ class Image : private SDL_Surface
 	    return UPoint(w, h);
 	}
 
-	//! Returns colormap of the surface
-	SDL_Color *getColors() const {
-	    return format->palette->colors;
+	//! Returns palette of the surface
+	inline SDL_Palette *getPalette() const {
+	    return format->palette;
 	}
 
 	//@}
@@ -292,8 +292,12 @@ class Image : private SDL_Surface
 	  @param firstcolor
 	  @param ncolors
 	  */
-	int setColors(SDL_Color *colors, int firstcolor, int ncolors) {
+	bool setColors(SDL_Color *colors, int firstcolor, int ncolors) {
 	    return SDL_SetColors(this, colors, firstcolor, ncolors);
+	}
+
+	bool setPalette(SDL_Palette *palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
+	    return SDL_SetPalette(this, flags, palette->colors, firstColor, palette->ncolors);
 	}
 
 	//! Remap colors of surface
@@ -412,6 +416,18 @@ class Image : private SDL_Surface
 
 	inline void renderText(std::string text, Font *font, int offx, int offy, Uint8 paloff) {
 	    font->render(text, this, offx, offy, paloff);
+	}
+
+	inline bool mustLock() {
+	    return SDL_MUSTLOCK(this);
+	}
+
+	inline int lockSurface() {
+	    return SDL_LockSurface(this);
+	}
+
+	inline void unlockSurface() {
+	    SDL_UnlockSurface(this);
 	}
 
 	//@}
