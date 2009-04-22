@@ -69,7 +69,8 @@ ObjectPtr TerrainClass::getGroundObject()
     for(iter = m_assignedObjects.begin(); iter != m_assignedObjects.end(); iter++)
     {
 	ObjectPtr tmp = (*iter).second;
-	if(tmp->isAGroundUnit())
+	//FIXME: Checking that tmp isn't NULL first shouldn't be necessary..
+	if(tmp && tmp->isAGroundUnit())
 	    return tmp;
     }
     return object;
