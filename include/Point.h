@@ -1,10 +1,11 @@
 #ifndef DUNE_POINT_H
 #define DUNE_POINT_H
 
-#include "Settings.h"
-
 #include <assert.h>
 #include <iostream>
+#include <cmath>
+
+#include "Settings.h"
 
 //------------------------------------------------------------------------------
 // Point struct
@@ -183,7 +184,13 @@ struct Point
             return Point((Settings::Instance()->GetWidth()  / 320.0f) * x,
                          (Settings::Instance()->GetHeight() / 200.0f) * y);
         }
-             
+
+	float distance(const Point &point) const {
+    	    float first = x - point.x,
+		  second = y - point.y;
+    	    return(std::sqrt(first*first + second*second));
+	}
+
         //@}
 };
 
