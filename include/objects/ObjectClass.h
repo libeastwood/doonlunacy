@@ -10,6 +10,9 @@
 #include "PythonObjects.h"
 #include "Rect.h"
 
+class WeaponClass;
+typedef boost::shared_ptr<WeaponClass> WeaponPtr;
+
 enum attribute {
     OBJECT_CLASS = 0,
     OBJECT_UNIT = 1 << 0,
@@ -236,7 +239,7 @@ class ObjectClass : public Rect
 
     ObjectPtr m_target;
 
-    std::vector<python::object> m_weapons;
+    std::vector<WeaponPtr> m_weapons;
 
     Uint32 m_attributes, m_status;
 

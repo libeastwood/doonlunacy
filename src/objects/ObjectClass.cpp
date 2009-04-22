@@ -41,6 +41,8 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
     m_attackMode = STANDGROUND;
 
+    std::vector<python::object> pyWeapons;
+
 
     try {
 	PointFloat size;
@@ -63,7 +65,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_maxSpeed = python::extract<float>(m_pyObject.attr("speed"));
 	m_turnSpeed = python::extract<float>(m_pyObject.attr("turnSpeed"));
 	m_viewRange = python::extract<int>(m_pyObject.attr("viewRange"));
-	m_weapons = getPyObjectVector<python::object>(m_pyObject.attr("weapons"));
+	pyWeapons = getPyObjectVector<python::object>(m_pyObject.attr("weapons"));
 	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size))
 	    setSize(size*BLOCKSIZE);
     }
@@ -73,6 +75,10 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
+    m_weapons.resize(pyWeapons.size());
+    for(size_t i = 0; i < pyWeapons.size(); i++)
+	m_weapons[i] = WeaponPtr(new WeaponClass(ObjectPtr(this), getPyObjectType(pyWeapons[i], 0), false));
+//FIXME:	m_weapons[i] = WeaponClass(GameMan::Instance()->getObject(getObjectID()), getPyObjectType(m_weapons.front(), 0), false);
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
@@ -382,15 +388,15 @@ void ObjectClass::setDestination(SPoint destination, Uint32 status)
 {
     setStatus(status);
     m_target.reset();
-    if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS)))
-    {
-
+    if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {
 	if(getStatus(STATUS_ATTACKING)) {
     	    m_target = GameMan::Instance()->GetMap()->getCell(destination)->getObject();
 	    UPoint targetPos(m_target ? m_target->getRealPos() : UPoint(destination * BLOCKSIZE));
 	    if(!m_weapons.empty())
 	    {
-    		ObjectPtr missile(new WeaponClass(GameMan::Instance()->getObject(getObjectID()), getPyObjectType(m_weapons.front(), 0), m_realPos, targetPos, false));
+		int rand = getRandomInt(0, m_weapons.size()-1);
+    		ObjectPtr missile(new WeaponClass(*m_weapons[rand].get()));
+		missile->setDestination(targetPos);
     		GameMan::Instance()->addObject(missile);
 		unsetStatus(STATUS_MOVING);
 	    }

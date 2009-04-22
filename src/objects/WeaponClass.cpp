@@ -10,13 +10,11 @@
 #include "PythonObjects.h"
 
 
-WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint realPosition, UPoint realDestination, bool air, uint32_t attribute) :
+WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, bool air, uint32_t attribute) :
     ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
     m_groundBlocked = false;
     m_airAttack = air;
-
-    int inaccuracy;
 
     m_shooter = newShooter;
 
@@ -27,7 +25,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
 	m_damagePiercing = python::extract<int>(m_pyObject.attr("damagePiercing"));
 	m_damageRadius =  python::extract<int>(m_pyObject.attr("damageRadius"));
 	m_groundBlocked =  python::extract<int>(m_pyObject.attr("groundBlocked"));
-	inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
+	m_inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
 	m_range = python::extract<int>(m_pyObject.attr("range"));
     }
     catch(python::error_already_set const &)
@@ -37,9 +35,14 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
 	exit(EXIT_FAILURE);
     }
 
-    m_destination.x = realDestination.x + getRandomInt(-inaccuracy, inaccuracy);
-    m_destination.y = realDestination.y + getRandomInt(-inaccuracy, inaccuracy);
+}
 
+void WeaponClass::setDestination(SPoint destination, Uint32 status) {
+    ObjectClass::setDestination(destination/BLOCKSIZE);
+    m_destination = destination;
+    m_destination += getRandomInt(-m_inaccuracy, m_inaccuracy);
+
+    /*
     if (getObjectName() == "Sonic")
     {
 	int diffX = m_destination.x - realPosition.x,
@@ -55,20 +58,21 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, UPoint re
 	ratio = (m_range * BLOCKSIZE)/square_root;
 	m_destination.x = realPosition.x + (int)(((float)diffX)*ratio);
 	m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
-    }
+    }*/
 
-    m_realPos = PointFloat(realPosition.x, realPosition.y);
-    m_source = realPosition;
-    x = realPosition.x/BLOCKSIZE;
-    y = realPosition.y/BLOCKSIZE;
-    h = w = m_graphic->getSize().y;
 
-    m_destAngle = dest_angle(realPosition, m_destination);
+    m_realPos = PointFloat(m_shooter->getRealPos());
+    m_source = m_shooter->getRealPos();
+    Rect::setPosition(m_shooter->getPosition());
+    setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
+
+    m_destAngle = dest_angle(m_source, m_destination);
     m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
     m_angle = m_destAngle;
     LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
     m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
+
 }
 
 WeaponClass::~WeaponClass()
@@ -157,8 +161,7 @@ void WeaponClass::update(float dt)
 	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
 
 	m_realPos += m_speed * m_adjust;  //keep the bullet moving by its current speeds
-	x = (short)(m_realPos.x/BLOCKSIZE);
-	y = (short)(m_realPos.y/BLOCKSIZE);
+	Rect::setPosition(m_realPos/BLOCKSIZE);
 
 	if ((x < -5) || (x >= map->w + 5) || (y < -5) || (y >= map->h + 5))
 	    m_frameTimer = 0;   //its off the screen, kill it
