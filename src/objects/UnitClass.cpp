@@ -75,11 +75,9 @@ void UnitClass::deploy(SPoint newPosition)
 
         //  clearStatus(STATUS_PICKEDUP);
 
-        setStatus(STATUS_RESPONDABLE);
+        setStatus(STATUS_RESPONDABLE & STATUS_ACTIVE);
 
-        setStatus(STATUS_ACTIVE);
-
-        setVisible(VIS_ALL, true);
+        setVisible(true);
 
         //FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
         //       Need to think of sth more effective.

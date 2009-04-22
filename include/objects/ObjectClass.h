@@ -1,10 +1,10 @@
 #ifndef DUNE_OBJECTS_OBJECTCLASS_H
 #define DUNE_OBJECTS_OBJECTCLASS_H
 
-#define VIS_ALL -1
-
 #include <string>
 #include <vector>
+
+#include <boost/dynamic_bitset.hpp>
 
 #include "PlayerClass.h"
 #include "PythonObjects.h"
@@ -89,7 +89,7 @@ class ObjectClass : public Rect
 	//@{
 	
 	void setHealth(int newHealth);
-	void setVisible(int team, bool status);
+	void setVisible(bool status, int team = -1);
 
     virtual void setDestination(SPoint destination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
@@ -138,7 +138,7 @@ class ObjectClass : public Rect
     ATTACKTYPE m_attackMode;
 
 	//! Specifies which players can see a given object
-    bool m_visible[MAX_PLAYERS+1];
+    boost::dynamic_bitset<> m_visible;
 
     /*!
      *  If set to true, animation frame will change in certain intervals.

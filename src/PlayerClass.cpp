@@ -250,7 +250,7 @@ ObjectPtr PlayerClass::placeUnit(std::string itemName, UPoint itemPos)
 	    unit->deploy(itemPos);
 	else
 	{
-	    newUnit->setVisible(VIS_ALL, false);
+	    newUnit->setVisible(false);
 	    newUnit->destroy();
 	    newUnit.reset();
 	}

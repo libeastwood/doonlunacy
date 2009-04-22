@@ -10,7 +10,7 @@
 #include "PythonObjects.h"
 
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
-    Rect(0, 0, 0, 0), m_attributes(attribute), m_objectName(objectName);
+    Rect(0, 0, 0, 0), m_objectName(objectName), m_attributes(attribute)
 {
     std::string graphic;
     std::vector<python::object> pyWeapons;
@@ -76,6 +76,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
+    m_visible.resize(MAX_PLAYERS);
 
 }
 
@@ -425,13 +426,15 @@ void ObjectClass::setPosition(SPoint pos)
     }
 }
 
-void ObjectClass::setVisible(int team, bool status)
+void ObjectClass::setVisible(bool status, int team)
 {
-    if (team == VIS_ALL) 
+    if(team < 0)
 	for(int i = 0; i < MAX_PLAYERS; i++)
 	    m_visible[i] = status;
-    else if ((team >= 1) && (team <= MAX_PLAYERS)) 
-	m_visible[--team] = status;
+    else if (team <= MAX_PLAYERS)
+	m_visible[team] = status;
+    else
+	throw "invalid player!";
 }
 
 void ObjectClass::unassignFromMap(SPoint pos)
