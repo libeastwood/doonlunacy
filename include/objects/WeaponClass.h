@@ -15,13 +15,23 @@ class WeaponClass : public ObjectClass
 	virtual void setDestination(SPoint destination, Uint32 status = 0);
 	inline bool isDirectShot() { return (m_source == m_destination); }
 
+	inline int getRange() { return m_range; }
+	inline bool loaded() {
+	    bool reload = --m_reloadTimer == 0;
+	    if(reload)
+		m_reloadTimer = m_reloadTime;
+	    return reload;
+	}
+
     private:
 	int	m_damage,
 		m_damagePiercing, //from 0 for none to 10 max
 		m_damageRadius,
 		m_deathFrame,
 		m_inaccuracy,
-		m_range;
+		m_range,
+		m_reloadTime,
+		m_reloadTimer;
 
 	float   m_destAngle,
 		m_angleLeft,

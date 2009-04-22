@@ -23,6 +23,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t 
 	m_damageRadius =  python::extract<int>(m_pyObject.attr("damageRadius"));
 	m_inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
 	m_range = python::extract<int>(m_pyObject.attr("range"));
+	m_reloadTime = python::extract<int>(m_pyObject.attr("reloadTime"));
 	if(!python::extract<bool>(m_pyObject.attr("groundBlocked")))
 	    setAttribute(OBJECT_AIRUNIT);
     }
@@ -32,6 +33,8 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t 
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
+    m_reloadTime += getRandomInt(-m_reloadTime/4, m_reloadTime/2);
+    m_reloadTimer = getRandomInt(1, m_reloadTime/2);
 
 }
 

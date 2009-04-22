@@ -15,7 +15,6 @@
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
-    setStatus(STATUS_RESPONDABLE);
     m_attackMode = DEFENSIVE;
 
     try {
@@ -42,7 +41,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
-    setStatus(STATUS_ACTIVE);
+    setStatus(STATUS_ACTIVE | STATUS_RESPONDABLE);
 }
 
 /*virtual*/
@@ -68,14 +67,14 @@ void UnitClass::deploy(SPoint newPosition)
     {
         setPosition(newPosition);
 
-        if ((m_guardPoint.x == INVALID_POS) || (m_guardPoint.y == INVALID_POS))
-            m_guardPoint = UPoint(x, y);
+        if (m_guardPoint == SPoint(INVALID_POS, INVALID_POS))
+            m_guardPoint = getPosition();
 
         setDestination(m_guardPoint);
 
         //  clearStatus(STATUS_PICKEDUP);
 
-        setStatus(STATUS_RESPONDABLE & STATUS_ACTIVE);
+        setStatus(STATUS_RESPONDABLE | STATUS_ACTIVE);
 
         setVisible(true);
 
@@ -135,17 +134,11 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 
     if (getStatus(STATUS_SELECTED) && !m_pathList.empty())
     {
-        Path::iterator iter = m_pathList.begin();
-        Rect rect;
-
-        while (iter != m_pathList.end())
+        for(Path::const_iterator iter = m_pathList.begin(); iter != m_pathList.end(); iter++)
         {
             UPoint pos(off + (*iter) * BLOCKSIZE - view * BLOCKSIZE + BLOCKSIZE / 2);
-	    rect.x = pos.x;
-	    rect.y = pos.y;
-            rect.w = rect.h = 2;
+	    Rect rect(pos.x, pos.y, 2, 2);
             dest->drawRect(rect, houseColour[m_owner->getColour()]);
-            iter++;
         }
     }
     #endif
@@ -158,9 +151,8 @@ void UnitClass::move()
     MapClass* map = m_owner->getMap();
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
-    if (getStatus(STATUS_MOVING))
-    {
-        m_oldPosition = UPoint(x, y);
+    if (getStatus(STATUS_MOVING)) {
+        m_oldPosition = getPosition();
 
         if (!getStatus(STATUS_BADLYDAMAGED) || hasAttribute(OBJECT_AIRUNIT))
             m_realPos += m_speed * m_adjust;
@@ -179,8 +171,7 @@ void UnitClass::move()
             if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE)
                     || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE))
             {
-                x = m_nextSpot.x;
-                y = m_nextSpot.y;
+		Rect::setPosition(m_nextSpot);
 
                 if (getPosition() == m_destination)
                     setStatus(STATUS_FORCED);
@@ -207,7 +198,7 @@ void UnitClass::navigate()
 {
     if (!getStatus(STATUS_MOVING))
     {
-        if ((x != m_destination.x) || (y != m_destination.y))
+        if (getPosition() != m_destination)
         {
             if (!getStatus(STATUS_NEXTSPOTFOUND))
             {
@@ -218,7 +209,7 @@ void UnitClass::navigate()
                         m_checkTimer = 100;
 
                         if (!AStarSearch() && (++m_noCloserPointCount >= 3)
-                                && ((x != m_oldPosition.x) || (y != m_oldPosition.y)))
+                                && getPosition() != m_oldPosition)
                         { //try searching for a path a number of times then give up
 /*                            if (m_target && m_targetFriendly
                                     && (m_target->getObjectName() != "Repair Yard")
@@ -251,7 +242,7 @@ void UnitClass::navigate()
             {
                 int tempAngle;
 
-                if ((tempAngle = m_owner->getMap()->getPosAngle(UPoint(x, y), m_nextSpot)) != -1)
+                if ((tempAngle = m_owner->getMap()->getPosAngle(getPosition(), m_nextSpot)) != -1)
                     m_nextSpotAngle = tempAngle;
 
                 if (!canPass(m_nextSpot))
@@ -305,7 +296,7 @@ void UnitClass::setDestination(SPoint destination, Uint32 status)
 {
     m_pathList.clear();
     ObjectClass::setDestination(destination, status);
-    if(m_guardPoint != destination && getStatus(STATUS_CONTROLLABLE & STATUS_MOVING))
+    if(m_guardPoint != destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
 	playConfirmSound();
 }
 
@@ -313,7 +304,7 @@ void UnitClass::setGuardPoint(UPoint newGuardPoint)
 {
     MapClass* map = m_owner->getMap();
 
-    if (map->cellExists(newGuardPoint) || ((newGuardPoint.x == INVALID_POS) && (newGuardPoint.y == INVALID_POS)))
+    if (map->cellExists(newGuardPoint) || (newGuardPoint == UPoint(INVALID_POS, INVALID_POS)))
 	m_guardPoint = newGuardPoint;
 }
 
@@ -417,8 +408,11 @@ void UnitClass::setTarget(ObjectPtr newTarget)
 */
 void UnitClass::targeting()
 {
-    if(m_target)
+    if(m_target) {
 	m_destination = m_target->getPosition();
+
+    }
+    attack();
 #if 0
 	if (!target && !moving && !forced && (attackMode != SCOUT) && (findTargetTimer == 0) && (currentGame->playerType != CLIENT))
 	{
@@ -500,7 +494,7 @@ void UnitClass::turn()
             else
             {
                 float angleLeft = 0,
-                                   angleRight = 0;
+		      angleRight = 0;
 
                 if (m_angle > wantedAngle)
                 {
@@ -538,6 +532,8 @@ void UnitClass::update(float dt)
             if (getStatus(STATUS_ACTIVE))
                 turn();
         }
+	else
+	    std::cout << "nonactive"<<std::endl;
 
         if (getStatus(STATUS_BADLYDAMAGED))
         {
@@ -620,9 +616,9 @@ void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)
 {
     int dx1, dy1, dx2, dy2;
     float cost,
-    cross,
-    heuristic,
-    f;
+      	  cross,
+      	  heuristic,
+      	  f;
     
     MapClass* map = m_owner->getMap();
 
@@ -703,14 +699,14 @@ bool UnitClass::AStarSearch()
     int numNodesChecked = 0;
     UPoint checkedPoint;
 
-    TerrainClass *node = map->getCell(UPoint(x, y));//initialise the current node the object is on
+    TerrainClass *node = map->getCell(getPosition());//initialise the current node the object is on
 
     if (m_target)
-        checkedPoint = m_target->getClosestPoint(UPoint(x, y));
+        checkedPoint = m_target->getClosestPoint(getPosition());
     else
         checkedPoint = m_destination;
 
-    node->m_f = node->m_heuristic = blockDistance(UPoint(x, y), checkedPoint);
+    node->m_f = node->m_heuristic = blockDistance(getPosition(), checkedPoint);
 
     /*for (int i=0; i<max(map->sizeX, map->sizeY)-1; i++)
      if (map->depthCheckCount[i] != 0) //very very bad if this happens, check if its in visited list and being reset to not visited

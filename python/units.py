@@ -165,6 +165,7 @@ class Infantry(InfantryUnit):
         self.radius = 2
         self.speed = 0.25
         self.viewRange = 4
+        self.weapons = [InfantryGun()]
 
 class Saboteur(InfantryUnit):
     def __init__(self):

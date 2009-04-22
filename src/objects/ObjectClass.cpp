@@ -383,22 +383,38 @@ void ObjectClass::setDestination(SPoint destination, Uint32 status)
 {
     setStatus(status);
     m_target.reset();
+
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {
-	if(getStatus(STATUS_ATTACKING)) {
-    	    m_target = GameMan::Instance()->GetMap()->getCell(destination)->getObject();
-	    UPoint targetPos(m_target ? m_target->getRealPos() : UPoint(destination * BLOCKSIZE));
-	    if(!m_weapons.empty())
-	    {
-		int rand = getRandomInt(0, m_weapons.size()-1);
-    		ObjectPtr missile(new WeaponClass(*m_weapons[rand].get()));
-		missile->setDestination(targetPos);
-    		GameMan::Instance()->addObject(missile);
+        m_destination = destination;
+    	clearStatus(STATUS_MOVING | STATUS_MOVING | STATUS_DEFAULT);
+	setStatus(status);
+    }
+}
+
+bool ObjectClass::attack() {
+    bool inRange = false;
+    if(getStatus(STATUS_ATTACKING)) {
+	if(m_weapons.empty())
+    	    clearStatus(STATUS_ATTACKING);
+	else {
+	    for(std::vector<WeaponPtr>::const_iterator weapon = m_weapons.begin(); weapon != m_weapons.end(); weapon++) {
+		if(getPosition().distance(m_destination) <= (*weapon)->getRange()) {
+		    inRange = true;
+		    if((*weapon)->loaded()) {
+			ObjectPtr missile(new WeaponClass(*(*weapon).get()));
+			missile->setDestination(m_destination * BLOCKSIZE);
+			GameMan::Instance()->addObject(missile);
+		    }
+		}
+	    }
+	    if(inRange && getStatus(STATUS_MOVING)) {
 		clearStatus(STATUS_MOVING);
+		setStatus(STATUS_JUSTSTOPPEDMOVING);
+		setStatus(STATUS_NEXTSPOTFOUND);
 	    }
 	}
-
-        m_destination = destination;
     }
+    return inRange;
 }
 
 void ObjectClass::setHealth(int newHealth)
@@ -414,14 +430,10 @@ void ObjectClass::setHealth(int newHealth)
 
 void ObjectClass::setPosition(SPoint pos)
 {
-    if ((pos.x == INVALID_POS) && (pos.y == INVALID_POS))
-	x = y = INVALID_POS;
-    else if (m_owner->getMap()->cellExists(pos))
+    Rect::setPosition(pos);
+    if (m_owner->getMap()->cellExists(pos) && pos != SPoint(INVALID_POS, INVALID_POS))
     {
-	x = pos.x;
-	y = pos.y;
 	m_realPos = pos * BLOCKSIZE;
-
 	assignToMap(pos);
     }
 }

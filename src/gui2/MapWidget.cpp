@@ -155,6 +155,8 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 		ObjectPtr targetObj;
 		if(m_keyPressed == SDLK_LCTRL || ((targetObj = m_map->getCell(pos)->getObject()) && targetObj->getOwner() != GameMan::Instance()->LocalPlayer()))
 		    status |= STATUS_ATTACKING;
+		if(m_keyPressed != SDLK_LCTRL)
+		    status |= STATUS_DEFAULT;
 
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
     		    if ((*unit).second->getStatus(STATUS_CONTROLLABLE) && (*unit).second->hasAttribute(OBJECT_UNIT))

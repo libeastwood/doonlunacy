@@ -42,6 +42,7 @@ enum status {
     STATUS_RESPONDABLE = 1 << 13,
     STATUS_CONTROLLABLE = 1 << 14,
     STATUS_BADLYDAMAGED = 1 << 15,
+    STATUS_DEFAULT = 1 << 16,
     STATUS_ALL = -1
 };
 
@@ -92,6 +93,7 @@ class ObjectClass : public Rect
 	void setVisible(bool status, int team = -1);
 
     virtual void setDestination(SPoint destination, Uint32 status = 0);
+    bool attack();
     virtual void setPosition(SPoint pos);
 
     inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
