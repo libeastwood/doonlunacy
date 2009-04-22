@@ -107,7 +107,7 @@ class ObjectClass : public Rect
 	inline bool isVisible(int team);
     int getHealthColour();
 
-    inline std::string getObjectName() { return getPyObjectType(m_pyObject, 0); }
+    inline std::string getObjectName() { return m_objectName; }
     int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
@@ -194,7 +194,8 @@ class ObjectClass : public Rect
     bool m_fadingIn;
 
 
-    std::string m_deathAnim;
+    std::string m_objectName,
+		m_deathAnim;
 
 
     //! SharedPtr to image for current object
