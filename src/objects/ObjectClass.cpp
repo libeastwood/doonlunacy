@@ -33,6 +33,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     m_selected = false;
     m_fadingIn = false;
     m_adjust = 0.0;
+    m_objectID = -1;
     m_controllable = (m_owner == GameMan::Instance()->LocalPlayer());
 
 
@@ -63,10 +64,8 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_turnSpeed = python::extract<float>(m_pyObject.attr("turnSpeed"));
 	m_viewRange = python::extract<int>(m_pyObject.attr("viewRange"));
 	m_weapons = getPyObjectVector<python::object>(m_pyObject.attr("weapons"));
-	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size)) {
-	    size *= BLOCKSIZE;
-	    w = size.x, h = size.y;
-	}
+	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size))
+	    setSize(size*BLOCKSIZE);
     }
     catch(python::error_already_set const &)
     {
