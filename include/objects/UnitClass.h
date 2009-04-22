@@ -17,7 +17,6 @@ class UnitClass : public ObjectClass
   public:
     //! @name Constructor and destructor
     //@{
-    UnitClass(PlayerClass* newOwner);
     UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
     virtual ~UnitClass();
     //@}
