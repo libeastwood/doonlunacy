@@ -159,7 +159,7 @@ void GameData::drawImage()
 		exit(EXIT_FAILURE);
 	    }
 	    if(getPyObject(pyObject.attr("crop"), &crop))
-		m_surface.reset(gameData->getPictureCrop(crop));
+		m_surface = gameData->getPictureCrop(crop);
 	    else
 		m_surface = gameData->getCopy();
 

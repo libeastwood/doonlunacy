@@ -159,7 +159,7 @@ class Image : private SDL_Surface
 	/*!
 	  @param dstRect geometry of rectangular region to cut out
 	  */ 
-	Image *getPictureCrop(ConstRect dstRect);
+	ImagePtr getPictureCrop(ConstRect dstRect);
 
 	//! Set colorkey
 	/*!

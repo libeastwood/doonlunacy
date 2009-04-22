@@ -61,7 +61,7 @@ void GameMenuState::drawMenu()
     topFrame->addChild(creditsLabel);
 
     ImagePtr creditsCounter(new Image(UPoint(65, 15)));
-    creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)));
+    creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)).get());
     Uint32 color = creditsCounter->getPixel(UPoint(0,0));
     creditsCounter->drawVLine(UPoint(64, 0), 14, color);
     GraphicsLabel *creditsCounterLabel = new GraphicsLabel(creditsCounter);

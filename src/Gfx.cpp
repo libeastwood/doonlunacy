@@ -45,7 +45,7 @@ Image::~Image()
 	delete m_tmpPal;
 }
 
-Image *Image::getPictureCrop(ConstRect dstRect)
+ImagePtr Image::getPictureCrop(ConstRect dstRect)
 {
     if(((int) (dstRect.x + dstRect.w) > w) || ((int) (dstRect.y + dstRect.h) > h)) {
 	LOG_ERROR("GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
@@ -58,7 +58,7 @@ Image *Image::getPictureCrop(ConstRect dstRect)
     returnPic->setPalette(getPalette());
     returnPic->blitFrom(this, dstRect, UPoint(0,0));
 
-    return returnPic;
+    return ImagePtr(returnPic);
 }
 
 void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
@@ -177,10 +177,10 @@ void Image::drawVBar(ConstUPoint start, int y2)
     ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
     sideBar->blitFrom(tmp.get());
-    tmp.reset(screen->getPictureCrop(Rect(241, 58, 12, 13)));
+    tmp = screen->getPictureCrop(Rect(241, 58, 12, 13));
     for(UPoint iter(0, 6); iter.y < y2 - 6; iter.y += 13)
 	sideBar->blitFrom(tmp.get(), iter);
-    tmp.reset(screen->getPictureCrop(Rect(241, 117, 12, 6)));
+    tmp = screen->getPictureCrop(Rect(241, 117, 12, 6));
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
     blitFrom(sideBar.get(), start);
@@ -193,10 +193,10 @@ void Image::drawHBarSmall(ConstUPoint start, int x2)
     ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
     sideBar->blitFrom(tmp.get());
-    tmp.reset(screen->getPictureCrop(Rect(260, 127, 10, 6)));
+    tmp = screen->getPictureCrop(Rect(260, 127, 10, 6));
     for(UPoint iter(5, 0); iter.x < x2 - 6; iter.x += 10)
 	sideBar->blitFrom(tmp.get(), iter);
-    tmp.reset(screen->getPictureCrop(Rect(313, 127, 6, 6)));
+    tmp = screen->getPictureCrop(Rect(313, 127, 6, 6));
     //FIXME: the line at end of bar and thingie needs to be adapted..
     sideBar->blitFrom(tmp.get(), UPoint(x2 - start.x - 6, 0));
     blitFrom(sideBar.get(), start);
