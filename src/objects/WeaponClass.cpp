@@ -60,7 +60,7 @@ void WeaponClass::setDestination(SPoint destination, Uint32 status) {
 
 
     m_realPos = PointFloat(m_shooter->getRealPos());
-    m_source = m_shooter->getRealPos();
+    m_source = m_shooter->getCentrePoint();
     Rect::setPosition(m_shooter->getPosition());
     setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
