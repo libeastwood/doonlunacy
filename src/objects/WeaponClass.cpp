@@ -13,8 +13,6 @@
 WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t attribute) :
     ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
-    m_groundBlocked = false;
-
     m_shooter = newShooter;
 
     m_deathSound = NONE;
@@ -23,9 +21,10 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t 
 	m_damage = python::extract<int>(m_pyObject.attr("damage"));
 	m_damagePiercing = python::extract<int>(m_pyObject.attr("damagePiercing"));
 	m_damageRadius =  python::extract<int>(m_pyObject.attr("damageRadius"));
-	m_groundBlocked =  python::extract<bool>(m_pyObject.attr("groundBlocked"));
 	m_inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
 	m_range = python::extract<int>(m_pyObject.attr("range"));
+	if(!python::extract<bool>(m_pyObject.attr("groundBlocked")))
+	    setAttribute(OBJECT_AIRUNIT);
     }
     catch(python::error_already_set const &)
     {
@@ -181,7 +180,7 @@ void WeaponClass::update(float dt)
 	    }
 	    else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 	    {
-		if (m_groundBlocked)
+		if (!hasAttribute(OBJECT_AIRUNIT))
 		    destroy();
 	    }
 	}

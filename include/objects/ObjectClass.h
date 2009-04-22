@@ -134,6 +134,7 @@ class ObjectClass : public Rect
     ObjectPtr findTarget();
     //@}
   protected:
+    inline void setAttribute(Uint32 attribute) { m_attributes |= attribute; }
     ATTACKTYPE m_attackMode;
 
 	//! Specifies which players can see a given object

@@ -16,9 +16,6 @@ class WeaponClass : public ObjectClass
 	inline bool isDirectShot() { return (m_source == m_destination); }
 
     private:
-	//! Is bullet headig for an air unit?
-	bool m_groundBlocked;
-
 	int	m_damage,
 		m_damagePiercing, //from 0 for none to 10 max
 		m_damageRadius,
