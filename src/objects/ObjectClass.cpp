@@ -10,7 +10,7 @@
 #include "PythonObjects.h"
 
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
-    Rect(0, 0, 0, 0), m_attributes(attribute)
+    Rect(0, 0, 0, 0), m_attributes(attribute), m_objectName(objectName);
 {
     std::string graphic;
     std::vector<python::object> pyWeapons;
@@ -21,7 +21,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     if(m_owner == GameMan::Instance()->LocalPlayer())
 	setStatus(STATUS_CONTROLLABLE);
 
-    m_pyObject = DataCache::Instance()->getPyObject(objectName);
+    m_pyObject = DataCache::Instance()->getPyObject(m_objectName);
 
 
     m_animCounter = 0;
@@ -54,7 +54,6 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_numFrames = python::extract<int>(m_pyObject.attr("numFrames"));
 	m_health = python::extract<int>(m_pyObject.attr("health"));
 	m_offset = UPoint(PointFloat(python::extract<PointFloat>(m_pyObject.attr("offset"))) * BLOCKSIZE);
-	m_objectName = getPyObjectType(m_pyObject, 0);
 	m_radius = python::extract<int>(m_pyObject.attr("radius"));
 	m_realPos = python::extract<PointFloat>(m_pyObject.attr("realPos"));
 	m_maxSpeed = python::extract<float>(m_pyObject.attr("speed"));
