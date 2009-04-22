@@ -123,7 +123,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
 
                 if (!m_selectedList.empty())
-                    (*m_selectedList.begin()->second).setSelected(false);
+                    m_selectedList.begin()->second->setStatus(STATUS_SELECTED);
 
 		if(m_keyPressed != SDLK_LSHIFT)
 		    m_selectedList.clear();
@@ -137,7 +137,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 				    && (*m_selectedList.begin()->second).getOwner() == GameMan::Instance()->LocalPlayer()
 				    && tmp->getOwner() == GameMan::Instance()->LocalPlayer())) {
 			    m_selectedList[tmp->getObjectID()] = tmp;
-			    tmp->setSelected(true);
+			    tmp->setStatus(STATUS_SELECTED);
 			    LOG_INFO("MapWidget", "Selected unit with ID: %d", tmp->getObjectID());
 			}
 		}
@@ -157,7 +157,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 		    status |= STATUS_ATTACKING;
 
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
-    		    if ((*unit).second->isControllable() && (*unit).second->hasAttribute(OBJECT_UNIT))
+    		    if ((*unit).second->getStatus(STATUS_CONTROLLABLE) && (*unit).second->hasAttribute(OBJECT_UNIT))
     			    ((UnitClass*)((*unit).second).get())->setDestination(pos, status);
             }
 
@@ -197,7 +197,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 			    if(tmp) {
 				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->hasAttribute(OBJECT_UNIT)) {
 				    m_selectedList[tmp->getObjectID()] = tmp;
-				    tmp->setSelected(true);
+				    tmp->setStatus(STATUS_SELECTED);
 				    LOG_INFO("MapWidget", "Selected unit with ID: %d at %d-%d", tmp->getObjectID(), pos.x, pos.y);
 				}
 			    }

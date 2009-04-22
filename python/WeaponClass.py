@@ -8,7 +8,7 @@ class Weapon(ObjectClass.Object):
         self.damageRadius = 2
         self.deathAnim = None
         self.graphic = None
-        self.groundBlocked = True
+        self.groundBlocked = False
         self.inaccuracy = 2
         self.numDeathFrames = 1
         self.numFrames = 1

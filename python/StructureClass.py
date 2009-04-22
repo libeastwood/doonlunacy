@@ -4,7 +4,6 @@ from WeaponClass import Weapon
 class Structure(ObjectClass.Object):
     def __init__(self):
         ObjectClass.Object.__init__(self)
-        self.animate = True
         self.capacity = 0
         self.deathAnim = None
         self.firstAnimFrame = 2

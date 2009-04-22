@@ -15,7 +15,7 @@
 
 UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
-    m_respondable = true;
+    setStatus(STATUS_RESPONDABLE);
     m_attackMode = DEFENSIVE;
 
     try {
@@ -42,7 +42,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     m_guardPoint = SPoint(INVALID_POS, INVALID_POS);
     m_nextSpot = SPoint(INVALID_POS, INVALID_POS);
     setAngle(LEFT);
-    setActive(false);
+    setStatus(STATUS_ACTIVE);
 }
 
 /*virtual*/
@@ -73,11 +73,11 @@ void UnitClass::deploy(SPoint newPosition)
 
         setDestination(m_guardPoint);
 
-        //  unsetStatus(STATUS_PICKEDUP);
+        //  clearStatus(STATUS_PICKEDUP);
 
-        setRespondable(true);
+        setStatus(STATUS_RESPONDABLE);
 
-        setActive(true);
+        setStatus(STATUS_ACTIVE);
 
         setVisible(VIS_ALL, true);
 
@@ -96,13 +96,13 @@ void UnitClass::destroy()
     {
         LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
         m_target.reset();
-	m_status = STATUS_DESTROYED;
+	setStatus(STATUS_DESTROYED);
         gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
         m_owner->decrementUnits(getObjectName());
 
-        m_respondable = false;
+        clearStatus(STATUS_RESPONDABLE);
 /*
         imageW = graphic->w / numDeathFrames;
         imageH = graphic->h;
@@ -135,7 +135,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
     // Show path on the screen
     #if 1
 
-    if (m_selected && !m_pathList.empty())
+    if (getStatus(STATUS_SELECTED) && !m_pathList.empty())
     {
         Path::iterator iter = m_pathList.begin();
         Rect rect;
@@ -164,7 +164,7 @@ void UnitClass::move()
     {
         m_oldPosition = UPoint(x, y);
 
-        if (!m_badlyDamaged || hasAttribute(OBJECT_AIRUNIT))
+        if (!getStatus(STATUS_BADLYDAMAGED) || hasAttribute(OBJECT_AIRUNIT))
             m_realPos += m_speed * m_adjust;
         else
             m_realPos += (m_speed / 2) * m_adjust;
@@ -185,9 +185,9 @@ void UnitClass::move()
                 y = m_nextSpot.y;
 
                 if (getPosition() == m_destination)
-                    setForced(false);
+                    setStatus(STATUS_FORCED);
 
-		unsetStatus(STATUS_MOVING);
+		clearStatus(STATUS_MOVING);
 
                 setStatus(STATUS_JUSTSTOPPEDMOVING);
 
@@ -198,7 +198,7 @@ void UnitClass::move()
 
     else
     {
-        unsetStatus(STATUS_JUSTSTOPPEDMOVING);
+        clearStatus(STATUS_JUSTSTOPPEDMOVING);
     }
 
     checkPos();
@@ -233,7 +233,7 @@ void UnitClass::navigate()
 */
                             setDestination(UPoint(x, y)); //can't get any closer, give up
 
-                            m_forced = false;
+                            clearStatus(STATUS_FORCED);
                             m_speedCap = NONE;
                         }
                     }
@@ -258,14 +258,14 @@ void UnitClass::navigate()
 
                 if (!canPass(m_nextSpot))
                 {
-                    unsetStatus(STATUS_NEXTSPOTFOUND);
+                    clearStatus(STATUS_NEXTSPOTFOUND);
                     m_pathList.clear();
                 }
 
                 else if (m_drawnAngle == m_nextSpotAngle)
                 {
 		    setStatus(STATUS_MOVING);
-                    unsetStatus(STATUS_NEXTSPOTFOUND);
+                    clearStatus(STATUS_NEXTSPOTFOUND);
                     assignToMap(m_nextSpot);
                     m_angle = m_drawnAngle;
                     setSpeeds();
@@ -288,7 +288,7 @@ void UnitClass::setAngle(int newAngle)
     {
         m_angle = m_drawnAngle = newAngle;
         m_nextSpotAngle = m_drawnAngle;
-        unsetStatus(STATUS_NEXTSPOTFOUND);
+        clearStatus(STATUS_NEXTSPOTFOUND);
     }
 }
 
@@ -307,14 +307,8 @@ void UnitClass::setDestination(SPoint destination, Uint32 status)
 {
     m_pathList.clear();
     ObjectClass::setDestination(destination, status);
-    if(m_guardPoint != destination && m_controllable && getStatus(STATUS_MOVING))
+    if(m_guardPoint != destination && getStatus(STATUS_CONTROLLABLE & STATUS_MOVING))
 	playConfirmSound();
-}
-
-void UnitClass::setSelected(bool value) {
-    ObjectClass::setSelected(value);
-    if(value && m_controllable)
-	playSelectSound();
 }
 
 void UnitClass::setGuardPoint(UPoint newGuardPoint)
@@ -331,11 +325,11 @@ void UnitClass::setPosition(SPoint pos)
     if (m_owner->getMap()->cellExists(pos))
         m_realPos += BLOCKSIZE / 2;
 
-    unsetStatus(STATUS_MOVING);
+    clearStatus(STATUS_MOVING);
 
-    unsetStatus(STATUS_NEXTSPOTFOUND);
+    clearStatus(STATUS_NEXTSPOTFOUND);
     m_nextSpotAngle = m_drawnAngle;
-    unsetStatus(STATUS_PICKEDUP);
+    clearStatus(STATUS_PICKEDUP);
     m_target.reset();
     m_pathList.clear();
     m_noCloserPointCount = 0;
@@ -492,7 +486,7 @@ void UnitClass::turn()
     {
         int wantedAngle;
         
-        if (m_target && (!m_targetFriendly || (m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
+        if (m_target && (/*!m_targetFriendly || */(m_targetDistance < 1.0)) && (m_targetDistance <= m_weaponRange))
             wantedAngle = m_targetAngle;
         else
             wantedAngle = m_nextSpotAngle;
@@ -537,17 +531,17 @@ void UnitClass::update(float dt)
     ObjectClass::update(dt);
     if (!getStatus(STATUS_DESTROYED))
     {
-        if (m_active)
+        if (getStatus(STATUS_ACTIVE))
         {
             targeting();
             navigate();
             move();
 
-            if (m_active)
+            if (getStatus(STATUS_ACTIVE))
                 turn();
         }
 
-        if (m_badlyDamaged)
+        if (getStatus(STATUS_BADLYDAMAGED))
         {
             if (m_health <= 0)
             {

@@ -12,11 +12,15 @@
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
     Rect(0, 0, 0, 0)
 {
+    std::string graphic;
+    std::vector<python::object> pyWeapons;
+
+    m_owner = newOwner;
     m_attributes = OBJECT_CLASS | attribute;
     m_status = STATUS_NONE;
 
-
-    std::string graphic;
+    if(m_owner == GameMan::Instance()->LocalPlayer())
+	setStatus(STATUS_CONTROLLABLE);
 
     m_pyObject = DataCache::Instance()->getPyObject(objectName);
 
@@ -25,24 +29,15 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     m_frameTime = 5;
     m_frameTimer = -1;
 
-    m_owner = newOwner;
-    m_badlyDamaged = false;
     m_realPos = PointFloat(0, 0);
     m_curAnimFrame = 0;
-    m_isAnimating = false;
-    m_selected = false;
     m_fadingIn = false;
     m_adjust = 0.0;
     m_objectID = -1;
-    m_controllable = (m_owner == GameMan::Instance()->LocalPlayer());
-
 
     m_checkTimer = 0;
 
     m_attackMode = STANDGROUND;
-
-    std::vector<python::object> pyWeapons;
-
 
     try {
 	PointFloat size;
@@ -356,8 +351,8 @@ void ObjectClass::handleDamage(int damage, ObjectPtr damager)
 	    if (m_health < 0)
 		m_health = 0;
 
-	    if (!m_badlyDamaged && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
-		m_badlyDamaged = true;
+	    if (!getStatus(STATUS_BADLYDAMAGED) && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
+		setStatus(STATUS_BADLYDAMAGED);
 	}
 
 	if (m_owner == GameMan::Instance()->LocalPlayer()) 
@@ -398,7 +393,7 @@ void ObjectClass::setDestination(SPoint destination, Uint32 status)
     		ObjectPtr missile(new WeaponClass(*m_weapons[rand].get()));
 		missile->setDestination(targetPos);
     		GameMan::Instance()->addObject(missile);
-		unsetStatus(STATUS_MOVING);
+		clearStatus(STATUS_MOVING);
 	    }
 	}
 
@@ -412,8 +407,8 @@ void ObjectClass::setHealth(int newHealth)
     {
 	m_health = newHealth;
 
-	if (!m_badlyDamaged && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
-	    m_badlyDamaged = true;
+	if (!getStatus(STATUS_BADLYDAMAGED) && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
+	    setStatus(STATUS_BADLYDAMAGED);
     }
 }
 

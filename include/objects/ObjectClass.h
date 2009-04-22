@@ -35,7 +35,14 @@ enum status {
     STATUS_TRACKED = 1 << 6,
     STATUS_TURRETED = 1 << 7,
     STATUS_JUSTSTOPPEDMOVING = 1 << 8,
-    STATUS_NEXTSPOTFOUND = 1 << 9
+    STATUS_NEXTSPOTFOUND = 1 << 9,
+    STATUS_SELECTED = 1 << 10,
+    STATUS_ACTIVE = 1 << 11,
+    STATUS_FORCED = 1 << 12,
+    STATUS_RESPONDABLE = 1 << 13,
+    STATUS_CONTROLLABLE = 1 << 14,
+    STATUS_BADLYDAMAGED = 1 << 15,
+    STATUS_ALL = -1
 };
 
 /*!
@@ -81,11 +88,7 @@ class ObjectClass : public Rect
     //! @name Setters and getters
 	//@{
 	
-    inline void setActive(bool status) { m_active = status; }
-    inline void setForced(bool status) { m_forced = status; }
 	void setHealth(int newHealth);
-    virtual inline void setSelected(bool value) { m_selected = value; }
-    inline void setRespondable(bool status) { m_respondable = status; }
 	void setVisible(int team, bool status);
 
     virtual void setDestination(SPoint destination, Uint32 status = 0);
@@ -94,30 +97,26 @@ class ObjectClass : public Rect
     inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
     inline Uint32 getAttributes() { return m_attributes; }
 
-    inline bool isActive()     { return m_active; }
-    inline bool isRespondable() { return m_respondable; }
-    inline bool isSelected() { return m_selected; }
+    inline bool getStatus(Uint32 status) { return m_status & status; }
+    inline Uint32 getStatusAll() { return m_status; }
+    virtual inline void setStatus(Uint32 status) { m_status |= status; }
+    inline void clearStatus(Uint32 status = STATUS_ALL) { m_status &= ~status; }
+
+
     //! Checks if a given team can see this object
 	inline bool isVisible(int team);
     int getHealthColour();
-
-    inline bool wasForced() { return m_forced; }
 
     inline std::string getObjectName() { return getPyObjectType(m_pyObject, 0); }
     int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
-    inline void setObjectID(int newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
+    inline void setObjectID(Uint32 newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
     inline int getArmor() { return m_armor; }
     inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
     inline UPoint getPosition() { return UPoint(x,y); }
     inline float getSpeed() { return m_maxSpeed; }
-    inline bool isControllable() { return m_controllable; }
-
-    inline bool getStatus(Uint32 status) { return m_status & status; }
-    inline void setStatus(Uint32 status) { m_status |= status; }
-    inline void unsetStatus(Uint32 status) { m_status &= ~status; }
 
     bool isOnScreen(Rect rect);
 
@@ -137,26 +136,13 @@ class ObjectClass : public Rect
   protected:
     ATTACKTYPE m_attackMode;
 
-    bool m_active,
-    //! Draw deathFrame if the building was destroyed, or remove unit from list and forget about it
-         m_respondable,
-         m_selected,
-	 m_controllable,
 	//! Specifies which players can see a given object
-         m_visible[MAX_PLAYERS+1];
+    bool m_visible[MAX_PLAYERS+1];
 
     /*!
      *  If set to true, animation frame will change in certain intervals.
      *  We don't want it in case of walls, turrets, etc.
      */
-    bool m_badlyDamaged,
-    //!can i do damage to stuff?
-         m_canAttackStuff,
-         m_forced,
-         m_isAnimating,
-    //! if true and target is friendly guard it or if it's e.g. refinery/repair yard go there
-         m_targetFriendly;
-
 
     float   m_adjust,
 	    m_angle,
@@ -227,17 +213,20 @@ class ObjectClass : public Rect
      *  Position on the screen where an object will be drawn. It depends on
      *  position of MapWidget, current view position and of course object's position.
      */
-    UPoint m_drawnPos;
-
-    UPoint m_offset;
+    UPoint m_drawnPos,
+	   m_offset;
 
     ObjectPtr m_target;
 
     std::vector<WeaponPtr> m_weapons;
 
-    Uint32 m_attributes, m_status;
-
     python::object m_pyObject;
+
+  private:
+    Uint32 m_attributes,
+	   m_status;
+
+
 
 };
 

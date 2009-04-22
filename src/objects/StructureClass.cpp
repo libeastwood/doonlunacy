@@ -7,7 +7,6 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName,
 {
     m_justPlacedTimer = 0;
     try {
-	    m_isAnimating = python::extract<bool>(m_pyObject.attr("animate"));
 	    m_firstAnimFrame = python::extract<int>(m_pyObject.attr("firstAnimFrame"));
 	    m_lastAnimFrame = python::extract<int>(m_pyObject.attr("lastAnimFrame"));
 	    m_powerRequirement = python::extract<int>(m_pyObject.attr("powerRequirement"));

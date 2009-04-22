@@ -36,7 +36,11 @@ class UnitClass : public ObjectClass
     virtual void update(float dt);
     virtual void setDestination(SPoint destination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
-    virtual void setSelected(bool value);
+    virtual inline void setStatus(Uint32 status) {
+    	ObjectClass::setStatus(status);
+    	if(status & STATUS_SELECTED && getStatus(STATUS_CONTROLLABLE))
+    	    playSelectSound();
+    }
 
     void playConfirmSound();
     void playSelectSound();
