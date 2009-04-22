@@ -10,11 +10,10 @@
 #include "PythonObjects.h"
 
 
-WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, bool air, uint32_t attribute) :
+WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t attribute) :
     ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
 {
     m_groundBlocked = false;
-    m_airAttack = air;
 
     m_shooter = newShooter;
 
@@ -24,7 +23,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, bool air,
 	m_damage = python::extract<int>(m_pyObject.attr("damage"));
 	m_damagePiercing = python::extract<int>(m_pyObject.attr("damagePiercing"));
 	m_damageRadius =  python::extract<int>(m_pyObject.attr("damageRadius"));
-	m_groundBlocked =  python::extract<int>(m_pyObject.attr("groundBlocked"));
+	m_groundBlocked =  python::extract<bool>(m_pyObject.attr("groundBlocked"));
 	m_inaccuracy = python::extract<int>(m_pyObject.attr("inaccuracy"));
 	m_range = python::extract<int>(m_pyObject.attr("range"));
     }
@@ -201,7 +200,7 @@ void WeaponClass::destroy()
 	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	    for(int y = 0; y < m_explosionSize; y++)
 		if ((m_explosionSize <= 2) || ((x != 0) && (x != (m_explosionSize-1))) || ((y != 0) && (y != (m_explosionSize-1))))
-		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, m_airAttack);
+		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, hasAttribute(OBJECT_AIRUNIT));
     }
     ObjectClass::destroy();
 

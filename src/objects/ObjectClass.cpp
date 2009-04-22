@@ -77,7 +77,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     }
     m_weapons.resize(pyWeapons.size());
     for(size_t i = 0; i < pyWeapons.size(); i++)
-	m_weapons[i] = WeaponPtr(new WeaponClass(ObjectPtr(this), getPyObjectType(pyWeapons[i], 0), false));
+	m_weapons[i] = WeaponPtr(new WeaponClass(ObjectPtr(this), getPyObjectType(pyWeapons[i], 0)));
 //FIXME:	m_weapons[i] = WeaponClass(GameMan::Instance()->getObject(getObjectID()), getPyObjectType(m_weapons.front(), 0), false);
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());

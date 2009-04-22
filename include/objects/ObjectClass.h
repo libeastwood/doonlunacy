@@ -98,6 +98,7 @@ class ObjectClass : public Rect
     inline bool isAUnit()       { return m_attributes & OBJECT_UNIT; }
     inline bool isInfantry()    { return m_attributes & OBJECT_INFANTRY; }
     inline bool isWeapon()    { return m_attributes & OBJECT_WEAPON; }
+    inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
     inline Uint32 getAttributes() { return m_attributes; }
 
     inline bool isActive()     { return m_active; }
