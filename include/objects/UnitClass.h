@@ -65,14 +65,14 @@ class UnitClass : public ObjectClass
     float   m_speedCap,
             m_targetDistance;
 
-    int	m_baseID,
-        m_destAngle,
-        m_deviationTimer,
-        m_findTargetTimer,
-        m_nextSpotAngle,
-        m_noCloserPointCount,
-        m_targetAngle;
-    
+    Sint16 m_baseID,
+	   m_destAngle,
+	   m_deviationTimer,
+	   m_findTargetTimer,
+	   m_nextSpotAngle,
+	   m_noCloserPointCount,
+	   m_targetAngle;
+
     SPoint  m_nextSpot,
             m_guardPoint;        
 

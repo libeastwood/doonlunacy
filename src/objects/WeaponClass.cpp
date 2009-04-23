@@ -43,7 +43,7 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t 
 void WeaponClass::setDestination(SPoint destination, Uint32 status) {
     ObjectClass::setDestination(destination/BLOCKSIZE);
     m_destination = destination;
-    m_destination += getRandom(-m_inaccuracy, m_inaccuracy);
+    m_destination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
 
     /*
     if (getObjectName() == "Sonic")

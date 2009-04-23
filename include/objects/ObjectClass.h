@@ -156,9 +156,6 @@ class ObjectClass : public Rect
     PointFloat m_realPos,
 	       m_speed;
 
-    //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
-    int m_animCounter;
-
     /*! Currently drawn frame
      *  @note 0 Just placed
      *        1 Destroyed
@@ -167,32 +164,33 @@ class ObjectClass : public Rect
      *        4,5,6,... Refinery, Starport,etc. when a unit docks, brings spice, whatever
      *
      */
-    int m_checkTimer,
+    Sint16 m_checkTimer,
+    //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
+	   m_animCounter,
+	   m_curAnimFrame,
 
-        m_curAnimFrame,
+	   //! Total number of frames
+	   m_animFrames,
 
-        //! Total number of frames
-        m_animFrames,
+	   m_drawnAngle,
 
-        m_drawnAngle,
+	   m_maxHealth,
 
-        m_maxHealth,
+	   //! Used for fog of war and area exploring.
+	   m_viewRange,
 
-        //! Used for fog of war and area exploring.
-        m_viewRange,
+	   m_weaponRange;
 
-        m_weaponRange;
-
-    int m_armor,
-        m_radius,
-	m_explosionSize,
-	m_guardRange,
-        m_numDeathFrames,
-	m_numFrames,
-        m_frameTime,
-        m_frameTimer,
-	m_smokeCounter,
-	m_smokeFrame;
+    Sint16 m_armor,
+	   m_radius,
+	   m_explosionSize,
+	   m_guardRange,
+	   m_numDeathFrames,
+	   m_numFrames,
+	   m_frameTime,
+	   m_frameTimer,
+	   m_smokeCounter,
+	   m_smokeFrame;
     bool m_fadingIn;
 
 
