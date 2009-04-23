@@ -1,3 +1,5 @@
+#include <boost/random.hpp>
+
 #include "objects/WeaponClass.h"
 #include "DataCache.h"
 #include "Definitions.h"
@@ -33,15 +35,15 @@ WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t 
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
-    m_reloadTime += getRandomInt(-m_reloadTime/4, m_reloadTime/2);
-    m_reloadTimer = getRandomInt(1, m_reloadTime/2);
 
+    m_reloadTime += getRandom(-m_reloadTime/4, m_reloadTime/2);
+    m_reloadTimer = getRandom(1, m_reloadTime/2);
 }
 
 void WeaponClass::setDestination(SPoint destination, Uint32 status) {
     ObjectClass::setDestination(destination/BLOCKSIZE);
     m_destination = destination;
-    m_destination += getRandomInt(-m_inaccuracy, m_inaccuracy);
+    m_destination += getRandom(-m_inaccuracy, m_inaccuracy);
 
     /*
     if (getObjectName() == "Sonic")

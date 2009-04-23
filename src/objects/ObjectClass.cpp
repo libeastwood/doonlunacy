@@ -165,7 +165,7 @@ void ObjectClass::drawSmoke(Image *dest)
 
     if(++m_smokeCounter >=SMOKEDELAY) {
 	m_smokeCounter = 0;
-	source.x = w*getRandomInt(0, 2);
+	source.x = w*getRandom(0, 2);
 	m_smokeFrame = source.x;
     };
 

@@ -28,15 +28,10 @@ MapGenerator::~MapGenerator()
 
 void MapGenerator::addRockBits()
 {
-    int spotX, spotY;
-    int done = 0;
-    TerrainClass * tmp;
-
-    while (done < m_rockBits)
+    for(int done = 0; done < m_rockBits; done++)
     {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-        tmp = m_map->getCell(SPoint(spotX, spotY));
+	SPoint spot(getRandom<short>(0, m_map->w - 1), getRandom<short>(0, m_map->h));
+	TerrainClass *tmp = m_map->getCell(spot);
 
         if (tmp->getType() == Terrain_Sand)
         {
@@ -44,26 +39,19 @@ void MapGenerator::addRockBits()
             tmp->setType(Terrain_Rock);
         }
 
-        done++;
     }
 }
 
 void MapGenerator::addBlooms()
 {
-    int spotX, spotY;
-    int done = 0;
-    TerrainClass * tmp;
-
-    while (done < m_spiceBlooms)
+    for(int done = 0; done < m_spiceBlooms; done++)
     {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-        tmp = m_map->getCell(SPoint(spotX, spotY));
+	SPoint spot(getRandom<short>(0, m_map->w - 1), getRandom<short>(0, m_map->h));
+	TerrainClass *tmp = m_map->getCell(spot);
 
         if (tmp->getType() == Terrain_Sand && tmp->getTile() == Terrain_a1)
-            tmp->setTile(getRandomInt(Terrain_a2, Terrain_a3));     // Spice bloom
+            tmp->setTile(getRandom<short>(Terrain_a2, Terrain_a3));     // Spice bloom
 
-        done++;
     } // WHILE
 }
 
@@ -194,7 +182,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
                 SPoint pos(BloomPos % m_map->w, BloomPos / m_map->w);
 
                 if (m_map->cellExists(pos))
-                    m_map->getCell(pos)->setTile(getRandomInt(Terrain_a2, Terrain_a3));
+                    m_map->getCell(pos)->setTile(getRandom<short>(Terrain_a2, Terrain_a3));
                 else
                     LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", pos.x, pos.y);
             }
@@ -250,35 +238,28 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
 bool MapGenerator::makeRandomMap(UPoint size)
 {
-    int i, count;
-    int spotX, spotY;
-
     m_map = new MapClass(size);
 
     clearTerrain(Terrain_a1, Terrain_Sand);
 
-    for (i = 0; i < m_rockSpots; i++)
+    for (int i = 0; i < m_rockSpots; i++)
     {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-
-        makeSpot(SPoint(spotX, spotY), Terrain_Rock);
+	SPoint spot(getRandom(0, m_map->w - 1), getRandom(0, m_map->h - 1));
+        makeSpot(spot, Terrain_Rock);
     }
 
     // Spice fields
 
-    for (i = 0; i < m_spiceFields; i++)
+    for (int i = 0; i < m_spiceFields; i++)
     {
-        spotX = getRandomInt(0, m_map->w - 1);
-        spotY = getRandomInt(0, m_map->h - 1);
-
-        makeSpot(SPoint(spotX, spotY), Terrain_Spice);
+	SPoint spot(getRandom(0, m_map->w - 1), getRandom(0, m_map->h - 1));
+        makeSpot(spot, Terrain_Spice);
     }
 
-    for (count = 0; count < ROCKFILLER; count++)
+    for (int count = 0; count < ROCKFILLER; count++)
         thickSpots(Terrain_Rock); //SPOT ROCK
 
-    for (count = 0; count < SPICEFILLER; count++)
+    for (int count = 0; count < SPICEFILLER; count++)
         thickSpots(Terrain_Spice);
 
     addRockBits();
@@ -297,7 +278,7 @@ void MapGenerator::makeSpot(SPoint cellPos, int type)
 
     for (j = 0; j < 1000; j++)
     {
-        dir = getRandomInt(0, 3); // Random Dir
+        dir = getRandom(0, 3); // Random Dir
 
         switch (dir)
         {
@@ -700,7 +681,7 @@ void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
 
                 if (side4(SPoint(i, j), type) == 2)                // Gamble, fifty fifty... rock or not?
                 {
-                    if (getRandomInt(0, 1) == 1)
+                    if (getRandom(0, 1) == 1)
                         m_map->getCell(SPoint(i, j))->setType(type);
                 }
             }

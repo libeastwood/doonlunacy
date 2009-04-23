@@ -265,8 +265,8 @@ void UnitClass::navigate()
 
         else if (!m_target) //not moving and not wanting to go anywhere, do some random turning
         {
-            if (getRandomInt(0, RANDOMTURNTIMER) == 0)
-                m_nextSpotAngle = getRandomInt(0, 7); //choose a random one of the eight possible angles
+            if (getRandom<Uint16>(0, RANDOMTURNTIMER) == 0)
+                m_nextSpotAngle = getRandom<Uint8>(0, 7); //choose a random one of the eight possible angles
         }
     }
 }
@@ -284,12 +284,12 @@ void UnitClass::setAngle(int newAngle)
 
 void UnitClass::playConfirmSound() {
     if(!m_confirmSound.empty())
-    	SoundPlayer::Instance()->playSound(m_confirmSound[getRandomInt(0,m_confirmSound.size()-1)]);
+    	SoundPlayer::Instance()->playSound(m_confirmSound[getRandom<Uint8>(0,m_confirmSound.size()-1)]);
 }
 
 void UnitClass::playSelectSound() {
     if(!m_selectSound.empty())
-    	SoundPlayer::Instance()->playSound(m_selectSound[getRandomInt(0,m_selectSound.size()-1)]);
+    	SoundPlayer::Instance()->playSound(m_selectSound[getRandom<Uint8>(0,m_selectSound.size()-1)]);
 }
 /*virtual*/
 void UnitClass::setDestination(SPoint destination, Uint32 status)

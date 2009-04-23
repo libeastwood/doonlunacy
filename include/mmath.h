@@ -1,9 +1,41 @@
 #ifndef DUNE_MMATH_H
 #define DUNE_MMATH_H
 
+#include <sys/time.h>
+#include <boost/random.hpp>
+
 #include "Gfx.h"
 #include "DuneConstants.h"
 #include "dMath.h"
+
+static int getSeed() {
+    struct timeval test;
+    gettimeofday(&test, NULL);
+    return test.tv_sec | test.tv_usec;
+}
+static boost::mt19937 randomEngine(getSeed());
+
+template <typename T>
+inline T getRandom(T min, T max) {
+    boost::uniform_smallint<T> distribution(min, max);
+    boost::variate_generator<boost::mt19937&, boost::uniform_smallint<T> > generator(randomEngine, distribution);
+
+    return generator();
+}
+
+template <>
+inline int getRandom<int>(int min, int max){
+    boost::uniform_int<int> distribution(min, max);
+    boost::variate_generator<boost::mt19937&, boost::uniform_int<int> > generator(randomEngine, distribution);
+    return generator();
+}
+
+template <>
+inline float getRandom<float>(float min, float max){
+    boost::uniform_real<float> distribution(min, max);
+    boost::variate_generator<boost::mt19937&, boost::uniform_real<float> > generator(randomEngine, distribution);
+    return generator();
+}
 
 int power(int num1, int num2);
 bool testIfInt(float number);
@@ -16,10 +48,10 @@ inline int lround(float number) { return round(number); }
 #endif
 
 float dest_angle(UPoint p1, UPoint p2);
-inline int getRandomInt(int min, int max) { return ((rand() % (++max-min)) + min); }
+
 template<typename T>
-T getRandomOf(int numParam, ...) {
-	int nthParam = getRandomInt(0,numParam-1);
+T getRandomOf(T numParam, ...) {
+	int nthParam = getRandom(0, numParam);
 	
 	va_list arg_ptr;
 	va_start(arg_ptr, numParam);
