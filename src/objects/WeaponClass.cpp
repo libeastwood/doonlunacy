@@ -12,11 +12,9 @@
 #include "PythonObjects.h"
 
 
-WeaponClass::WeaponClass(ObjectPtr newShooter, std::string weaponName, uint32_t attribute) :
-    ObjectClass(newShooter->getOwner(), weaponName, attribute | OBJECT_WEAPON)
+WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t attribute) :
+    ObjectClass(newOwner, weaponName, attribute | OBJECT_WEAPON)
 {
-    m_shooter = newShooter;
-
     m_deathSound = NONE;
 
     try {
