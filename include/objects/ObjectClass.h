@@ -124,7 +124,7 @@ class ObjectClass : public Rect
 
     UPoint getClosestPoint(UPoint point);
     UPoint getClosestCentrePoint(UPoint objectPos);
-    UPoint getCentrePoint();
+    inline UPoint getCentrePoint() { return UPoint((getPosition()*BLOCKSIZE)+(BLOCKSIZE/2)); }
 
     inline PlayerClass* getOwner() { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }

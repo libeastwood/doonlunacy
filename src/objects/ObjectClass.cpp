@@ -325,10 +325,7 @@ UPoint ObjectClass::getClosestCentrePoint(UPoint objectPos)
 
 UPoint ObjectClass::getCentrePoint()
 {
-    UPoint result;
-
-    result.x = int(round(m_realPos.x));
-    result.y = int(round(m_realPos.y));
+    UPoint result((getPosition()*BLOCKSIZE)+(BLOCKSIZE/2));
 
     return result;
 }
