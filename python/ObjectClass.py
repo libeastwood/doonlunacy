@@ -3,6 +3,7 @@ class Object(object):
         self.animFrames = 1
         self.armor = 0
         self.deathAnim = None
+        self.decayTime = 0
         self.drawnAngle = 2
         self.angle = 256 / 8 * self.drawnAngle
         self.drawnPos = (0,0)

@@ -166,6 +166,7 @@ class ObjectClass : public Rect
     //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
 	   m_animCounter,
 	   m_curAnimFrame,
+	   m_decayTime,
 
 	   //! Total number of frames
 	   m_animFrames,
@@ -222,7 +223,8 @@ class ObjectClass : public Rect
 
   private:
     Uint32 m_attributes,
-	   m_status;
+	   m_status,
+	   m_ticks;
 
     Sint16 m_maxHealth;
 

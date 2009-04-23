@@ -35,6 +35,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     m_objectID = -1;
 
     m_checkTimer = 0;
+    m_ticks = 0;
 
     m_attackMode = STANDGROUND;
 
@@ -44,6 +45,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_animFrames = python::extract<int>(m_pyObject.attr("animFrames"));
 	m_armor = python::extract<int>(m_pyObject.attr("armor"));
 	m_deathAnim = getPyObjectType(m_pyObject.attr("deathAnim"), 0);
+	m_decayTime = python::extract<int>(m_pyObject.attr("decayTime"));
 	m_drawnAngle = python::extract<int>(m_pyObject.attr("drawnAngle"));
 	m_drawnPos = python::extract<SPoint>(m_pyObject.attr("drawnPos"));
 	m_explosionSize = python::extract<int>(m_pyObject.attr("explosionSize"));
@@ -76,6 +78,8 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     for(size_t i = 0; i < pyWeapons.size(); i++)
 	m_weapons[i] = WeaponPtr(new WeaponClass(m_owner, getPyObjectType(pyWeapons[i], 0)));
 
+    if(m_decayTime)
+	m_decayTime -= getRandom<Sint16>(1+m_decayTime/4, m_decayTime);
 }
 
 ObjectClass::~ObjectClass()
@@ -214,11 +218,23 @@ void ObjectClass::animate()
 		m_frameTimer = m_frameTime;
 	}
 	m_frameTimer--;
-    }	
+    }
 }
 
 void ObjectClass::doDeath(Image *dest)
 {
+    if(m_frameTimer <= 0) {
+	if(m_decayTime > 0) {
+	    Uint32 tick = SDL_GetTicks();
+	    if(tick > (m_ticks + 1000)) {
+		std::swap(m_ticks, tick);
+		m_decayTime--;
+		m_graphic->fadeOut();
+	    }
+	}
+	else
+	    return;
+    }
     Rect source(w * m_curAnimFrame, 0, w, h);
     UPoint destPoint((m_drawnPos - ((m_explosionSize/2) * BLOCKSIZE)) - BLOCKSIZE/2);
 

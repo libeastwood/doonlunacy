@@ -33,6 +33,7 @@ class InfantryUnit(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Trooper()
         self.deathAnim = ObjPic_DeadInfantry()
+        self.decayTime = 15
         self.numDeathFrames = 2
         self.armor = 1
         self.maxHealth = self.health = 10
