@@ -150,7 +150,7 @@ class Trike(GroundUnit):
         self.radius = 4
         self.speed = 1.0
         self.viewRange = 4
-        self.weapons = [SmallRocket(), LargeRocket()]
+        self.weapons = [MediumRocket(), MediumRocket(), MediumRocket(), MediumRocket()]
 
 class Fremen(InfantryUnit):
     def __init__(self):

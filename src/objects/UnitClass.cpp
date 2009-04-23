@@ -70,7 +70,7 @@ void UnitClass::deploy(SPoint newPosition)
         if (m_guardPoint == SPoint(INVALID_POS, INVALID_POS))
             m_guardPoint = getPosition();
 
-        setDestination(m_guardPoint);
+        setDestination(m_guardPoint*BLOCKSIZE);
 
         //  clearStatus(STATUS_PICKEDUP);
 
@@ -217,7 +217,7 @@ void UnitClass::navigate()
                                 setTarget();
                             }
 */
-                            setDestination(UPoint(x, y)); //can't get any closer, give up
+                            setDestination(getRealPos()); //can't get any closer, give up
 
                             clearStatus(STATUS_FORCED);
                             m_speedCap = NONE;
@@ -289,11 +289,11 @@ void UnitClass::playSelectSound() {
     	SoundPlayer::Instance()->playSound(m_selectSound[getRandom<Uint8>(0,m_selectSound.size()-1)]);
 }
 /*virtual*/
-void UnitClass::setDestination(SPoint destination, Uint32 status)
+void UnitClass::setDestination(SPoint realDestination, Uint32 status)
 {
     m_pathList.clear();
-    ObjectClass::setDestination(destination, status);
-    if(m_guardPoint != destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
+    ObjectClass::setDestination(realDestination, status);
+    if(m_guardPoint != m_destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
 	playConfirmSound();
 }
 

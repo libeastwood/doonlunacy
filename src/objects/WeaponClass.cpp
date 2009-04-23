@@ -38,10 +38,9 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     m_reloadTimer = getRandom(1, m_reloadTime/2);
 }
 
-void WeaponClass::setDestination(SPoint destination, Uint32 status) {
-    ObjectClass::setDestination(destination/BLOCKSIZE);
-    m_destination = destination;
-    m_destination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
+void WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
+//    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
+    ObjectClass::setDestination(realDestination);
 
     /*
     if (getObjectName() == "Sonic")
@@ -67,7 +66,7 @@ void WeaponClass::setDestination(SPoint destination, Uint32 status) {
     Rect::setPosition(m_shooter->getPosition());
     setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
-    m_destAngle = dest_angle(m_source, m_destination);
+    m_destAngle = dest_angle(m_source, m_realDestination);
     m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
     m_angle = m_destAngle;
     LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
@@ -168,9 +167,9 @@ void WeaponClass::update(float dt)
 	    m_frameTimer = 0;   //its off the screen, kill it
 	else
 	{
-	    if (distance_from(m_source.x, m_source.y, m_realPos.x, m_realPos.x) >= distance_from(m_source, m_destination))
+	    if (distance_from(m_source.x, m_source.y, m_realPos.x, m_realPos.x) >= distance_from(m_source, m_realDestination))
 	    {
-		m_realPos = m_destination;
+		m_realPos = m_realDestination;
 		destroy();
 	    }
 	    else if (getObjectName() == "Sonic")

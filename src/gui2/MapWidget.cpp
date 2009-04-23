@@ -104,7 +104,8 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 {
     //FIXME: This is a bit lame way to get coordinates for selection on map
     //       relative to the menu..
-    UPoint pos(m_view + ((p - getPosition()) / BLOCKSIZE));
+    UPoint realPos((p - getPosition()) + (m_view * BLOCKSIZE));
+    UPoint pos(realPos/BLOCKSIZE);
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();
     ObjectPtr tmp;
@@ -160,7 +161,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
 		for(ObjectMap::const_iterator unit = m_selectedList.begin(); unit != m_selectedList.end(); unit++)
     		    if ((*unit).second->getStatus(STATUS_CONTROLLABLE) && (*unit).second->hasAttribute(OBJECT_UNIT))
-    			    ((UnitClass*)((*unit).second).get())->setDestination(pos, status);
+    			    ((UnitClass*)((*unit).second).get())->setDestination(realPos, status);
             }
 
             return true;

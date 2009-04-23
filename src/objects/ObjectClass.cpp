@@ -395,13 +395,15 @@ bool ObjectClass::isVisible(int team)
 	return false;
 }
 
-void ObjectClass::setDestination(SPoint destination, Uint32 status)
+void ObjectClass::setDestination(SPoint realDestination, Uint32 status)
 {
+    UPoint destination(realDestination/BLOCKSIZE);
     setStatus(status);
     m_target.reset();
 
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {
         m_destination = destination;
+	m_realDestination = realDestination;
     	clearStatus(STATUS_MOVING | STATUS_MOVING | STATUS_DEFAULT);
 	setStatus(status);
     }
