@@ -322,14 +322,6 @@ UPoint ObjectClass::getClosestCentrePoint(UPoint objectPos)
 }
 
 
-
-UPoint ObjectClass::getCentrePoint()
-{
-    UPoint result((getPosition()*BLOCKSIZE)+(BLOCKSIZE/2));
-
-    return result;
-}
-
 int ObjectClass::getHealthColour()
 {
     float healthPercent = (float)m_health / (float)m_maxHealth;
