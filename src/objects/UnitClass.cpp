@@ -289,12 +289,15 @@ void UnitClass::playSelectSound() {
     	SoundPlayer::Instance()->playSound(m_selectSound[getRandom<Uint8>(0,m_selectSound.size()-1)]);
 }
 /*virtual*/
-void UnitClass::setDestination(SPoint realDestination, Uint32 status)
+bool UnitClass::setDestination(SPoint realDestination, Uint32 status)
 {
-    m_pathList.clear();
-    ObjectClass::setDestination(realDestination, status);
-    if(m_guardPoint != m_destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
-	playConfirmSound();
+    if(ObjectClass::setDestination(realDestination, status)) {
+    	m_pathList.clear();
+    	if(m_guardPoint != m_destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
+    	    playConfirmSound();
+	return true;
+    }
+    return false;
 }
 
 void UnitClass::setGuardPoint(UPoint newGuardPoint)

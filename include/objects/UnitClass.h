@@ -33,7 +33,7 @@ class UnitClass : public ObjectClass
     void setAngle(int newAngle);
 
     virtual void update(float dt);
-    virtual void setDestination(SPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
     virtual inline void setStatus(Uint32 status) {
     	ObjectClass::setStatus(status);

@@ -93,7 +93,7 @@ class ObjectClass : public Rect
     inline Sint16 getHealth() { return m_health; }
     void setVisible(bool status, int team = -1);
 
-    virtual void setDestination(SPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
     bool attack();
     virtual void setPosition(SPoint pos);
 

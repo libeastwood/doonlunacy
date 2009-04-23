@@ -13,7 +13,7 @@ class WeaponClass : public ObjectClass
 	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);
 	virtual void destroy();
-	virtual void setDestination(SPoint realDestination, Uint32 status = 0);
+	virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
 	inline bool isDirectShot() { return (m_source == m_destination); }
 
 	inline Sint16 getRange() { return m_range; }

@@ -321,7 +321,6 @@ UPoint ObjectClass::getClosestCentrePoint(UPoint objectPos)
     return getCentrePoint();
 }
 
-
 int ObjectClass::getHealthColour()
 {
     float healthPercent = (float)m_health / (float)m_maxHealth;
@@ -384,18 +383,19 @@ bool ObjectClass::isVisible(int team)
 	return false;
 }
 
-void ObjectClass::setDestination(SPoint realDestination, Uint32 status)
+bool ObjectClass::setDestination(SPoint realDestination, Uint32 status)
 {
     UPoint destination(realDestination/BLOCKSIZE);
-    setStatus(status);
-    m_target.reset();
-
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {
+    	setStatus(status);
+    	m_target.reset();
         m_destination = destination;
 	m_realDestination = realDestination;
     	clearStatus(STATUS_MOVING | STATUS_MOVING | STATUS_DEFAULT);
 	setStatus(status);
+	return true;
     }
+    return false;
 }
 
 bool ObjectClass::attack() {

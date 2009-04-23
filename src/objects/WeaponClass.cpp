@@ -38,41 +38,42 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     m_reloadTimer = getRandom(1, m_reloadTime/2);
 }
 
-void WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
-//    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
-    ObjectClass::setDestination(realDestination);
+bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
+    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
+    if(ObjectClass::setDestination(realDestination)) {
+	/*
+	   if (getObjectName() == "Sonic")
+	   {
+	   int diffX = m_destination.x - realPosition.x,
+	   diffY = m_destination.y - realPosition.y;
 
-    /*
-    if (getObjectName() == "Sonic")
-    {
-	int diffX = m_destination.x - realPosition.x,
-	    diffY = m_destination.y - realPosition.y;
+	   float ratio;
+	   float square_root;
 
-	float ratio;
-	float square_root;
+	   if ((diffX == 0) && (diffY == 0))
+	   diffY = m_range * BLOCKSIZE;
 
-	if ((diffX == 0) && (diffY == 0))
-	    diffY = m_range * BLOCKSIZE;
-
-	square_root = sqrt((float)(diffX*diffX + diffY*diffY));
-	ratio = (m_range * BLOCKSIZE)/square_root;
-	m_destination.x = realPosition.x + (int)(((float)diffX)*ratio);
-	m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
-    }*/
+	   square_root = sqrt((float)(diffX*diffX + diffY*diffY));
+	   ratio = (m_range * BLOCKSIZE)/square_root;
+	   m_destination.x = realPosition.x + (int)(((float)diffX)*ratio);
+	   m_destination.y = realPosition.y + (int)(((float)diffY)*ratio);
+	   }*/
 
 
-    m_realPos = PointFloat(m_shooter->getRealPos());
-    m_source = m_shooter->getCentrePoint();
-    Rect::setPosition(m_shooter->getPosition());
-    setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
+	m_realPos = PointFloat(m_shooter->getRealPos());
+	m_source = m_shooter->getCentrePoint();
+	Rect::setPosition(m_shooter->getPosition());
+	setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
-    m_destAngle = dest_angle(m_source, m_realDestination);
-    m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
-    m_angle = m_destAngle;
-    LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
+	m_destAngle = dest_angle(m_source, m_realDestination);
+	m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
+	m_angle = m_destAngle;
+	LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
-    m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
-
+	m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
+	return true;
+    }
+    return false;
 }
 
 WeaponClass::~WeaponClass()
