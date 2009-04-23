@@ -89,10 +89,11 @@ uint32_t GameMan::addObject(ObjectPtr object) {
     uint32_t objectID = ++m_objectIDCounter,
 	     objectType = object->getAttributes();
 
-    object->setObjectID(objectID);
     if(m_objects.find(objectType) == m_objects.end())
 	m_objects[objectType] = ObjectMap();
     m_objects[objectType][objectID] = object;
+    object->setObjectID(objectID);
+
 
     return objectID;
 }

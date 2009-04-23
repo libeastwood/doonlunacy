@@ -88,13 +88,10 @@ void UnitClass::deploy(SPoint newPosition)
 
 void UnitClass::destroy()
 {
-    GameMan* gman = GameMan::Instance();
     if (!getStatus(STATUS_DESTROYED))
     {
         LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
         m_target.reset();
-	setStatus(STATUS_DESTROYED);
-        gman->GetMap()->removeObjectFromMap(getObjectID()); //no map point will reference now
         //gman->GetObjectTree()->RemoveObject(getObjectID());
 
         m_owner->decrementUnits(getObjectName());
@@ -523,27 +520,18 @@ void UnitClass::update(float dt)
     ObjectClass::update(dt);
     if (!getStatus(STATUS_DESTROYED))
     {
-        if (getStatus(STATUS_ACTIVE))
-        {
-            targeting();
-            navigate();
-            move();
+	if (getStatus(STATUS_ACTIVE))
+	{
+	    targeting();
+	    navigate();
+	    move();
 
-            if (getStatus(STATUS_ACTIVE))
-                turn();
-        }
-	else
-	    std::cout << "nonactive"<<std::endl;
+	    if (getStatus(STATUS_ACTIVE))
+		turn();
+	}
 
-        if (getStatus(STATUS_BADLYDAMAGED))
-        {
-            if (m_health <= 0)
-            {
-                destroy();
-                return;
-            }
     }
-    }
+}
 
 #if 0 
     if (m_badlyDamaged)
@@ -607,9 +595,8 @@ if (!m_destroyed)
     }
 
 }
-#endif 
-
 }
+#endif 
 
 /* search algorithmns */
 void UnitClass::nodePushSuccesors(PriorityQ* open, TerrainClass* parent_node)

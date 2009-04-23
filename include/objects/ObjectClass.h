@@ -71,7 +71,7 @@ class ObjectClass : public Rect
 	//
 	// Common object functions
 	//
-	
+
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
     bool clearObject() { return ((m_status & STATUS_DESTROYED) && (m_frameTimer == 0)); }
@@ -88,9 +88,10 @@ class ObjectClass : public Rect
 
     //! @name Setters and getters
 	//@{
-	
-	void setHealth(int newHealth);
-	void setVisible(bool status, int team = -1);
+
+    void handleDamage(Sint16 damage, ObjectPtr damager = ObjectPtr());
+    inline Sint16 getHealth() { return m_health; }
+    void setVisible(bool status, int team = -1);
 
     virtual void setDestination(SPoint destination, Uint32 status = 0);
     bool attack();
@@ -113,11 +114,10 @@ class ObjectClass : public Rect
     int getViewRange();
 
     inline Uint32 getObjectID() { return m_objectID; }
-    inline void setObjectID(Uint32 newObjectID) { if (newObjectID >= 0) m_objectID = newObjectID; }
+    inline void setObjectID(Uint32 newObjectID) { m_objectID = newObjectID; }
     inline int getArmor() { return m_armor; }
     inline int getRadius() { return m_radius; }
     inline UPoint getRealPos() { return m_realPos; }
-    inline UPoint getPosition() { return UPoint(x,y); }
     inline float getSpeed() { return m_maxSpeed; }
 
     bool isOnScreen(Rect rect);
@@ -132,7 +132,6 @@ class ObjectClass : public Rect
 	//! @name  Attack related functions
 	//@{
     bool canAttack(ObjectPtr object);
-    void handleDamage(int damage, ObjectPtr damager);
     ObjectPtr findTarget();
     //@}
   protected:
@@ -149,7 +148,6 @@ class ObjectClass : public Rect
 
     float   m_adjust,
 	    m_angle,
-            m_health,
 	    m_maxSpeed,
 	    m_turnSpeed;
 
@@ -173,8 +171,6 @@ class ObjectClass : public Rect
 	   m_animFrames,
 
 	   m_drawnAngle,
-
-	   m_maxHealth,
 
 	   //! Used for fog of war and area exploring.
 	   m_viewRange,
@@ -208,14 +204,14 @@ class ObjectClass : public Rect
 
     Uint32 m_objectID;
 
-    UPoint m_destination,
+    SPoint m_destination,
            m_oldPosition;
 
     /*!
      *  Position on the screen where an object will be drawn. It depends on
      *  position of MapWidget, current view position and of course object's position.
      */
-    UPoint m_drawnPos,
+    SPoint m_drawnPos,
 	   m_offset;
 
     ObjectPtr m_target;
@@ -227,6 +223,10 @@ class ObjectClass : public Rect
   private:
     Uint32 m_attributes,
 	   m_status;
+
+    Sint16 m_maxHealth;
+
+    float m_health;
 
 
 

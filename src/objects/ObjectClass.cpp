@@ -45,7 +45,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_armor = python::extract<int>(m_pyObject.attr("armor"));
 	m_deathAnim = getPyObjectType(m_pyObject.attr("deathAnim"), 0);
 	m_drawnAngle = python::extract<int>(m_pyObject.attr("drawnAngle"));
-	m_drawnPos = python::extract<UPoint>(m_pyObject.attr("drawnPos"));
+	m_drawnPos = python::extract<SPoint>(m_pyObject.attr("drawnPos"));
 	m_explosionSize = python::extract<int>(m_pyObject.attr("explosionSize"));
 	m_guardRange = python::extract<int>(m_pyObject.attr("guardRange"));
 	graphic = getPyObjectType(m_pyObject.attr("graphic"), 0);
@@ -62,21 +62,19 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	pyWeapons = getPyObjectVector<python::object>(m_pyObject.attr("weapons"));
 	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size))
 	    setSize(size*BLOCKSIZE);
-    }
-    catch(python::error_already_set const &)
-    {
+    } catch(python::error_already_set const &) {
 	LOG_FATAL("ObjectClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
-    m_weapons.resize(pyWeapons.size());
-    for(size_t i = 0; i < pyWeapons.size(); i++)
-	m_weapons[i] = WeaponPtr(new WeaponClass(ObjectPtr(this), getPyObjectType(pyWeapons[i], 0)));
-//FIXME:	m_weapons[i] = WeaponClass(GameMan::Instance()->getObject(getObjectID()), getPyObjectType(m_weapons.front(), 0), false);
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
     m_visible.resize(MAX_PLAYERS);
+
+    m_weapons.resize(pyWeapons.size());
+    for(size_t i = 0; i < pyWeapons.size(); i++)
+	m_weapons[i] = WeaponPtr(new WeaponClass(m_owner, getPyObjectType(pyWeapons[i], 0)));
 
 }
 
@@ -149,7 +147,6 @@ void ObjectClass::drawSelectionBox(Image* dest)
 	    m_selectionBoxGlowing.reset();
 	    m_fadingIn = reset;
     }
- 
     dest->drawHLine(UPoint(m_drawnPos.x + 2, m_drawnPos.y + 2), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
@@ -340,19 +337,22 @@ int ObjectClass::getViewRange()
 	return m_viewRange;
 }
 
-void ObjectClass::handleDamage(int damage, ObjectPtr damager)
+void ObjectClass::handleDamage(Sint16 damage, ObjectPtr damager)
 {
     if (!getStatus(STATUS_DESTROYED))
     {
 	if (damage >= 0) 
 	{
 	    m_health -= damage;
-
-	    if (m_health < 0)
-		m_health = 0;
-
-	    if (!getStatus(STATUS_BADLYDAMAGED) && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
+	    if (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO)
+	    {
 		setStatus(STATUS_BADLYDAMAGED);
+		if(m_health <= 0)
+		{
+		    m_health = 0;
+		    destroy();
+		}
+	    }
 	}
 
 	if (m_owner == GameMan::Instance()->LocalPlayer()) 
@@ -401,7 +401,8 @@ bool ObjectClass::attack() {
 		if(getPosition().distance(m_destination) <= (*weapon)->getRange()) {
 		    inRange = true;
 		    if((*weapon)->loaded()) {
-			ObjectPtr missile(new WeaponClass(*(*weapon).get()));
+			WeaponPtr missile(new WeaponClass(*(*weapon).get()));
+			missile->setShooter(GameMan::Instance()->getObject(getObjectID()));
 			missile->setDestination(m_destination * BLOCKSIZE);
 			GameMan::Instance()->addObject(missile);
 		    }
@@ -415,17 +416,6 @@ bool ObjectClass::attack() {
 	}
     }
     return inRange;
-}
-
-void ObjectClass::setHealth(int newHealth)
-{
-    if ((newHealth >= 0) && (newHealth <= m_maxHealth))
-    {
-	m_health = newHealth;
-
-	if (!getStatus(STATUS_BADLYDAMAGED) && (m_health/(float)m_maxHealth < HEAVILYDAMAGEDRATIO))
-	    setStatus(STATUS_BADLYDAMAGED);
-    }
 }
 
 void ObjectClass::setPosition(SPoint pos)
@@ -458,4 +448,7 @@ void ObjectClass::unassignFromMap(SPoint pos)
 void ObjectClass::update(float dt)
 {
     m_adjust = dt * (Settings::Instance()->GetGameSpeed() * 10);
+    if(getStatus(STATUS_DESTROYED)) {
+	unassignFromMap(getPosition());
+    }
 }
