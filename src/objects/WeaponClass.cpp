@@ -40,7 +40,7 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
 
 bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
     //FIXME: Why does offset need to be added?
-    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy) + (m_offset*2);
+    realDestination += (m_offset*2) + getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
     if(ObjectClass::setDestination(realDestination)) {
 	/*
 	   if (getObjectName() == "Sonic")
