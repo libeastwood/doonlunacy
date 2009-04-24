@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "GameMan.h"
 #include "GameData.h"
 #include "objects/ObjectClass.h"
@@ -93,8 +95,8 @@ void ObjectClass::assignToMap(SPoint pos)
     MapClass* map = m_owner->getMap();
 
     // If structure is more than 1x1, be sure to assign it to all cells required
-    for (int i = pos.x; i < x + w/BLOCKSIZE; i++)
-	for (int j = pos.y; j < y + h/BLOCKSIZE; j++) {
+    for (int i = pos.x; i < x + ceil((float)w/BLOCKSIZE); i++)
+	for (int j = pos.y; j < y + ceil((float)h/BLOCKSIZE); j++) {
 	    SPoint temp(i,j);
 	    if (map->cellExists(temp)) {
 		map->getCell(temp)->assignObject(m_objectID);
