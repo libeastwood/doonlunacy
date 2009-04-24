@@ -407,12 +407,12 @@ bool ObjectClass::attack() {
     	    clearStatus(STATUS_ATTACKING);
 	else {
 	    for(std::vector<WeaponPtr>::const_iterator weapon = m_weapons.begin(); weapon != m_weapons.end(); weapon++) {
-		if(getPosition().distance(m_destination) <= (*weapon)->getRange()) {
+		if(getRealPos().distance(m_realDestination) <= (*weapon)->getRange()*BLOCKSIZE) {
 		    inRange = true;
 		    if((*weapon)->loaded()) {
 			WeaponPtr missile(new WeaponClass(*(*weapon).get()));
 			missile->setShooter(GameMan::Instance()->getObject(getObjectID()));
-			missile->setDestination(m_destination * BLOCKSIZE);
+			missile->setDestination(m_realDestination);
 			GameMan::Instance()->addObject(missile);
 		    }
 		}
@@ -434,6 +434,8 @@ void ObjectClass::setPosition(SPoint pos)
 	Rect::setPosition(pos);
 
 	m_realPos = pos * BLOCKSIZE;
+	if(getSize() < SPoint(BLOCKSIZE, BLOCKSIZE))
+	    m_realPos = getCentrePoint();
 	assignToMap(pos);
     }
 }
