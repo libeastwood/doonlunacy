@@ -58,7 +58,7 @@ enum status {
 
 #define SMOKEDELAY 30
 
-class ObjectClass : public Rect
+class ObjectClass : protected Rect
 {
 
   public:
@@ -123,6 +123,8 @@ class ObjectClass : public Rect
 
     bool isOnScreen(Rect rect);
 
+    inline SPoint getPosition() { return Rect::getPosition(); }
+    inline SPoint getSize() { return Rect::getSize(); }
     UPoint getClosestPoint(UPoint point);
     UPoint getClosestCentrePoint(UPoint objectPos);
     inline UPoint getCentrePoint() { return UPoint((getPosition()*BLOCKSIZE)+(BLOCKSIZE/2)); }

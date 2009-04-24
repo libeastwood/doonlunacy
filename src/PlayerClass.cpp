@@ -191,8 +191,9 @@ ObjectPtr PlayerClass::placeStructure(int builderID, UPoint builderPos, std::str
     }
 
     if (structure) {
-	for(int i=0;i<structure->w;i++)
-	    for(int j=0;j<structure->h;j++) {
+	SPoint size(structure->getSize());
+	for(int i=0;i<size.x;i++)
+	    for(int j=0;j<size.y;j++) {
 		//sprintf(temp, "clear x: %d, y: %d", xPos + i, yPos + j);
 		//currentGame->AddToNewsTicker(temp);
 

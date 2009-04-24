@@ -17,13 +17,13 @@ void GroundUnit::checkPos()
 
     if (getStatus(STATUS_JUSTSTOPPEDMOVING))
     {
-        m_realPos = UPoint(x, y) * BLOCKSIZE + BLOCKSIZE / 2;
+        m_realPos = getPosition() * BLOCKSIZE + BLOCKSIZE / 2;
         m_findTargetTimer = 0; //allow a scan for new targets now
 
         //if (currentGame->playerType == SERVER)
         // netDoConsistancy();
 
-        if (map->getCell(SPoint(x, y))->isBloom())
+        if (map->getCell(getPosition())->isBloom())
         {
 #if 0
             COORDTYPE realPos;
