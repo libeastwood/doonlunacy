@@ -39,7 +39,8 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
 }
 
 bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
-    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
+    //FIXME: Why does offset need to be added?
+    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy) + (m_offset*2);
     if(ObjectClass::setDestination(realDestination)) {
 	/*
 	   if (getObjectName() == "Sonic")
@@ -60,9 +61,8 @@ bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
 	   }*/
 
 
-	m_realPos = PointFloat(m_shooter->getRealPos());
+	setRealPosition(m_shooter->getRealPos());
 	m_source = m_shooter->getCentrePoint();
-	Rect::setPosition(m_shooter->getPosition());
 	setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
 	m_destAngle = dest_angle(m_source, m_realDestination);
@@ -146,6 +146,11 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
     }//end of if sonic
     */
     ObjectClass::draw(dest, off, view);
+
+    UPoint pos((off + m_source - view * BLOCKSIZE) - m_offset); //off + m_realDestination);
+	    Rect rect(pos.x, pos.y, 2, 2);
+            dest->drawRect(rect, HOUSE_HARKONNEN);
+
 }
 
 void WeaponClass::update(float dt)
@@ -158,11 +163,10 @@ void WeaponClass::update(float dt)
 
     if (!getStatus(STATUS_DESTROYED))
     {
-	UPoint oldLocation = UPoint(x,y);
+	UPoint oldLocation(getPosition());
 	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
 
-	m_realPos += m_speed * m_adjust;  //keep the bullet moving by its current speeds
-	Rect::setPosition(m_realPos/BLOCKSIZE);
+	setRealPosition(m_realPos + m_speed * m_adjust);  //keep the bullet moving by its current speeds
 
 	if ((x < -5) || (x >= map->w + 5) || (y < -5) || (y >= map->h + 5))
 	    m_frameTimer = 0;   //its off the screen, kill it
@@ -170,7 +174,7 @@ void WeaponClass::update(float dt)
 	{
 	    if (distance_from(m_source.x, m_source.y, m_realPos.x, m_realPos.x) >= distance_from(m_source, m_realDestination))
 	    {
-		m_realPos = m_realDestination;
+		setRealPosition(m_realDestination);
 		destroy();
 	    }
 	    else if (getObjectName() == "Sonic")
@@ -181,10 +185,11 @@ void WeaponClass::update(float dt)
 		    map->damage(m_shooter, m_owner, realPos, getObjectName(), m_damage, m_damagePiercing, m_damageRadius, false);
 		}
 	    }
-	    else if (map->cellExists(UPoint(x,y)) && map->getCell(UPoint(x,y))->hasAGroundObject() && map->getCell(UPoint(x,y))->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
+	    else if (map->cellExists(getPosition()) && map->getCell(getPosition())->hasAGroundObject() && map->getCell(getPosition())->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 	    {
 		if (!hasAttribute(OBJECT_AIRUNIT))
 		    destroy();
+
 	    }
 	}
     }

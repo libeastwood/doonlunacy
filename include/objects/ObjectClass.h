@@ -96,6 +96,7 @@ class ObjectClass : public Rect
     virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
     bool attack();
     virtual void setPosition(SPoint pos);
+    virtual void setRealPosition(SPoint realPos);
 
     inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
     inline Uint32 getAttributes() { return m_attributes; }

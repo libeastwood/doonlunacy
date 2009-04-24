@@ -427,10 +427,23 @@ bool ObjectClass::attack() {
 
 void ObjectClass::setPosition(SPoint pos)
 {
-    Rect::setPosition(pos);
     if (m_owner->getMap()->cellExists(pos) && pos != SPoint(INVALID_POS, INVALID_POS))
     {
+	Rect::setPosition(pos);
+
 	m_realPos = pos * BLOCKSIZE;
+	assignToMap(pos);
+    }
+}
+
+void ObjectClass::setRealPosition(SPoint realPos)
+{
+    SPoint pos(realPos/BLOCKSIZE);
+    if (m_owner->getMap()->cellExists(pos) && pos != SPoint(INVALID_POS, INVALID_POS))
+    {
+	Rect::setPosition(pos);
+
+	m_realPos = realPos;
 	assignToMap(pos);
     }
 }
