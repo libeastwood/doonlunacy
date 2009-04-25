@@ -187,6 +187,10 @@ struct Point
                          (Settings::Instance()->GetHeight() / 200.0f) * y);
         }
 
+	Point getAbs() const {
+	    return Point(abs(x), abs(y));
+	}
+
 	float distance(const Point &point) const {
     	    float dx = x - point.x,
 		  dy = y - point.y;
