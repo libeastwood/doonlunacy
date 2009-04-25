@@ -14,6 +14,8 @@
 /*!
     @note Implemented fully inline, so no need to worry about speed.
 */
+static const float pi = 3.14159265f;
+
 template <typename T>
 struct Point
 {
@@ -186,9 +188,17 @@ struct Point
         }
 
 	float distance(const Point &point) const {
-    	    float first = x - point.x,
-		  second = y - point.y;
-    	    return(std::sqrt(first*first + second*second));
+    	    float dx = x - point.x,
+		  dy = y - point.y;
+    	    return(std::sqrt(dx*dx + dy*dy));
+	}
+
+	float angle(const Point &point) const {
+	    float dx = x-point.x, dy = y - point.y;
+	    float angle = acos(-dx/distance(point)) * 180 / pi;
+	    if(dy < 0)
+		angle = 360-angle; 
+	    return angle;
 	}
 
         //@}
