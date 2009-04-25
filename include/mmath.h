@@ -47,8 +47,6 @@ inline int round(float number) { return ((int)(number + 0.5)); }
 inline int lround(float number) { return round(number); }
 #endif
 
-float dest_angle(UPoint p1, UPoint p2);
-
 template<typename T>
 T getRandomOf(T numParam, ...) {
 	int nthParam = getRandom(0, numParam);

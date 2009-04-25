@@ -65,12 +65,12 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
 	m_source = m_shooter->getCentrePoint();
 	setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
-	m_destAngle = dest_angle(m_source, m_realDestination);
-	m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
+	m_destAngle = m_source.angle(m_realDestination);
+	m_drawnAngle = (int)((float)m_numFrames*m_destAngle/360.0);
 	m_angle = m_destAngle;
 	LOG_DEBUG("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
-	m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
+	m_speed = PointFloat(cos(m_destAngle * (pi / 180)), -sin(m_destAngle * (pi / 180))) * m_maxSpeed;
 	m_distanceTraveled = 10000;
 	return true;
     }

@@ -64,43 +64,6 @@ int roundUp(float number)
 	return result;
 }
 
-float dest_angle(UPoint p1, UPoint p2)
-{
-        float  destAngle;
-
-        float  diffX = p2.x - p1.x,
-                diffY = p2.y - p1.y;
-
-        if (diffX != 0)
-        {
-                if ((diffX >= 0) && (diffY >= 0))  //if x2 >= x1 && y2 >= y1
-                {
-                        destAngle = 2*PI - atan(fabs(diffY/diffX));
-                }
-                else if ((diffX < 0) && (diffY >= 0))  //if x2 < x1 && y2 >= y1
-                {
-                        destAngle = atan(fabs(diffY/diffX)) + PI;
-                }
-                else if ((diffX < 0) && (diffY < 0))  //if x2 < x1 && y2 < y1
-                {
-                        destAngle = PI - atan(fabs(diffY/diffX));
-                }
-                else if ((diffX >= 0) && (diffY < 0))  //if x2 >= x1 && y2 < y1
-                {
-                        destAngle = atan(fabs(diffY/diffX));
-                }
-        }
-        else if (diffY <= 0)
-        {
-                destAngle = PI/2;
-        }
-        else destAngle = 3*PI/2;
-
-        if (destAngle == 2*PI) destAngle = 0;
-
-        return (destAngle*256.0/(2*PI));
-}
-
 float normalize(float value, float max)
 {
 	while(value < 0.0)
