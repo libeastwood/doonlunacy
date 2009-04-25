@@ -124,11 +124,36 @@ struct Rect : public SDL_Rect
                     (x <= p.x && p.x <= x+w) &&
                     (y <= p.y && p.y <= y+h));
         }
-        
+
+	//! How much of a rect inside this Rect?
+        /*!
+            @param r Rect in question
+	    @return percent (1/100)
+        */
+	float contains (Rect r) {
+	    float max;
+	    Rect rect(*this);
+	    if(getPosition() < r.getPosition())
+		boost::swap(rect, r);
+	    std::cout << rect.intersectRect(r).getSize() << std::endl;
+	    if(!rect.containsPartial(r))
+		return 0;
+	    if(rect.containsWhole(r))
+		return 1;
+	    
+	    if(getSize() < r.getSize())
+		max = w*h;
+	    else
+		max = r.w*r.h;
+	    SPoint containsPoint(rect.intersectRect(r).getSize());
+	    
+	    return (containsPoint.x*containsPoint.y)/max;
+	}
+
         //! Is a rect inside this Rect ? (partial match required)
         /*!
             Whole Rect has to be inside or equal this Rect.
-            @param r Roint in question
+            @param r Rect in question
         */
         bool containsWhole(const Rect &r) const
         {
