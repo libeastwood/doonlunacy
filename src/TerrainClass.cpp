@@ -97,7 +97,9 @@ ObjectClass* TerrainClass::getUndergroundUnit()
 */
 void TerrainClass::assignObject(uint32_t newObjectID)
 {
-	m_assignedObjects.insert(ObjectPair(newObjectID, GameMan::Instance()->getObject(newObjectID)));
+    if(newObjectID == (Uint32)-1)
+	throw "object lacks objectID";
+    m_assignedObjects.insert(ObjectPair(newObjectID, GameMan::Instance()->getObject(newObjectID)));
 }
 
 ObjectPtr TerrainClass::getObject() {
@@ -178,12 +180,9 @@ void TerrainClass::damageCell(ObjectPtr damager, WeaponClass *weapon, UPoint rea
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
 	ObjectPtr object = iterator->second;
 
-	if(!object)
-	{
-	    LOG_WARNING("TerrainClass", "damageCell(): null object at %d-%d (%d-%d)", realPos.x/BLOCKSIZE, realPos.y/BLOCKSIZE, realPos.x, realPos.y);
-	    continue;
-	}
+	LOG_DEBUG("TerrainClass", "damageCell(): %s (%u) might damage %s (%u) at %d-%d (%d-%d)", weapon->getObjectName().c_str(), weapon->getObjectID(), object->getObjectName().c_str(), object->getObjectID(), realPos.x, realPos.y, (realPos/BLOCKSIZE).x, (realPos/BLOCKSIZE).y);
 	Rect rect(realPos-damageRadius, (weapon->getSize()/2)+(damageRadius*2));
+	damageProp = object->coverage(rect);
 
 	damage = ((bulletDamage + damagePiercing) * damageProp) - object->getArmor();
 	object->handleDamage(damage, damager);

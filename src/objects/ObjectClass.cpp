@@ -354,22 +354,6 @@ int ObjectClass::getHealthColour()
 	return COLOUR_RED;
 }
 
-float ObjectClass::coverage(Rect r) {
-    float max;
-    Rect rect(getRealPos(), getSize());
-    if(getRealPos() < r.getPosition())
-	boost::swap(rect, r);
-    if(getSize() < r.getSize())
-	max = w*h;
-    else
-	max = r.w*r.h;
-    SPoint covPoint(rect.intersectRect(r).getSize());
-    if(covPoint.x < 1 || covPoint.y < 1)
-	return 0;
-
-    return (covPoint.x*covPoint.y)/max;
-}
-
 int ObjectClass::getViewRange()
 {
     if (m_owner->hasRadarOn() )
@@ -447,9 +431,9 @@ bool ObjectClass::attack() {
 		    inRange = true;
 		    if((*weapon)->loaded()) {
 			WeaponPtr missile(new WeaponClass(*(*weapon).get()));
+			GameMan::Instance()->addObject(missile);
 			missile->setShooter(GameMan::Instance()->getObject(getObjectID()));
 			missile->setDestination(m_realDestination);
-			GameMan::Instance()->addObject(missile);
 		    }
 		}
 	    }

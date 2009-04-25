@@ -129,7 +129,7 @@ class ObjectClass : protected Rect
     SPoint getClosestCentrePoint(SPoint objectPos);
     inline SPoint getCentrePoint() { return SPoint(getRealPos()+(getSize()/2)); }
 
-    float coverage(Rect rect);
+    float coverage(Rect rect) { return Rect(getRealPos(), getSize()).contains(rect); }
 
     inline PlayerClass* getOwner() { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
