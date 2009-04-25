@@ -293,7 +293,7 @@ bool UnitClass::setDestination(ConstSPoint realDestination, Uint32 status)
 {
     if(ObjectClass::setDestination(realDestination, status)) {
     	m_pathList.clear();
-    	if(m_guardPoint != m_destination && (getStatus(STATUS_CONTROLLABLE | STATUS_MOVING)))
+    	if(m_guardPoint != m_destination && (getStatus(STATUS_CONTROLLABLE & STATUS_MOVING)))
     	    playConfirmSound();
 	return true;
     }
