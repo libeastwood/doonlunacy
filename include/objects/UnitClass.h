@@ -27,13 +27,13 @@ class UnitClass : public ObjectClass
     
     virtual void draw(Image * dest, SPoint off, SPoint view);
     
-    virtual void destroy();
+    virtual bool destroy();
     virtual void deploy(SPoint newPosition);
    	
     void setAngle(int newAngle);
 
     virtual void update(float dt);
-    virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
     virtual void setPosition(SPoint pos);
     virtual inline void setStatus(Uint32 status) {
     	ObjectClass::setStatus(status);

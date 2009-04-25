@@ -168,11 +168,10 @@ void TerrainClass::clearDamage()
 }
 
 
-void TerrainClass::damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
+void TerrainClass::damageCell(ObjectPtr damager, WeaponClass *weapon, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
 {
-    int     distance;
-    float  damageProp;
-    UPoint centrePoint;
+    float  damageProp = 0,
+	   damage;
     // non air damage
 
     ObjectMap::const_iterator iterator;
@@ -180,30 +179,17 @@ void TerrainClass::damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoi
 	ObjectPtr object = iterator->second;
 
 	if(!object)
+	{
+	    LOG_WARNING("TerrainClass", "damageCell(): null object at %d-%d (%d-%d)", realPos.x/BLOCKSIZE, realPos.y/BLOCKSIZE, realPos.x, realPos.y);
 	    continue;
-	centrePoint = object->getClosestCentrePoint(UPoint(x,y));
-	distance = lround(distance_from(centrePoint, realPos));
-	if (distance <= 0)
-	    distance = 1;
-
-	if (distance - object->getRadius() <= damageRadius)	{
-	#if 0 //We ain't got sonic tanks yet
-	    if ((bulletType == Bullet_DRocket) && (object->isAUnit()) && (getRandomInt(0, 100) <= 30)) {
-		((UnitClass*)object)->netDeviate(damagerOwner);
-	    }
-	#endif
-
-	    damageProp = ((float)(damageRadius + object->getRadius() - distance))/((float)distance);
-	    if (damageProp > 0)	{
-		if (damageProp > 1.0)
-		    damageProp = 1.0;
-
-
-		object->handleDamage(lround((float)(bulletDamage + damagePiercing) * damageProp) - object->getArmor(), damager);
-	    }
 	}
+	Rect rect(realPos-damageRadius, (weapon->getSize()/2)+(damageRadius*2));
 
+	damage = ((bulletDamage + damagePiercing) * damageProp) - object->getArmor();
+	object->handleDamage(damage, damager);
     }
+
+}
 
 #if 0
 	TerrainClass* cell;
@@ -367,8 +353,8 @@ void TerrainClass::damageCell(ObjectPtr damager, PlayerClass* damagerOwner, UPoi
 			}
 		}
 	}
-#endif
 }
+#endif
 
 
 bool TerrainClass::isFogged(int player)

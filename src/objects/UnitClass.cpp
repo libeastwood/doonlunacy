@@ -65,59 +65,59 @@ void UnitClass::deploy(SPoint newPosition)
     
     if (map->cellExists(newPosition))
     {
-        setPosition(newPosition);
+	setPosition(newPosition);
 
-        if (m_guardPoint == SPoint(INVALID_POS, INVALID_POS))
-            m_guardPoint = getPosition();
+	if (m_guardPoint == SPoint(INVALID_POS, INVALID_POS))
+	    m_guardPoint = getPosition();
 
-        setDestination(m_guardPoint*BLOCKSIZE);
+	setDestination(m_guardPoint*BLOCKSIZE);
 
-        //  clearStatus(STATUS_PICKEDUP);
+	//  clearStatus(STATUS_PICKEDUP);
 
-        setStatus(STATUS_RESPONDABLE | STATUS_ACTIVE);
+	setStatus(STATUS_RESPONDABLE | STATUS_ACTIVE);
 
-        setVisible(true);
+	setVisible(true);
 
-        //FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
-        //       Need to think of sth more effective.
-        map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
+	//FIXME: This decreases cpu consumption by about 30%-40%, but causes problems if fog of war is enabled.
+	//       Need to think of sth more effective.
+	map->viewMap(m_owner->getTeam(), getPosition(), getViewRange() );
 
     }
 
 }
 
-void UnitClass::destroy()
+bool UnitClass::destroy()
 {
-    if (!getStatus(STATUS_DESTROYED))
+    if (ObjectClass::destroy())
     {
-        LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
-        m_target.reset();
-        //gman->GetObjectTree()->RemoveObject(getObjectID());
+	LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
+	m_target.reset();
+	//gman->GetObjectTree()->RemoveObject(getObjectID());
 
-        m_owner->decrementUnits(getObjectName());
+	m_owner->decrementUnits(getObjectName());
 
-        clearStatus(STATUS_RESPONDABLE);
-/*
-        imageW = graphic->w / numDeathFrames;
-        imageH = graphic->h;
-        xOffset = (imageW - BLOCKSIZE) / 2;    //this is where it actually draws the graphic
-        yOffset = (imageH - BLOCKSIZE) / 2;    //cause it draws at top left, not middle
-*/
-        //m_frameTimer = m_frameTime;
-        //m_deathFrame = 0;
+	clearStatus(STATUS_RESPONDABLE);
+	/*
+	   imageW = graphic->w / numDeathFrames;
+	   imageH = graphic->h;
+	   xOffset = (imageW - BLOCKSIZE) / 2;    //this is where it actually draws the graphic
+	   yOffset = (imageH - BLOCKSIZE) / 2;    //cause it draws at top left, not middle
+	   */
+	//m_frameTimer = m_frameTime;
+	//m_deathFrame = 0;
 
-        //if (isVisible(getOwner()->getTeam()))
-        //    PlayDestroySound();
+	//if (isVisible(getOwner()->getTeam()))
+	//    PlayDestroySound();
 
-        //gman->GetUnits()->remove(this);
+	//gman->GetUnits()->remove(this);
 
-        //delete this;
+	//delete this;
 
-        //if (map->cellExists(&location))
-        // map->getCell(&location)->assignDeadObject(this);
+	//if (map->cellExists(&location))
+	// map->getCell(&location)->assignDeadObject(this);
+	return true;
     }
-    ObjectClass::destroy();
-
+    return false;
 }
 
 
@@ -127,18 +127,18 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
     ObjectClass::draw(dest, off, view);
 
     // Show path on the screen
-    #if 1
+#if 1
 
     if (getStatus(STATUS_SELECTED) && !m_pathList.empty())
     {
-        for(Path::const_iterator iter = m_pathList.begin(); iter != m_pathList.end(); iter++)
-        {
-            UPoint pos(off + (*iter) * BLOCKSIZE - view * BLOCKSIZE + BLOCKSIZE / 2);
+	for(Path::const_iterator iter = m_pathList.begin(); iter != m_pathList.end(); iter++)
+	{
+	    UPoint pos(off + (*iter) * BLOCKSIZE - view * BLOCKSIZE + BLOCKSIZE / 2);
 	    Rect rect(pos.x, pos.y, 2, 2);
-            dest->drawRect(rect, houseColour[m_owner->getColour()]);
-        }
+	    dest->drawRect(rect, houseColour[m_owner->getColour()]);
+	}
     }
-    #endif
+#endif
 
 }
 
@@ -149,25 +149,25 @@ void UnitClass::move()
     // if(!m_moving && getRandomInt(0,40) == 0)
     //TODO:Not implemented yet.
     if (getStatus(STATUS_MOVING)) {
-        m_oldPosition = getPosition();
+	m_oldPosition = getPosition();
 
-        if (!getStatus(STATUS_BADLYDAMAGED) || hasAttribute(OBJECT_AIRUNIT))
-            m_realPos += m_speed * m_adjust;
-        else
-            m_realPos += (m_speed / 2) * m_adjust;
+	if (!getStatus(STATUS_BADLYDAMAGED) || hasAttribute(OBJECT_AIRUNIT))
+	    m_realPos += m_speed * m_adjust;
+	else
+	    m_realPos += (m_speed / 2) * m_adjust;
 
-        // if vehicle is half way out of old cell
+	// if vehicle is half way out of old cell
 
-        if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE / 2)
-                || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE / 2))
-        {
-            unassignFromMap(m_oldPosition); //let something else go in
+	if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE / 2)
+		|| (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE / 2))
+	{
+	    unassignFromMap(m_oldPosition); //let something else go in
 
-            // if vehicle is out of old cell
+	    // if vehicle is out of old cell
 
-            if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE)
-                    || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE))
-            {
+	    if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE)
+		    || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE))
+	    {
 		Rect::setPosition(m_nextSpot);
 
                 if (getPosition() == m_destination)
@@ -289,7 +289,7 @@ void UnitClass::playSelectSound() {
     	SoundPlayer::Instance()->playSound(m_selectSound[getRandom<Uint8>(0,m_selectSound.size()-1)]);
 }
 /*virtual*/
-bool UnitClass::setDestination(SPoint realDestination, Uint32 status)
+bool UnitClass::setDestination(ConstSPoint realDestination, Uint32 status)
 {
     if(ObjectClass::setDestination(realDestination, status)) {
     	m_pathList.clear();
@@ -312,7 +312,7 @@ void UnitClass::setPosition(SPoint pos)
 {
     ObjectClass::setPosition(pos);
     if (m_owner->getMap()->cellExists(pos))
-        m_realPos += BLOCKSIZE / 2;
+        m_realPos = getCentrePoint();
 
     clearStatus(STATUS_MOVING);
 
@@ -776,7 +776,7 @@ bool UnitClass::AStarSearch()
                 node = node->m_parent;
             }
 
-            LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", getObjectName().c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
+            //LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", getObjectName().c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
 
             return true;
         }

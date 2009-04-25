@@ -74,14 +74,14 @@ class ObjectClass : protected Rect
 
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
-    bool clearObject() { return ((m_status & STATUS_DESTROYED) && (m_frameTimer == 0)); }
+    inline bool clearObject() { return (getStatus(STATUS_DESTROYED) && m_frameTimer == 0 && m_decayTime == 0); }
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
     void drawSelectionBox(Image* dest);
 
     void drawSmoke(Image *dest);
-    virtual void destroy();
+    virtual bool destroy();
     virtual void update(float dt);
     virtual void animate();
     virtual void doDeath(Image *dest);
@@ -93,7 +93,7 @@ class ObjectClass : protected Rect
     inline Sint16 getHealth() { return m_health; }
     void setVisible(bool status, int team = -1);
 
-    virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
     bool attack();
     virtual void setPosition(SPoint pos);
     virtual void setRealPosition(SPoint realPos);
@@ -118,16 +118,18 @@ class ObjectClass : protected Rect
     inline void setObjectID(Uint32 newObjectID) { m_objectID = newObjectID; }
     inline int getArmor() { return m_armor; }
     inline int getRadius() { return m_radius; }
-    inline UPoint getRealPos() { return m_realPos; }
+    inline SPoint getRealPos() { return m_realPos; }
     inline float getSpeed() { return m_maxSpeed; }
 
     bool isOnScreen(Rect rect);
 
     inline SPoint getPosition() { return Rect::getPosition(); }
     inline SPoint getSize() { return Rect::getSize(); }
-    UPoint getClosestPoint(UPoint point);
-    UPoint getClosestCentrePoint(UPoint objectPos);
-    inline UPoint getCentrePoint() { return UPoint((getPosition()*BLOCKSIZE)+(BLOCKSIZE/2)); }
+    SPoint getClosestPoint(SPoint point);
+    SPoint getClosestCentrePoint(SPoint objectPos);
+    inline SPoint getCentrePoint() { return SPoint(getRealPos()+(getSize()/2)); }
+
+    float coverage(Rect rect);
 
     inline PlayerClass* getOwner() { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }

@@ -17,7 +17,7 @@ void GroundUnit::checkPos()
 
     if (getStatus(STATUS_JUSTSTOPPEDMOVING))
     {
-        m_realPos = getPosition() * BLOCKSIZE + BLOCKSIZE / 2;
+	setPosition(getCentrePoint());
         m_findTargetTimer = 0; //allow a scan for new targets now
 
         //if (currentGame->playerType == SERVER)

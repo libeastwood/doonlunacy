@@ -224,16 +224,23 @@ void MapClass::createSandRegions()
 #endif
 }
 
-void MapClass::damage(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, 
+void MapClass::damage(ObjectPtr damager, WeaponClass *weapon, UPoint realPos, 
 	std::string objectName, int damage, int damagePiercing, int damageRadius, bool air)
 {
-    ConstSPoint centreCell(realPos/BLOCKSIZE);
-    SPoint pos(centreCell-2);
+#if 1
+    ConstSPoint centreCell((realPos/BLOCKSIZE)+2);
 
-    for (; pos.x <= centreCell.x+2; pos.x++)
-	for (; pos.y <= centreCell.y+2; pos.y++)
+    for (Sint16 x = centreCell.x - 4; x <= centreCell.x; x++)
+	for (Sint16 y = centreCell.y - 4; y <= centreCell.y; y++)
+	{
+	    SPoint pos(x,y);
 	    if (cellExists(pos))
-		getCell(pos)->damageCell(damager, damagerOwner, realPos, objectName, damage, damagePiercing, damageRadius, air);
+		getCell(pos)->damageCell(damager, weapon, realPos, objectName, damage, damagePiercing, damageRadius, air);
+	}
+#else
+    getCell(realPos/BLOCKSIZE)->damageCell(damager, weapon, realPos, objectName, damage, damagePiercing, damageRadius, air);
+#endif
+
 }
 
 

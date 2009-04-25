@@ -12,8 +12,8 @@ class WeaponClass : public ObjectClass
 	inline void setShooter(ObjectPtr shooter) { m_shooter = shooter; }
 	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);
-	virtual void destroy();
-	virtual bool setDestination(SPoint realDestination, Uint32 status = 0);
+	virtual bool destroy();
+	virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
 	inline bool isDirectShot() { return (m_source == m_destination); }
 
 	inline Sint16 getRange() { return m_range; }

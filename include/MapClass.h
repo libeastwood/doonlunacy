@@ -49,7 +49,7 @@ class MapClass : public Rect
      */    
     UPoint getMapPos(int angle, UPoint source);
     //@}
-    void damage(ObjectPtr damager, PlayerClass* damagerOwner, UPoint realPos, 
+    void damage(ObjectPtr damager, WeaponClass *weapon, UPoint realPos, 
 	    std::string objectName, int damage, int damagePiercing, int damageRadius, bool air);
 
     void fixWall(SPoint pos);

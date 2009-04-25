@@ -16,6 +16,7 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     ObjectClass(newOwner, weaponName, attribute | OBJECT_WEAPON)
 {
     m_deathSound = NONE;
+    clearStatus();
 
     try {
 	m_damage = python::extract<int>(m_pyObject.attr("damage"));
@@ -38,11 +39,9 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     m_reloadTimer = getRandom(1, m_reloadTime/2);
 }
 
-bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
-    //FIXME: Why does offset need to be added?
-    realDestination += m_offset*2;
-    realDestination += getRandom<Sint16>(-m_inaccuracy, m_inaccuracy);
-    if(ObjectClass::setDestination(realDestination)) {
+bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
+    if(ObjectClass::setDestination(realDestination + getRandom<Sint16>(-m_inaccuracy, m_inaccuracy), status)) {
+
 	/*
 	   if (getObjectName() == "Sonic")
 	   {
@@ -69,9 +68,10 @@ bool WeaponClass::setDestination(SPoint realDestination, Uint32 status) {
 	m_destAngle = dest_angle(m_source, m_realDestination);
 	m_drawnAngle = (int)((float)m_numFrames*m_destAngle/256.0);
 	m_angle = m_destAngle;
-	LOG_INFO("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
+	LOG_DEBUG("WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
 	m_speed = PointFloat(m_maxSpeed * cos(m_destAngle * conv2char), m_maxSpeed * -sin(m_destAngle * conv2char));
+	m_distanceTraveled = 10000;
 	return true;
     }
     return false;
@@ -148,10 +148,6 @@ void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
     */
     ObjectClass::draw(dest, off, view);
 
-    UPoint pos((off + m_source - view * BLOCKSIZE) - m_offset); //off + m_realDestination);
-	    Rect rect(pos.x, pos.y, 2, 2);
-            dest->drawRect(rect, HOUSE_HARKONNEN);
-
 }
 
 void WeaponClass::update(float dt)
@@ -173,12 +169,16 @@ void WeaponClass::update(float dt)
 	    m_frameTimer = 0;   //its off the screen, kill it
 	else
 	{
-	    if (distance_from(m_source.x, m_source.y, m_realPos.x, m_realPos.x) >= distance_from(m_source, m_realDestination))
+	    float distance = m_realDestination.distance(getRealPos());
+	    if(distance < m_distanceTraveled)
+		m_distanceTraveled = distance;
+	    else 
 	    {
 		setRealPosition(m_realDestination);
 		destroy();
 	    }
-	    else if (getObjectName() == "Sonic")
+	    /*
+	    if (getObjectName() == "Sonic")
 	    {
 		if (getPosition() != oldLocation.x)
 		{
@@ -186,7 +186,8 @@ void WeaponClass::update(float dt)
 		    map->damage(m_shooter, m_owner, realPos, getObjectName(), m_damage, m_damagePiercing, m_damageRadius, false);
 		}
 	    }
-	    else if (map->cellExists(getPosition()) && map->getCell(getPosition())->hasAGroundObject() && map->getCell(getPosition())->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
+	    else */
+	    if (map->cellExists(getPosition()) && map->getCell(getPosition())->hasAGroundObject() && map->getCell(getPosition())->getGroundObject()->hasAttribute(OBJECT_STRUCTURE))
 	    {
 		if (!hasAttribute(OBJECT_AIRUNIT))
 		    destroy();
@@ -197,19 +198,20 @@ void WeaponClass::update(float dt)
     //	animate();
 }
 
-void WeaponClass::destroy()
+bool WeaponClass::destroy()
 {
-    if (!getStatus(STATUS_DESTROYED))
-    {
-	/* Here we deal damage to explosion area according to it's size */
+    if (ObjectClass::destroy()) {
+	/* Here we deal damage to explosion area relative to it's size */
     	MapClass* map = GameMan::Instance()->GetMap();
-	UPoint destPoint((UPoint(m_realPos) - ((m_explosionSize/2) * BLOCKSIZE)) - BLOCKSIZE/2);
+	UPoint destPoint((UPoint(m_realPos) - ((m_explosionSize/2) * BLOCKSIZE)));
 
 	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	    for(int y = 0; y < m_explosionSize; y++)
 		if ((m_explosionSize <= 2) || ((x != 0) && (x != (m_explosionSize-1))) || ((y != 0) && (y != (m_explosionSize-1))))
-		    map->damage(m_shooter, m_owner, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, hasAttribute(OBJECT_AIRUNIT));
+		{
+		    map->damage(m_shooter, this, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, hasAttribute(OBJECT_AIRUNIT));
+		}
+	return true;
     }
-    ObjectClass::destroy();
-
+    return false;
 }

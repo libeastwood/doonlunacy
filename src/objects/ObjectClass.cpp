@@ -94,9 +94,10 @@ void ObjectClass::assignToMap(SPoint pos)
 {
     MapClass* map = m_owner->getMap();
 
+    UPoint tileSize(ceil((float)w/BLOCKSIZE), ceil((float)h/BLOCKSIZE));
     // If structure is more than 1x1, be sure to assign it to all cells required
-    for (int i = pos.x; i < x + ceil((float)w/BLOCKSIZE); i++)
-	for (int j = pos.y; j < y + ceil((float)h/BLOCKSIZE); j++) {
+    for (int i = pos.x; i < x + tileSize.x; i++)
+	for (int j = pos.y; j < y + tileSize.y; j++) {
 	    SPoint temp(i,j);
 	    if (map->cellExists(temp)) {
 		map->getCell(temp)->assignObject(m_objectID);
@@ -141,6 +142,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 
 void ObjectClass::drawSelectionBox(Image* dest)
 {
+#if 0
     if(!m_selectionBoxGlowing)
 	m_selectionBoxGlowing = m_selectionBox->getCopy();
 
@@ -153,6 +155,10 @@ void ObjectClass::drawSelectionBox(Image* dest)
 	    m_selectionBoxGlowing.reset();
 	    m_fadingIn = reset;
     }
+#else
+    m_selectionBox->blitTo(dest, m_drawnPos);
+#endif
+
     dest->drawHLine(UPoint(m_drawnPos.x + 2, m_drawnPos.y + 2), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
 } //want it to start in one from edges  finish one from right edge
 
@@ -176,7 +182,7 @@ void ObjectClass::drawSmoke(Image *dest)
 #endif
 }
 
-void ObjectClass::destroy()
+bool ObjectClass::destroy()
 {
     if (!(getStatus(STATUS_DESTROYED)))
     {
@@ -206,14 +212,15 @@ void ObjectClass::destroy()
 
 	setStatus(STATUS_DESTROYED);
 	m_frameTimer = m_frameTime;
+	return true;
     }
+    return false;
 }
 
 void ObjectClass::animate()
 {
     if (m_frameTimer > 0)
     {
-
 	if(m_frameTimer == 1)
 	{
 	    if(++m_curAnimFrame < m_numDeathFrames)
@@ -238,7 +245,7 @@ void ObjectClass::doDeath(Image *dest)
 	    return;
     }
     Rect source(w * m_curAnimFrame, 0, w, h);
-    UPoint destPoint((m_drawnPos - ((m_explosionSize/2) * BLOCKSIZE)) - BLOCKSIZE/2);
+    UPoint destPoint((m_drawnPos - ((m_explosionSize/2) * BLOCKSIZE)));
 
     for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	for(int y = 0; y < m_explosionSize; y++)
@@ -313,12 +320,24 @@ ObjectPtr ObjectClass::findTarget()
 }
 
 /* virtual */
-UPoint ObjectClass::getClosestPoint(UPoint point)
+SPoint ObjectClass::getClosestPoint(SPoint point)
 {
-    return UPoint(x, y);
+    SPoint min(getRealPos()-(getSize()/2)),
+	   max(getRealPos()+(getSize()/2)),
+	   tmp, closest;
+    float closestDistance = (1<<15)-1,
+	     distance;
+    for(Sint16 x = min.x; x < max.x; x++)
+	for(Sint16 y = min.y; y < max.y; y++)
+	    if((distance=(tmp=SPoint(x,y)).distance(point)) < closestDistance)  {
+		boost::swap(closestDistance, distance);
+		boost::swap(closest, tmp);
+	    }
+
+    return closest;
 }
 
-UPoint ObjectClass::getClosestCentrePoint(UPoint objectPos)
+SPoint ObjectClass::getClosestCentrePoint(SPoint objectPos)
 {
     return getCentrePoint();
 }
@@ -333,6 +352,22 @@ int ObjectClass::getHealthColour()
 	return COLOUR_YELLOW;
     else
 	return COLOUR_RED;
+}
+
+float ObjectClass::coverage(Rect r) {
+    float max;
+    Rect rect(getRealPos(), getSize());
+    if(getRealPos() < r.getPosition())
+	boost::swap(rect, r);
+    if(getSize() < r.getSize())
+	max = w*h;
+    else
+	max = r.w*r.h;
+    SPoint covPoint(rect.intersectRect(r).getSize());
+    if(covPoint.x < 1 || covPoint.y < 1)
+	return 0;
+
+    return (covPoint.x*covPoint.y)/max;
 }
 
 int ObjectClass::getViewRange()
@@ -385,18 +420,18 @@ bool ObjectClass::isVisible(int team)
 	return false;
 }
 
-bool ObjectClass::setDestination(SPoint realDestination, Uint32 status)
+bool ObjectClass::setDestination(ConstSPoint realDestination, Uint32 status)
 {
-    UPoint destination(realDestination/BLOCKSIZE);
+    SPoint destination(realDestination/BLOCKSIZE);
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {
-    	setStatus(status);
     	m_target.reset();
         m_destination = destination;
 	m_realDestination = realDestination;
-    	clearStatus(STATUS_MOVING | STATUS_MOVING | STATUS_DEFAULT);
+    	clearStatus(STATUS_MOVING | STATUS_MOVING | STATUS_DEFAULT | STATUS_ATTACKING);
 	setStatus(status);
 	return true;
     }
+
     return false;
 }
 
@@ -406,6 +441,7 @@ bool ObjectClass::attack() {
 	if(m_weapons.empty())
     	    clearStatus(STATUS_ATTACKING);
 	else {
+
 	    for(std::vector<WeaponPtr>::const_iterator weapon = m_weapons.begin(); weapon != m_weapons.end(); weapon++) {
 		if(getRealPos().distance(m_realDestination) <= (*weapon)->getRange()*BLOCKSIZE) {
 		    inRange = true;
