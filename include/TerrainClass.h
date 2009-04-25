@@ -170,7 +170,7 @@ class TerrainClass  : public UPoint
 	 *  @param damageRadius bullets affect only one cell, rockets can have bigger radius of destruction
 	 *  @param air the bullet is aimed at an air unit
 	 */
-	void damageCell(ObjectPtr damager, WeaponClass *weapon, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air);
+	void damageCell(WeaponClass *weapon, UPoint realPos);
 
     private:
 

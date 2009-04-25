@@ -24,6 +24,9 @@ class WeaponClass : public ObjectClass
 	    return reload;
 	}
 
+	void dealDamage(ObjectPtr object, SPoint realPos);
+
+
     private:
 	Sint16	m_damage,
 		m_damagePiercing, //from 0 for none to 10 max

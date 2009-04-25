@@ -170,22 +170,14 @@ void TerrainClass::clearDamage()
 }
 
 
-void TerrainClass::damageCell(ObjectPtr damager, WeaponClass *weapon, UPoint realPos, std::string weaponName, int bulletDamage, int damagePiercing, int damageRadius, bool air) 
+void TerrainClass::damageCell(WeaponClass *weapon, UPoint realPos)
 {
-    float  damageProp = 0,
-	   damage;
-    // non air damage
-
     ObjectMap::const_iterator iterator;
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
 	ObjectPtr object = iterator->second;
 
 	LOG_DEBUG("TerrainClass", "damageCell(): %s (%u) might damage %s (%u) at %d-%d (%d-%d)", weapon->getObjectName().c_str(), weapon->getObjectID(), object->getObjectName().c_str(), object->getObjectID(), realPos.x, realPos.y, (realPos/BLOCKSIZE).x, (realPos/BLOCKSIZE).y);
-	Rect rect(realPos-damageRadius, (weapon->getSize()/2)+(damageRadius*2));
-	damageProp = object->coverage(rect);
-
-	damage = ((bulletDamage + damagePiercing) * damageProp) - object->getArmor();
-	object->handleDamage(damage, damager);
+	weapon->dealDamage(object, realPos);
     }
 
 }

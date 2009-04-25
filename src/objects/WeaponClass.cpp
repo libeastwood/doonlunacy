@@ -82,6 +82,13 @@ WeaponClass::~WeaponClass()
 
 }
 
+void WeaponClass::dealDamage(ObjectPtr object, SPoint realPos) {
+	Rect rect(realPos-m_damageRadius, (getSize()/2)+(m_damageRadius*2));
+	float damageProp = object->coverage(rect);
+	Sint16 damage = ((m_damage + m_damagePiercing) * damageProp) - object->getArmor();
+	object->handleDamage(damage, m_shooter);
+}
+
 void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
 {
     /*
@@ -208,9 +215,7 @@ bool WeaponClass::destroy()
 	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	    for(int y = 0; y < m_explosionSize; y++)
 		if ((m_explosionSize <= 2) || ((x != 0) && (x != (m_explosionSize-1))) || ((y != 0) && (y != (m_explosionSize-1))))
-		{
-		    map->damage(m_shooter, this, destPoint + UPoint(0, y*BLOCKSIZE), getObjectName(), m_damage, m_damagePiercing, m_damageRadius, hasAttribute(OBJECT_AIRUNIT));
-		}
+		    map->damage(this, destPoint + UPoint(0, y*BLOCKSIZE));
 	return true;
     }
     return false;
