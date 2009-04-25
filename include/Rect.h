@@ -135,7 +135,6 @@ struct Rect : public SDL_Rect
 	    Rect rect(*this);
 	    if(getPosition() < r.getPosition())
 		boost::swap(rect, r);
-	    std::cout << rect.intersectRect(r).getSize() << std::endl;
 	    if(!rect.containsPartial(r))
 		return 0;
 	    if(rect.containsWhole(r))
