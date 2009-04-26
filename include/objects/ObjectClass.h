@@ -71,7 +71,7 @@ class ObjectClass : protected Rect
     friend std::ostream& operator<<(std::ostream& os, const ObjectClass& c){
 	return os << c.m_objectType << "(" << (*c.getOwner()).getPlayerNumber() << "," << c.getObjectName()
 	    << "," << c.getAttributes() << ")" << "ID: " << c.getObjectID() << " position: "
-	    << c.getPosition() << c.getRealPos();
+	    << c.getPosition() << c.getRealPosition();
     }
 
     friend std::ostream& operator<<(std::ostream& os, ObjectClass* c){
@@ -128,18 +128,18 @@ class ObjectClass : protected Rect
     inline void setObjectID(Uint32 newObjectID) { m_objectID = newObjectID; }
     inline int getArmor() const { return m_armor; }
     inline int getRadius() const { return m_radius; }
-    inline SPoint getRealPos() const { return m_realPos; }
+    inline SPoint getRealPosition() const { return m_realPosition; }
     inline float getSpeed() const { return m_maxSpeed; }
 
-    inline bool isOnScreen(Rect rect) const { return rect.containsPartial(Rect(m_realPos.x, m_realPos.y, w, h)); }
+    inline bool isOnScreen(Rect rect) const { return rect.containsPartial(Rect(m_realPosition.x, m_realPosition.y, w, h)); }
 
     inline SPoint getPosition() const { return Rect::getPosition(); }
     inline SPoint getSize() const { return Rect::getSize(); }
     SPoint getClosestPoint(SPoint point) const;
     SPoint getClosestCentrePoint(SPoint objectPos) const;
-    inline SPoint getCentrePoint() const { return SPoint(getRealPos()+(getSize()/2)); }
+    inline SPoint getCentrePoint() const { return SPoint(getRealPosition()+(getSize()/2)); }
 
-    float coverage(Rect rect) const { return Rect(getRealPos(), getSize()).contains(rect); }
+    float coverage(Rect rect) const { return Rect(getRealPosition(), getSize()).contains(rect); }
 
     inline PlayerClass* getOwner() const { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
@@ -166,7 +166,7 @@ class ObjectClass : protected Rect
 	    m_maxSpeed,
 	    m_turnSpeed;
 
-    PointFloat m_realPos,
+    PointFloat m_realPosition,
 	       m_speed;
 
     /*! Currently drawn frame

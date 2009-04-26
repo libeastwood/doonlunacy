@@ -61,7 +61,7 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
 	   }*/
 
 
-	setRealPosition(m_shooter->getRealPos());
+	setRealPosition(m_shooter->getRealPosition());
 	m_source = m_shooter->getCentrePoint();
 	setSize(UPoint(m_graphic->getSize().y, m_graphic->getSize().y));
 
@@ -170,13 +170,13 @@ void WeaponClass::update(float dt)
 	UPoint oldLocation(getPosition());
 	LOG_DEBUG("WeaponClass", "Old location was %d-%d", x,y);
 
-	setRealPosition(m_realPos + m_speed * m_adjust);  //keep the bullet moving by its current speeds
+	setRealPosition(m_realPosition + m_speed * m_adjust);  //keep the bullet moving by its current speeds
 
 	if ((x < -5) || (x >= map->w + 5) || (y < -5) || (y >= map->h + 5))
 	    m_frameTimer = 0;   //its off the screen, kill it
 	else
 	{
-	    float distance = m_realDestination.distance(getRealPos());
+	    float distance = m_realDestination.distance(getRealPosition());
 	    if(distance < m_distanceTraveled)
 		m_distanceTraveled = distance;
 	    else 
@@ -189,7 +189,7 @@ void WeaponClass::update(float dt)
 	    {
 		if (getPosition() != oldLocation.x)
 		{
-		    UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
+		    UPoint realPos = UPoint((short)m_realPosition.x, (short)m_realPos.y);
 		    map->damage(m_shooter, m_owner, realPos, getObjectName(), m_damage, m_damagePiercing, m_damageRadius, false);
 		}
 	    }
@@ -210,7 +210,7 @@ bool WeaponClass::destroy()
     if (ObjectClass::destroy()) {
 	/* Here we deal damage to explosion area relative to it's size */
     	MapClass* map = GameMan::Instance()->GetMap();
-	UPoint destPoint((UPoint(m_realPos) - ((m_explosionSize/2) * BLOCKSIZE)));
+	UPoint destPoint((UPoint(getRealPosition()) - ((m_explosionSize/2) * BLOCKSIZE)));
 
 	for(int x = 0; x < m_explosionSize; x++, destPoint.x += BLOCKSIZE)
 	    for(int y = 0; y < m_explosionSize; y++)

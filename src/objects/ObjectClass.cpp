@@ -30,7 +30,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     m_frameTime = 5;
     m_frameTimer = -1;
 
-    m_realPos = PointFloat(0, 0);
+    m_realPosition = PointFloat(0, 0);
     m_curAnimFrame = 0;
     m_fadingIn = false;
     m_adjust = 0.0;
@@ -60,7 +60,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_objectType = getPyObjectType(m_pyObject, 1);
 	m_offset = UPoint(PointFloat(python::extract<PointFloat>(m_pyObject.attr("offset"))) * BLOCKSIZE);
 	m_radius = python::extract<int>(m_pyObject.attr("radius"));
-	m_realPos = python::extract<PointFloat>(m_pyObject.attr("realPos"));
+	m_realPosition = python::extract<PointFloat>(m_pyObject.attr("realPos"));
 	m_maxSpeed = python::extract<float>(m_pyObject.attr("speed"));
 	m_turnSpeed = python::extract<float>(m_pyObject.attr("turnSpeed"));
 	m_viewRange = python::extract<int>(m_pyObject.attr("viewRange"));
@@ -120,7 +120,7 @@ bool ObjectClass::canAttack(ObjectPtr object) const
 
 void ObjectClass::setDrawnPos(SPoint off, SPoint view)
 {
-    m_drawnPos = (off + m_realPos - view * BLOCKSIZE) - m_offset;
+    m_drawnPos = (off + m_realPosition - view * BLOCKSIZE) - m_offset;
 }
 
 
@@ -188,7 +188,7 @@ bool ObjectClass::destroy()
     if (!(getStatus(STATUS_DESTROYED)))
     {
 	/*
-	   UPoint realPos = UPoint((short)m_realPos.x, (short)m_realPos.y);
+	   UPoint realPos = UPoint((short)m_realPosition.x, (short)m_realPos.y);
 
 	   for(int i = 0; i < m_explosionSize; i++)
 	   for(int j = 0; j < m_explosionSize; j++)
@@ -323,8 +323,8 @@ ObjectPtr ObjectClass::findTarget()
 /* virtual */
 SPoint ObjectClass::getClosestPoint(SPoint point) const
 {
-    SPoint min(getRealPos()-(getSize()/2)),
-	   max(getRealPos()+(getSize()/2)),
+    SPoint min(getRealPosition()-(getSize()/2)),
+	   max(getRealPosition()+(getSize()/2)),
 	   tmp, closest;
     float closestDistance = (1<<15)-1,
 	     distance;
@@ -423,7 +423,7 @@ bool ObjectClass::attack() {
 	else {
 
 	    for(std::vector<WeaponPtr>::const_iterator weapon = m_weapons.begin(); weapon != m_weapons.end(); weapon++) {
-		if(getRealPos().distance(m_realDestination) <= (*weapon)->getRange()*BLOCKSIZE) {
+		if(getRealPosition().distance(m_realDestination) <= (*weapon)->getRange()*BLOCKSIZE) {
 		    inRange = true;
 		    if((*weapon)->loaded()) {
 			WeaponPtr missile(new WeaponClass(*(*weapon).get()));
@@ -449,9 +449,9 @@ void ObjectClass::setPosition(SPoint pos)
     {
 	Rect::setPosition(pos);
 
-	m_realPos = pos * BLOCKSIZE;
+	m_realPosition = pos * BLOCKSIZE;
 	if(getSize() < SPoint(BLOCKSIZE, BLOCKSIZE))
-	    m_realPos = getCentrePoint();
+	    m_realPosition = getCentrePoint();
 	assignToMap(pos);
     }
 }
@@ -463,7 +463,7 @@ void ObjectClass::setRealPosition(SPoint realPos)
     {
 	Rect::setPosition(pos);
 
-	m_realPos = realPos;
+	m_realPosition = realPos;
 	assignToMap(pos);
     }
 }

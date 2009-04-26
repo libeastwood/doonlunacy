@@ -139,7 +139,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 				    && tmp->getOwner() == GameMan::Instance()->LocalPlayer())) {
 			    m_selectedList[tmp->getObjectID()] = tmp;
 			    tmp->setStatus(STATUS_SELECTED);
-			    LOG_INFO("MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), tmp->getPosition().x, tmp->getPosition().y, tmp->getRealPos().x, tmp->getRealPos().y);
+			    LOG_INFO("MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), tmp->getPosition().x, tmp->getPosition().y, tmp->getRealPosition().x, tmp->getRealPosition().y);
 			}
 		}
 	    }
@@ -201,7 +201,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->hasAttribute(OBJECT_UNIT)) {
 				    m_selectedList[tmp->getObjectID()] = tmp;
 				    tmp->setStatus(STATUS_SELECTED);
-				    LOG_INFO("MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), pos.x, pos.y, tmp->getRealPos().x, tmp->getRealPos().y);
+				    LOG_INFO("MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), pos.x, pos.y, tmp->getRealPosition().x, tmp->getRealPosition().y);
 				}
 			    }
 			}

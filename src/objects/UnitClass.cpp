@@ -152,21 +152,21 @@ void UnitClass::move()
 	m_oldPosition = getPosition();
 
 	if (!getStatus(STATUS_BADLYDAMAGED) || hasAttribute(OBJECT_AIRUNIT))
-	    m_realPos += m_speed * m_adjust;
+	    m_realPosition += m_speed * m_adjust;
 	else
-	    m_realPos += (m_speed / 2) * m_adjust;
+	    m_realPosition += (m_speed / 2) * m_adjust;
 
 	// if vehicle is half way out of old cell
 
-	if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE / 2)
-		|| (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE / 2))
+	if ((abs(x*BLOCKSIZE - (int)m_realPosition.x + BLOCKSIZE / 2) > BLOCKSIZE / 2)
+		|| (abs(y*BLOCKSIZE - (int)m_realPosition.y + BLOCKSIZE / 2) > BLOCKSIZE / 2))
 	{
 	    unassignFromMap(m_oldPosition); //let something else go in
 
 	    // if vehicle is out of old cell
 
-	    if ((abs(x*BLOCKSIZE - (int)m_realPos.x + BLOCKSIZE / 2) > BLOCKSIZE)
-		    || (abs(y*BLOCKSIZE - (int)m_realPos.y + BLOCKSIZE / 2) > BLOCKSIZE))
+	    if ((abs(x*BLOCKSIZE - (int)m_realPosition.x + BLOCKSIZE / 2) > BLOCKSIZE)
+		    || (abs(y*BLOCKSIZE - (int)m_realPosition.y + BLOCKSIZE / 2) > BLOCKSIZE))
 	    {
 		Rect::setPosition(m_nextSpot);
 
@@ -217,7 +217,7 @@ void UnitClass::navigate()
                                 setTarget();
                             }
 */
-                            setDestination(getRealPos()); //can't get any closer, give up
+                            setDestination(getRealPosition()); //can't get any closer, give up
 
                             clearStatus(STATUS_FORCED);
                             m_speedCap = NONE;
@@ -312,7 +312,7 @@ void UnitClass::setPosition(SPoint pos)
 {
     ObjectClass::setPosition(pos);
     if (m_owner->getMap()->cellExists(pos))
-        m_realPos = getCentrePoint();
+        m_realPosition = getCentrePoint();
 
     clearStatus(STATUS_MOVING);
 
