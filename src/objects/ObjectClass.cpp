@@ -57,6 +57,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_numDeathFrames = python::extract<int>(m_pyObject.attr("numDeathFrames"));
 	m_numFrames = python::extract<int>(m_pyObject.attr("numFrames"));
 	m_health = python::extract<int>(m_pyObject.attr("health"));
+	m_objectType = getPyObjectType(m_pyObject, 1);
 	m_offset = UPoint(PointFloat(python::extract<PointFloat>(m_pyObject.attr("offset"))) * BLOCKSIZE);
 	m_radius = python::extract<int>(m_pyObject.attr("radius"));
 	m_realPos = python::extract<PointFloat>(m_pyObject.attr("realPos"));
@@ -106,7 +107,7 @@ void ObjectClass::assignToMap(SPoint pos)
 	}
 }
 
-bool ObjectClass::canAttack(ObjectPtr object)
+bool ObjectClass::canAttack(ObjectPtr object) const
 {
     if ( (object != NULL) && !object->getStatus(STATUS_DESTROYED) 
 	    && ( object->hasAttribute(OBJECT_STRUCTURE) || !object->hasAttribute(OBJECT_AIRUNIT) )
@@ -320,7 +321,7 @@ ObjectPtr ObjectClass::findTarget()
 }
 
 /* virtual */
-SPoint ObjectClass::getClosestPoint(SPoint point)
+SPoint ObjectClass::getClosestPoint(SPoint point) const
 {
     SPoint min(getRealPos()-(getSize()/2)),
 	   max(getRealPos()+(getSize()/2)),
@@ -337,12 +338,12 @@ SPoint ObjectClass::getClosestPoint(SPoint point)
     return closest;
 }
 
-SPoint ObjectClass::getClosestCentrePoint(SPoint objectPos)
+SPoint ObjectClass::getClosestCentrePoint(SPoint objectPos) const
 {
     return getCentrePoint();
 }
 
-int ObjectClass::getHealthColour()
+int ObjectClass::getHealthColour() const
 {
     float healthPercent = (float)m_health / (float)m_maxHealth;
 
@@ -354,7 +355,7 @@ int ObjectClass::getHealthColour()
 	return COLOUR_RED;
 }
 
-int ObjectClass::getViewRange()
+int ObjectClass::getViewRange() const
 {
     if (m_owner->hasRadarOn() )
 	return m_viewRange+2;
@@ -391,12 +392,7 @@ void ObjectClass::handleDamage(Sint16 damage, ObjectPtr damager)
     }
 }
 
-bool ObjectClass::isOnScreen(Rect rect)
-{
-    return rect.containsPartial(Rect(m_realPos.x, m_realPos.y, w, h));
-}
-
-bool ObjectClass::isVisible(int team)
+bool ObjectClass::isVisible(int team) const
 {
     if ((team >= 1) && (team <= MAX_PLAYERS))
 	return m_visible[team-1];

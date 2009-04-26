@@ -68,13 +68,23 @@ class ObjectClass : protected Rect
     virtual ~ObjectClass();
     //@}
 
+    friend std::ostream& operator<<(std::ostream& os, const ObjectClass& c){
+	return os << c.m_objectType << "(" << (*c.getOwner()).getPlayerNumber() << "," << c.getObjectName()
+	    << "," << c.getAttributes() << ")" << "ID: " << c.getObjectID() << " position: "
+	    << c.getPosition() << c.getRealPos();
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, ObjectClass* c){
+	return os << *c;
+    }
+
 	//
 	// Common object functions
 	//
 
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);
-    inline bool clearObject() { return (getStatus(STATUS_DESTROYED) && m_frameTimer == 0 && m_decayTime == 0); }
+    inline bool clearObject() const { return (getStatus(STATUS_DESTROYED) && m_frameTimer == 0 && m_decayTime == 0); }
     
     void setDrawnPos(SPoint off, SPoint view);
     virtual void draw(Image * dest, SPoint off, SPoint view);
@@ -90,7 +100,7 @@ class ObjectClass : protected Rect
 	//@{
 
     void handleDamage(Sint16 damage, ObjectPtr damager = ObjectPtr());
-    inline Sint16 getHealth() { return m_health; }
+    inline Sint16 getHealth() const { return m_health; }
     void setVisible(bool status, int team = -1);
 
     virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
@@ -98,45 +108,45 @@ class ObjectClass : protected Rect
     virtual void setPosition(SPoint pos);
     virtual void setRealPosition(SPoint realPos);
 
-    inline bool hasAttribute(Uint32 attribute) { return m_attributes & attribute; }
-    inline Uint32 getAttributes() { return m_attributes; }
+    inline bool hasAttribute(Uint32 attribute) const { return m_attributes & attribute; }
+    inline Uint32 getAttributes() const { return m_attributes; }
 
-    inline bool getStatus(Uint32 status) { return m_status & status; }
-    inline Uint32 getStatusAll() { return m_status; }
+    inline bool getStatus(Uint32 status) const { return m_status & status; }
+    inline Uint32 getStatusAll() const { return m_status; }
     virtual inline void setStatus(Uint32 status) { m_status |= status; }
     inline void clearStatus(Uint32 status = STATUS_ALL) { m_status &= ~status; }
 
 
     //! Checks if a given team can see this object
-	inline bool isVisible(int team);
-    int getHealthColour();
+    inline bool isVisible (int team) const;
+    int getHealthColour() const;
 
-    inline std::string getObjectName() { return m_objectName; }
-    int getViewRange();
+    inline std::string getObjectName() const { return m_objectName; }
+    int getViewRange() const;
 
-    inline Uint32 getObjectID() { return m_objectID; }
+    inline Uint32 getObjectID() const { return m_objectID; }
     inline void setObjectID(Uint32 newObjectID) { m_objectID = newObjectID; }
-    inline int getArmor() { return m_armor; }
-    inline int getRadius() { return m_radius; }
-    inline SPoint getRealPos() { return m_realPos; }
-    inline float getSpeed() { return m_maxSpeed; }
+    inline int getArmor() const { return m_armor; }
+    inline int getRadius() const { return m_radius; }
+    inline SPoint getRealPos() const { return m_realPos; }
+    inline float getSpeed() const { return m_maxSpeed; }
 
-    bool isOnScreen(Rect rect);
+    inline bool isOnScreen(Rect rect) const { return rect.containsPartial(Rect(m_realPos.x, m_realPos.y, w, h)); }
 
-    inline SPoint getPosition() { return Rect::getPosition(); }
-    inline SPoint getSize() { return Rect::getSize(); }
-    SPoint getClosestPoint(SPoint point);
-    SPoint getClosestCentrePoint(SPoint objectPos);
-    inline SPoint getCentrePoint() { return SPoint(getRealPos()+(getSize()/2)); }
+    inline SPoint getPosition() const { return Rect::getPosition(); }
+    inline SPoint getSize() const { return Rect::getSize(); }
+    SPoint getClosestPoint(SPoint point) const;
+    SPoint getClosestCentrePoint(SPoint objectPos) const;
+    inline SPoint getCentrePoint() const { return SPoint(getRealPos()+(getSize()/2)); }
 
-    float coverage(Rect rect) { return Rect(getRealPos(), getSize()).contains(rect); }
+    float coverage(Rect rect) const { return Rect(getRealPos(), getSize()).contains(rect); }
 
-    inline PlayerClass* getOwner() { return m_owner; }
+    inline PlayerClass* getOwner() const { return m_owner; }
     inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
     //@}
 	//! @name  Attack related functions
 	//@{
-    bool canAttack(ObjectPtr object);
+    bool canAttack(ObjectPtr object) const;
     ObjectPtr findTarget();
     //@}
   protected:
@@ -197,6 +207,7 @@ class ObjectClass : protected Rect
 
 
     std::string m_objectName,
+		m_objectType,
 		m_deathAnim;
 
 
