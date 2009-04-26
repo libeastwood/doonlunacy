@@ -48,7 +48,7 @@ Image::~Image()
 ImagePtr Image::getPictureCrop(ConstRect dstRect)
 {
     if(((int) (dstRect.x + dstRect.w) > w) || ((int) (dstRect.y + dstRect.h) > h)) {
-	LOG_ERROR("GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
+	LOG(LV_ERROR, "GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
 		dstRect.x, dstRect.y, dstRect.w, dstRect.y);
 	exit(EXIT_FAILURE);	
     }

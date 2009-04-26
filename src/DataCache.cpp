@@ -171,10 +171,10 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 	if(::getPyObject(pyObject.attr("palette"), &variable))
 	    palette = DataCache::Instance()->getPalette(variable);
 	else
-	    LOG_ERROR("DataCache", "No palette for %s!", path.c_str());
+	    LOG(LV_ERROR, "DataCache", "No palette for %s!", path.c_str());
 
 	if(!::getPyObject(pyObject.attr("filename"), &variable)) {
-	    LOG_ERROR("DataCache", "%s: 'filename' variable missing!", path.c_str());
+	    LOG(LV_ERROR, "DataCache", "%s: 'filename' variable missing!", path.c_str());
 	    exit(EXIT_FAILURE);
 	}
 
@@ -194,7 +194,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
             ShpFile shpfile(data, len, palette);
 	    
     	    if(!::getPyObject(pyObject.attr("index"), &index)) {
-    		LOG_ERROR("DataCache", "%s: 'index' variable missing!", path.c_str());
+    		LOG(LV_ERROR, "DataCache", "%s: 'index' variable missing!", path.c_str());
     		exit(EXIT_FAILURE);
     	    }
 
@@ -205,7 +205,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
             animationLabel->setFrameRate(frameRate);
     }
     catch(python::error_already_set const &) {
-	LOG_FATAL("DataCache", "Error loading data: %s", path.c_str());
+	LOG(LV_FATAL, "DataCache", "Error loading data: %s", path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }

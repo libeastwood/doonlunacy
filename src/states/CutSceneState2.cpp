@@ -26,7 +26,7 @@ CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
 	m_scenes = getPyObjectVector<python::object>(cutscenes.attr("intro"));
     }
     catch(python::error_already_set const &) {
-	LOG_FATAL("CutSceneState", "Error loading data: %s", m_scene.c_str());
+	LOG(LV_FATAL, "CutSceneState", "Error loading data: %s", m_scene.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -175,7 +175,7 @@ void CutSceneState::loadScene(uint32_t scene)
 
     }
     catch(python::error_already_set const &) {
-	LOG_FATAL("CutSceneState", "Error loading data: %s", m_scene.c_str());
+	LOG(LV_FATAL, "CutSceneState", "Error loading data: %s", m_scene.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -202,7 +202,7 @@ int CutSceneState::Execute(float ft)
 	    m_fadeOut = m_backgroundFrame->fadeOutChildren();
 	else
 	{
-	    LOG_INFO("CutSceneState", "Scene %d playtime: %f s", m_curScene, (SDL_GetTicks()- m_sceneStart)/1000.f);
+	    LOG(LV_INFO, "CutSceneState", "Scene %d playtime: %f s", m_curScene, (SDL_GetTicks()- m_sceneStart)/1000.f);
 	    m_curScene++;
 	    if(m_loop != NULL)
 	    {

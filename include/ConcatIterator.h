@@ -50,7 +50,7 @@ public:
 	
 	T operator* () {
 		if(IterationFinished()) {
-			LOG_ERROR("ConcatIterator", "Cannot dereference because iteration is finished.");
+			LOG(LV_ERROR, "ConcatIterator", "Cannot dereference because iteration is finished.");
 			exit(EXIT_FAILURE);
 		}
 		
@@ -59,7 +59,7 @@ public:
 	
 	void operator++ () {
 		if(IterationFinished()) {
-			LOG_ERROR("ConcatIterator", "Cannot increment because iteration is finished.\n");
+			LOG(LV_ERROR, "ConcatIterator", "Cannot increment because iteration is finished.\n");
 			exit(EXIT_FAILURE);
 		}
 		

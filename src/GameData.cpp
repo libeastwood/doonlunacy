@@ -51,8 +51,8 @@ bool GameData::freeIfUnique() {
 	}
 
 	if(m_freeCounter > 50)
-	    LOG_WARNING("GameData", "%s has been freed over 50 times!", m_path.c_str());
-	LOG_DEBUG("GameData", "Freeing %s", m_path.c_str());
+	    LOG(LV_WARNING, "GameData", "%s has been freed over 50 times!", m_path.c_str());
+	LOG(LV_DEBUG, "GameData", "Freeing %s", m_path.c_str());
 	return true;
     }
     return false;
@@ -72,11 +72,11 @@ void GameData::drawImage()
 	if(getPyObject(pyObject.attr("palette"), &variable))
 	    palette = DataCache::Instance()->getPalette(variable);
 	else
-	    LOG_ERROR("GameData", "No palette for %s!", m_path.c_str());
+	    LOG(LV_ERROR, "GameData", "No palette for %s!", m_path.c_str());
 
 	if(getPyObjectType(pyObject, 1) == "GameDataConst") {
 	    if(!getPyObject(pyObject.attr("filename"), &variable)) {
-		LOG_ERROR("GameData", "%s: 'filename' variable missing!", m_path.c_str());
+		LOG(LV_ERROR, "GameData", "%s: 'filename' variable missing!", m_path.c_str());
 		exit(EXIT_FAILURE);
 	    }
 
@@ -101,14 +101,14 @@ void GameData::drawImage()
 		    Uint32 tilesX = 0, tilesY = 0;
 		    for(Uint32 j = 0; j < tiles.size(); j++) { 
 			if(TILE_GETINDEX(tiles[j]) >= (Uint32)shpfile.getNumFiles()) {
-			    LOG_ERROR("GameData","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile.getNumFiles());
+			    LOG(LV_ERROR, "GameData","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile.getNumFiles());
 			    exit(EXIT_FAILURE);
 			}				
 		    }
 		    if(!tilesX)
 			tilesX = tiles.size();
 		    else if(tilesX != tiles.size())
-			LOG_FATAL("GameData:", "Tile row size %d is of different size than %d for %s!",
+			LOG(LV_FATAL, "GameData:", "Tile row size %d is of different size than %d for %s!",
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
 		    Uint32 *tilesArray = new Uint32[tiles.size()];
@@ -117,7 +117,7 @@ void GameData::drawImage()
 		    delete [] tilesArray;
 		}
 		else {
-		    LOG_FATAL("GameData", "%s: No index or tiles specified!", m_path.c_str());
+		    LOG(LV_FATAL, "GameData", "%s: No index or tiles specified!", m_path.c_str());
 		    exit(EXIT_FAILURE);
 		}
 	    }
@@ -138,12 +138,12 @@ void GameData::drawImage()
 			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
 		    }
 		    else {
-			LOG_FATAL("GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
+			LOG(LV_FATAL, "GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
 			exit(EXIT_FAILURE);
 		    }
 		}
 		else {
-		    LOG_FATAL("GameData", "No map specified for %s!", m_path.c_str());
+		    LOG(LV_FATAL, "GameData", "No map specified for %s!", m_path.c_str());
 		    exit(EXIT_FAILURE);
 		}
 	    }
@@ -155,7 +155,7 @@ void GameData::drawImage()
 	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType")
 		gameData = DataCache::Instance()->getGameData(variable)->getImage();
 	    else {
-		LOG_ERROR("GameMan", "%s: gamedata variable missing!", m_path.c_str());
+		LOG(LV_ERROR, "GameMan", "%s: gamedata variable missing!", m_path.c_str());
 		exit(EXIT_FAILURE);
 	    }
 	    if(getPyObject(pyObject.attr("crop"), &crop))
@@ -190,13 +190,13 @@ void GameData::drawImage()
 	    }
 	}
 	else {
-	    LOG_ERROR("GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str());
+	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str());
 	    exit(EXIT_FAILURE);
 	}
 	m_persistent = pyObject.attr("persistent");
     }
     catch(python::error_already_set const &) {
-	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());
+	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	throw;
     }
@@ -214,18 +214,18 @@ void GameData::loadSound() {
 
 
 	if(!getPyObject(pyObject.attr("filename"), &filename)) {
-	    LOG_ERROR("GameData", "%s: 'filename' variable missing!", filename.c_str());
+	    LOG(LV_ERROR, "GameData", "%s: 'filename' variable missing!", filename.c_str());
 	    exit(EXIT_FAILURE);
 	    }
 
         data = ResMan::Instance()->readFile(filename, &len);
         if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
-            LOG_ERROR("GameData", "getChunkFromFile(): Cannot open %s!",filename.c_str());
+            LOG(LV_ERROR, "GameData", "getChunkFromFile(): Cannot open %s!",filename.c_str());
             exit(EXIT_FAILURE);
         }
 
         if((soundChunk = LoadVOC_RW(rwop, 0)) == NULL) {
-            LOG_ERROR("DataCache", "getChunkFromFile(): Cannot load %s!",filename.c_str());
+            LOG(LV_ERROR, "DataCache", "getChunkFromFile(): Cannot load %s!",filename.c_str());
             exit(EXIT_FAILURE);		
         }
 
@@ -234,7 +234,7 @@ void GameData::loadSound() {
     	m_sound.reset(new Sound(soundChunk));
     }
     catch(python::error_already_set const &) {
-	LOG_FATAL("GameData", "Error loading data: %s", m_path.c_str());
+	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }

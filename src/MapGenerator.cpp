@@ -158,7 +158,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
                     break;
 
                 default:
-                    LOG_ERROR("MapClass", "Unknown maptype %x\n", type);
+                    LOG(LV_ERROR, "MapClass", "Unknown maptype %x\n", type);
                     exit(EXIT_FAILURE);
             }
 
@@ -184,7 +184,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
                 if (m_map->cellExists(pos))
                     m_map->getCell(pos)->setTile(getRandom<short>(Terrain_a2, Terrain_a3));
                 else
-                    LOG_WARNING("MapClass", "Cannot set bloom at %d, %d\n", pos.x, pos.y);
+                    LOG(LV_WARNING, "MapClass", "Cannot set bloom at %d, %d\n", pos.x, pos.y);
             }
         }
     }
@@ -225,7 +225,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
                 else
                 {
-                    LOG_WARNING("MapGenerator", "Cannot set field at %d, %d", pos.x, pos.y);
+                    LOG(LV_WARNING, "MapGenerator", "Cannot set field at %d, %d", pos.x, pos.y);
                 }
             }
         }

@@ -22,12 +22,12 @@ State::~State()
 
 void State::JustMadeActive()
 {
-    LOG_INFO("State", "--> %s just made active", GetName());
+    LOG(LV_INFO, "State", "--> %s just made active", GetName());
 }
 
 void State::JustMadeInactive()
 {
-    LOG_INFO("State", "<-- %s just made inactive", GetName());
+    LOG(LV_INFO, "State", "<-- %s just made inactive", GetName());
 }
 
 void State::PopState()

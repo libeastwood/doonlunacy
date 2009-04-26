@@ -129,7 +129,7 @@ MapClass::MapClass(UPoint size)
 
 		    depthCheckMax[i][j][k] += y - end + 1;
 		}
-		//LOG_INFO("MapClass", "depthCheckMax[%d][%d][%d] is %d.", i, j, k, depthCheckMax[i][j][k]);
+		//LOG(LV_INFO, "MapClass", "depthCheckMax[%d][%d][%d] is %d.", i, j, k, depthCheckMax[i][j][k]);
 	    }
 	}
 }
@@ -390,7 +390,7 @@ TerrainClass * MapClass::getCell(SPoint pos)
     }
     else
     {
-	LOG_ERROR("MapClass", "Cell[%d][%d] does not exist", pos.x,pos.y);
+	LOG(LV_ERROR, "MapClass", "Cell[%d][%d] does not exist", pos.x,pos.y);
 	return NULL;
     }   
 }

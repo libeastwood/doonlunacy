@@ -39,14 +39,14 @@ void GameMan::AddPlayer(HOUSETYPE House, bool ai, int team)
 {
     if (m_players.size() > (unsigned)House)
     {
-        LOG_ERROR("GameMan" , "Trying to create already existing player!");
+        LOG(LV_ERROR, "GameMan" , "Trying to create already existing player!");
         exit(EXIT_FAILURE);
     }
 
     if (ai == true)
     {
         //player[House] = new AiPlayerClass(House,House,House,DEFAULT_STARTINGCREDITS,InitSettings->Difficulty,team);
-        LOG_WARNING("GameMan" , "Trying to create unimplemented ai player!");
+        LOG(LV_WARNING, "GameMan" , "Trying to create unimplemented ai player!");
     }
 
     else
@@ -132,7 +132,7 @@ ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
     else if(objectClass == "Structure")
 	    newObject.reset(new StructureClass(Owner, itemName));
     else
-	LOG_ERROR("GameMan", "createObject: item %s, %s unknown type!", itemName.c_str(), objectClass.c_str());
+	LOG(LV_ERROR, "GameMan", "createObject: item %s, %s unknown type!", itemName.c_str(), objectClass.c_str());
 
     addObject(newObject);
 
@@ -150,7 +150,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
     if (SeedNum == -1)
     {
-        LOG_ERROR("GameMan", "Cannot find Seednum in %s!", scenarioName.c_str());
+        LOG(LV_ERROR, "GameMan", "Cannot find Seednum in %s!", scenarioName.c_str());
         delete m_map;
         return false;
     }
@@ -195,7 +195,7 @@ bool GameMan::LoadScenario(string scenarioName)
             house = HOUSE_MERCENARY;
         else
         {
-            LOG_WARNING("GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
+            LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
             house = HOUSE_ATREIDES;
         }
 
@@ -203,7 +203,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
         if (pos <= 0)
         {
-            LOG_WARNING("GameMan", "LoadScenario: Invalid position string: %s", PosStr.c_str());
+            LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position string: %s", PosStr.c_str());
             pos = 0;
         }
 
@@ -218,7 +218,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
         /*        //FIXME: Fix this here and in addPlayer
           if(m_players->size() > house) {
-           LOG_ERROR("MapGenerator", "player[%d]== NULL",(int) house);
+           LOG(LV_ERROR, "MapGenerator", "player[%d]== NULL",(int) house);
            exit(EXIT_FAILURE);
           }
         */
@@ -229,7 +229,7 @@ bool GameMan::LoadScenario(string scenarioName)
 
             if (!newUnit)
             {
-                LOG_WARNING("GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
+                LOG(LV_WARNING, "GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
             }
         }
     }
@@ -269,14 +269,14 @@ bool GameMan::LoadScenario(string scenarioName)
                 house = HOUSE_MERCENARY;
             else
             {
-                LOG_WARNING("GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
+                LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
                 house = HOUSE_ATREIDES;
             }
 
             /*
                 //FIXME: Fix this here and in addPlayer
                 if(m_players->size() > house) {
-                LOG_ERROR("MapGenerator","player[%d]== NULL",(int) house);
+                LOG(LV_ERROR, "MapGenerator","player[%d]== NULL",(int) house);
                 exit(EXIT_FAILURE);
                }
             */
@@ -289,7 +289,7 @@ bool GameMan::LoadScenario(string scenarioName)
             else if (BuildingStr == "Wall")
                 m_players[house]->placeStructure(INVALID_POS, INVALID_POS, "Wall", UPoint(pos % 64, pos / 64));
             else
-                LOG_WARNING("GameMan", "LoadScenario: Invalid building string: %s", BuildingStr.c_str());
+                LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid building string: %s", BuildingStr.c_str());
         }
 
         else
@@ -316,7 +316,7 @@ bool GameMan::LoadScenario(string scenarioName)
                 house = HOUSE_MERCENARY;
             else
             {
-                LOG_WARNING("GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
+                LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid house string: %s", HouseStr.c_str());
                 house = HOUSE_ATREIDES;
             }
 
@@ -325,7 +325,7 @@ bool GameMan::LoadScenario(string scenarioName)
 	    ObjectPtr newStructure = m_players[house]->placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
 	    if (newStructure == NULL)
-		LOG_WARNING("GameMan", "LoadScenario: Invalid position: %s", PosStr.c_str());
+		LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position: %s", PosStr.c_str());
         }
     }
 
@@ -354,7 +354,7 @@ bool GameMan::SplitString(string ParseString, unsigned int NumStringPointers, ..
 
     if ((pStr = (string**) malloc(sizeof(string*) * NumStringPointers)) == NULL)
     {
-        LOG_ERROR("MapClass", "SplitString: Cannot allocate memory!\n");
+        LOG(LV_ERROR, "MapClass", "SplitString: Cannot allocate memory!\n");
         exit(EXIT_FAILURE);
     }
 

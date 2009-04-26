@@ -29,7 +29,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     }
     catch(python::error_already_set const &)
     {
-	LOG_FATAL("UnitClass", "Error loading object: %s", getObjectName().c_str());
+	LOG(LV_FATAL, "UnitClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -47,7 +47,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
 /*virtual*/
 UnitClass::~UnitClass()
 {
-    LOG_INFO("UnitClass", "%s deleted", getObjectName().c_str());
+    LOG(LV_INFO, "UnitClass", "%s deleted", getObjectName().c_str());
 }
 
 
@@ -90,7 +90,7 @@ bool UnitClass::destroy()
 {
     if (ObjectClass::destroy())
     {
-	LOG_INFO("UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
+	LOG(LV_INFO, "UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
 	m_target.reset();
 	//gman->GetObjectTree()->RemoveObject(getObjectID());
 
@@ -776,7 +776,7 @@ bool UnitClass::AStarSearch()
                 node = node->m_parent;
             }
 
-            //LOG_INFO("UnitClass", "%s at %d,%d to %d, %d: %d", getObjectName().c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
+            //LOG(LV_INFO, "UnitClass", "%s at %d,%d to %d, %d: %d", getObjectName().c_str(), x, y, m_destination.x, m_destination.y, numNodesChecked);
 
             return true;
         }

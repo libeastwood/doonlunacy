@@ -67,7 +67,7 @@ void Application::Init()
     
     if (SDL_Init(flags) < 0)
     {
-	LOG_ERROR("Application", "ERROR: Couldn't initialise SDL: %s", SDL_GetError());
+	LOG(LV_ERROR, "Application", "ERROR: Couldn't initialise SDL: %s", SDL_GetError());
 	//Die();
     }
 
@@ -145,13 +145,13 @@ void Application::InitAudio()
 
     if ( Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0 )
     {
-        LOG_ERROR("Application","Warning: Couldn't set 22050 Hz 16-bit audio\n"
+        LOG(LV_ERROR, "Application","Warning: Couldn't set 22050 Hz 16-bit audio\n"
                        "- Reason: %s",SDL_GetError());
         Die();
     }
     else
     {
-        LOG_INFO("Application", "Allocated %d channels.\n", Mix_AllocateChannels(16)); 
+        LOG(LV_INFO, "Application", "Allocated %d channels.\n", Mix_AllocateChannels(16)); 
     };
 }
 
@@ -181,7 +181,7 @@ void Application::SetPalette()
     pal->colors[205].b = 153;
     
     assert(pal != NULL);
-    LOG_INFO("Application", "Setting palette %d colors", pal->ncolors);
+    LOG(LV_INFO, "Application", "Setting palette %d colors", pal->ncolors);
     assert( m_screen->setColors(pal->colors, 0, pal->ncolors) == 1 );
     m_currentPalette = pal;
 
@@ -202,7 +202,7 @@ void Application::InitVideo()
     
     if(!surf)
     {
-        LOG_ERROR("Application", "Couldn't set video mode: %s", SDL_GetError());
+        LOG(LV_ERROR, "Application", "Couldn't set video mode: %s", SDL_GetError());
         Die();
     };
 
@@ -241,7 +241,7 @@ void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
 
 void Application::LoadData()
 {
-    LOG_INFO("Application", "Loading resources");
+    LOG(LV_INFO, "Application", "Loading resources");
     ResMan::Instance()->addRes("INTRO");
 
     DataCache::Instance()->Init();
@@ -249,7 +249,7 @@ void Application::LoadData()
     SetPalette();
     m_cursor = DataCache::Instance()->getGameData("UI_MouseCursor")->getImage();
 
-    LOG_INFO("Application", "Starting sound...");
+    LOG(LV_INFO, "Application", "Starting sound...");
     SoundPlayer::Instance();
 
 /*	Mix_Chunk* myChunk = DataCache::Instance()->getMusic(MUSIC_INTRO, 0);
@@ -339,7 +339,7 @@ void Application::Run()
         };
     };
     
-    LOG_INFO("Application", "done");
+    LOG(LV_INFO, "Application", "done");
 }
 
 void Application::HandleEvents()

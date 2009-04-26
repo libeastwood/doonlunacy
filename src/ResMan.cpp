@@ -88,7 +88,7 @@ std::string DIRResource::readText(std::string path)
 	bfs::path fullpath (m_path);
 	fullpath /= path;
 	std::string file_contents;
-	LOG_INFO("ResMan", "Opening file %s...", fullpath.string().c_str());
+	LOG(LV_INFO, "ResMan", "Opening file %s...", fullpath.string().c_str());
 	std::ifstream file_stream(fullpath.string().c_str());
 	
 	assert( file_stream.is_open() );
@@ -145,7 +145,7 @@ unsigned char* PAKResource::readFile(std::string path, size_t *size)
     size_t filesize;
     unsigned char *buf =  m_pakfile->getFile(path.c_str(), &filesize);
     
-    //RESMAN_LOG_INFO(boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);
+    //RESMAN_LOG(LV_INFO, boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);
 
     assert(buf != NULL);
     assert(filesize != 0);
@@ -188,13 +188,13 @@ bool ResMan::addRes(std::string name)
 {
     std::string fullpath = Settings::Instance()->GetDataDir();
     fullpath.append(name);
-    LOG_INFO("ResMan", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
+    LOG(LV_INFO, "ResMan", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
     bfs::path file (fullpath);
     Resource *res = NULL;
 
     if (bfs::exists(file))
     {
-        LOG_INFO("ResMan", "Using DIRResource for %s", name.c_str());
+        LOG(LV_INFO, "ResMan", "Using DIRResource for %s", name.c_str());
         res = new DIRResource(file);
     }
     else 
@@ -205,7 +205,7 @@ bool ResMan::addRes(std::string name)
 
         if (!bfs::exists(pakpath))
         {
-            LOG_ERROR("ResMan", "Neither DIR or PAK found for %s", name.c_str());
+            LOG(LV_ERROR, "ResMan", "Neither DIR or PAK found for %s", name.c_str());
             return false;
         }
         
@@ -230,13 +230,13 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     std::string fsname = std::string(name, 0, p);
     filename = std::string(name, p+1, name.length() - fsname.length() - 1);
 
-    LOG_INFO("ResMan", "Opening file from %s named %s...", fsname.c_str(), filename.c_str());
+    LOG(LV_INFO, "ResMan", "Opening file from %s named %s...", fsname.c_str(), filename.c_str());
 
     Resource* res = m_resources[fsname];
 
     if (res == NULL)
     {
-        LOG_WARNING("ResMan", "Cannot find file!");
+        LOG(LV_WARNING, "ResMan", "Cannot find file!");
         
         return NULL;
     };
@@ -299,14 +299,14 @@ void ResMan::writeText(std::string name, std::string text)
 	Resource* res = getResource(name, filename);
 	if (res == NULL) 
 	{
-		LOG_ERROR("ResMan", "Resource not found!");
+		LOG(LV_ERROR, "ResMan", "Resource not found!");
 		assert(0);
 		return;
 	};
 
 	if (!res->isWritable())
 	{
-		LOG_ERROR("ResMan", "Resource not writable!\n");
+		LOG(LV_ERROR, "ResMan", "Resource not writable!\n");
 		assert(0);
 		return;
 	};

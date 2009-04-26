@@ -176,7 +176,7 @@ void TerrainClass::damageCell(WeaponClass *weapon, UPoint realPos)
     for(iterator = m_assignedObjects.begin(); iterator != m_assignedObjects.end(); iterator++) {
 	ObjectPtr object = iterator->second;
 
-	LOG_DEBUG("TerrainClass", "damageCell(): %s (%u) might damage %s (%u) at %d-%d (%d-%d)", weapon->getObjectName().c_str(), weapon->getObjectID(), object->getObjectName().c_str(), object->getObjectID(), realPos.x, realPos.y, (realPos/BLOCKSIZE).x, (realPos/BLOCKSIZE).y);
+	LOG(LV_DEBUG, "TerrainClass", "damageCell(): %s (%u) might damage %s (%u) at %d-%d (%d-%d)", weapon->getObjectName().c_str(), weapon->getObjectID(), object->getObjectName().c_str(), object->getObjectID(), realPos.x, realPos.y, (realPos/BLOCKSIZE).x, (realPos/BLOCKSIZE).y);
 	weapon->dealDamage(object, realPos);
     }
 

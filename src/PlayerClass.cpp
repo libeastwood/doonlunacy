@@ -53,7 +53,7 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
 
 PlayerClass::~PlayerClass()
 {
-    LOG_INFO("PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum, m_house);
+    LOG(LV_INFO, "PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum, m_house);
 }
 
 void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
@@ -96,12 +96,12 @@ void PlayerClass::decrementUnits(std::string itemName)
     else if(itemName == "Harvester")
 	m_numHarvesters--;
     //decrementHarvesters();
-    //		LOG_INFO("PlayerClass", "Decrement harvesters not implemented");
+    //		LOG(LV_INFO, "PlayerClass", "Decrement harvesters not implemented");
 
     //if (!isAlive())
     //	lose();
 
-    LOG_INFO("PlayerClass", "numUnits:%d", m_numUnits);
+    LOG(LV_INFO, "PlayerClass", "numUnits:%d", m_numUnits);
 
     //currentGame->AddToNewsTicker(temp);
 }
@@ -127,7 +127,7 @@ ObjectPtr PlayerClass::placeStructure(int builderID, UPoint builderPos, std::str
     if((itemName != "Slab1") && (itemName != "Slab4")) {
 	structure = GameMan::Instance()->createObject(itemName,this);
 	if(!structure) {
-	    LOG_ERROR("PlayerClass", "Cannot create Object %s", itemName.c_str());
+	    LOG(LV_ERROR, "PlayerClass", "Cannot create Object %s", itemName.c_str());
 	    exit(EXIT_FAILURE);
 	}
 

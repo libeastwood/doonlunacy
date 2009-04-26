@@ -63,8 +63,8 @@ void Label::redraw()
         }
 
 
-        LOG_INFO("Label", "Text has %d lines.", numLines);
-        LOG_INFO("Label", "Width is %d", width);
+        LOG(LV_INFO, "Label", "Text has %d lines.", numLines);
+        LOG(LV_INFO, "Label", "Width is %d", width);
 
         // If surface width was not %4 == 0 then you'd get a text in italics 
         drawBackground(width, texth, numLines);
@@ -133,7 +133,7 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 
     if(m_background->getSize().x < textw + 4-(textw%4)
 		    ||  m_background->getSize().y < texth * numLines)
-        LOG_WARNING("GraphicsLabel:", "Background image is too small to fit all text!");
+        LOG(LV_WARNING, "GraphicsLabel:", "Background image is too small to fit all text!");
 
 	if(!m_surface)
 		m_surface = m_background->getCopy();
@@ -170,7 +170,7 @@ void AnimationLabel::addFrame(ImagePtr animFrame, bool setColorKey) {
 	if(m_origSize == UPoint(0,0))
 		m_origSize = animFrame->getSize(), setSize(m_origSize.getScaled());
 	else if(animFrame->getSize() != m_origSize)
-        LOG_ERROR("AnimationLabel:", "Frame size %dx%d doesn't match %dx%d!",
+        LOG(LV_ERROR, "AnimationLabel:", "Frame size %dx%d doesn't match %dx%d!",
 				animFrame->getSize().x, animFrame->getSize().y, m_origSize.x, m_origSize.y);
 	assert(animFrame->getSize() == m_origSize);
 

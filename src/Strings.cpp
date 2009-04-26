@@ -21,7 +21,7 @@ StringInputCache::StringInputCache(const char *input) : data(NULL), length(0), i
     length = strlen(input) + 1;
     data = (char *) malloc(length);
     strncpy(data, input, length); // copy with NULL character from source
-//    LOG_INFO("String", "StringInputCache: initialized !!! '%s' !!!", data);        
+//    LOG(LV_INFO, "String", "StringInputCache: initialized !!! '%s' !!!", data);        
 }
 StringInputCache::StringInputCache(ConstString input) : data(NULL), length(0), index(0)
 {
@@ -29,7 +29,7 @@ StringInputCache::StringInputCache(ConstString input) : data(NULL), length(0), i
     length = strlen(chars) + 1;
     data = (char *) malloc(length);
     strncpy(data, chars, length); // copy with NULL character from source
-//    LOG_INFO("String", "StringInputCache: initialized '%s'", data);        
+//    LOG(LV_INFO, "String", "StringInputCache: initialized '%s'", data);        
 }
 StringInputCache::~StringInputCache()
 {
@@ -42,7 +42,7 @@ String StringInputCache::getWord(ConstString delimiters)
     wordLength = strcspn(data + index, delimiters.c_str()); // stops on NULL
     
     index += wordLength;
-//    LOG_INFO("String", "getWord: '%c' | '%c' '%c'", *(data+index-1), *(data+index), *(data+index+1));    
+//    LOG(LV_INFO, "String", "getWord: '%c' | '%c' '%c'", *(data+index-1), *(data+index), *(data+index+1));    
     return String(data + index - wordLength, wordLength);;
 }
 
@@ -51,19 +51,19 @@ String StringInputCache::peekWord(ConstString delimiters)
     int wordLength; // relative to current position
     wordLength = strcspn(data + index, delimiters.c_str()); // stops on NULL
     
-//    LOG_INFO("String", "peekWord: '%c' | '%c' '%c'", *(data+index-1-wordLength), *(data+index-wordLength), *(data+index+1-wordLength));    
+//    LOG(LV_INFO, "String", "peekWord: '%c' | '%c' '%c'", *(data+index-1-wordLength), *(data+index-wordLength), *(data+index+1-wordLength));    
     return String(data + index, wordLength);;
 }
 
 char StringInputCache::getChar()
 {
-//     LOG_INFO("String", "getChar: '%c'", *(data+index));    
+//     LOG(LV_INFO, "String", "getChar: '%c'", *(data+index));    
      return *(data + (index++)); // TODO: remove this todo once sure that it really works ;-)
 }
 
 char StringInputCache::peekChar()
 {
-//     LOG_INFO("String", "peekChar: '%c'", *(data+index));    
+//     LOG(LV_INFO, "String", "peekChar: '%c'", *(data+index));    
     return *(data + index);
 }
 
@@ -71,7 +71,7 @@ void StringInputCache::skipChars(ConstString chars)
 {
     while ((*(data + index) != 0) && (chars.find((char)*(data+index), 0) != String::npos))
     {
-//        LOG_INFO("String", "StringInputCache: skipping(normal = '%s') '%c'", chars.c_str(), *(data+index));    
+//        LOG(LV_INFO, "String", "StringInputCache: skipping(normal = '%s') '%c'", chars.c_str(), *(data+index));    
         index++;
     }
 }
@@ -80,7 +80,7 @@ void StringInputCache::skipCharsUntil(ConstString chars)
 {
     while ((*(data + index) != 0) && (chars.find((char)*(data+index), 0) == String::npos))
     {
-//        LOG_INFO("String", "StringInputCache: skipping(until = '%s') '%c'", chars.c_str(), *(data+index));    
+//        LOG(LV_INFO, "String", "StringInputCache: skipping(until = '%s') '%c'", chars.c_str(), *(data+index));    
         index++;
     }
 }

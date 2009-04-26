@@ -68,7 +68,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size))
 	    setSize(size*BLOCKSIZE);
     } catch(python::error_already_set const &) {
-	LOG_FATAL("ObjectClass", "Error loading object: %s", getObjectName().c_str());
+	LOG(LV_FATAL, "ObjectClass", "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -87,7 +87,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 ObjectClass::~ObjectClass()
 {
-    LOG_INFO("ObjectClass", "%s destroyed", getObjectName().c_str());
+    LOG(LV_INFO, "ObjectClass", "%s destroyed", getObjectName().c_str());
 }
 
 /* virtual */

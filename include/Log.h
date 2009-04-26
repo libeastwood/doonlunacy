@@ -121,24 +121,18 @@ class Log : public Singleton<Log>
 
         //! Log message
         /*!
-            @param logSystem string identificatin what logged the message
             @param verbosity verbosity of message
+            @param logSystem string identificatin what logged the message
             @param message message itself 
         */
-        void log(ConstString logSystem, LogVerbosity verbosity, ConstString message);
+        void log(LogVerbosity verbosity, ConstString logSystem, ConstString message);
         //! Log message
         /*!
-            @param logSystem string identificatin what logged the message
             @param verbosity verbosity of message
+            @param logSystem string identificatin what logged the message
             @param format printf-type message string             
         */
-        void log(ConstString logSystem, LogVerbosity verbosity, const char *format, ...);
-        void logFatal(ConstString logSystem, const char *format, ...);
-        void logError(ConstString logSystem, const char *format, ...);
-        void logWarning(ConstString logSystem, const char *format, ...);
-        void logInfo(ConstString logSystem, const char *format, ...);
-        void logDebug(ConstString logSystem, const char *format, ...);
-
+        void log(LogVerbosity verbosity, ConstString logSystem, const char *format, ...);
         //@}
 
 
@@ -212,15 +206,6 @@ class Log : public Singleton<Log>
 
 //! Log message of given verbosity emitted by given system
 #define LOG           Log::Instance()->log
-//! Log fatal message emitted by given system
-#define LOG_FATAL     Log::Instance()->logFatal
-//! Log error message emitted by given system
-#define LOG_ERROR     Log::Instance()->logError
-//! Log warning message emitted by given system
-#define LOG_WARNING   Log::Instance()->logWarning
-//! Log info message emitted by given system
-#define LOG_INFO      Log::Instance()->logInfo
-#define LOG_DEBUG     Log::Instance()->logDebug
 
 //! Increase indentation for following messages
 #define LOG_INDENT      Log::Instance()->indent
@@ -236,14 +221,6 @@ class Log : public Singleton<Log>
 // TODO: not sure what to do with these, they raise some warnings... (otpetrik)
 
 #define LOG           ((void)(0))
-#define LOG_FATAL     ((void)(0))
-#define LOG_ERROR     ((void)(0))
-#define LOG_WARNING   ((void)(0))
-#define LOG_INFO      ((void)(0))
-#define LOG_DEBUG     ((void)(0))
-
-#define LOG_INDENT      ((void)(0))
-#define LOG_UNINDENT    ((void)(0))
 
 #endif // LOG_DISABLED
 

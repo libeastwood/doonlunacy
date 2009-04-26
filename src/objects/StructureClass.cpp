@@ -13,7 +13,7 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName,
     }
     catch(python::error_already_set const &)
     {
-        LOG_FATAL("StructureClass", "Error loading object: %s", getObjectName().c_str());
+        LOG(LV_FATAL, "StructureClass", "Error loading object: %s", getObjectName().c_str());
         PyErr_Print();
         exit(EXIT_FAILURE);
     }
