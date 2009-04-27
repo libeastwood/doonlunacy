@@ -7,7 +7,6 @@ class AirUnit : public UnitClass
 {
 public:
 	AirUnit(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
-	virtual ~AirUnit();
 
 	void checkPos();
 

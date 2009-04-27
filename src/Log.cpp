@@ -94,6 +94,44 @@ bool Log::checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity)
     return true;
 }
 
+
+void vsPrintf(char *str, const char *format, va_list args) {
+
+    String output;
+    for (; *format != '\0'; format++)
+    {
+	char curChar = *format;
+	if(curChar == '%')
+	{
+	    char fmt[3] = {curChar, *(++format), '\0'};
+	    if(fmt[1] == 'S')
+	    {
+		output += *va_arg(args, String*);
+	    } else {
+    		char buf[LOG_MAX_STRING_LENGTH];
+    		void *tmp = va_arg(args, void*);
+	    	// Windows is inherently insecure (no vsnprintf & snprintf)
+		// TODO: if you are using mingw, tell us whether you have snprintf & vsnprint available, thanks !
+#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
+		sprintf(buf, fmt, tmp);
+#else
+    		snprintf(buf, LOG_MAX_STRING_LENGTH, fmt, tmp);
+#endif
+    		output += buf;
+	    }
+	    continue;
+	}
+	output += curChar;
+    }
+    va_end(args);
+#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
+    sprintf(str, "%s", output.c_str());
+#else
+    snprintf(str, LOG_MAX_STRING_LENGTH, "%s", output.c_str());
+#endif
+
+}
+
 void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, va_list args)
 {
 
@@ -113,6 +151,7 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
             verb = "[WARNING]";
             break;
         case LV_INFO:
+	case LV_DEBUG:
         default:
             verb = "";
             break;
@@ -121,46 +160,11 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
     for (int i = 0; i < indentLevel; i++)
         message[i] = ' ';
 
+    vsPrintf(&message[indentLevel], format, args);
+
     // Windows are inherently insecure (no vsnprintf & snprintf)
     // TODO: if you are using mingw, tell us whether you have snprintf & vsnprint available, thanks !
     #if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
-
-    va_list args;
-    va_start(args, format);
-    for (; *format != '\0'; format++)
-    {
-	char curChar = *format;
-	if(curChar == '%')
-	{
-	    char fmt[3] = {curChar, *(++format), '\0'};
-	    void *tmp = va_arg(args, void*);
-	    if(fmt[1] == 'O')
-	    {
-		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << *((std::string*)tmp);
-		newFormat += ss.str().c_str();
-	    } else {
-    		char test[1024];
-    		sprintf(test, fmt, tmp);
-    		newFormat += test;
-	    }
-	    continue;
-	    /*
-	    if(*(format+1) == 'O')
-	    {
-		std::stringstream ss (std::stringstream::in | std::stringstream::out);
-		ss << balla;
-
-		newFormat += ss.str().c_str();
-		format++;
-		continue;
-	    }*/
-	}
-	newFormat += curChar;
-    }
-    va_end(args);
-
-    vsprintf(&message[indentLevel], format, args);
 
     // do not print ':' unless there is a logSystem string
     if (logSystem.size() != 0)
@@ -169,8 +173,6 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
         sprintf(formated, "%s%s\n", verb, message);    
 
     #else
-    
-    vsnprintf(&message[indentLevel], LOG_MAX_STRING_LENGTH - indentLevel, format, args);
 
     // do not print ':' unless there is a logSystem string
     if (logSystem.size() != 0)

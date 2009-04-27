@@ -24,11 +24,6 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName,
 
 }
 
-StructureClass::~StructureClass()
-{
-
-}
-
 /*
 void StructureClass::assignToMap(SPoint pos)
 {

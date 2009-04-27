@@ -8,7 +8,6 @@ class WeaponClass : public ObjectClass
 {
     public:
 	WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t attribute = 0);
-	~WeaponClass();
 	inline void setShooter(ObjectPtr shooter) { m_shooter = shooter; }
 	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);

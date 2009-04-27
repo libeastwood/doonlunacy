@@ -77,11 +77,6 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
     return false;
 }
 
-WeaponClass::~WeaponClass()
-{
-
-}
-
 void WeaponClass::dealDamage(ObjectPtr object, SPoint realPos) {
 	Rect rect(realPos-m_damageRadius, (getSize()/2)+(m_damageRadius*2));
 	float damageProp = object->coverage(rect);

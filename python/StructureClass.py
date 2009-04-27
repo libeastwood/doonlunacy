@@ -1,11 +1,12 @@
 import ObjectClass
 from WeaponClass import Weapon
+from gamedata import *
 
 class Structure(ObjectClass.Object):
     def __init__(self):
         ObjectClass.Object.__init__(self)
         self.capacity = 0
-        self.deathAnim = None
+        self.deathAnim = ObjPic_Hit_ExplosionLarge1()
         self.firstAnimFrame = 2
         self.lastAnimFrame = 3
         self.health = self.maxHealth = 1000

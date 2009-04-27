@@ -18,7 +18,6 @@ class UnitClass : public ObjectClass
     //! @name Constructor and destructor
     //@{
     UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
-    virtual ~UnitClass();
     //@}
 
     bool canPass(UPoint pos);

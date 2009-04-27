@@ -16,7 +16,6 @@ class StructureClass : public ObjectClass
     //! @name Constructors & Destructor
     //@{
     StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attributes = 0);
-    virtual ~StructureClass();
     //@} 
     
     virtual void animate();

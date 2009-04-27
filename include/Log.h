@@ -224,10 +224,4 @@ class Log : public Singleton<Log>
 
 #endif // LOG_DISABLED
 
-template<typename T>
-const char * obj2c_str(const T obj) {
-    std::stringstream ss(std::stringstream::in | std::stringstream::out);
-    ss << obj;
-    return ss.str().c_str();
-}
 #endif // DUNE_LOG_H

@@ -6,8 +6,3 @@ InfantryClass::InfantryClass(PlayerClass* newOwner, std::string unitName, uint32
 {
 }
 
-InfantryClass::~InfantryClass()
-{
-
-}
-

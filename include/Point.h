@@ -151,6 +151,20 @@ struct Point
 	    return os << '(' << c.x << 'x' << c.y << ')';
 	}
 
+	virtual operator std::string() const {
+    	    std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	    ss << *this;
+	    return ss.str();
+	}
+
+	/*
+	virtual operator const char *() const {
+	    std::string ret = *this;
+	    //FIXME: memory leakage..
+    	    return strdup(ret.c_str());
+	}*/
+
+
 	//! Type-casting operator
 	/*!
 	  If it doesn't compile, then the types are incompatible.

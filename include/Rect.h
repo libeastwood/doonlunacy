@@ -80,6 +80,19 @@ struct Rect : public SDL_Rect
             return os << "Rect(" << c.x << ',' << c.y << ',' << c.w << ',' << c.h << ')';
         }
 
+	virtual operator std::string () const {
+	    std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	    ss << *this;
+	    return ss.str();
+	}
+
+	/*
+	virtual operator const char *() const {
+	    std::string ret = *this;
+	    //FIXME: memory leakage..
+	    return strdup(ret.c_str());
+	}*/
+
         //@}
 
         //! @name Placement & Size

@@ -68,9 +68,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	if(getPyObject<PointFloat>(m_pyObject.attr("size"), &size))
 	    setSize(size*BLOCKSIZE);
     } catch(python::error_already_set const &) {
-	LOG(LV_FATAL, "ObjectClass", "Error loading object: %s", getObjectName().c_str());
+	LOG(LV_FATAL, m_objectType, "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
-	exit(EXIT_FAILURE);
+	throw;
     }
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
@@ -87,7 +87,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 ObjectClass::~ObjectClass()
 {
-    LOG(LV_INFO, "ObjectClass", "%s destroyed", getObjectName().c_str());
+    //FIXME: should use ConstString, but crashes..
+    std::string dest = *this;
+    LOG(LV_INFO, m_objectType, "Destroyed: %S", &dest);
 }
 
 /* virtual */

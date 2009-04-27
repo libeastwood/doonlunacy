@@ -8,7 +8,6 @@ class BuilderClass : public StructureClass
 {
     public:
         BuilderClass(PlayerClass* newOwner, std::string, uint32_t attribute = 0);
-        ~BuilderClass();
 
 };
 

@@ -5,10 +5,6 @@ AirUnit::AirUnit(PlayerClass *newOwner, std::string unitName, uint32_t attribute
 {
 }
 
-AirUnit::~AirUnit()
-{
-}
-
 void AirUnit::checkPos()
 {
 	/*

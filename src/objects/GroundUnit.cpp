@@ -6,11 +6,6 @@ GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName, uint32_t att
 {
 }
 
-GroundUnit::~GroundUnit()
-{
-
-}
-
 void GroundUnit::checkPos()
 {
     MapClass* map = m_owner->getMap();

@@ -120,7 +120,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
             if (m_map->cellExists(pos))
             {
                 tmp = m_map->getCell(pos)->getObject();
-                LOG(LV_INFO, "MapWidget", "%d-%d (%d-%d)", pos.x, pos.y, realPos.x, realPos.y);
+                LOG(LV_INFO, "MapWidget", "%S [%S]", &((ConstString)pos), &((ConstString)realPos));
 
 
                 if (!m_selectedList.empty())
@@ -139,7 +139,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 				    && tmp->getOwner() == GameMan::Instance()->LocalPlayer())) {
 			    m_selectedList[tmp->getObjectID()] = tmp;
 			    tmp->setStatus(STATUS_SELECTED);
-			    LOG(LV_INFO, "MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), tmp->getPosition().x, tmp->getPosition().y, tmp->getRealPosition().x, tmp->getRealPosition().y);
+			    LOG(LV_INFO, "MapWidget", "Selected %S", &((ConstString)*tmp));
 			}
 		}
 	    }
@@ -196,12 +196,12 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 		    for(pos.y = start.y; pos.y <= end.y; pos.y++) {
 			if (m_map->cellExists(pos)) {
 			    ObjectPtr tmp = m_map->getCell(pos)->getObject();
-			    LOG(LV_DEBUG, "MapWidget", "multi: %d-%d", pos.x, pos.y);
+			    LOG(LV_DEBUG, "MapWidget", "multi: %S", &((ConstString)*tmp));
 			    if(tmp) {
 				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->hasAttribute(OBJECT_UNIT)) {
 				    m_selectedList[tmp->getObjectID()] = tmp;
 				    tmp->setStatus(STATUS_SELECTED);
-				    LOG(LV_INFO, "MapWidget", "Selected %s with ID: %d at %d-%d (%d-%d)", tmp->getObjectName().c_str(), tmp->getObjectID(), pos.x, pos.y, tmp->getRealPosition().x, tmp->getRealPosition().y);
+				    LOG(LV_INFO, "MapWidget", "Selected %S", &((ConstString)*tmp));
 				}
 			    }
 			}

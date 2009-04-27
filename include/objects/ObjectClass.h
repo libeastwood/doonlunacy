@@ -65,7 +65,7 @@ class ObjectClass : protected Rect
     //!
     //@{
     ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute = 0);
-    virtual ~ObjectClass();
+    ~ObjectClass();
     //@}
 
     friend std::ostream& operator<<(std::ostream& os, const ObjectClass& c){
@@ -74,13 +74,16 @@ class ObjectClass : protected Rect
 	    << c.getPosition() << c.getRealPosition();
     }
 
-    friend std::ostream& operator<<(std::ostream& os, ObjectClass* c){
-	return os << *c;
+    virtual operator std::string() const {
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+	ss << *this;
+	return ss.str();
     }
 
-	//
-	// Common object functions
-	//
+
+    //
+    // Common object functions
+    //
 
     virtual void assignToMap(SPoint pos);
     virtual void unassignFromMap(SPoint pos);

@@ -44,13 +44,6 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     setStatus(STATUS_ACTIVE | STATUS_RESPONDABLE);
 }
 
-/*virtual*/
-UnitClass::~UnitClass()
-{
-    LOG(LV_INFO, "UnitClass", "%s deleted", getObjectName().c_str());
-}
-
-
 bool UnitClass::canPass(UPoint pos)
 {
     MapClass * map = m_owner->getMap();

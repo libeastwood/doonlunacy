@@ -8,9 +8,7 @@
 class GroundUnit : public UnitClass
 {
   public:
-  
     GroundUnit(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
-    virtual ~GroundUnit();
     
     void checkPos();
     

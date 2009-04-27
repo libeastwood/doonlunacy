@@ -10,13 +10,30 @@
 #include <string>
 #include <sstream>
 
-//! Shortcut to std::string
-typedef std::string String;
+class String : public std::string
+{
+    public:
+	template<typename T>
+	    String(T s) : std::string(conv(s)) {}
+	String(const std::string& str, size_t pos, size_t n = npos ) : std::string(str, pos, n) {}
+	String(const char *s, size_t n ) : std::string(s, n) {}
+	String(const char *s) : std::string(s) {}
+	String(size_t n, char c) : std::string(n, c) {}
+	String() {}
+
+    private:
+	template<typename T>
+	std::string conv(T obj) {
+	    std::string ret = obj;
+	    return obj;
+	}
+};
+
 //! Shortcut to const std::string &
 /*
     @warning It is reference, thus you cannot create array,map,... of type ConstString !
 */
-typedef const std::string &ConstString;
+typedef const String &ConstString;
 
 //------------------------------------------------------------------------------
 // Misc functions
