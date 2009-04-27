@@ -87,9 +87,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
 ObjectClass::~ObjectClass()
 {
-    //FIXME: should use ConstString, but crashes..
-    std::string dest = *this;
-    LOG(LV_INFO, m_objectType, "Destroyed: %S", &dest);
+    LOG(LV_INFO, m_objectType, "Destroyed: %S", &((ConstString)*this));
 }
 
 /* virtual */
