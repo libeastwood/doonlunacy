@@ -196,7 +196,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
 		    for(pos.y = start.y; pos.y <= end.y; pos.y++) {
 			if (m_map->cellExists(pos)) {
 			    ObjectPtr tmp = m_map->getCell(pos)->getObject();
-			    LOG(LV_DEBUG, "MapWidget", "multi: %S", &((ConstString)*tmp));
+			    LOG(LV_DEBUG, "MapWidget", "multi: %S", &((ConstString)pos));
 			    if(tmp) {
 				if(tmp->getOwner() == GameMan::Instance()->LocalPlayer() && tmp->hasAttribute(OBJECT_UNIT)) {
 				    m_selectedList[tmp->getObjectID()] = tmp;
