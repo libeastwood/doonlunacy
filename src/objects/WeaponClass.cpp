@@ -30,7 +30,7 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     }
     catch(python::error_already_set const &)
     {
-	LOG(LV_FATAL, "WeapontClass", "Error loading object: %s", getObjectName().c_str());
+	LOG(LV_FATAL, m_objectType, "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -68,7 +68,7 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
 	m_destAngle = m_source.angle(m_realDestination);
 	m_drawnAngle = (int)((float)m_numFrames*m_destAngle/360.0);
 	m_angle = m_destAngle;
-	LOG(LV_DEBUG, "WeaponClass", "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
+	LOG(LV_DEBUG, m_objectType, "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
 	m_speed = PointFloat(cos(m_destAngle * (pi / 180)), -sin(m_destAngle * (pi / 180))) * m_maxSpeed;
 	m_distanceTraveled = 10000;
@@ -163,7 +163,7 @@ void WeaponClass::update(float dt)
     if (!getStatus(STATUS_DESTROYED))
     {
 	UPoint oldLocation(getPosition());
-	LOG(LV_DEBUG, "WeaponClass", "Old location was %d-%d", x,y);
+	LOG(LV_DEBUG, m_objectType, "Old location was %S", &((ConstString)getPosition()));
 
 	setRealPosition(m_realPosition + m_speed * m_adjust);  //keep the bullet moving by its current speeds
 

@@ -29,7 +29,7 @@ UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attri
     }
     catch(python::error_already_set const &)
     {
-	LOG(LV_FATAL, "UnitClass", "Error loading object: %s", getObjectName().c_str());
+	LOG(LV_FATAL, m_objectType, "Error loading object: %s", getObjectName().c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
@@ -83,7 +83,7 @@ bool UnitClass::destroy()
 {
     if (ObjectClass::destroy())
     {
-	LOG(LV_INFO, "UnitClass","Destroying unit %d (objectName=%s)... ",m_objectID, getObjectName().c_str());
+	LOG(LV_INFO, m_objectType, "Destroying %S... ", &((ConstString)*this));
 	m_target.reset();
 	//gman->GetObjectTree()->RemoveObject(getObjectID());
 
