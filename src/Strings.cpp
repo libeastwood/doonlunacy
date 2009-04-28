@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "Strings.h"
 
 #include "Log.h"
@@ -202,4 +204,33 @@ void StringOutputCache::add(ConstString str)
         index = nlIndex+1; 
     }
     data += str.substr(index);    
+}
+
+int sScanf(ConstString str, const char *format, ...) {
+    int ret = 0;
+    const char *cstr = str.c_str();
+    va_list args;
+    va_start(args, format);
+    for (; *format != '\0'; format++)
+	if(*format == '%') {
+	    char delim = *(format+2);
+	    char fmt[6] = {*format, *(++format), delim, '\0', '\0', '\0'};
+	    void *tmp = va_arg(args, void*);
+
+	    if (fmt[1] == 'S') {
+		String *ptr = (String*)tmp;
+		while(*cstr != delim && *cstr != 0)
+		    *ptr += *(cstr++);
+		ret++;
+	    }
+	    else {
+    		if(fmt[1] == 's')
+    		    fmt[1] = '[', fmt[2] = '^', fmt[3] = delim, fmt[4] = ']';
+		ret += sscanf(cstr, fmt, tmp);
+		cstr = (const char*)index(cstr, delim);
+	    }
+	    cstr++;
+	}
+    va_end(args);
+    return ret;
 }

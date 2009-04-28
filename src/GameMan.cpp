@@ -176,8 +176,9 @@ bool GameMan::LoadScenario(string scenarioName)
     {
         string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
         string tmp = myInifile->getStringValue("UNITS", tmpkey);
-        string HouseStr, UnitStr, health, PosStr, rotation, mode;
-        SplitString(tmp, 6, &HouseStr, &UnitStr, &health, &PosStr, &rotation, &mode);
+        string HouseStr, UnitStr;
+	int health, pos;
+        sScanf(tmp, "%S,%S,%d,%d", &HouseStr, &UnitStr, &health, &pos);
 
         int house;
 
@@ -199,11 +200,9 @@ bool GameMan::LoadScenario(string scenarioName)
             house = HOUSE_ATREIDES;
         }
 
-        int pos = atoi(PosStr.c_str());
-
         if (pos <= 0)
         {
-            LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position string: %s", PosStr.c_str());
+            LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position string: %d", pos);
             pos = 0;
         }
 
@@ -251,7 +250,7 @@ bool GameMan::LoadScenario(string scenarioName)
             int pos = atoi(PosStr.c_str());
 
             string HouseStr, BuildingStr;
-            SplitString(tmp, 2, &HouseStr, &BuildingStr);
+            sScanf(tmp, "%S,%S", &HouseStr, &BuildingStr);
 
             int house;
 
@@ -295,10 +294,9 @@ bool GameMan::LoadScenario(string scenarioName)
         else
         {
             // other structure
-            string HouseStr, BuildingStr, health, PosStr;
-            SplitString(tmp, 6, &HouseStr, &BuildingStr, &health, &PosStr);
-
-            int pos = atoi(PosStr.c_str());
+            string HouseStr, BuildingStr;
+	    int health, pos;
+	    sScanf(tmp, "%S,%S,%d,%d", &HouseStr, &BuildingStr, &health, &pos);
 
             int house;
 
@@ -325,7 +323,7 @@ bool GameMan::LoadScenario(string scenarioName)
 	    ObjectPtr newStructure = m_players[house]->placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
 	    if (newStructure == NULL)
-		LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position: %s", PosStr.c_str());
+		LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position: %d", pos);
         }
     }
 
@@ -339,56 +337,6 @@ void GameMan::Select(List* objectList)
 
 }
 */
-/*
- Splits a string into several substrings. This strings are separated with ','.
-*/
-bool GameMan::SplitString(string ParseString, unsigned int NumStringPointers, ...)
-{
-    va_list arg_ptr;
-    va_start(arg_ptr, NumStringPointers);
-
-    string** pStr;
-
-    if (NumStringPointers == 0)
-        return false;
-
-    if ((pStr = (string**) malloc(sizeof(string*) * NumStringPointers)) == NULL)
-    {
-        LOG(LV_ERROR, "MapClass", "SplitString: Cannot allocate memory!\n");
-        exit(EXIT_FAILURE);
-    }
-
-    for (unsigned int i = 0; i < NumStringPointers; i++)
-    {
-        pStr[i] = va_arg(arg_ptr, string* );
-    }
-
-    va_end(arg_ptr);
-
-    int startpos = 0;
-    unsigned int index = 0;
-
-    for (unsigned int i = 0; i < ParseString.size(); i++)
-    {
-        if (ParseString[i] == ',')
-        {
-            *(pStr[index]) = ParseString.substr(startpos, i - startpos);
-            startpos = i + 1;
-            index++;
-
-            if (index >= NumStringPointers)
-            {
-                free(pStr);
-                return false;
-            }
-        }
-    }
-
-    *(pStr[index]) = ParseString.substr(startpos, ParseString.size() - startpos);
-
-    free(pStr);
-    return true;
-}
 
 void GameMan::TakeMapScreenshot(string filename)
 {

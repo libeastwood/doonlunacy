@@ -75,6 +75,8 @@ inline bool fromString(ConstString string)
         return false;
 }
 
+int sScanf(ConstString str, const char *format, ...);
+
 //@}
 
 //------------------------------------------------------------------------------

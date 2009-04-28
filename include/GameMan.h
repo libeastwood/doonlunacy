@@ -42,8 +42,6 @@ class GameMan : public Singleton<GameMan>
 
     void TakeMapScreenshot(std::string filename = "mapshot.bmp");
     
-    bool SplitString(std::string ParseString, unsigned int NumStringPointers, ...);
-    
     MapClass * GetMap() { return m_map; }
     std::vector<PlayerClass*> GetPlayers() { return m_players; }
     PlayerClass * GetPlayer(int i) { return m_players[i]; }
