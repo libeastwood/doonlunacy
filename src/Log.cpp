@@ -112,9 +112,10 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
         case LV_WARNING:
             verb = "[WARNING]";
             break;
-        case LV_INFO:
 	case LV_DEBUG:
 	    verb = "[DEBUG]";
+	    break;
+        case LV_INFO:
         default:
             verb = "";
             break;
