@@ -114,6 +114,7 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
             break;
         case LV_INFO:
 	case LV_DEBUG:
+	    verb = "[DEBUG]";
         default:
             verb = "";
             break;
@@ -126,7 +127,7 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
 
     // do not print ':' unless there is a logSystem string
     if (logSystem.size() != 0)
-        snPrintf(formated, LOG_MAX_STRING_LENGTH, "%s%s: %s\n", verb, logSystem.c_str(), message);
+        snPrintf(formated, LOG_MAX_STRING_LENGTH, "%s%S: %s\n", verb, &logSystem, message);
     else
         snPrintf(formated, LOG_MAX_STRING_LENGTH, "%s%s\n", verb, message);    
      
