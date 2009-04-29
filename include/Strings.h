@@ -75,7 +75,10 @@ inline bool fromString(ConstString string)
         return false;
 }
 
+size_t snPrintf(char *str, size_t size, const char *format, ...);
+size_t vsnPrintf(char *str, size_t size, const char *format, va_list ap);
 int sScanf(ConstString str, const char *format, ...);
+int vsScanf(ConstString str, const char *format, va_list ap);
 
 //@}
 

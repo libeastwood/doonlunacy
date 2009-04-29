@@ -6,7 +6,7 @@
 #include <stdarg.h>
 
 #define LOG_DEFAULT_VERBOSITY LV_MAX
-#define LOG_MAX_STRING_LENGTH 1000
+#define LOG_MAX_STRING_LENGTH 1024
 
 //------------------------------------------------------------------------------
 // LogBackend class
@@ -94,44 +94,6 @@ bool Log::checkMessageVerbosity(ConstString logSystem, LogVerbosity verbosity)
     return true;
 }
 
-
-void vsPrintf(char *str, const char *format, va_list args) {
-
-    String output;
-    for (; *format != '\0'; format++)
-    {
-	char curChar = *format;
-	if(curChar == '%')
-	{
-	    char fmt[3] = {curChar, *(++format), '\0'};
-	    if(fmt[1] == 'S')
-	    {
-		output += *va_arg(args, String*);
-	    } else {
-    		char buf[LOG_MAX_STRING_LENGTH];
-    		void *tmp = va_arg(args, void*);
-	    	// Windows is inherently insecure (no vsnprintf & snprintf)
-		// TODO: if you are using mingw, tell us whether you have snprintf & vsnprint available, thanks !
-#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
-		sprintf(buf, fmt, tmp);
-#else
-    		snprintf(buf, LOG_MAX_STRING_LENGTH, fmt, tmp);
-#endif
-    		output += buf;
-	    }
-	    continue;
-	}
-	output += curChar;
-    }
-    va_end(args);
-#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
-    sprintf(str, "%s", output.c_str());
-#else
-    snprintf(str, LOG_MAX_STRING_LENGTH, "%s", output.c_str());
-#endif
-
-}
-
 void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *format, va_list args)
 {
 
@@ -160,27 +122,13 @@ void Log::doLog(ConstString logSystem, LogVerbosity verbosity, const char *forma
     for (int i = 0; i < indentLevel; i++)
         message[i] = ' ';
 
-    vsPrintf(&message[indentLevel], format, args);
-
-    // Windows are inherently insecure (no vsnprintf & snprintf)
-    // TODO: if you are using mingw, tell us whether you have snprintf & vsnprint available, thanks !
-    #if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
+    vsnPrintf(&message[indentLevel], LOG_MAX_STRING_LENGTH, format, args);
 
     // do not print ':' unless there is a logSystem string
     if (logSystem.size() != 0)
-        sprintf(formated, "%s%s: %s\n", verb, logSystem.c_str(), message);
+        snPrintf(formated, LOG_MAX_STRING_LENGTH, "%s%s: %s\n", verb, logSystem.c_str(), message);
     else
-        sprintf(formated, "%s%s\n", verb, message);    
-
-    #else
-
-    // do not print ':' unless there is a logSystem string
-    if (logSystem.size() != 0)
-        snprintf(formated, LOG_MAX_STRING_LENGTH, "%s%s: %s\n", verb, logSystem.c_str(), message);
-    else
-        snprintf(formated, LOG_MAX_STRING_LENGTH, "%s%s\n", verb, message);    
-    
-    #endif
+        snPrintf(formated, LOG_MAX_STRING_LENGTH, "%s%s\n", verb, message);    
      
     backend->log(formated);
 }

@@ -206,16 +206,74 @@ void StringOutputCache::add(ConstString str)
     data += str.substr(index);    
 }
 
+size_t snPrintf(char *str, size_t size, const char *format, ...) {
+    size_t ret;
+    va_list ap;
+
+    va_start(ap, format);
+    ret = vsnPrintf(str, size, format, ap);
+    va_end(ap);
+
+    return ret;
+}
+
+size_t vsnPrintf(char *str, size_t size, const char *format, va_list ap) {
+    size_t ret = 0;
+
+    while(*format != '\0' && (size -= ret) > 0)
+    {
+	size_t written = 1;
+	if(*format == '%')
+	{
+	    const char *tmp = va_arg(ap, const char*);
+	    char fmt[10] = {*(format++)};
+	    for(size_t i = 1; i < sizeof(fmt); i++)
+		fmt[i] = (*format != '\0' && *format != ' ' && *format != '%') ? *(format++) : '\0';
+
+	    if(fmt[1] == 'S')
+	    {
+		fmt[1] = 's';
+		tmp = (*((String*)tmp)).c_str();
+	    }
+	    // Windows is inherently insecure (no vsnprintf & snprintf)
+	    // TODO: if you are using mingw, tell us whether you have snprintf & vsnprint available, thanks !
+#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
+	    written = sprintf(str, fmt, tmp);
+#else
+	    written = snprintf(str, size, fmt, tmp);
+#endif
+	}
+	else
+	    *(str) = *(format++);
+	str += written;
+	ret += written;
+    }
+    va_end(ap);
+    *(str) = '\0';
+
+    return ret;
+}
+
 int sScanf(ConstString str, const char *format, ...) {
+    int ret;
+    va_list ap;
+
+    va_start(ap, format);
+    ret = vsScanf(str, format, ap);
+    va_end(ap);
+
+    return ret;
+}
+
+int vsScanf(ConstString str, const char *format, va_list ap) {
     int ret = 0;
     const char *cstr = str.c_str();
-    va_list args;
-    va_start(args, format);
+
     for (; *format != '\0'; format++)
 	if(*format == '%') {
 	    char delim = *(format+2);
 	    char fmt[6] = {*format, *(++format), delim, '\0', '\0', '\0'};
-	    void *tmp = va_arg(args, void*);
+	    void *tmp = va_arg(ap, void*);
 
 	    if (fmt[1] == 'S') {
 		String *ptr = (String*)tmp;
@@ -231,6 +289,7 @@ int sScanf(ConstString str, const char *format, ...) {
 	    }
 	    cstr++;
 	}
-    va_end(args);
+    va_end(ap);
+
     return ret;
 }
