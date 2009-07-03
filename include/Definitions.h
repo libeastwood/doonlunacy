@@ -4,6 +4,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <map>
+#include <SDL.h>
 
 class Image;
 class ObjectClass;
@@ -26,9 +27,9 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
 typedef boost::shared_ptr<Sound> SoundPtr;
 
 typedef boost::shared_ptr<ObjectClass> ObjectPtr;
-typedef std::pair<uint32_t, ObjectPtr> ObjectPair;
-typedef std::map<uint32_t, ObjectPtr> ObjectMap;
-typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;
+typedef std::pair<Uint32, ObjectPtr> ObjectPair;
+typedef std::map<Uint32, ObjectPtr> ObjectMap;
+typedef std::map<Uint32, ObjectMap> ObjectTypeMap;
 
 //! \enum MUSICTYPE
 /*! Types of music available in the game*/
