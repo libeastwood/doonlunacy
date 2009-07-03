@@ -2,6 +2,7 @@
 #define DUNE_RECT_H
 
 #include <SDL.h>
+#include <boost/swap.hpp>
 
 #include "Point.h"
 
