@@ -237,7 +237,11 @@ void ObjectClass::doDeath(Image *dest)
 	if(m_decayTime > 0) {
 	    Uint32 tick = SDL_GetTicks();
 	    if(tick > (m_ticks + 1000)) {
+#if BOOST_VERSION >= 103800
+		boost::swap(m_ticks, tick);		
+#else
 		std::swap(m_ticks, tick);
+#endif
 		m_decayTime--;
 		m_graphic->fadeOut();
 	    }
@@ -331,8 +335,14 @@ SPoint ObjectClass::getClosestPoint(SPoint point) const
     for(Sint16 x = min.x; x < max.x; x++)
 	for(Sint16 y = min.y; y < max.y; y++)
 	    if((distance=(tmp=SPoint(x,y)).distance(point)) < closestDistance)  {
+#if BOOST_VERSION >= 103800
 		boost::swap(closestDistance, distance);
 		boost::swap(closest, tmp);
+#else
+		std::swap(closestDistance, distance);
+		std::swap(closest, tmp);
+#endif
+
 	    }
 
     return closest;

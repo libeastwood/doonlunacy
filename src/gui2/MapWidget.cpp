@@ -185,7 +185,11 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
     UPoint end(m_view + ((m_selectEnd - getPosition()) / BLOCKSIZE));
 
     if(start > end)
-	std::swap(start,end);
+#if BOOST_VERSION >= 103800
+	boost::swap(start, end);
+#else
+	std::swap(start, end);
+#endif
 
     UPoint pos;
     switch (button)
