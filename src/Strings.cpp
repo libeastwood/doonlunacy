@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "Strings.h"
 
@@ -284,6 +285,10 @@ int vsScanf(ConstString str, const char *format, va_list ap) {
 	    else {
     		if(fmt[1] == 's')
     		    fmt[1] = '[', fmt[2] = '^', fmt[3] = delim, fmt[4] = ']';
+		else
+		    for(size_t i = 1; i < sizeof(fmt); i++)
+			fmt[i] = (*format != '\0' && *format != ' ' && *format != '%') ? *(format++) : '\0';
+
 		ret += sscanf(cstr, fmt, tmp);
 		cstr = (const char*)index(cstr, delim);
 	    }

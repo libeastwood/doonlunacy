@@ -9,6 +9,7 @@
 
 #include <string>
 #include <sstream>
+#include <stdarg.h>
 
 //! Shortcut to std::string
 typedef std::string String;
