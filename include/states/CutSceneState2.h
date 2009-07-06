@@ -20,7 +20,6 @@ typedef struct {
 class AnimationLabel;
 class Frame;
 class Font;
-class TransparentLabel;
 class CutSceneState : public MenuBaseState 
 {
 
@@ -32,7 +31,8 @@ class CutSceneState : public MenuBaseState
 	int Execute(float ft);
 
     private:
-	void loadScene(uint32_t scene);
+	void loadScene(int scene);
+	void skipCutScene();
 	AnimationLabel *m_animLabel;
 	Frame *m_sceneFrame,
 	      *m_animFrame,
@@ -45,7 +45,7 @@ class CutSceneState : public MenuBaseState
 	     m_fadeOut,
 	     m_textFadeIn;
 	loop *m_loop;
-	uint32_t m_numAnimFrames,
+	int m_numAnimFrames,
 		 m_totalAnimFrames,
 		 m_curScene,
 		 m_sceneStart,

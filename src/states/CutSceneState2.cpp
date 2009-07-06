@@ -37,6 +37,13 @@ CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
     m_drawMenu = true;
     m_font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     m_loop = NULL;
+    TransparentButton *m_skipButton = new TransparentButton(SPoint(set->GetWidth(), set->GetHeight()));
+    m_skipButton->setSize(UPoint(set->GetWidth(), set->GetHeight()));
+    m_skipButton->setPosition(UPoint(0,0));
+    m_skipButton->onClick.connect(
+            boost::bind(&CutSceneState::skipCutScene, this) );
+    m_backgroundFrame->addChild(m_skipButton);
+
 }
 
 CutSceneState::~CutSceneState()
@@ -45,7 +52,14 @@ CutSceneState::~CutSceneState()
 	delete m_loop;
 }
 
-void CutSceneState::loadScene(uint32_t scene)
+void CutSceneState::skipCutScene()
+{
+    LOG(LV_INFO, "CutSceneState", "Skipping cutscene: '%S'", &(ConstString)m_scene);
+
+    m_curScene = -1;
+}
+
+void CutSceneState::loadScene(int scene)
 {
     if(m_sceneFrame != NULL)
 	m_backgroundFrame->deleteChild(m_sceneFrame);
@@ -186,6 +200,10 @@ void CutSceneState::loadScene(uint32_t scene)
 int CutSceneState::Execute(float ft)
 {
     Uint32 curFrame;
+
+    if(m_curScene == -1)
+	return -1;
+
     if(m_drawMenu)
     {
 	loadScene(m_curScene);
@@ -209,7 +227,7 @@ int CutSceneState::Execute(float ft)
 		delete m_loop;
 		m_loop = NULL;
 	    }
-	    if(m_curScene == m_scenes.size())
+	    if(m_curScene == (int)m_scenes.size())
 		return -1;
 	    m_drawMenu = true;
 	}
