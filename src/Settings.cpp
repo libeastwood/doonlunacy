@@ -4,6 +4,7 @@
 
 
 
+#include "Application.h"
 #include "Settings.h"
 #include "Strings.h"
 #include "ResMan.h"
@@ -198,7 +199,41 @@ EMUOPL Settings::ToggleEmuOpl(){
             break;
     }
     SoundPlayer::Instance()->changeEmuOpl((EMUOPL)m_emuOpl);
+    local["config"]["sound"]["opl_emulator"] = m_emuOpl;
     m_updated = true;
     return (EMUOPL)m_emuOpl;
 
 }
+
+int Settings::ToggleResolution() {
+    Application* app = Application::Instance();
+
+    switch (GetWidth())
+    {
+        case 640:
+            app->UpdateVideoMode(800, 600);
+            break;
+                
+        case 800:
+            app->UpdateVideoMode(1024, 768);
+            break;
+                
+        case 1024:
+            app->UpdateVideoMode(640, 480);
+            break;                
+    }
+
+    local["config"]["graphics"]["height"] = m_height = GetHeight();
+    local["config"]["graphics"]["width"] = m_width = GetWidth();
+
+
+    return GetWidth();
+}
+
+bool Settings::ToggleFullscreen() {
+    Application::Instance()->UpdateVideoMode(local["config"]["graphics"]["fullscreen"] = m_fullscreen = !m_fullscreen);
+    m_updated = true;
+
+    return m_fullscreen;
+}
+

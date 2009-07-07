@@ -88,7 +88,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butOk);
 
-    m_hscaleGameSpeed = new HScale(1, 10, 4);
+    m_hscaleGameSpeed = new HScale(1, 10, set->GetGameSpeed());
     m_hscaleGameSpeed->setSize(SPoint(bw, bh));
     m_vbox->addChild(m_hscaleGameSpeed);
 
@@ -147,32 +147,26 @@ void OptionsMenuState::doOk()
 
 void OptionsMenuState::doResolution()
 {
-    Application* app = Application::Instance();
-
-    switch (set->GetWidth())
+    switch (set->ToggleResolution())
     {
         case 640:
-            app->UpdateVideoMode(800, 600);
+            m_butResolution->setCaption("640x480");
+            break;                
+
+        case 800:
             m_butResolution->setCaption("800x600");
             break;
                 
-        case 800:
-            app->UpdateVideoMode(1024, 768);
+        case 1024:
             m_butResolution->setCaption("1024x768");
             break;
                 
-        case 1024:
-            app->UpdateVideoMode(640, 480);
-            m_butResolution->setCaption("640x480");
-            break;                
     }
 }
 
 void OptionsMenuState::doScreenMode()
 {
-    bool newSetting = !set->GetFullScreen();
-    
-    Application::Instance()->UpdateVideoMode(newSetting);
+    bool newSetting = set->ToggleFullscreen();
 
     newSetting ? m_butWindowMode->setCaption("Fullscreen") :
     m_butWindowMode->setCaption("Window mode");

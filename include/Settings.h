@@ -143,9 +143,12 @@ class Settings: public Singleton<Settings>
 	bool GetSound() { return m_soundOn; }
 	bool GetMusic() { return m_musicOn; }
 	bool GetPlayIntro() { return m_playIntro; }
-	void ToggleSound() { m_soundOn = !m_soundOn; m_updated = true; }
-	void ToggleMusic() { m_musicOn = !m_musicOn; m_updated = true; }
-	void ToggleIntro() { m_playIntro = !m_playIntro; m_updated = true; }
+	void ToggleSound() { local["config"]["sound"]["sound_on"] = m_soundOn = !m_soundOn, m_updated = true; }
+	void ToggleMusic() { local["config"]["sound"]["music_on"] = m_musicOn = !m_musicOn, m_updated = true; }
+	void ToggleIntro() { local["config"]["play_intro"] = m_playIntro = !m_playIntro, m_updated = true; }
+	int ToggleResolution();
+	bool ToggleFullscreen();
+    
 	EMUOPL ToggleEmuOpl();
 
 };
