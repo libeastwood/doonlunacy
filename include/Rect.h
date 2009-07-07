@@ -2,9 +2,6 @@
 #define DUNE_RECT_H
 
 #include <SDL.h>
-#if BOOST_VERSION >= 103800
-#include <boost/swap.hpp>
-#endif
 
 #include "Point.h"
 
@@ -150,11 +147,7 @@ struct Rect : public SDL_Rect
 	    float max;
 	    Rect rect(*this);
 	    if(getPosition() < r.getPosition())
-#if BOOST_VERSION >= 103800
-		boost::swap(rect, r);
-#else
-	    	std::swap(rect, r);
-#endif
+		swap(rect, r);
 	    if(!rect.containsPartial(r))
 		return 0;
 	    if(rect.containsWhole(r))

@@ -1,3 +1,5 @@
+#include <stack>
+
 #include "Application.h"
 #include "FontManager.h"
 #include "GameMan.h"
@@ -10,7 +12,6 @@
 #include "objects/StructureClass.h"
 #include "objects/UnitClass.h"
 
-#include <stack>
 MapWidget::MapWidget()
 {
     m_view = SPoint(0, 0);
@@ -185,11 +186,7 @@ bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
     UPoint end(m_view + ((m_selectEnd - getPosition()) / BLOCKSIZE));
 
     if(start > end)
-#if BOOST_VERSION >= 103800
-	boost::swap(start, end);
-#else
-	std::swap(start, end);
-#endif
+	swap(start, end);
 
     UPoint pos;
     switch (button)

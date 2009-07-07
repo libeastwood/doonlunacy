@@ -6,6 +6,12 @@
 #include <map>
 #include <SDL.h>
 
+#if BOOST_VERSION >= 103800
+using boost::swap;
+#else
+using std::swap;
+#endif
+
 class Image;
 class ObjectClass;
 class Sound;
