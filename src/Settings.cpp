@@ -223,8 +223,10 @@ int Settings::ToggleResolution() {
             break;                
     }
 
-    local["config"]["graphics"]["height"] = m_height = GetHeight();
-    local["config"]["graphics"]["width"] = m_width = GetWidth();
+    local["config"]["graphics"]["height"] = m_height;
+    local["config"]["graphics"]["width"] = m_width;
+
+    m_updated = true;
 
 
     return GetWidth();

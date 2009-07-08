@@ -79,6 +79,9 @@ void MainMenuBaseState::resize()
 {
     Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
 
+    m_container->setSize(UPoint(set->GetWidth(),
+		set->GetHeight()));
+
     ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
     background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     background->drawBorders3(3);
