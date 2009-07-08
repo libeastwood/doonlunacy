@@ -12,7 +12,7 @@
 OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 {
     std::string m_caption;
-    
+    UPoint resolution = set->GetResolution();    
 
     set->GetFullScreen() ? m_caption = "Fullscreen" : m_caption = "Window mode";
         
@@ -23,6 +23,11 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
    
     m_vbox->addChild(m_butWindowMode);
 
+    m_caption = resolution;
+    m_caption.erase(0,1);
+    m_caption.erase(m_caption.size()-1, m_caption.size());
+
+    /*
     switch (set->GetWidth())
     {
         case 640:
@@ -37,7 +42,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
             m_caption = "1024x768";
             break;
     
-    }
+    }*/
     
     m_butResolution = new BoringButton(m_caption);
     m_butResolution->setSize(UPoint(bw,bh));
@@ -94,7 +99,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
     m_vbox->addChild(m_hscaleGameSpeed);
 
     m_vbox->fit(2);
-    Uint16 x = (set->GetWidth() / 2) - 
+    Uint16 x = (resolution.x / 2) - 
                 (m_vbox->w / 2);
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();
@@ -148,21 +153,11 @@ void OptionsMenuState::doOk()
 
 void OptionsMenuState::doResolution()
 {
-    switch (set->ToggleResolution())
-    {
-        case 640:
-            m_butResolution->setCaption("640x480");
-            break;                
-
-        case 800:
-            m_butResolution->setCaption("800x600");
-            break;
-                
-        case 1024:
-            m_butResolution->setCaption("1024x768");
-            break;
-                
-    }
+    UPoint resolution = set->ToggleResolution();
+    std::string res = resolution;
+    res.erase(0,1);
+    res.erase(res.size()-1, res.size());
+    m_butResolution->setCaption(res);
 }
 
 void OptionsMenuState::doScreenMode()

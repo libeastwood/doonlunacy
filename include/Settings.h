@@ -72,7 +72,7 @@ class Settings: public Singleton<Settings>
 	Settings();
 
 	// protected so Application can change them 
-	int m_width, m_height;
+	UPoint m_resolution;
 	bool m_fullscreen;
 	int m_debug;
 	bool m_doubleBuffered;
@@ -129,9 +129,7 @@ class Settings: public Singleton<Settings>
 
 	inline int GetMaxSearchPath() { return m_maxPathSearch; }
 
-	inline int GetWidth() { return m_width; }
-
-	inline int GetHeight() { return m_height; }
+	inline UPoint GetResolution() { return m_resolution; }
 
 	inline bool GetFullScreen() { return m_fullscreen; }
 
@@ -147,7 +145,7 @@ class Settings: public Singleton<Settings>
 	void ToggleSound() { local["config"]["sound"]["sound_on"] = m_soundOn = !m_soundOn, m_updated = true; }
 	void ToggleMusic() { local["config"]["sound"]["music_on"] = m_musicOn = !m_musicOn, m_updated = true; }
 	void ToggleIntro() { local["config"]["play_intro"] = m_playIntro = !m_playIntro, m_updated = true; }
-	int ToggleResolution();
+	UPoint ToggleResolution();
 	bool ToggleFullscreen();
 	void SetResolution(UPoint resolution);
     

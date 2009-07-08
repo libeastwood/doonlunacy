@@ -9,12 +9,13 @@
 
 MenuBaseState::MenuBaseState()
 {
+    UPoint resolution = set->GetResolution();    
+
     m_drawMenu = true;
 
     m_container = new Container();
     m_container->setPosition(UPoint(0, 0));
-    m_container->setSize(UPoint(set->GetWidth(),
-			    set->GetHeight()));
+    m_container->setSize(resolution);
     
     m_backgroundFrame = new Frame();
     m_container->addChild(m_backgroundFrame);

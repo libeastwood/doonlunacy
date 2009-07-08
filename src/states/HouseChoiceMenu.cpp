@@ -14,9 +14,10 @@
 
 HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 {
+    UPoint resolution = set->GetResolution();
     ImagePtr background = DataCache::Instance()->getGameData("UI_HouseChoiceBackground")->getImage()->getResized();
-    
-	m_backgroundFrame->changeBackground(background);
+
+    m_backgroundFrame->changeBackground(background);
 
     m_butAtreides = new TransparentButton(UPoint(84,92).getScaled());
     m_butAtreides->onClick.connect(
@@ -40,7 +41,7 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
     m_backgroundFrame->addChild(m_butHarkonnen);
     
     m_butBack = new BoringButton("Back to menu", false);
-    m_butBack->setPosition(SPoint(30, Settings::Instance()->GetHeight() - m_butBack->h - 50));
+    m_butBack->setPosition(SPoint(30, resolution.y - m_butBack->h - 50));
     m_butBack->setSize(UPoint(180, 35));
     m_butBack->onClick.connect(
              boost::bind(&HouseChoiceMenuState::doBack, this) );

@@ -190,6 +190,7 @@ void Application::SetPalette()
 void Application::InitVideo()
 {
     Settings* set = Settings::Instance();
+    UPoint resolution = set->GetResolution();
     
     int videoFlags = SDL_HWPALETTE | SDL_RESIZABLE;
     if (set->GetDoubleBuffered())
@@ -198,7 +199,7 @@ void Application::InitVideo()
         videoFlags |= SDL_FULLSCREEN;
 
 
-    SDL_Surface *surf = SDL_SetVideoMode(set->GetWidth(), set->GetHeight(), 8, videoFlags);
+    SDL_Surface *surf = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
     
     if(!surf)
     {
@@ -214,7 +215,7 @@ void Application::InitVideo()
 
     SDL_ShowCursor(SDL_DISABLE);
 
-    m_rootWidget->setSize(UPoint(set->GetWidth(), set->GetHeight()));
+    m_rootWidget->setSize(resolution);
     m_rootWidget->setPosition(UPoint(0, 0));
 }
 

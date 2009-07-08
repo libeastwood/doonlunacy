@@ -1,9 +1,6 @@
 #include <SDL_mixer.h>
 #include <boost/python.hpp>
 
-
-
-
 #include "Application.h"
 #include "Point.h"
 #include "Settings.h"
@@ -44,8 +41,8 @@ void Settings::load()
             m_gameSpeed = python::extract<int>(local["config"]["game_speed"]);
             m_playIntro = python::extract<bool>(local["config"]["play_intro"]);
 
-            m_height = python::extract<int>(local["config"]["graphics"]["height"]);
-            m_width = python::extract<int>(local["config"]["graphics"]["width"]);	
+            m_resolution.x = python::extract<int>(local["config"]["graphics"]["width"]);	
+            m_resolution.y = python::extract<int>(local["config"]["graphics"]["height"]);
             m_fullscreen = python::extract<bool>(local["config"]["graphics"]["fullscreen"]);
             m_doubleBuffered = python::extract<bool>(local["config"]["graphics"]["double_buffered"]);
 
@@ -64,8 +61,8 @@ void Settings::load()
             local["config"]["game_speed"] = m_gameSpeed = 4;
             local["config"]["play_intro"] = m_playIntro = true;
 
-            local["config"]["graphics"]["height"] = m_height = 480;
-            local["config"]["graphics"]["width"] = m_width = 640;
+            local["config"]["graphics"]["width"] = m_resolution.x = 640;
+            local["config"]["graphics"]["height"] = m_resolution.y = 480;
             local["config"]["graphics"]["fullscreen"] = m_fullscreen = false;
             local["config"]["graphics"]["double_buffered"] = m_doubleBuffered = true;
 
@@ -206,31 +203,25 @@ EMUOPL Settings::ToggleEmuOpl(){
 
 }
 
-int Settings::ToggleResolution() {
+UPoint Settings::ToggleResolution() {
     UPoint resolution;
-    switch (GetWidth())
-    {
-        case 640:
-	    resolution = UPoint(800, 600);
-            break;
-                
-        case 800:
-	    resolution = UPoint(1024, 768);
-            break;
-                
-        case 1024:
-	    resolution = UPoint(640, 480);
-            break;                
-    }
+
+    if(m_resolution.x < 800)
+	resolution = UPoint(800, 600);
+    else if(m_resolution.x < 1024)
+	resolution = UPoint(1024, 768);
+    else
+	resolution = UPoint(640, 480);
 
     SetResolution(resolution);
 
-    return GetWidth();
+    return m_resolution;
 }
 
 void Settings::SetResolution(UPoint resolution) {
-    local["config"]["graphics"]["width"] = m_width = resolution.x;    
-    local["config"]["graphics"]["height"] = m_height = resolution.y;
+    m_resolution = resolution;
+    local["config"]["graphics"]["width"] = resolution.x;
+    local["config"]["graphics"]["height"] = resolution.y;
 
     Application::Instance()->InitVideo();
 

@@ -26,13 +26,14 @@ GameMenuState::~GameMenuState()
 
 void GameMenuState::drawMenu()
 {
-    ImagePtr top(new Image(UPoint(set->GetWidth(), m_mapWidget->getPosition().y)));
+    UPoint resolution = set->GetResolution();
+    ImagePtr top(new Image(UPoint(resolution.x, m_mapWidget->getPosition().y)));
     top->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     Frame *topFrame = new Frame(top);
     //FIXME: Why does events gets messed up when using m_backgroundFrame?
     m_container->addChild(topFrame);
 
-    ImagePtr messageBox(new Image(UPoint(set->GetWidth(), 28)));
+    ImagePtr messageBox(new Image(UPoint(resolution.x, 28)));
     messageBox->recolor(0, 116);
     messageBox->drawBorders2();
     GraphicsLabel *messageLabel = new GraphicsLabel(messageBox);
@@ -58,7 +59,7 @@ void GameMenuState::drawMenu()
 
     ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
     GraphicsLabel *creditsLabel = new GraphicsLabel(credits);
-    creditsLabel->setPosition(UPoint(set->GetWidth() - 135, 7));
+    creditsLabel->setPosition(UPoint(resolution.x - 135, 7));
     topFrame->addChild(creditsLabel);
 
     ImagePtr creditsCounter(new Image(UPoint(65, 15)));
@@ -69,7 +70,7 @@ void GameMenuState::drawMenu()
     creditsCounterLabel->setPosition(creditsLabel->getPosition() + SPoint(creditsLabel->getSize().x + 2, -1));
     topFrame->addChild(creditsCounterLabel);
 
-    ImagePtr sideBar(new Image(UPoint(set->GetWidth() - m_mapWidget->getSize().x, set->GetHeight() - m_mapWidget->getPosition().y)));
+    ImagePtr sideBar(new Image(UPoint(resolution.x - m_mapWidget->getSize().x, resolution.y - m_mapWidget->getPosition().y)));
     ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
     sideBar->blitFrom(roundThingie.get(), UPoint(0, 0));
     sideBar->drawVBar(UPoint(1, roundThingie->getSize().y), 117);

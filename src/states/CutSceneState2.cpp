@@ -21,6 +21,8 @@
 
 CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
 {
+    UPoint resolution = set->GetResolution();
+
     try  {
 	python::object cutscenes = python::import("cutscenes");
 	m_scenes = getPyObjectVector<python::object>(cutscenes.attr("intro"));
@@ -30,15 +32,15 @@ CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
-    ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
+    ImagePtr background(new Image(resolution));
     m_backgroundFrame->changeBackground(background);
     m_sceneFrame = NULL;
     m_curScene = 0;
     m_drawMenu = true;
     m_font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     m_loop = NULL;
-    TransparentButton *m_skipButton = new TransparentButton(SPoint(set->GetWidth(), set->GetHeight()));
-    m_skipButton->setSize(UPoint(set->GetWidth(), set->GetHeight()));
+    TransparentButton *m_skipButton = new TransparentButton(resolution);
+    m_skipButton->setSize(resolution);
     m_skipButton->setPosition(UPoint(0,0));
     m_skipButton->onClick.connect(
             boost::bind(&CutSceneState::skipCutScene, this) );
@@ -61,9 +63,10 @@ void CutSceneState::skipCutScene()
 
 void CutSceneState::loadScene(int scene)
 {
+    UPoint resolution = set->GetResolution();
     if(m_sceneFrame != NULL)
 	m_backgroundFrame->deleteChild(m_sceneFrame);
-    m_sceneFrame = new Frame(ImagePtr(new Image(UPoint(set->GetWidth(), set->GetHeight()))));
+    m_sceneFrame = new Frame(ImagePtr(new Image(resolution)));
     m_backgroundFrame->addChild(m_sceneFrame);
     m_animFrame = new Frame();
     m_sceneFrame->addChild(m_animFrame);

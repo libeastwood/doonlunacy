@@ -77,38 +77,40 @@ void MainMenuBaseState::drawSpecifics()
 
 void MainMenuBaseState::resize()
 {
-    Uint16 x = (set->GetWidth() / 2) - (m_vbox->w / 2);
+    UPoint resolution = set->GetResolution();    
+    Uint16 x = (resolution.x / 2) - (m_vbox->w / 2);
 
-    m_container->setSize(UPoint(set->GetWidth(),
-		set->GetHeight()));
+    m_container->setSize(resolution);
 
-    ImagePtr background(new Image(UPoint(set->GetWidth(), set->GetHeight())));
+    ImagePtr background(new Image(resolution));
     background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     background->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 
-    m_middleFrame->setPosition(UPoint(x - 70, set->GetHeight()/2 - 172));
+    m_middleFrame->setPosition(UPoint(x - 70, resolution.y/2 - 172));
 
-    m_menuFrame->setPosition(UPoint(x - 15, set->GetHeight()/2 + 36));
+    m_menuFrame->setPosition(UPoint(x - 15, resolution.y/2 + 36));
 
 
     m_harkonnenHerald->setPosition(UPoint(11, 11));
-    m_atreidesHerald->setPosition(UPoint(set->GetWidth() - 66, 11));
-    m_ordosHerald->setPosition(UPoint(11, set->GetHeight() - 67));
+    m_atreidesHerald->setPosition(UPoint(resolution.x - 66, 11));
+    m_ordosHerald->setPosition(UPoint(11, resolution.y - 67));
 
-    m_versionLabel->setPosition(UPoint(set->GetWidth() - 120, set->GetHeight() - 48));
+    m_versionLabel->setPosition(UPoint(resolution.x - 120, resolution.y - 48));
 
 }
 
 int MainMenuBaseState::Execute(float dt)
 {
+    UPoint resolution = set->GetResolution();
+
     if(m_drawMenu)
     {
         draw();
 		drawSpecifics();
 		m_drawMenu = false;
     }
-    if(m_backgroundFrame->getSize() != UPoint(set->GetWidth(), set->GetHeight())){
+    if(m_backgroundFrame->getSize() != resolution){
         resize();
     }
 
