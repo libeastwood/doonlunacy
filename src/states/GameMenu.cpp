@@ -1,16 +1,17 @@
+#include <boost/bind.hpp>
+
 #include "states/GameMenu.h"
 
 #include "DataCache.h"
 #include "GameData.h"
 #include "GameData.h"
+#include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
 
 #include "states/MentatInfoMenu.h"
-
-#include <boost/bind.hpp>
 
 GameMenuState::GameMenuState(HOUSETYPE house)
 {

@@ -5,6 +5,7 @@
 
 
 #include "Application.h"
+#include "Point.h"
 #include "Settings.h"
 #include "Strings.h"
 #include "ResMan.h"
@@ -206,30 +207,36 @@ EMUOPL Settings::ToggleEmuOpl(){
 }
 
 int Settings::ToggleResolution() {
-    Application* app = Application::Instance();
-
+    UPoint resolution;
     switch (GetWidth())
     {
         case 640:
-            app->UpdateVideoMode(800, 600);
+	    resolution = UPoint(800, 600);
             break;
                 
         case 800:
-            app->UpdateVideoMode(1024, 768);
+	    resolution = UPoint(1024, 768);
             break;
                 
         case 1024:
-            app->UpdateVideoMode(640, 480);
+	    resolution = UPoint(640, 480);
             break;                
     }
 
-    local["config"]["graphics"]["height"] = m_height;
-    local["config"]["graphics"]["width"] = m_width;
+    SetResolution(resolution);
+
+    return GetWidth();
+}
+
+void Settings::SetResolution(UPoint resolution) {
+    Application::Instance()->UpdateVideoMode(resolution.x, resolution.y);
+
+    local["config"]["graphics"]["width"] = m_width = resolution.x;    
+    local["config"]["graphics"]["height"] = m_height = resolution.y;
 
     m_updated = true;
 
 
-    return GetWidth();
 }
 
 bool Settings::ToggleFullscreen() {

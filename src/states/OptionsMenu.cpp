@@ -1,12 +1,13 @@
+#include <boost/bind.hpp>
+
 #include "states/OptionsMenu.h"
 
 #include "Application.h"
+#include "Settings.h"
 
 #include "gui2/Button.h"
 #include "gui2/HScale.h"
 #include "gui2/VBox.h"
-
-#include <boost/bind.hpp>
 
 OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
 {

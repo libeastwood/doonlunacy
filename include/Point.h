@@ -2,10 +2,13 @@
 #define DUNE_POINT_H
 
 #include <assert.h>
-#include <iostream>
 #include <cmath>
+#include <sstream>
+#include <string>
+#include <SDL.h>
 
-#include "Settings.h"
+#include "Definitions.h"
+
 
 //------------------------------------------------------------------------------
 // Point struct
@@ -197,8 +200,9 @@ struct Point
 	//! Return point scaled to current resolution
         Point getScaled() const
         {
-            return Point((Settings::Instance()->GetWidth()  / 320.0f) * x,
-                         (Settings::Instance()->GetHeight() / 200.0f) * y);
+	    const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo();
+            return Point((videoInfo->current_w / 320.0f) * x,
+                         (videoInfo->current_h / 200.0f) * y);
         }
 
 	Point getAbs() const {

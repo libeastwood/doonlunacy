@@ -1,11 +1,11 @@
+#include <boost/bind.hpp>
+
 #include "states/MainMenu.h"
 
 #include "Application.h"
+#include "Settings.h"
 #include "gui2/Container.h"
 #include "gui2/Frame.h"
-
-#include <boost/bind.hpp>
-
 
 MenuBaseState::MenuBaseState()
 {

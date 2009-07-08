@@ -1,16 +1,17 @@
-#include "GameData.h"
-
-#include "DataCache.h"
-#include "Gfx.h"
-#include "PythonObjects.h"
-#include "ResMan.h"
-#include "Sfx.h"
-
 #include <eastwood/CpsFile.h>
 #include <eastwood/IcnFile.h>
 #include <eastwood/PalFile.h>
 #include <eastwood/ShpFile.h>
 #include <eastwood/VocFile.h>
+
+#include "GameData.h"
+
+#include "DataCache.h"
+#include "Gfx.h"
+#include "Log.h"
+#include "PythonObjects.h"
+#include "ResMan.h"
+#include "Sfx.h"
 
 GameData::GameData(std::string path)
 {

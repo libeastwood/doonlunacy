@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <string>
 
+#include "Point.h"
+
 #include "DuneConstants.h"
 #include "Definitions.h"
 
@@ -148,6 +150,7 @@ class Settings: public Singleton<Settings>
 	void ToggleIntro() { local["config"]["play_intro"] = m_playIntro = !m_playIntro, m_updated = true; }
 	int ToggleResolution();
 	bool ToggleFullscreen();
+	void SetResolution(UPoint resolution);
     
 	EMUOPL ToggleEmuOpl();
 

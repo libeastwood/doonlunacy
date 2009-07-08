@@ -3,6 +3,8 @@
 #include "Point.h"
 #include "Rect.h"
 
+namespace python = boost::python;
+
 static void * PointFloatExtract(PyObject *intermediate)
 {
     float x, y;
