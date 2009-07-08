@@ -67,7 +67,6 @@ class Settings: public Singleton<Settings>
 {
 	friend class Singleton<Settings>;
 	friend class SoundPlayer;
-	friend class Application;
 	friend class HScale;
 	protected:
 	Settings();

@@ -191,14 +191,14 @@ void Application::InitVideo()
 {
     Settings* set = Settings::Instance();
     
-    int videoFlags = SDL_HWPALETTE;
-    if (set->m_doubleBuffered)
+    int videoFlags = SDL_HWPALETTE | SDL_RESIZABLE;
+    if (set->GetDoubleBuffered())
         videoFlags |= SDL_HWSURFACE | SDL_DOUBLEBUF;
-    if (set->m_fullscreen)
+    if (set->GetFullScreen())
         videoFlags |= SDL_FULLSCREEN;
 
 
-    SDL_Surface *surf = SDL_SetVideoMode(set->m_width, set->m_height, 8, videoFlags);
+    SDL_Surface *surf = SDL_SetVideoMode(set->GetWidth(), set->GetHeight(), 8, videoFlags);
     
     if(!surf)
     {
@@ -214,29 +214,8 @@ void Application::InitVideo()
 
     SDL_ShowCursor(SDL_DISABLE);
 
-    m_rootWidget->setSize(UPoint(set->m_width, set->m_height));
+    m_rootWidget->setSize(UPoint(set->GetWidth(), set->GetHeight()));
     m_rootWidget->setPosition(UPoint(0, 0));
-}
-
-void Application::UpdateVideoMode(bool fs)
-{
-    Settings::Instance()->m_fullscreen = fs;
-    InitVideo();
-}
-    
-void Application::UpdateVideoMode(Uint16 w, Uint16 h)
-{
-    Settings::Instance()->m_width = w;
-    Settings::Instance()->m_height = h;
-    InitVideo();
-}
-
-void Application::UpdateVideoMode(Uint16 w, Uint16 h, bool fs)
-{
-    Settings::Instance()->m_width = w;
-    Settings::Instance()->m_height = h;
-    Settings::Instance()->m_fullscreen = fs;
-    InitVideo();
 }
 
 void Application::LoadData()
@@ -354,6 +333,9 @@ void Application::HandleEvents()
                 fprintf(stderr,"QUIT!\n");
                 m_running = false;
                 break;
+	    case SDL_VIDEORESIZE:
+		Settings::Instance()->SetResolution(UPoint(event.resize.w, event.resize.h));
+		break;
             case SDL_MOUSEMOTION:
                 m_cursorX = event.motion.x;
                 m_cursorY = event.motion.y;
@@ -371,7 +353,7 @@ void Application::HandleEvents()
                 break;
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_F11)
-                    UpdateVideoMode(!Settings::Instance()->GetFullScreen());
+                    Settings::Instance()->ToggleFullscreen();
             
                 m_rootWidget->handleKeyDown(&(event.key.keysym));
                 break;

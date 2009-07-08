@@ -229,10 +229,10 @@ int Settings::ToggleResolution() {
 }
 
 void Settings::SetResolution(UPoint resolution) {
-    Application::Instance()->UpdateVideoMode(resolution.x, resolution.y);
-
     local["config"]["graphics"]["width"] = m_width = resolution.x;    
     local["config"]["graphics"]["height"] = m_height = resolution.y;
+
+    Application::Instance()->InitVideo();
 
     m_updated = true;
 
@@ -240,7 +240,10 @@ void Settings::SetResolution(UPoint resolution) {
 }
 
 bool Settings::ToggleFullscreen() {
-    Application::Instance()->UpdateVideoMode(local["config"]["graphics"]["fullscreen"] = m_fullscreen = !m_fullscreen);
+    local["config"]["graphics"]["fullscreen"] = m_fullscreen = !m_fullscreen;
+
+    Application::Instance()->InitVideo();
+
     m_updated = true;
 
     return m_fullscreen;

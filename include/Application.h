@@ -31,6 +31,7 @@ class Label;
 class Application : public Singleton<Application>
 {
     friend class Singleton<Application>;
+    friend class Settings;
 
     protected:
         Application();
@@ -58,11 +59,6 @@ class Application : public Singleton<Application>
 
         void SetClearColor(Uint32 palIndex) { m_clearColor = palIndex; }
 
-        void UpdateVideoMode(bool fullscreen);
-        void UpdateVideoMode(Uint16 w, Uint16 h);
-        void UpdateVideoMode(Uint16 w, Uint16 h, bool fullscreen);
-
-        
     private:
         void InitSettings();
         void InitAudio();
