@@ -347,8 +347,8 @@ void Image::flipH() {
     if (!mustLock() || (lockSurface() == 0)) {
 	for(int y = 0; y < h;y++) {
 		for(int x = 0; x < w; x++) {
-			char val = *( ((char*) (pixels)) + y*pitch + x);
-			*( ((char*) (pixels)) + (h - y - 1)*pitch + x) = val;
+			Uint8 val = *( ((Uint8*) (pixels)) + y*pitch + x);
+			*( ((Uint8*) (pixels)) + (h - y - 1)*pitch + x) = val;
 		}
 	}
 	if (mustLock())
@@ -361,8 +361,8 @@ void Image::flipV() {
     if (!mustLock() || (lockSurface() == 0)) {
 	for(int y = 0; y < h;y++) {
 		for(int x = 0; x < w; x++) {
-			char val = *( ((char*) (pixels)) + y*pitch + x);
-			*( ((char*) (pixels)) + y*pitch + (w - x - 1)) = val;
+			Uint8 val = *( ((Uint8*) (pixels)) + y*pitch + x);
+			*( ((Uint8*) (pixels)) + y*pitch + (w - x - 1)) = val;
 		}
 	}
 	if (mustLock())
