@@ -17,7 +17,6 @@
 /*!
     @note Implemented fully inline, so no need to worry about speed.
 */
-static const float pi = 3.14159265f;
 
 template <typename T>
 struct Point
@@ -217,7 +216,7 @@ struct Point
 
 	float angle(const Point &point) const {
 	    float dx = x-point.x, dy = y - point.y;
-	    float angle = acos(-dx/distance(point)) * 180 / pi;
+	    float angle = acos(-dx/distance(point)) * 180 / M_PI;
 	    if(dy < 0)
 		angle = 360-angle; 
 	    return angle;

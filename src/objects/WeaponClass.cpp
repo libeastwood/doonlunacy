@@ -70,7 +70,7 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
 	m_angle = m_destAngle;
 	LOG(LV_DEBUG, m_objectType, "Angle %f, drawn angle %d", m_angle, m_drawnAngle);
 
-	m_speed = PointFloat(cos(m_destAngle * (pi / 180)), -sin(m_destAngle * (pi / 180))) * m_maxSpeed;
+	m_speed = PointFloat(cos(m_destAngle * (M_PI / 180)), -sin(m_destAngle * (M_PI / 180))) * m_maxSpeed;
 	m_distanceTraveled = 10000;
 	return true;
     }
