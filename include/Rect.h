@@ -74,10 +74,24 @@ struct Rect : public SDL_Rect
             w = rect.w;
             h = rect.h;
             return *this;
-        }
+	}
 
-        friend std::ostream& operator<<(std::ostream& os, const Rect& c){
-            return os << "Rect(" << c.x << ',' << c.y << ',' << c.w << ',' << c.h << ')';
+	//! Compare two rectangles for equality.
+	/*!
+	  \return true if x / y coordinates and h / w are identical in both rectangles.
+	  */  
+	bool operator==(const SDL_Rect& rect) const {
+	    return ((x == rect.x) && (y == rect.y) &&
+		    (w == rect.w) && (h == rect.h));
+	}
+
+	bool operator!=(const SDL_Rect& rect) const {
+	    return ((x != rect.x) || (y != rect.y) ||
+		    (w != rect.w) || (h != rect.h));
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Rect& c){
+	    return os << "Rect(" << c.x << ',' << c.y << ',' << c.w << ',' << c.h << ')';
         }
 
 	virtual operator std::string () const {
