@@ -399,8 +399,7 @@ class Image : private SDL_Surface
 	  */
 	void drawVBar(ConstUPoint start, int y2);
 
-	void drawTiles(ImagePtr tile);
-	void drawTiles(ImagePtr tile, ConstRect area);
+	void drawTiles(ImagePtr tile, Rect area = Rect());
 
 	bool fadeIn(const int fadeAmt = 4);
 	bool fadeOut(const int fadeAmt = 4);

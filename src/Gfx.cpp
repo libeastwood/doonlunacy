@@ -202,14 +202,11 @@ void Image::drawHBarSmall(ConstUPoint start, int x2)
     blitFrom(sideBar.get(), start);
 }
 
-void Image::drawTiles(ImagePtr tile)
+void Image::drawTiles(ImagePtr tile, Rect area)
 {
-    Rect area(0, 0, getSize().x, getSize().y);
-    drawTiles(tile, area);
-}
+    if(area == Rect())
+	area.setSize(getSize());
 
-void Image::drawTiles(ImagePtr tile, ConstRect area)
-{
     ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
     UPoint size = getSize();
     UPoint bgSize = tile->getSize();
