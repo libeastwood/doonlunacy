@@ -40,6 +40,7 @@ void MenuBaseState::JustMadeInactive()
 void MenuBaseState::resize()
 {
     m_container->setSize(set->GetResolution());
+    m_backgroundFrame->setSize(set->GetResolution());
 }
 
 int MenuBaseState::Execute(float dt)

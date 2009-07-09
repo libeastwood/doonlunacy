@@ -29,13 +29,28 @@ EditorState::EditorState(HOUSETYPE house) : GameMenuState(house)
 //    m_container->addChild(m_mapWidget2);
 #endif
 
-#if 1
     m_mapWidget = new MapWidget();
-    m_mapWidget->setPosition(UPoint(0,56));
+}
+
+void EditorState::draw()
+{
+    m_backgroundFrame->addChild(m_mapWidget);
+
+    GameMenuState::draw();
+
+}
+
+void EditorState::resize()
+{
+    GameMenuState::resize();
+    m_mapWidget->setPosition(UPoint(0, m_topFrame->getSize().y));
     UPoint resolution = set->GetResolution();
-    m_mapWidget->setSize(UPoint(resolution.x - 144, resolution.y - m_mapWidget->getPosition().y));
+    UPoint mapSize(resolution.x - m_sideBarFrame->getSize().x, resolution.y - m_mapWidget->getPosition().y);
+    mapSize.x -= mapSize.x % BLOCKSIZE;
+    mapSize.y -= mapSize.y % BLOCKSIZE;    
+
+    mapSize += BLOCKSIZE;
+
+    m_mapWidget->setSize(mapSize);
     GameMan::Instance()->LoadScenario("SCENARIO:SCENA001.INI");
-    //FIXME: Should really use m_backgroundFrame..
-    m_container->addChild(m_mapWidget);
-#endif 
 }

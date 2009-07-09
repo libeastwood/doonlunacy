@@ -6,11 +6,14 @@
 #include "gui2/MapWidget.h"
 
 class EditorState : public GameMenuState {
-public:
+    public:
 	EditorState(HOUSETYPE house = HOUSE_ATREIDES);
 
 	virtual const char* GetName() { return "Editor"; }
 
+    protected:
+	virtual void resize();
+	virtual void draw();
 };
 
 #endif // DUNE_STATES_EDITOR_H

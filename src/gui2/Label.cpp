@@ -121,8 +121,7 @@ void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLine
 
 GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textColor, int maxLineLength) : Label(caption, textColor, maxLineLength)
 {
-    m_background = background;
-	redraw();
+    changeBackground(background);
 }
 
 
@@ -143,6 +142,13 @@ void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 
 GraphicsLabel::~GraphicsLabel()
 {
+}
+
+void GraphicsLabel::changeBackground(ImagePtr background)
+{
+    m_background = background;
+    if(m_background)
+    	redraw();
 }
 
 AnimationLabel::AnimationLabel(ConstUPoint origSize)

@@ -7,20 +7,32 @@
 
 #include "gui2/MapWidget.h"
 
+class Frame;
 class GraphicButton;
+class GraphicsLabel;
 class GameMenuState : public MenuBaseState {
     public:
         GameMenuState(HOUSETYPE house);
         ~GameMenuState();
 
-        int Execute(float dt);
+        virtual int Execute(float dt);
 
     protected:
-        MapWidget *m_mapWidget, *m_mapWidget2;
-		GraphicButton *m_mentatButton, *m_optionsButton;
-		void drawMenu();
-		void doMentat();
-		HOUSETYPE m_house;
+	virtual void resize();
+	virtual void draw();
+	void doMentat();
+
+	MapWidget *m_mapWidget,
+		  *m_mapWidget2;
+	Frame *m_topFrame,
+	      *m_sideBarFrame,
+	      *m_radarFrame;
+	GraphicButton *m_mentatButton,
+		      *m_optionsButton;
+	GraphicsLabel *m_creditsLabel,
+		      *m_creditsCounterLabel,
+		      *m_messageLabel;
+	HOUSETYPE m_house;
 };
 
 #endif // DUNE_STATES_GAMEMENU_H

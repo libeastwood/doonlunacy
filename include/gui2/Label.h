@@ -63,6 +63,8 @@ public:
     GraphicsLabel(ImagePtr background, std::string caption="", int textColor = 49, int maxLineLength = 0);
     ~GraphicsLabel();
 
+    void changeBackground(ImagePtr background);
+
 protected:
     virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
 
