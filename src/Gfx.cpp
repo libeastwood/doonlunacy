@@ -343,6 +343,32 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
     return morph;
 }
 
+void Image::flipH() {
+    if (!mustLock() || (lockSurface() == 0)) {
+	for(int y = 0; y < h;y++) {
+		for(int x = 0; x < w; x++) {
+			char val = *( ((char*) (pixels)) + y*pitch + x);
+			*( ((char*) (pixels)) + (h - y - 1)*pitch + x) = val;
+		}
+	}
+	if (mustLock())
+	    unlockSurface();
+    }	
+}
+
+
+void Image::flipV() {
+    if (!mustLock() || (lockSurface() == 0)) {
+	for(int y = 0; y < h;y++) {
+		for(int x = 0; x < w; x++) {
+			char val = *( ((char*) (pixels)) + y*pitch + x);
+			*( ((char*) (pixels)) + y*pitch + (w - x - 1)) = val;
+		}
+	}
+	if (mustLock())
+	    unlockSurface();
+    }	
+}
 
 //------------------------------------------------------------------------------
 // Single pixel operations
