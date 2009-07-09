@@ -10,7 +10,7 @@ class MainMenuBaseState : public MenuBaseState
 {
     public:
         MainMenuBaseState();
-        int Execute(float dt);
+        virtual int Execute(float dt);
         virtual const char* GetName() { return "MainMenuBaseState"; }
 
     protected:
@@ -25,7 +25,7 @@ class MainMenuBaseState : public MenuBaseState
         static const int bh = 20;
         void draw();
 	virtual void drawSpecifics();
-	void resize();
+	virtual void resize();
 };
 
 #endif // DUNE_MAINMENU_H

@@ -202,6 +202,8 @@ void CutSceneState::loadScene(int scene)
 
 int CutSceneState::Execute(float ft)
 {
+    MenuBaseState::Execute(ft);
+
     Uint32 curFrame;
 
     if(m_curScene == -1)

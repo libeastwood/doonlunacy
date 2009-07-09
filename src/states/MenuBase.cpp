@@ -15,7 +15,6 @@ MenuBaseState::MenuBaseState()
 
     m_container = new Container();
     m_container->setPosition(UPoint(0, 0));
-    m_container->setSize(resolution);
     
     m_backgroundFrame = new Frame();
     m_container->addChild(m_backgroundFrame);
@@ -38,7 +37,15 @@ void MenuBaseState::JustMadeInactive()
     State::JustMadeInactive();
 }
 
+void MenuBaseState::resize()
+{
+    m_container->setSize(set->GetResolution());
+}
+
 int MenuBaseState::Execute(float dt)
 {
+    if(m_container->getSize() != set->GetResolution())
+        resize();
+
     return 0;
 }

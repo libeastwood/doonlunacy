@@ -77,10 +77,10 @@ void MainMenuBaseState::drawSpecifics()
 
 void MainMenuBaseState::resize()
 {
+    MenuBaseState::resize();
+
     UPoint resolution = set->GetResolution();    
     Uint16 x = (resolution.x / 2) - (m_vbox->w / 2);
-
-    m_container->setSize(resolution);
 
     ImagePtr background(new Image(resolution));
     background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
@@ -102,17 +102,14 @@ void MainMenuBaseState::resize()
 
 int MainMenuBaseState::Execute(float dt)
 {
-    UPoint resolution = set->GetResolution();
-
     if(m_drawMenu)
     {
         draw();
-		drawSpecifics();
-		m_drawMenu = false;
+	drawSpecifics();
+	m_drawMenu = false;
     }
-    if(m_backgroundFrame->getSize() != resolution){
-        resize();
-    }
+
+    MenuBaseState::Execute(dt);
 
     return 0;
 }
