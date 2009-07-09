@@ -253,10 +253,8 @@ ImagePtr GameData::getImage()
 ImagePtr GameData::getImage(HOUSETYPE house)
 {
     std::map<HOUSETYPE, ImagePtr>::iterator iter = m_remappedImg.find(house);
-    if (iter != m_remappedImg.end())
-    { 
+    if (iter != m_remappedImg.end() && iter->second)
 	return m_remappedImg.find(house)->second;
-    }
     else
     {
 	ImagePtr copy = getImage()->getRecoloredByHouse(house);
