@@ -71,8 +71,8 @@ struct Point
         //! operator -=
         Point &operator-=(const Point &point)
         {
-            x += point.x;
-            y += point.y;
+            x -= point.x;
+            y -= point.y;
             return *this;
         }
         //! operator *=
