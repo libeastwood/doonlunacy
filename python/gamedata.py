@@ -53,6 +53,24 @@ class UI_HouseChoiceBackground(GameDataConst):
         self.type = "CPS"
         self.filename = "ENGLISH:HERALD.ENG"
 
+class UI_HeraldColoredHarkonnen(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = UI_HouseChoiceBackground()
+        self.crop = (214, 53, 90, 95)
+
+class UI_HeraldColoredAtreides(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = UI_HouseChoiceBackground()
+        self.crop = (20, 53, 90, 95)
+
+class UI_HeraldColoredOrdos(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = UI_HouseChoiceBackground()
+        self.crop = (116, 53, 90, 95)
+
 class UI_SelectionBox(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
