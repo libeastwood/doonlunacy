@@ -209,11 +209,28 @@ void Image::drawTiles(ImagePtr tile, Rect area)
 
     ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
     UPoint size = getSize();
-    UPoint bgSize = tile->getSize();
+    UPoint tileSize = tile->getSize();
     UPoint iter;
-    for(iter.x = 0; iter.x < size.x; iter.x += bgSize.x - 1)
-	for(iter.y = 0; iter.y < size.y; iter.y += bgSize.y - 1)
-	    tiledArea->blitFrom(tile.get(), iter);
+    ImagePtr tileHFlipped = tile->getCopy();
+    tileHFlipped->flipH();
+    ImagePtr tileVFlipped = tile->getCopy();
+    tileVFlipped->flipV();
+    ImagePtr tileHVFlipped = tileVFlipped->getCopy();
+    tileHVFlipped->flipH();
+    for(iter.y = 0; iter.y < size.y; iter.y += tileSize.y)
+	for(iter.x = 0; iter.x < size.x; iter.x += tileSize.x)
+	{
+			if((iter.x % (tileSize.x*2) == 0) && (iter.y % (tileSize.y*2) == 0)) {
+			    tiledArea->blitFrom(tile.get(), iter);
+			} else if((iter.x % (tileSize.x*2) != 0) && (iter.y % (tileSize.y*2) == 0)) {
+			    tiledArea->blitFrom(tileHFlipped.get(), iter);
+			} else if((iter.x % (tileSize.x*2) == 0) && (iter.y % (tileSize.y*2) != 0)) {
+			    tiledArea->blitFrom(tileVFlipped.get(), iter);
+			} else /*if((dest.x % (tileSize.x*2) != 0) && (dest.y % (tileSize.y*2) != 0))*/ {
+			    tiledArea->blitFrom(tileHVFlipped.get(), iter);
+			}
+	}
+
     blitFrom(tiledArea.get(), UPoint(area.x, area.y));
 }
 
@@ -345,10 +362,11 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
 
 void Image::flipH() {
     if (!mustLock() || (lockSurface() == 0)) {
-	for(int y = 0; y < h;y++) {
-		for(int x = 0; x < w; x++) {
-			Uint8 val = *( ((Uint8*) (pixels)) + y*pitch + x);
-			*( ((Uint8*) (pixels)) + (h - y - 1)*pitch + x) = val;
+	for(int i = 0; i < w; i++) {
+		for(int j = 0; j < h/2; j++) {
+		    Uint8 *top = (Uint8 *)pixels + j*pitch + i*format->BytesPerPixel,
+			  *bottom = (Uint8 *)pixels + (h-j-1)*pitch + i*format->BytesPerPixel;
+		    swap(*top, *bottom);
 		}
 	}
 	if (mustLock())
@@ -359,10 +377,11 @@ void Image::flipH() {
 
 void Image::flipV() {
     if (!mustLock() || (lockSurface() == 0)) {
-	for(int y = 0; y < h;y++) {
-		for(int x = 0; x < w; x++) {
-			Uint8 val = *( ((Uint8*) (pixels)) + y*pitch + x);
-			*( ((Uint8*) (pixels)) + y*pitch + (w - x - 1)) = val;
+	for(int j = 0; j < h; j++) {
+		for(int i = 0; i < w/2; i++) {
+		    Uint8 *left = (Uint8 *)pixels + j*pitch + i*format->BytesPerPixel,
+			  *right = (Uint8 *)pixels + j*pitch + (w-i-1)*format->BytesPerPixel;
+		    swap(*left, *right);
 		}
 	}
 	if (mustLock())

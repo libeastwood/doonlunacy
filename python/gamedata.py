@@ -81,7 +81,7 @@ class UI_MenuBackground(GameDataMod):
     def __init__(self):
         GameDataMod.__init__(self)
         self.gamedata = Fame()
-        self.crop = (0, 0, 50, 50)
+        self.crop = (0, 1, 63, 67)
 
 class UI_BlankFiller(GameDataMod):
     def __init__(self):
