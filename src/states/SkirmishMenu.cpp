@@ -32,6 +32,7 @@ void SkirmishMenuState::drawSpecifics()
 
     ImagePtr houseChoice = DataCache::Instance()->getGameData("UI_HouseChoiceBackground")->getImage();
     houseChoice->drawBorders1();
+    houseChoice->greyOut(Rect(20, 50, 300, 150));
     m_middleFrame->changeBackground(houseChoice);
 }
 

@@ -564,3 +564,38 @@ void Image::recolorByHouse(int house)
 {
     recolor(DEFAULT_SURFACE_REMAP_BEGIN, houseColour[house]);
 }
+
+void Image::greyOut(Rect area) {
+	unsigned char index2greyindex[] = {
+		0, 0, 0, 13, 233, 127, 0, 131, 0, 0, 0, 0, 0, 13, 14, 15,
+		0, 127, 0, 0, 0, 14, 0, 130, 24, 131, 131, 0, 0, 29, 0, 183,
+		0, 128, 128, 0, 14, 14, 14, 130, 130, 0, 0, 0, 0, 13, 0, 29,
+		0, 0, 30, 0, 0, 183, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		126, 0, 0, 126, 128, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0,
+		0, 14, 0, 0, 0, 0, 0, 14, 0, 0, 130, 0, 131, 0, 13, 29,
+		0, 30, 183, 175, 175, 0, 0, 0, 0, 0, 0, 0, 0, 233, 0, 0,
+		14, 0, 14, 130, 24, 0, 0, 0, 131, 0, 175, 0, 24, 0, 0, 0,
+		0, 14, 130, 131, 29, 133, 134, 0, 233, 0, 14, 24, 131, 13, 29, 183,
+		30, 30, 183, 183, 175, 175, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		24, 13, 29, 183, 175, 0, 0, 30, 0, 0, 13, 0, 0, 30, 174, 175,
+		14, 24, 131, 13, 30, 183, 175, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 30, 0, 175, 175, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0,
+		0, 0, 131, 13, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 13, 0, 0, 30, 183, 0, 0, 0, 0, 0, 0, 0 };
+
+    if(area == Rect())
+	area.setSize(getSize());
+
+    if (!mustLock() || (lockSurface() == 0))
+    {
+	for(int i = area.x; i < area.w; i++)
+	    for(int j = area.y; j < area.h; j++) {
+		unsigned char inputIndex = *( ((unsigned char*) (pixels)) + j*pitch + i);
+		unsigned char outputIndex = index2greyindex[inputIndex];
+		*( ((unsigned char*) (pixels)) + j*pitch + i) = outputIndex;
+	    }
+	if (mustLock())
+	    unlockSurface();
+    }
+}

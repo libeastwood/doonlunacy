@@ -362,6 +362,7 @@ class Image : private SDL_Surface
 	    return copy;
 	}
 
+	void greyOut(Rect area = Rect());
 	void drawBorders(std::string nw, std::string ne, std::string sw,
 		std::string se, Uint16 edgeDistance = 0);
 
