@@ -63,7 +63,7 @@ void GameMenuState::draw()
     m_creditsCounterLabel = new GraphicsLabel(creditsCounter);
     m_topFrame->addChild(m_creditsCounterLabel);
 
-    ImagePtr roundThingie(screen->getPictureCrop(Rect(240, 39, 14, 13)));
+    ImagePtr roundThingie = DataCache::Instance()->getGameData("UI_RoundBall")->getImage(m_house);
 
     ImagePtr radar(new Image(UPoint(144, 118 + roundThingie->getSize().y)));
     radar->blitFrom(roundThingie.get(), UPoint(0, 0));

@@ -374,6 +374,12 @@ class UI_CreditsCounter(GameDataMod):
         self.gamedata = Screen()
         self.crop = (256, 1, 64, 15)
 
+class UI_RoundBall(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = Screen()
+        self.crop = (240, 39, 14, 13)
+
 class ObjPic_Tank_Base(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
