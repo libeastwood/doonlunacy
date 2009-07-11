@@ -356,6 +356,12 @@ class UI_Corner3SE(GameDataMod):
         self.colorkey = 0;
         self.fillrect = [(0, 0, 5, 5)]
 
+class UI_CreditsDigits(GameDatMod):
+    def __init__(self):
+        GameDataMod.__init__(self):
+            self.filename = "DUNE:SHAPES.SHP"
+            self.tiles = normal_row([2,3,4,5,6,7,8,9,10,11])
+
 class ObjPic_Tank_Base(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
