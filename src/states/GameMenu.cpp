@@ -53,12 +53,11 @@ void GameMenuState::draw()
 
     m_topFrame->addChild(m_optionsButton);
 
-    ImagePtr credits(screen->getPictureCrop(Rect(201, 2, 54, 12)));
-    m_creditsLabel = new GraphicsLabel(credits);
+    m_creditsLabel = new GraphicsLabel(DataCache::Instance()->getGameData("UI_Credits")->getImage(m_house));
     m_topFrame->addChild(m_creditsLabel);
 
     ImagePtr creditsCounter(new Image(UPoint(65, 15)));
-    creditsCounter->blitFrom(screen->getPictureCrop(Rect(256, 1, 64, 15)).get());
+    creditsCounter->blitFrom(DataCache::Instance()->getGameData("UI_CreditsCounter")->getImage().get());
     Uint32 color = creditsCounter->getPixel(UPoint(0,0));
     creditsCounter->drawVLine(UPoint(64, 0), 14, color);
     m_creditsCounterLabel = new GraphicsLabel(creditsCounter);

@@ -362,6 +362,18 @@ class UI_CreditsDigits(GameDataConst):
         self.filename = "DUNE:SHAPES.SHP"
         self.tiles = normal_row([2,3,4,5,6,7,8,9,10,11])
 
+class UI_Credits(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = Screen()
+        self.crop = (201, 2, 54, 12)
+
+class UI_CreditsCounter(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = Screen()
+        self.crop = (256, 1, 64, 15)
+
 class ObjPic_Tank_Base(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
