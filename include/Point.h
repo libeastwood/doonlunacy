@@ -68,6 +68,14 @@ struct Point
             y += point.y;
             return *this;
         }
+
+	Point &operator+=(T value)
+        {
+            x += value;
+            y += value;
+            return *this;
+        }
+
         //! operator -=
         Point &operator-=(const Point &point)
         {
@@ -75,6 +83,14 @@ struct Point
             y -= point.y;
             return *this;
         }
+
+        Point &operator-=(T value)
+        {
+            x -= value;
+            y -= value;
+            return *this;
+        }
+
         //! operator *=
         Point &operator*=(T times)
         {
