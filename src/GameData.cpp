@@ -184,10 +184,8 @@ void GameData::drawImage()
 	    }
 	    if(!nonePyObject(pyObject.attr("fillrect"))) {
 		std::vector<Rect> fillRects = getPyObjectVector<Rect>(pyObject.attr("fillrect"));
-	    	for (std::vector<Rect>::const_iterator iter = fillRects.begin(); iter != fillRects.end(); iter++) {
-		    Rect rect(*iter);
-		    m_surface->fillRect(colorkey, &rect);
-		}
+	    	for (std::vector<Rect>::const_iterator iter = fillRects.begin(); iter != fillRects.end(); iter++)
+		    m_surface->fillRect(colorkey, *iter);
 	    }
 	}
 	else {

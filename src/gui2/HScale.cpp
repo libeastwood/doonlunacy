@@ -41,7 +41,7 @@ void HScale::draw(Image * dest, SPoint off)
     scale.w = (int)((m_value * 100)/ m_max);
     
     Container::draw(dest, off);
-    dest->fillRect(52, &scale);
+    dest->fillRect(52, scale);
     scale.y--;
     scale.w = 100;
     scale.h+=2;

@@ -101,7 +101,7 @@ void Image::fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 	r.w = (int)end - r.x;
 
 	// fillit
-	fillRect(color1 + i, &r);
+	fillRect(color1 + i, r);
     }
 }
 void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
@@ -126,7 +126,7 @@ void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 	r.h = (int)end - r.y;
 
 	// fillit
-	fillRect(color1 + i, &r);
+	fillRect(color1 + i, r);
     }
 }
 

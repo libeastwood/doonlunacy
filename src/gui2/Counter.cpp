@@ -54,20 +54,17 @@ void Counter::drawDigits()
     int len = strlen(digits);
     ImagePtr creditDigits = DataCache::Instance()->getGameData("UI_CreditsDigits")->getImage();
 
-
-
-    char digit[2];
-    int num;
     Uint32 colorBg = m_surface->getPixel(UPoint(4,4));
     for(int i = 0, j = 0; i < m_maxlen; i++) {
 	if(i + len >= m_maxlen) {
+	    char digit[2];
+	    int num;
+
 	    digit[0] = digits[j++];
 	    num = atoi(digit);
 	    m_surface->blitFrom(creditDigits->getPictureCrop(Rect(num*8,0, 8,8)).get(),UPoint(4+i*10,4));
 	}
-	else {
-	    Rect r(4+i*10, 4, 8, 8);
-	    m_surface->fillRect(colorBg, &r);
-	}
+	else
+	    m_surface->fillRect(colorBg, Rect(4+i*10, 4, 8, 8));
     }
 }

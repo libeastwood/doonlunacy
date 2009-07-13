@@ -274,8 +274,8 @@ class Image : private SDL_Surface
 	//! @name Fill operations
 	//@{
 
-	void fillRect(Uint32 color, Rect *dstRect = NULL) {
-	    SDL_FillRect(this, dstRect, color);
+	void fillRect(Uint32 color, Rect dstRect = Rect()) {
+	    SDL_FillRect(this, !dstRect ? NULL : &dstRect, color);
 	}
 
 	void fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect);
