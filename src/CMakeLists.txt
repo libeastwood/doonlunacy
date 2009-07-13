@@ -67,6 +67,7 @@ SET( DOONLUNACY_STATE_SRCS
   states/MentatInfoMenu.cpp
   states/OptionsMenu.cpp
   states/SingleMenu.cpp
+  states/SkirmishGame.cpp
   states/SkirmishMenu.cpp
   states/State.cpp
   states/TopLevelState.cpp

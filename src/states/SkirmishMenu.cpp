@@ -2,6 +2,8 @@
 
 #include "states/SkirmishMenu.h"
 
+#include "states/SkirmishGame.h"
+
 #include "DataCache.h"
 #include "GameData.h"
 #include "Settings.h"
@@ -72,18 +74,25 @@ void SkirmishMenuState::drawSpecifics()
     transparent->setColorKey();
     GraphicButton *atreidesButton = new GraphicButton(transparent, atreides);
     atreidesButton->setPosition(UPoint(0, 0));
+    atreidesButton->onClick.connect(
+            boost::bind(&SkirmishMenuState::setHouse, this, HOUSE_ATREIDES));
+
     m_selectionBox->addChild(atreidesButton);
 
     ImagePtr ordos = DataCache::Instance()->getGameData("UI_HeraldColoredOrdos")->getImage();
     transparent->setColorKey();
     GraphicButton *ordosButton = new GraphicButton(transparent, ordos);
     ordosButton->setPosition(UPoint(96, 0));
+    ordosButton->onClick.connect(
+            boost::bind(&SkirmishMenuState::setHouse, this, HOUSE_ORDOS));
     m_selectionBox->addChild(ordosButton);
 
     ImagePtr harkonnen = DataCache::Instance()->getGameData("UI_HeraldColoredHarkonnen")->getImage();
     transparent->setColorKey();
     GraphicButton *harkonnenButton = new GraphicButton(transparent, harkonnen);
     harkonnenButton->setPosition(UPoint(194, 0));
+    harkonnenButton->onClick.connect(
+            boost::bind(&SkirmishMenuState::setHouse, this, HOUSE_HARKONNEN));
     m_selectionBox->addChild(harkonnenButton);
 
     m_missionLabel->redraw();
@@ -113,6 +122,7 @@ void SkirmishMenuState::resize()
 
 void SkirmishMenuState::doStart()
 {
+    mp_parent->PushState( new SkirmishGameState(HOUSE_ATREIDES, m_missionCounter->getValue()) );
 }
 
 void SkirmishMenuState::doCancel()

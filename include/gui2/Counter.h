@@ -10,6 +10,7 @@ class Counter : public Frame
 
     void increase();
     void decrease();
+    int getValue() { return m_value; }
 
   private:
     int m_min,

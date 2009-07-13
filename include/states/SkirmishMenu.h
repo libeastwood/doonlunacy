@@ -24,6 +24,7 @@ class SkirmishMenuState : public MainMenuBaseState
 	virtual void resize();
 
     private:
+	void setHouse(HOUSETYPE house) { m_house = house; }
         BoringButton *m_butStart,
 		     *m_butCancel,
 		     *m_butMinus,
@@ -32,6 +33,8 @@ class SkirmishMenuState : public MainMenuBaseState
 	Frame *m_missionFrame;
 	SelectionBox *m_selectionBox;
 	TransparentLabel *m_missionLabel;
+	HOUSETYPE m_house;
+	int m_level;
 
 };
 
