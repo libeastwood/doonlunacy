@@ -76,6 +76,13 @@ struct Rect : public SDL_Rect
             return *this;
 	}
 
+	//! operator !
+	bool operator!()
+	{
+	    return ((x == 0) && (y == 0) &&
+		    (w == 0) && (h == 0));
+	}
+
 	//! Compare two rectangles for equality.
 	/*!
 	  \return true if x / y coordinates and h / w are identical in both rectangles.
