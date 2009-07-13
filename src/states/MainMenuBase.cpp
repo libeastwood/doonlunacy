@@ -1,3 +1,5 @@
+#include <boost/bind.hpp>
+
 #include "states/MainMenuBase.h"
 
 #include "Application.h"
@@ -9,8 +11,6 @@
 #include "gui2/Frame.h"
 #include "gui2/Label.h"
 #include "gui2/VBox.h"
-
-#include <boost/bind.hpp>
 
 MainMenuBaseState::MainMenuBaseState()
 {
@@ -44,12 +44,12 @@ void MainMenuBaseState::draw()
 	ImagePtr menuBottom(new Image(UPoint(bw + 20, (m_vbox->getChildrenSize() * 2) + (m_vbox->getChildrenSize() * bh) + 25)));
     menuBottom->drawBorders2();
     menuBottom->setColorKey();
-    Frame *menuBottomFrame = new Frame(menuBottom);
+    m_menuBottomFrame = new Frame(menuBottom);
     m_vbox->setPosition(UPoint(9,14));
-    menuBottomFrame->addChild(m_vbox);
+    m_menuBottomFrame->addChild(m_vbox);
 
-    menuBottomFrame->setPosition(UPoint(0,31));
-    m_menuFrame->addChild(menuBottomFrame);
+    m_menuBottomFrame->setPosition(UPoint(0,31));
+    m_menuFrame->addChild(m_menuBottomFrame);
 
     m_harkonnenHerald = new GraphicsLabel(DataCache::Instance()->getGameData("UI_Mentat_HeraldHarkonnen")->getImage());
     m_backgroundFrame->addChild(m_harkonnenHerald);

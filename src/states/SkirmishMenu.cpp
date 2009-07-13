@@ -1,13 +1,16 @@
+#include <boost/bind.hpp>
+
 #include "states/SkirmishMenu.h"
 
 #include "DataCache.h"
 #include "GameData.h"
+#include "Settings.h"
 
 #include "gui2/Button.h"
+#include "gui2/Counter.h"
 #include "gui2/Frame.h"
+#include "gui2/HScale.h"
 #include "gui2/VBox.h"
-
-#include <boost/bind.hpp>
 
 
 SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
@@ -23,6 +26,27 @@ SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
     m_butCancel->onClick.connect(
             boost::bind(&SkirmishMenuState::doCancel, this) );
     m_vbox->addChild(m_butCancel);
+
+    m_missionLabel = new TransparentLabel("Mission");
+
+    m_missionCounter = new Counter(1, 22, 1);
+    m_butPlus = new BoringButton("+");
+    m_butPlus->setSize(SPoint(10, 10));
+    m_butPlus->onClick.connect(
+            boost::bind(&Counter::increase, m_missionCounter) );
+
+    m_butMinus = new BoringButton("-");
+    m_butMinus->setSize(SPoint(10,10));
+    m_butMinus->onClick.connect(
+            boost::bind(&Counter::decrease, m_missionCounter) );
+
+    m_missionFrame = new Frame();
+
+    m_missionFrame->addChild(m_missionLabel);
+    m_missionFrame->addChild(m_butMinus);
+    m_missionFrame->addChild(m_butPlus);
+    m_missionFrame->addChild(m_missionCounter);
+    m_backgroundFrame->addChild(m_missionFrame);
 
 }
 
@@ -55,6 +79,29 @@ void SkirmishMenuState::drawSpecifics()
     harkonnenButton->setPosition(UPoint(213, 52));
     m_middleFrame->addChild(harkonnenButton);
 
+    m_missionLabel->redraw();
+}
+
+void SkirmishMenuState::resize()
+{
+    MainMenuBaseState::resize();
+    UPoint resolution = set->GetResolution();
+
+    m_missionLabel->setPosition(SPoint(8,8));
+    m_missionCounter->setPosition(m_missionLabel->getPosition() + SPoint(m_missionLabel->getSize().x + 5, 0));
+    m_butPlus->setPosition(m_missionCounter->getPosition() + SPoint(m_missionCounter->getSize().x + 5, -2));
+    m_butMinus->setPosition(m_missionCounter->getPosition() + SPoint(m_missionCounter->getSize().x + 5, 8));
+
+    ImagePtr tmp(new Image(m_missionLabel->getSize() + m_missionLabel->getPosition() + SPoint(m_missionCounter->getSize().x + m_butPlus->getSize().x + 20, 5)));
+    tmp->setColorKey();
+    tmp->drawBorders1();
+
+    m_missionFrame->changeBackground(tmp);
+
+    SPoint midPos = m_menuFrame->getPosition() + SPoint(m_menuFrame->getSize().x, m_menuBottomFrame->getPosition().y);
+    SPoint pos = midPos + (UPoint(resolution.x - midPos.x,m_menuBottomFrame->getSize().y)/2) - (m_missionFrame->getSize()/2);
+
+    m_missionFrame->setPosition(pos);
 }
 
 void SkirmishMenuState::doStart()
