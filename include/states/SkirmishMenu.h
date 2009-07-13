@@ -6,6 +6,7 @@
 class BoringButton;
 class Counter;
 class Frame;
+class SelectionBox;
 class TransparentLabel;
 
 class SkirmishMenuState : public MainMenuBaseState 
@@ -29,6 +30,7 @@ class SkirmishMenuState : public MainMenuBaseState
 		     *m_butPlus;
 	Counter *m_missionCounter;
 	Frame *m_missionFrame;
+	SelectionBox *m_selectionBox;
 	TransparentLabel *m_missionLabel;
 
 };

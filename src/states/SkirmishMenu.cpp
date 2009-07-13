@@ -10,6 +10,7 @@
 #include "gui2/Counter.h"
 #include "gui2/Frame.h"
 #include "gui2/HScale.h"
+#include "gui2/SelectionBox.h"
 #include "gui2/VBox.h"
 
 
@@ -26,6 +27,8 @@ SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
     m_butCancel->onClick.connect(
             boost::bind(&SkirmishMenuState::doCancel, this) );
     m_vbox->addChild(m_butCancel);
+
+    m_selectionBox = new SelectionBox(false);
 
     m_missionLabel = new TransparentLabel("Mission");
 
@@ -56,28 +59,32 @@ void SkirmishMenuState::drawSpecifics()
 
     ImagePtr houseChoice = DataCache::Instance()->getGameData("UI_HouseChoiceBackground")->getImage()->getCopy();
     houseChoice->drawBorders1();
-    houseChoice->greyOut(Rect(20, 53, 300, 53+95));
+    Rect area(20, 53, 300, 53+95);
+    houseChoice->greyOut(area);
     m_middleFrame->changeBackground(houseChoice);
+    m_selectionBox->setPosition(area.getPosition() - 1);
+    m_selectionBox->setSize(area.getSize());
+    m_middleFrame->addChild(m_selectionBox);
 
     ImagePtr atreides = DataCache::Instance()->getGameData("UI_HeraldColoredAtreides")->getImage();
     ImagePtr transparent(new Image(atreides->getSize()));
 
     transparent->setColorKey();
     GraphicButton *atreidesButton = new GraphicButton(transparent, atreides);
-    atreidesButton->setPosition(UPoint(19, 52));
-    m_middleFrame->addChild(atreidesButton);
+    atreidesButton->setPosition(UPoint(0, 0));
+    m_selectionBox->addChild(atreidesButton);
 
     ImagePtr ordos = DataCache::Instance()->getGameData("UI_HeraldColoredOrdos")->getImage();
     transparent->setColorKey();
     GraphicButton *ordosButton = new GraphicButton(transparent, ordos);
-    ordosButton->setPosition(UPoint(115, 52));
-    m_middleFrame->addChild(ordosButton);
+    ordosButton->setPosition(UPoint(96, 0));
+    m_selectionBox->addChild(ordosButton);
 
     ImagePtr harkonnen = DataCache::Instance()->getGameData("UI_HeraldColoredHarkonnen")->getImage();
     transparent->setColorKey();
     GraphicButton *harkonnenButton = new GraphicButton(transparent, harkonnen);
-    harkonnenButton->setPosition(UPoint(213, 52));
-    m_middleFrame->addChild(harkonnenButton);
+    harkonnenButton->setPosition(UPoint(194, 0));
+    m_selectionBox->addChild(harkonnenButton);
 
     m_missionLabel->redraw();
 }

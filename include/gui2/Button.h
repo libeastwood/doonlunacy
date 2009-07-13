@@ -5,6 +5,8 @@
 #include "boost/signal.hpp"
 #include <string>
 
+class SelectionBox;
+
 class Button : public Widget
 {
     public:
@@ -28,6 +30,8 @@ class GraphicButton : public Button
         virtual bool handleButtonUp(Uint8 button, SPoint p);
 
     protected:
+    	friend class SelectionBox;
+
         ImagePtr m_surfNormal;
         ImagePtr m_surfPressed;
 

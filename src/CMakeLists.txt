@@ -81,6 +81,7 @@ SET( DOONLUNACY_GUI_SRCS
   gui2/Frame.cpp
   gui2/HScale.cpp
   gui2/Counter.cpp
+  gui2/SelectionBox.cpp
 )
 
 SET( DOONLUNACY_SRCS
