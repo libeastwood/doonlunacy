@@ -80,6 +80,7 @@ SET( DOONLUNACY_GUI_SRCS
   gui2/Label.cpp
   gui2/Frame.cpp
   gui2/HScale.cpp
+  gui2/Counter.cpp
 )
 
 SET( DOONLUNACY_SRCS
