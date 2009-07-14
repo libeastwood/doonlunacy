@@ -134,7 +134,7 @@ class Tank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
-        self.topGraphic = ObjPic_Tank_Base()
+        self.topGraphic = ObjPic_Tank_Gun()
         self.armor = 10
         self.health = self.maxHealth = 400
         self.radius = 6
