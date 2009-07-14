@@ -154,6 +154,7 @@ structures = {
         'Outpost' : Radar,
         'Radar' : Radar,
         'Refinery' : Refinery,
+        'Repair' : RepairYard,
         'Repair Yard' : RepairYard,
         'R-Turret' : RocketTurret,
         'Turret' : GunTurret,
