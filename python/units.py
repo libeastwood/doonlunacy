@@ -39,7 +39,7 @@ class Devastator(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Devastator_Base()
-        self.gunPicture = ObjPic_Devastator_Gun()
+        self.topGraphic = ObjPic_Devastator_Gun()
         self.armor = 15
         self.health = self.maxHealth = 1000
         self.radius = 7
@@ -49,8 +49,8 @@ class Devastator(GroundUnit):
 class Deviator(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.graphic = ObjPic_Siegetank_Base()
-        self.gunPicture = ObjPic_Launcher_Gun()
+        self.graphic = ObjPic_Tank_Base()
+        self.topGraphic = ObjPic_Launcher_Gun()
         self.armor = 5
         self.health = self.maxHealth =  200
         self.radius = 6
@@ -61,8 +61,8 @@ class Deviator(GroundUnit):
 class Launcher(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.graphic = ObjPic_Siegetank_Base()
-        self.gunPicture = ObjPic_Launcher_Gun()
+        self.graphic = ObjPic_Tank_Base()
+        self.topGraphic = ObjPic_Launcher_Gun()
         self.armor = 7
         self.health = self.maxHealth = 300
         self.radius = 6
@@ -112,7 +112,7 @@ class SiegeTank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Siegetank_Base()
-        self.gunPicture = ObjPic_Siegetank_Gun()
+        self.topGraphic = ObjPic_Siegetank_Gun()
         self.armor = 12
         self.health = self.maxHealth = 600
         self.radius = 7
@@ -122,8 +122,8 @@ class SiegeTank(GroundUnit):
 class SonicTank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
-        self.graphic = ObjPic_Siegetank_Base()
-        self.gunPicture = ObjPic_Sonictank_Gun()
+        self.graphic = ObjPic_Tank_Base()
+        self.topGraphic = ObjPic_Sonictank_Gun()
         self.armor = 7
         self.health = self.maxHealth = 350
         self.radius = 6
@@ -134,7 +134,7 @@ class Tank(GroundUnit):
     def __init__(self):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
-        self.gunPicture = ObjPic_Tank_Base()
+        self.topGraphic = ObjPic_Tank_Base()
         self.armor = 10
         self.health = self.maxHealth = 400
         self.radius = 6

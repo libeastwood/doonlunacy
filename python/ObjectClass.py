@@ -9,6 +9,7 @@ class Object(object):
         self.drawnPos = (0,0)
         self.explosionSize = 1
         self.graphic = None
+        self.topGraphic = None
         self.guardRange = 0
         self.numDeathFrames = 1
         self.numFrames = 1
