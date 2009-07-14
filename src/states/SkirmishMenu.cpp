@@ -35,12 +35,12 @@ SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
     m_missionLabel = new TransparentLabel("Mission");
 
     m_missionCounter = new Counter(1, 22, 1);
-    m_butPlus = new BoringButton("+");
+    m_butPlus = new BoringButton(" ");
     m_butPlus->setSize(SPoint(10, 10));
     m_butPlus->onClick.connect(
             boost::bind(&Counter::increase, m_missionCounter) );
 
-    m_butMinus = new BoringButton("-");
+    m_butMinus = new BoringButton(" ");
     m_butMinus->setSize(SPoint(10,10));
     m_butMinus->onClick.connect(
             boost::bind(&Counter::decrease, m_missionCounter) );
