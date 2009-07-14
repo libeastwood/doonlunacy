@@ -34,8 +34,20 @@ void SkirmishGameState::resize()
     m_mapWidget->setSize(mapSize);
 
     char mission[] = "SCENARIO:SCEN%c%.3d.INI";
-    sprintf(mission, mission, (char)m_house, m_level);
-    printf("%s\n", mission);
+    char house;
+    if(m_house == HOUSE_HARKONNEN)
+	house = 'H';
+    else if(m_house == HOUSE_ATREIDES)
+	house = 'A';
+    else if(m_house == HOUSE_ORDOS)
+	house = 'O';
+    else if(m_house == HOUSE_FREMEN)
+	house = 'F';
+    else if(m_house == HOUSE_MERCENARY)
+	house = 'M';
+    else
+	house = 0;
+    sprintf(mission, mission, house, m_level);
 
     GameMan::Instance()->LoadScenario(mission);
 }
