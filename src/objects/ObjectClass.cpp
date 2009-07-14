@@ -160,8 +160,12 @@ void ObjectClass::drawSelectionBox(Image* dest)
     m_selectionBox->blitTo(dest, m_drawnPos);
 #endif
 
-    dest->drawHLine(UPoint(m_drawnPos.x + 2, m_drawnPos.y + 2), m_drawnPos.x + 1 + ((int)(((float)m_health / (float)m_maxHealth)*(w - 3))), getHealthColour());
-} //want it to start in one from edges  finish one from right edge
+    int health = ((int)(((float)m_health / (float)m_maxHealth)*(w - 3)));
+
+    ImagePtr healthBar(new Image(UPoint(health,1)));
+    healthBar->fillRect(getHealthColour());
+    healthBar->blitTo(dest, m_drawnPos+2);
+}
 
 void ObjectClass::drawSmoke(Image *dest)
 {
