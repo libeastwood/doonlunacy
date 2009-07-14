@@ -621,7 +621,7 @@ class ObjPic_Wall(GameDataConst):
         self.map = "DUNE:ICON.MAP"
         self.mapindex = 6
         self.tilepos = (1,1)
-        num = 75
+        self.num = 75
 
 class ObjPic_Bullet_SmallRocket(GameDataConst):
     def __init__(self):
