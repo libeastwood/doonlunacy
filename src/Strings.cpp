@@ -227,8 +227,8 @@ size_t vsnPrintf(char *str, size_t size, const char *format, va_list ap) {
 	if(*format == '%')
 	{
 	    const char *tmp = va_arg(ap, const char*);
-	    char fmt[5] = {*(format++)};
-	    for(size_t i = 1; i < sizeof(fmt); i++)
+	    char fmt[6] = {*(format++)};
+	    for(size_t i = 1; i < sizeof(fmt)-1; i++)
 		fmt[i] = (*format != '\0' && *format != ' ' && *format != '%') ? *(format++) : '\0';
 
 	    if(fmt[1] == 'S')
