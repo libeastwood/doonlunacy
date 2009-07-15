@@ -96,7 +96,17 @@ SET( PAKVIEW_SRCS
   ${DOONLUNACY_BASE_SRCS}
   ${DOONLUNACY_GUI_SRCS}
 )
-  
+ 
+SET( GAMEDATAUTIL_SRCS
+  misc/gamedatautil.cpp
+  gui2/Widget.cpp
+  gui2/Container.cpp
+  gui2/Label.cpp
+  states/State.cpp
+  states/TopLevelState.cpp
+  ${DOONLUNACY_BASE_SRCS}
+)
+
 ADD_EXECUTABLE(../doonlunacy ${DOONLUNACY_SRCS})
 
 TARGET_LINK_LIBRARIES(../doonlunacy ${LIBEASTWOOD_LIBRARIES} )
@@ -105,6 +115,12 @@ TARGET_LINK_LIBRARIES(../doonlunacy boost_filesystem-mt )
 TARGET_LINK_LIBRARIES(../doonlunacy boost_python-mt )
 TARGET_LINK_LIBRARIES(../doonlunacy ${PYTHON_LIBRARY} )
 
+ADD_EXECUTABLE(../gamedatautil ${GAMEDATAUTIL_SRCS} )
+TARGET_LINK_LIBRARIES(../gamedatautil ${LIBEASTWOOD_LIBRARIES} )
+TARGET_LINK_LIBRARIES(../gamedatautil boost_signals-mt )
+TARGET_LINK_LIBRARIES(../gamedatautil boost_filesystem-mt )
+TARGET_LINK_LIBRARIES(../gamedatautil boost_python-mt )
+TARGET_LINK_LIBRARIES(../gamedatautil ${PYTHON_LIBRARY} )
 
 
 #ADD_EXECUTABLE(../pakview ${PAKVIEW_SRCS})
