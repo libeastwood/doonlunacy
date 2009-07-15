@@ -1,3 +1,5 @@
+#include "Definitions.h"
+
 #include <eastwood/CpsFile.h>
 #include <eastwood/IcnFile.h>
 #include <eastwood/PalFile.h>
