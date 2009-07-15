@@ -190,6 +190,7 @@ class ObjectClass : protected Rect
 	   m_animFrames,
 
 	   m_drawnAngle,
+	   m_drawnTopAngle,
 
 	   //! Used for fog of war and area exploring.
 	   m_viewRange,
@@ -216,6 +217,7 @@ class ObjectClass : protected Rect
 
     //! SharedPtr to image for current object
     ImagePtr m_graphic,
+	     m_topGraphic,
 	     m_selectionBox,
 	     m_selectionBoxGlowing;
 
@@ -238,6 +240,7 @@ class ObjectClass : protected Rect
     ObjectPtr m_target;
 
     std::vector<WeaponPtr> m_weapons;
+    std::vector<SPoint> m_topOffset;
 
     python::object m_pyObject;
 

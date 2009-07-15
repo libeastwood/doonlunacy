@@ -14,7 +14,7 @@
 ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
     Rect(0, 0, 0, 0), m_objectName(objectName), m_attributes(attribute)
 {
-    std::string graphic;
+    std::string graphic, topGraphic;
     std::vector<python::object> pyWeapons;
 
     m_owner = newOwner;
@@ -41,6 +41,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 
     m_attackMode = STANDGROUND;
 
+    m_drawnTopAngle = getRandom(0,7);
     try {
 	PointFloat size;
 	m_angle = python::extract<int>(m_pyObject.attr("angle"));
@@ -53,6 +54,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_explosionSize = python::extract<int>(m_pyObject.attr("explosionSize"));
 	m_guardRange = python::extract<int>(m_pyObject.attr("guardRange"));
 	graphic = getPyObjectType(m_pyObject.attr("graphic"), 0);
+	topGraphic = getPyObjectType(m_pyObject.attr("topGraphic"), 0);
+	if(topGraphic != "NoneType")
+	    m_topOffset = getPyObjectVector<SPoint>(m_pyObject.attr("topOffset"));
 	m_maxHealth = python::extract<int>(m_pyObject.attr("maxHealth"));
 	m_numDeathFrames = python::extract<int>(m_pyObject.attr("numDeathFrames"));
 	m_numFrames = python::extract<int>(m_pyObject.attr("numFrames"));
@@ -74,6 +78,9 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
     }
 
     m_graphic = DataCache::Instance()->getGameData(graphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+    if(topGraphic != "NoneType")
+    	m_topGraphic = DataCache::Instance()->getGameData(topGraphic)->getImage((m_owner == NULL) ? (HOUSETYPE)HOUSE_HARKONNEN : (HOUSETYPE)m_owner->getHouse());
+
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
     m_visible.resize(MAX_PLAYERS);
 
@@ -134,6 +141,16 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
     {
 	Rect source(m_numFrames > 1 ? m_drawnAngle * w : m_curAnimFrame * w, 0, w, h);
 	m_graphic->blitTo(dest, source, m_drawnPos);
+	if(m_topGraphic)
+	{
+	    source.w = source.h = m_topGraphic->getSize().y;
+	    int16_t topOffset = m_drawnTopAngle;
+	    if(topOffset > (signed)m_topOffset.size() - 1 || topOffset < 0)
+		topOffset -= (topOffset/m_topOffset.size()) * m_topOffset.size();
+	    
+	    source.x = m_numFrames > 1 ? m_drawnTopAngle * source.w : m_curAnimFrame * source.w;
+	    m_topGraphic->blitTo(dest, source, m_drawnPos + m_topOffset[drawnTopAngle]);
+	}
     }
     else if (m_numDeathFrames > 1)
 	doDeath(dest);

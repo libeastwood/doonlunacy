@@ -7,6 +7,7 @@ class Unit(ObjectClass.Object):
     def __init__(self):
         ObjectClass.Object.__init__(self)
         self.deathAnim = ObjPic_Hit_ExplosionSmallUnit()
+        self.numFrames = 8
         self.speed = 0.0
         self.speedCap = None
         self.turnSpeed = 0.0625

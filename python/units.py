@@ -40,6 +40,8 @@ class Devastator(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Devastator_Base()
         self.topGraphic = ObjPic_Devastator_Gun()
+        self.topOffset = [(2, -4), (-1, -3), (0, -4), (1, -3),
+                (-2, -4), (0, -3), (-1, -3), (0, -3)]
         self.armor = 15
         self.health = self.maxHealth = 1000
         self.radius = 7
@@ -51,6 +53,7 @@ class Deviator(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
         self.topGraphic = ObjPic_Launcher_Gun()
+        self.topOffset = [(3, -1), (3, 0), (3, 0), (3, 0)]
         self.armor = 5
         self.health = self.maxHealth =  200
         self.radius = 6
@@ -63,6 +66,7 @@ class Launcher(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
         self.topGraphic = ObjPic_Launcher_Gun()
+        self.topOffset = [(3, -1), (3, 0), (3, 0), (3, 0)],
         self.armor = 7
         self.health = self.maxHealth = 300
         self.radius = 6
@@ -113,6 +117,8 @@ class SiegeTank(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Siegetank_Base()
         self.topGraphic = ObjPic_Siegetank_Gun()
+        self.topOffset = [(2,-4),(1,-5),(0,-5),(-1,-5),
+                (-2,-4),(-1,-2),(-1,-4),(1,-2)]
         self.armor = 12
         self.health = self.maxHealth = 600
         self.radius = 7
@@ -124,6 +130,7 @@ class SonicTank(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
         self.topGraphic = ObjPic_Sonictank_Gun()
+        self.topOffset = [(3, 1)]
         self.armor = 7
         self.health = self.maxHealth = 350
         self.radius = 6
@@ -135,6 +142,7 @@ class Tank(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
         self.topGraphic = ObjPic_Tank_Gun()
+        self.topOffset = [(0,-1)]
         self.armor = 10
         self.health = self.maxHealth = 400
         self.radius = 6
