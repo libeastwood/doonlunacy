@@ -11,10 +11,8 @@ int main(int argc, char *argv[])
     Settings::Instance()->load();
     DataCache::Instance()->Init();
 
-    std::string gamedata = argv[1];
-    ImagePtr img = DataCache::Instance()->getGameData(gamedata)->getImage();
-
-    img->saveBMP(gamedata + ".bmp");
+    for(int i = 1; i < argc; i++)
+    	DataCache::Instance()->getGameData(argv[i])->getImage()->saveBMP(((std::string)argv[i]) + ".bmp");
     
     return 0;
 }
