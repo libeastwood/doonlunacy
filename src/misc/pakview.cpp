@@ -8,7 +8,7 @@
 
 #include "gui2/Label.h"
 #include "pakfile/Palette.h"
-#include "tests/pakview.h"
+#include "misc/pakview.h"
 
 #include "boost/bind.hpp"
 
@@ -98,9 +98,6 @@ class PakViewState : public State
 
 int main(int argc, char *argv[])
 {
-    Settings::Instance()->ParseFile("dunelegacy.cfg");
-    Settings::Instance()->ParseOptions(argc, argv);
-
     Application::Instance()->Init();
     
     DataCache::Instance();
