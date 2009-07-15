@@ -39,22 +39,22 @@ Font* FontManager::loadFont(std::string fn)
 
 	LOG(LV_INFO, "Font", "nchars %u", header->nchars);
 
-	word* dchar = new word[header->nchars+1];
+	uint16_t* dchar = new uint16_t[header->nchars+1];
 
-	file->read(dchar, sizeof(word) * (header->nchars+1));
+	file->read(dchar, sizeof(uint16_t) * (header->nchars+1));
 
-	byte* wchar = new byte[header->nchars+1];
+	uint8_t* wchar = new uint8_t[header->nchars+1];
 
 
 	file->seek(header->wpos);
-	file->read(wchar, sizeof(byte) * (header->nchars+1));
+	file->read(wchar, sizeof(uint8_t) * (header->nchars+1));
 
 	if (wchar[0] != 8) LOG(LV_WARNING, "Font", "%d: bad!!", wchar[0]);
 
-	word* hchar = new word[header->nchars+1];
+	uint16_t* hchar = new uint16_t[header->nchars+1];
 
 	file->seek(header->hpos);
-	file->read(hchar, sizeof(word) * (header->nchars+1));
+	file->read(hchar, sizeof(uint16_t) * (header->nchars+1));
 
 	file->seek(header->cdata);
 
@@ -62,17 +62,17 @@ Font* FontManager::loadFont(std::string fn)
     
 	for (int i=0; i!=header->nchars+1; i++)
 	{
-		byte offset = hchar[i] & 0xFF;
-		byte height = hchar[i] >> 8;
-		byte width =( wchar[i] + 1)/ 2;
+		uint8_t offset = hchar[i] & 0xFF;
+		uint8_t height = hchar[i] >> 8;
+		uint8_t width =( wchar[i] + 1)/ 2;
         
 		characters[i].width = width;
 		characters[i].height = height;
 		characters[i].y_offset = offset;
 
 		file->seek(dchar[i]); 
-		byte* bitmap = new byte[width * height];
-		file->read(bitmap, sizeof(byte) * (width * height));
+		uint8_t* bitmap = new uint8_t[width * height];
+		file->read(bitmap, sizeof(uint8_t) * (width * height));
 		characters[i].bitmap = bitmap;       
 	};
 

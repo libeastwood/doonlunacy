@@ -5,6 +5,7 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <SDL.h>
+#include <inttypes.h>
 
 #if BOOST_VERSION >= 103800
 using boost::swap;

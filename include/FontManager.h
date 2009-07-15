@@ -1,9 +1,14 @@
 #ifndef DUNE_FONTMANAGER_H
 #define DUNE_FONTMANAGER_H
 
-#include "singleton.h"
+#include <map>
+
+#include "Definitions.h"
 
 #include <eastwood/Font.h>
+
+#include "singleton.h"
+
 
 class FontManager : public Singleton<FontManager>
 {
