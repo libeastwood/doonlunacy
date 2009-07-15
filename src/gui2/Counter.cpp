@@ -33,18 +33,16 @@ void Counter::decrease()
 {
     m_value--;
     if (m_value < m_min)
-	m_value = m_min;
-    else
-	drawDigits();
+	m_value = m_max;
+    drawDigits();
 }
 
 void Counter::increase()
 {
     m_value++;
     if (m_value > m_max)
-	m_value = m_max;
-    else
-	drawDigits();
+	m_value = m_min;
+    drawDigits();
 }
 
 void Counter::drawDigits()
