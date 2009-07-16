@@ -66,7 +66,7 @@ class Launcher(GroundUnit):
         GroundUnit.__init__(self)
         self.graphic = ObjPic_Tank_Base()
         self.topGraphic = ObjPic_Launcher_Gun()
-        self.topOffset = [(3, -1), (3, 0), (3, 0), (3, 0)],
+        self.topOffset = [(3, -1), (3, 0), (3, 0), (3, 0)]
         self.armor = 7
         self.health = self.maxHealth = 300
         self.radius = 6
