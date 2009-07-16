@@ -149,7 +149,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
 		topOffset -= (topOffset/m_topOffset.size()) * m_topOffset.size();
 	    
 	    source.x = m_numFrames > 1 ? m_drawnTopAngle * source.w : m_curAnimFrame * source.w;
-	    m_topGraphic->blitTo(dest, source, m_drawnPos + m_topOffset[drawnTopAngle]);
+	    m_topGraphic->blitTo(dest, source, m_drawnPos + m_topOffset[topOffset]);
 	}
     }
     else if (m_numDeathFrames > 1)
