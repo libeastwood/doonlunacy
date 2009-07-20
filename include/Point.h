@@ -242,17 +242,17 @@ struct Point
 };
 
 //! Point with unsigned coordinates
-typedef Point<Uint16> UPoint;
+typedef Point<uint16_t> UPoint;
 //! Constant Point with unsigned coordinates
 typedef const UPoint &ConstUPoint;
 
 //! Point with signed coordinates
-typedef Point<Sint16> SPoint;
+typedef Point<int16_t> SPoint;
 //! Constant Point with signed coordinates
 typedef const SPoint &ConstSPoint;
 
 //! Point with signed 32-bit coordinates
-typedef Point<Sint32> SPointBig;
+typedef Point<int32_t> SPointBig;
 //! Constant Point with signed 32-bit coordinates
 typedef const SPointBig &ConstSPointBig;
 

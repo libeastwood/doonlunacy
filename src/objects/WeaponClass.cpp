@@ -39,8 +39,8 @@ WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t
     m_reloadTimer = getRandom(1, m_reloadTime/2);
 }
 
-bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
-    if(ObjectClass::setDestination(realDestination + getRandom<Sint16>(-m_inaccuracy, m_inaccuracy), status)) {
+bool WeaponClass::setDestination(ConstSPoint realDestination, uint32_t status) {
+    if(ObjectClass::setDestination(realDestination + getRandom<int16_t>(-m_inaccuracy, m_inaccuracy), status)) {
 
 	/*
 	   if (getObjectName() == "Sonic")
@@ -80,7 +80,7 @@ bool WeaponClass::setDestination(ConstSPoint realDestination, Uint32 status) {
 void WeaponClass::dealDamage(ObjectPtr object, SPoint realPos) {
 	Rect rect(realPos-m_damageRadius, (getSize()/2)+(m_damageRadius*2));
 	float damageProp = object->coverage(rect);
-	Sint16 damage = ((m_damage + m_damagePiercing) * damageProp) - object->getArmor();
+	int16_t damage = ((m_damage + m_damagePiercing) * damageProp) - object->getArmor();
 	object->handleDamage(damage, m_shooter);
 }
 

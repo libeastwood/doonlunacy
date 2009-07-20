@@ -96,14 +96,14 @@ void GameData::drawImage()
 	    }
 
 	    if (type == "SHP") {
-		std::vector<Uint32> tiles = getPyObjectVector<Uint32>(pyObject.attr("tiles"));
+		std::vector<uint32_t> tiles = getPyObjectVector<uint32_t>(pyObject.attr("tiles"));
 		ShpFile shpfile(data, len, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
 		    m_surface.reset(new Image(shpfile.getSurface(value)));
 		else if(!tiles.empty()) {
-		    Uint32 tilesX = 0, tilesY = 0;
-		    for(Uint32 j = 0; j < tiles.size(); j++) { 
-			if(TILE_GETINDEX(tiles[j]) >= (Uint32)shpfile.getNumFiles()) {
+		    uint32_t tilesX = 0, tilesY = 0;
+		    for(uint32_t j = 0; j < tiles.size(); j++) { 
+			if(TILE_GETINDEX(tiles[j]) >= (uint32_t)shpfile.getNumFiles()) {
 			    LOG(LV_ERROR, "GameData","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile.getNumFiles());
 			    exit(EXIT_FAILURE);
 			}				
@@ -114,7 +114,7 @@ void GameData::drawImage()
 			LOG(LV_FATAL, "GameData:", "Tile row size %d is of different size than %d for %s!",
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
-		    Uint32 *tilesArray = new Uint32[tiles.size()];
+		    uint32_t *tilesArray = new uint32_t[tiles.size()];
 		    std::copy(tiles.begin(), tiles.end(), tilesArray);
 		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, tilesArray)));
 		    delete [] tilesArray;
@@ -152,7 +152,7 @@ void GameData::drawImage()
 	    }
 	}
 	else if(getPyObjectType(pyObject, 1) == "GameDataMod") {
-	    Uint32 colorkey = 0;
+	    uint32_t colorkey = 0;
 	    Rect crop;
 	    ImagePtr gameData;
 	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType")

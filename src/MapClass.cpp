@@ -227,8 +227,8 @@ void MapClass::createSandRegions()
 void MapClass::damage(WeaponClass *weapon, UPoint realPos) {
     ConstSPoint endCell((realPos/BLOCKSIZE)+2);
 
-    for (Sint16 x = endCell.x - 4; x <= endCell.x; x++)
-	for (Sint16 y = endCell.y - 4; y <= endCell.y; y++)
+    for (int16_t x = endCell.x - 4; x <= endCell.x; x++)
+	for (int16_t y = endCell.y - 4; y <= endCell.y; y++)
 	{
 	    SPoint pos(x,y);
 	    if (cellExists(pos))
@@ -488,7 +488,7 @@ int MapClass::getPosAngle(UPoint source, UPoint pos)
     return angle;
 }
 
-void MapClass::removeObjectFromMap(Uint32 ObjectID)
+void MapClass::removeObjectFromMap(uint32_t ObjectID)
 {
     // TODO: This has still room for optimization..
     for(int y = 0; y < h ; y++) 

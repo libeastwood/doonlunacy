@@ -20,7 +20,7 @@ Label::~Label()
 {
 }
 
-void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
+void Label::drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines)
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->recolor(0, m_bgColor);
@@ -29,11 +29,11 @@ void Label::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
 void Label::redraw()
 {
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
-    Uint16 textw, texth;
+    uint16_t textw, texth;
 
     if (m_maxLineLength > 0)
     {    
-        Uint16 width = 0;
+        uint16_t width = 0;
 
         std::vector<String> lines;
         StringInputCache str(m_caption);
@@ -59,7 +59,7 @@ void Label::redraw()
         for (int i=0; i < numLines; i++)
         {
             font->extents(lines[i].c_str(), textw, texth);
-            width = (Uint16)std::max(width, textw);
+            width = (uint16_t)std::max(width, textw);
         }
 
 
@@ -113,7 +113,7 @@ TransparentLabel::TransparentLabel(std::string caption, int textColor, int maxLi
 {
 }
 
-void TransparentLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
+void TransparentLabel::drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines)
 {
     m_surface.reset(new Image(UPoint(textw + 4-(textw%4), texth * numLines) ) );
     m_surface->setColorKey();
@@ -125,7 +125,7 @@ GraphicsLabel::GraphicsLabel(ImagePtr background, std::string caption, int textC
 }
 
 
-void GraphicsLabel::drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines)
+void GraphicsLabel::drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines)
 {
 //    TODO: implement proper operator for Point class
 //    if(m_background->getSize() < (UPoint(textw + 4-(textw%4), texth * numLines)))

@@ -32,9 +32,9 @@ class UnitClass : public ObjectClass
     void setAngle(int newAngle);
 
     virtual void update(float dt);
-    virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(ConstSPoint realDestination, uint32_t status = 0);
     virtual void setPosition(SPoint pos);
-    virtual inline void setStatus(Uint32 status) {
+    virtual inline void setStatus(uint32_t status) {
     	ObjectClass::setStatus(status);
     	if(status & STATUS_SELECTED && getStatus(STATUS_CONTROLLABLE))
     	    playSelectSound();
@@ -64,7 +64,7 @@ class UnitClass : public ObjectClass
     float   m_speedCap,
             m_targetDistance;
 
-    Sint16 m_baseID,
+    int16_t m_baseID,
 	   m_destAngle,
 	   m_deviationTimer,
 	   m_findTargetTimer,

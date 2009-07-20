@@ -26,7 +26,7 @@ void Sound::concatSound(SoundPtr sound) {
 	volume = sound->volume;
 	alen = sound->alen;
 
-	if((abuf = (Uint8 *)malloc(alen)) == NULL) {
+	if((abuf = (uint8_t *)malloc(alen)) == NULL) {
 	    throw(std::bad_alloc());
 	}
 
@@ -35,7 +35,7 @@ void Sound::concatSound(SoundPtr sound) {
     else {
 	alen += sound->alen;
 
-	if((abuf = (Uint8 *)realloc(abuf, alen)) == NULL)
+	if((abuf = (uint8_t *)realloc(abuf, alen)) == NULL)
 	    throw(std::bad_alloc());
 
 	SDL_memcpy(abuf + (alen - sound->alen), sound->abuf, sound->alen);

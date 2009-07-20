@@ -64,7 +64,7 @@ class ObjectClass : protected Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute = 0);
+    ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute = 0);
     ~ObjectClass();
     //@}
 
@@ -102,22 +102,22 @@ class ObjectClass : protected Rect
     //! @name Setters and getters
 	//@{
 
-    void handleDamage(Sint16 damage, ObjectPtr damager = ObjectPtr());
-    inline Sint16 getHealth() const { return m_health; }
+    void handleDamage(int16_t damage, ObjectPtr damager = ObjectPtr());
+    inline int16_t getHealth() const { return m_health; }
     void setVisible(bool status, int team = -1);
 
-    virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
+    virtual bool setDestination(ConstSPoint realDestination, uint32_t status = 0);
     bool attack();
     virtual void setPosition(SPoint pos);
     virtual void setRealPosition(SPoint realPos);
 
-    inline bool hasAttribute(Uint32 attribute) const { return m_attributes & attribute; }
-    inline Uint32 getAttributes() const { return m_attributes; }
+    inline bool hasAttribute(uint32_t attribute) const { return m_attributes & attribute; }
+    inline uint32_t getAttributes() const { return m_attributes; }
 
-    inline bool getStatus(Uint32 status) const { return m_status & status; }
-    inline Uint32 getStatusAll() const { return m_status; }
-    virtual inline void setStatus(Uint32 status) { m_status |= status; }
-    inline void clearStatus(Uint32 status = STATUS_ALL) { m_status &= ~status; }
+    inline bool getStatus(uint32_t status) const { return m_status & status; }
+    inline uint32_t getStatusAll() const { return m_status; }
+    virtual inline void setStatus(uint32_t status) { m_status |= status; }
+    inline void clearStatus(uint32_t status = STATUS_ALL) { m_status &= ~status; }
 
 
     //! Checks if a given team can see this object
@@ -127,8 +127,8 @@ class ObjectClass : protected Rect
     inline std::string getObjectName() const { return m_objectName; }
     int getViewRange() const;
 
-    inline Uint32 getObjectID() const { return m_objectID; }
-    inline void setObjectID(Uint32 newObjectID) { m_objectID = newObjectID; }
+    inline uint32_t getObjectID() const { return m_objectID; }
+    inline void setObjectID(uint32_t newObjectID) { m_objectID = newObjectID; }
     inline int getArmor() const { return m_armor; }
     inline int getRadius() const { return m_radius; }
     inline SPoint getRealPosition() const { return m_realPosition; }
@@ -153,7 +153,7 @@ class ObjectClass : protected Rect
     ObjectPtr findTarget();
     //@}
   protected:
-    inline void setAttribute(Uint32 attribute) { m_attributes |= attribute; }
+    inline void setAttribute(uint32_t attribute) { m_attributes |= attribute; }
     ATTACKTYPE m_attackMode;
 
 	//! Specifies which players can see a given object
@@ -180,7 +180,7 @@ class ObjectClass : protected Rect
      *        4,5,6,... Refinery, Starport,etc. when a unit docks, brings spice, whatever
      *
      */
-    Sint16 m_checkTimer,
+    int16_t m_checkTimer,
     //! Increments every time a sprite is drawn. Usually after 25 cycles animation frame is changed
 	   m_animCounter,
 	   m_curAnimFrame,
@@ -197,7 +197,7 @@ class ObjectClass : protected Rect
 
 	   m_weaponRange;
 
-    Sint16 m_armor,
+    int16_t m_armor,
 	   m_radius,
 	   m_explosionSize,
 	   m_guardRange,
@@ -224,7 +224,7 @@ class ObjectClass : protected Rect
     //! Pointer to map to which object is assigned.
     PlayerClass *m_owner;
 
-    Uint32 m_objectID;
+    uint32_t m_objectID;
 
     SPoint m_destination,
 	   m_realDestination,
@@ -245,11 +245,11 @@ class ObjectClass : protected Rect
     python::object m_pyObject;
 
   private:
-    Uint32 m_attributes,
+    uint32_t m_attributes,
 	   m_status,
 	   m_ticks;
 
-    Sint16 m_maxHealth;
+    int16_t m_maxHealth;
 
     float m_health;
 

@@ -206,7 +206,7 @@ int CutSceneState::Execute(float ft)
 {
     MenuBaseState::Execute(ft);
 
-    Uint32 curFrame;
+    uint32_t curFrame;
 
     if(m_curScene == -1)
 	return -1;
@@ -254,7 +254,7 @@ int CutSceneState::Execute(float ft)
 	    int linebreak = text.find("\n",0)+ 1;
 	    std::string thisLine;
 	    // This is a bit hairy and needs to be cleaned up a bit..
-	    Uint16 textw, texth;
+	    uint16_t textw, texth;
 
 	    while(text.substr(0, linebreak-1).length() > 0){
 		thisLine = text.substr(0, linebreak-1);

@@ -52,7 +52,7 @@ void Counter::drawDigits()
     int len = strlen(digits);
     ImagePtr creditDigits = DataCache::Instance()->getGameData("UI_CreditsDigits")->getImage();
 
-    Uint32 colorBg = m_surface->getPixel(UPoint(4,4));
+    uint32_t colorBg = m_surface->getPixel(UPoint(4,4));
     for(int i = 0, j = 0; i < m_maxlen; i++) {
 	if(i + len >= m_maxlen) {
 	    int num;

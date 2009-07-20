@@ -6,7 +6,7 @@ SelectionBox::SelectionBox(bool multi) : Container(), m_multi(multi)
 {
 }
 
-bool SelectionBox::handleButtonDown(Uint8 button, SPoint p)
+bool SelectionBox::handleButtonDown(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;
     if (!contains(p)) return false;

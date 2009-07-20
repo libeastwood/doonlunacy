@@ -12,10 +12,10 @@ class WeaponClass : public ObjectClass
 	virtual void draw(Image *dest, SPoint off, SPoint view);
 	virtual void update(float dt);
 	virtual bool destroy();
-	virtual bool setDestination(ConstSPoint realDestination, Uint32 status = 0);
+	virtual bool setDestination(ConstSPoint realDestination, uint32_t status = 0);
 	inline bool isDirectShot() { return (m_source == m_destination); }
 
-	inline Sint16 getRange() { return m_range; }
+	inline int16_t getRange() { return m_range; }
 	inline bool loaded() {
 	    bool reload = --m_reloadTimer == 0;
 	    if(reload)
@@ -27,7 +27,7 @@ class WeaponClass : public ObjectClass
 
 
     private:
-	Sint16	m_damage,
+	int16_t	m_damage,
 		m_damagePiercing, //from 0 for none to 10 max
 		m_damageRadius,
 		m_deathFrame,
@@ -45,7 +45,7 @@ class WeaponClass : public ObjectClass
 		m_initialYSpeed,
 		m_distanceTraveled;
 
-	Uint32 m_deathSound;
+	uint32_t m_deathSound;
 
 	SPoint  m_source;
 

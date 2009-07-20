@@ -12,13 +12,13 @@ bool Widget::handleMotion(SPoint p)
     return false;
 }
 
-bool Widget::handleButtonDown(Uint8 button, SPoint p)
+bool Widget::handleButtonDown(uint8_t button, SPoint p)
 {
     if (contains(p)) return true;
     return false;
 }
 
-bool Widget::handleButtonUp(Uint8 button, SPoint p)
+bool Widget::handleButtonUp(uint8_t button, SPoint p)
 {
     if (contains(p)) return true;
     return false;

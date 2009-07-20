@@ -79,7 +79,7 @@ void Image::blitToScreenCentered() const
 }
 
 
-void Image::fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
+void Image::fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRect)
 {
     int numColors = color2 - color1 + 1;
     float stripeWidth = dstRect.w/(float)numColors;
@@ -104,7 +104,7 @@ void Image::fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 	fillRect(color1 + i, r);
     }
 }
-void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
+void Image::fillRectHGradient(uint32_t color1, uint32_t color2, ConstRect dstRect)
 {
     int numColors = color2 - color1 + 1;
     float stripeHeight = dstRect.h/(float)numColors;
@@ -133,7 +133,7 @@ void Image::fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect)
 void Image::drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
 	ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
 	ImagePtr bottom, ImagePtr left, ImagePtr right,
-	Uint16 edgeDistance)
+	uint16_t edgeDistance)
 {
     UPoint size = getSize();
 
@@ -155,7 +155,7 @@ void Image::drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
 }
 
 void Image::drawBorders(std::string nw, std::string ne, std::string sw,
-	std::string se, Uint16 edgeDistance)
+	std::string se, uint16_t edgeDistance)
 {
     ImagePtr corner_nw, corner_ne, corner_sw, corner_se, top, bottom, left, right;
     corner_nw = DataCache::Instance()->getGameData(nw)->getImage();
@@ -364,8 +364,8 @@ void Image::flipH() {
     if (!mustLock() || (lockSurface() == 0)) {
 	for(int i = 0; i < w; i++) {
 		for(int j = 0; j < h/2; j++) {
-		    Uint8 *top = (Uint8 *)pixels + j*pitch + i*format->BytesPerPixel,
-			  *bottom = (Uint8 *)pixels + (h-j-1)*pitch + i*format->BytesPerPixel;
+		    uint8_t *top = (uint8_t *)pixels + j*pitch + i*format->BytesPerPixel,
+			  *bottom = (uint8_t *)pixels + (h-j-1)*pitch + i*format->BytesPerPixel;
 		    swap(*top, *bottom);
 		}
 	}
@@ -379,8 +379,8 @@ void Image::flipV() {
     if (!mustLock() || (lockSurface() == 0)) {
 	for(int j = 0; j < h; j++) {
 		for(int i = 0; i < w/2; i++) {
-		    Uint8 *left = (Uint8 *)pixels + j*pitch + i*format->BytesPerPixel,
-			  *right = (Uint8 *)pixels + j*pitch + (w-i-1)*format->BytesPerPixel;
+		    uint8_t *left = (uint8_t *)pixels + j*pitch + i*format->BytesPerPixel,
+			  *right = (uint8_t *)pixels + j*pitch + (w-i-1)*format->BytesPerPixel;
 		    swap(*left, *right);
 		}
 	}
@@ -393,20 +393,20 @@ void Image::flipV() {
 // Single pixel operations
 //------------------------------------------------------------------------------
 
-void Image::putPixel(ConstUPoint point, Uint32 color) {
+void Image::putPixel(ConstUPoint point, uint32_t color) {
     UPoint screenSize = Application::Instance()->Screen()->getSize();
     if (point.x >= 0 && point.x < screenSize.x && point.y >=0 && point.y < screenSize.y)
     {
 	int bpp = format->BytesPerPixel;
 	// p is the address of the pixel to set
-	Uint8 *p = (Uint8 *)pixels + point.y*pitch + point.x*bpp;
+	uint8_t *p = (uint8_t *)pixels + point.y*pitch + point.x*bpp;
 	switch(bpp) {
 	    case 1:
 		*p = color;
 		break;
 
 	    case 2:
-		*(Uint16 *)p = color;
+		*(uint16_t *)p = color;
 		break;
 
 	    case 3:
@@ -422,29 +422,29 @@ void Image::putPixel(ConstUPoint point, Uint32 color) {
 		break;
 
 	    case 4:
-		*(Uint32 *)p = color;
+		*(uint32_t *)p = color;
 		break;
 	}
     }
 }
 
-Uint32 Image::getPixel(ConstUPoint point) const
+uint32_t Image::getPixel(ConstUPoint point) const
 {
     int bpp = format->BytesPerPixel;
     // p is the address of the pixel to retrieve
-    Uint8 *p = (Uint8 *)pixels + point.y*pitch + point.x*bpp;
+    uint8_t *p = (uint8_t *)pixels + point.y*pitch + point.x*bpp;
     switch(bpp) {
 	case 1:
 	    return *p;
 	case 2:
-	    return *(Uint16 *)p;
+	    return *(uint16_t *)p;
 	case 3:
 	    if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
 		return p[0] << 16 | p[1] << 8 | p[2];
 	    else
 		return p[0] | p[1] << 8 | p[2] << 16;
 	case 4:
-	    return *(Uint32 *)p;
+	    return *(uint32_t *)p;
 	default:
 	    return 0;       // shouldn't happen, but avoids warnings
 
@@ -455,7 +455,7 @@ Uint32 Image::getPixel(ConstUPoint point) const
 // Drawing operations
 //------------------------------------------------------------------------------
 
-void Image::drawHLine(UPoint start, int x2, Uint32 color, bool lock) {
+void Image::drawHLine(UPoint start, int x2, uint32_t color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     //
     if (lock == false || !mustLock() || (lockSurface() == 0))
@@ -473,7 +473,7 @@ void Image::drawHLine(UPoint start, int x2, Uint32 color, bool lock) {
     }
 }
 
-void Image::drawVLine(UPoint start, int y2, Uint32 color, bool lock) {
+void Image::drawVLine(UPoint start, int y2, uint32_t color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     if (lock == false || !mustLock() ||  (lockSurface() == 0))
     {
@@ -490,7 +490,7 @@ void Image::drawVLine(UPoint start, int y2, Uint32 color, bool lock) {
     }
 }
 
-void Image::drawRect(ConstRect rect, Uint32 color, bool lock) {
+void Image::drawRect(ConstRect rect, uint32_t color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     if (lock == false || !mustLock() ||  (lockSurface() == 0))
     {
@@ -545,12 +545,12 @@ void Image::recolor(int colorSrc, int colorDst, int colorNum) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     if (!mustLock() || (lockSurface() == 0))
     {
-	Uint8 *pixel;
+	uint8_t *pixel;
 	int x, y;
 	for (y = 0; y < h; y++)
 	    for (x = 0; x < w; x++)
 	    {
-		pixel = &(((Uint8*)pixels)[y*pitch + x]);
+		pixel = &(((uint8_t*)pixels)[y*pitch + x]);
 		if ((*pixel >= colorSrc) && (*pixel < colorSrc + colorNum))
 
 		    *pixel = *pixel - colorSrc + colorDst;

@@ -45,8 +45,8 @@ class Application : public Singleton<Application>
 
         inline Image * Screen() { return m_screen; }
 
-        inline Uint16 CursorX() { return m_cursorX; }
-        inline Uint16 CursorY() { return m_cursorY; }
+        inline uint16_t CursorX() { return m_cursorX; }
+        inline uint16_t CursorY() { return m_cursorY; }
         Cursor CurrentCursor() { return m_cursorFrame; }
         void SetCursor(Cursor cursor) { m_cursorFrame = cursor; }
 
@@ -57,7 +57,7 @@ class Application : public Singleton<Application>
         void SetPalette();
         SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
 
-        void SetClearColor(Uint32 palIndex) { m_clearColor = palIndex; }
+        void SetClearColor(uint32_t palIndex) { m_clearColor = palIndex; }
 
     private:
         void InitSettings();
@@ -80,11 +80,11 @@ class Application : public Singleton<Application>
                 
         bool m_running;
 
-        Uint16 m_cursorX, m_cursorY;
+        uint16_t m_cursorX, m_cursorY;
         Cursor m_cursorFrame;
         ConstImagePtr m_cursor;
 
-        Uint32 m_clearColor;
+        uint32_t m_clearColor;
 };
 
 

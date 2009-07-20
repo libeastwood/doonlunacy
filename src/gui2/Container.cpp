@@ -48,7 +48,7 @@ bool Container::handleMotion(SPoint p)
     return false;
 }
 
-bool Container::handleButtonDown(Uint8 button, SPoint p)
+bool Container::handleButtonDown(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;
     if (!contains(p)) return false;
@@ -66,7 +66,7 @@ bool Container::handleButtonDown(Uint8 button, SPoint p)
     return false;
 }
 
-bool Container::handleButtonUp(Uint8 button, SPoint p)
+bool Container::handleButtonUp(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;
     if (!contains(p)) return false;

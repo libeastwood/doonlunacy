@@ -3,6 +3,6 @@
 
 #include <SDL.h>
 
-void createMapWithSeed(Uint32 Para_Seed,Uint16 *pResultMap);
+void createMapWithSeed(uint32_t Para_Seed,uint16_t *pResultMap);
 
 #endif // MAPSEED_H_INCLUDED

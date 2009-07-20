@@ -53,7 +53,7 @@ class MapClass : public Rect
 
     void fixWall(SPoint pos);
     void fixWalls(SPoint pos);
-    void removeObjectFromMap(Uint32 ObjectID);
+    void removeObjectFromMap(uint32_t ObjectID);
     void selectObjects(int playerNum, int x1, int y1, int x2, int y2, int realX, int realY, bool objectARGMode);
     void viewMap(int playerTeam, UPoint location, int maxViewRange);
     void viewMap(int playerTeam, int x, int y, int maxViewRange);

@@ -83,8 +83,8 @@ void MainMenuState::doSkirmish()
     Rect rect(0,0,10, 10);
     
     Image * img = new Image(UPoint(48, 2000));
-    Uint16 textw, texth;
-    for (Uint32 j=0; j< 200; j++)
+    uint16_t textw, texth;
+    for (uint32_t j=0; j< 200; j++)
     {
         String index = toString(j);
         font->extents(index, textw, texth);
@@ -102,9 +102,9 @@ void MainMenuState::doSkirmish()
     Rect rect(0,0,10, 10);
     
     Image * img = new Image(UPoint(100, 2000));
-    Uint16 textw, texth;
+    uint16_t textw, texth;
     // For intro font only use range 0..125
-    for (Uint32 j=0; j< 125; j++)
+    for (uint32_t j=0; j< 125; j++)
     {
         String tmp; tmp+= j;
         String index = toString(j);

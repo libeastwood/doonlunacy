@@ -11,7 +11,7 @@
 #include "SoundPlayer.h"
 #include "PythonObjects.h"
 
-ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 attribute) :
+ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute) :
     Rect(0, 0, 0, 0), m_objectName(objectName), m_attributes(attribute)
 {
     std::string graphic, topGraphic;
@@ -89,7 +89,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, Uint32 a
 	m_weapons[i] = WeaponPtr(new WeaponClass(m_owner, getPyObjectType(pyWeapons[i], 0)));
 
     if(m_decayTime)
-	m_decayTime -= getRandom<Sint16>(1+m_decayTime/4, m_decayTime);
+	m_decayTime -= getRandom<int16_t>(1+m_decayTime/4, m_decayTime);
 }
 
 ObjectClass::~ObjectClass()
@@ -256,7 +256,7 @@ void ObjectClass::doDeath(Image *dest)
 {
     if(m_frameTimer <= 0) {
 	if(m_decayTime > 0) {
-	    Uint32 tick = SDL_GetTicks();
+	    uint32_t tick = SDL_GetTicks();
 	    if(tick > (m_ticks + 1000)) {
 		swap(m_ticks, tick);		
 		m_decayTime--;
@@ -349,8 +349,8 @@ SPoint ObjectClass::getClosestPoint(SPoint point) const
 	   tmp, closest;
     float closestDistance = (1<<15)-1,
 	     distance;
-    for(Sint16 x = min.x; x < max.x; x++)
-	for(Sint16 y = min.y; y < max.y; y++)
+    for(int16_t x = min.x; x < max.x; x++)
+	for(int16_t y = min.y; y < max.y; y++)
 	    if((distance=(tmp=SPoint(x,y)).distance(point)) < closestDistance)  {
 		swap(closestDistance, distance);
 		swap(closest, tmp);
@@ -384,7 +384,7 @@ int ObjectClass::getViewRange() const
 	return m_viewRange;
 }
 
-void ObjectClass::handleDamage(Sint16 damage, ObjectPtr damager)
+void ObjectClass::handleDamage(int16_t damage, ObjectPtr damager)
 {
     if (!getStatus(STATUS_DESTROYED))
     {
@@ -421,7 +421,7 @@ bool ObjectClass::isVisible(int team) const
 	return false;
 }
 
-bool ObjectClass::setDestination(ConstSPoint realDestination, Uint32 status)
+bool ObjectClass::setDestination(ConstSPoint realDestination, uint32_t status)
 {
     SPoint destination(realDestination/BLOCKSIZE);
     if (m_owner->getMap()->cellExists(destination) || ((destination.x == INVALID_POS) && (destination.y == INVALID_POS))) {

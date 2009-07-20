@@ -5,7 +5,7 @@
 #include "Application.h"
 #include "Gfx.h"
 
-bool Button::handleButtonUp(Uint8 button, SPoint p)
+bool Button::handleButtonUp(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;
     if (!contains(p)) return false;
@@ -51,7 +51,7 @@ void GraphicButton::draw(Image * dest, SPoint off)
     };
 }
 
-bool GraphicButton::handleButtonDown(Uint8 button, SPoint p)
+bool GraphicButton::handleButtonDown(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;   
     if (!contains(p)) 
@@ -67,7 +67,7 @@ bool GraphicButton::handleButtonDown(Uint8 button, SPoint p)
     return true;
 }
 
-bool GraphicButton::handleButtonUp(Uint8 button, SPoint p)
+bool GraphicButton::handleButtonUp(uint8_t button, SPoint p)
 {
     if (!m_visible) return false;   
     m_pressed = false;
@@ -180,11 +180,11 @@ void BoringButton::redraw()
     
     Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
-    Uint16 fontColour;
+    uint16_t fontColour;
     
     m_menuButton ? fontColour = 49 : fontColour = 105;
 
-    Uint16 textw, texth;
+    uint16_t textw, texth;
     font->extents(m_caption.c_str(), textw, texth);
 
     m_surfNormal->renderText(m_caption.c_str(), font,

@@ -80,7 +80,7 @@ void MainMenuBaseState::resize()
     MenuBaseState::resize();
 
     UPoint resolution = set->GetResolution();    
-    Uint16 x = (resolution.x / 2) - (m_vbox->w / 2);
+    uint16_t x = (resolution.x / 2) - (m_vbox->w / 2);
 
     ImagePtr background(new Image(resolution));
     background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());

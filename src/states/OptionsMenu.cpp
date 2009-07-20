@@ -99,7 +99,7 @@ OptionsMenuState::OptionsMenuState() : MainMenuBaseState()
     m_vbox->addChild(m_hscaleGameSpeed);
 
     m_vbox->fit(2);
-    Uint16 x = (resolution.x / 2) - 
+    uint16_t x = (resolution.x / 2) - 
                 (m_vbox->w / 2);
     m_vbox->setPosition(UPoint(x - 5, 312));
     m_vbox->reshape();

@@ -14,8 +14,8 @@ class Container: public Widget
         virtual void draw(Image * dest, SPoint offset);
 
 		virtual bool handleMotion(SPoint p);
-        virtual bool handleButtonDown(Uint8 button, SPoint p);
-        virtual bool handleButtonUp(Uint8 button, SPoint p);
+        virtual bool handleButtonDown(uint8_t button, SPoint p);
+        virtual bool handleButtonUp(uint8_t button, SPoint p);
 
         virtual bool handleKeyDown(SDL_keysym* key);
         virtual bool handleKeyUp(SDL_keysym* key);

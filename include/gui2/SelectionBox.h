@@ -12,8 +12,8 @@ class SelectionBox : public Container
 	SelectionBox(bool multi = false);
 	typedef std::list<GraphicButton*> ButtonList;
 
-        virtual bool handleButtonDown(Uint8 button, SPoint p);
-        virtual bool handleButtonUp(Uint8 button, SPoint p) { return false; }
+        virtual bool handleButtonDown(uint8_t button, SPoint p);
+        virtual bool handleButtonUp(uint8_t button, SPoint p) { return false; }
 
 	void addChild(GraphicButton *child);
 

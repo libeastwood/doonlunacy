@@ -13,7 +13,7 @@
 
 typedef struct
 {
-    Uint32 damageType;
+    uint32_t damageType;
     int	tile;
     UPoint realPos;
 } DAMAGETYPE;
@@ -27,21 +27,21 @@ class TerrainClass  : public UPoint
 
 	void draw(Image * dest, SPoint pos);
 
-/*	void assignAirUnit(Uint32 newObjectID);
-	void assignDeadObject(Uint32 newObjectID);
-	void assignNonInfantryGroundObject(Uint32 newObjectID);
-	void assignUndergroundUnit(Uint32 newObjectID);*/
+/*	void assignAirUnit(uint32_t newObjectID);
+	void assignDeadObject(uint32_t newObjectID);
+	void assignNonInfantryGroundObject(uint32_t newObjectID);
+	void assignUndergroundUnit(uint32_t newObjectID);*/
 	void assignObject(uint32_t newObjectID);
 
 	/*
-	void unassignAirUnit(Uint32 ObjectID);
-	void unassignDeadObject(Uint32 ObjectID);
-	void unassignNonInfantryGroundObject(Uint32 ObjectID);
+	void unassignAirUnit(uint32_t ObjectID);
+	void unassignDeadObject(uint32_t ObjectID);
+	void unassignNonInfantryGroundObject(uint32_t ObjectID);
 	*/
 	bool unassignObject(uint32_t ObjectID);
 	/*
-	void unassignInfantry(Uint32 ObjectID, int currentPosition);
-	void unassignUndergroundUnit(Uint32 ObjectID);
+	void unassignInfantry(uint32_t ObjectID, int currentPosition);
+	void unassignUndergroundUnit(uint32_t ObjectID);
 	*/
 
 #if 0
@@ -204,7 +204,7 @@ class TerrainClass  : public UPoint
 
 	//! damage positions
 	DAMAGETYPE	m_damage[DAMAGEPERCELL];
-	Uint32 m_damageType;
+	uint32_t m_damageType;
 	int	m_damagePos;
 };
 

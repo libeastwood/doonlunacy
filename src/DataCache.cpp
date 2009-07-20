@@ -185,7 +185,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
         if (type == "WSA") {
             WsaFile wsafile(data, len, palette);
 
-            for(Uint16 i = 0; i < wsafile.getNumFrames(); i++)
+            for(uint16_t i = 0; i < wsafile.getNumFrames(); i++)
                 animationLabel->addFrame(ImagePtr(new Image(wsafile.getSurface(i))));
         }
 
@@ -198,7 +198,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
     		exit(EXIT_FAILURE);
     	    }
 
-            for(Uint16 i = index.x; i < index.y; i++)
+            for(uint16_t i = index.x; i < index.y; i++)
                 animationLabel->addFrame(ImagePtr(new Image(shpfile.getSurface(i))));
         }
 	if(::getPyObject(pyObject.attr("framerate"), &frameRate))

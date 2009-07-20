@@ -34,7 +34,7 @@ public:
 	void setResize(bool resize) { m_resize = resize; }
 
 protected:
-    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
+    virtual void drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines = 1);
     std::string m_caption;
 	int m_resizeRatio;
 	bool m_resize;
@@ -53,7 +53,7 @@ public:
     TransparentLabel(std::string caption="", int textColor = 49, int maxLineLength = 0);
 
 protected:
-    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
+    virtual void drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines = 1);
 
 };
 
@@ -66,7 +66,7 @@ public:
     void changeBackground(ImagePtr background);
 
 protected:
-    virtual void drawBackground(Uint16 textw, Uint16 texth, Uint16 numLines = 1);
+    virtual void drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines = 1);
 
 private:
     ImagePtr m_background;

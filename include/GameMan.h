@@ -15,7 +15,7 @@
 
 //! @note GameMan pronounced G-Man http://en.wikipedia.org/wiki/G-Man_%28Half-Life%29
 
-extern Uint8 lookDist[11];
+extern uint8_t lookDist[11];
 
 class GameMan : public Singleton<GameMan>
 {

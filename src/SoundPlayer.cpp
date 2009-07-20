@@ -39,7 +39,7 @@ SoundPlayer::~SoundPlayer()
 void SoundPlayer::changeEmuOpl(EMUOPL oplType)
 {
 /*    int freq, channels;
-    Uint16 format;
+    uint16_t format;
 */
     if (Mix_GetMusicHookData())
         stopMusic();

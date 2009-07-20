@@ -33,14 +33,14 @@ class Widget : public Rect
 			@param p cursor location relative to the widget
 			@return true if the event was handled
 		*/
-        virtual bool handleButtonDown(Uint8 button, SPoint p);
+        virtual bool handleButtonDown(uint8_t button, SPoint p);
 		/*! 
 			called when a mouse button is released
 			@param button button number. You can use SDL button constants.
 			@param p cursor location relative to the widget
 			@return true if the event was handled
 		*/
-        virtual bool handleButtonUp(Uint8 button, SPoint p);
+        virtual bool handleButtonUp(uint8_t button, SPoint p);
 
 		/*!
 			called when a key is pressed
@@ -115,7 +115,7 @@ class Widget : public Rect
 };
 
 /*
-inline bool Widget::hitTest(Uint16 x, Uint16 y)
+inline bool Widget::hitTest(uint16_t x, uint16_t y)
 {
     return ((x > m_x) && (x < m_x + m_width) &&
             (y > m_y) && (y < m_y + m_height));

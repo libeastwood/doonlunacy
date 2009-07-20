@@ -52,7 +52,7 @@ typedef struct
 
 	DIFFICULTYTYPE	playerDifficulty[MAX_PLAYERS];
 
-	Uint16	port;
+	uint16_t	port;
 
 	//IPaddress	serverIp;
 } SETTINGSTYPE;

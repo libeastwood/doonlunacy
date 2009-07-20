@@ -18,7 +18,7 @@ static void * PointFloatExtract(PyObject *intermediate)
 
 static void * UPointExtract(PyObject *intermediate)
 {
-    Uint16 x, y;
+    uint16_t x, y;
     if(!PyArg_ParseTuple(intermediate, "HH", &x, &y))
 	python::throw_error_already_set();
 
@@ -29,7 +29,7 @@ static void * UPointExtract(PyObject *intermediate)
 
 static void * SPointExtract(PyObject *intermediate)
 {
-    Sint16 x, y;
+    int16_t x, y;
     if(!PyArg_ParseTuple(intermediate, "hh", &x, &y))
 	python::throw_error_already_set();
 
@@ -40,8 +40,8 @@ static void * SPointExtract(PyObject *intermediate)
 
 static void * RectExtract(PyObject *intermediate)
 {
-    Sint16 x, y;
-    Uint16 w, h;
+    int16_t x, y;
+    uint16_t w, h;
     if(!PyArg_ParseTuple(intermediate, "hhHH", &x, &y, &w, &h))
 	python::throw_error_already_set();
 

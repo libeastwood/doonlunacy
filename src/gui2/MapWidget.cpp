@@ -101,7 +101,7 @@ bool MapWidget::handleKeyUp(SDL_keysym* key)
     return true;
 }
 
-bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
+bool MapWidget::handleButtonDown(uint8_t button, SPoint p)
 {
     //FIXME: This is a bit lame way to get coordinates for selection on map
     //       relative to the menu..
@@ -153,7 +153,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
 
             if (!m_selectedList.empty())
             {
-		Uint32 status = STATUS_NONE;
+		uint32_t status = STATUS_NONE;
 		ObjectPtr targetObj;
 		if(m_keyPressed == SDLK_LCTRL || ((targetObj = m_map->getCell(pos)->getObject()) && targetObj->getOwner() != GameMan::Instance()->LocalPlayer()))
 		    status |= STATUS_ATTACKING;
@@ -177,7 +177,7 @@ bool MapWidget::handleButtonDown(Uint8 button, SPoint p)
     return false;
 }
 
-bool MapWidget::handleButtonUp(Uint8 button, SPoint p)
+bool MapWidget::handleButtonUp(uint8_t button, SPoint p)
 {
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();

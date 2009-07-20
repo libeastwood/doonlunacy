@@ -13,7 +13,7 @@
     This struct provides convenient constructors and methods to test if Rect
     contains another Rect or Point.
     
-    @note Member wariables are x,y (Sint16) and w,h (Uint16) inherited from 
+    @note Member wariables are x,y (int16_t) and w,h (uint16_t) inherited from 
     SDL_Rect
     
     @note Implemented fully inline, so no need to worry about speed.
@@ -26,7 +26,7 @@ struct Rect : public SDL_Rect
         //@{
 
         //! Constructor
-        Rect(Sint16 x = 0, Sint16 y = 0, Uint16 w = 0, Uint16 h = 0)
+        Rect(int16_t x = 0, int16_t y = 0, uint16_t w = 0, uint16_t h = 0)
         {
             this->x = x;
             this->y = y;

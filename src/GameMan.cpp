@@ -11,7 +11,7 @@
 #include "objects/GroundUnit.h"
 #include "objects/InfantryClass.h"
 
-Uint8 lookDist[11];
+uint8_t lookDist[11];
 
 GameMan::GameMan()
 {

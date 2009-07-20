@@ -22,7 +22,7 @@
 
 #include "houses.h"
 
-Uint8 gpaloff;
+uint8_t gpaloff;
 
 Application::Application()
 {
@@ -60,7 +60,7 @@ void Application::Init()
 
     srand(time(NULL));
 
-    Uint32 flags = SDL_INIT_AUDIO | \
+    uint32_t flags = SDL_INIT_AUDIO | \
                    SDL_INIT_TIMER | \
                    SDL_INIT_VIDEO | \
                    SDL_INIT_NOPARACHUTE ;
@@ -248,12 +248,12 @@ void Application::Die()
 
 void Application::Run()
 {
-    Uint32 now = SDL_GetTicks();
-    Uint32 then;
+    uint32_t now = SDL_GetTicks();
+    uint32_t then;
     // keep the frame rate down to around 25 fps
-    const Uint32 min_frame_duration = 40; 
+    const uint32_t min_frame_duration = 40; 
 
-    Uint32 fps_start = now;
+    uint32_t fps_start = now;
     int fps_frames = 0;
     const int fps_interval = 10 * 1000; // 10 seconds
     float fps;
@@ -298,7 +298,7 @@ void Application::Run()
 
         SDL_Rect pdest = {10, 10, 5, 10};
 
-        for (Uint32 i=0; i!=256; i++)
+        for (uint32_t i=0; i!=256; i++)
         {
             pdest.x = 7 * i;
             SDL_FillRect(m_screen->getSurface(), &pdest, i);

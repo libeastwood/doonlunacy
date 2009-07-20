@@ -97,7 +97,7 @@ ObjectClass* TerrainClass::getUndergroundUnit()
 */
 void TerrainClass::assignObject(uint32_t newObjectID)
 {
-    if(newObjectID == (Uint32)-1)
+    if(newObjectID == (uint32_t)-1)
 	throw "object lacks objectID";
     m_assignedObjects.insert(ObjectPair(newObjectID, GameMan::Instance()->getObject(newObjectID)));
 }
@@ -128,7 +128,7 @@ ObjectPtr TerrainClass::getObjectAt(UPoint pos) {
 		atPos.x = x;
 		atPos.y = y;
 				
-		std::list<Uint32>::const_iterator iter;
+		std::list<uint32_t>::const_iterator iter;
 		for(iter = assignedInfantryList.begin(); iter != assignedInfantryList.end() ;iter++) {
 			infantry = (InfantryClass*) currentGame->getObjectTree().getObject(*iter);
 			if(infantry == NULL)
@@ -186,7 +186,7 @@ void TerrainClass::damageCell(WeaponClass *weapon, UPoint realPos)
 	TerrainClass* cell;
 	
 	if (bulletType == Unit_Sandworm) {
-		ConcatIterator<Uint32> iterator;
+		ConcatIterator<uint32_t> iterator;
 		iterator.addList(assignedDeadObjectsList);
 		iterator.addList(assignedInfantryList);
 		iterator.addList(assignedNonInfantryGroundObjectList);
@@ -212,7 +212,7 @@ void TerrainClass::damageCell(WeaponClass *weapon, UPoint realPos)
 			{
 				AirUnit*	airUnit;
 			
-				std::list<Uint32>::const_iterator iter;
+				std::list<uint32_t>::const_iterator iter;
 				for(iter = assignedAirUnitList.begin(); iter != assignedAirUnitList.end() ;iter++) {
 					airUnit = (AirUnit*) currentGame->getObjectTree().getObject(*iter);
 			
@@ -242,7 +242,7 @@ void TerrainClass::damageCell(WeaponClass *weapon, UPoint realPos)
 			}
 		} else {
 			// non air damage
-			ConcatIterator<Uint32> iterator;
+			ConcatIterator<uint32_t> iterator;
 			iterator.addList(assignedNonInfantryGroundObjectList);
 			iterator.addList(assignedInfantryList);
 			iterator.addList(assignedUndergroundUnitList);

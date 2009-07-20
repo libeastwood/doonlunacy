@@ -4,9 +4,9 @@
 
 void VBox::reshape()
 {
-    Uint16 d = h / m_children.size(); 
+    uint16_t d = h / m_children.size(); 
 
-    Uint16 y = 0;
+    uint16_t y = 0;
 
     WidgetList::iterator it;
     

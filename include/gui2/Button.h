@@ -12,7 +12,7 @@ class Button : public Widget
     public:
         boost::signal<void ()> onClick;
         
-        virtual bool handleButtonUp(Uint8 button, SPoint p);
+        virtual bool handleButtonUp(uint8_t button, SPoint p);
 };
 
 
@@ -26,8 +26,8 @@ class GraphicButton : public Button
 
         virtual void draw(Image * dest, SPoint off);
 
-        virtual bool handleButtonDown(Uint8 button, SPoint p);
-        virtual bool handleButtonUp(Uint8 button, SPoint p);
+        virtual bool handleButtonDown(uint8_t button, SPoint p);
+        virtual bool handleButtonUp(uint8_t button, SPoint p);
 
     protected:
     	friend class SelectionBox;

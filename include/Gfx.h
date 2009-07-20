@@ -84,7 +84,7 @@ class Image : private SDL_Surface
 
 	  @warning The surface has to be locked !
 	  */
-	void putPixel(ConstUPoint point, Uint32 color);
+	void putPixel(ConstUPoint point, uint32_t color);
 
 	//! Get pixel from given surface
 	/*!
@@ -93,7 +93,7 @@ class Image : private SDL_Surface
 
 	  @warning The surface has to be locked !
 	  */
-	Uint32 getPixel(ConstUPoint point) const;
+	uint32_t getPixel(ConstUPoint point) const;
 
 	//@}
 
@@ -107,7 +107,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawHLine(UPoint start, int x2, Uint32 color, bool lock = true);
+	void drawHLine(UPoint start, int x2, uint32_t color, bool lock = true);
 
 	//! Draw vertical line
 	/*!
@@ -116,7 +116,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawVLine(UPoint start, int y2, Uint32 color, bool lock = true);
+	void drawVLine(UPoint start, int y2, uint32_t color, bool lock = true);
 
 	//! Draw rectangle
 	/*!
@@ -124,7 +124,7 @@ class Image : private SDL_Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawRect(ConstRect rect, Uint32 color, bool lock = true);
+	void drawRect(ConstRect rect, uint32_t color, bool lock = true);
 
 	//@}
 
@@ -274,12 +274,12 @@ class Image : private SDL_Surface
 	//! @name Fill operations
 	//@{
 
-	void fillRect(Uint32 color, Rect dstRect = Rect()) {
+	void fillRect(uint32_t color, Rect dstRect = Rect()) {
 	    SDL_FillRect(this, !dstRect ? NULL : &dstRect, color);
 	}
 
-	void fillRectVGradient(Uint32 color1, Uint32 color2, ConstRect dstRect);
-	void fillRectHGradient(Uint32 color1, Uint32 color2, ConstRect dstRect);       
+	void fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRect);
+	void fillRectHGradient(uint32_t color1, uint32_t color2, ConstRect dstRect);       
 
 	//@}
 
@@ -364,24 +364,24 @@ class Image : private SDL_Surface
 
 	void greyOut(Rect area = Rect());
 	void drawBorders(std::string nw, std::string ne, std::string sw,
-		std::string se, Uint16 edgeDistance = 0);
+		std::string se, uint16_t edgeDistance = 0);
 
 	void drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
 		ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
 		ImagePtr bottom, ImagePtr left, ImagePtr right,
-		Uint16 edgeDistance = 0);
+		uint16_t edgeDistance = 0);
 
-	void drawBorders1(Uint16 edgeDistance = 0) {
+	void drawBorders1(uint16_t edgeDistance = 0) {
 	    drawBorders("UI_Corner1NW", "UI_Corner1NE", "UI_Corner1SW",
 		    "UI_Corner1SE", edgeDistance);
 	}
 
-	void drawBorders2(Uint16 edgeDistance = 0) {
+	void drawBorders2(uint16_t edgeDistance = 0) {
 	    drawBorders("UI_Corner2NW", "UI_Corner2NE", "UI_Corner2SW",
 		    "UI_Corner2SE", edgeDistance);
 	}
 
-	void drawBorders3(Uint16 edgeDistance = 0) {
+	void drawBorders3(uint16_t edgeDistance = 0) {
 	    drawBorders("UI_Corner3NW", "UI_Corner3NE", "UI_Corner3SW",
 		    "UI_Corner3SE", edgeDistance);
 	}
@@ -417,7 +417,7 @@ class Image : private SDL_Surface
 	    return SDL_SaveBMP(this, filename.c_str());
 	}
 
-	inline void renderText(std::string text, Font *font, int offx, int offy, Uint8 paloff) {
+	inline void renderText(std::string text, Font *font, int offx, int offy, uint8_t paloff) {
 	    font->render(text, this, offx, offy, paloff);
 	}
 
