@@ -1,4 +1,6 @@
 #include <boost/bind.hpp>
+#include "Definitions.h"
+
 #include <eastwood/CpsFile.h>
 #include <eastwood/WsaFile.h>
 
