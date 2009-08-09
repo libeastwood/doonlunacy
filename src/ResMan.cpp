@@ -54,6 +54,13 @@ Resource::~Resource()
 
 }
 
+std::string Resource::getRealPath(std::string path)
+{
+    bfs::path fullpath(m_path);
+    fullpath /= path;
+    return fullpath.string();
+}
+
 // ------------------------------------------------------------------
 
 DIRResource::DIRResource(bfs::path path)
@@ -111,9 +118,11 @@ bool DIRResource::exists(std::string path)
 
 // ------------------------------------------------------------------
 
-WritableDIRResource::WritableDIRResource(std::string path) : DIRResource(path)
+WritableDIRResource::WritableDIRResource(std::string path, bool create) : DIRResource(path)
 {
     mb_writable = true;
+    if(create && !exists(path))
+	bfs::create_directory(path);
 }
 
 void WritableDIRResource::writeText(std::string path, std::string text)
@@ -186,9 +195,9 @@ ResMan::~ResMan()
 
 bool ResMan::addRes(std::string name)
 {
-    std::string fullpath = Settings::Instance()->GetDataDir();
-    fullpath.append(name);
-    LOG(LV_INFO, "ResMan", "Adding resource %s from %s...", name.c_str(), fullpath.c_str());
+    bfs::path fullpath(Settings::Instance()->GetDataDir());
+    fullpath /= name;
+    LOG(LV_INFO, "ResMan", "Adding resource %s from %S...", name.c_str(), &(ConstString)fullpath.string());
     bfs::path file (fullpath);
     Resource *res = NULL;
 
@@ -255,6 +264,17 @@ bool ResMan::exists(std::string path)
     };
 
     return res->exists(filename);
+}
+
+std::string ResMan::getRealPath(std::string path)
+{
+    std::string filename;
+    Resource *res = getResource(path, filename);
+
+    /*if (res == NULL)
+	throw*/
+
+    return res->getRealPath(filename);
 }
 
 unsigned char*  ResMan::readFile(std::string name, size_t *size)
