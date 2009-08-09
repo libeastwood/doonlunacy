@@ -1,4 +1,5 @@
 #include <boost/python.hpp>
+#include <cstdlib>
 
 #include "Point.h"
 #include "Rect.h"
@@ -53,7 +54,8 @@ static void * RectExtract(PyObject *intermediate)
 
 void InitPython()
 {
-    setenv("PYTHONPATH", "python", 1);
+    std::string env = (std::string)std::getenv("PYTHONPATH") + ":python";
+    setenv("PYTHONPATH", env.c_str(), 1);
 
     Py_Initialize();
 
