@@ -91,15 +91,17 @@ void Settings::load()
 	boost::filesystem::path pythonData(GetGameDir());
 	pythonData /= "python";
 
-	std::string pythonPath = pythonData.string();
+	char *pyPath = Py_GetPath();
+	std::string pythonPath = pythonData.string() + 
 #ifdef _WIN32
-	pythonPath += ";";
+	";"
 #else
-	pythonPath += ":";
+	":"
 #endif
-	pythonPath += Py_GetPath();
+	+ pyPath;
 
 	PySys_SetPath((char*)pythonPath.c_str());
+	free(pyPath);
     }
     catch(python::error_already_set const &)
     {
