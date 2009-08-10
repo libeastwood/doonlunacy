@@ -1,6 +1,8 @@
 #include <SDL_mixer.h>
 #include <boost/python.hpp>
+#include <boost/filesystem/path.hpp>
 
+#include <iostream>
 #include "Application.h"
 #include "Point.h"
 #include "Settings.h"
@@ -16,7 +18,16 @@ Settings::Settings()
 
     // for config files 
     // set to the current directory for the moment 
-    ResMan::Instance()->addRes("CONFIG", new WritableDIRResource("") );
+#ifdef _WIN32
+    boost::filesystem::path doonHome(std::getenv("HOMEDRIVE"));
+    doonHome /= std::getenv("HOMEPATH");
+    doonHome /= "Doon Lunacy";
+#else
+    boost::filesystem::path doonHome(std::getenv("HOME"));
+    doonHome /= ".doonlunacy";
+#endif
+    m_configDir = doonHome.string();
+    ResMan::Instance()->addRes("CONFIG", new WritableDIRResource(m_configDir, true) );
 
     //FIXME:Should this be in config file?? And should this be set for each game seperately??
     m_maxPathSearch = 100;
@@ -26,19 +37,20 @@ Settings::Settings()
 
 void Settings::load()
 {
-    const char* settingsfile = "CONFIG:config.py";
+    const char* settingsFile = "CONFIG:config.py";
     try{
         main = python::import("__main__");
         python::object global = main.attr("__dict__");
-        python::object settings = python::import("settings");
-        local = settings.attr("__dict__");
+        local = python::dict();
 
-        if (ResMan::Instance()->exists(settingsfile))
+        if (ResMan::Instance()->exists(settingsFile))
         {
-            python::object result = python::exec_file("config.py", global, local);
+            python::object result = python::exec_file(ResMan::Instance()->getRealPath(settingsFile).c_str(), global, local);
             m_dataDir = python::extract<std::string>(local["config"]["data_dir"]);
             m_debug = python::extract<int>(local["config"]["debug"]);
             m_gameSpeed = python::extract<int>(local["config"]["game_speed"]);
+            m_gameDir = python::extract<std::string>(local["config"]["game_dir"]);
+
             m_playIntro = python::extract<bool>(local["config"]["play_intro"]);
 
             m_resolution.x = python::extract<int>(local["config"]["graphics"]["width"]);	
@@ -56,9 +68,10 @@ void Settings::load()
         } else
         {
             python::exec("config = {'graphics' : dict(), 'sound' : dict()}", global, local);
-            local["config"]["data_dir"] = m_dataDir = "paks/";
-            local["config"]["debug"] = m_debug= 8;
+            local["config"]["data_dir"] = m_dataDir = "DUNE2";
+            local["config"]["debug"] = m_debug = 8;
             local["config"]["game_speed"] = m_gameSpeed = 4;
+	    local["config"]["game_dir"] = m_gameDir = ".";
             local["config"]["play_intro"] = m_playIntro = true;
 
             local["config"]["graphics"]["width"] = m_resolution.x = 640;
@@ -74,14 +87,25 @@ void Settings::load()
             local["config"]["sound"]["music_volume"] = m_musicVolume = MIX_MAX_VOLUME/2;
             local["config"]["sound"]["opl_emulator"] = m_emuOpl = (int)CT_EMUOPL;
             m_updated = true;
-        }
+	}
+	boost::filesystem::path pythonData(GetGameDir());
+	pythonData /= "python";
+
+	std::string pythonPath = pythonData.string();
+#ifdef _WIN32
+	pythonPath += ";";
+#else
+	pythonPath += ":";
+#endif
+	pythonPath += Py_GetPath();
+
+	PySys_SetPath((char*)pythonPath.c_str());
     }
     catch(python::error_already_set const &)
     {
         PyErr_Print();
         exit(EXIT_FAILURE);
     }
-
 
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
     /*
@@ -119,9 +143,8 @@ void Settings::save()
 {
     if(m_updated) {
 	try {
-	    python::object global = main.attr("__dict__");
 	    python::object settings = python::import("settings");
-
+    	    python::object global = settings.attr("__dict__");
 	    python::exec("confstring = printconf('config', config)", global, local);
 
 	    std::string configText = python::extract<std::string>(local["confstring"]);

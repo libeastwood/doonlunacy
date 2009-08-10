@@ -112,11 +112,11 @@ class Settings: public Singleton<Settings>
 
 	int m_emuOpl;
 
-	std::string m_dataDir;
+	std::string m_configDir,
+	    	    m_dataDir,
+	    	    m_gameDir;
 
 	python::object	main;
-	/*
-	   python::object	global;*/
 	python::object	local;
 	public:
 	void load();
@@ -135,7 +135,9 @@ class Settings: public Singleton<Settings>
 
 	inline bool GetDoubleBuffered() { return m_doubleBuffered; }
 
+	std::string GetConfigDir() { return m_configDir; }	
 	std::string GetDataDir() { return m_dataDir; }
+	std::string GetGameDir() { return m_gameDir; }
 
 	EMUOPL GetEmuOpl();
 

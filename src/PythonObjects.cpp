@@ -1,8 +1,11 @@
 #include <boost/python.hpp>
+#include <boost/filesystem/path.hpp>
 #include <cstdlib>
+#include <iostream>
 
 #include "Point.h"
 #include "Rect.h"
+#include "Settings.h"
 
 namespace python = boost::python;
 
@@ -54,10 +57,7 @@ static void * RectExtract(PyObject *intermediate)
 
 void InitPython()
 {
-    std::string env = (std::string)std::getenv("PYTHONPATH") + ":python";
-    setenv("PYTHONPATH", env.c_str(), 1);
-
-    Py_Initialize();
+    Py_InitializeEx(0);
 
     python::converter::registry::insert(&SPointExtract,python::type_id<SPoint>(),&python::converter::wrap_pytype<&PyTuple_Type>::get_pytype);
     python::converter::registry::insert(&UPointExtract,python::type_id<UPoint>(),&python::converter::wrap_pytype<&PyTuple_Type>::get_pytype);
