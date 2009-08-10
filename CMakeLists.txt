@@ -3,7 +3,7 @@ SET( CMAKE_MODULE_PATH ${DOONLUNACY_SOURCE_DIR}/cmake/modules )
 cmake_minimum_required(VERSION 2.6)
 
 
-SET(VERSION "0.95")
+SET(VERSION "0.96")
 
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -O0 -Wno-long-long -Wno-variadic-macros -g" )
 
