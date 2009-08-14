@@ -10,6 +10,9 @@
 #include "ResMan.h"
 #include "SoundPlayer.h"
 
+#ifndef GAME_DIR
+#define GAME_DIR "."
+#endif
 
 SETTINGSTYPE settings;
 
@@ -45,6 +48,7 @@ void Settings::load()
 
         if (ResMan::Instance()->exists(settingsFile))
         {
+	    //TODO: Handle missing values
             python::object result = python::exec_file(ResMan::Instance()->getRealPath(settingsFile).c_str(), global, local);
             m_dataDir = python::extract<std::string>(local["config"]["data_dir"]);
             m_debug = python::extract<int>(local["config"]["debug"]);
@@ -71,7 +75,7 @@ void Settings::load()
             local["config"]["data_dir"] = m_dataDir = "DUNE2";
             local["config"]["debug"] = m_debug = 8;
             local["config"]["game_speed"] = m_gameSpeed = 4;
-	    local["config"]["game_dir"] = m_gameDir = ".";
+	    local["config"]["game_dir"] = m_gameDir = GAME_DIR;
             local["config"]["play_intro"] = m_playIntro = true;
 
             local["config"]["graphics"]["width"] = m_resolution.x = 640;
@@ -102,6 +106,7 @@ void Settings::load()
 
 	PySys_SetPath((char*)pythonPath.c_str());
 	free(pyPath);
+	save();
     }
     catch(python::error_already_set const &)
     {
