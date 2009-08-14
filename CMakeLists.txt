@@ -94,11 +94,11 @@ SET( DOONLUNACY_GAME_PYTHON
   python/weapons.py
 )
 
-INSTALL( FILES doonlunacy.desktop DESTINATION ${SHARE_INSTALL_PREFIX}/applications )
-INSTALL( FILES icons/doonlunacy-16x16.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/16x16/doonlunacy.png )
-INSTALL( FILES icons/doonlunacy-32x32.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/32x32/doonlunacy.png )
-INSTALL( FILES icons/doonlunacy-48x48.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/48x48/doonlunacy.png )
-INSTALL( FILES icons/doonlunacy-64x64.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/64x64/doonlunacy.png )
+INSTALL( FILES menu/doonlunacy.desktop DESTINATION ${SHARE_INSTALL_PREFIX}/applications )
+INSTALL( FILES menu/doonlunacy-16x16.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/16x16/doonlunacy.png )
+INSTALL( FILES menu/doonlunacy-32x32.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/32x32/doonlunacy.png )
+INSTALL( FILES menu/doonlunacy-48x48.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/48x48/doonlunacy.png )
+INSTALL( FILES menu/doonlunacy-64x64.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/64x64/doonlunacy.png )
 INSTALL( FILES ${DOONLUNACY_GAME_PYTHON} DESTINATION ${DOONLUNACY_GAME_DIR}/python )
 
 ADD_SUBDIRECTORY( src )
