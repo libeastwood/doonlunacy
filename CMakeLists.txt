@@ -95,10 +95,10 @@ SET( DOONLUNACY_GAME_PYTHON
 )
 
 INSTALL( FILES menu/doonlunacy.desktop DESTINATION ${SHARE_INSTALL_PREFIX}/applications )
-INSTALL( FILES menu/16x16/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/16x16/ )
-INSTALL( FILES menu/32x32/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/32x32/ )
-INSTALL( FILES menu/48x48/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/48x48/ )
-INSTALL( FILES menu/64x64/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/64x64/ )
+INSTALL( FILES menu/16x16/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/16x16/apps )
+INSTALL( FILES menu/32x32/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/32x32/apps )
+INSTALL( FILES menu/48x48/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/48x48/apps )
+INSTALL( FILES menu/64x64/doonlunacy.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/64x64/apps )
 INSTALL( FILES ${DOONLUNACY_GAME_PYTHON} DESTINATION ${DOONLUNACY_GAME_DIR}/python )
 
 ADD_SUBDIRECTORY( src )
