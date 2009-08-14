@@ -125,7 +125,8 @@ TARGET_LINK_LIBRARIES(gamedatautil boost_filesystem-mt )
 TARGET_LINK_LIBRARIES(gamedatautil boost_python-mt )
 TARGET_LINK_LIBRARIES(gamedatautil ${PYTHON_LIBRARY} )
 
-INSTALL(TARGETS gamedatautil DESTINATION ${CMAKE_INSTALL_PREFIX}/games/doonlunacy-util
+INSTALL(TARGETS gamedatautil DESTINATION ${CMAKE_INSTALL_PREFIX}/games/doonlunacy-util )
+
 ENDIF(BUILD_UTIL)
 
 
