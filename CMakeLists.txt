@@ -5,7 +5,13 @@ cmake_minimum_required(VERSION 2.6)
 
 SET(VERSION "0.96")
 
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -O0 -Wno-long-long -Wno-variadic-macros -g" )
+IF ( DEFINED SHARE_INSTALL_PREFIX )
+  SET( DOONLUNACY_GAME_DIR ${SHARE_INSTALL_PREFIX}/games/doonlunacy )
+ELSE ( DEFINED SHARE_INSTALL_PREFIX )
+  SET( DOONLUNACY_GAME_DIR "." )
+ENDIF( DEFINED SHARE_INSTALL_PREFIX )
+ 
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -O0 -Wno-long-long -Wno-variadic-macros -g -DGAME_DIR='\"${DOONLUNACY_GAME_DIR}\"'" )
 
 IF( DEFINED CMAKE_INSTALL_PREFIX )
   SET( INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
@@ -55,8 +61,34 @@ IF (PYTHONLIBS_FOUND)
   INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 ENDIF(PYTHONLIBS_FOUND)
 
+SET( DOONLUNACY_GAME_PYTHON
+  python/AnimationClass.py
+  python/CutsceneClass.py
+  python/GameDataClass.py
+  python/ObjectClass.py
+  python/SoundClass.py
+  python/StructureClass.py
+  python/UnitClass.py
+  python/WeaponClass.py
+  python/animations.py
+  python/common.py
+  python/cutscenes.py
+  python/gamedata.py
+  python/music.py
+  python/objects.py
+  python/settings.py
+  python/sounds.py
+  python/structures.py
+  python/units.py
+  python/weapons.py
+)
 
-
+INSTALL( FILES doonlunacy.desktop DESTINATION ${SHARE_INSTALL_PREFIX}/applications )
+INSTALL( FILES icons/doonlunacy-16x16.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/16x16/doonlunacy.png )
+INSTALL( FILES icons/doonlunacy-32x32.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/32x32/doonlunacy.png )
+INSTALL( FILES icons/doonlunacy-48x48.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/48x48/doonlunacy.png )
+INSTALL( FILES icons/doonlunacy-64x64.png DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/64x64/doonlunacy.png )
+INSTALL( FILES ${DOONLUNACY_GAME_PYTHON} DESTINATION ${DOONLUNACY_GAME_DIR}/python )
 
 ADD_SUBDIRECTORY( src )
 
