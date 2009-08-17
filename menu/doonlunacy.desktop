@@ -2,7 +2,7 @@
 Name=Doon Lunacy: Barchan
 GenericName=Doon Lunacy
 Comment=A free RTS implementation utilizing the original Dune 2 data
-Comment[nb]=Et fritt sanntidstrategistrageispill som benytter seg av de originale Dune 2-data
+Comment[nb]=Et fritt sanntidsstrategispill som benytter seg av de originale Dune 2-data
 Exec=doonlunacy
 Icon=doonlunacy
 Terminal=false
