@@ -78,7 +78,7 @@ void GameMenuState::draw()
 
 void GameMenuState::doMentat()
 {
-    mp_parent->PushState( new MentatInfoMenuState(HOUSE_ATREIDES) );
+    mp_parent->PushState( new MentatInfoMenuState(m_house) );
 }
 
 void GameMenuState::resize()
