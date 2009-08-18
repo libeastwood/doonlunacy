@@ -139,7 +139,7 @@ ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
     return newObject;
 }
 
-bool GameMan::LoadScenario(string scenarioName)
+bool GameMan::LoadScenario(std::string scenarioName)
 {
     size_t len;
     uint8_t *data = ResMan::Instance()->readFile(scenarioName, &len);
@@ -158,8 +158,8 @@ bool GameMan::LoadScenario(string scenarioName)
 	return false;
     }
 
-    string FieldString = myInifile->getStringValue("MAP", "Field");
-    string BloomString = myInifile->getStringValue("MAP", "Bloom");
+    std::string FieldString = myInifile->getStringValue("MAP", "Field");
+    std::string BloomString = myInifile->getStringValue("MAP", "Bloom");
 
     m_map = MapGenerator::Instance()->createOldMap(FieldString, SeedNum, BloomString);
     // now set up all the players
@@ -177,9 +177,9 @@ bool GameMan::LoadScenario(string scenarioName)
 
     while (!myInifile->KeyList_EOF(myListHandle))
     {
-	string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
-	string tmp = myInifile->getStringValue("UNITS", tmpkey);
-	string HouseStr, UnitStr;
+	std::string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
+	std::string tmp = myInifile->getStringValue("UNITS", tmpkey);
+	std::string HouseStr, UnitStr;
 	int health, pos;
 	sScanf(tmp, "%S,%S,%d,%d", &HouseStr, &UnitStr, &health, &pos);
 
@@ -221,16 +221,16 @@ bool GameMan::LoadScenario(string scenarioName)
 
     while (!myInifile->KeyList_EOF(myListHandle))
     {
-	string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
-	string tmp = myInifile->getStringValue("STRUCTURES", tmpkey);
+	std::string tmpkey = myInifile->KeyList_GetNextKey(&myListHandle);
+	std::string tmp = myInifile->getStringValue("STRUCTURES", tmpkey);
 
 	if (tmpkey.find("GEN") == 0)
 	{
 	    // Gen Object/Structure
-	    string PosStr = tmpkey.substr(3, tmpkey.size() - 3);
+	    std::string PosStr = tmpkey.substr(3, tmpkey.size() - 3);
 	    int pos = atoi(PosStr.c_str());
 
-	    string HouseStr, BuildingStr;
+	    std::string HouseStr, BuildingStr;
 	    sScanf(tmp, "%S,%S", &HouseStr, &BuildingStr);
 
 	    int house;
@@ -275,7 +275,7 @@ bool GameMan::LoadScenario(string scenarioName)
 	else
 	{
 	    // other structure
-	    string HouseStr, BuildingStr;
+	    std::string HouseStr, BuildingStr;
 	    int health, pos;
 	    sScanf(tmp, "%S,%S,%d,%d", &HouseStr, &BuildingStr, &health, &pos);
 
@@ -319,7 +319,7 @@ bool GameMan::LoadScenario(string scenarioName)
    }
    */
 
-void GameMan::TakeMapScreenshot(string filename)
+void GameMan::TakeMapScreenshot(std::string filename)
 {
     int w = m_map->w;
     int h = m_map->h;

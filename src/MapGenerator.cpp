@@ -170,7 +170,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
     if (BloomString != "")
     {
-        vector<std::string> BloomPositions  = SplitString(BloomString);
+	std::vector<std::string> BloomPositions  = SplitString(BloomString);
 
         for (unsigned int i = 0; i < BloomPositions.size();i++)
         {
@@ -191,7 +191,7 @@ MapClass* MapGenerator::createOldMap(std::string FieldString, int SeedNum, std::
 
     if (FieldString != "")
     {
-        vector<std::string> FieldPositions  = SplitString(FieldString);
+	std::vector<std::string> FieldPositions  = SplitString(FieldString);
 
         for (unsigned int i = 0; i < FieldPositions.size();i++)
         {
@@ -688,9 +688,9 @@ void MapGenerator::thickSpots(int type)  //removes holes in rock and spice
         }
 }
 
-vector<std::string> MapGenerator::SplitString(std::string ParseString)
+std::vector<std::string> MapGenerator::SplitString(std::string ParseString)
 {
-    vector<std::string> retVector;
+    std::vector<std::string> retVector;
     int startpos = 0;
 
     for (unsigned int i = 0; i < ParseString.size(); i++)
