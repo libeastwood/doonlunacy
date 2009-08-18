@@ -206,31 +206,9 @@ bool GameMan::LoadScenario(string scenarioName)
             pos = 0;
         }
 
-        int Num2Place = 1;
-
-            //make three
-
-        if (UnitStr == "Infantry")
-            Num2Place = 3;
-        else if (UnitStr == "Troopers")
-            Num2Place = 3;
-
-        /*        //FIXME: Fix this here and in addPlayer
-          if(m_players->size() > house) {
-           LOG(LV_ERROR, "MapGenerator", "player[%d]== NULL",(int) house);
-           exit(EXIT_FAILURE);
-          }
-        */
-
-        for (int i = 0; i < Num2Place; i++)
-        {
-            ObjectPtr newUnit = m_players[house]->placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
-
-            if (!newUnit)
-            {
-                LOG(LV_WARNING, "GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
-            }
-        }
+	ObjectPtr newUnit = m_players[house]->placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
+	if (!newUnit)
+	    LOG(LV_WARNING, "GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
     }
 
     myInifile->KeyList_Close(&myListHandle);
