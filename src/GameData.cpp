@@ -70,7 +70,7 @@ void GameData::drawImage()
 	int value;
 	UPoint pos;
 	SDL_Palette* palette;
-	python::object pyObject = DataCache::Instance()->getPyObject(m_path);
+	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
 
 	if(getPyObject(pyObject.attr("palette"), &variable))
 	    palette = DataCache::Instance()->getPalette(variable);
@@ -211,7 +211,7 @@ void GameData::loadSound() {
         size_t len;
         uint8_t *data;
 	std::string filename;
-	python::object pyObject = DataCache::Instance()->getPyObject(m_path);
+	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
 
 
 	if(!getPyObject(pyObject.attr("filename"), &filename)) {

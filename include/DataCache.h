@@ -79,15 +79,20 @@ class DataCache : public Singleton<DataCache>
 
         SDL_Palette* getPalette(std::string paletteFile);
 
-	void loadPyObject(std::string objectName);
+	python::object loadPyObject(std::string moduleName, std::string objectName);
         
-	inline python::object getPyObject(std::string objectName) {
-	    if(m_pyObjects.find(objectName) == m_pyObjects.end()) {
-		loadPyObject(objectName);
+	inline python::object getPyObject(std::string moduleName, std::string objectName) {
+	    if(m_pyObjects.find(moduleName) == m_pyObjects.end()) {
+		m_pyObjects[moduleName] = std::map<std::string, python::object>();
 	    }
 
-	    return m_pyObjects[objectName];
+	    if(m_pyObjects[moduleName].find(objectName) == m_pyObjects[moduleName].end()) {
+		m_pyObjects[moduleName][objectName] = loadPyObject(moduleName, objectName);
+	    }
+
+	    return m_pyObjects[moduleName][objectName];
 	}
+
 
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
         std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
@@ -102,7 +107,7 @@ class DataCache : public Singleton<DataCache>
 		StringFile* IntroStrings;
 		StringFile* CreditsStrings;
 		std::map<std::string, GameData*> m_gameData;
-		std::map<std::string, python::object> m_pyObjects;
+		std::map<std::string, std::map<std::string, python::object> > m_pyObjects;
 };
 
 #endif // DUNE_DATACACHE_H

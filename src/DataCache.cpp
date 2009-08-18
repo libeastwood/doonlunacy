@@ -73,15 +73,15 @@ void DataCache::Init(){
     free(data);
 }
 
-void DataCache::loadPyObject(std::string objectName) {
+python::object DataCache::loadPyObject(std::string moduleName, std::string objectName) {
     python::object main = python::import("__main__").attr("__dict__");
-    python::object gamedata = python::import("objects").attr("__dict__");
-    python::dict objects = python::extract<python::dict>(gamedata["objects"]);
+    python::object module = python::import((python::str)moduleName).attr("__dict__");
+    python::dict objects = python::extract<python::dict>(module["objects"]);
 
     if(objects.has_key(objectName))
-	m_pyObjects[objectName] = python::eval(((std::string)python::extract<std::string>(objects[objectName].attr("__name__")) + "()").c_str(), main, gamedata);
-    else
-	m_pyObjects[objectName] = python::eval(((std::string)objectName + "()").c_str(), main, gamedata);
+	return python::eval(((std::string)python::extract<std::string>(objects[objectName].attr("__name__")) + "()").c_str(), main, module);
+
+    return python::eval(((std::string)objectName + "()").c_str(), main, module);
 }
 
 SDL_Palette* DataCache::getPalette(std::string paletteFile)
@@ -166,7 +166,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 
         std::string variable, type;
         SDL_Palette* palette;
-	python::object pyObject = DataCache::Instance()->getPyObject(path);
+	python::object pyObject = DataCache::Instance()->getPyObject("objects", path);
 
 	if(::getPyObject(pyObject.attr("palette"), &variable))
 	    palette = DataCache::Instance()->getPalette(variable);

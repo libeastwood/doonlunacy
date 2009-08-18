@@ -109,7 +109,7 @@ ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
     std::string objectClass;
     ObjectPtr newObject;
     try {
-	objectClass = getPyObjectType(DataCache::Instance()->getPyObject(itemName));
+	objectClass = getPyObjectType(DataCache::Instance()->getPyObject("objects", itemName));
     }
     catch(python::error_already_set const &)
     {

@@ -23,7 +23,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     if(m_owner == GameMan::Instance()->LocalPlayer())
 	setStatus(STATUS_CONTROLLABLE);
 
-    m_pyObject = DataCache::Instance()->getPyObject(m_objectName);
+    m_pyObject = DataCache::Instance()->getPyObject("objects", m_objectName);
 
 
     m_animCounter = 0;
