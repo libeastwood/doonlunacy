@@ -378,9 +378,9 @@ int ObjectClass::getHealthColour() const
 
 int ObjectClass::getViewRange() const
 {
-    if (m_owner->hasRadarOn() )
+    /*if (m_owner->hasRadarOn() )
 	return m_viewRange+2;
-    else
+    else*/
 	return m_viewRange;
 }
 

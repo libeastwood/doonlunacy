@@ -87,7 +87,7 @@ bool UnitClass::destroy()
 	m_target.reset();
 	//gman->GetObjectTree()->RemoveObject(getObjectID());
 
-	m_owner->decrementUnits(getObjectName());
+	//m_owner->decrementUnits(getObjectName());
 
 	clearStatus(STATUS_RESPONDABLE);
 	/*

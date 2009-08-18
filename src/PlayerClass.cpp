@@ -20,35 +20,12 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
 	m_house = 0;
 
     if ((newColour >= 0) && (newColour < NUM_HOUSES))
-	m_colour = newColour;
+	m_color = newColour;
     else
-	m_colour = 0;
+	m_color = 0;
 
-    m_capacity = 0;
-    m_power = 0;
-    m_powerRequirement = 0;
     m_team = team;
 
-    m_numBarracks = 0;
-    m_numCarryalls = 0;
-    m_numFrigates = 0;
-    m_numHarvesters = 0;
-    m_numUnits = 0;
-    m_numIXs = 0;
-    m_numHeavyFactories = 0;
-    m_numHighTechFactories = 0;
-    m_numLightFactories = 0;
-    m_numPalaces = 0;
-    m_numRefineries = 0;
-    m_numRepairYards = 0;
-    m_numRocketTurrets = 0;
-    m_numRadars = 0;
-    m_numStarPorts = 0;
-    m_numWalls = 0;
-    m_numWindTraps = 0;
-    m_numWORs = 0;
-    m_numWalls = 0;
-    m_numStructures = 0;
 }
 
 PlayerClass::~PlayerClass()
@@ -68,44 +45,8 @@ ObjectPtr PlayerClass::createUnit(std::string itemName)
 {
     ObjectPtr newUnit = GameMan::Instance()->createObject(itemName,this);
 
-    if (itemName != "Sandworm") 
-    {
-	m_numUnits++;
-    }
-
-
-    if(itemName == "Frigate")
-	m_numFrigates++;
-    else if(itemName == "Carryall")
-	m_numCarryalls++;
-    else if(itemName == "Harvester")
-	m_numHarvesters++;
-
     return newUnit;
 }
-
-void PlayerClass::decrementUnits(std::string itemName)
-{
-    if (itemName != "Sandworm")
-	m_numUnits--;
-
-    if(itemName == "Carryall")
-	m_numCarryalls--;
-    else if(itemName == "Frigate")
-	m_numFrigates--;
-    else if(itemName == "Harvester")
-	m_numHarvesters--;
-    //decrementHarvesters();
-    //		LOG(LV_INFO, "PlayerClass", "Decrement harvesters not implemented");
-
-    //if (!isAlive())
-    //	lose();
-
-    LOG(LV_INFO, "PlayerClass", "numUnits:%d", m_numUnits);
-
-    //currentGame->AddToNewsTicker(temp);
-}
-
 
 /*inline*/
 MapClass* PlayerClass::getMap()
@@ -262,20 +203,4 @@ ObjectPtr PlayerClass::placeUnit(std::string itemName, UPoint itemPos)
 
 void PlayerClass::update()
 {
-    if (m_oldCredits != m_credits)
-    {
-	//		if ((this == GameMan::Instance()->LocalPlayer()) && (getAmountOfCredits() > 0))
-	//			SoundPlayer::Instance()->playSound(CreditsTick);
-	m_oldCredits = m_credits;
-    }
-
-    if (m_credits > m_capacity)
-    {
-	m_credits--;// = capacity;
-	if (this == GameMan::Instance()->LocalPlayer())
-	{
-	    //TODO: Add news ticker, etc.:)
-	    //currentGame->AddToNewsTicker("spice lost, build more silos.");
-	}
-    }
 }
