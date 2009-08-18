@@ -18,6 +18,8 @@
 
 SkirmishMenuState::SkirmishMenuState() : MainMenuBaseState()
 {
+    m_house = HOUSE_ATREIDES;
+
     m_butStart = new BoringButton("Start");
     m_butStart->setSize(SPoint(bw, bh));
     m_butStart->onClick.connect(
@@ -122,7 +124,7 @@ void SkirmishMenuState::resize()
 
 void SkirmishMenuState::doStart()
 {
-    mp_parent->PushState( new SkirmishGameState(HOUSE_ATREIDES, m_missionCounter->getValue()) );
+    mp_parent->PushState( new SkirmishGameState(m_house, m_missionCounter->getValue()) );
 }
 
 void SkirmishMenuState::doCancel()
