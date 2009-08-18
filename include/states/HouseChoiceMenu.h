@@ -10,7 +10,6 @@ public:
 	HouseChoiceMenuState();
 	~HouseChoiceMenuState();
 
-	int Execute(float dt);
 	virtual const char* GetName() { return "HouseChoiceMenuState"; }
 
 

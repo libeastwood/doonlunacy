@@ -51,11 +51,6 @@ HouseChoiceMenuState::HouseChoiceMenuState() : MenuBaseState()
 HouseChoiceMenuState::~HouseChoiceMenuState() {
 }
 
-int HouseChoiceMenuState::Execute(float dt)
-{
-    return 0;
-}
-
 void HouseChoiceMenuState::doAtreides() {
     mp_parent->PushState( new HouseChoiceInfoMenuState(HOUSE_ATREIDES) );
 }
