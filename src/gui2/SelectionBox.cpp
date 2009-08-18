@@ -33,6 +33,9 @@ bool SelectionBox::handleButtonDown(uint8_t button, SPoint p)
 		else {
 		    if(!(*it2)->m_pressed)
 			if ((*it)->handleButtonDown(button, op)) {
+			    //FIXME: maybe a new onHit() or something in handleButtonDown()?
+			    (*it)->handleButtonUp(button, op);
+			    (*it)->handleButtonDown(button, op);
 			    for(ButtonList::iterator it3 = m_buttons.begin();
 				    it3 != m_buttons.end();
 				    it3++) {
