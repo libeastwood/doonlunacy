@@ -39,6 +39,8 @@ class MapWidget : public Widget {
     bool handleKeyUp(SDL_keysym* key);
     bool handleButtonDown(uint8_t button, SPoint p);
     bool handleButtonUp(uint8_t button, SPoint p);    
+
+    void setMapPosition(SPoint pos) { m_view = pos; }
     //@}
 
   private:

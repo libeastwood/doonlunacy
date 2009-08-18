@@ -50,4 +50,6 @@ void SkirmishGameState::resize()
     sprintf(mission, mission, house, m_level);
 
     GameMan::Instance()->LoadScenario(mission);
+    //TODO: adjust to make it relative to current resolution rather than 320x200
+    m_mapWidget->setMapPosition(GameMan::Instance()->getTacticalPos());
 }

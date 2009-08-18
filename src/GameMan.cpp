@@ -146,6 +146,9 @@ bool GameMan::LoadScenario(string scenarioName)
 
     IniFile *myInifile = new IniFile(data, len);
 
+    int tacticalPos = myInifile->getIntValue("BASIC", "TacticalPos", 0);
+    m_tacticalPos = SPoint(tacticalPos % 64, tacticalPos / 64);
+
     int SeedNum = myInifile->getIntValue("MAP", "Seed", -1);
 
     if (SeedNum == -1)

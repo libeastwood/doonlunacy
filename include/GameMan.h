@@ -50,13 +50,14 @@ class GameMan : public Singleton<GameMan>
     ObjectPtr getObject(uint32_t objectID);
     uint32_t addObject(ObjectPtr object);
     void removeObject(uint32_t objectID);
+    SPoint getTacticalPos() { return m_tacticalPos; }
     PlayerClass * LocalPlayer() { return m_localPlayer; }
     void Update(float dt);
-	//FIXME: This shouldn't be here
-	bool placingMode;
-	
-	//void Select(List* objectList);
-	//void Unselect(List* objectList);
+    //FIXME: This shouldn't be here
+    bool placingMode;
+
+    //void Select(List* objectList);
+    //void Unselect(List* objectList);
   protected:
 
     MapClass *m_map;
@@ -64,6 +65,7 @@ class GameMan : public Singleton<GameMan>
     std::vector<PlayerClass*> m_players;
     ObjectTypeMap m_objects;
     uint32_t m_objectIDCounter;
+    SPoint m_tacticalPos;
 };
 
 #endif // DUNE_GAMEMANAGER_H
