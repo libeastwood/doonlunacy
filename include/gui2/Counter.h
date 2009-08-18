@@ -16,7 +16,8 @@ class Counter : public Frame
     int m_min,
         m_max,
 	m_maxlen,
-        m_value;
+        m_value,
+	m_bgColor;
 
     void drawDigits();
 

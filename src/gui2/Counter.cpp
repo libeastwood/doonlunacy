@@ -18,6 +18,7 @@ Counter::Counter(int min, int max, int value)
     size = 3 + (m_maxlen*10);
 
     tmp = DataCache::Instance()->getGameData("UI_CreditsCounter")->getImage();
+    m_bgColor = tmp->getPixel(UPoint(4,4));
     background.reset(new Image(UPoint(size + 2, tmp->getSize().y)));
 
     background->putPixel(UPoint(background->getSize().x-1,0), tmp->getPixel(UPoint(0,0)));
@@ -52,7 +53,6 @@ void Counter::drawDigits()
     int len = strlen(digits);
     ImagePtr creditDigits = DataCache::Instance()->getGameData("UI_CreditsDigits")->getImage();
 
-    uint32_t colorBg = m_surface->getPixel(UPoint(4,4));
     for(int i = 0, j = 0; i < m_maxlen; i++) {
 	if(i + len >= m_maxlen) {
 	    int num;
@@ -62,6 +62,6 @@ void Counter::drawDigits()
 	    m_surface->blitFrom(creditDigits->getPictureCrop(Rect(num*8,0, 8,8)).get(),UPoint(4+i*10,4));
 	}
 	else
-	    m_surface->fillRect(colorBg, Rect(4+i*10, 4, 8, 8));
+	    m_surface->fillRect(m_bgColor, Rect(4+i*10, 4, 8, 8));
     }
 }
