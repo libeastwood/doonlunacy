@@ -183,7 +183,7 @@ void GameData::drawImage()
 	    }
 	}
 	else {
-	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str());
+	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str(), getPyObjectType(pyObject, 1).c_str());
 	    exit(EXIT_FAILURE);
 	}
 	//m_persistent = pyObject.attr("persistent");
