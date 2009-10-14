@@ -193,7 +193,7 @@ class Image : protected eastwood::SDL::Surface
 	void blitFrom(Image *source, ConstRect srcRect, ConstUPoint dstPoint) {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(dstPoint, source->getSize()));
-	    SDL_BlitSurface(source, const_cast<SDL_Rect *>(static_cast<const SDL_Rect *>(&srcRect)), this, &dstRect); 
+	    SDL_BlitSurface(source, const_cast<Rect*>(&srcRect), this, &dstRect); 
 	}
 	//! Blit whole source image to this image
 	/*!
@@ -231,7 +231,7 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitTo(Image *destination, ConstRect srcRect, ConstUPoint dstPoint) const {
 	    assert(destination != NULL);
-	    destination->blitFrom((Image*)this, srcRect, dstPoint);
+	    destination->blitFrom(const_cast<Image*>(this), srcRect, dstPoint);
 	}
 	//! Blit the whole image to destination image
 	/*!
@@ -240,7 +240,7 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitTo(Image *destination, ConstUPoint dstPoint) const {
 	    assert(destination != NULL);
-	    destination->blitFrom((Image*)this, dstPoint);
+	    destination->blitFrom(const_cast<Image*>(this), dstPoint);
 	}
 	//! Blit the whole image to destination image (to top-left corner)
 	/*!
@@ -248,7 +248,7 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitTo(Image *destination) const {
 	    assert(destination != NULL);
-	    destination->blitFrom((Image*)this);
+	    destination->blitFrom(const_cast<Image*>(this));
 	}
 	//! Blit the whole image to destination image (to center)
 	/*!
@@ -256,7 +256,7 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitToCentered(Image *destination) const {
 	    assert(destination != NULL);
-	    destination->blitFromCentered((Image*)this);
+	    destination->blitFromCentered(const_cast<Image*>(this));
 	}
 	//! Blit part of the image to screen
 	/*!
