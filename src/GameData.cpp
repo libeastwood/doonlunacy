@@ -223,11 +223,11 @@ void GameData::loadSound() {
     	m_sound.reset(new Sound(sound));
     }
     catch(python::error_already_set const &) {
-	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
+	LOG(LV_FATAL, "GameData::loadSound():", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     } catch(eastwood::Exception e) {
-	LOG(LV_ERROR, "GameData::drawImage():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
+	LOG(LV_ERROR, "GameData::loadSound():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
 	exit(EXIT_FAILURE);
     }
 
