@@ -1,3 +1,5 @@
+#include "Definitions.h"
+
 #include <eastwood/VocFile.h>
 #include <eastwood/AdlFile.h>
 
@@ -79,7 +81,7 @@ void SoundPlayer::changeEmuOpl(EMUOPL oplType)
 
     m_player = new AdlibPlayer(m_opl);
     */
-    m_player = new AdlFile();
+    m_player = new eastwood::SDL::Mixer::Player();
 }
 
 void SoundPlayer::VoiceChunkFinishedCallback(int channel)
@@ -115,10 +117,9 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 	m_currentSong->filename = filename;
 	m_currentSong->track = trackNum;
         changeEmuOpl(Settings::Instance()->GetEmuOpl());
-	size_t bufsize;
-	uint8_t *data;
-	data = ResMan::Instance()->readFile(filename, &bufsize);
-        m_player->load(data, bufsize);
+	eastwood::IStream *data;
+	data = ResMan::Instance()->getFile(filename);
+        m_player->load(*data);
         m_player->rewind(trackNum);
 
         Mix_HookMusic(m_player->callback, m_player);

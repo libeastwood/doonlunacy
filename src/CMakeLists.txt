@@ -110,6 +110,7 @@ SET( GAMEDATAUTIL_SRCS
 ADD_EXECUTABLE(doonlunacy ${DOONLUNACY_SRCS})
 
 TARGET_LINK_LIBRARIES(doonlunacy ${LIBEASTWOOD_LIBRARIES} )
+TARGET_LINK_LIBRARIES(doonlunacy SDL_eastwood )
 TARGET_LINK_LIBRARIES(doonlunacy boost_signals-mt )
 TARGET_LINK_LIBRARIES(doonlunacy boost_filesystem-mt )
 TARGET_LINK_LIBRARIES(doonlunacy boost_python-mt )

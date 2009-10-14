@@ -2,19 +2,19 @@
 #define DUNE_SFX_H
 
 #include <boost/shared_ptr.hpp>
-#include <SDL_mixer.h>
+#include <eastwood/SDL/Mixer/Sound.h>
 
 #include "Definitions.h"
 
 class SoundPlayer;
 
-class Sound : private Mix_Chunk {
+class Sound : public eastwood::SDL::Mixer::Sound {
   public:
-    Sound(Mix_Chunk *soundChunk);
-    Sound() { allocated = 0; abuf = NULL, alen = 0, volume = 0;}
+    Sound() : eastwood::SDL::Mixer::Sound() {};
+    Sound(const eastwood::SDL::Mixer::Sound &sound) : eastwood::SDL::Mixer::Sound(sound) {};
     ~Sound();
 
-    void concatSound(SoundPtr sound);
+    Sound concatSound(const Sound &sound);
 
     friend class SoundPlayer;
 

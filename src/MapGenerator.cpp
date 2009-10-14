@@ -1,4 +1,3 @@
-#include <eastwood/IniFile.h>
 
 #include "MapGenerator.h"
 
@@ -11,6 +10,8 @@
 #include "ResMan.h"
 
 #include "mmath.h"
+#include <eastwood/IniFile.h>
+
 
 MapGenerator::MapGenerator ()
 {

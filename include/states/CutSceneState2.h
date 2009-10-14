@@ -6,6 +6,7 @@
 #include <vector>
 #include <boost/python.hpp>
 #include <boost/dynamic_bitset.hpp>
+#include <eastwood/Font.h>
 #include "Gfx.h"
 #include "states/MenuBase.h"
 
@@ -19,7 +20,6 @@ typedef struct {
 
 class AnimationLabel;
 class Frame;
-class Font;
 class CutSceneState : public MenuBaseState 
 {
 
@@ -37,7 +37,7 @@ class CutSceneState : public MenuBaseState
 	Frame *m_sceneFrame,
 	      *m_animFrame,
 	      *m_textFrame;
-	Font *m_font;
+	eastwood::Font *m_font;
 	ImagePtr m_lastFrame;
 	SPoint m_textPosition,
 	       m_animPosition;

@@ -9,39 +9,7 @@
 #include <string>
 //#include "Log.h"
 
-class PakFile;
-/*!
-  Class to emulate a file object using an unsigned char* buffer
-  */
-class FileLike
-{
-    public:
-	//! @name Constructors & Destructor
-	//@{
-	FileLike(unsigned char* buf, size_t size);
-	~FileLike();
-	//@}
-
-	//! @name FileLike methods
-	//@{
-	/*! 
-	  read data from the buffer
-	  @param buf buffer to read data into 
-	  @param size amount of bytes to read
-	  */
-	void read(void* buf, size_t size);
-	/*!
-	  seek to a position in the buffer
-	  @param offset offset from the beginning of the buffer in bytes
-	  */
-	void seek(off_t offset);
-	//@}
-
-    private:
-	unsigned char* m_buf;
-	size_t m_size;
-	off_t m_pos;
-};
+#include <eastwood/PakFile.h>
 
 /*!
   Base class for all resources. 
@@ -61,7 +29,7 @@ class Resource
 	  @param size if not NULL the file size is put here 
 	  @return file data
 	  */
-	virtual unsigned char* readFile(std::string path, size_t *size) { return NULL; }
+	virtual eastwood::IStream* getFile(std::string path) { return NULL; }
 
 	/*!
 	  read a text file from resource
@@ -102,7 +70,7 @@ class DIRResource : public Resource
 {
     public:
 	DIRResource(boost::filesystem::path path) ;
-	unsigned char* readFile(std::string path, size_t *size);
+	eastwood::IStream* getFile(std::string path);
 	std::string readText(std::string path);
 	bool exists(std::string path);
 };
@@ -125,10 +93,12 @@ class PAKResource : public Resource
     public:
 	PAKResource(boost::filesystem::path path) ;
 	~PAKResource();
-	unsigned char *readFile(std::string path, size_t *size);
+
+	eastwood::IStream* getFile(std::string path);
 	bool exists(std::string path);
     private:
-	PakFile *m_pakfile;
+	eastwood::PakFile *m_pakfile;
+	std::fstream *m_fstream;
 };
 
 /*!
@@ -171,14 +141,8 @@ class ResMan : public Singleton<ResMan>
       @param size if not NULL the file size is put here 
       @return file data
       */
-    unsigned char* readFile(std::string path, size_t *size);
-    /*!
-      read a file from the resource.
-      @param path path to the file to read
-      @return FileLike object
-      */
-    FileLike* readFile(std::string path);
-    //@}
+    eastwood::IStream* getFile(std::string path);
+
 
     //! @name textmode functions
     //@{

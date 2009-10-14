@@ -9,24 +9,21 @@
 
 #include "singleton.h"
 
-
 class FontManager : public Singleton<FontManager>
 {
     friend class Singleton<FontManager>;
-
-    typedef std::map<std::string, Font*> FontList;
 
     protected:
         FontManager();
         ~FontManager();
 
     public:
-        Font* getFont(std::string fn);
+	eastwood::Font* getFont(std::string fn);
 
     private:
-        FontList m_fonts;
+	std::map<std::string, eastwood::Font*> m_fonts;
 
-        Font* loadFont(std::string fn);
+	eastwood::Font* loadFont(std::string fn);
 };
 
 #endif // DUNE_FONTMANAGER_H

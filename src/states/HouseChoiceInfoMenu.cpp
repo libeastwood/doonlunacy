@@ -38,7 +38,7 @@ HouseChoiceInfoMenuState::HouseChoiceInfoMenuState(HOUSETYPE newHouse) : MentatM
         boost::bind(&HouseChoiceInfoMenuState::doNo, this) );    
         m_backgroundFrame->addChild(m_butNo);
 
-	std::string desc = DataCache::Instance()->getBriefingText(0, MISSION_DESCRIPTION, newHouse);
+	std::string desc = DataCache::Instance()->getBriefingText(0, eastwood::MISSION_DESCRIPTION, newHouse);
 	int linebreak = desc.find("\n",0) + 1;
 	m_textLabel = new TransparentLabel(desc.substr(linebreak,desc.length()-linebreak), 158, 64);
 	m_textLabel->setPosition(UPoint(0,35));

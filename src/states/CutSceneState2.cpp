@@ -135,7 +135,7 @@ void CutSceneState::loadScene(int scene)
 		    for(int i = 0; i < python::len(soundObj); i++) {
 			std::string sound = getPyObjectType((soundObj[i]), 0);
 			SoundPtr tmp = DataCache::Instance()->getGameData(sound)->getSound();
-			snd->concatSound(tmp);
+			snd.reset(new Sound(snd->concatSound(*tmp.get())));
 		    }
 		}
 		else
@@ -154,17 +154,16 @@ void CutSceneState::loadScene(int scene)
 	if(!getPyObject(curScene.attr("filename"), &filename))
 	    m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))), true);
 	else {
-	    size_t len;
-	    uint8_t *data = ResMan::Instance()->readFile(filename, &len);
+	    eastwood::IStream *data = ResMan::Instance()->getFile(filename);
 	    if(filename.substr(filename.length()-3, 3) == "CPS") {
-		CpsFile cpsfile(data, len);
-		m_animLabel->addFrame(ImagePtr(new Image(cpsfile.getSurface())), true);
+		eastwood::CpsFile cpsfile(*data);
+		m_animLabel->addFrame(ImagePtr(new Image(new eastwood::SDL::Surface(cpsfile.getSurface()))), true);
 	    }
 	    else {
-		WsaFile wsafile(data, len, DataCache::Instance()->getPalette(palettefile), continuation ? m_lastFrame.get() : NULL);
+		eastwood::WsaFile wsafile(*data, DataCache::Instance()->getPalette(palettefile), eastwood::Surface());
 		std::vector<ImagePtr> wsaFrames;
-		for(uint32_t i = 0; i < wsafile.getNumFrames(); i++)
-		    wsaFrames.push_back(ImagePtr(new Image(wsafile.getSurface(i))));
+		for(uint32_t i = 0; i < wsafile.size(); i++)
+		    wsaFrames.push_back(ImagePtr(new Image(new eastwood::SDL::Surface(wsafile.getSurface(i)))));
 
 		for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
 		    if(i < wsaFrames.size())
@@ -263,7 +262,7 @@ int CutSceneState::Execute(float ft)
 
 		m_font->extents(thisLine, textw, texth);
 
-		tmp->renderText(thisLine, m_font, tmp->getSize().x/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
+		//tmp->renderText(thisLine, m_font, tmp->getSize().x/2 - textw/2, 10+(numLines++*20) - texth/2, m_textColor);
 
 		if(linebreak == -1 || text == text.substr(linebreak, text.length()-linebreak))
 		    break;

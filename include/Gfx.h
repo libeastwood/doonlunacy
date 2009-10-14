@@ -417,8 +417,8 @@ class Image : private SDL_Surface
 	    return SDL_SaveBMP(this, filename.c_str());
 	}
 
-	inline void renderText(std::string text, Font *font, int offx, int offy, uint8_t paloff) {
-	    font->render(text, this, offx, offy, paloff);
+	inline void renderText(std::string text, eastwood::Font *font, int offx, int offy, uint8_t paloff) {
+	    //font->render(text, this, offx, offy, paloff);
 	}
 
 	inline bool mustLock() {

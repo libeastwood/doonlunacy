@@ -1,5 +1,7 @@
-#include <eastwood/IniFile.h>
 #include <stack>
+#include "Definitions.h"
+#include <eastwood/IniFile.h>
+#include <eastwood/IStream.h>
 
 #include "GameMan.h"
 #include "ResMan.h"
@@ -141,10 +143,9 @@ ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
 
 bool GameMan::LoadScenario(std::string scenarioName)
 {
-    size_t len;
-    uint8_t *data = ResMan::Instance()->readFile(scenarioName, &len);
+    eastwood::IStream *data = ResMan::Instance()->getFile(scenarioName);
 
-    IniFile *myInifile = new IniFile(data, len);
+    eastwood::IniFile *myInifile = new eastwood::IniFile(*data);
 
     int tacticalPos = myInifile->getIntValue("BASIC", "TacticalPos", 0);
     m_tacticalPos = SPoint(tacticalPos % 64, tacticalPos / 64);
@@ -171,7 +172,7 @@ bool GameMan::LoadScenario(std::string scenarioName)
     AddPlayer(HOUSE_FREMEN, false, 2);
     AddPlayer(HOUSE_MERCENARY, false, 2);
 
-    IniFile::KeyListHandle myListHandle;
+    eastwood::IniFile::KeyListHandle myListHandle;
 
     myListHandle = myInifile->KeyList_Open("UNITS");
 

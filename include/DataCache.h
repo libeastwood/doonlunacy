@@ -1,7 +1,12 @@
 #ifndef DUNE_DATACACHE_H
 #define DUNE_DATACACHE_H
 
+
 #include "Definitions.h"
+#include <eastwood/StringFile.h>
+#include <eastwood/Palette.h>
+#include <eastwood/SDL/Surface.h>
+
 #include "Gfx.h"
 #include "houses.h"
 #include "singleton.h"
@@ -14,13 +19,9 @@
 #define NUM_MAPCHOICEPIECES	28
 #define NUM_MAPCHOICEARROWS	9
 
-class SDL_Palette;
 class AnimationLabel;
 class GameData;
 class GameData;
-class StringFile;
-class PalFile;
-typedef boost::shared_ptr<PalFile> PalfilePtr;
 
 #include <boost/python.hpp>
 
@@ -77,7 +78,7 @@ class DataCache : public Singleton<DataCache>
          *         </ul>
          */
 
-        SDL_Palette* getPalette(std::string paletteFile);
+	eastwood::Palette getPalette(std::string paletteFile);
 
 	python::object loadPyObject(std::string moduleName, std::string objectName);
         
@@ -95,17 +96,17 @@ class DataCache : public Singleton<DataCache>
 
 
         song * getMusic(MUSICTYPE musicType, uint16_t ID);
-        std::string	getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house);
+        std::string	getBriefingText(uint16_t mission, eastwood::MissionType textType, HOUSETYPE house);
         std::string	getIntroString(uint16_t i);
         std::string	getCreditsString(uint16_t i);
         //@}
 
     private:
-		std::map<std::string, PalfilePtr> m_palette;
+		std::map<std::string, eastwood::Palette> m_palette;
 
-		StringFile* BriefingStrings[3];
-		StringFile* IntroStrings;
-		StringFile* CreditsStrings;
+		eastwood::StringFile* BriefingStrings[3];
+		eastwood::StringFile* IntroStrings;
+		eastwood::StringFile* CreditsStrings;
 		std::map<std::string, GameData*> m_gameData;
 		std::map<std::string, std::map<std::string, python::object> > m_pyObjects;
 };

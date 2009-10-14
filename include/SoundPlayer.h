@@ -6,6 +6,7 @@
 
 #include "DataCache.h"
 #include "Definitions.h"
+#include <eastwood/SDL/Mixer/Player.h>
 #include "houses.h"
 #include "ResMan.h"
 #include "singleton.h"
@@ -81,7 +82,7 @@ class SoundPlayer : public Singleton<SoundPlayer>
 	MUSICTYPE m_currentMusicType;
 	song *m_currentSong;
 
-	AdlFile *m_player;
+	eastwood::SDL::Mixer::Player *m_player;
 };
 
 #endif //SOUNDPLAYER_H_INCLUDED

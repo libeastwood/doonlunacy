@@ -17,14 +17,12 @@
 #include <eastwood/PalFile.h>
 #include <eastwood/StringFile.h>
 #include <eastwood/VocFile.h>
+#include <eastwood/SDL/Surface.h>
 
 #include <string>
 
 #include <boost/format.hpp>
 
-
-typedef boost::shared_ptr<IcnFile> IcnfilePtr;
-typedef boost::shared_ptr<ShpFile> ShpfilePtr;
 
 DataCache::DataCache() {
 }
@@ -32,8 +30,7 @@ DataCache::DataCache() {
 #include <iostream>
 
 void DataCache::Init(){
-    size_t len;
-    uint8_t *data;
+    eastwood::IStream *data;
     //    Image *tmp;
 
     ResMan::Instance()->addRes("ENGLISH");
@@ -41,9 +38,8 @@ void DataCache::Init(){
     // Not properly decoded yet..
     // CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
-    data = ResMan::Instance()->readFile("ENGLISH:INTRO.ENG", &len);
-    IntroStrings = new StringFile(data);
-    free(data);
+    data = ResMan::Instance()->getFile("ENGLISH:INTRO.ENG");
+    IntroStrings = new eastwood::StringFile(*data);
 
     ResMan::Instance()->addRes("DUNE");
 
@@ -62,15 +58,12 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("VOC");
     ResMan::Instance()->addRes("XTRE");
 
-    data = ResMan::Instance()->readFile("ENGLISH:TEXTA.ENG", &len);	
-    BriefingStrings[0] = new StringFile(data);
-    free(data);
-    data = ResMan::Instance()->readFile("ENGLISH:TEXTO.ENG", &len);	
-    BriefingStrings[1] = new StringFile(data);
-    free(data);
-    data = ResMan::Instance()->readFile("ENGLISH:TEXTH.ENG", &len);	
-    BriefingStrings[2] = new StringFile(data);
-    free(data);
+    data = ResMan::Instance()->getFile("ENGLISH:TEXTA.ENG");	
+    BriefingStrings[0] = new eastwood::StringFile(*data);
+    data = ResMan::Instance()->getFile("ENGLISH:TEXTO.ENG");
+    BriefingStrings[1] = new eastwood::StringFile(*data);
+    data = ResMan::Instance()->getFile("ENGLISH:TEXTH.ENG");
+    BriefingStrings[2] = new eastwood::StringFile(*data);
 }
 
 python::object DataCache::loadPyObject(std::string moduleName, std::string objectName) {
@@ -84,16 +77,14 @@ python::object DataCache::loadPyObject(std::string moduleName, std::string objec
     return python::eval(((std::string)objectName + "()").c_str(), main, module);
 }
 
-SDL_Palette* DataCache::getPalette(std::string paletteFile)
+eastwood::Palette DataCache::getPalette(std::string paletteFile)
 {
     if(m_palette.find(paletteFile) == m_palette.end())
     {
-        size_t len;
-        uint8_t *data = ResMan::Instance()->readFile(paletteFile, &len);
-        m_palette[paletteFile] = PalfilePtr(new PalFile(data, len));
-        free(data);
+	eastwood::IStream *data = ResMan::Instance()->getFile(paletteFile);
+        m_palette[paletteFile] = eastwood::PalFile(*data).getPalette();
     }
-    return m_palette[paletteFile]->getPalette();
+    return m_palette[paletteFile];
 }
 
 
@@ -122,7 +113,7 @@ song *DataCache::getMusic(MUSICTYPE musicType, uint16_t ID)
     return newSong;
 }
 
-std::string	DataCache::getBriefingText(uint16_t mission, uint16_t textType, HOUSETYPE house) {
+std::string	DataCache::getBriefingText(uint16_t mission, eastwood::MissionType textType, HOUSETYPE house) {
     return BriefingStrings[house]->getString(mission,textType);
 }
 
@@ -160,12 +151,11 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 
     try
     {
-        size_t len;
-	uint8_t *data;
+	eastwood::IStream *data;
 	float frameRate;
 
         std::string variable, type;
-        SDL_Palette* palette;
+	eastwood::Palette palette;
 	python::object pyObject = DataCache::Instance()->getPyObject("objects", path);
 
 	if(::getPyObject(pyObject.attr("palette"), &variable))
@@ -178,28 +168,33 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 	    exit(EXIT_FAILURE);
 	}
 
-	data = ResMan::Instance()->readFile(variable, &len);
+	data = ResMan::Instance()->getFile(variable);
 
 	type = variable.substr(variable.length()-3, 3);
 
         if (type == "WSA") {
-            WsaFile wsafile(data, len, palette);
+	    eastwood::WsaFile wsafile(*data, palette);
 
-            for(uint16_t i = 0; i < wsafile.getNumFrames(); i++)
-                animationLabel->addFrame(ImagePtr(new Image(wsafile.getSurface(i))));
+            for(uint16_t i = 0; i < wsafile.size(); i++) {
+		eastwood::SDL::Surface *surf = new eastwood::SDL::Surface(wsafile.getSurface(i));
+                animationLabel->addFrame(ImagePtr(new Image(surf)));
+	    }
         }
 
         if (type == "SHP") {
 	    UPoint index;
-            ShpFile shpfile(data, len, palette);
+	    eastwood::ShpFile shpfile(*data, palette);
 	    
     	    if(!::getPyObject(pyObject.attr("index"), &index)) {
     		LOG(LV_ERROR, "DataCache", "%s: 'index' variable missing!", path.c_str());
     		exit(EXIT_FAILURE);
     	    }
 
-            for(uint16_t i = index.x; i < index.y; i++)
-                animationLabel->addFrame(ImagePtr(new Image(shpfile.getSurface(i))));
+            for(uint16_t i = index.x; i < index.y; i++) {
+		eastwood::SDL::Surface *surf = new eastwood::SDL::Surface(shpfile.getSurface(i));
+
+                animationLabel->addFrame(ImagePtr(new Image(surf)));
+	    }
         }
 	if(::getPyObject(pyObject.attr("framerate"), &frameRate))
             animationLabel->setFrameRate(frameRate);

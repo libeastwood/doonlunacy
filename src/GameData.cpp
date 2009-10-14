@@ -2,9 +2,12 @@
 
 #include <eastwood/CpsFile.h>
 #include <eastwood/IcnFile.h>
+#include <eastwood/MapFile.h>
 #include <eastwood/PalFile.h>
 #include <eastwood/ShpFile.h>
 #include <eastwood/VocFile.h>
+#include <eastwood/SDL/Surface.h>
+#include <eastwood/SDL/Mixer/Sound.h>
 
 #include "GameData.h"
 
@@ -15,12 +18,9 @@
 #include "ResMan.h"
 #include "Sfx.h"
 
-GameData::GameData(std::string path)
+// set m_persistent to true to avoid it being freed
+GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(true)
 {
-    m_path = path;
-    // set this to true to avoid it being freed
-    m_persistent = false;
-    m_freeCounter = 0;
 }
 
 GameData::~GameData()
@@ -64,12 +64,11 @@ bool GameData::freeIfUnique() {
 void GameData::drawImage()
 {
     try {
-	size_t len;
-	uint8_t *data;
+	eastwood::IStream *data;
 	std::string variable;
 	int value;
 	UPoint pos;
-	SDL_Palette* palette;
+	eastwood::Palette palette;
 	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
 
 	if(getPyObject(pyObject.attr("palette"), &variable))
@@ -88,36 +87,28 @@ void GameData::drawImage()
 	    if(!getPyObject(pyObject.attr("type"), &type))
 		type = variable.substr(variable.length()-3, 3);
 
-	    data = ResMan::Instance()->readFile(variable, &len);
+	    data = ResMan::Instance()->getFile(variable);
 
 	    if (type == "CPS") {
-		CpsFile cpsfile(data, len, palette);
-		m_surface.reset(new Image(cpsfile.getSurface()));
+		eastwood::CpsFile cpsfile(*data, palette);
+		m_surface.reset(new Image(new eastwood::SDL::Surface(cpsfile.getSurface())));
 	    }
 
 	    if (type == "SHP") {
 		std::vector<uint32_t> tiles = getPyObjectVector<uint32_t>(pyObject.attr("tiles"));
-		ShpFile shpfile(data, len, palette);
+		eastwood::ShpFile shpfile(*data, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
-		    m_surface.reset(new Image(shpfile.getSurface(value)));
+		    m_surface.reset(new Image(new eastwood::SDL::Surface(shpfile.getSurface(value))));
 		else if(!tiles.empty()) {
 		    uint32_t tilesX = 0, tilesY = 0;
-		    for(uint32_t j = 0; j < tiles.size(); j++) { 
-			if(TILE_GETINDEX(tiles[j]) >= (uint32_t)shpfile.getNumFiles()) {
-			    LOG(LV_ERROR, "GameData","ShpFile::getSurfaceArray(): There exist only %d files in this *.shp.",shpfile.getNumFiles());
-			    exit(EXIT_FAILURE);
-			}				
-		    }
+
 		    if(!tilesX)
 			tilesX = tiles.size();
 		    else if(tilesX != tiles.size())
 			LOG(LV_FATAL, "GameData:", "Tile row size %d is of different size than %d for %s!",
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
-		    uint32_t *tilesArray = new uint32_t[tiles.size()];
-		    std::copy(tiles.begin(), tiles.end(), tilesArray);
-		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, tilesArray)));
-		    delete [] tilesArray;
+		    m_surface.reset(new Image(new eastwood::SDL::Surface(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front()))));
 		}
 		else {
 		    LOG(LV_FATAL, "GameData", "%s: No index or tiles specified!", m_path.c_str());
@@ -127,19 +118,19 @@ void GameData::drawImage()
 	    if (type == "ICN") {
 		std::string mapName;
 		if(getPyObject<std::string>(pyObject.attr("map"), &mapName)) {
-		    size_t mapLen;
-		    uint8_t *mapData = ResMan::Instance()->readFile(mapName, &mapLen);
+		    data = ResMan::Instance()->getFile(mapName);
+		    eastwood::MapFile map(*data);		    
 
-		    IcnFile icnfile(data, len, mapData, mapLen, palette);
+		    eastwood::IcnFile icnfile(*data, map, palette);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
-			m_surface.reset(new Image(icnfile.getSurface(value)));
+			m_surface.reset(new Image(new eastwood::SDL::Surface(icnfile.getSurface(value))));
 		    else if(getPyObject<UPoint>(pyObject.attr("row"), &pos))
-			m_surface.reset(new Image(icnfile.getSurfaceRow(pos.x, pos.y)));
-		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value)) {
+			m_surface.reset(new Image(new eastwood::SDL::Surface(icnfile.getTiles(pos.x, pos.y))));
+/*		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value)) {
 			int tilesN = python::extract<int>(pyObject.attr("num"));
 			UPoint tilePos = python::extract<UPoint>(pyObject.attr("tilepos"));
 			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
-		    }
+		    }*/
 		    else {
 			LOG(LV_FATAL, "GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
 			exit(EXIT_FAILURE);
@@ -194,7 +185,7 @@ void GameData::drawImage()
 	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str());
 	    exit(EXIT_FAILURE);
 	}
-	m_persistent = pyObject.attr("persistent");
+	//m_persistent = pyObject.attr("persistent");
     }
     catch(python::error_already_set const &) {
 	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
@@ -206,10 +197,8 @@ void GameData::drawImage()
 void GameData::loadSound() {
 
     try {
-    	Mix_Chunk* soundChunk;
-        SDL_RWops *rwop;
-        size_t len;
-        uint8_t *data;
+	Sound sound;
+	eastwood::IStream *data;
 	std::string filename;
 	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
 
@@ -219,20 +208,10 @@ void GameData::loadSound() {
 	    exit(EXIT_FAILURE);
 	    }
 
-        data = ResMan::Instance()->readFile(filename, &len);
-        if((rwop = SDL_RWFromMem(data, len)) ==NULL) {
-            LOG(LV_ERROR, "GameData", "getChunkFromFile(): Cannot open %s!",filename.c_str());
-            exit(EXIT_FAILURE);
-        }
+        data = ResMan::Instance()->getFile(filename);
+	sound = eastwood::SDL::Mixer::Sound(eastwood::VocFile(*data).getSound()).getResampled(eastwood::I_LINEAR);
 
-        if((soundChunk = LoadVOC_RW(rwop, 0)) == NULL) {
-            LOG(LV_ERROR, "DataCache", "getChunkFromFile(): Cannot load %s!",filename.c_str());
-            exit(EXIT_FAILURE);		
-        }
-
-        SDL_RWclose(rwop);
-        free(data);
-    	m_sound.reset(new Sound(soundChunk));
+    	m_sound.reset(new Sound(sound));
     }
     catch(python::error_already_set const &) {
 	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());

@@ -12,10 +12,10 @@ FontManager::~FontManager()
 
 }
 
-Font* FontManager::getFont(std::string fn)
+eastwood::Font* FontManager::getFont(std::string fn)
 {
 
-	FontList::iterator it = m_fonts.find(fn);
+    std::map<std::string, eastwood::Font*>::iterator it = m_fonts.find(fn);
 	if (it == m_fonts.end())
 	{
 		LOG(LV_INFO, "Font", "Loading %s", fn.c_str());
@@ -24,13 +24,13 @@ Font* FontManager::getFont(std::string fn)
 	return m_fonts[fn];
 }
 
-Font* FontManager::loadFont(std::string fn)
+eastwood::Font* FontManager::loadFont(std::string fn)
 {
 	LOG(LV_INFO, "Font", "LoadFont %s", fn.c_str());
-	FileLike* file = ResMan::Instance()->readFile(fn);
-	FNTHeader* header = new FNTHeader();
+	std::istream *file = ResMan::Instance()->getFile(fn);
+	eastwood::FNTHeader* header = new eastwood::FNTHeader();
     
-	file->read(header, sizeof(FNTHeader));
+	file->read((char*)header, sizeof(eastwood::FNTHeader));
 
 	// this checks if its a valid font
 	if (header->unknown1 != 0x0500) LOG(LV_WARNING, "Font", "failed unknown1");
@@ -41,24 +41,24 @@ Font* FontManager::loadFont(std::string fn)
 
 	uint16_t* dchar = new uint16_t[header->nchars+1];
 
-	file->read(dchar, sizeof(uint16_t) * (header->nchars+1));
+	file->read((char*)dchar, sizeof(uint16_t) * (header->nchars+1));
 
 	uint8_t* wchar = new uint8_t[header->nchars+1];
 
 
-	file->seek(header->wpos);
-	file->read(wchar, sizeof(uint8_t) * (header->nchars+1));
+	file->seekg(header->wpos, std::ios::beg);
+	file->read((char*)wchar, sizeof(uint8_t) * (header->nchars+1));
 
 	if (wchar[0] != 8) LOG(LV_WARNING, "Font", "%d: bad!!", wchar[0]);
 
 	uint16_t* hchar = new uint16_t[header->nchars+1];
 
-	file->seek(header->hpos);
-	file->read(hchar, sizeof(uint16_t) * (header->nchars+1));
+	file->seekg(header->hpos, std::ios::beg);
+	file->read((char*)hchar, sizeof(uint16_t) * (header->nchars+1));
 
-	file->seek(header->cdata);
+	file->seekg(header->cdata, std::ios::beg);
 
-	FNTCharacter* characters = new FNTCharacter[header->nchars+1];    
+	eastwood::FNTCharacter* characters = new eastwood::FNTCharacter[header->nchars+1];    
     
 	for (int i=0; i!=header->nchars+1; i++)
 	{
@@ -70,9 +70,9 @@ Font* FontManager::loadFont(std::string fn)
 		characters[i].height = height;
 		characters[i].y_offset = offset;
 
-		file->seek(dchar[i]); 
+		file->seekg(dchar[i], std::ios::beg);
 		uint8_t* bitmap = new uint8_t[width * height];
-		file->read(bitmap, sizeof(uint8_t) * (width * height));
+		file->read((char*)bitmap, sizeof(uint8_t) * (width * height));
 		characters[i].bitmap = bitmap;       
 	};
 
@@ -81,7 +81,8 @@ Font* FontManager::loadFont(std::string fn)
 	delete[] wchar;
 	delete file;
     
-	Font* font = new Font(characters, header);
+	eastwood::Font* font = new eastwood::Font(characters, header);
 
 	return font;
 }
+

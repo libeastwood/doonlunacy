@@ -19,29 +19,6 @@
 
 namespace bfs = boost::filesystem;
 
-FileLike::FileLike(unsigned char* buf, size_t size)
-{
-    m_buf = buf;
-    m_size = size;
-    m_pos = 0;
-}
-
-FileLike::~FileLike()
-{
-    free(m_buf);
-}
-
-void FileLike::read(void* buf, size_t size)
-{
-    memcpy(buf, &m_buf[m_pos], size);
-    m_pos += size; 
-}
-
-void FileLike::seek(off_t offset)
-{
-    m_pos = offset;
-}
-
 // ------------------------------------------------------------------
 
 Resource::Resource()
@@ -68,26 +45,13 @@ DIRResource::DIRResource(bfs::path path)
     m_path = path; 
 }
 
-unsigned char* DIRResource::readFile(std::string path, size_t *size)
+eastwood::IStream* DIRResource::getFile(std::string path)
 {
     bfs::path fullpath (m_path);
     fullpath /= path;
 
-    FILE *file = fopen (fullpath.string().c_str(), "rb");
-    fseek(file, 0, SEEK_END);
-    size_t filesize = ftell(file);
-
-    fseek(file, 0, SEEK_SET);
-
-    unsigned char* buf = new unsigned char[filesize];
-
-    fread(buf, filesize, 1, file);
-
-    fclose(file);
-
-    if (size != NULL) *size = filesize;
-
-    return buf;
+    std::ifstream *file = new std::ifstream(path.c_str());
+    return reinterpret_cast<eastwood::IStream*>(file);
 }
 
 std::string DIRResource::readText(std::string path) 
@@ -141,32 +105,26 @@ void WritableDIRResource::writeText(std::string path, std::string text)
 PAKResource::PAKResource(bfs::path path)
 {
     m_path = path;
-    m_pakfile = new PakFile(path.string().c_str());
+    m_fstream = new std::fstream(path.string().c_str());
+    m_pakfile = new eastwood::PakFile(*m_fstream);
 }
 
 PAKResource::~PAKResource()
 {
     delete m_pakfile;
+    m_fstream->close();
+    delete m_fstream;
 }
 
-unsigned char* PAKResource::readFile(std::string path, size_t *size)
+eastwood::IStream* PAKResource::getFile(std::string path)
 {
-    size_t filesize;
-    unsigned char *buf =  m_pakfile->getFile(path.c_str(), &filesize);
-
-    //RESMAN_LOG(LV_INFO, boost::format("read pak %s size %d\n") % path.string().c_str() % filesize);
-
-    assert(buf != NULL);
-    assert(filesize != 0);
-
-    if (size != NULL) *size = filesize;
-
-    return buf;
+    m_pakfile->open(path);
+    return m_pakfile;
 }
 
 bool PAKResource::exists(std::string path)
 {
-    for (unsigned int i = 0; i != m_pakfile->getNumFiles(); i++)
+    for (unsigned int i = 0; i != m_pakfile->sizeg(); i++)
     {
 	if (m_pakfile->getFileName(i) == path) return true;
     };
@@ -253,6 +211,15 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     return res;
 }
 
+eastwood::IStream* ResMan::getFile(std::string name)
+{
+    std::string filename;
+    Resource* res = getResource(name, filename);
+
+
+    return res->getFile(filename);
+}
+
 bool ResMan::exists(std::string path)
 {
     std::string filename;
@@ -275,31 +242,6 @@ std::string ResMan::getRealPath(std::string path)
 	throw*/
 
     return res->getRealPath(filename);
-}
-
-unsigned char*  ResMan::readFile(std::string name, size_t *size)
-{
-    std::string filename;
-    Resource* res = getResource(name, filename);
-
-    if (res == NULL) 
-    {
-	if (size != NULL) size = 0;
-	return NULL;
-    };
-
-    unsigned char *buf = res->readFile(filename.c_str(), size);
-
-    assert(buf != NULL);
-
-    return buf;
-}
-
-FileLike* ResMan::readFile(std::string name)
-{
-    size_t size;
-    unsigned char* buf = readFile(name, &size);
-    return new FileLike(buf, size);
 }
 
 std::string ResMan::readText(std::string name)

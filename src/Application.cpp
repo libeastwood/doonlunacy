@@ -172,7 +172,8 @@ void Application::InitNet()
 
 void Application::SetPalette()
 {
-    SDL_Palette * pal = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
+    eastwood::SDL::Palette *epl = new eastwood::SDL::Palette(DataCache::Instance()->getPalette("DUNE:IBM.PAL"));
+    SDL_Palette * pal = epl; //&((eastwood::SDL::Palette)DataCache::Instance()->getPalette("DUNE:IBM.PAL"));
     
     //This fixes white wheels. Is palette broken or sth??
 

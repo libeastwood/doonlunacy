@@ -28,7 +28,7 @@ void Label::drawBackground(uint16_t textw, uint16_t texth, uint16_t numLines)
 
 void Label::redraw()
 {
-    Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    eastwood::Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
     uint16_t textw, texth;
 
     if (m_maxLineLength > 0)
