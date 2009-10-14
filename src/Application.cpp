@@ -177,7 +177,7 @@ void Application::SetPalette()
     palette[205].b = 153;
     
     LOG(LV_INFO, "Application", "Setting palette %d colors", palette.size());
-    assert( m_screen->setPalette(&palette) == true );
+    assert( m_screen->setPalette((SDL_Palette*)&palette) == true );
     m_currentPalette = palette;
 
 }
@@ -196,16 +196,17 @@ void Application::InitVideo()
 
     SDL_Surface *surf = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
     
-    if(!surf)
-    {
+    if(!surf) {
         LOG(LV_ERROR, "Application", "Couldn't set video mode: %s", SDL_GetError());
         Die();
-    };
+    }
 
-    m_screen = (Image*)surf;//eastwood::Surface((uint8_t*)surf->pixels, surf->w, surf->h, surf->format->BitsPerPixel, eastwood::Palette(256)));//  (*surf->format->palette)));
+    //FIXME: we can't really create a proper Image object out of this one as surf
+    //	     is a pointer to an SDL_Surface* (current_video) out of our reach..
+    m_screen = (Image*)surf;
     
     // reset the palette if we've got one 
-    if (m_currentPalette.size() )
+    if (m_currentPalette)
         SetPalette();
 
     SDL_ShowCursor(SDL_DISABLE);
@@ -223,6 +224,7 @@ void Application::LoadData()
     
     SetPalette();
     m_cursor = DataCache::Instance()->getGameData("UI_MouseCursor")->getImage();
+    m_cursor->setColorKey();
 
     LOG(LV_INFO, "Application", "Starting sound...");
     SoundPlayer::Instance();

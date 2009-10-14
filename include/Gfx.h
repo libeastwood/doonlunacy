@@ -298,12 +298,12 @@ class Image : protected eastwood::SDL::Surface
 	  @param firstcolor
 	  @param ncolors
 	  */
-	bool setColors(SDL_Color *colors, int firstcolor, int ncolors) {
-	    return SDL_SetColors(this, colors, firstcolor, ncolors);
-	}
-
 	bool setPalette(SDL_Palette *palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
 	    return SDL_SetPalette(this, flags, palette->colors, firstColor, palette->ncolors);
+	}
+
+	bool setPalette(eastwood::Palette palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
+	    return eastwood::SDL::Surface::setPalette(palette, firstColor, flags);
 	}
 
 	//! Remap colors of surface
@@ -443,7 +443,7 @@ class Image : protected eastwood::SDL::Surface
 
 
     private:
-	SDL_Color *m_origPal, *m_tmpPal;
+	eastwood::Palette m_origPal, m_tmpPal;
 };
 
 #endif // DUNE_GFX_H

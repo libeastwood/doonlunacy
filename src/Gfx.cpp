@@ -22,8 +22,7 @@ Image::Image(const eastwood::SDL::Surface &surface) :
     pixels = *_pixels.get();
 }
 
-Image::Image(SDL_Surface *surface) : eastwood::SDL::Surface(*surface), m_tmpPal(NULL) {
-    m_tmpPal = NULL;
+Image::Image(SDL_Surface *surface) : eastwood::SDL::Surface(*surface), m_tmpPal(0) {
 }
 
 Image::Image(ConstUPoint size) :
@@ -55,7 +54,7 @@ ImagePtr Image::getPictureCrop(ConstRect dstRect)
 
     Image *returnPic = new Image(UPoint(dstRect.w, dstRect.h));
 
-    returnPic->setPalette(getPalette());
+    returnPic->setPalette(_palette);
     returnPic->blitFrom(this, dstRect, UPoint(0,0));
 
     return ImagePtr(returnPic);
@@ -236,16 +235,14 @@ void Image::drawTiles(ImagePtr tile, Rect area)
 
 bool Image::fadeIn(const int fadeAmt)
 {
-    SDL_Color *src = getPalette()->colors;
-    int ncolors = getPalette()->ncolors;
-    SDL_Color *dest = m_tmpPal;
-    if(m_tmpPal == NULL)
+    eastwood::Color *src = &_palette[0];
+    uint16_t ncolors = _palette.size();
+    
+    eastwood::Color *dest = &m_tmpPal[0];
+    if(!m_tmpPal.size())
     {
-	m_tmpPal = new SDL_Color[ncolors];
-	memcpy((unsigned char*)m_tmpPal,
-		src,
-		sizeof(SDL_Color) * ncolors);
-	dest = m_tmpPal;
+	m_tmpPal = eastwood::Palette(ncolors);
+	dest = &m_tmpPal[0];
 
 	for (int i=0; i!=ncolors; i++, src++)
 	{
@@ -253,7 +250,7 @@ bool Image::fadeIn(const int fadeAmt)
 	    src->g = 0;
 	    src->b = 0;
 	}
-	setPalette(getPalette());
+	setPalette(_palette);
 	return true;
     }
     bool fade = false;
@@ -273,7 +270,7 @@ bool Image::fadeIn(const int fadeAmt)
 	}
     }
     if(fade)
-	setPalette(getPalette());
+	setPalette(_palette);
 
     return fade;
 }
@@ -281,10 +278,9 @@ bool Image::fadeIn(const int fadeAmt)
 bool Image::fadeOut(const int fadeAmt)
 {
     bool fade = false;
-    SDL_Palette *pal = getPalette();
-    SDL_Color *src = pal->colors;
+    eastwood::Color *src = &_palette[0];
 
-    for (int i=0; i!=pal->ncolors; i++, src++)
+    for (uint16_t i=0; i!=_palette.size(); i++, src++)
     {
 	if (src->r > 0 || src->g > 0 || src->b > 0)
 	{
@@ -299,12 +295,12 @@ bool Image::fadeOut(const int fadeAmt)
 	}
     }
     if(fade)
-	setPalette(getPalette());
+	setPalette(_palette);
 
     return fade;
 }
 
-inline uint16_t colDiff(SDL_Color srcCol, SDL_Color dstCol) {
+static inline uint16_t colDiff(eastwood::Color srcCol, eastwood::Color dstCol) {
     return abs(srcCol.r - dstCol.r) + abs(srcCol.g - dstCol.g) + abs(srcCol.b - dstCol.b);
 }
 
@@ -312,8 +308,7 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
     bool morph = false;
     UPoint point;
     std::vector<uint16_t> newCol;
-    SDL_Palette *pal = getPalette();
-    newCol.assign(pal->ncolors, -1);
+    newCol.assign(_palette.size(), -1);
 
     for(point.x = 0;  point.x != w; point.x++)
 	for(point.y = 0; point.y != h; point.y++)
@@ -326,14 +321,14 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
 		    newPix = (uint8_t)newCol[curPix];
 		else
 		{
-		    SDL_Color srcCol = pal->colors[curPix];
-		    SDL_Color dstCol = pal->colors[dstPix];
+		    eastwood::Color srcCol = _palette[curPix];
+		    eastwood::Color dstCol = _palette[dstPix];
 		    uint16_t minDiff = -1;
 		    std::vector<uint8_t> newCols;
-		    for(uint16_t i = 0; i != pal->ncolors; i++)
+		    for(uint16_t i = 0; i != _palette.size(); i++)
 		    {
 			if(i == curPix) continue;
-			SDL_Color col = pal->colors[i];
+			eastwood::Color col = _palette[i];
 			uint16_t diff = colDiff(srcCol, col);
 			uint16_t dstDiff = colDiff(srcCol, dstCol);
 			if(diff == dstDiff)
@@ -515,7 +510,7 @@ ImagePtr Image::getResized(ConstUPoint size)
     Image *resized = new Image(size);
 
     // copy palette (otherwise you'll get only black image)
-    resized->setPalette(getPalette());
+    resized->setPalette(_palette);
 
     // copy colorkey (not sure what happens ;-) )
     resized->setColorKey(format->colorkey, (flags & SDL_SRCCOLORKEY) | (flags & SDL_RLEACCEL));
