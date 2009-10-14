@@ -121,6 +121,7 @@ void GameData::drawImage()
 		if(getPyObject<std::string>(pyObject.attr("map"), &mapName)) {
 		    data = ResMan::Instance()->getFile(mapName);
 		    eastwood::MapFile map(*data);		    
+		    data = ResMan::Instance()->getFile(variable);
 
 		    eastwood::IcnFile icnfile(*data, map, palette);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
