@@ -139,7 +139,7 @@ class Image : protected eastwood::SDL::Surface
 
 	//! Make copy of the image
 	ImagePtr getCopy() const {
-	    return ImagePtr(new Image(SDL_ConvertSurface((Image*)this, format, flags)));
+	    return ImagePtr(new Image(*this));
 	}
 
 	//! Make resized copy of the image
