@@ -193,11 +193,11 @@ void GameData::drawImage()
 	PyErr_Print();
 	throw;
     } catch(eastwood::Exception e) {
-	LOG(LV_ERROR, "GameData::drawImage():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
+	LOG(LV_ERROR, "GameData::drawImage()", "%S %S: %S", &((ConstString)m_path), &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
 	throw;
     }
     catch(std::out_of_range e) {
-	LOG(LV_ERROR, "GameData::drawImage():", "%s", e.what());
+	LOG(LV_ERROR, "GameData::drawImage()", "%S %s", &((ConstString)m_path), e.what());
 	throw;
     }
 
@@ -213,7 +213,7 @@ void GameData::loadSound() {
 
 
 	if(!getPyObject(pyObject.attr("filename"), &filename)) {
-	    LOG(LV_ERROR, "GameData", "%s: 'filename' variable missing!", filename.c_str());
+	    LOG(LV_ERROR, "GameData::loadSound()", "%s: 'filename' variable missing!", filename.c_str());
 	    exit(EXIT_FAILURE);
 	    }
 
@@ -223,11 +223,11 @@ void GameData::loadSound() {
     	m_sound.reset(new Sound(sound));
     }
     catch(python::error_already_set const &) {
-	LOG(LV_FATAL, "GameData::loadSound():", "Error loading data: %s", m_path.c_str());
+	LOG(LV_FATAL, "GameData::loadSound()", "Error loading sound: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     } catch(eastwood::Exception e) {
-	LOG(LV_ERROR, "GameData::loadSound():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
+	LOG(LV_ERROR, "GameData::loadSound()", "%S %S: %S", &((ConstString)m_path), &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
 	exit(EXIT_FAILURE);
     }
 
