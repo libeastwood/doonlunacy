@@ -175,7 +175,7 @@ class Image : protected eastwood::SDL::Surface
 	  @note If you need to disable colorkey, think twice about your 
 	  code...            
 	  */
-	void setColorKey(int color = 0, int flags = SDL_SRCCOLORKEY | SDL_RLEACCEL) {
+	void setColorKey(int color = 0, int flags = SDL_SRCCOLORKEY | SDL_RLEACCEL) throw() {
 	    SDL_SetColorKey(this, flags, color);
 	}
 
@@ -190,7 +190,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(Image *source, ConstRect srcRect, ConstUPoint dstPoint) {
+	void blitFrom(Image *source, ConstRect srcRect, ConstUPoint dstPoint) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(dstPoint, source->getSize()));
 	    SDL_BlitSurface(source, const_cast<Rect*>(&srcRect), this, &dstRect); 
@@ -200,7 +200,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param source source image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(Image *source, ConstUPoint dstPoint) {
+	void blitFrom(Image *source, ConstUPoint dstPoint) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(dstPoint, source->getSize()));
 	    SDL_BlitSurface(source, NULL, this, &dstRect); 
@@ -209,7 +209,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param source source image
 	  */
-	void blitFrom(Image *source) {
+	void blitFrom(Image *source) throw() {
 	    assert(source != NULL);
 	    if(source->pixels != pixels)
     		SDL_BlitSurface(source, NULL, this, NULL); 
@@ -218,7 +218,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param source source image
 	  */
-	void blitFromCentered(Image *source) {
+	void blitFromCentered(Image *source) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(getSize()/2 - source->getSize()/2, source->getSize()));
 	    SDL_BlitSurface(source, NULL, this, &dstRect); 
@@ -229,7 +229,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(Image *destination, ConstRect srcRect, ConstUPoint dstPoint) const {
+	void blitTo(Image *destination, ConstRect srcRect, ConstUPoint dstPoint) const throw() {
 	    assert(destination != NULL);
 	    destination->blitFrom(const_cast<Image*>(this), srcRect, dstPoint);
 	}
@@ -238,7 +238,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param destination destination image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(Image *destination, ConstUPoint dstPoint) const {
+	void blitTo(Image *destination, ConstUPoint dstPoint) const throw() {
 	    assert(destination != NULL);
 	    destination->blitFrom(const_cast<Image*>(this), dstPoint);
 	}
@@ -246,7 +246,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param destination destination image
 	  */
-	void blitTo(Image *destination) const {
+	void blitTo(Image *destination) const throw() {
 	    assert(destination != NULL);
 	    destination->blitFrom(const_cast<Image*>(this));
 	}
@@ -254,7 +254,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param destination destination image
 	  */
-	void blitToCentered(Image *destination) const {
+	void blitToCentered(Image *destination) const throw() {
 	    assert(destination != NULL);
 	    destination->blitFromCentered(const_cast<Image*>(this));
 	}
@@ -281,7 +281,7 @@ class Image : protected eastwood::SDL::Surface
 	//! @name Fill operations
 	//@{
 
-	void fillRect(uint32_t color, Rect dstRect = Rect()) {
+	void fillRect(uint32_t color, Rect dstRect = Rect()) throw() {
 	    SDL_FillRect(this, !dstRect ? NULL : &dstRect, color);
 	}
 
@@ -329,7 +329,7 @@ class Image : protected eastwood::SDL::Surface
 
 	  @note Starting color and color number defaults to hardcoded numbers.
 	  */
-	inline void recolorByColor(int color) {
+	void recolorByColor(int color) throw() {
 	    recolor(DEFAULT_SURFACE_REMAP_BEGIN, color);
 	}
 
@@ -416,11 +416,11 @@ class Image : protected eastwood::SDL::Surface
 	void flipH();
 	void flipV();
 
-	inline int flip() {
+	int flip() throw() {
 	    return SDL_Flip(this);
 	};
 
-	int saveBMP(std::string filename) {
+	int saveBMP(std::string filename) throw() {
 	    return SDL_SaveBMP(this, filename.c_str());
 	}
 
@@ -428,15 +428,15 @@ class Image : protected eastwood::SDL::Surface
 	    font->render(text, *this, offx, offy, paloff);
 	}
 
-	inline bool mustLock() {
+	inline bool mustLock() throw() {
 	    return SDL_MUSTLOCK(this);
 	}
 
-	inline int lockSurface() {
+	inline int lockSurface() throw() {
 	    return SDL_LockSurface(this);
 	}
 
-	inline void unlockSurface() {
+	inline void unlockSurface() throw() {
 	    SDL_UnlockSurface(this);
 	}
 
