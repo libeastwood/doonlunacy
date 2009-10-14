@@ -17,7 +17,6 @@ class GameDataConst(GameData):
         self.index = None
         self.map = None
         self.mapindex = None
-        self.tilepos = (0,0)
         self.num = 0
         self.row = None
 

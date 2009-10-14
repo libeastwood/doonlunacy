@@ -126,13 +126,10 @@ void GameData::drawImage()
 		    eastwood::IcnFile icnfile(*data, map, palette);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
 			m_surface.reset(new Image(icnfile.getSurface(value)));
-		    else if(getPyObject<UPoint>(pyObject.attr("row"), &pos))
-			m_surface.reset(new Image(icnfile.getTiles(pos.x, pos.y)));
-/*		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value)) {
-			int tilesN = python::extract<int>(pyObject.attr("num"));
-			UPoint tilePos = python::extract<UPoint>(pyObject.attr("tilepos"));
-			m_surface.reset(new Image(icnfile.getSurfaceArray(value, tilePos.x, tilePos.y, tilesN)));
-		    }*/
+		    else if(getPyObject<int>(pyObject.attr("row"), &value))
+			m_surface.reset(new Image(icnfile.getTiles(value, false)));
+		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value))
+			m_surface.reset(new Image(icnfile.getTiles(value, true)));
 		    else {
 			LOG(LV_FATAL, "GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
 			exit(EXIT_FAILURE);

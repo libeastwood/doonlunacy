@@ -620,8 +620,6 @@ class ObjPic_Wall(GameDataConst):
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
         self.mapindex = 6
-        self.tilepos = (1,1)
-        self.num = 75
 
 class ObjPic_Bullet_SmallRocket(GameDataConst):
     def __init__(self):
@@ -713,8 +711,6 @@ class ObjPic_DeadInfantryOrig(GameDataConst):
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
         self.mapindex = 4
-        self.tilepos = (1,1)
-        self.num = 6
 
 class ObjPic_DeadInfantry(GameDataMod):
     def __init__(self):
@@ -739,14 +735,14 @@ class ObjPic_Terrain(GameDataConst):
         GameDataConst.__init__(self)
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
-        self.row = (124, 209)
+        self.row = 9
 
 class ObjPic_RockDamage(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
-        self.row = (1, 6)
+        self.row = 1
 
 class ObjPic_SandDamage(GameDataConst):
     def __init__(self):
@@ -759,7 +755,7 @@ class HideTile(GameDataConst):
         GameDataConst.__init__(self)
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
-        self.row = (108, 123)
+        self.row = 7
 
 class ObjPic_Terrain_Hidden(GameDataMod):
     def __init__(self):
