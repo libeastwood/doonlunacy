@@ -10,9 +10,10 @@
 #ifndef DUNE_GFX_H
 #define DUNE_GFX_H
 
-#include <SDL_video.h>
+#include "Definitions.h"
 #include <string>
 #include <eastwood/Font.h>
+#include <eastwood/SDL/Surface.h>
 
 #include "Colours.h"
 #include "Point.h"
@@ -33,7 +34,7 @@
 
 class CutSceneState;
 
-class Image : private SDL_Surface
+class Image : protected eastwood::SDL::Surface
 {
     public:
 
@@ -45,6 +46,11 @@ class Image : private SDL_Surface
 	  @warning Do not pass NULL parameter !
 	  */
 	Image(SDL_Surface *surface);
+
+	Image(const eastwood::SDL::Surface &surface);
+
+	Image() : eastwood::SDL::Surface() { }
+	Image &operator=(const SDL_Surface *surface);
 
 	//! Constructor
 	/*!
@@ -418,7 +424,7 @@ class Image : private SDL_Surface
 	}
 
 	inline void renderText(std::string text, eastwood::Font *font, int offx, int offy, uint8_t paloff) {
-	    //font->render(text, this, offx, offy, paloff);
+	    font->render(text, *this, offx, offy, paloff);
 	}
 
 	inline bool mustLock() {
@@ -437,7 +443,6 @@ class Image : private SDL_Surface
 
 
     private:
-	Image() { }
 	SDL_Color *m_origPal, *m_tmpPal;
 };
 

@@ -15,35 +15,34 @@
 // Image class
 //------------------------------------------------------------------------------
 
-Image::Image(SDL_Surface *surface) : SDL_Surface(*surface), m_tmpPal(NULL) {
+Image::Image(const eastwood::SDL::Surface &surface) :
+    eastwood::SDL::Surface(surface), m_origPal(0), m_tmpPal(0)
+{
+    //FIXME: Why is this required??
+    pixels = *_pixels.get();
+}
+
+Image::Image(SDL_Surface *surface) : eastwood::SDL::Surface(*surface), m_tmpPal(NULL) {
     m_tmpPal = NULL;
 }
 
-Image::Image(ConstUPoint size) : SDL_Surface(*SDL_CreateRGBSurface(
-	    SDL_HWSURFACE, // TODO: which one to use, HW or SW ? (otpetrik)
-	    size.x,  // width
-	    size.y,  // height
-	    8,       // bits per pixel
-	    0,0,0,0)), m_tmpPal(NULL) {
+Image::Image(ConstUPoint size) :
+    eastwood::SDL::Surface(size.x, size.y, 8, *Application::Instance()->Screen()->getPalette()),
+    m_origPal(0), m_tmpPal(0)
+{
     assert(size.x != 0);
     assert(size.y != 0);
+}
 
-    // copy palette from the screen (otherwise you'll get only black image)
-    setPalette(Application::Instance()->Screen()->getPalette());
+Image& Image::operator=(const SDL_Surface *surface) 
+{
+    *(eastwood::SDL::Surface*)this = surface;
+
+    return *this;
 }
 
 Image::~Image()
 {
-    // This is a workaround for using SDL_FreeSurface as we cannot call it on
-    // the object itself in it's destructor as it would attempt to free it.
-    // Therefore we just copy the struct with it's members to a new variable
-    // so that the same data will get freed along with this variable.
-    SDL_Surface *surface = (SDL_Surface *)SDL_malloc(sizeof(*surface));
-    SDL_memcpy(surface, this, sizeof(*surface));
-
-    SDL_FreeSurface(surface);
-    if(m_tmpPal != NULL)
-	delete m_tmpPal;
 }
 
 ImagePtr Image::getPictureCrop(ConstRect dstRect)

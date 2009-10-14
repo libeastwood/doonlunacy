@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include <eastwood/SDL/Surface.h>
 
 #include "Application.h"
 #include "Colours.h"
@@ -24,16 +25,11 @@
 
 uint8_t gpaloff;
 
-Application::Application()
+Application::Application() :
+    m_screen(new Image()),
+    m_currentPalette(0), m_rootState(NULL), m_rootWidget(NULL), m_running(false),
+    m_cursorX(0), m_cursorY(0), m_cursorFrame(CURSOR_NORMAL), m_clearColor(0)
 {
-    m_running = false;
-    m_rootState = NULL;
-
-    m_clearColor = 0;
-    m_cursorX = 0;
-    m_cursorY = 0;
-    m_cursorFrame = CURSOR_NORMAL;
-    m_currentPalette = NULL;
 }
 
 Application::~Application()
@@ -172,19 +168,17 @@ void Application::InitNet()
 
 void Application::SetPalette()
 {
-    eastwood::SDL::Palette *epl = new eastwood::SDL::Palette(DataCache::Instance()->getPalette("DUNE:IBM.PAL"));
-    SDL_Palette * pal = epl; //&((eastwood::SDL::Palette)DataCache::Instance()->getPalette("DUNE:IBM.PAL"));
+    eastwood::SDL::Palette palette = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
     
     //This fixes white wheels. Is palette broken or sth??
 
-    pal->colors[205].r = 109;
-    pal->colors[205].g = 109;
-    pal->colors[205].b = 153;
+    palette[205].r = 109;
+    palette[205].g = 109;
+    palette[205].b = 153;
     
-    assert(pal != NULL);
-    LOG(LV_INFO, "Application", "Setting palette %d colors", pal->ncolors);
-    assert( m_screen->setColors(pal->colors, 0, pal->ncolors) == 1 );
-    m_currentPalette = pal;
+    LOG(LV_INFO, "Application", "Setting palette %d colors", palette.size());
+    assert( m_screen->setPalette(&palette) == true );
+    m_currentPalette = palette;
 
 }
 
@@ -208,10 +202,10 @@ void Application::InitVideo()
         Die();
     };
 
-    m_screen = (Image*)surf;
+    m_screen = (Image*)surf;//eastwood::Surface((uint8_t*)surf->pixels, surf->w, surf->h, surf->format->BitsPerPixel, eastwood::Palette(256)));//  (*surf->format->palette)));
     
     // reset the palette if we've got one 
-    if (m_currentPalette != NULL)
+    if (m_currentPalette.size() )
         SetPalette();
 
     SDL_ShowCursor(SDL_DISABLE);

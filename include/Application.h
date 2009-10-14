@@ -12,8 +12,7 @@
 
 namespace python = boost::python;
 
-typedef enum
-{
+enum Cursor {
 	CURSOR_NORMAL,
 	CURSOR_RIGHT,
 	CURSOR_UP,
@@ -22,7 +21,7 @@ typedef enum
 	CURSOR_TARGET,
 	CURSOR_SELECTION,
 	NUM_CURSORS
-} Cursor;
+};
 
 class Container;
 class Label;
@@ -41,7 +40,7 @@ class Application : public Singleton<Application>
 
         void Die();
 
-        inline Image * Screen() { return m_screen; }
+        inline Image  *Screen() { return m_screen; }
 
         inline uint16_t CursorX() { return m_cursorX; }
         inline uint16_t CursorY() { return m_cursorY; }
@@ -53,7 +52,7 @@ class Application : public Singleton<Application>
         Container* RootWidget() { return m_rootWidget; }
 
         void SetPalette();
-        SDL_Palette* GetCurrentPalette() { return m_currentPalette; }
+	eastwood::Palette GetCurrentPalette() { return m_currentPalette; }
 
         void SetClearColor(uint32_t palIndex) { m_clearColor = palIndex; }
 
@@ -70,7 +69,7 @@ class Application : public Singleton<Application>
         void BlitCursor();
 
         Image *m_screen;
-        SDL_Palette *m_currentPalette;
+	eastwood::Palette m_currentPalette;
         
         StateMachine *m_rootState;
 

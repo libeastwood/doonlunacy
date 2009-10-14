@@ -175,10 +175,8 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
         if (type == "WSA") {
 	    eastwood::WsaFile wsafile(*data, palette);
 
-            for(uint16_t i = 0; i < wsafile.size(); i++) {
-		eastwood::SDL::Surface *surf = new eastwood::SDL::Surface(wsafile.getSurface(i));
-                animationLabel->addFrame(ImagePtr(new Image(surf)));
-	    }
+            for(uint16_t i = 0; i < wsafile.size(); i++)
+                animationLabel->addFrame(ImagePtr(new Image(wsafile.getSurface(i))));
         }
 
         if (type == "SHP") {
@@ -190,11 +188,8 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
     		exit(EXIT_FAILURE);
     	    }
 
-            for(uint16_t i = index.x; i < index.y; i++) {
-		eastwood::SDL::Surface *surf = new eastwood::SDL::Surface(shpfile.getSurface(i));
-
-                animationLabel->addFrame(ImagePtr(new Image(surf)));
-	    }
+            for(uint16_t i = index.x; i < index.y; i++)
+                animationLabel->addFrame(ImagePtr(new Image(shpfile.getSurface(i))));
         }
 	if(::getPyObject(pyObject.attr("framerate"), &frameRate))
             animationLabel->setFrameRate(frameRate);

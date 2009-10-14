@@ -91,14 +91,14 @@ void GameData::drawImage()
 
 	    if (type == "CPS") {
 		eastwood::CpsFile cpsfile(*data, palette);
-		m_surface.reset(new Image(new eastwood::SDL::Surface(cpsfile.getSurface())));
+		m_surface.reset(new Image(cpsfile.getSurface()));
 	    }
 
 	    if (type == "SHP") {
 		std::vector<uint32_t> tiles = getPyObjectVector<uint32_t>(pyObject.attr("tiles"));
 		eastwood::ShpFile shpfile(*data, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
-		    m_surface.reset(new Image(new eastwood::SDL::Surface(shpfile.getSurface(value))));
+		    m_surface.reset(new Image(shpfile.getSurface(value)));
 		else if(!tiles.empty()) {
 		    uint32_t tilesX = 0, tilesY = 0;
 
@@ -108,7 +108,7 @@ void GameData::drawImage()
 			LOG(LV_FATAL, "GameData:", "Tile row size %d is of different size than %d for %s!",
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
-		    m_surface.reset(new Image(new eastwood::SDL::Surface(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front()))));
+		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front())));
 		}
 		else {
 		    LOG(LV_FATAL, "GameData", "%s: No index or tiles specified!", m_path.c_str());
@@ -123,9 +123,9 @@ void GameData::drawImage()
 
 		    eastwood::IcnFile icnfile(*data, map, palette);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
-			m_surface.reset(new Image(new eastwood::SDL::Surface(icnfile.getSurface(value))));
+			m_surface.reset(new Image(icnfile.getSurface(value)));
 		    else if(getPyObject<UPoint>(pyObject.attr("row"), &pos))
-			m_surface.reset(new Image(new eastwood::SDL::Surface(icnfile.getTiles(pos.x, pos.y))));
+			m_surface.reset(new Image(icnfile.getTiles(pos.x, pos.y)));
 /*		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value)) {
 			int tilesN = python::extract<int>(pyObject.attr("num"));
 			UPoint tilePos = python::extract<UPoint>(pyObject.attr("tilepos"));
