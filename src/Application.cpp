@@ -224,7 +224,6 @@ void Application::LoadData()
     
     SetPalette();
     m_cursor = DataCache::Instance()->getGameData("UI_MouseCursor")->getImage();
-    m_cursor->setColorKey();
 
     LOG(LV_INFO, "Application", "Starting sound...");
     SoundPlayer::Instance();

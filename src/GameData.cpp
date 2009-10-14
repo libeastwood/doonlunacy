@@ -110,6 +110,7 @@ void GameData::drawImage()
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
 		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front())));
+		    m_surface->setColorKey();
 		}
 		else {
 		    LOG(LV_FATAL, "GameData", "%s: No index or tiles specified!", m_path.c_str());
