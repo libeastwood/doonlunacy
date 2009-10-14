@@ -1,6 +1,7 @@
 #include "Definitions.h"
 
 #include <eastwood/CpsFile.h>
+#include <eastwood/Exception.h>
 #include <eastwood/IcnFile.h>
 #include <eastwood/MapFile.h>
 #include <eastwood/PalFile.h>
@@ -191,7 +192,15 @@ void GameData::drawImage()
 	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	throw;
+    } catch(eastwood::Exception e) {
+	LOG(LV_ERROR, "GameData::drawImage():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
+	throw;
     }
+    catch(std::out_of_range e) {
+	LOG(LV_ERROR, "GameData::drawImage():", "%s", e.what());
+	throw;
+    }
+
 }
 
 void GameData::loadSound() {
@@ -217,7 +226,11 @@ void GameData::loadSound() {
 	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
 	PyErr_Print();
 	exit(EXIT_FAILURE);
+    } catch(eastwood::Exception e) {
+	LOG(LV_ERROR, "GameData::drawImage():", "%S: %S", &((ConstString)e.getLocation()), &((ConstString)e.getMessage()));
+	exit(EXIT_FAILURE);
     }
+
 }    
 
 ImagePtr GameData::getImage()
