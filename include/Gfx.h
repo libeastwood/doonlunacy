@@ -211,7 +211,8 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitFrom(Image *source) {
 	    assert(source != NULL);
-	    SDL_BlitSurface(source, NULL, this, NULL); 
+	    if(source->pixels != pixels)
+    		SDL_BlitSurface(source, NULL, this, NULL); 
 	}
 	//! Blit whole source image to this image (to center)
 	/*!
