@@ -74,8 +74,8 @@ class Image : protected eastwood::SDL::Surface
 	}
 
 	//! Returns palette of the surface
-	inline SDL_Palette *getPalette() const {
-	    return format->palette;
+	inline eastwood::Palette getPalette() const {
+	    return _palette;
 	}
 
 	//@}

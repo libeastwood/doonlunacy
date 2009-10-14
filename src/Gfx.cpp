@@ -26,7 +26,7 @@ Image::Image(SDL_Surface *surface) : eastwood::SDL::Surface(*surface), m_tmpPal(
 }
 
 Image::Image(ConstUPoint size) :
-    eastwood::SDL::Surface(size.x, size.y, 8, *Application::Instance()->Screen()->getPalette()),
+    eastwood::SDL::Surface(size.x, size.y, 8, *Application::Instance()->Screen()->format->palette),
     m_origPal(0), m_tmpPal(0)
 {
     assert(size.x != 0);
