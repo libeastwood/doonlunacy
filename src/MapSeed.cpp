@@ -252,9 +252,10 @@ void createMapWithSeed(uint32_t Para_Seed,uint16_t *pResultMap)
 	}
     }
 
+    std::vector<uint8_t>::const_iterator it = Array4x4TerrainGrid.begin();
     for(int16_t y = 0; y < 64; y+=4)
 	for(int16_t x = 0; x < 64; x+=4)
-	    MapArray[MapArray2DToMapArray1D(x,y)] = Array4x4TerrainGrid[y*4+x/4];
+	    MapArray[MapArray2DToMapArray1D(x,y)] = *it++;
 
     for(int16_t y = 0; y < 64; y+=4) {
 	for(int16_t x = 0; x < 64; x+=4) {
@@ -285,7 +286,7 @@ void createMapWithSeed(uint32_t Para_Seed,uint16_t *pResultMap)
 
 	for(int16_t x = 0; x < 64; x++, row++) {
 
-	    Area(0, 0) = ((x > 0) && (y > 0)) ? oldMapRow[x-1] : curMapRow[x];
+	    Area(0,0) = ((x > 0) && (y > 0)) ? oldMapRow[x-1] : curMapRow[x];
 	    Area(1,0) = (y > 0) ? oldMapRow[x] : curMapRow[x];
 	    Area(2,0) = ((x < 63) && (y > 0)) ? oldMapRow[x+1] : curMapRow[x];
 
