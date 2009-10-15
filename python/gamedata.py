@@ -730,12 +730,31 @@ class ObjPic_SandWormShimmerMask(GameDataConst):
         self.filename = "DUNE:UNITS1.SHP"
         self.index = 10
 
+class ObjPic_SpiceBloom(GameDataConst):
+    def __init__(self):
+        GameDataConst.__init__(self)
+        self.filename = "DUNE:ICON.ICN"
+        self.map = "DUNE:ICON.MAP"
+        self.row = 10
+
 class ObjPic_Terrain(GameDataConst):
     def __init__(self):
         GameDataConst.__init__(self)
         self.filename = "DUNE:ICON.ICN"
         self.map = "DUNE:ICON.MAP"
         self.row = 9
+
+class ObjPic_ConcreteSlab(GameDataConst):
+    def __init__(self):
+        GameDataConst.__init__(self)
+        self.filename = "DUNE:ICON.ICN"
+        self.map = "DUNE:ICON.MAP"
+        self.row = 8
+
+class ObjPic_AllTerrain(GameDataMod):
+    def __init__(self):
+        GameDataMod.__init__(self)
+        self.gamedata = [ObjPic_ConcreteSlab(), ObjPic_Terrain(), ObjPic_SpiceBloom()]
 
 class ObjPic_RockDamage(GameDataConst):
     def __init__(self):

@@ -18,6 +18,7 @@
 #include "PythonObjects.h"
 #include "ResMan.h"
 #include "Sfx.h"
+#include <iostream>
 
 // set m_persistent to true to avoid it being freed
 GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(true)
@@ -146,16 +147,39 @@ void GameData::drawImage()
 	    uint32_t colorkey = 0;
 	    Rect crop;
 	    ImagePtr gameData;
-	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType")
+
+	    if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) == "list") {
+		std::vector<python::object> gameDataVec = getPyObjectVector<python::object>(pyObject.attr("gamedata"));
+		std::vector<ImagePtr> data;		
+		UPoint newSize;
+		for(std::vector<python::object>::const_iterator it = gameDataVec.begin();
+			it != gameDataVec.end(); ++it) {
+		    variable = getPyObjectType(*it, 0);
+		    data.push_back(DataCache::Instance()->getGameData(variable)->getImage());
+		    UPoint size = data.back()->getSize();
+		    newSize.x += size.x;
+		    if(size.y > newSize.y)
+			newSize.y = size.y;
+		}
+		m_surface.reset(new Image(newSize));
+		UPoint destPoint(0,0);
+		for(std::vector<ImagePtr>::const_iterator it = data.begin();
+			it != data.end(); ++it) {
+		    m_surface->blitFrom(it->get(), destPoint);
+		    destPoint.x += (*it)->getSize().x;
+		}
+	    }
+	    else if((variable = getPyObjectType(pyObject.attr("gamedata"), 0)) != "NoneType") {
 		gameData = DataCache::Instance()->getGameData(variable)->getImage();
+    		if(getPyObject(pyObject.attr("crop"), &crop))
+    		    m_surface = gameData->getPictureCrop(crop);
+    		else
+    		    m_surface = gameData->getCopy();
+	    }
 	    else {
 		LOG(LV_ERROR, "GameMan", "%s: gamedata variable missing!", m_path.c_str());
 		exit(EXIT_FAILURE);
 	    }
-	    if(getPyObject(pyObject.attr("crop"), &crop))
-		m_surface = gameData->getPictureCrop(crop);
-	    else
-		m_surface = gameData->getCopy();
 
 	    if(getPyObject(pyObject.attr("colorkey"), &colorkey))
 		m_surface->setColorKey(colorkey);
@@ -180,6 +204,7 @@ void GameData::drawImage()
 	    	for (std::vector<Rect>::const_iterator iter = fillRects.begin(); iter != fillRects.end(); iter++)
 		    m_surface->fillRect(colorkey, *iter);
 	    }
+
 	}
 	else {
 	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str(), getPyObjectType(pyObject, 1).c_str());
@@ -217,7 +242,7 @@ void GameData::loadSound() {
 	    }
 
         data = ResMan::Instance()->getFile(filename);
-	sound = eastwood::VocFile(*data).getSound();//.getResampled(2, 22050, (eastwood::AudioFormat)MIX_DEFAULT_FORMAT, eastwood::I_LINEAR);
+	sound = eastwood::VocFile(*data).getSound();
 
     	m_sound.reset(new Sound(sound.getResampled(eastwood::I_LINEAR)));
     }

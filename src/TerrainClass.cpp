@@ -19,7 +19,7 @@ TerrainClass::TerrainClass() : UPoint(0,0)
     m_tile = Terrain_a1;
     m_type = Terrain_Sand;
     m_hideTile = Terrain_HiddenFull;
-    m_img = DataCache::Instance()->getGameData("ObjPic_Terrain")->getImage();
+    m_img = DataCache::Instance()->getGameData("ObjPic_AllTerrain")->getImage();
     m_hiddenImg = DataCache::Instance()->getGameData("ObjPic_Terrain_Hidden")->getImage();
     m_visited = false;
 
