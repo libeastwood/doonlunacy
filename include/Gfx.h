@@ -45,7 +45,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @warning Do not pass NULL parameter !
 	  */
-	Image(SDL_Surface *surface);
+	Image(const SDL_Surface *surface);
 
 	Image(const eastwood::SDL::Surface &surface);
 
@@ -70,7 +70,7 @@ class Image : protected eastwood::SDL::Surface
 
 	//! Returns size of the surface
 	UPoint getSize() const {
-	    return UPoint(w, h);
+	    return UPoint(_width, _height);
 	}
 
 	//! Returns palette of the surface
@@ -158,7 +158,7 @@ class Image : protected eastwood::SDL::Surface
 
 	//! Make resized copy of the image relative to current resolution
 	ImagePtr getResized() {
-	    return getResized(UPoint(w, h).getScaled());
+	    return getResized(getSize().getScaled());
 	}
 
 	//! Cut out a rectangular region of the image
@@ -176,7 +176,7 @@ class Image : protected eastwood::SDL::Surface
 	  code...            
 	  */
 	void setColorKey(int color = 0, int flags = SDL_SRCCOLORKEY | SDL_RLEACCEL) throw() {
-	    SDL_SetColorKey(this, flags, color);
+	    SDL_SetColorKey(_surface, flags, color);
 	}
 
 	//@}
@@ -193,7 +193,7 @@ class Image : protected eastwood::SDL::Surface
 	void blitFrom(Image *source, ConstRect srcRect, ConstUPoint dstPoint) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(dstPoint, source->getSize()));
-	    SDL_BlitSurface(source, const_cast<Rect*>(&srcRect), this, &dstRect); 
+	    SDL_BlitSurface(*source, const_cast<Rect*>(&srcRect), _surface, &dstRect); 
 	}
 	//! Blit whole source image to this image
 	/*!
@@ -203,7 +203,7 @@ class Image : protected eastwood::SDL::Surface
 	void blitFrom(Image *source, ConstUPoint dstPoint) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(dstPoint, source->getSize()));
-	    SDL_BlitSurface(source, NULL, this, &dstRect); 
+	    SDL_BlitSurface(*source, NULL, _surface, &dstRect); 
 	}
 	//! Blit whole source image to this image (to top-left corner)
 	/*!
@@ -211,8 +211,8 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void blitFrom(Image *source) throw() {
 	    assert(source != NULL);
-	    if(source->pixels != pixels)
-    		SDL_BlitSurface(source, NULL, this, NULL); 
+	    if((void*)source != (void*)this)
+    		SDL_BlitSurface(*source, NULL, _surface, NULL); 
 	}
 	//! Blit whole source image to this image (to center)
 	/*!
@@ -221,7 +221,7 @@ class Image : protected eastwood::SDL::Surface
 	void blitFromCentered(Image *source) throw() {
 	    assert(source != NULL);
 	    Rect dstRect(Rect(getSize()/2 - source->getSize()/2, source->getSize()));
-	    SDL_BlitSurface(source, NULL, this, &dstRect); 
+	    SDL_BlitSurface(*source, NULL, _surface, &dstRect); 
 	}
 	//! Blit part of the image to destination image
 	/*!
@@ -282,7 +282,7 @@ class Image : protected eastwood::SDL::Surface
 	//@{
 
 	void fillRect(uint32_t color, Rect dstRect = Rect()) throw() {
-	    SDL_FillRect(this, !dstRect ? NULL : &dstRect, color);
+	    SDL_FillRect(_surface, !dstRect ? NULL : &dstRect, color);
 	}
 
 	void fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRect);
@@ -299,11 +299,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param firstcolor
 	  @param ncolors
 	  */
-	bool setPalette(SDL_Palette *palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
-	    return SDL_SetPalette(this, flags, palette->colors, firstColor, palette->ncolors);
-	}
-
-	bool setPalette(eastwood::Palette palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
+	bool setPalette(eastwood::Palette &palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
 	    return eastwood::SDL::Surface::setPalette(palette, firstColor, flags);
 	}
 
@@ -417,11 +413,11 @@ class Image : protected eastwood::SDL::Surface
 	void flipV();
 
 	int flip() throw() {
-	    return SDL_Flip(this);
+	    return SDL_Flip(_surface);
 	};
 
 	int saveBMP(std::string filename) throw() {
-	    return SDL_SaveBMP(this, filename.c_str());
+	    return SDL_SaveBMP(_surface, filename.c_str());
 	}
 
 	inline void renderText(std::string text, eastwood::Font *font, int offx, int offy, uint8_t paloff) {
@@ -429,15 +425,15 @@ class Image : protected eastwood::SDL::Surface
 	}
 
 	inline bool mustLock() throw() {
-	    return SDL_MUSTLOCK(this);
+	    return SDL_MUSTLOCK(_surface);
 	}
 
 	inline int lockSurface() throw() {
-	    return SDL_LockSurface(this);
+	    return SDL_LockSurface(_surface);
 	}
 
 	inline void unlockSurface() throw() {
-	    SDL_UnlockSurface(this);
+	    SDL_UnlockSurface(_surface);
 	}
 
 	//@}

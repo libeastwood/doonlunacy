@@ -168,7 +168,7 @@ void Application::InitNet()
 
 void Application::SetPalette()
 {
-    eastwood::SDL::Palette palette = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
+    eastwood::Palette palette = DataCache::Instance()->getPalette("DUNE:IBM.PAL");
     
     //This fixes white wheels. Is palette broken or sth??
 
@@ -177,7 +177,7 @@ void Application::SetPalette()
     palette[205].b = 153;
     
     LOG(LV_INFO, "Application", "Setting palette %d colors", palette.size());
-    assert( m_screen->setPalette((SDL_Palette*)&palette) == true );
+    assert( m_screen->setPalette(palette) == true );
     m_currentPalette = palette;
 
 }
@@ -203,7 +203,7 @@ void Application::InitVideo()
 
     //FIXME: we can't really create a proper Image object out of this one as surf
     //	     is a pointer to an SDL_Surface* (current_video) out of our reach..
-    m_screen = (Image*)surf;
+    *m_screen = surf;
     
     // reset the palette if we've got one 
     if (m_currentPalette)

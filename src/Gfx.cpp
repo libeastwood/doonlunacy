@@ -19,14 +19,14 @@ Image::Image(const eastwood::SDL::Surface &surface) :
     eastwood::SDL::Surface(surface), m_origPal(0), m_tmpPal(0)
 {
     //FIXME: Why is this required??
-    pixels = *_pixels.get();
+    _surface->pixels = *_pixels.get();
 }
 
-Image::Image(SDL_Surface *surface) : eastwood::SDL::Surface(*surface), m_tmpPal(0) {
+Image::Image(const SDL_Surface *surface) : eastwood::SDL::Surface(surface), m_tmpPal(0) {
 }
 
 Image::Image(ConstUPoint size) :
-    eastwood::SDL::Surface(size.x, size.y, 8, *Application::Instance()->Screen()->format->palette),
+    eastwood::SDL::Surface(size.x, size.y, 8, Application::Instance()->Screen()->getPalette()),
     m_origPal(0), m_tmpPal(0)
 {
     assert(size.x != 0);
@@ -46,7 +46,7 @@ Image::~Image()
 
 ImagePtr Image::getPictureCrop(ConstRect dstRect)
 {
-    if(((int) (dstRect.x + dstRect.w) > w) || ((int) (dstRect.y + dstRect.h) > h)) {
+    if(((int) (dstRect.x + dstRect.w) > _width) || ((int) (dstRect.y + dstRect.h) > _height)) {
 	LOG(LV_ERROR, "GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
 		dstRect.x, dstRect.y, dstRect.w, dstRect.h);
 	exit(EXIT_FAILURE);	
@@ -310,8 +310,8 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
     std::vector<uint16_t> newCol;
     newCol.assign(_palette.size(), -1);
 
-    for(point.x = 0;  point.x != w; point.x++)
-	for(point.y = 0; point.y != h; point.y++)
+    for(point.x = 0;  point.x != _width; point.x++)
+	for(point.y = 0; point.y != _height; point.y++)
 	{
 	    uint8_t curPix = getPixel(point);
 	    uint8_t dstPix = morphImage->getPixel(point);
@@ -357,10 +357,10 @@ bool Image::morph(ImagePtr morphImage, const int morphAmt) {
 
 void Image::flipH() {
     if (!mustLock() || (lockSurface() == 0)) {
-	for(int i = 0; i < w; i++) {
-		for(int j = 0; j < h/2; j++) {
-		    uint8_t *top = (uint8_t *)pixels + j*pitch + i*format->BytesPerPixel,
-			  *bottom = (uint8_t *)pixels + (h-j-1)*pitch + i*format->BytesPerPixel;
+	for(int i = 0; i < _width; i++) {
+		for(int j = 0; j < _height/2; j++) {
+		    uint8_t *top = (uint8_t *)*this + j*_pitch + i*_Bpp,
+			  *bottom = (uint8_t *)*this + (_height-j-1)*_pitch + i*_Bpp;
 		    swap(*top, *bottom);
 		}
 	}
@@ -372,10 +372,10 @@ void Image::flipH() {
 
 void Image::flipV() {
     if (!mustLock() || (lockSurface() == 0)) {
-	for(int j = 0; j < h; j++) {
-		for(int i = 0; i < w/2; i++) {
-		    uint8_t *left = (uint8_t *)pixels + j*pitch + i*format->BytesPerPixel,
-			  *right = (uint8_t *)pixels + j*pitch + (w-i-1)*format->BytesPerPixel;
+	for(int j = 0; j < _height; j++) {
+		for(int i = 0; i < _width/2; i++) {
+		    uint8_t *left = (uint8_t *)*this + j*_pitch + i*_Bpp,
+			  *right = (uint8_t *)*this + j*_pitch + (_width-i-1)*_Bpp;
 		    swap(*left, *right);
 		}
 	}
@@ -392,9 +392,9 @@ void Image::putPixel(ConstUPoint point, uint32_t color) {
     UPoint screenSize = Application::Instance()->Screen()->getSize();
     if (point.x >= 0 && point.x < screenSize.x && point.y >=0 && point.y < screenSize.y)
     {
-	int bpp = format->BytesPerPixel;
+	int bpp = _Bpp;
 	// p is the address of the pixel to set
-	uint8_t *p = (uint8_t *)pixels + point.y*pitch + point.x*bpp;
+	uint8_t *p = (uint8_t *)*this + point.y*_pitch + point.x*bpp;
 	switch(bpp) {
 	    case 1:
 		*p = color;
@@ -425,9 +425,9 @@ void Image::putPixel(ConstUPoint point, uint32_t color) {
 
 uint32_t Image::getPixel(ConstUPoint point) const
 {
-    int bpp = format->BytesPerPixel;
+    int bpp = _Bpp;
     // p is the address of the pixel to retrieve
-    uint8_t *p = (uint8_t *)pixels + point.y*pitch + point.x*bpp;
+    uint8_t *p = (uint8_t *)*this + point.y*_pitch + point.x*bpp;
     switch(bpp) {
 	case 1:
 	    return *p;
@@ -513,16 +513,16 @@ ImagePtr Image::getResized(ConstUPoint size)
     resized->setPalette(_palette);
 
     // copy colorkey (not sure what happens ;-) )
-    resized->setColorKey(format->colorkey, (flags & SDL_SRCCOLORKEY) | (flags & SDL_RLEACCEL));
+    resized->setColorKey(_surface->format->colorkey, (_surface->flags & SDL_SRCCOLORKEY) | (_surface->flags & SDL_RLEACCEL));
 
     if (resized->mustLock())
 	resized->lockSurface();
     if (mustLock())
 	lockSurface();
 
-    for(int y = 0; y < resized->h; y++)
-	for(int x = 0; x < resized->w; x++)
-	    resized->putPixel(UPoint(x, y), getPixel(UPoint(w*x/resized->w, h*y/resized->h)));
+    for(int y = 0; y < resized->_height; y++)
+	for(int x = 0; x < resized->_width; x++)
+	    resized->putPixel(UPoint(x, y), getPixel(UPoint(_width*x/resized->_width, _height*y/resized->_height)));
 
     if (resized->mustLock())
 	resized->unlockSurface();
@@ -541,11 +541,10 @@ void Image::recolor(int colorSrc, int colorDst, int colorNum) {
     if (!mustLock() || (lockSurface() == 0))
     {
 	uint8_t *pixel;
-	int x, y;
-	for (y = 0; y < h; y++)
-	    for (x = 0; x < w; x++)
+	for (int y = 0; y < _height; y++)
+	    for (int x = 0; x < _width; x++)
 	    {
-		pixel = &(((uint8_t*)pixels)[y*pitch + x]);
+		pixel = &(((uint8_t*)*this)[y*_pitch + x]);
 		if ((*pixel >= colorSrc) && (*pixel < colorSrc + colorNum))
 
 		    *pixel = *pixel - colorSrc + colorDst;
@@ -575,9 +574,9 @@ void Image::greyOut(Rect area) {
     {
 	for(int i = area.x; i < area.w; i++)
 	    for(int j = area.y; j < area.h; j++) {
-		unsigned char inputIndex = *( ((unsigned char*) (pixels)) + j*pitch + i);
-		unsigned char outputIndex = index2greyindex[inputIndex];
-		*( ((unsigned char*) (pixels)) + j*pitch + i) = outputIndex;
+		uint8_t inputIndex = *( ((uint8_t*)*this) + j*_pitch + i);
+		uint8_t outputIndex = index2greyindex[inputIndex];
+		*( ((uint8_t*)*this) + j*_pitch + i) = outputIndex;
 	    }
 	if (mustLock())
 	    unlockSurface();

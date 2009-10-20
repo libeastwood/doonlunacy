@@ -157,13 +157,13 @@ void CutSceneState::loadScene(int scene)
 	    eastwood::IStream *data = ResMan::Instance()->getFile(filename);
 	    if(filename.substr(filename.length()-3, 3) == "CPS") {
 		eastwood::CpsFile cpsfile(*data);
-		m_animLabel->addFrame(ImagePtr(new Image(new eastwood::SDL::Surface(cpsfile.getSurface()))), true);
+		m_animLabel->addFrame(ImagePtr(new Image(cpsfile.getSurface())), true);
 	    }
 	    else {
 		eastwood::WsaFile wsafile(*data, DataCache::Instance()->getPalette(palettefile), eastwood::Surface());
 		std::vector<ImagePtr> wsaFrames;
 		for(uint32_t i = 0; i < wsafile.size(); i++)
-		    wsaFrames.push_back(ImagePtr(new Image(new eastwood::SDL::Surface(wsafile.getSurface(i)))));
+		    wsaFrames.push_back(ImagePtr(new Image(wsafile.getSurface(i))));
 
 		for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
 		    if(i < wsaFrames.size())
