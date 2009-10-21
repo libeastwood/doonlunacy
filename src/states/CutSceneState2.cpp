@@ -131,11 +131,11 @@ void CutSceneState::loadScene(int scene)
 		SoundPtr snd;
 		if(type == "tuple") {
 		    python::tuple soundObj = python::extract<python::tuple>(sounds[time]);
-		    snd.reset(new Sound());
+		    snd.reset(new eastwood::SDL::Mixer::Sound());
 		    for(int i = 0; i < python::len(soundObj); i++) {
 			std::string sound = getPyObjectType((soundObj[i]), 0);
 			SoundPtr tmp = DataCache::Instance()->getGameData(sound)->getSound();
-			snd.reset(new Sound(snd->concatSound(*tmp.get())));
+			snd = concatSound(snd, tmp);
 		    }
 		}
 		else

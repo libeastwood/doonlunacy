@@ -230,7 +230,6 @@ void GameData::drawImage()
 void GameData::loadSound() {
 
     try {
-	eastwood::SDL::Mixer::Sound sound;
 	eastwood::IStream *data;
 	std::string filename;
 	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
@@ -242,9 +241,9 @@ void GameData::loadSound() {
 	    }
 
         data = ResMan::Instance()->getFile(filename);
-	sound = eastwood::VocFile(*data).getSound();
+	eastwood::SDL::Mixer::Sound sound = eastwood::VocFile(*data).getSound();
 
-    	m_sound.reset(new Sound(sound.getResampled(eastwood::I_LINEAR)));
+    	m_sound.reset(new eastwood::SDL::Mixer::Sound(sound.getResampled(eastwood::I_LINEAR)));
     }
     catch(python::error_already_set const &) {
 	LOG(LV_FATAL, "GameData::loadSound()", "Error loading sound: %s", m_path.c_str());

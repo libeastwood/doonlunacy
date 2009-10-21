@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <SDL.h>
+#include <eastwood/SDL/Mixer/Sound.h>
 
 #if BOOST_VERSION >= 103800
 using boost::swap;
@@ -15,7 +16,7 @@ using std::swap;
 
 class Image;
 class ObjectClass;
-class Sound;
+
 
 //! Smart pointer around Image class instance
 typedef boost::shared_ptr<Image> ImagePtr;
@@ -31,7 +32,7 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
         
 */
 
-typedef boost::shared_ptr<Sound> SoundPtr;
+typedef boost::shared_ptr<eastwood::SDL::Mixer::Sound> SoundPtr;
 
 typedef boost::shared_ptr<ObjectClass> ObjectPtr;
 typedef std::pair<uint32_t, ObjectPtr> ObjectPair;
