@@ -3,32 +3,32 @@ from SoundClass import *
 class YesSir(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZREPORT1.VOC"
+        self.filename = "VOC:REPORT1.VOC"
 
 class Reporting(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZREPORT2.VOC"
+        self.filename = "VOC:REPORT2.VOC"
 
 class Acknowledged(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZREPORT3.VOC"
+        self.filename = "VOC:REPORT3.VOC"
 
 class Affirmative(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZAFFIRM.VOC"
+        self.filename = "VOC:AFFIRM.VOC"
 
 class MovingOut(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZMOVEOUT.VOC"
+        self.filename = "VOC:MOVEOUT.VOC"
 
 class InfantryOut(SoundClass):
     def __init__(self):
         SoundClass.__init__(self)
-        self.filename = "VOC:ZOVEROUT.VOC"
+        self.filename = "VOC:OVEROUT.VOC"
 
 class SomethingUnderTheSand(SoundClass):
     def __init__(self):
