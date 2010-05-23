@@ -124,11 +124,7 @@ eastwood::IStream* PAKResource::getFile(std::string path)
 
 bool PAKResource::exists(std::string path)
 {
-    for (unsigned int i = 0; i != m_pakfile->sizeg(); i++)
-    {
-	if (m_pakfile->getFileName(i) == path) return true;
-    };
-    return false;
+    return m_pakfile->exists(path);
 }
 
 // ------------------------------------------------------------------
