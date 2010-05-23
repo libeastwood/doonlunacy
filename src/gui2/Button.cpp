@@ -178,7 +178,7 @@ void BoringButton::redraw()
         
     }
     
-    eastwood::Font* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
+    eastwood::FntFile* font = FontManager::Instance()->getFont("INTRO:INTRO.FNT");
 
     uint16_t fontColour;
     

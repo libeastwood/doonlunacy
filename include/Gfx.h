@@ -12,7 +12,7 @@
 
 #include "Definitions.h"
 #include <string>
-#include <eastwood/Font.h>
+#include <eastwood/FntFile.h>
 #include <eastwood/SDL/Surface.h>
 
 #include "Colours.h"
@@ -420,7 +420,7 @@ class Image : protected eastwood::SDL::Surface
 	    return SDL_SaveBMP(_surface, filename.c_str());
 	}
 
-	inline void renderText(std::string text, eastwood::Font *font, int offx, int offy, uint8_t paloff) {
+	inline void renderText(std::string text, eastwood::FntFile *font, int offx, int offy, uint8_t paloff) {
 	    font->render(text, *this, offx, offy, paloff);
 	}
 

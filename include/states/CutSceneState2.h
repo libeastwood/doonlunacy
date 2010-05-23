@@ -6,7 +6,7 @@
 #include <vector>
 #include <boost/python.hpp>
 #include <boost/dynamic_bitset.hpp>
-#include <eastwood/Font.h>
+#include <eastwood/FntFile.h>
 #include "Gfx.h"
 #include "states/MenuBase.h"
 
@@ -37,7 +37,7 @@ class CutSceneState : public MenuBaseState
 	Frame *m_sceneFrame,
 	      *m_animFrame,
 	      *m_textFrame;
-	eastwood::Font *m_font;
+	eastwood::FntFile *m_font;
 	ImagePtr m_lastFrame;
 	SPoint m_textPosition,
 	       m_animPosition;

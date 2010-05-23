@@ -5,7 +5,7 @@
 
 #include "Definitions.h"
 
-#include <eastwood/Font.h>
+#include <eastwood/FntFile.h>
 
 #include "singleton.h"
 
@@ -18,12 +18,12 @@ class FontManager : public Singleton<FontManager>
         ~FontManager();
 
     public:
-	eastwood::Font* getFont(std::string fn);
+	eastwood::FntFile* getFont(std::string fn);
 
     private:
-	std::map<std::string, eastwood::Font*> m_fonts;
+	std::map<std::string, eastwood::FntFile*> m_fonts;
 
-	eastwood::Font* loadFont(std::string fn);
+	eastwood::FntFile* loadFont(std::string fn);
 };
 
 #endif // DUNE_FONTMANAGER_H
