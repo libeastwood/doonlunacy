@@ -125,7 +125,7 @@ void GameData::drawImage()
 		    eastwood::MapFile map(*data);		    
 		    data = ResMan::Instance()->getFile(variable);
 
-		    eastwood::IcnFile icnfile(*data, map, palette);
+		    eastwood::IcnFile icnfile(*data, palette, map);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
 			m_surface.reset(new Image(icnfile.getSurface(value)));
 		    else if(getPyObject<int>(pyObject.attr("row"), &value))
