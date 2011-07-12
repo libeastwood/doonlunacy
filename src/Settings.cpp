@@ -76,7 +76,7 @@ void Settings::load()
             local["config"]["debug"] = m_debug = 8;
             local["config"]["game_speed"] = m_gameSpeed = 4;
 	    local["config"]["game_dir"] = m_gameDir = GAME_DIR;
-            local["config"]["play_intro"] = m_playIntro = true;
+            local["config"]["play_intro"] = m_playIntro = false;
 
             local["config"]["graphics"]["width"] = m_resolution.x = 640;
             local["config"]["graphics"]["height"] = m_resolution.y = 480;
