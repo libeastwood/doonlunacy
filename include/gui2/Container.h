@@ -8,7 +8,7 @@ class Container: public Widget
 {
     public:
 	Container();
-	~Container();
+	virtual ~Container();
         typedef std::list<Widget*> WidgetList;
 
         virtual void draw(Image * dest, SPoint offset);

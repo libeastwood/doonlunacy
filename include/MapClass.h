@@ -24,7 +24,7 @@ class MapClass : public Rect
      *  @param size UPoint representing size of the map in cells UPoint(64,64)) means that size is 64x64 cells, and 1024x1024pixels
      */
     MapClass(UPoint size);
-    ~MapClass();
+    virtual ~MapClass() {};
     //@}
     bool cellExists(SPoint pos);
     bool cellExists(int x, int y) { return cellExists(SPoint(x,y)); }

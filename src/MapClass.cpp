@@ -134,11 +134,6 @@ MapClass::MapClass(UPoint size)
 	}
 }
 
-MapClass::~MapClass()
-{
-
-}
-
 /*inline*/
 bool MapClass::cellExists(SPoint pos) 
 {
