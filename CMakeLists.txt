@@ -61,7 +61,7 @@ ELSE ( NOT LIBEASTWOOD_FOUND)
 ENDIF( NOT LIBEASTWOOD_FOUND)
 
 SET(Boost_USE_MULTITHREADED ON)
-FIND_PACKAGE(Boost COMPONENTS signals python filesystem REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS signals python system filesystem REQUIRED)
 IF (Boost_FOUND)
   MESSAGE( STATUS "boost found: includes in ${Boost_INCLUDE_DIRS}, library in ${Boost_LIBRARY_DIRS}")
   INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
