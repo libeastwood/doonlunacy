@@ -114,7 +114,9 @@ void Settings::load()
         exit(EXIT_FAILURE);
     }
 
+#ifndef LOG_DISABLED
     Log::Instance()->setDefaultVerbosity(LogVerbosity(m_debug));
+#endif
     /*
        if (configFile->exists("log_verbosity"))
        {

@@ -220,7 +220,9 @@ class Log : public Singleton<Log>
 // few useless macros
 // TODO: not sure what to do with these, they raise some warnings... (otpetrik)
 
-#define LOG           ((void)(0))
+#define LOG(...)		((void)(0))
+#define LOG_INDENT(...)		((void)(0))
+#define LOG_UNINDENT(...)	((void)(0))
 
 #endif // LOG_DISABLED
 
