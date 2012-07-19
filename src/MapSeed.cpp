@@ -15,7 +15,8 @@ static uint32_t Seed;
 
 
 // some values
-static const std::bitset<21> BoolArray(std::string("010011110011110000100"));
+static const std::string bitStr("010011110011110000100");
+static const std::bitset<21> BoolArray(bitStr);
 
 // some offsets
 static const int8_t OffsetArray1[]={
