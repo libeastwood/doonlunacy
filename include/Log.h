@@ -33,8 +33,6 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-#ifndef LOG_DISABLED
-
 //! Log verbosity level
 /*!
     Used to filter unnecessary messages.
@@ -55,6 +53,8 @@ enum LogVerbosity
     //! last loglevel (used to set full logging)
     LV_MAX = 255
 };
+
+#ifndef LOG_DISABLED
 
 class LogBackend;
 
