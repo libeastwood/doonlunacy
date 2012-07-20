@@ -10,7 +10,6 @@
 #include "DataCache.h"
 #include "FontManager.h"
 #include "GameData.h"
-#include "GameData.h"
 #include "DuneConstants.h"
 #include "Gfx.h"
 #include "Log.h"
