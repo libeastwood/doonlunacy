@@ -9,6 +9,7 @@
 #include "DataCache.h"
 #include "FontManager.h"
 #include "GameData.h"
+#include "Gfx.h"
 #include "PythonObjects.h"
 #include "ResMan.h"
 #include "SoundPlayer.h"

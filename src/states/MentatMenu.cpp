@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "DataCache.h"
 #include "GameData.h"
+#include "Gfx.h"
 #include "SoundPlayer.h"
 
 #include "gui2/Label.h"

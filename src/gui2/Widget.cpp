@@ -1,3 +1,4 @@
+#include "Gfx.h"
 #include "gui2/Widget.h"
 
 Widget* Widget::m_focusedWidget = NULL;
@@ -54,3 +55,9 @@ bool Widget::fadeOut(const int fadeAmt)
 		return m_surface->fadeOut(fadeAmt);
 	return false;
 }
+
+void Widget::recolorByHouse(HOUSETYPE house)
+{
+    if(m_surface) m_surface->recolorByHouse(house);
+} 
+

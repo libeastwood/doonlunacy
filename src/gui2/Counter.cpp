@@ -1,7 +1,9 @@
-#include "gui2/Counter.h"
 #include "DataCache.h"
 #include "DuneConstants.h"
 #include "GameData.h"
+#include "Gfx.h"
+
+#include "gui2/Counter.h"
 
 Counter::Counter(int min, int max, int value)
 {

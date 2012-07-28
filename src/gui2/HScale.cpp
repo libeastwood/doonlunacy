@@ -1,7 +1,10 @@
 #include "boost/bind.hpp"
 
-#include "gui2/HScale.h"
+#include "Gfx.h"
 #include "Strings.h"
+
+#include "gui2/HScale.h"
+
 HScale::HScale(int min, int max, int value)
 {
     m_min = min;

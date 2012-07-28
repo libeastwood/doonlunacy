@@ -2,6 +2,7 @@
 
 #include "DataCache.h"
 #include "GameData.h"
+#include "Gfx.h"
 
 #include "gui2/Button.h"
 #include "gui2/Frame.h"

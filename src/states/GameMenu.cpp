@@ -5,6 +5,7 @@
 #include "DataCache.h"
 #include "GameData.h"
 #include "GameData.h"
+#include "Gfx.h"
 #include "Settings.h"
 
 #include "gui2/Button.h"

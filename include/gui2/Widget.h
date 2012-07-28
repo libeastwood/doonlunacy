@@ -2,7 +2,6 @@
 #define DUNE_GUI2_WIDGET
 
 #include "Definitions.h"
-#include "Gfx.h"
 #include "Point.h"
 #include "Rect.h"
 #include "houses.h"
@@ -101,7 +100,10 @@ class Widget : public Rect
 		bool fadeIn(const int fadeAmt = 4);
 		bool fadeOut(const int fadeAmt = 4);
 
-		inline void recolorByHouse(HOUSETYPE house) { if(m_surface) m_surface->recolorByHouse(house); } 
+	// don't make function inline as it pulls in dependency on Gfx.h
+	//inline void recolorByHouse(HOUSETYPE house) { if(m_surface) m_surface->recolorByHouse(house); } 
+	void recolorByHouse(HOUSETYPE house);
+
 		//@}
 
     protected:
