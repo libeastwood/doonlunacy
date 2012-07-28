@@ -21,7 +21,7 @@
 #include <iostream>
 
 // set m_persistent to true to avoid it being freed
-GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(true)
+GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(false)
 {
 }
 
@@ -210,7 +210,7 @@ void GameData::drawImage()
 	    LOG(LV_ERROR, "GameData", "%s is of type %s, must be of type GameDataConst or GameDataMod!", m_path.c_str(), getPyObjectType(pyObject, 1).c_str());
 	    exit(EXIT_FAILURE);
 	}
-	//m_persistent = pyObject.attr("persistent");
+	m_persistent = pyObject.attr("persistent");
     }
     catch(python::error_already_set const &) {
 	LOG(LV_FATAL, "GameData", "Error loading data: %s", m_path.c_str());
