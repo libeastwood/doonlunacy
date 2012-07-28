@@ -5,6 +5,7 @@
 #include "Definitions.h"
 #include "GameMan.h"
 #include "GameData.h"
+#include "Gfx.h"
 #include "houses.h"
 #include "Log.h"
 #include "MapClass.h"

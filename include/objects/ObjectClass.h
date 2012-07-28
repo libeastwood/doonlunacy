@@ -6,6 +6,7 @@
 
 #include <boost/dynamic_bitset.hpp>
 
+#include "Colours.h"
 #include "PlayerClass.h"
 #include "PythonObjects.h"
 #include "Rect.h"

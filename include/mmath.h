@@ -4,9 +4,9 @@
 #include <sys/time.h>
 #include <boost/random.hpp>
 
-#include "Gfx.h"
 #include "DuneConstants.h"
 #include "dMath.h"
+#include "Point.h"
 
 static int getSeed() {
     struct timeval test;

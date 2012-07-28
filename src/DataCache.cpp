@@ -1,4 +1,5 @@
 #include "DataCache.h" 
+#include "Gfx.h"
 #include "ResMan.h"
 #include "Log.h"
 #include "PythonObjects.h"

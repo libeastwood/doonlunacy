@@ -1,7 +1,6 @@
 #ifndef DUNE_PRIORITYQ_H
 #define DYBE_PRIORITYQ_H
 
-#include "Gfx.h"
 #include "TerrainClass.h"
 
 /*!

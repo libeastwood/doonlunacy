@@ -1,7 +1,10 @@
 #ifndef DUNE_GUI2_WIDGET
 #define DUNE_GUI2_WIDGET
 
+#include "Definitions.h"
 #include "Gfx.h"
+#include "Point.h"
+#include "Rect.h"
 #include "houses.h"
 
 /*!

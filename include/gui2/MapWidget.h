@@ -2,7 +2,6 @@
 #define DUNE_MAPWIDGET_H
 
 #include "gui2/Widget.h"
-#include "Gfx.h"
 #include "GameMan.h"
 #include "MapClass.h"
 

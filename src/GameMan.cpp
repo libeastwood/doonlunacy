@@ -4,6 +4,7 @@
 #include <eastwood/IStream.h>
 
 #include "GameMan.h"
+#include "Gfx.h"
 #include "ResMan.h"
 #include "PythonObjects.h"
 

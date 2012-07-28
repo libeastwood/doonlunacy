@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Definitions.h"
-#include "Gfx.h"
 #include "Log.h"
 #include "TerrainClass.h"
 

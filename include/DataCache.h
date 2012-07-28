@@ -5,9 +5,7 @@
 #include "Definitions.h"
 #include <eastwood/StringFile.h>
 #include <eastwood/Palette.h>
-#include <eastwood/SDL/Surface.h>
 
-#include "Gfx.h"
 #include "houses.h"
 #include "singleton.h"
 

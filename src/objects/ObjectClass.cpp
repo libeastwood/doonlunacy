@@ -2,6 +2,7 @@
 
 #include "GameMan.h"
 #include "GameData.h"
+#include "Gfx.h"
 #include "objects/ObjectClass.h"
 #include "DuneConstants.h"
 #include "Definitions.h"

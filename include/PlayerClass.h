@@ -2,9 +2,9 @@
 #define DUNE_PLAYERCLASS_H
 #include <string>
 #include <vector>
+#include "Definitions.h"
 #include "DuneConstants.h"
-
-#include "Gfx.h"
+#include "Point.h"
 
 class MapClass;
 

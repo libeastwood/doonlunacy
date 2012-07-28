@@ -7,7 +7,8 @@
 #include <boost/python.hpp>
 #include <boost/dynamic_bitset.hpp>
 #include <eastwood/FntFile.h>
-#include "Gfx.h"
+#include "Definitions.h"
+#include "Point.h"
 #include "states/MenuBase.h"
 
 

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "GameMan.h"
+#include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
 

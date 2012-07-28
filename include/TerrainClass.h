@@ -2,7 +2,7 @@
 #define DUNE_TERRAINCLASS_H
 
 #include "DataCache.h"
-#include "Gfx.h"
+#include "Definitions.h"
 #include "mmath.h"
 #include "objects/ObjectClass.h"
 

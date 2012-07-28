@@ -1,4 +1,5 @@
 #include "DuneConstants.h"
+#include "Gfx.h"
 #include "Log.h"
 #include "MapClass.h"
 #include "objects/StructureClass.h"
