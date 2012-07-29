@@ -43,7 +43,7 @@ struct Point
 	virtual ~Point() { }
 
         //! Copy constructor
-        Point(const Point &point) { *this = point; }
+        Point(const Point &point) : x(point.x), y(point.y) { }
         
         //@}
 
