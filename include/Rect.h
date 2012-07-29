@@ -39,6 +39,9 @@ struct Rect : public SDL_Rect
             setPosition(position);
             setSize(size);
         }
+	//! Destructor
+	virtual ~Rect() { }
+
         //! Copy constructor
         Rect(const Rect &rect)
         {

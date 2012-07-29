@@ -38,6 +38,10 @@ struct Point
 
         //! Constructor
         Point(T x = 0, T y = 0) : x(x), y(y) {  }
+
+	//! Destructor
+	virtual ~Point() { }
+
         //! Copy constructor
         Point(const Point &point) { *this = point; }
         
