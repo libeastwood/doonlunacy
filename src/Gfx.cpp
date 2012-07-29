@@ -19,10 +19,10 @@ Image::Image(const eastwood::SDL::Surface &surface) :
     eastwood::SDL::Surface(surface), m_origPal(0), m_tmpPal(0)
 {
     //FIXME: Why is this required??
-    _surface->pixels = *_pixels.get();
+    _surface->pixels = *this;
 }
 
-Image::Image(const SDL_Surface *surface) : eastwood::SDL::Surface(surface), m_tmpPal(0) {
+Image::Image(const SDL_Surface *surface) : eastwood::SDL::Surface(surface), m_origPal(0), m_tmpPal(0) {
 }
 
 Image::Image(ConstUPoint size) :
@@ -38,10 +38,6 @@ Image& Image::operator=(const SDL_Surface *surface)
     *(eastwood::SDL::Surface*)this = surface;
 
     return *this;
-}
-
-Image::~Image()
-{
 }
 
 ImagePtr Image::getPictureCrop(ConstRect dstRect)

@@ -49,7 +49,7 @@ class Image : protected eastwood::SDL::Surface
 
 	Image(const eastwood::SDL::Surface &surface);
 
-	Image() : eastwood::SDL::Surface() { }
+	Image() : eastwood::SDL::Surface(), m_origPal(0), m_tmpPal(0) { }
 	Image &operator=(const SDL_Surface *surface);
 
 	//! Constructor
@@ -59,7 +59,7 @@ class Image : protected eastwood::SDL::Surface
 	Image(ConstUPoint size);
 
 	//! Destructor
-	~Image();
+	virtual ~Image() {};
 
 	//@}
 
