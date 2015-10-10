@@ -21,7 +21,7 @@
 #include <iostream>
 
 // set m_persistent to true to avoid it being freed
-GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(false)
+GameData::GameData(std::string path) : m_path(path), m_freeCounter(0), m_persistent(true)
 {
 }
 
