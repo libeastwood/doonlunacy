@@ -193,16 +193,13 @@ void Application::InitVideo()
         videoFlags |= SDL_FULLSCREEN;
 
 
-    SDL_Surface *surf = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
+    *m_screen = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
     
-    if(!surf) {
+    if(!m_screen) {
         LOG(LV_ERROR, "Application", "Couldn't set video mode: %s", SDL_GetError());
         Die();
-    }
-
-    //FIXME: we can't really create a proper Image object out of this one as surf
-    //	     is a pointer to an SDL_Surface* (current_video) out of our reach..
-    *m_screen = surf;
+    } else
+	m_screen->_surface->flags |= SDL_PREALLOC;
     
     // reset the palette if we've got one 
     if (m_currentPalette)
@@ -284,7 +281,7 @@ void Application::Run()
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
 
-        m_rootWidget->draw(m_screen, SPoint(0, 0));
+        m_rootWidget->draw(m_screen.get(), SPoint(0, 0));
 
         BlitCursor();
 #if 0 

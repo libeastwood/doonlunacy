@@ -40,7 +40,7 @@ class Application : public Singleton<Application>
 
         void Die();
 
-        inline Image  *Screen() { return m_screen; }
+        inline Image  *Screen() { return m_screen.get(); }
 
         inline uint16_t CursorX() { return m_cursorX; }
         inline uint16_t CursorY() { return m_cursorY; }
@@ -68,7 +68,7 @@ class Application : public Singleton<Application>
         void HandleEvents();
         void BlitCursor();
 
-        Image *m_screen;
+        ImagePtr m_screen;
 	eastwood::Palette m_currentPalette;
         
         StateMachine *m_rootState;
