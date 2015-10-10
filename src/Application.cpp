@@ -53,8 +53,6 @@ void Application::Init()
 
     InitSettings();
 
-    srand(time(NULL));
-
     uint32_t flags = SDL_INIT_AUDIO | \
                    SDL_INIT_TIMER | \
                    SDL_INIT_VIDEO | \
