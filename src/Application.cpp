@@ -193,13 +193,15 @@ void Application::InitVideo()
         videoFlags |= SDL_FULLSCREEN;
 
 
-    *m_screen = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
+    SDL_Surface *surface = SDL_SetVideoMode(resolution.x, resolution.y, 8, videoFlags);
     
-    if(!m_screen) {
+    if(!surface) {
         LOG(LV_ERROR, "Application", "Couldn't set video mode: %s", SDL_GetError());
         Die();
     } else
-	m_screen->_surface->flags |= SDL_PREALLOC;
+	surface->flags |= SDL_PREALLOC;
+
+    *m_screen = surface;
     
     // reset the palette if we've got one 
     if (m_currentPalette)
