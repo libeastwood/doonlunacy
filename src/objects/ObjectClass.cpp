@@ -95,7 +95,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
 
 ObjectClass::~ObjectClass()
 {
-    LOG(LV_INFO, m_objectType, "Destroyed: %S", &((ConstString)*this));
+//    LOG(LV_INFO, m_objectType, "Destroyed: %S", &((ConstString)*this));
 }
 
 /* virtual */

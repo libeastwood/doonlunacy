@@ -30,7 +30,7 @@ PlayerClass::PlayerClass(int newPlayerNumber, int newHouse, int newColour, int n
 
 PlayerClass::~PlayerClass()
 {
-    LOG(LV_INFO, "PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum, m_house);
+//    LOG(LV_INFO, "PlayerClass", "Player %d (house: %d) deleted", m_mapPlayerNum, m_house);
 }
 
 void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
