@@ -43,7 +43,7 @@ class Image : protected eastwood::SDL::Surface
 
 	//! Constructor
 	/*!
-	  @warning Do not pass NULL parameter !
+	  @warning Do not pass nullptr parameter !
 	  */
 	Image(const SDL_Surface *surface);
 
@@ -56,7 +56,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param size size of the image !
 	  */
-	Image(ConstUPoint size);
+	Image(const UPoint& size);
 
 	//! Destructor
 	virtual ~Image() {};
@@ -90,7 +90,7 @@ class Image : protected eastwood::SDL::Surface
 
 	  @warning The surface has to be locked !
 	  */
-	void putPixel(ConstUPoint point, uint32_t color);
+	void putPixel(const UPoint& point, uint32_t color);
 
 	//! Get pixel from given surface
 	/*!
@@ -99,7 +99,7 @@ class Image : protected eastwood::SDL::Surface
 
 	  @warning The surface has to be locked !
 	  */
-	uint32_t getPixel(ConstUPoint point) const;
+	uint32_t getPixel(const UPoint& point) const;
 
 	//@}
 
@@ -130,7 +130,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawRect(ConstRect rect, uint32_t color, bool lock = true);
+	void drawRect(const Rect& rect, uint32_t color, bool lock = true);
 
 	//@}
 
@@ -154,7 +154,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param size size of the new image
 	  */
-	ImagePtr getResized(ConstUPoint size);
+	ImagePtr getResized(const UPoint& size);
 
 	//! Make resized copy of the image relative to current resolution
 	ImagePtr getResized() {
@@ -165,7 +165,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param dstRect geometry of rectangular region to cut out
 	  */ 
-	ImagePtr getPictureCrop(ConstRect dstRect);
+	ImagePtr getPictureCrop(const Rect& dstRect);
 
 	//! Set colorkey
 	/*!
@@ -190,38 +190,34 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(Image *source, ConstRect srcRect, ConstUPoint dstPoint) throw() {
-	    assert(source != NULL);
-	    Rect dstRect(Rect(dstPoint, source->getSize()));
-	    SDL_BlitSurface(*source, const_cast<Rect*>(&srcRect), _surface, &dstRect); 
+	void blitFrom(const Image& source, const Rect& srcRect, const UPoint& dstPoint) const throw() {
+	    Rect dstRect(Rect(dstPoint, source.getSize()));
+	    SDL_BlitSurface(source, const_cast<Rect*>(&srcRect), _surface, &dstRect); 
 	}
 	//! Blit whole source image to this image
 	/*!
 	  @param source source image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(Image *source, ConstUPoint dstPoint) throw() {
-	    assert(source != NULL);
-	    Rect dstRect(Rect(dstPoint, source->getSize()));
-	    SDL_BlitSurface(*source, NULL, _surface, &dstRect); 
+	void blitFrom(const Image& source, const UPoint& dstPoint) const throw() {
+	    Rect dstRect(Rect(dstPoint, source.getSize()));
+	    SDL_BlitSurface(source, nullptr, _surface, &dstRect); 
 	}
 	//! Blit whole source image to this image (to top-left corner)
 	/*!
 	  @param source source image
 	  */
-	void blitFrom(Image *source) throw() {
-	    assert(source != NULL);
+	void blitFrom(const Image& source) const throw() {
 	    if((void*)source != (void*)this)
-    		SDL_BlitSurface(*source, NULL, _surface, NULL); 
+		SDL_BlitSurface(source, nullptr, _surface, nullptr); 
 	}
 	//! Blit whole source image to this image (to center)
 	/*!
 	  @param source source image
 	  */
-	void blitFromCentered(Image *source) throw() {
-	    assert(source != NULL);
-	    Rect dstRect(Rect(getSize()/2 - source->getSize()/2, source->getSize()));
-	    SDL_BlitSurface(*source, NULL, _surface, &dstRect); 
+	void blitFromCentered(const Image& source) const throw() {
+	    Rect dstRect(Rect(getSize()/2 - source.getSize()/2, source.getSize()));
+	    SDL_BlitSurface(source, nullptr, _surface, &dstRect); 
 	}
 	//! Blit part of the image to destination image
 	/*!
@@ -229,46 +225,42 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(Image *destination, ConstRect srcRect, ConstUPoint dstPoint) const throw() {
-	    assert(destination != NULL);
-	    destination->blitFrom(const_cast<Image*>(this), srcRect, dstPoint);
+	void blitTo(const Image& destination, const Rect& srcRect, const UPoint& dstPoint) const throw() {
+	    destination.blitFrom(*this, srcRect, dstPoint);
 	}
 	//! Blit the whole image to destination image
 	/*!
 	  @param destination destination image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(Image *destination, ConstUPoint dstPoint) const throw() {
-	    assert(destination != NULL);
-	    destination->blitFrom(const_cast<Image*>(this), dstPoint);
+	void blitTo(const Image& destination, const UPoint& dstPoint) const throw() {
+	    destination.blitFrom(*this, dstPoint);
 	}
 	//! Blit the whole image to destination image (to top-left corner)
 	/*!
 	  @param destination destination image
 	  */
-	void blitTo(Image *destination) const throw() {
-	    assert(destination != NULL);
-	    destination->blitFrom(const_cast<Image*>(this));
+	void blitTo(const Image& destination) const throw() {
+	    destination.blitFrom(*this);
 	}
 	//! Blit the whole image to destination image (to center)
 	/*!
 	  @param destination destination image
 	  */
-	void blitToCentered(Image *destination) const throw() {
-	    assert(destination != NULL);
-	    destination->blitFromCentered(const_cast<Image*>(this));
+	void blitToCentered(const Image& destination) const throw() {
+	    destination.blitFromCentered(*this);
 	}
 	//! Blit part of the image to screen
 	/*!
-	  @param srcRect part of source image to copy
+	  @param srcRect part of sou	rce image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const;
+	void blitToScreen(const Rect& srcRect, const UPoint& dstPoint) const;
 	//! Blit the whole image to screen
 	/*!
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitToScreen(ConstUPoint dstPoint) const;
+	void blitToScreen(const UPoint& dstPoint) const;
 
 	//! Blit the whole image to destination image (to top-left corner)
 	void blitToScreen() const;
@@ -282,11 +274,11 @@ class Image : protected eastwood::SDL::Surface
 	//@{
 
 	void fillRect(uint32_t color, Rect dstRect = Rect()) throw() {
-	    SDL_FillRect(_surface, !dstRect ? NULL : &dstRect, color);
+	    SDL_FillRect(_surface, !dstRect ? nullptr : &dstRect, color);
 	}
 
-	void fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRect);
-	void fillRectHGradient(uint32_t color1, uint32_t color2, ConstRect dstRect);       
+	void fillRectVGradient(uint32_t color1, uint32_t color2, const Rect& dstRect);
+	void fillRectHGradient(uint32_t color1, uint32_t color2, const Rect& dstRect);       
 
 	//@}
 
@@ -394,14 +386,14 @@ class Image : protected eastwood::SDL::Surface
 	  @param start coordinates of start
 	  @param x2 x-coord of finish
 	  */
-	void drawHBarSmall(ConstUPoint start, int x2);
+	void drawHBarSmall(const UPoint& start, int x2);
 
 	//! Draw vertical bar
 	/*!
 	  @param start coordinates of start
 	  @param y2 y-coord of finish
 	  */
-	void drawVBar(ConstUPoint start, int y2);
+	void drawVBar(const UPoint& start, int y2);
 
 	void drawTiles(ImagePtr tile, Rect area = Rect());
 
@@ -440,6 +432,7 @@ class Image : protected eastwood::SDL::Surface
 
 
     private:
+
 	eastwood::Palette m_origPal, m_tmpPal;
 };
 
