@@ -27,11 +27,11 @@
 #ifndef DUNE_LOG_H
 #define DUNE_LOG_H
 
+#include "Definitions.h"
 #include "singleton.h"
 #include "Strings.h"
 
 #include <map>
-#include <boost/shared_ptr.hpp>
 
 //! Log verbosity level
 /*!
@@ -58,7 +58,7 @@ enum LogVerbosity
 
 class LogBackend;
 
-typedef boost::shared_ptr<LogBackend> LogBackendPtr;
+typedef std::shared_ptr<LogBackend> LogBackendPtr;
 
 //! Generic log backend class
 /*!

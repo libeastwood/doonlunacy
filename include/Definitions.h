@@ -2,27 +2,22 @@
 #define DUNE_DEFINITIONS_H
 //TODO: Sort it somehow.
 
-#include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
+#include <cstdint>
+#include <memory>
 #include <map>
 #include <SDL.h>
 #include <eastwood/SDL/Mixer/Sound.h>
 
-#if BOOST_VERSION >= 103800
-using boost::swap;
-#else
 using std::swap;
-#endif
 
 class Image;
 class ObjectClass;
 
-
 //! Smart pointer around Image class instance
-typedef boost::shared_ptr<Image> ImagePtr;
+typedef std::shared_ptr<Image> ImagePtr;
 
 //! Smart pointer around Image class const instance
-typedef boost::shared_ptr<const Image> ConstImagePtr;
+typedef std::shared_ptr<const Image> ConstImagePtr;
 
 //! The Image class is a wrapper around SDL_Surface
 /*!
@@ -32,9 +27,9 @@ typedef boost::shared_ptr<const Image> ConstImagePtr;
         
 */
 
-typedef boost::shared_ptr<eastwood::SDL::Mixer::Sound> SoundPtr;
+typedef std::shared_ptr<eastwood::SDL::Mixer::Sound> SoundPtr;
 
-typedef boost::shared_ptr<ObjectClass> ObjectPtr;
+typedef std::shared_ptr<ObjectClass> ObjectPtr;
 typedef std::pair<uint32_t, ObjectPtr> ObjectPair;
 typedef std::map<uint32_t, ObjectPtr> ObjectMap;
 typedef std::map<uint32_t, ObjectMap> ObjectTypeMap;

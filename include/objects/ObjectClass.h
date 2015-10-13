@@ -12,7 +12,7 @@
 #include "Rect.h"
 
 class WeaponClass;
-typedef boost::shared_ptr<WeaponClass> WeaponPtr;
+typedef std::shared_ptr<WeaponClass> WeaponPtr;
 
 enum attribute {
     OBJECT_CLASS = 0,
