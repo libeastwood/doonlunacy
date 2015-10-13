@@ -190,7 +190,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(const Image& source, const Rect& srcRect, const UPoint& dstPoint) const throw() {
+	void blitFrom(const Image& source, const Rect& srcRect, const UPoint& dstPoint) throw() {
 	    Rect dstRect(Rect(dstPoint, source.getSize()));
 	    SDL_BlitSurface(source, const_cast<Rect*>(&srcRect), _surface, &dstRect); 
 	}
@@ -199,7 +199,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param source source image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitFrom(const Image& source, const UPoint& dstPoint) const throw() {
+	void blitFrom(const Image& source, const UPoint& dstPoint) throw() {
 	    Rect dstRect(Rect(dstPoint, source.getSize()));
 	    SDL_BlitSurface(source, nullptr, _surface, &dstRect); 
 	}
@@ -207,7 +207,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param source source image
 	  */
-	void blitFrom(const Image& source) const throw() {
+	void blitFrom(const Image& source) throw() {
 	    if((void*)source != (void*)this)
 		SDL_BlitSurface(source, nullptr, _surface, nullptr); 
 	}
@@ -215,7 +215,7 @@ class Image : protected eastwood::SDL::Surface
 	/*!
 	  @param source source image
 	  */
-	void blitFromCentered(const Image& source) const throw() {
+	void blitFromCentered(const Image& source) throw() {
 	    Rect dstRect(Rect(getSize()/2 - source.getSize()/2, source.getSize()));
 	    SDL_BlitSurface(source, nullptr, _surface, &dstRect); 
 	}
@@ -291,7 +291,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param firstcolor
 	  @param ncolors
 	  */
-	bool setPalette(eastwood::Palette &palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
+	bool setPalette(const eastwood::Palette &palette, int firstColor = 0, int flags = (SDL_LOGPAL|SDL_PHYSPAL)) {
 	    return eastwood::SDL::Surface::setPalette(palette, firstColor, flags);
 	}
 
