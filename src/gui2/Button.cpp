@@ -37,7 +37,7 @@ void GraphicButton::setGraphics(ImagePtr normal, ImagePtr pressed)
 	m_surface = m_surfNormal;
 }
 
-void GraphicButton::draw(Image * dest, SPoint off)
+void GraphicButton::draw(Image& dest, SPoint off)
 {
     if (!m_visible) return;
 

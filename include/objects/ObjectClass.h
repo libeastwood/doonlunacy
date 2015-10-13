@@ -91,14 +91,14 @@ class ObjectClass : protected Rect
     inline bool clearObject() const { return (getStatus(STATUS_DESTROYED) && m_frameTimer == 0 && m_decayTime == 0); }
     
     void setDrawnPos(SPoint off, SPoint view);
-    virtual void draw(Image * dest, SPoint off, SPoint view);
-    void drawSelectionBox(Image* dest);
+    virtual void draw(Image& dest, SPoint off, SPoint view);
+    void drawSelectionBox(Image& dest);
 
-    void drawSmoke(Image *dest);
+    void drawSmoke(Image& dest);
     virtual bool destroy();
     virtual void update(float dt);
     virtual void animate();
-    virtual void doDeath(Image *dest);
+    virtual void doDeath(Image& dest);
 
     //! @name Setters and getters
 	//@{

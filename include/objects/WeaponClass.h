@@ -9,7 +9,7 @@ class WeaponClass : public ObjectClass
     public:
 	WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t attribute = 0);
 	inline void setShooter(ObjectPtr shooter) { m_shooter = shooter; }
-	virtual void draw(Image *dest, SPoint off, SPoint view);
+	virtual void draw(Image& dest, SPoint off, SPoint view);
 	virtual void update(float dt);
 	virtual bool destroy();
 	virtual bool setDestination(ConstSPoint realDestination, uint32_t status = 0);

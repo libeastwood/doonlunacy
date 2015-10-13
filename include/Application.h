@@ -40,7 +40,7 @@ class Application : public Singleton<Application>
 
         void Die();
 
-        inline Image  *Screen() { return m_screen.get(); }
+        inline Image& Screen() { return *m_screen; }
 
         inline uint16_t CursorX() { return m_cursorX; }
         inline uint16_t CursorY() { return m_cursorY; }

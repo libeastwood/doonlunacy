@@ -165,7 +165,7 @@ void GameData::drawImage()
 		UPoint destPoint(0,0);
 		for(std::vector<ImagePtr>::const_iterator it = data.begin();
 			it != data.end(); ++it) {
-		    m_surface->blitFrom(it->get(), destPoint);
+		    m_surface->blitFrom(*(*it), destPoint);
 		    destPoint.x += (*it)->getSize().x;
 		}
 	    }

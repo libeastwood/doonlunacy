@@ -28,7 +28,7 @@ public:
     ~Label();
     //@}
 
-    virtual void draw(Image * dest, SPoint off);
+    virtual void draw(Image& dest, SPoint off);
 
 	void setResizeRatio(int resizeRatio) { m_resizeRatio = resizeRatio; }
 	void setResize(bool resize) { m_resize = resize; }
@@ -80,7 +80,7 @@ class AnimationLabel : public Widget
 		AnimationLabel();
 		~AnimationLabel();
 
-		virtual void draw(Image * dest, SPoint off);
+		virtual void draw(Image& dest, SPoint off);
 
 		ImagePtr getFrame();
 		void setFrameRate(float frameRate) {

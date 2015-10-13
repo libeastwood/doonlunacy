@@ -2,6 +2,7 @@
 #define DUNE_GUI2_WIDGET
 
 #include "Definitions.h"
+#include "Gfx.h"
 #include "Point.h"
 #include "Rect.h"
 #include "houses.h"
@@ -18,7 +19,7 @@ class Widget : public Rect
 	virtual ~Widget() {};
 		//@}
 
-        virtual void draw(Image * dest, SPoint off) {}
+        virtual void draw(Image& dest, SPoint off) {}
 
 		//! @name Event handling functions
 		//@{

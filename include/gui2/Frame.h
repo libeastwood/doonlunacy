@@ -22,7 +22,7 @@ public:
 
     ~Frame();
 
-    virtual void draw(Image *dest, SPoint off);
+    virtual void draw(Image& dest, SPoint off);
 
 	void changeBackground(ImagePtr background);
 

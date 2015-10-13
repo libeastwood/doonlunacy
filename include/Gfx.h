@@ -130,7 +130,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param color color to draw with
 	  @param lock whether to lock the surface (defaults to yes)
 	  */
-	void drawRect(const Rect& rect, uint32_t color, bool lock = true);
+	void drawRect(Rect& rect, uint32_t color, bool lock = true);
 
 	//@}
 
@@ -225,7 +225,7 @@ class Image : protected eastwood::SDL::Surface
 	  @param srcRect part of source image to copy
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(const Image& destination, const Rect& srcRect, const UPoint& dstPoint) const throw() {
+	void blitTo(Image& destination, const Rect& srcRect, const UPoint& dstPoint) const throw() {
 	    destination.blitFrom(*this, srcRect, dstPoint);
 	}
 	//! Blit the whole image to destination image
@@ -233,21 +233,21 @@ class Image : protected eastwood::SDL::Surface
 	  @param destination destination image
 	  @param dstPoint target coordinates (top-left corner)
 	  */
-	void blitTo(const Image& destination, const UPoint& dstPoint) const throw() {
+	void blitTo(Image& destination, const UPoint& dstPoint) const throw() {
 	    destination.blitFrom(*this, dstPoint);
 	}
 	//! Blit the whole image to destination image (to top-left corner)
 	/*!
 	  @param destination destination image
 	  */
-	void blitTo(const Image& destination) const throw() {
+	void blitTo(Image& destination) const throw() {
 	    destination.blitFrom(*this);
 	}
 	//! Blit the whole image to destination image (to center)
 	/*!
 	  @param destination destination image
 	  */
-	void blitToCentered(const Image& destination) const throw() {
+	void blitToCentered(Image& destination) const throw() {
 	    destination.blitFromCentered(*this);
 	}
 	//! Blit part of the image to screen
@@ -361,9 +361,9 @@ class Image : protected eastwood::SDL::Surface
 	void drawBorders(std::string nw, std::string ne, std::string sw,
 		std::string se, uint16_t edgeDistance = 0);
 
-	void drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
-		ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
-		ImagePtr bottom, ImagePtr left, ImagePtr right,
+	void drawBorders(const Image& corner_nw, const Image& corner_ne,
+		const Image& corner_sw, const Image& corner_se, const Image& top,
+		const Image& bottom, const Image& left, const Image& right,
 		uint16_t edgeDistance = 0);
 
 	void drawBorders1(uint16_t edgeDistance = 0) {
@@ -395,7 +395,7 @@ class Image : protected eastwood::SDL::Surface
 	  */
 	void drawVBar(const UPoint& start, int y2);
 
-	void drawTiles(ImagePtr tile, Rect area = Rect());
+	void drawTiles(const Image& tile, Rect area = Rect());
 
 	bool fadeIn(const int fadeAmt = 4);
 	bool fadeOut(const int fadeAmt = 4);

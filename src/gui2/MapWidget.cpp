@@ -219,7 +219,7 @@ bool MapWidget::handleButtonUp(uint8_t button, SPoint p)
     return false;
 }
 
-void MapWidget::draw(Image * dest, SPoint off)
+void MapWidget::draw(Image& dest, SPoint off)
 {
     GameMan* gman = GameMan::Instance();
     MapClass* m_map = gman->GetMap();
@@ -313,8 +313,7 @@ void MapWidget::draw(Image * dest, SPoint off)
             m_selectRect.h = m_selectStart.y - m_selectEnd.y;
         }
         
-        dest->drawRect(m_selectRect, 255);
+        dest.drawRect(m_selectRect, 255);
     }
 
 }
-

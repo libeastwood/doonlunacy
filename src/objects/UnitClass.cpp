@@ -115,7 +115,7 @@ bool UnitClass::destroy()
 
 
 /*virtual*/
-void UnitClass::draw(Image * dest, SPoint off, SPoint view)
+void UnitClass::draw(Image& dest, SPoint off, SPoint view)
 {
     ObjectClass::draw(dest, off, view);
 
@@ -128,7 +128,7 @@ void UnitClass::draw(Image * dest, SPoint off, SPoint view)
 	{
 	    UPoint pos(off + (*iter) * BLOCKSIZE - view * BLOCKSIZE + BLOCKSIZE / 2);
 	    Rect rect(pos.x, pos.y, 2, 2);
-	    dest->drawRect(rect, houseColour[m_owner->getColour()]);
+	    dest.drawRect(rect, houseColour[m_owner->getColour()]);
 	}
     }
 #endif

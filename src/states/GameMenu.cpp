@@ -58,7 +58,7 @@ void GameMenuState::draw()
     m_topFrame->addChild(m_creditsLabel);
 
     ImagePtr creditsCounter(new Image(UPoint(65, 15)));
-    creditsCounter->blitFrom(DataCache::Instance()->getGameData("UI_CreditsCounter")->getImage().get());
+    creditsCounter->blitFrom(*DataCache::Instance()->getGameData("UI_CreditsCounter")->getImage());
     uint32_t color = creditsCounter->getPixel(UPoint(0,0));
     creditsCounter->drawVLine(UPoint(64, 0), 14, color);
     m_creditsCounterLabel = new GraphicsLabel(creditsCounter);
@@ -67,9 +67,9 @@ void GameMenuState::draw()
     ImagePtr roundThingie = DataCache::Instance()->getGameData("UI_RoundBall")->getImage(m_house);
 
     ImagePtr radar(new Image(UPoint(144, 118 + roundThingie->getSize().y)));
-    radar->blitFrom(roundThingie.get(), UPoint(0, 0));
+    radar->blitFrom(*roundThingie, UPoint(0, 0));
     radar->drawVBar(UPoint(1, roundThingie->getSize().y), 117);
-    radar->blitFrom(roundThingie.get(), UPoint(0, 118));
+    radar->blitFrom(*roundThingie, UPoint(0, 118));
     radar->drawHBarSmall(UPoint(roundThingie->getSize().x, 122), radar->getSize().x - 1);
     m_radarFrame->changeBackground(radar);
 
@@ -88,7 +88,7 @@ void GameMenuState::resize()
 
     UPoint resolution = set->GetResolution();
     ImagePtr top(new Image(UPoint(resolution.x, 56)));
-    top->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
+    top->drawTiles(*DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     m_topFrame->changeBackground(top);
 
     ImagePtr messageBox(new Image(UPoint(resolution.x, 28)));
@@ -112,7 +112,7 @@ void GameMenuState::resize()
 
     ImagePtr sideBar(new Image(UPoint(m_radarFrame->getSize().x, resolution.y - m_radarFrame->getSize().y - m_topFrame->getSize().y)));
     sideBar->drawVBar(UPoint(1, 0), sideBar->getSize().y - 1 - roundThingie->getSize().y);
-    sideBar->blitFrom(roundThingie.get(), UPoint(0, sideBar->getSize().y - 1 - roundThingie->getSize().y));
+    sideBar->blitFrom(*roundThingie, UPoint(0, sideBar->getSize().y - 1 - roundThingie->getSize().y));
     
     m_sideBarFrame->changeBackground(sideBar);
     m_radarFrame->setPosition(UPoint(resolution.x - m_radarFrame->getSize().x, m_topFrame->getSize().y));

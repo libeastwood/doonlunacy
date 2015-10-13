@@ -11,7 +11,7 @@ class HScale : public Container
     HScale(int min, int max, int value);
     ~HScale();
 
-    void draw(Image * dest, SPoint off);
+    void draw(Image& dest, SPoint off);
 
   private:
     int m_min,

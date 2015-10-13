@@ -33,7 +33,7 @@ TerrainClass::~TerrainClass()
 
 }
 
-void TerrainClass::draw(Image * dest, SPoint pos)
+void TerrainClass::draw(Image& dest, SPoint pos)
 {
     if (isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
     {

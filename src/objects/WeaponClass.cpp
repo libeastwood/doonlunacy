@@ -85,7 +85,7 @@ void WeaponClass::dealDamage(ObjectPtr object, SPoint realPos) {
 	object->handleDamage(damage, m_shooter);
 }
 
-void WeaponClass::draw(Image * dest, SPoint off, SPoint view)
+void WeaponClass::draw(Image& dest, SPoint off, SPoint view)
 {
     /*
     if (!getStatus(STATUS_DESTROYED) && getObjectName() == "Sonic")

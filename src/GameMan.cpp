@@ -325,16 +325,15 @@ void GameMan::TakeMapScreenshot(std::string filename)
 {
     int w = m_map->w;
     int h = m_map->h;
-    Image * img = new Image(UPoint(w * 16, h * 16));
+    Image img(UPoint(w * 16, h * 16));
 
 
     for (int i = 0 ; i < w; i++)
 	for (int j = 0 ; j < h; j++)
 	    m_map->getCell(UPoint(i, j))->draw(img, SPoint(16*i, 16*j));
 
-    img->saveBMP(filename);
+    img.saveBMP(filename);
 
-    delete img;
 }
 
 /*

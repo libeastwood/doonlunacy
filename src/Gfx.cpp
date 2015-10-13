@@ -25,8 +25,8 @@ Image::Image(const eastwood::SDL::Surface &surface) :
 Image::Image(const SDL_Surface *surface) : eastwood::SDL::Surface(surface), m_origPal(0), m_tmpPal(0) {
 }
 
-Image::Image(ConstUPoint size) :
-    eastwood::SDL::Surface(size.x, size.y, 8, Application::Instance()->Screen()->getPalette()),
+Image::Image(const UPoint& size) :
+    eastwood::SDL::Surface(size.x, size.y, 8, Application::Instance()->Screen().getPalette()),
     m_origPal(0), m_tmpPal(0)
 {
     assert(size.x != 0);
@@ -40,7 +40,7 @@ Image& Image::operator=(const SDL_Surface *surface)
     return *this;
 }
 
-ImagePtr Image::getPictureCrop(ConstRect dstRect)
+ImagePtr Image::getPictureCrop(const Rect& dstRect)
 {
     if(((int) (dstRect.x + dstRect.w) > _width) || ((int) (dstRect.y + dstRect.h) > _height)) {
 	LOG(LV_ERROR, "GFX", "getPictureCrop: Cannot create new x:%d y:%d %dx%d Picture!",
@@ -51,16 +51,16 @@ ImagePtr Image::getPictureCrop(ConstRect dstRect)
     Image *returnPic = new Image(UPoint(dstRect.w, dstRect.h));
 
     returnPic->setPalette(_palette);
-    returnPic->blitFrom(this, dstRect, UPoint(0,0));
+    returnPic->blitFrom(*this, dstRect, UPoint(0,0));
 
     return ImagePtr(returnPic);
 }
 
-void Image::blitToScreen(ConstRect srcRect, ConstUPoint dstPoint) const
+void Image::blitToScreen(const Rect& srcRect, const UPoint& dstPoint) const
 {
     blitTo(Application::Instance()->Screen(), srcRect, dstPoint);
 }
-void Image::blitToScreen(ConstUPoint dstPoint) const
+void Image::blitToScreen(const UPoint& dstPoint) const
 {
     blitTo(Application::Instance()->Screen(), dstPoint);
 }
@@ -74,7 +74,7 @@ void Image::blitToScreenCentered() const
 }
 
 
-void Image::fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRect)
+void Image::fillRectVGradient(uint32_t color1, uint32_t color2, const Rect& dstRect)
 {
     int numColors = color2 - color1 + 1;
     float stripeWidth = dstRect.w/(float)numColors;
@@ -86,7 +86,6 @@ void Image::fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRec
 	// calculate begin & end of i-th strip
 	begin = i*stripeWidth;
 	end = (i+1)*stripeWidth;
-
 	// round the border pixel to major one
 	begin = (int)begin + (((begin - (int)begin) < 0.5f) ? 0 : 1);
 	end = (int)end + (((end - (int)end) < 0.5f) ? 0 : 1);
@@ -99,7 +98,7 @@ void Image::fillRectVGradient(uint32_t color1, uint32_t color2, ConstRect dstRec
 	fillRect(color1 + i, r);
     }
 }
-void Image::fillRectHGradient(uint32_t color1, uint32_t color2, ConstRect dstRect)
+void Image::fillRectHGradient(uint32_t color1, uint32_t color2, const Rect& dstRect)
 {
     int numColors = color2 - color1 + 1;
     float stripeHeight = dstRect.h/(float)numColors;
@@ -125,26 +124,26 @@ void Image::fillRectHGradient(uint32_t color1, uint32_t color2, ConstRect dstRec
     }
 }
 
-void Image::drawBorders(ImagePtr corner_nw, ImagePtr corner_ne,
-	ImagePtr corner_sw, ImagePtr corner_se, ImagePtr top,
-	ImagePtr bottom, ImagePtr left, ImagePtr right,
+void Image::drawBorders(const Image& corner_nw, const Image& corner_ne,
+	const Image& corner_sw, const Image& corner_se, const Image& top,
+	const Image& bottom, const Image& left, const Image& right,
 	uint16_t edgeDistance)
 {
     UPoint size = getSize();
 
-    blitFrom(corner_nw.get(), UPoint(edgeDistance,edgeDistance));
-    blitFrom(corner_ne.get(), UPoint(size.x - corner_ne->getSize().x - edgeDistance, edgeDistance));
-    blitFrom(corner_sw.get(), UPoint(edgeDistance, size.y - corner_sw->getSize().y - edgeDistance));
-    blitFrom(corner_se.get(), UPoint(size.x - corner_se->getSize().x - edgeDistance, size.y - corner_se->getSize().y - edgeDistance));
+    blitFrom(corner_nw, UPoint(edgeDistance,edgeDistance));
+    blitFrom(corner_ne, UPoint(size.x - corner_ne.getSize().x - edgeDistance, edgeDistance));
+    blitFrom(corner_sw, UPoint(edgeDistance, size.y - corner_sw.getSize().y - edgeDistance));
+    blitFrom(corner_se, UPoint(size.x - corner_se.getSize().x - edgeDistance, size.y - corner_se.getSize().y - edgeDistance));
 
-    for(int i = corner_se->getSize().x; i < size.x - corner_se->getSize().y; i++){
-	blitFrom(top.get(), UPoint(i, edgeDistance));
-	blitFrom(top.get(), UPoint(i, size.y - bottom->getSize().y - edgeDistance));
+    for(int i = corner_se.getSize().x; i < size.x - corner_se.getSize().y; i++){
+	blitFrom(top, UPoint(i, edgeDistance));
+	blitFrom(top, UPoint(i, size.y - bottom.getSize().y - edgeDistance));
     }
 
-    for(int i = corner_ne->getSize().y; i < size.y - corner_se->getSize().x; i++){
-	blitFrom(left.get(), UPoint(edgeDistance, i));
-	blitFrom(right.get(), UPoint(size.x - right->getSize().x - edgeDistance, i));
+    for(int i = corner_ne.getSize().y; i < size.y - corner_se.getSize().x; i++){
+	blitFrom(left, UPoint(edgeDistance, i));
+	blitFrom(right, UPoint(size.x - right.getSize().x - edgeDistance, i));
     }
 
 }
@@ -161,72 +160,72 @@ void Image::drawBorders(std::string nw, std::string ne, std::string sw,
     bottom = DataCache::Instance()->getGameData("UI_BottomBorder")->getImage();
     left = DataCache::Instance()->getGameData("UI_LeftBorder")->getImage();
     right = DataCache::Instance()->getGameData("UI_RightBorder")->getImage();
-    drawBorders(corner_nw, corner_ne, corner_sw, corner_se, top,
-	    bottom, left, right, edgeDistance);
+    drawBorders(*corner_nw, *corner_ne, *corner_sw, *corner_se, *top,
+	    *bottom, *left, *right, edgeDistance);
 }
 
-void Image::drawVBar(ConstUPoint start, int y2)
+void Image::drawVBar(const UPoint& start, int y2)
 {
     ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
-    sideBar->blitFrom(tmp.get());
+    sideBar->blitFrom(*tmp);
     tmp = screen->getPictureCrop(Rect(241, 58, 12, 13));
     for(UPoint iter(0, 6); iter.y < y2 - 6; iter.y += 13)
-	sideBar->blitFrom(tmp.get(), iter);
+	sideBar->blitFrom(*tmp, iter);
     tmp = screen->getPictureCrop(Rect(241, 117, 12, 6));
     //FIXME: the line at end of bar and thingie needs to be adapted..
-    sideBar->blitFrom(tmp.get(), UPoint(0,  y2 - start.y - 6));
-    blitFrom(sideBar.get(), start);
+    sideBar->blitFrom(*tmp, UPoint(0,  y2 - start.y - 6));
+    blitFrom(*sideBar, start);
 }
 
-void Image::drawHBarSmall(ConstUPoint start, int x2)
+void Image::drawHBarSmall(const UPoint& start, int x2)
 {
     ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
     ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
-    sideBar->blitFrom(tmp.get());
+    sideBar->blitFrom(*tmp);
     tmp = screen->getPictureCrop(Rect(260, 127, 10, 6));
     for(UPoint iter(5, 0); iter.x < x2 - 6; iter.x += 10)
-	sideBar->blitFrom(tmp.get(), iter);
+	sideBar->blitFrom(*tmp, iter);
     tmp = screen->getPictureCrop(Rect(313, 127, 6, 6));
     //FIXME: the line at end of bar and thingie needs to be adapted..
-    sideBar->blitFrom(tmp.get(), UPoint(x2 - start.x - 6, 0));
-    blitFrom(sideBar.get(), start);
+    sideBar->blitFrom(*tmp, UPoint(x2 - start.x - 6, 0));
+    blitFrom(*sideBar, start);
 }
 
-void Image::drawTiles(ImagePtr tile, Rect area)
+void Image::drawTiles(const Image& tile, Rect area)
 {
     if(area == Rect())
 	area.setSize(getSize());
 
     ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
     UPoint size = getSize();
-    UPoint tileSize = tile->getSize();
+    UPoint tileSize = tile.getSize();
     UPoint iter;
-    ImagePtr tileHFlipped = tile->getCopy();
+    ImagePtr tileHFlipped = tile.getCopy();
     tileHFlipped->flipH();
-    ImagePtr tileVFlipped = tile->getCopy();
+    ImagePtr tileVFlipped = tile.getCopy();
     tileVFlipped->flipV();
-    ImagePtr tileHVFlipped = tileVFlipped->getCopy();
+    ImagePtr tileHVFlipped = tileVFlipped,getCopy();
     tileHVFlipped->flipH();
     for(iter.y = 0; iter.y < size.y; iter.y += tileSize.y)
 	for(iter.x = 0; iter.x < size.x; iter.x += tileSize.x)
 	{
 			if((iter.x % (tileSize.x*2) == 0) && (iter.y % (tileSize.y*2) == 0)) {
-			    tiledArea->blitFrom(tile.get(), iter);
+			    tiledArea->blitFrom(tile, iter);
 			} else if((iter.x % (tileSize.x*2) != 0) && (iter.y % (tileSize.y*2) == 0)) {
-			    tiledArea->blitFrom(tileHFlipped.get(), iter);
+			    tiledArea->blitFrom(*tileHFlipped, iter);
 			} else if((iter.x % (tileSize.x*2) == 0) && (iter.y % (tileSize.y*2) != 0)) {
-			    tiledArea->blitFrom(tileVFlipped.get(), iter);
+			    tiledArea->blitFrom(*tileVFlipped, iter);
 			} else /*if((dest.x % (tileSize.x*2) != 0) && (dest.y % (tileSize.y*2) != 0))*/ {
-			    tiledArea->blitFrom(tileHVFlipped.get(), iter);
+			    tiledArea->blitFrom(*tileHVFlipped, iter);
 			}
 	}
 
-    blitFrom(tiledArea.get(), UPoint(area.x, area.y));
+    blitFrom(*tiledArea, UPoint(area.x, area.y));
 }
 
 bool Image::fadeIn(const int fadeAmt)
@@ -384,8 +383,8 @@ void Image::flipV() {
 // Single pixel operations
 //------------------------------------------------------------------------------
 
-void Image::putPixel(ConstUPoint point, uint32_t color) {
-    UPoint screenSize = Application::Instance()->Screen()->getSize();
+void Image::putPixel(const UPoint& point, uint32_t color) {
+    UPoint screenSize = Application::Instance()->Screen().getSize();
     if (point.x >= 0 && point.x < screenSize.x && point.y >=0 && point.y < screenSize.y)
     {
 	int bpp = _Bpp;
@@ -419,7 +418,7 @@ void Image::putPixel(ConstUPoint point, uint32_t color) {
     }
 }
 
-uint32_t Image::getPixel(ConstUPoint point) const
+uint32_t Image::getPixel(const UPoint& point) const
 {
     int bpp = _Bpp;
     // p is the address of the pixel to retrieve
@@ -440,7 +439,7 @@ uint32_t Image::getPixel(ConstUPoint point) const
 	    return 0;       // shouldn't happen, but avoids warnings
 
     }
-}
+   }
 
 //------------------------------------------------------------------------------
 // Drawing operations
@@ -481,7 +480,7 @@ void Image::drawVLine(UPoint start, int y2, uint32_t color, bool lock) {
     }
 }
 
-void Image::drawRect(ConstRect rect, uint32_t color, bool lock) {
+void Image::drawRect(Rect& rect, uint32_t color, bool lock) {
     // MUSTLOCK == 0 means no need for locking, LockSurface == 0 means successful lock
     if (lock == false || !mustLock() ||  (lockSurface() == 0))
     {
@@ -498,7 +497,7 @@ void Image::drawRect(ConstRect rect, uint32_t color, bool lock) {
 // Surface operations
 //------------------------------------------------------------------------------
 
-ImagePtr Image::getResized(ConstUPoint size)
+ImagePtr Image::getResized(const UPoint& size)
 {
     assert(size.x != 0);
     assert(size.y != 0);

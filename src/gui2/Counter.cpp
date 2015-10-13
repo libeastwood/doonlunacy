@@ -25,8 +25,8 @@ Counter::Counter(int min, int max, int value)
 
     background->putPixel(UPoint(background->getSize().x-1,0), tmp->getPixel(UPoint(0,0)));
     background->drawVLine(UPoint(background->getSize().x-1,1), tmp->getSize().y-1, tmp->getPixel(UPoint(1, tmp->getSize().y-1)));
-    background->blitFrom(tmp->getPictureCrop(Rect(0,0, size, tmp->getSize().y)).get());
-    background->blitFrom(tmp->getPictureCrop(Rect(tmp->getSize().x-1,0,1, tmp->getSize().y)).get(), UPoint(background->getSize().x-2, 0));
+    background->blitFrom(*tmp->getPictureCrop(Rect(0,0, size, tmp->getSize().y)));
+    background->blitFrom(*tmp->getPictureCrop(Rect(tmp->getSize().x-1,0,1, tmp->getSize().y)), UPoint(background->getSize().x-2, 0));
 
     changeBackground(background);
     drawDigits();
@@ -61,7 +61,7 @@ void Counter::drawDigits()
 	    char digit[2] = {digits[j++], '\0'};
 
 	    num = atoi(digit);
-	    m_surface->blitFrom(creditDigits->getPictureCrop(Rect(num*8,0, 8,8)).get(),UPoint(4+i*10,4));
+	    m_surface->blitFrom(*creditDigits->getPictureCrop(Rect(num*8,0, 8,8)),UPoint(4+i*10,4));
 	}
 	else
 	    m_surface->fillRect(m_bgColor, Rect(4+i*10, 4, 8, 8));

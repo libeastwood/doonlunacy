@@ -25,7 +25,7 @@ class TerrainClass  : public UPoint
 	TerrainClass();
 	~TerrainClass();
 
-	void draw(Image * dest, SPoint pos);
+	void draw(Image& dest, SPoint pos);
 
 /*	void assignAirUnit(uint32_t newObjectID);
 	void assignDeadObject(uint32_t newObjectID);

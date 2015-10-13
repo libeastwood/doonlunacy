@@ -21,7 +21,8 @@ StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName,
 
     m_selectionBox.reset(new Image(UPoint(w,h)));
     m_selectionBox->setColorKey();
-    m_selectionBox->drawRect(Rect(0, 0, w, h), COLOUR_WHITE);
+    Rect rect(0, 0, w, h);
+    m_selectionBox->drawRect(rect, COLOUR_WHITE);
 
 }
 
@@ -60,7 +61,7 @@ void StructureClass::setJustPlaced()
 }
 #if 0
 
-void StructureClass::draw(Image * dest, SPoint off, SPoint view)
+void StructureClass::draw(const Image& dest, SPoint off, SPoint view)
 {
 	if (!m_destroyed)
 	{

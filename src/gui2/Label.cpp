@@ -94,7 +94,7 @@ void Label::setLabel(std::string caption)
     m_redraw = true;
 }
 
-void Label::draw(Image * dest, SPoint off)
+void Label::draw(Image& dest, SPoint off)
 {
     if (!m_visible) return;
 
@@ -137,7 +137,7 @@ void GraphicsLabel::drawBackground(uint16_t textw, uint16_t texth, uint16_t numL
 	if(!m_surface)
 		m_surface = m_background->getCopy();
 	else
-		m_surface->blitFrom(m_background.get());
+		m_surface->blitFrom(*m_background);
 }
 
 GraphicsLabel::~GraphicsLabel()
@@ -187,7 +187,7 @@ void AnimationLabel::addFrame(ImagePtr animFrame, bool setColorKey) {
 }
 
 
-void AnimationLabel::draw(Image * screen, SPoint off)
+void AnimationLabel::draw(Image& screen, SPoint off)
 {
     if (!m_visible || m_animFrames.empty()) return;
 
@@ -198,7 +198,7 @@ void AnimationLabel::draw(Image * screen, SPoint off)
 		m_animFrames[m_curFrame] = m_surface;
 	}
 
-	screen->blitFrom(m_surface.get(), UPoint(off.x + x, off.y + y));
+	screen.blitFrom(*m_surface, UPoint(off.x + x, off.y + y));
 
 	if((SDL_GetTicks() - m_curFrameStartTime) > m_frameDurationTime && m_enabled) {
 		m_curFrameStartTime = SDL_GetTicks();

@@ -23,7 +23,7 @@ class MapWidget : public Widget {
 	MapWidget();
 	~MapWidget();
     //@}
-    void draw(Image * dest, SPoint off);
+    void draw(Image& dest, SPoint off);
     
     //! @name widget methods to handle user input
     /*! @note It's possible to have more than one MapWidget at the same time,

@@ -133,7 +133,7 @@ void ObjectClass::setDrawnPos(SPoint off, SPoint view)
 
 
 /* virtual */
-void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
+void ObjectClass::draw(Image& dest, SPoint off, SPoint view)
 {
 
     setDrawnPos(off, view);
@@ -159,7 +159,7 @@ void ObjectClass::draw(Image * dest, SPoint off, SPoint view)
     animate();
 }
 
-void ObjectClass::drawSelectionBox(Image* dest)
+void ObjectClass::drawSelectionBox(Image& dest)
 {
 #if 0
     if(!m_selectionBoxGlowing)
@@ -185,7 +185,7 @@ void ObjectClass::drawSelectionBox(Image* dest)
     healthBar->blitTo(dest, m_drawnPos+2);
 }
 
-void ObjectClass::drawSmoke(Image *dest)
+void ObjectClass::drawSmoke(Image& dest)
 {
 #if 1
     Rect source(w * m_curAnimFrame, 0, w, h);
@@ -253,7 +253,7 @@ void ObjectClass::animate()
     }
 }
 
-void ObjectClass::doDeath(Image *dest)
+void ObjectClass::doDeath(Image& dest)
 {
     if(m_frameTimer <= 0) {
 	if(m_decayTime > 0) {

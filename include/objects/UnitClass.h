@@ -24,7 +24,7 @@ class UnitClass : public ObjectClass
     //! Function used e.g. by air units to calculate their posision, etc.
     virtual void checkPos() = 0;
     
-    virtual void draw(Image * dest, SPoint off, SPoint view);
+    virtual void draw(Image& dest, SPoint off, SPoint view);
     
     virtual bool destroy();
     virtual void deploy(SPoint newPosition);

@@ -11,7 +11,7 @@ class Container: public Widget
 	virtual ~Container();
         typedef std::list<Widget*> WidgetList;
 
-        virtual void draw(Image * dest, SPoint offset);
+        virtual void draw(Image& dest, SPoint offset);
 
 		virtual bool handleMotion(SPoint p);
         virtual bool handleButtonDown(uint8_t button, SPoint p);

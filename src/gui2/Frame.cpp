@@ -12,7 +12,7 @@ Frame::Frame()
     m_surface.reset(new Image(UPoint(1,1)));
 }
 
-void Frame::draw(Image *dest, SPoint off){
+void Frame::draw(Image& dest, SPoint off){
     if (!m_visible) return;
 
     m_surface->blitTo(dest, UPoint(off.x + x, off.y + y));

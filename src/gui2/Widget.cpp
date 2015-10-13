@@ -1,4 +1,3 @@
-#include "Gfx.h"
 #include "gui2/Widget.h"
 
 Widget* Widget::m_focusedWidget = NULL;

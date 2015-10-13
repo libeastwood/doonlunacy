@@ -24,7 +24,7 @@ class GraphicButton : public Button
             
         void setGraphics(ImagePtr normal, ImagePtr pressed);
 
-        virtual void draw(Image * dest, SPoint off);
+        virtual void draw(Image& dest, SPoint off);
 
         virtual bool handleButtonDown(uint8_t button, SPoint p);
         virtual bool handleButtonUp(uint8_t button, SPoint p);

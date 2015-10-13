@@ -17,7 +17,7 @@ Container::~Container()
     }
 }
 
-void Container::draw(Image * dest, SPoint off)
+void Container::draw(Image& dest, SPoint off)
 {
     if (!m_visible) return;
 

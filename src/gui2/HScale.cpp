@@ -38,17 +38,17 @@ HScale::~HScale()
 
 }
 
-void HScale::draw(Image * dest, SPoint off)
+void HScale::draw(Image& dest, SPoint off)
 {
     Rect scale(off.x + x + 45, off.y + y+ 7, 0, 5);
     scale.w = (int)((m_value * 100)/ m_max);
     
     Container::draw(dest, off);
-    dest->fillRect(52, scale);
+    dest.fillRect(52, scale);
     scale.y--;
     scale.w = 100;
     scale.h+=2;
-    dest->drawRect(scale, 0);
+    dest.drawRect(scale, 0);
 }
 
 

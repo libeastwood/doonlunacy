@@ -83,7 +83,7 @@ void MainMenuBaseState::resize()
     uint16_t x = (resolution.x / 2) - (m_vbox->w / 2);
 
     ImagePtr background(new Image(resolution));
-    background->drawTiles(DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
+    background->drawTiles(*DataCache::Instance()->getGameData("UI_MenuBackground")->getImage());
     background->drawBorders3(3);
     m_backgroundFrame->changeBackground(background);
 

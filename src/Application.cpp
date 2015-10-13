@@ -50,7 +50,6 @@ Application::~Application()
 
 void Application::Init()
 {
-
     InitSettings();
 
     uint32_t flags = SDL_INIT_AUDIO | \
@@ -281,7 +280,7 @@ void Application::Run()
 
         if (m_rootState->Execute(dt) == -1) m_running = false;
 
-        m_rootWidget->draw(m_screen.get(), SPoint(0, 0));
+        m_rootWidget->draw(*m_screen, SPoint(0, 0));
 
         BlitCursor();
 #if 0 
@@ -380,6 +379,6 @@ void Application::BlitCursor()
     case NUM_CURSORS: break;
     }
     
-    m_screen->blitFrom((Image*)m_cursor.get(), src, dest);
+    m_screen->blitFrom(*m_cursor, src, dest);
 }
 
