@@ -48,12 +48,12 @@ ImagePtr Image::getPictureCrop(const Rect& dstRect)
 	exit(EXIT_FAILURE);	
     }
 
-    Image *returnPic = new Image(UPoint(dstRect.w, dstRect.h));
+    auto returnPic = std::make_shared<Image>(UPoint(dstRect.w, dstRect.h));
 
     returnPic->setPalette(_palette);
     returnPic->blitFrom(*this, dstRect, UPoint(0,0));
 
-    return ImagePtr(returnPic);
+    return returnPic;
 }
 
 void Image::blitToScreen(const Rect& srcRect, const UPoint& dstPoint) const
@@ -502,7 +502,7 @@ ImagePtr Image::getResized(const UPoint& size)
     assert(size.x != 0);
     assert(size.y != 0);
 
-    Image *resized = new Image(size);
+    auto resized = std::make_shared<Image>(size);
 
     // copy palette (otherwise you'll get only black image)
     resized->setPalette(_palette);
