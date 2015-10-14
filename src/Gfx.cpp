@@ -524,7 +524,7 @@ ImagePtr Image::getResized(const UPoint& size)
     if (mustLock())
 	unlockSurface();
 
-    return ImagePtr(resized);
+    return resized;
 }
 
 //------------------------------------------------------------------------------
