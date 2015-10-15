@@ -51,6 +51,7 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("FINALE");
     ResMan::Instance()->addRes("HARK");
     ResMan::Instance()->addRes("HERC");
+    ResMan::Instance()->addRes("INTRO");
     ResMan::Instance()->addRes("INTROVOC");
     ResMan::Instance()->addRes("MENTAT");
     ResMan::Instance()->addRes("MERC");
