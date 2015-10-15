@@ -51,6 +51,8 @@ class Image : protected eastwood::SDL::Surface
 
 	Image() : eastwood::SDL::Surface(), m_origPal(0), m_tmpPal(0) { }
 	Image &operator=(const SDL_Surface *surface);
+	Image(const Image& image) :
+		eastwood::SDL::Surface(image), m_origPal(image.m_origPal), m_tmpPal(image.m_tmpPal) {}
 
 	//! Constructor
 	/*!
