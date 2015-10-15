@@ -54,7 +54,7 @@ void GameMan::AddPlayer(HOUSETYPE House, bool ai, int team)
 
     else
     {
-	m_players.push_back(new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team));
+	m_players.emplace_back(new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team));
 	m_localPlayer = m_players[0];//localPlayer;
     }
 

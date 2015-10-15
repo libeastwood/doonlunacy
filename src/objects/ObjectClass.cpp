@@ -85,9 +85,8 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_selectionBox = DataCache::Instance()->getGameData("UI_SelectionBox")->getImage();
     m_visible.resize(MAX_PLAYERS);
 
-    m_weapons.resize(pyWeapons.size());
     for(size_t i = 0; i < pyWeapons.size(); i++)
-	m_weapons[i] = WeaponPtr(new WeaponClass(m_owner, getPyObjectType(pyWeapons[i], 0)));
+	m_weapons.emplace_back(std::make_shared<WeaponClass>(m_owner, getPyObjectType(pyWeapons[i], 0)));
 
     if(m_decayTime)
 	m_decayTime -= getRandom<int16_t>(1+m_decayTime/4, m_decayTime);

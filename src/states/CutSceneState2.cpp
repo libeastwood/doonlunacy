@@ -35,7 +35,7 @@ CutSceneState::CutSceneState(std::string scene) : m_scene(scene)
 	PyErr_Print();
 	exit(EXIT_FAILURE);
     }
-    ImagePtr background(new Image(resolution));
+    auto background = std::make_shared<Image>(resolution);
     m_backgroundFrame->changeBackground(background);
     m_sceneFrame = NULL;
     m_curScene = 0;
@@ -67,13 +67,13 @@ void CutSceneState::skipCutScene()
 void CutSceneState::loadScene(int scene)
 {
     UPoint resolution = set->GetResolution();
-    if(m_sceneFrame != NULL)
+    if(m_sceneFrame != nullptr)
 	m_backgroundFrame->deleteChild(m_sceneFrame);
-    m_sceneFrame = new Frame(ImagePtr(new Image(resolution)));
+    m_sceneFrame = new Frame(std::make_shared<Image>(resolution));
     m_backgroundFrame->addChild(m_sceneFrame);
     m_animFrame = new Frame();
     m_sceneFrame->addChild(m_animFrame);
-    m_textFrame = new Frame(ImagePtr(new Image(UPoint(300,50).getScaled())));
+    m_textFrame = new Frame(std::make_shared<Image>(UPoint(300,50).getScaled()));
     m_sceneFrame->addChild(m_textFrame);
     std::string filename, palettefile;
     if(m_loop)
@@ -151,20 +151,19 @@ void CutSceneState::loadScene(int scene)
 	m_animPosition = python::extract<SPoint>(curScene.attr("animPosition"));
 
 	m_animLabel = new AnimationLabel();
-	ImagePtr animFrame;
 	if(!getPyObject(curScene.attr("filename"), &filename))
-	    m_animLabel->addFrame(ImagePtr(new Image(UPoint(1,1))), true);
+	    m_animLabel->addFrame(std::make_shared<Image>(UPoint(1,1)), true);
 	else {
 	    eastwood::IStream *data = ResMan::Instance()->getFile(filename);
 	    if(filename.substr(filename.length()-3, 3) == "CPS") {
 		eastwood::CpsFile cpsfile(*data);
-		m_animLabel->addFrame(ImagePtr(new Image(cpsfile.getSurface())), true);
+		m_animLabel->addFrame(std::make_shared<Image>(cpsfile.getSurface()), true);
 	    }
 	    else {
 		eastwood::WsaFile wsafile(*data, DataCache::Instance()->getPalette(palettefile), eastwood::Surface());
 		std::vector<ImagePtr> wsaFrames;
 		for(uint32_t i = 0; i < wsafile.size(); i++)
-		    wsaFrames.push_back(ImagePtr(new Image(wsafile.getSurface(i))));
+		    wsaFrames.emplace_back(std::make_shared<Image>(wsafile.getSurface(i)));
 
 		for(uint32_t i = 0; i < wsaFrames.size() + loopAnimFrames; i++)
 		    if(i < wsaFrames.size())
@@ -247,7 +246,7 @@ int CutSceneState::Execute(float ft)
 
     if(!m_framePlayed[curFrame]) {
 	if(m_textStrings.find(curFrame) != m_textStrings.end()) {
-	    ImagePtr tmp(new Image(UPoint(420, 45)));
+	    auto tmp = std::make_shared<Image>(UPoint(420, 45));
 	    tmp->setColorKey();
 	    std::string text = m_textStrings[curFrame];
 	    uint8_t numLines = 0;

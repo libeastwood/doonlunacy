@@ -141,7 +141,7 @@ class Image : protected eastwood::SDL::Surface
 
 	//! Make copy of the image
 	ImagePtr getCopy() const {
-	    return ImagePtr(new Image(*this));
+	    return std::make_shared<Image>(*this);
 	}
 
 	//! Make resized copy of the image

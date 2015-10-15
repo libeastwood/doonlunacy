@@ -763,7 +763,7 @@ bool UnitClass::AStarSearch()
             while (node->m_parent != NULL)
             {
                 m_nextSpot = UPoint(node->x, node->y);
-                m_pathList.push_front(UPoint(node->x, node->y));
+                m_pathList.emplace_front(UPoint(node->x, node->y));
                 //if (debug) //see final path
                 //getOwner()->placeUnit(Unit_Carryall, nextSpot.x, nextSpot.y);
                 node = node->m_parent;

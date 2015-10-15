@@ -93,14 +93,14 @@ void GameData::drawImage()
 
 	    if (type == "CPS") {
 		eastwood::CpsFile cpsfile(*data, palette);
-		m_surface.reset(new Image(cpsfile.getSurface()));
+		m_surface = std::make_shared<Image>(cpsfile.getSurface());
 	    }
 
 	    if (type == "SHP") {
 		std::vector<uint32_t> tiles = getPyObjectVector<uint32_t>(pyObject.attr("tiles"));
 		eastwood::ShpFile shpfile(*data, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
-		    m_surface.reset(new Image(shpfile.getSurface(value)));
+		    m_surface = std::make_shared<Image>(shpfile.getSurface(value));
 		else if(!tiles.empty()) {
 		    uint32_t tilesX = 0, tilesY = 0;
 
@@ -110,7 +110,7 @@ void GameData::drawImage()
 			LOG(LV_FATAL, "GameData:", "Tile row size %d is of different size than %d for %s!",
 				tiles.size(), tilesX, m_path.c_str());
 		    tilesY++;
-		    m_surface.reset(new Image(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front())));
+		    m_surface = std::make_shared<Image>(shpfile.getSurfaceArray(tilesX, tilesY, &tiles.front()));
 		}
 		else {
 		    LOG(LV_FATAL, "GameData", "%s: No index or tiles specified!", m_path.c_str());
@@ -127,11 +127,11 @@ void GameData::drawImage()
 
 		    eastwood::IcnFile icnfile(*data, palette, map);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
-			m_surface.reset(new Image(icnfile.getSurface(value)));
+			m_surface = std::make_shared<Image>(icnfile.getSurface(value));
 		    else if(getPyObject<int>(pyObject.attr("row"), &value))
-			m_surface.reset(new Image(icnfile.getTiles(value, false)));
+			m_surface = std::make_shared<Image>(icnfile.getTiles(value, false));
 		    else if(getPyObject<int>(pyObject.attr("mapindex"), &value))
-			m_surface.reset(new Image(icnfile.getTiles(value, true)));
+			m_surface = std::make_shared<Image>(icnfile.getTiles(value, true));
 		    else {
 			LOG(LV_FATAL, "GameData", "no index, mapindex or row specified for %s!", m_path.c_str());
 			exit(EXIT_FAILURE);
@@ -161,7 +161,7 @@ void GameData::drawImage()
 		    if(size.y > newSize.y)
 			newSize.y = size.y;
 		}
-		m_surface.reset(new Image(newSize));
+		m_surface = std::make_shared<Image>(newSize);
 		UPoint destPoint(0,0);
 		for(std::vector<ImagePtr>::const_iterator it = data.begin();
 			it != data.end(); ++it) {

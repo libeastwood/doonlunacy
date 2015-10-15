@@ -168,7 +168,7 @@ void Image::drawVBar(const UPoint& start, int y2)
 {
     ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
-    ImagePtr sideBar(new Image(UPoint(12, y2 - start.y))); 
+    ImagePtr sideBar(std::make_shared<Image>(UPoint(12, y2 - start.y)));
     ImagePtr tmp(screen->getPictureCrop(Rect(241, 52, 12, 6)));
     sideBar->blitFrom(*tmp);
     tmp = screen->getPictureCrop(Rect(241, 58, 12, 13));
@@ -184,7 +184,7 @@ void Image::drawHBarSmall(const UPoint& start, int x2)
 {
     ImagePtr screen = DataCache::Instance()->getGameData("Screen")->getImage();
 
-    ImagePtr sideBar(new Image(UPoint(x2 - start.x, 6))); 
+    auto sideBar = std::make_shared<Image>(UPoint(x2 - start.x, 6)); 
     ImagePtr tmp(screen->getPictureCrop(Rect(254, 127, 5, 6)));
     sideBar->blitFrom(*tmp);
     tmp = screen->getPictureCrop(Rect(260, 127, 10, 6));
@@ -201,7 +201,7 @@ void Image::drawTiles(const Image& tile, Rect area)
     if(area == Rect())
 	area.setSize(getSize());
 
-    ImagePtr tiledArea(new Image(UPoint(area.w, area.h)));
+    auto tiledArea = std::make_shared<Image>(UPoint(area.w, area.h));
     UPoint size = getSize();
     UPoint tileSize = tile.getSize();
     UPoint iter;
