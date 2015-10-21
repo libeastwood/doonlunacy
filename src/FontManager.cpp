@@ -26,8 +26,8 @@ eastwood::FntFile* FontManager::getFont(std::string fn)
 
 eastwood::FntFile* FontManager::loadFont(std::string fn)
 {
-	std::istream *file = ResMan::Instance()->getFile(fn);
-	eastwood::FntFile* font = new eastwood::FntFile(*file);
+	std::istream &file = ResMan::Instance()->getFile(fn);
+	eastwood::FntFile* font = new eastwood::FntFile(file);
 
 	return font;
 }

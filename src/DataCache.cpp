@@ -31,7 +31,7 @@ DataCache::DataCache() {
 #include <iostream>
 
 void DataCache::Init(){
-    eastwood::IStream *data;
+    eastwood::IStream data;
     //    Image *tmp;
 
     ResMan::Instance()->addRes("ENGLISH");
@@ -40,7 +40,7 @@ void DataCache::Init(){
     // CreditsStrings = new StringFile("ENGLISH:CREDITS.ENG");
 
     data = ResMan::Instance()->getFile("ENGLISH:INTRO.ENG");
-    IntroStrings = new eastwood::StringFile(*data);
+    IntroStrings = new eastwood::StringFile(data);
 
     ResMan::Instance()->addRes("DUNE");
 
@@ -61,11 +61,11 @@ void DataCache::Init(){
     ResMan::Instance()->addRes("XTRE");
 
     data = ResMan::Instance()->getFile("ENGLISH:TEXTA.ENG");	
-    BriefingStrings[0] = new eastwood::StringFile(*data);
+    BriefingStrings[0] = new eastwood::StringFile(data);
     data = ResMan::Instance()->getFile("ENGLISH:TEXTO.ENG");
-    BriefingStrings[1] = new eastwood::StringFile(*data);
+    BriefingStrings[1] = new eastwood::StringFile(data);
     data = ResMan::Instance()->getFile("ENGLISH:TEXTH.ENG");
-    BriefingStrings[2] = new eastwood::StringFile(*data);
+    BriefingStrings[2] = new eastwood::StringFile(data);
 }
 
 python::object DataCache::loadPyObject(std::string moduleName, std::string objectName) {
@@ -83,8 +83,8 @@ eastwood::Palette DataCache::getPalette(std::string paletteFile)
 {
     if(m_palette.find(paletteFile) == m_palette.end())
     {
-	eastwood::IStream *data = ResMan::Instance()->getFile(paletteFile);
-        m_palette[paletteFile] = eastwood::PalFile(*data).getPalette();
+	eastwood::IStream &data = ResMan::Instance()->getFile(paletteFile);
+        m_palette[paletteFile] = eastwood::PalFile(data).getPalette();
     }
     return m_palette[paletteFile];
 }
@@ -153,7 +153,6 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 
     try
     {
-	eastwood::IStream *data;
 	float frameRate;
 
         std::string variable, type;
@@ -170,12 +169,12 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 	    exit(EXIT_FAILURE);
 	}
 
-	data = ResMan::Instance()->getFile(variable);
+	eastwood::IStream &data = ResMan::Instance()->getFile(variable);
 
 	type = variable.substr(variable.length()-3, 3);
 
         if (type == "WSA") {
-	    eastwood::WsaFile wsafile(*data, palette);
+	    eastwood::WsaFile wsafile(data, palette);
 
             for(uint16_t i = 0; i < wsafile.size(); i++)
                 animationLabel->addFrame(ImagePtr(new Image(wsafile.getSurface(i))));
@@ -183,7 +182,7 @@ AnimationLabel *DataCache::getAnimationLabel(std::string path)
 
         if (type == "SHP") {
 	    UPoint index;
-	    eastwood::ShpFile shpfile(*data, palette);
+	    eastwood::ShpFile shpfile(data, palette);
 	    
     	    if(!::getPyObject(pyObject.attr("index"), &index)) {
     		LOG(LV_ERROR, "DataCache", "%s: 'index' variable missing!", path.c_str());

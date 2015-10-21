@@ -557,10 +557,10 @@ void Image::recolorByHouse(int house)
 void Image::greyOut(Rect area) {
     size_t len;
     uint8_t *index2greyindex;
-    eastwood::IStream *data = ResMan::Instance()->getFile("DUNE:GRAYRMAP.TBL");
-    len = data->sizeg();
+    eastwood::IStream &data = ResMan::Instance()->getFile("DUNE:GRAYRMAP.TBL");
+    len = data.sizeg();
     index2greyindex = (uint8_t*)malloc(len);
-    data->read((char*)index2greyindex, len);
+    data.read((char*)index2greyindex, len);
 
     if(area == Rect())
 	area.setSize(getSize());

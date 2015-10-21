@@ -66,7 +66,6 @@ bool GameData::freeIfUnique() {
 void GameData::drawImage()
 {
     try {
-	eastwood::IStream *data;
 	std::string variable;
 	int value;
 	UPoint pos;
@@ -89,16 +88,16 @@ void GameData::drawImage()
 	    if(!getPyObject(pyObject.attr("type"), &type))
 		type = variable.substr(variable.length()-3, 3);
 
-	    data = ResMan::Instance()->getFile(variable);
+	    eastwood::IStream &data = ResMan::Instance()->getFile(variable);
 
 	    if (type == "CPS") {
-		eastwood::CpsFile cpsfile(*data, palette);
+		eastwood::CpsFile cpsfile(data, palette);
 		m_surface = std::make_shared<Image>(cpsfile.getSurface());
 	    }
 
 	    if (type == "SHP") {
 		std::vector<uint32_t> tiles = getPyObjectVector<uint32_t>(pyObject.attr("tiles"));
-		eastwood::ShpFile shpfile(*data, palette);
+		eastwood::ShpFile shpfile(data, palette);
 		if(getPyObject<int>(pyObject.attr("index"), &value))
 		    m_surface = std::make_shared<Image>(shpfile.getSurface(value));
 		else if(!tiles.empty()) {
@@ -121,11 +120,11 @@ void GameData::drawImage()
 	    if (type == "ICN") {
 		std::string mapName;
 		if(getPyObject<std::string>(pyObject.attr("map"), &mapName)) {
-		    data = ResMan::Instance()->getFile(mapName);
-		    eastwood::MapFile map(*data);		    
-		    data = ResMan::Instance()->getFile(variable);
+		    eastwood::IStream &mapData = ResMan::Instance()->getFile(mapName);
+		    eastwood::MapFile map(mapData);		    
+		    eastwood::IStream &icnData = ResMan::Instance()->getFile(variable);
 
-		    eastwood::IcnFile icnfile(*data, palette, map);
+		    eastwood::IcnFile icnfile(icnData, palette, map);
     		    if(getPyObject<int>(pyObject.attr("index"), &value))
 			m_surface = std::make_shared<Image>(icnfile.getSurface(value));
 		    else if(getPyObject<int>(pyObject.attr("row"), &value))
@@ -230,7 +229,6 @@ void GameData::drawImage()
 void GameData::loadSound() {
 
     try {
-	eastwood::IStream *data;
 	std::string filename;
 	python::object pyObject = DataCache::Instance()->getPyObject("objects", m_path);
 
@@ -240,8 +238,8 @@ void GameData::loadSound() {
 	    exit(EXIT_FAILURE);
 	    }
 
-        data = ResMan::Instance()->getFile(filename);
-	eastwood::SDL::Mixer::Sound sound = eastwood::VocFile(*data).getSound();
+	eastwood::IStream &data = ResMan::Instance()->getFile(filename);
+	eastwood::SDL::Mixer::Sound sound = eastwood::VocFile(data).getSound();
 
     	m_sound.reset(new eastwood::SDL::Mixer::Sound(sound.getResampled(eastwood::I_LINEAR)));
     }

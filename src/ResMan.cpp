@@ -21,9 +21,8 @@ namespace bfs = boost::filesystem;
 
 // ------------------------------------------------------------------
 
-Resource::Resource()
+Resource::Resource(bfs::path path, bool writable) : m_path(path), mb_writable(writable)
 {
-    mb_writable = false;
 }
 
 Resource::~Resource()
@@ -40,18 +39,17 @@ std::string Resource::getRealPath(std::string path)
 
 // ------------------------------------------------------------------
 
-DIRResource::DIRResource(bfs::path path)
+DIRResource::DIRResource(bfs::path path, bool writable) : Resource(path, writable)
 {
-    m_path = path; 
 }
 
-eastwood::IStream* DIRResource::getFile(std::string path)
+eastwood::IStream& DIRResource::getFile(std::string path)
 {
     bfs::path fullpath (m_path);
     fullpath /= path;
 
-    std::ifstream *file = new std::ifstream(path.c_str());
-    return reinterpret_cast<eastwood::IStream*>(file);
+    mb_file.open(path.c_str());
+    return reinterpret_cast<eastwood::IStream&>(mb_file);
 }
 
 std::string DIRResource::readText(std::string path) 
@@ -82,10 +80,9 @@ bool DIRResource::exists(std::string path)
 
 // ------------------------------------------------------------------
 
-WritableDIRResource::WritableDIRResource(std::string path, bool create) : DIRResource(path)
+WritableDIRResource::WritableDIRResource(std::string path, bool writable) : DIRResource(path, writable)
 {
-    mb_writable = true;
-    if(create && !exists(path))
+    if(writable && !exists(path))
 	bfs::create_directory(path);
 }
 
@@ -102,29 +99,24 @@ void WritableDIRResource::writeText(std::string path, std::string text)
 
 // ------------------------------------------------------------------
 
-PAKResource::PAKResource(bfs::path path)
+PAKResource::PAKResource(bfs::path path) : Resource(path), m_fstream(path.string().c_str()), m_pakfile(m_fstream)
 {
-    m_path = path;
-    m_fstream = new std::fstream(path.string().c_str());
-    m_pakfile = new eastwood::PakFile(*m_fstream);
 }
 
 PAKResource::~PAKResource()
 {
-    delete m_pakfile;
-    m_fstream->close();
-    delete m_fstream;
+    m_fstream.close();
 }
 
-eastwood::IStream* PAKResource::getFile(std::string path)
+eastwood::IStream& PAKResource::getFile(std::string path)
 {
-    m_pakfile->open(path);
+    m_pakfile.open(path);
     return m_pakfile;
 }
 
 bool PAKResource::exists(std::string path)
 {
-    return m_pakfile->exists(path);
+    return m_pakfile.exists(path);
 }
 
 // ------------------------------------------------------------------
@@ -207,7 +199,7 @@ Resource* ResMan::getResource(std::string name, std::string& filename)
     return res;
 }
 
-eastwood::IStream* ResMan::getFile(std::string name)
+eastwood::IStream& ResMan::getFile(std::string name)
 {
     std::string filename;
     Resource* res = getResource(name, filename);

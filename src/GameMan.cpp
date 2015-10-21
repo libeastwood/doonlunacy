@@ -144,9 +144,7 @@ ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
 
 bool GameMan::LoadScenario(std::string scenarioName)
 {
-    eastwood::IStream *data = ResMan::Instance()->getFile(scenarioName);
-
-    eastwood::IniFile *myInifile = new eastwood::IniFile(*data);
+    eastwood::IniFile *myInifile = new eastwood::IniFile(ResMan::Instance()->getFile(scenarioName));
 
     int tacticalPos = myInifile->getIntValue("BASIC", "TacticalPos", 0);
     m_tacticalPos = SPoint(tacticalPos % 64, tacticalPos / 64);

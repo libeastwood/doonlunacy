@@ -117,9 +117,7 @@ void SoundPlayer::playMusic(std::string filename, uint16_t trackNum)
 	m_currentSong->filename = filename;
 	m_currentSong->track = trackNum;
         changeEmuOpl(Settings::Instance()->GetEmuOpl());
-	eastwood::IStream *data;
-	data = ResMan::Instance()->getFile(filename);
-        m_player->load(*data);
+        m_player->load(ResMan::Instance()->getFile(filename));
         m_player->rewind(trackNum);
 
         Mix_HookMusic(m_player->callback, m_player);

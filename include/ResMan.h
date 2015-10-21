@@ -1,6 +1,5 @@
 #ifndef DUNE_RESMAN_H
 #define DUNE_RESMAN_H
-
 #include "singleton.h"
 
 #include <boost/filesystem/path.hpp>
@@ -10,6 +9,7 @@
 //#include "Log.h"
 
 #include <eastwood/PakFile.h>
+#include <fstream>
 
 /*!
   Base class for all resources. 
@@ -19,7 +19,7 @@ class Resource
     public:
 	//! @name Constructors & Destructor
 	//@{
-	Resource();
+	Resource(boost::filesystem::path path, bool writable = false);
 	virtual ~Resource();
 	//@}
 
@@ -29,7 +29,7 @@ class Resource
 	  @param size if not NULL the file size is put here 
 	  @return file data
 	  */
-	virtual eastwood::IStream* getFile(std::string path) { return NULL; }
+	virtual eastwood::IStream& getFile(std::string path) = 0;
 
 	/*!
 	  read a text file from resource
@@ -37,6 +37,7 @@ class Resource
 	  @return text from the file
 	  */
 	virtual std::string readText(std::string path) { return ""; }
+
 	/*!
 	  write a text file to a resource
 	  @param path path to write the file
@@ -69,10 +70,13 @@ class Resource
 class DIRResource : public Resource
 {
     public:
-	DIRResource(boost::filesystem::path path) ;
-	eastwood::IStream* getFile(std::string path);
+	DIRResource(boost::filesystem::path path, bool writable = false) ;
+	eastwood::IStream& getFile(std::string path);
 	std::string readText(std::string path);
 	bool exists(std::string path);
+
+    protected:
+	std::ifstream mb_file;
 };
 
 /*!
@@ -81,7 +85,7 @@ class DIRResource : public Resource
 class WritableDIRResource : public DIRResource
 {
     public:
-	WritableDIRResource(std::string path, bool create = false);
+	WritableDIRResource(std::string path, bool writable = true);
 	void writeText(std::string path, std::string text);
 };
 
@@ -94,11 +98,12 @@ class PAKResource : public Resource
 	PAKResource(boost::filesystem::path path) ;
 	~PAKResource();
 
-	eastwood::IStream* getFile(std::string path);
+	eastwood::IStream& getFile(std::string path);
 	bool exists(std::string path);
     private:
-	eastwood::PakFile *m_pakfile;
-	std::fstream *m_fstream;
+
+	std::fstream m_fstream;
+	eastwood::PakFile m_pakfile;
 };
 
 /*!
@@ -141,7 +146,7 @@ class ResMan : public Singleton<ResMan>
       @param size if not NULL the file size is put here 
       @return file data
       */
-    eastwood::IStream* getFile(std::string path);
+    eastwood::IStream& getFile(std::string path);
 
 
     //! @name textmode functions

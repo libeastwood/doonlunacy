@@ -154,13 +154,13 @@ void CutSceneState::loadScene(int scene)
 	if(!getPyObject(curScene.attr("filename"), &filename))
 	    m_animLabel->addFrame(std::make_shared<Image>(UPoint(1,1)), true);
 	else {
-	    eastwood::IStream *data = ResMan::Instance()->getFile(filename);
+	    eastwood::IStream &data = ResMan::Instance()->getFile(filename);
 	    if(filename.substr(filename.length()-3, 3) == "CPS") {
-		eastwood::CpsFile cpsfile(*data);
+		eastwood::CpsFile cpsfile(data);
 		m_animLabel->addFrame(std::make_shared<Image>(cpsfile.getSurface()), true);
 	    }
 	    else {
-		eastwood::WsaFile wsafile(*data, DataCache::Instance()->getPalette(palettefile), eastwood::Surface());
+		eastwood::WsaFile wsafile(data, DataCache::Instance()->getPalette(palettefile), eastwood::Surface());
 		std::vector<ImagePtr> wsaFrames;
 		for(uint32_t i = 0; i < wsafile.size(); i++)
 		    wsaFrames.emplace_back(std::make_shared<Image>(wsafile.getSurface(i)));
