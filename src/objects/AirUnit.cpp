@@ -1,7 +1,7 @@
 #include "objects/AirUnit.h"
 #include "PlayerClass.h"
 
-AirUnit::AirUnit(PlayerClass *newOwner, std::string unitName, uint32_t attribute) : UnitClass(newOwner, unitName, attribute | OBJECT_AIRUNIT)
+AirUnit::AirUnit(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute) : UnitClass(newOwner, unitName, attribute | OBJECT_AIRUNIT)
 {
 }
 

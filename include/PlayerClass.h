@@ -23,18 +23,21 @@ class PlayerClass
 	
 	void decrementUnits(std::string itemName);
 
+	bool operator==(const PlayerClass& player) const noexcept { return this == &player; }
+	bool operator!=(const PlayerClass& player) const noexcept { return this != &player; }
+
 	//! @name setters and getters
 	//@{
 	
-	inline int getColour() { return m_color; }
-	MapClass* getMap();
-	inline int getPlayerNumber() { return m_mapPlayerNum; }
-	inline int getHouse() { return m_house; }
-	inline int getTeam() { return m_team; }
+	inline int getColour() const noexcept { return m_color; }
+	MapClass* getMap() const noexcept;
+	inline int getPlayerNumber() const noexcept { return m_mapPlayerNum; }
+	inline int getHouse() const noexcept { return m_house; }
+	inline int getTeam() const noexcept { return m_team; }
 
-	int getMapPlayerNum() { return	m_mapPlayerNum; }
+	int getMapPlayerNum() const noexcept { return m_mapPlayerNum; }
 
-	inline bool isAI() { return m_ai; }
+	inline bool isAI() const noexcept{ return m_ai; }
 	//@}
 	
 	ObjectPtr createUnit(std::string itemName);

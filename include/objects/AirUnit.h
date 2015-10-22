@@ -6,7 +6,7 @@
 class AirUnit : public UnitClass
 {
 public:
-	AirUnit(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
+	AirUnit(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute = 0);
 
 	void checkPos();
 

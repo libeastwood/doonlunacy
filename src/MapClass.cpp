@@ -573,8 +573,8 @@ void MapClass::viewMap(int playerTeam, UPoint location, int maxViewRange)
 	pos.y = location.y;
 
     GameMan* gman = GameMan::Instance();
-    int number = gman->LocalPlayer()->getPlayerNumber();
-    int team = gman->LocalPlayer()->getTeam();
+    int number = gman->LocalPlayer().getPlayerNumber();
+    int team = gman->LocalPlayer().getTeam();
     maxViewRange++;
     //makes map viewable in an area like as shown below 
 
@@ -600,7 +600,7 @@ void MapClass::viewMap(int playerTeam, UPoint location, int maxViewRange)
 	{
 	    if (distance_from(location, check) <= maxViewRange)
 		for (i = 0; i < MAX_PLAYERS; i++)
-		    if (gman->GetPlayer(i) && gman->GetPlayer(i)->getTeam() == playerTeam)
+		    if (gman->playerExists(i) && gman->GetPlayer(i).getTeam() == playerTeam)
 			getCell(SPoint(check.x, check.y))->setExplored(i, true);
 	    check.y++;
 	}

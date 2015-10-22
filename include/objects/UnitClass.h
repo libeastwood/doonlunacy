@@ -17,7 +17,7 @@ class UnitClass : public ObjectClass
   public:
     //! @name Constructor and destructor
     //@{
-    UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
+    UnitClass(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute = 0);
     //@}
 
     bool canPass(UPoint pos);

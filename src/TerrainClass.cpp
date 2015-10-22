@@ -35,7 +35,7 @@ TerrainClass::~TerrainClass()
 
 void TerrainClass::draw(Image& dest, SPoint pos)
 {
-    if (isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+    if (isExplored(GameMan::Instance()->LocalPlayer().getPlayerNumber()))
     {
         Rect source(m_tile*BLOCKSIZE, 0, BLOCKSIZE, BLOCKSIZE);
         m_img->blitTo(dest, source, pos);

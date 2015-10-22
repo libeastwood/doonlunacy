@@ -12,16 +12,13 @@
 #include "SoundPlayer.h"
 #include "PythonObjects.h"
 
-ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute) :
-    Rect(0, 0, 0, 0), m_objectName(objectName), m_attributes(attribute)
+ObjectClass::ObjectClass(const PlayerClass& newOwner, const std::string& objectName, uint32_t attribute) :
+    Rect(0, 0, 0, 0), m_objectName(objectName), m_owner(&newOwner), m_attributes(attribute), m_status(STATUS_NONE)
 {
     std::string graphic, topGraphic;
     std::vector<python::object> pyWeapons;
 
-    m_owner = newOwner;
-    m_status = STATUS_NONE;
-
-    if(m_owner == GameMan::Instance()->LocalPlayer())
+    if(*m_owner == GameMan::Instance()->LocalPlayer())
 	setStatus(STATUS_CONTROLLABLE);
 
     m_pyObject = DataCache::Instance()->getPyObject("objects", m_objectName);
@@ -86,7 +83,7 @@ ObjectClass::ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t
     m_visible.resize(MAX_PLAYERS);
 
     for(size_t i = 0; i < pyWeapons.size(); i++)
-	m_weapons.emplace_back(std::make_shared<WeaponClass>(m_owner, getPyObjectType(pyWeapons[i], 0)));
+	m_weapons.emplace_back(std::make_shared<WeaponClass>(*m_owner, getPyObjectType(pyWeapons[i], 0)));
 
     if(m_decayTime)
 	m_decayTime -= getRandom<int16_t>(1+m_decayTime/4, m_decayTime);
@@ -118,7 +115,7 @@ bool ObjectClass::canAttack(ObjectPtr object) const
 {
     if ( (object != NULL) && !object->getStatus(STATUS_DESTROYED) 
 	    && ( object->hasAttribute(OBJECT_STRUCTURE) || !object->hasAttribute(OBJECT_AIRUNIT) )
-	    && ( (object->getOwner()->getTeam() != m_owner->getTeam() ) 
+	    && ( (object->getOwner().getTeam() != m_owner->getTeam() ) 
 		|| object->getObjectName() == "Sandworm") && object->isVisible(m_owner->getTeam()) ) 
 	return true;
     else
@@ -402,7 +399,7 @@ void ObjectClass::handleDamage(int16_t damage, ObjectPtr damager)
 	    }
 	}
 
-	if (m_owner == GameMan::Instance()->LocalPlayer()) 
+	if (*m_owner == GameMan::Instance()->LocalPlayer()) 
 	{
 	    //FIXME: Yeah, whatever
 	    //soundPlayer->changeMusic(MUSIC_ATTACK);

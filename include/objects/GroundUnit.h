@@ -8,7 +8,7 @@
 class GroundUnit : public UnitClass
 {
   public:
-    GroundUnit(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
+    GroundUnit(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute = 0);
     
     void checkPos();
     

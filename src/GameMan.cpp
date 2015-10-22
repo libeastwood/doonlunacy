@@ -54,11 +54,10 @@ void GameMan::AddPlayer(HOUSETYPE House, bool ai, int team)
 
     else
     {
-	m_players.emplace_back(new PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team));
-	m_localPlayer = m_players[0];//localPlayer;
+	m_players.emplace_back(PlayerClass(House, House, House, DEFAULT_STARTINGCREDITS, team));
     }
 
-    m_players[House]->assignMapPlayerNum(House);
+    m_players[House].assignMapPlayerNum(House);
 }
 
 void GameMan::Init()
@@ -68,8 +67,6 @@ void GameMan::Init()
 
 void GameMan::Clear()
 {
-    for(std::vector<PlayerClass*>::const_iterator iter = m_players.begin(); iter != m_players.end(); iter++)
-	delete *iter;
     m_players.clear();
     m_objects.clear();
 
@@ -107,7 +104,7 @@ void GameMan::removeObject(uint32_t objectID) {
 	    return;
 }
 
-ObjectPtr GameMan::createObject(std::string itemName, PlayerClass* Owner)
+ObjectPtr GameMan::createObject(std::string itemName, const PlayerClass& Owner)
 {
     std::string objectClass;
     ObjectPtr newObject;
@@ -209,7 +206,7 @@ bool GameMan::LoadScenario(std::string scenarioName)
 	    pos = 0;
 	}
 
-	ObjectPtr newUnit = m_players[house]->placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
+	ObjectPtr newUnit = m_players[house].placeUnit(UnitStr, UPoint(pos % 64, pos / 64));
 	if (!newUnit)
 	    LOG(LV_WARNING, "GameMan", "LoadScenario: This file is not a valid unit entry: %d. (invalid unit position)", pos);
     }
@@ -265,13 +262,13 @@ bool GameMan::LoadScenario(std::string scenarioName)
 	    //Using INVALID_POS instead of NONE to avoid warnings.
 	    //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
 	    if (BuildingStr == "Concrete")
-		m_players[house]->placeStructure(INVALID_POS, INVALID_POS, "Slab1", UPoint(pos % 64, pos / 64));
+		m_players[house].placeStructure(INVALID_POS, INVALID_POS, "Slab1", UPoint(pos % 64, pos / 64));
 	    else if (BuildingStr == "Wall")
-		m_players[house]->placeStructure(INVALID_POS, INVALID_POS, "Wall", UPoint(pos % 64, pos / 64));
+		m_players[house].placeStructure(INVALID_POS, INVALID_POS, "Wall", UPoint(pos % 64, pos / 64));
 	    else
 		LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid building string: %s", BuildingStr.c_str());
 	}
-
+	
 	else
 	{
 	    // other structure
@@ -301,7 +298,7 @@ bool GameMan::LoadScenario(std::string scenarioName)
 
 	    //Using INVALID_POS instead of NONE to avoid warnings.
 	    //FIXME: Maybe we should rename INVALID_POS to INVALID or sth
-	    ObjectPtr newStructure = m_players[house]->placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
+	    ObjectPtr newStructure = m_players[house].placeStructure(INVALID_POS, INVALID_POS, BuildingStr, UPoint(pos % 64, pos / 64));
 
 	    if (newStructure == NULL)
 		LOG(LV_WARNING, "GameMan", "LoadScenario: Invalid position: %d", pos);

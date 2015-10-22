@@ -32,7 +32,7 @@ class GameMan : public Singleton<GameMan>
     bool LoadScenario(std::string scenarioName);
     
     void AddPlayer(HOUSETYPE House, bool ai, int team);
-    ObjectPtr createObject(std::string itemName, PlayerClass* Owner);
+    ObjectPtr createObject(std::string itemName, const PlayerClass& Owner);
 
     /*!
      *  As the name suggests it saves current map to a BMP file.
@@ -42,16 +42,17 @@ class GameMan : public Singleton<GameMan>
 
     void TakeMapScreenshot(std::string filename = "mapshot.bmp");
     
-    MapClass * GetMap() { return m_map; }
-    std::vector<PlayerClass*> GetPlayers() { return m_players; }
-    PlayerClass * GetPlayer(int i) { return m_players[i]; }
+    MapClass * GetMap() const noexcept { return m_map; }
+    const std::vector<PlayerClass>& GetPlayers() { return m_players; }
+    inline bool playerExists(uint8_t i) { return i < m_players.size(); }
+    const PlayerClass& GetPlayer(int i) { return m_players[i]; }
     inline ObjectTypeMap::const_iterator getObjectsBegin() { return m_objects.begin(); }
     inline ObjectTypeMap::const_iterator getObjectsEnd() { return m_objects.end(); }
     ObjectPtr getObject(uint32_t objectID);
     uint32_t addObject(ObjectPtr object);
     void removeObject(uint32_t objectID);
     SPoint getTacticalPos() { return m_tacticalPos; }
-    PlayerClass * LocalPlayer() { return m_localPlayer; }
+    const PlayerClass& LocalPlayer() { return m_players.front(); }
     void Update(float dt);
     //FIXME: This shouldn't be here
     bool placingMode;
@@ -61,8 +62,7 @@ class GameMan : public Singleton<GameMan>
   protected:
 
     MapClass *m_map;
-    PlayerClass *m_localPlayer;
-    std::vector<PlayerClass*> m_players;
+    std::vector<PlayerClass> m_players;
     ObjectTypeMap m_objects;
     uint32_t m_objectIDCounter;
     SPoint m_tacticalPos;

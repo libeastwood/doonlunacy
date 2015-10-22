@@ -13,7 +13,7 @@
 #include "objects/ObjectClass.h"
 #include "objects/UnitClass.h"
 
-UnitClass::UnitClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
+UnitClass::UnitClass(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute) : ObjectClass(newOwner, unitName, attribute | OBJECT_UNIT)
 {
     m_attackMode = DEFENSIVE;
 

@@ -4,7 +4,7 @@
 #include "MapClass.h"
 #include "objects/StructureClass.h"
 
-StructureClass::StructureClass(PlayerClass* newOwner, std::string structureName, uint32_t attribute) : ObjectClass(newOwner, structureName, attribute | OBJECT_STRUCTURE)
+StructureClass::StructureClass(const PlayerClass& newOwner, const std::string& structureName, uint32_t attribute) : ObjectClass(newOwner, structureName, attribute | OBJECT_STRUCTURE)
 {
     m_justPlacedTimer = 0;
     try {

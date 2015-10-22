@@ -65,12 +65,12 @@ class ObjectClass : protected Rect
   public:
     //!
     //@{
-    ObjectClass(PlayerClass* newOwner, std::string objectName, uint32_t attribute = 0);
+    ObjectClass(const PlayerClass& newOwner, const std::string& objectName, uint32_t attribute = 0);
     ~ObjectClass();
     //@}
 
     friend std::ostream& operator<<(std::ostream& os, const ObjectClass& c){
-	return os << c.m_objectType << "(" << (*c.getOwner()).getPlayerNumber() << "," << c.getObjectName()
+	return os << c.m_objectType << "(" << (c.getOwner()).getPlayerNumber() << "," << c.getObjectName()
 	    << "," << c.getAttributes() << ")" << "ID: " << c.getObjectID() << " position: "
 	    << c.getPosition() << c.getRealPosition();
     }
@@ -125,7 +125,7 @@ class ObjectClass : protected Rect
     inline bool isVisible (int team) const;
     int getHealthColour() const;
 
-    inline std::string getObjectName() const { return m_objectName; }
+    inline const std::string& getObjectName() const { return m_objectName; }
     int getViewRange() const;
 
     inline uint32_t getObjectID() const { return m_objectID; }
@@ -145,8 +145,8 @@ class ObjectClass : protected Rect
 
     float coverage(Rect rect) const { return Rect(getRealPosition(), getSize()).contains(rect); }
 
-    inline PlayerClass* getOwner() const { return m_owner; }
-    inline void setOwner(PlayerClass* newOwner) { m_owner = newOwner; }
+    inline const PlayerClass& getOwner() const { return *m_owner; }
+    inline void setOwner(const PlayerClass newOwner) { m_owner = &newOwner; }
     //@}
 	//! @name  Attack related functions
 	//@{
@@ -223,7 +223,7 @@ class ObjectClass : protected Rect
 	     m_selectionBoxGlowing;
 
     //! Pointer to map to which object is assigned.
-    PlayerClass *m_owner;
+    const PlayerClass *m_owner;
 
     uint32_t m_objectID;
 

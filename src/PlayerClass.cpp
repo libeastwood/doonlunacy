@@ -43,13 +43,13 @@ void PlayerClass::assignMapPlayerNum(int newMapPlayerNum)
 
 ObjectPtr PlayerClass::createUnit(std::string itemName)
 {
-    ObjectPtr newUnit = GameMan::Instance()->createObject(itemName,this);
+    ObjectPtr newUnit = GameMan::Instance()->createObject(itemName,*this);
 
     return newUnit;
 }
 
 /*inline*/
-MapClass* PlayerClass::getMap()
+MapClass* PlayerClass::getMap() const noexcept
 {
     return GameMan::Instance()->GetMap();
 }
@@ -66,7 +66,7 @@ ObjectPtr PlayerClass::placeStructure(int builderID, UPoint builderPos, std::str
 
 
     if((itemName != "Slab1") && (itemName != "Slab4")) {
-	structure = GameMan::Instance()->createObject(itemName,this);
+	structure = GameMan::Instance()->createObject(itemName,*this);
 	if(!structure) {
 	    LOG(LV_ERROR, "PlayerClass", "Cannot create Object %s", itemName.c_str());
 	    exit(EXIT_FAILURE);

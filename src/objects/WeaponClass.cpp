@@ -13,7 +13,7 @@
 #include "PythonObjects.h"
 
 
-WeaponClass::WeaponClass(PlayerClass* newOwner, std::string weaponName, uint32_t attribute) :
+WeaponClass::WeaponClass(const PlayerClass& newOwner, const std::string& weaponName, uint32_t attribute) :
     ObjectClass(newOwner, weaponName, attribute | OBJECT_WEAPON)
 {
     m_deathSound = NONE;

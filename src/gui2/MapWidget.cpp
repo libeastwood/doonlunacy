@@ -271,14 +271,14 @@ void MapWidget::draw(Image& dest, SPoint off)
 	}
 	for(ObjectMap::const_iterator objMap = (*objTypeMap).second.begin(); objMap != (*objTypeMap).second.end(); objMap++) {
 	    ObjectPtr object = objMap->second;
-	    if(m_map->getCell(object->getPosition())->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+	    if(m_map->getCell(object->getPosition())->isExplored(GameMan::Instance()->LocalPlayer().getPlayerNumber()))
 		object->draw(dest, SPoint(off.x + x, off.y + y), m_view);
 	}
     }
     while(!attributeKeys.empty()) {
 	for(ObjectMap::const_iterator objMap = attributeKeys.top().begin(); objMap != attributeKeys.top().end(); objMap++) {
 	    ObjectPtr object = objMap->second;
-	    if(m_map->getCell(object->getPosition())->isExplored(GameMan::Instance()->LocalPlayer()->getPlayerNumber()))
+	    if(m_map->getCell(object->getPosition())->isExplored(GameMan::Instance()->LocalPlayer().getPlayerNumber()))
     		object->draw(dest, SPoint(off.x + x, off.y + y), m_view);
 	}
 	attributeKeys.pop();

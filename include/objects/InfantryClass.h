@@ -7,7 +7,7 @@ class InfantryClass : public GroundUnit
 {
 
 public:
-	InfantryClass(PlayerClass* newOwner, std::string unitName, uint32_t attribute = 0);
+	InfantryClass(const PlayerClass& newOwner, const std::string& unitName, uint32_t attribute = 0);
 };
 
 #endif // DUNE_OBJECTS_INFANTRYCLASS_H

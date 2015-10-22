@@ -2,7 +2,7 @@
 
 #include "objects/GroundUnit.h"
 
-GroundUnit::GroundUnit(PlayerClass* newOwner, std::string unitName, uint32_t attributes) : UnitClass(newOwner, unitName, attributes | OBJECT_GROUNDUNIT)
+GroundUnit::GroundUnit(const PlayerClass& newOwner, const std::string& unitName, uint32_t attributes) : UnitClass(newOwner, unitName, attributes | OBJECT_GROUNDUNIT)
 {
 }
 
