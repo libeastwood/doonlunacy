@@ -2,7 +2,7 @@
 #define DUNE_GUI2_BUTTON
 
 #include "gui2/Widget.h"
-#include "boost/signal.hpp"
+#include <boost/signals2.hpp>
 #include <string>
 
 class SelectionBox;
@@ -10,7 +10,7 @@ class SelectionBox;
 class Button : public Widget
 {
     public:
-        boost::signal<void ()> onClick;
+        boost::signals2::signal<void ()> onClick;
         
         virtual bool handleButtonUp(uint8_t button, SPoint p);
 };
