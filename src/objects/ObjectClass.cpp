@@ -89,11 +89,12 @@ ObjectClass::ObjectClass(const PlayerClass& newOwner, const std::string& objectN
 	m_decayTime -= getRandom<int16_t>(1+m_decayTime/4, m_decayTime);
 }
 
+/*
 ObjectClass::~ObjectClass()
 {
 //    LOG(LV_INFO, m_objectType, "Destroyed: %S", &((ConstString)*this));
 }
-
+*/
 /* virtual */
 void ObjectClass::assignToMap(SPoint pos)
 {
