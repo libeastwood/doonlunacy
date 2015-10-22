@@ -66,7 +66,7 @@ class ObjectClass : protected Rect
     //!
     //@{
     ObjectClass(const PlayerClass& newOwner, const std::string& objectName, uint32_t attribute = 0);
-    ~ObjectClass();
+    virtual ~ObjectClass() {}
     //@}
 
     friend std::ostream& operator<<(std::ostream& os, const ObjectClass& c){
